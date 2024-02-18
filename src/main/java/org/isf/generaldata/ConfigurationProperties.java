@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,6 +38,7 @@ public abstract class ConfigurationProperties {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 	private static final boolean EXIT_ON_FAIL = false;
+	private static boolean initialized = true;
 
 	private Properties prop;
 
@@ -66,7 +67,7 @@ public abstract class ConfigurationProperties {
 	 * @param fileProperties - the file name (to be available in the classpath)
 	 * @param logger - the {@link Logger} of the concrete class
 	 */
-	public static final Properties loadPropertiesFile(String fileProperties, Logger logger) {
+	public static Properties loadPropertiesFile(String fileProperties, Logger logger) {
 		return loadPropertiesFile(fileProperties, logger, false);
 	}
 
@@ -77,11 +78,12 @@ public abstract class ConfigurationProperties {
 	 * @param exitOnFail - if {@code true} the application will exit if configuration 
 	 * is missing, otherwise default values will be used
 	 */
-	private static final Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
+	private static Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
 		Properties prop = new Properties();
 		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties)) {
 			if (null == in) {
 				logger.error(">> '{}' file not found.", fileProperties);
+				initialized = false;
 				if (exitOnFail) {
 					System.exit(1);
 				}
@@ -91,6 +93,7 @@ public abstract class ConfigurationProperties {
 			logger.info("File {} loaded.", fileProperties);
 		} catch (IOException e) {
 			logger.error(">> '{}' file not found.", fileProperties);
+			initialized = false;
 			if (exitOnFail) {
 				System.exit(1);
 			}
@@ -144,7 +147,7 @@ public abstract class ConfigurationProperties {
 	}
 
 	/**
-	 * Method to retrieve an double property
+	 * Method to retrieve a double property
 	 *
 	 * @param property
 	 * @param defaultValue
@@ -176,5 +179,14 @@ public abstract class ConfigurationProperties {
 			return defaultValue;
 		}
 		return value;
+	}
+
+	/**
+	 * Method to know the {@link ConfigurationProperties} initialization status.
+	 * 
+	 * @return {@code true} if the ConfigurationProperties is initialized, {@code false} otherwise
+	 */
+	public boolean isInitialized() {
+		return initialized;
 	}
 }

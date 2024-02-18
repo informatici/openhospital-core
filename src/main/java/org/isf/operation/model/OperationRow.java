@@ -49,8 +49,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name="OH_OPERATIONROW")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "OPER_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "OPER_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPER_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPER_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPER_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "OPER_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPER_LAST_MODIFIED_DATE"))
@@ -95,7 +95,7 @@ public class OperationRow extends Auditable<String> {
     private Bill bill;
 
     @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
-    private Float transUnit = 0f;
+    private Float transUnit = 0.0f;
     
     @Transient
     private volatile int hashCode;
@@ -258,6 +258,6 @@ public class OperationRow extends Auditable<String> {
 
     @Override
     public String toString() {
-        return this.operation.getDescription() + " " + this.admission.getUserID();
+        return this.operation.getDescription() + ' ' + this.admission.getUserID();
     }
 }

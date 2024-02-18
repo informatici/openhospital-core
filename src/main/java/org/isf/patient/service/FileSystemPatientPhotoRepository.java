@@ -42,8 +42,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileSystemPatientPhotoRepository {
 
-	private static final String KEY_ERROR_TITLE = "angal.patient.patientphoto.error.title";
-
 	private static final String KEY_FILE_NOT_FOUND = "angal.patient.patientphoto.error.filenotfound.msg";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoRepository.class);
@@ -53,7 +51,7 @@ public class FileSystemPatientPhotoRepository {
 	public boolean exist(String path, Integer patientId) {
 		File patientIdFolder = new File(path);
 		File f = new File(patientIdFolder, patientId + IMAGE_FORMAT);
-		return (f.exists() && !f.isDirectory());
+		return f.exists() && !f.isDirectory();
 	}
 
 	public void loadInPatient(Patient patient, String path) throws OHServiceException {

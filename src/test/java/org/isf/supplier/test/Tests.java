@@ -74,16 +74,15 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		Supplier result = supplierIoOperation.saveOrUpdate(supplier);
-
-		assertThat(result);
-		checkSupplierIntoDb(supplier.getSupId());
+		Supplier newSupplier = supplierIoOperation.saveOrUpdate(supplier);
+		checkSupplierIntoDb(newSupplier.getSupId());
 	}
 
 	@Test
 	public void testIoSupplierGetByID() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		checkSupplierIntoDb(foundSupplier.getSupId());
 	}
 
@@ -91,6 +90,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoSupplierGetAll() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		List<Supplier> suppliers = supplierBrowserManager.getAll();
 		assertThat(suppliers).contains(foundSupplier);
 	}
@@ -99,6 +99,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoSupplierGetList() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		List<Supplier> suppliers = supplierBrowserManager.getList();
 		assertThat(suppliers).contains(foundSupplier);
 	}
@@ -106,14 +107,15 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		assertThat(supplierBrowserManager.saveOrUpdate(supplier));
-		checkSupplierIntoDb(supplier.getSupId());
+		Supplier newSupplier = supplierBrowserManager.saveOrUpdate(supplier);
+		checkSupplierIntoDb(newSupplier.getSupId());
 	}
 
 	@Test
 	public void testMgrSupplierGetByID() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		checkSupplierIntoDb(foundSupplier.getSupId());
 	}
 
@@ -121,6 +123,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrSupplierGetAll() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		List<Supplier> suppliers = supplierBrowserManager.getAll();
 		assertThat(suppliers).contains(foundSupplier);
 	}
@@ -129,6 +132,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrSupplierGetList() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		List<Supplier> suppliers = supplierBrowserManager.getList();
 		assertThat(suppliers).contains(foundSupplier);
 	}
@@ -137,6 +141,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetHashMap() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		// get all (including deleted)
 		Map<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
 		// get all (not including deleted)
@@ -160,8 +165,8 @@ public class Tests extends OHCoreTestCase {
 	public void testSupplierEquals() throws Exception {
 		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 
-		assertThat(supplier).isEqualTo(supplier);
 		assertThat(supplier)
+				.isEqualTo(supplier)
 				.isNotNull()
 				.isNotEqualTo("someString");
 
@@ -176,6 +181,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSupplierHashCode() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier supplier = supplierBrowserManager.getByID(code);
+		assertThat(supplier).isNotNull();
 		// compute value
 		int hashCode = supplier.hashCode();
 		// use computed stored value
@@ -190,6 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	private void checkSupplierIntoDb(int code) throws OHServiceException {
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		assertThat(foundSupplier).isNotNull();
 		testSupplier.check(foundSupplier);
 	}
 }

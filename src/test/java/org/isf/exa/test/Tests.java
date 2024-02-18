@@ -109,7 +109,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamRowZero() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowIoOperation.getExamRow(0, null);
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -117,7 +118,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamRowNoDescription() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowIoOperation.getExamRow(foundExamRow.getCode(), null);
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -125,7 +127,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamRowWithDescription() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowIoOperation.getExamRow(foundExamRow.getCode(), foundExamRow.getDescription());
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -133,7 +136,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamRows() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowIoOperation.getExamRows();
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 		// deprecated method
@@ -144,7 +148,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamsRowByDesc() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowIoOperation.getExamsRowByDesc(foundExamRow.getDescription());
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -152,7 +157,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExams() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
 		List<Exam> exams = examIoOperation.getExams();
 		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 	}
@@ -160,7 +166,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamTypeExam() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		List<ExamType> examTypes = examIoOperation.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
@@ -168,7 +175,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamTypeExamRow() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		List<ExamType> examTypes = examRowIoOperation.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
@@ -180,9 +188,8 @@ public class Tests extends OHCoreTestCase {
 		ExamRow examRow = testExamRow.setup(exam, true);
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		examIoOperationRepository.saveAndFlush(exam);
-		boolean result = examIoOperation.newExamRow(examRow);
-		assertThat(result).isTrue();
-		checkExamRowIntoDb(examRow.getCode());
+		ExamRow newExamRow = examIoOperation.newExamRow(examRow);
+		checkExamRowIntoDb(newExamRow.getCode());
 	}
 
 	@Test
@@ -190,51 +197,52 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		Exam exam = testExam.setup(examType, 1, false);
-		boolean result = examIoOperation.newExam(exam);
-		assertThat(result).isTrue();
-		checkExamIntoDb(exam.getCode());
+		Exam newExam = examIoOperation.newExam(exam);
+		checkExamIntoDb(newExam.getCode());
 	}
 
 	@Test
 	public void testIoUpdateExam() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
 		foundExam.setDescription("Update");
 		Exam result = examIoOperation.updateExam(foundExam);
-		assertThat(result);
-		Exam updateExam = examIoOperationRepository.findById(code).get();
+		assertThat(result).isNotNull();
+		Exam updateExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(updateExam).isNotNull();
 		assertThat(updateExam.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoUpdateExamRow() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow examRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(examRow).isNotNull();
 		examRow.setDescription("Update");
 		ExamRow result = examRowIoOperation.updateExamRow(examRow);
-		assertThat(result);
-		ExamRow updateExamRow = examRowIoOperationRepository.findById(code).get();
+		assertThat(result).isNotNull();
+		ExamRow updateExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(updateExamRow).isNotNull();
 		assertThat(updateExamRow.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoDeleteExam() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
-		boolean result = examIoOperation.deleteExam(foundExam);
-		assertThat(result).isTrue();
-		result = examIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
+		examIoOperation.deleteExam(foundExam);
+		assertThat(examIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testIoDeleteExamRow() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
-		boolean result = examIoOperation.deleteExamRow(foundExamRow);
-		assertThat(result).isTrue();
-		result = examIoOperation.isRowPresent(code);
-		assertThat(result).isFalse();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
+		examIoOperation.deleteExamRow(foundExamRow);
+		assertThat(examIoOperation.isRowPresent(code)).isFalse();
 	}
 
 	@Test
@@ -250,7 +258,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoIsKeyPresentExamRow() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow examRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(examRow).isNotNull();
 		boolean result = examRowIoOperation.isKeyPresent(examRow);
 		assertThat(result).isTrue();
 		// fail
@@ -262,14 +271,16 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoIsCodePresent() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow examRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(examRow).isNotNull();
 		assertThat(examRowIoOperation.isCodePresent(examRow.getCode())).isTrue();
 	}
 
 	@Test
 	public void testIoIsRowPresent() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow examRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(examRow).isNotNull();
 		assertThat(examRowIoOperation.isRowPresent(examRow.getCode())).isTrue();
 	}
 
@@ -300,7 +311,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExamRow() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowBrowsingManager.getExamRow(0, null);
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -308,7 +320,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExams() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
 		List<Exam> exams = examBrowsingManager.getExams();
 		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 
@@ -328,7 +341,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		List<ExamType> examTypes = examBrowsingManager.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
@@ -341,7 +355,7 @@ public class Tests extends OHCoreTestCase {
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		examIoOperationRepository.saveAndFlush(exam);
 		ExamRow result = examRowBrowsingManager.newExamRow(examRow);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkExamRowIntoDb(examRow.getCode());
 	}
 
@@ -350,40 +364,39 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		Exam exam = testExam.setup(examType, 1, false);
-		boolean result = examBrowsingManager.newExam(exam);
-		assertThat(result).isTrue();
-		checkExamIntoDb(exam.getCode());
+		Exam newExam = examBrowsingManager.newExam(exam);
+		checkExamIntoDb(newExam.getCode());
 	}
 
 	@Test
 	public void testMgrUpdateExam() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
 		foundExam.setDescription("Update");
 		Exam result = examBrowsingManager.updateExam(foundExam);
-		assertThat(result);
-		Exam updateExam = examIoOperationRepository.findById(code).get();
-		assertThat(updateExam.getDescription()).isEqualTo("Update");
+		assertThat(result).isNotNull();
+		Exam updatedExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(updatedExam).isNotNull();
+		assertThat(updatedExam.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrDeleteExam() throws Exception {
 		String code = setupTestExam(false);
-		Exam foundExam = examIoOperationRepository.findById(code).get();
-		boolean result = examBrowsingManager.deleteExam(foundExam);
-		assertThat(result).isTrue();
-		result = examIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
+		examBrowsingManager.deleteExam(foundExam);
+		assertThat(examIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrDeleteExamRow() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
-		boolean result = examRowBrowsingManager.deleteExamRow(foundExamRow);
-		assertThat(result).isTrue();
-		result = examIoOperation.isRowPresent(code);
-		assertThat(result).isFalse();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
+		examRowBrowsingManager.deleteExamRow(foundExamRow);
+		assertThat(examIoOperation.isRowPresent(code)).isFalse();
 	}
 
 	@Test
@@ -399,7 +412,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExamRowZero() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowBrowsingManager.getExamRow(0, null);
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 
@@ -410,7 +424,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExamRowNoDescription() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowBrowsingManager.getExamRow(foundExamRow.getCode(), null);
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 
@@ -421,7 +436,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetExamRowWithDescription() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		List<ExamRow> examRows = examRowBrowsingManager.getExamRow(foundExamRow.getCode(), foundExamRow.getDescription());
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
@@ -437,7 +453,7 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 		// description = ""
 		exam.setCode(code);
@@ -446,14 +462,13 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 	}
 
 	@Test
 	public void testMgrExamValidationInsert() throws Exception {
 		String code = setupTestExam(false);
-		Exam exam = examIoOperationRepository.findById(code).get();
 		// code already exists
 		ExamType examType = new ExamType("ZZ", "TestDescription");
 		Exam exam2 = testExam.setup(examType, 1, false);
@@ -462,7 +477,7 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataIntegrityViolationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 	}
 
@@ -477,18 +492,19 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 	}
 
 	@Test
 	public void testExamEqualHashToString() throws Exception {
 		String code = setupTestExam(false);
-		Exam exam = examIoOperationRepository.findById(code).get();
+		Exam exam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(exam).isNotNull();
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
-		assertThat(exam).isEqualTo(exam);
 		assertThat(exam)
+				.isEqualTo(exam)
 				.isNotEqualTo(exam2)
 				.isNotEqualTo("xyzzy");
 		exam2.setCode(exam.getCode());
@@ -504,12 +520,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testExamRowEqualHashToString() throws Exception {
 		int code = setupTestExamRow(false);
-		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow examRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(examRow).isNotNull();
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
-		assertThat(examRow).isEqualTo(examRow);
 		assertThat(examRow)
+				.isEqualTo(examRow)
 				.isNotEqualTo(examRow2)
 				.isNotEqualTo("xyzzy");
 		examRow2.setCode(examRow.getCode());
@@ -525,7 +542,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testExamGetterSetter() throws Exception {
 		String code = setupTestExam(false);
-		Exam exam = examIoOperationRepository.findById(code).get();
+		Exam exam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(exam).isNotNull();
 		exam.setLock(-99);
 		assertThat(exam.getLock()).isEqualTo(-99);
 
@@ -559,7 +577,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkExamIntoDb(String code) throws OHException {
-		Exam foundExam = examIoOperationRepository.findById(code).get();
+		Exam foundExam = examIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExam).isNotNull();
 		testExam.check(foundExam);
 	}
 
@@ -574,7 +593,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkExamRowIntoDb(int code) throws OHException {
-		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).get();
+		ExamRow foundExamRow = examRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamRow).isNotNull();
 		testExamRow.check(foundExamRow);
 	}
 

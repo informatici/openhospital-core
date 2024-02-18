@@ -40,18 +40,18 @@ public class DicomTypeBrowserManager {
 	@Autowired
 	private DicomTypeIoOperation ioOperations;
 
-	public boolean newDicomType(DicomType dicomType) throws OHServiceException {
+	public DicomType newDicomType(DicomType dicomType) throws OHServiceException {
 		validateDicomType(dicomType, true);
 		return ioOperations.newDicomType(dicomType);
 	}
 
-	public boolean updateDicomType(DicomType dicomType) throws OHServiceException {
+	public DicomType updateDicomType(DicomType dicomType) throws OHServiceException {
 		validateDicomType(dicomType, false);
 		return ioOperations.updateDicomType(dicomType);
 	}
 
-	public boolean deleteDicomType(DicomType dicomType) throws OHServiceException {
-		return ioOperations.deleteDicomType(dicomType);
+	public void deleteDicomType(DicomType dicomType) throws OHServiceException {
+		ioOperations.deleteDicomType(dicomType);
 	}
 
 	public List<DicomType> getDicomType() throws OHServiceException {
@@ -62,7 +62,7 @@ public class DicomTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param dicomType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDicomType(DicomType dicomType, boolean insert) throws OHServiceException {

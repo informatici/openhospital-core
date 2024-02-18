@@ -30,14 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * VacTypeIoOperation - methods to interact with DB
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -47,7 +39,7 @@ public class VacTypeIoOperation {
 	private VaccineTypeIoOperationRepository repository;
 	
 	/**
-	 * Returns all {@link VaccineType}s from DB
+	 * Returns all {@link VaccineType}s from the DB.
 	 * 	
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException 
@@ -57,10 +49,10 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * Inserts a new {@link VaccineType} into DB
+	 * Inserts a new {@link VaccineType} into the DB.
 	 * 
 	 * @param vaccineType - the {@link VaccineType} to insert 
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link VaccineType} object.
 	 * @throws OHServiceException 
 	 */
 	public VaccineType newVaccineType(VaccineType vaccineType) throws OHServiceException {
@@ -68,10 +60,10 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * Updates a {@link VaccineType} in the DB
+	 * Updates a {@link VaccineType} in the DB,
 	 *
 	 * @param vaccineType - the item to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @return the updated {@link VaccineType} object.
 	 * @throws OHServiceException 
 	 */
 	public VaccineType updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
@@ -79,23 +71,21 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * Deletes a {@link VaccineType} in the DB
+	 * Deletes a {@link VaccineType} in the DB.
 	 *
 	 * @param vaccineType - the item to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
+	public void deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
 		repository.delete(vaccineType);
-		return true;
 	}
 	
 	
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the {@link VaccineType} code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -113,7 +103,7 @@ public class VacTypeIoOperation {
 		if (code != null) {
 			return repository.findById(code).orElse(null);
 		}
-		throw new IllegalArgumentException("code must not be null");
+		throw new IllegalArgumentException("VaccineType code must not be null.");
 	}
 
 }

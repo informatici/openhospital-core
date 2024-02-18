@@ -49,8 +49,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name="OH_PATIENTEXAMINATION")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "PEX_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "PEX_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "PEX_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PEX_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PEX_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PEX_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PEX_LAST_MODIFIED_DATE"))
@@ -422,7 +422,7 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	public double getBMI() {
 		if (pex_height != null) {
 			double temp = Math.pow(10, 2); // 2 <-- decimal digits;
-			double height = pex_height * (1. / 100); // convert to m
+			double height = pex_height * (1.0 / 100); // convert to m
 			double weight = pex_weight; // Kg
 			return Math.round(weight / Math.pow(height, 2) * temp) / temp ; //getting Kg/m2
 		} else {

@@ -82,7 +82,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPricesOthers() throws Exception {
 		// given:
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 
 		// when:
 		List<PricesOthers> result = priceOthersIoOperations.getOthers();
@@ -95,16 +96,15 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdatePricesOthers() throws Exception {
 		// given:
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 		foundPricesOthers.setDescription("Update");
 
 		// when:
-		PricesOthers result = priceOthersIoOperations.updateOther(foundPricesOthers);
-		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers updatedPricesOthers = priceOthersIoOperations.updateOther(foundPricesOthers);
 
 		// then:
-		assertThat(result);
-		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+		assertThat(updatedPricesOthers.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -113,31 +113,31 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
 
 		// when:
-		PricesOthers result = priceOthersIoOperations.newOthers(pricesOthers);
+		PricesOthers newPricesOthers = priceOthersIoOperations.newOthers(pricesOthers);
 
 		// then:
-		assertThat(result);
-		checkPricesOthersIntoDb(pricesOthers.getId());
+		checkPricesOthersIntoDb(newPricesOthers.getId());
 	}
 
 	@Test
 	public void testIoDeletePricesOthers() throws Exception {
 		// given:
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 
 		// when:
-		boolean result = priceOthersIoOperations.deleteOthers(foundPricesOthers);
+		priceOthersIoOperations.deleteOthers(foundPricesOthers);
 
 		// then:
-		assertThat(result).isTrue();
 		assertThat(priceOthersIoOperationRepository.existsById(id)).isFalse();
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 		assertThat(priceOthersIoOperations.isCodePresent(foundPricesOthers.getId())).isTrue();
 		assertThat(priceOthersIoOperations.isCodePresent(-1)).isFalse();
 	}
@@ -145,7 +145,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPricesOthers() throws Exception {
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 		List<PricesOthers> result = pricesOthersManager.getOthers();
 		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
@@ -153,25 +154,26 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdatePricesOthers() throws Exception {
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 		foundPricesOthers.setDescription("Update");
-		assertThat(pricesOthersManager.updateOther(foundPricesOthers));
-		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
-		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+		PricesOthers updatedPricesOthers = pricesOthersManager.updateOther(foundPricesOthers);
+		assertThat(updatedPricesOthers.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewPricesOther() throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
-		assertThat(pricesOthersManager.newOther(pricesOthers));
-		checkPricesOthersIntoDb(pricesOthers.getId());
+		PricesOthers newPricesOthers = pricesOthersManager.newOther(pricesOthers);
+		checkPricesOthersIntoDb(newPricesOthers.getId());
 	}
 
 	@Test
 	public void testMgrDeletePricesOther() throws Exception {
 		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
-		assertThat(pricesOthersManager.deleteOther(foundPricesOthers)).isTrue();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
+		pricesOthersManager.deleteOther(foundPricesOthers);
 		assertThat(priceOthersIoOperationRepository.existsById(id)).isFalse();
 	}
 
@@ -183,11 +185,11 @@ public class Tests extends OHCoreTestCase {
 			pricesOthers.setCode("");
 			pricesOthersManager.newOther(pricesOthers);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -198,11 +200,11 @@ public class Tests extends OHCoreTestCase {
 			pricesOthers.setDescription("");
 			pricesOthersManager.newOther(pricesOthers);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -215,9 +217,9 @@ public class Tests extends OHCoreTestCase {
 	public void testPricesOthersEquals() throws Exception {
 		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
 
-		assertThat(pricesOthers).isEqualTo(pricesOthers);
 		assertThat(pricesOthers)
 				.isNotNull()
+				.isEqualTo(pricesOthers)
 				.isNotEqualTo("someString");
 
 		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
@@ -245,7 +247,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkPricesOthersIntoDb(int id) {
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPricesOthers).isNotNull();
 		testPricesOthers.check(foundPricesOthers);
 	}
 }

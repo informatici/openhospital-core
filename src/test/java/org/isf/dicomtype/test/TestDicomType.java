@@ -23,12 +23,6 @@ package org.isf.dicomtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Random;
-
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
@@ -61,18 +55,4 @@ public class TestDicomType {
 		assertThat(dicomType.getDicomTypeDescription()).isEqualTo(dicomTypeDescription);
 	}
 
-	public Blob createRandomBlob(int byteCount) {
-		Blob blob = null;
-		byte[] data;
-
-		data = new byte[byteCount];
-		new Random().nextBytes(data);
-		try {
-			blob = new SerialBlob(data);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return blob;
-	}
 }

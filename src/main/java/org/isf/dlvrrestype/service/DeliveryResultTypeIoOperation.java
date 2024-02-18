@@ -53,38 +53,36 @@ public class DeliveryResultTypeIoOperation {
 	/**
 	 * Updates the specified {@link DeliveryResultType}.
 	 * @param deliveryResultType the delivery result type to update.
-	 * @return <code>true</code> if the delivery result type has been updated, <code>false</code> otherwise.
+	 * @return the updated {@link DeliveryResultType}.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
-		return repository.save(deliveryResultType) != null;
+	public DeliveryResultType updateDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
+		return repository.save(deliveryResultType);
 	}
 
 	/**
 	 * Stores the specified {@link DeliveryResultType}.
 	 * @param deliveryResultType the delivery result type to store.
-	 * @return <code>true</code> if the delivery result type has been stored. 
+	 * @return the new {@link DeliveryResultType}.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
-		return repository.save(deliveryResultType) != null;
+	public DeliveryResultType newDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
+		return repository.save(deliveryResultType);
 	}
 
 	/**
 	 * Deletes the specified {@link DeliveryResultType}.
 	 * @param deliveryResultType the delivery result type to delete.
-	 * @return <code>true</code> if the delivery result type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
+	public void deleteDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
 		repository.delete(deliveryResultType);
-		return true;
 	}
 
 	/**
-	 * Checks if the specified code is already used by others {@link DeliveryResultType}s.
+	 * Checks if the specified code is already used by other {@link DeliveryResultType}s.
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

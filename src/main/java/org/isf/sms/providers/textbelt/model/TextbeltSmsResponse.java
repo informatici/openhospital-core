@@ -69,7 +69,7 @@ public class TextbeltSmsResponse implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TextbeltSmsResponse [success=" + success + ", quotaRemaining=" + quotaRemaining + ", textId=" + textId + ", error=" + error + "]";
+		return "TextbeltSmsResponse [success=" + success + ", quotaRemaining=" + quotaRemaining + ", textId=" + textId + ", error=" + error + ']';
 	}
 
 }

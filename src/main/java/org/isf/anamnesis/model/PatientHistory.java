@@ -22,7 +22,6 @@
 package org.isf.anamnesis.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -41,11 +40,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "OH_PATIENTHISTORY")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({ @AttributeOverride(name = "createdBy", column = @Column(name = "PAH_CREATED_BY")),
-		@AttributeOverride(name = "createdDate", column = @Column(name = "PAH_CREATED_DATE")),
-		@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAH_LAST_MODIFIED_BY")),
-		@AttributeOverride(name = "active", column = @Column(name = "PAH_ACTIVE")),
-		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAH_LAST_MODIFIED_DATE")) })
+@AttributeOverride(name = "createdBy", column = @Column(name = "PAH_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PAH_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAH_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PAH_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAH_LAST_MODIFIED_DATE"))
 public class PatientHistory extends Auditable<String> implements Comparable<PatientHistory> {
 
 	@Id

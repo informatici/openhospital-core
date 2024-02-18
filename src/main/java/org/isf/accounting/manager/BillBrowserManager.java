@@ -94,7 +94,7 @@ public class BillBrowserManager {
 	/**
 	 * Retrieves all the {@link BillItems} associated to the passed {@link Bill} id.
 	 * @param billID the bill id.
-	 * @return a list of {@link BillItems} or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillItems} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillItems> getItems(int billID) throws OHServiceException {
@@ -140,38 +140,37 @@ public class BillBrowserManager {
 	
 	/**
 	 * Stores a new {@link Bill} along with all its {@link BillItems} and {@link BillPayments}
-	 * @param newBill - the bill to store.
+	 * @param bill - the bill to store.
 	 * @param billItems - the list of bill's items
 	 * @param billPayments - the list of bill's payments
-	 * @return <code>true</code> if the bill has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @returns the persisted Bill object
+	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean newBill(
-			Bill newBill,
+	public Bill newBill(
+			Bill bill,
 			List<BillItems> billItems,
-			List<BillPayments> billPayments) throws OHServiceException
-	{
-		validateBill(newBill, billItems, billPayments);
-		int billId = newBill(newBill);
-		boolean result = billId > 0;
+			List<BillPayments> billPayments) throws OHServiceException {
+		validateBill(bill, billItems, billPayments);
+		Bill newBill = newBill(bill);
+		int billId = newBill.getId();
 		if (!billItems.isEmpty()) {
-			result = newBillItems(billId, billItems);
+			newBillItems(billId, billItems);
 		}
 		if (!billPayments.isEmpty()) {
-			result = result && newBillPayments(billId, billPayments);
+			newBillPayments(billId, billPayments);
 		}
-		return result;
+		return newBill;
 	}
 
 	/**
 	 * Stores a new {@link Bill}.
 	 * @param newBill the bill to store.
-	 * @return the generated id.
+	 * @return the persisted Bill object
 	 * @throws OHServiceException
 	 */
-	private int newBill(Bill newBill) throws OHServiceException {
+	private Bill newBill(Bill newBill) throws OHServiceException {
 		return ioOperations.newBill(newBill);
 	}
 
@@ -179,22 +178,20 @@ public class BillBrowserManager {
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
 	 * @param billID the bill id.
 	 * @param billItems the bill items to store.
-	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
-		return ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
+	private void newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
+		ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
 	}
 	
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
 	 * @param billID the bill id.
 	 * @param payItems the bill payments.
-	 * @return <code>true</code> if the payments have been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
-		return ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
+	private void newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
+		ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
 	}
 	
 	/**
@@ -202,36 +199,35 @@ public class BillBrowserManager {
 	 * @param updateBill - the bill to update.
 	 * @param billItems - the list of bill's items
 	 * @param billPayments - the list of bill's payments
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean updateBill(Bill updateBill,
+	public Bill updateBill(Bill updateBill,
 			List<BillItems> billItems,
 			List<BillPayments> billPayments) throws OHServiceException {
 		validateBill(updateBill, billItems, billPayments);
-		boolean result = updateBill(updateBill);
-		result = result && newBillItems(updateBill.getId(), billItems);
-		result = result && newBillPayments(updateBill.getId(), billPayments);
-		return result;
-
+		Bill updatedBill = updateBill(updateBill);
+		newBillItems(updateBill.getId(), billItems);
+		newBillPayments(updateBill.getId(), billPayments);
+		return updatedBill;
 	}
 
 	/**
 	 * Updates the specified {@link Bill}.
 	 * @param updateBill the bill to update.
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException 
 	 */
-	private boolean updateBill(Bill updateBill) throws OHServiceException {
+	private Bill updateBill(Bill updateBill) throws OHServiceException {
 		return ioOperations.updateBill(updateBill);
 	}
 	
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.
 	 * @param patID the patient id.
-	 * @return the list of pending bills or <code>null</code> if an error occurred.
+	 * @return the list of pending bills or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getPendingBills(int patID) throws OHServiceException {
@@ -241,7 +237,7 @@ public class BillBrowserManager {
 	/**
 	 * Get the {@link Bill} with specified billID
 	 * @param billID
-	 * @return the {@link Bill} or <code>null</code> if an error occurred.
+	 * @return the {@link Bill} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public Bill getBill(int billID) throws OHServiceException {
@@ -250,7 +246,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Returns all user ids related to a {@link BillPayments}.
-	 * @return a list of user id or <code>null</code> if an error occurred.
+	 * @return a list of user id or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<String> getUsers() throws OHServiceException {
@@ -258,20 +254,20 @@ public class BillBrowserManager {
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.
+	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
+	 * If the Bill is not found it is silently ignored.
 	 * @param deleteBill the bill to delete.
-	 * @return <code>true</code> if the bill has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteBill(Bill deleteBill) throws OHServiceException {
-		return ioOperations.deleteBill(deleteBill);
+	public void deleteBill(Bill deleteBill) throws OHServiceException {
+		ioOperations.deleteBill(deleteBill);
 	}
 
 	/**
 	 * Retrieves all the {@link Bill}s for the specified date range.
 	 * @param dateFrom the low date range endpoint, inclusive. 
 	 * @param dateTo the high date range endpoint, inclusive.
-	 * @return a list of retrieved {@link Bill}s or <code>null</code> if an error occurred.
+	 * @return a list of retrieved {@link Bill}s or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -281,7 +277,7 @@ public class BillBrowserManager {
 	/**
 	 * Gets all the {@link Bill}s associated to the passed {@link BillPayments}.
 	 * @param billPayments the {@link BillPayments} associated to the bill to retrieve.
-	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or <code>null</code> if an error occurred.
+	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getBills(List<BillPayments> billPayments) throws OHServiceException {
@@ -295,7 +291,7 @@ public class BillBrowserManager {
 	 * Retrieves all the {@link BillPayments} for the specified date range.
 	 * @param dateFrom low endpoint, inclusive, for the date range. 
 	 * @param dateTo high endpoint, inclusive, for the date range.
-	 * @return a list of {@link BillPayments} for the specified date range or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillPayments} for the specified date range or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -305,7 +301,7 @@ public class BillBrowserManager {
 	/**
 	 * Retrieves all the {@link BillPayments} associated to the passed {@link Bill} list.
 	 * @param billArray the bill array list of {@link Bill}s.
-	 * @return a list of {@link BillPayments} associated to the passed bill list or <code>null</code> if an error occurred. 
+	 * @return a list of {@link BillPayments} associated to the passed bill list or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(List<Bill> billArray) throws OHServiceException {

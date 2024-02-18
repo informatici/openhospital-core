@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -61,5 +61,11 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Modifying
 	@Query(value = "update User set lastLogin=:lastLoggedIn where userName=:id")
 	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
+
+	@Query("select count(u) from User u where active=1")
+	long countAllActiveUsers();
+
+	@Query("select count(g) from UserGroup g where active=1")
+	long countAllActiveGroups();
 
 }

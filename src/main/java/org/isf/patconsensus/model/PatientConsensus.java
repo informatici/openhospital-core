@@ -40,8 +40,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "OH_PATIENT_CONSENSUS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "PTC_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "PTC_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "PTC_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PTC_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PTC_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PTC_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PTC_LAST_MODIFIED_DATE"))
@@ -108,7 +108,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
-						+ ", patient=" + patient + "]";
+						+ ", patient=" + patient + ']';
 	}
 
 

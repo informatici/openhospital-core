@@ -103,43 +103,44 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetSerieDetail() throws Exception {
+	public void testIoGetSeriesDetail() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
-		Long[] dicoms = dicomIoOperation.getSerieDetail(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
+		Long[] dicoms = dicomIoOperation.getSeriesDetail(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicoms).hasSize(1);
 	}
 
 	@Test
-	public void testIoDeleteSerie() throws Exception {
+	public void testIoDeleteSeries() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
-		boolean result = dicomIoOperation.deleteSerie(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-
-		assertThat(result).isTrue();
-		result = dicomIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
+		dicomIoOperation.deleteSeries(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		assertThat(dicomIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testIoLoadDetails() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-		FileDicom dicom2 = dicomIoOperation.loadDetails(Long.valueOf(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		FileDicom dicom2 = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
 
 	@Test
 	public void testIoLoadDetailsNullIdFile() throws Exception {
-		assertThat(dicomIoOperation.loadDetails(null, 1, "someSeriesNumber")).isNull();
+		assertThat(dicomIoOperation.loadDetails(-1, 1, "someSeriesNumber")).isNull();
 	}
 
 	@Test
 	public void testIoLoadPatientFiles() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
 		FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
 		assertThat(dicoms[0].getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
@@ -147,19 +148,19 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoExist() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
-		boolean result = dicomIoOperation.exist(foundFileDicom);
-		assertThat(result).isTrue();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
+		assertThat(dicomIoOperation.exist(foundFileDicom)).isTrue();
 	}
 
 	@Test
-	public void testIoSaveFileUpate() throws Exception {
+	public void testIoSaveFileUpdate() throws Exception {
 		long code = setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
 		foundFileDicom.setDicomSeriesDescription("Update");
-		dicomIoOperation.saveFile(foundFileDicom);
-		FileDicom updateFileDicom = dicomIoOperationRepository.findById(code).get();
-		assertThat(updateFileDicom.getDicomSeriesDescription()).isEqualTo("Update");
+		FileDicom updatedFileDicom = dicomIoOperation.saveFile(foundFileDicom);
+		assertThat(updatedFileDicom.getDicomSeriesDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -317,9 +318,9 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
 
-		assertThat(fileDicom).isEqualTo(fileDicom);
 		assertThat(fileDicom)
 				.isNotNull()
+				.isEqualTo(fileDicom)
 				.isNotEqualTo("someString");
 
 		FileDicom fileDicom2 = testFileDicom.setup(dicomType, true);
@@ -351,7 +352,7 @@ public class Tests extends OHCoreTestCase {
 	// This test requires access to the opencv native libraries
 	@Ignore
 	@Test
-	public void testFileDicomGetThumbnailasImage() throws Exception {
+	public void testFileDicomGetThumbnailsAsImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, false);
 		assertThat(fileDicom.getDicomThumbnailAsImage()).isNull();
@@ -375,7 +376,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkFileDicomIntoDb(long code) throws Exception {
-		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundFileDicom).isNotNull();
 		testFileDicom.check(foundFileDicom);
 	}
 }

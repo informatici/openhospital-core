@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -37,8 +37,8 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
 	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
-	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward " +
-			"and medWard.id.medical.code=:medical")
+	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code = :ward " +
+			"and medWard.id.medical.code = :medical")
 	MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);
 
 	@Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +

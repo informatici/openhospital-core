@@ -33,22 +33,11 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Vaccine Type - model for the vaccine type entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 19/10/2011 - Cla - version is now 1.0
- * 18/11/2011 - Cla - inserted print method
- * 18/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_VACCINETYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "VACT_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "VACT_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "VACT_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "VACT_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "VACT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "VACT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "VACT_LAST_MODIFIED_DATE"))
@@ -100,7 +89,7 @@ public class VaccineType extends Auditable<String> {
 	}
 
 	public String print() {
-		return "vaccineType code=." + getCode() + ". description=." + getDescription() + ".";
+		return "vaccineType code=." + getCode() + ". description=." + getDescription() + '.';
 	}
 
 	@Override

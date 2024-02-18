@@ -27,20 +27,13 @@ import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This class offers the io operations for recovering and managing
- * operations records from the database
- *
- * @author Rick, Vero, pupo
- * modification history
- * ====================
- * 13/02/09 - Alex - modified query for ordering resultset by description only
- * 13/02/09 - Alex - added Major/Minor control
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -53,13 +46,13 @@ public class OperationIoOperations {
 	 * Return the {@link Operation}s whose type matches specified string
 	 * 
 	 * @param typeDescription - a type description
-	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
+	 * @return the list of {@link Operation}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException 
 	 */
 	public List<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
 		return typeDescription == null ?
 				repository.findByOrderByDescriptionAsc() :
-				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc("%" + typeDescription + "%");
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc('%' + typeDescription + '%');
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{
@@ -78,8 +71,8 @@ public class OperationIoOperations {
 	 * Insert an {@link Operation} in the DBs
 	 * 
 	 * @param operation - the {@link Operation} to insert
-	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @return the newly saved {@link Operation} object
+	 * @throws OHServiceException
 	 */
 	public Operation newOperation(Operation operation) throws OHServiceException {
 		return repository.save(operation);
@@ -89,7 +82,7 @@ public class OperationIoOperations {
 	 * Updates an {@link Operation} in the DB
 	 * 
 	 * @param operation - the {@link Operation} to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
+	 * @return the newly updated {@link Operation} object
 	 * @throws OHServiceException 
 	 */
 	public Operation updateOperation(Operation operation) throws OHServiceException {
@@ -99,18 +92,16 @@ public class OperationIoOperations {
 	/** 
 	 * Delete a {@link Operation} in the DB
 	 * @param operation - the {@link Operation} to delete
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteOperation(Operation operation) throws OHServiceException {
+	public void deleteOperation(Operation operation) throws OHServiceException {
 		repository.delete(operation);
-		return true;
 	}
 	
 	/**
 	 * Checks if an {@link Operation} code has already been used
 	 * @param code - the code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -122,12 +113,24 @@ public class OperationIoOperations {
 	 * 
 	 * @param description - the {@link Operation} description
 	 * @param typeCode - the {@link OperationType} code
-	 * @return <code>true</code> if the description is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the description is already in use, {@code false} otherwise.
 	 * @throws OHServiceException 
 	 */
 	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
 		Operation foundOperation = repository.findOneByDescriptionAndType_Code(description, typeCode);
 		return foundOperation != null && foundOperation.getDescription().compareTo(description) == 0;
 	}
-}
+	
+	/**
+	 * Retrieves a page of {@link Operation}s
+	 * 
+	 * @param page - The page number of the operations to retrieve
+	 * @param size - The size of the page of operations to retrieve.
+	 * @return a {@link PagedResponse} object that contains the {@link Operation}s.
+	 * @throws OHServiceException 
+	 */
+	public Page<Operation> getOperationPageable(int page, int size) throws OHServiceException {
+		return repository.findAllPageable(PageRequest.of(page, size));
 
+	}
+}

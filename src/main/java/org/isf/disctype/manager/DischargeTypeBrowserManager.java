@@ -40,7 +40,7 @@ public class DischargeTypeBrowserManager {
 	private DischargeTypeIoOperation ioOperations;
 
 	/**
-	 * Method that returns all DischargeTypes in a list
+	 * Return all the {@link DischargeType}s in a list.
 	 *
 	 * @return the list of all DischargeTypes (could be null)
 	 * @throws OHServiceException
@@ -50,31 +50,31 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * Method that create a new DischargeType
+	 * Persist a new {@link DischargeType}.
 	 *
 	 * @param dischargeType
-	 * @return true - if the new DischargeType has been inserted
+	 * @return the persisted new DischargeType object.
 	 * @throws OHServiceException
 	 */
-	public boolean newDischargeType(DischargeType dischargeType) throws OHServiceException {
+	public DischargeType newDischargeType(DischargeType dischargeType) throws OHServiceException {
 		validateDischargeType(dischargeType, true);
 		return ioOperations.newDischargeType(dischargeType);
 	}
 
 	/**
-	 * Method that updates an already existing DischargeType
+	 * Update an existing {@link DischargeType}.
 	 *
 	 * @param dischargeType
-	 * @return true - if the existing DischargeType has been updated
+	 * @return the persisted updated DischargeType object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDischargeType(DischargeType dischargeType) throws OHServiceException {
+	public DischargeType updateDischargeType(DischargeType dischargeType) throws OHServiceException {
 		validateDischargeType(dischargeType, false);
 		return ioOperations.newDischargeType(dischargeType);
 	}
 
 	/**
-	 * Method that check if a DischargeType already exists
+	 * Check if a {@link DischargeType} already exists.
 	 *
 	 * @param code
 	 * @return true - if the DischargeType already exists
@@ -85,15 +85,14 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * Method that delete a DischargeType
+	 * Delete a {@link DischargeType}.
 	 *
 	 * @param dischargeType
-	 * @return true - if the DischargeType has been deleted
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
+	public void deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
 		validateDeleteDischargeType(dischargeType);
-		return ioOperations.deleteDischargeType(dischargeType);
+		ioOperations.deleteDischargeType(dischargeType);
 	}
 
 	/**
@@ -104,7 +103,7 @@ public class DischargeTypeBrowserManager {
 	 */
 	protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (dischargeType.getCode().equals("D")) {
+		if ("D".equals(dischargeType.getCode())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord.msg")));
 		}
 		if (!errors.isEmpty()) {
@@ -116,13 +115,13 @@ public class DischargeTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param dischargeType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = dischargeType.getCode();
-		if (key.equals("")) {
+		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
 		if (key.length() > 10) {
@@ -132,7 +131,7 @@ public class DischargeTypeBrowserManager {
 		if (insert && isCodePresent(key)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
-		if (dischargeType.getDescription().equals("")) {
+		if (dischargeType.getDescription().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		if (!errors.isEmpty()) {

@@ -39,7 +39,7 @@ public class DischargeTypeIoOperation {
 	private DischargeTypeIoOperationRepository repository;
 	
 	/**
-	 * Method that returns all DischargeTypes in a list
+	 * Method that returns all {@link DischargeType}s in a list
 	 * 
 	 * @return the list of all DischargeTypes
 	 * @throws OHServiceException
@@ -49,41 +49,39 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * Method that updates an already existing DischargeType
+	 * Method that updates an already existing {@link DischargeType}
 	 * 
 	 * @param dischargeType
-	 * @return true - if the existing DischargeType has been updated
+	 * @return the persisted updated DischargeType object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDischargeType(DischargeType dischargeType) throws OHServiceException {
-		return repository.save(dischargeType) != null;
+	public DischargeType updateDischargeType(DischargeType dischargeType) throws OHServiceException {
+		return repository.save(dischargeType);
 	}
 
 	/**
-	 * Method that create a new DischargeType
+	 * Method that create a new {@link DischargeType}.
 	 * 
 	 * @param dischargeType
-	 * @return true - if the new DischargeType has been inserted
+	 * @return the persisted new DischargeType object.
 	 * @throws OHServiceException
 	 */
-	public boolean newDischargeType(DischargeType dischargeType) throws OHServiceException {
-		return repository.save(dischargeType) != null;
+	public DischargeType newDischargeType(DischargeType dischargeType) throws OHServiceException {
+		return repository.save(dischargeType);
 	}
 
 	/**
-	 * Method that delete a DischargeType
+	 * Method that deletes a {@link DischargeType}.
 	 * 
 	 * @param dischargeType
-	 * @return true - if the DischargeType has been deleted
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
+	public void deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
 		repository.delete(dischargeType);
-		return true;
 	}
 
 	/**
-	 * Method that check if a DischargeType already exists
+	 * Method that checks if a {@link DischargeType} already exists.
 	 * 
 	 * @param code
 	 * @return true - if the DischargeType already exists

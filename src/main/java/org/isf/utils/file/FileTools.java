@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,6 +22,9 @@
 package org.isf.utils.file;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +43,9 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * @author Mwithi
@@ -47,15 +54,15 @@ public class FileTools {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileTools.class);
 
-	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
+	private static final String[] BINARY_UNITS = { "B", "M", "G" }; // Byte, Megabyte, Gigabyte
 
 	// TODO: consider more specific versions of \d that do "some" validation
-	// DAY:   (0[1-9]|[12][0-9]|3[01])
+	// DAY: (0[1-9]|[12][0-9]|3[01])
 	// MONTH: (0[1-9]|1[012])
-	// YEAR:  (2\d\d\d)
+	// YEAR: (2\d\d\d)
 
-	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
-	// MIN:   ([0-5][0-9])
+	// HOUR: (0[0-9]|1[0-9]|2[0-3])
+	// MIN: ([0-5][0-9])
 
 	private static final String[][] dateTimeFormats = {
 			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
@@ -107,7 +114,7 @@ public class FileTools {
 	 * Retrieve timestamp from filename
 	 *
 	 * @param file
-	 * @return the list of retrieved date or <code>null</code> if nothing is found
+	 * @return the list of retrieved date or {@code null} if nothing is found
 	 */
 	public static List<Date> getTimestampFromName(File file) {
 		return getTimestampFromName(file.getName());
@@ -197,4 +204,54 @@ public class FileTools {
 		return size;
 	}
 
+	/**
+	 * Read a text file into string, with option to wrap with {@code <html>} tags
+	 * 
+	 * @param path the path to the file to read
+	 * @param makeHtml if {@code true}, wrap the text with {@code <html>} tags and {@code <br>} for new lines
+	 * @return the file content as plain text or html
+	 */
+	public static String readFileToStringLineByLine(String path, boolean makeHtml) {
+		File file = new File(path);
+		StringBuilder content = new StringBuilder();
+
+		if (!file.exists() || !file.isFile()) {
+			throw new IllegalArgumentException("File not found: " + path);
+		}
+
+		try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
+			if (makeHtml) {
+				content.append("<html>");
+			}
+			while (scanner.hasNextLine()) {
+				content.append(scanner.nextLine());
+				if (scanner.hasNextLine() && makeHtml) {
+					content.append("<br>");
+				}
+			}
+			if (makeHtml) {
+				content.append("</html>");
+			}
+		} catch (IOException e) {
+			LOGGER.error("Error to read file {}", path);
+			throw new UncheckedIOException(e);
+		}
+		return content.toString();
+	}
+
+	/**
+	 * Get file from classpath
+	 * @param filename
+	 * @return the File if it is found in the classpath
+	 */
+	public static File getFile(String filename) {
+		ResourceLoader resourceLoader = new DefaultResourceLoader();
+		Resource resource = resourceLoader.getResource(filename);
+		try {
+			return resource.getFile();
+		} catch (IOException e) {
+			LOGGER.debug("No {} file found", filename);
+		}
+		return null;
+	}
 }

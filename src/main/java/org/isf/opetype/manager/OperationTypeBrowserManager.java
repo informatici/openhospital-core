@@ -42,7 +42,7 @@ public class OperationTypeBrowserManager {
 	/**
 	 * Return the list of {@link OperationType}s
 	 *
-	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
+	 * @return the list of {@link OperationType}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException
 	 */
 	public List<OperationType> getOperationType() throws OHServiceException {
@@ -53,7 +53,7 @@ public class OperationTypeBrowserManager {
 	 * Insert an {@link OperationType} in the DB
 	 *
 	 * @param operationType - the {@link OperationType} to insert
-	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
+	 * @return the newly inserted {@link OperationType} object.
 	 * @throws OHServiceException
 	 */
 	public OperationType newOperationType(OperationType operationType) throws OHServiceException {
@@ -65,7 +65,7 @@ public class OperationTypeBrowserManager {
 	 * Update an {@link OperationType}
 	 *
 	 * @param operationType - the {@link OperationType} to update
-	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
+	 * @return the newly updated {@link OperationType} object.
 	 * @throws OHServiceException
 	 */
 	public OperationType updateOperationType(OperationType operationType) throws OHServiceException {
@@ -74,21 +74,21 @@ public class OperationTypeBrowserManager {
 	}
 
 	/**
-	 * Delete an {@link OperationType}
+	 * Delete an {@link OperationType} object. If the object does not exist it is silently ignored.  If the
+	 * object is null a {@link OHServiceException} is thrown.
 	 *
 	 * @param operationType - the {@link OperationType} to delete
-	 * @return <code>true</code> if the {@link OperationType} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteOperationType(OperationType operationType) throws OHServiceException {
-		return ioOperations.deleteOperationType(operationType);
+	public void deleteOperationType(OperationType operationType) throws OHServiceException {
+		ioOperations.deleteOperationType(operationType);
 	}
 
 	/**
 	 * Checks if an {@link OperationType} code has already been used
 	 *
 	 * @param code - the code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -106,10 +106,8 @@ public class OperationTypeBrowserManager {
 				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2)));
 			}
 		}
-		if (insert) {
-			if (isCodePresent(key)) {
+		if (insert && isCodePresent(key)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
-			}
 		}
 		if (description == null || description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));

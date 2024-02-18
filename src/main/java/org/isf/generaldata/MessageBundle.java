@@ -43,7 +43,7 @@ public class MessageBundle {
 
 	private static ResourceBundle defaultResourceBundle;
 
-	public static void initialize() throws RuntimeException {
+	public static void initialize() {
 		try {
 			defaultResourceBundle = ResourceBundle.getBundle("language", new Locale("en"));
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
@@ -88,7 +88,7 @@ public class MessageBundle {
 	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for
 	 * the setMemonic() method associated for example with a Button object.
 	 * <p>
-	 * This works because: VK_A thru VK_Z are the same as ASCII 'A' thru 'Z' (0x41 - 0x5A)
+	 * This works because: VK_A through VK_Z are the same as ASCII 'A' through 'Z' (0x41 - 0x5A)
 	 *
 	 * @param key a MessageBundle key (ending in ".key")
 	 * @return the int value associated with the string

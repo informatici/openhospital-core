@@ -139,7 +139,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
 		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
@@ -155,13 +156,12 @@ public class Tests extends OHCoreTestCase {
 	@Transactional // requires active session because of lazy loading patient
 	public void testIoUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		PatientVaccine result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result);
-		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
-		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
+		PatientVaccine updatedPatientVaccine = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
+		assertThat(updatedPatientVaccine.getVaccineDate()).isEqualTo(newDate);
 	}
 
 	@Test
@@ -174,18 +174,17 @@ public class Tests extends OHCoreTestCase {
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		PatientVaccine result = patvacIoOperation.newPatientVaccine(patientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
 	@Test
 	public void testIoDeletePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
-		boolean result = patvacIoOperation.deletePatientVaccine(foundPatientVaccine);
-		assertThat(result).isTrue();
-		result = patvacIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
+		patvacIoOperation.deletePatientVaccine(foundPatientVaccine);
+		assertThat(patvacIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -210,14 +209,16 @@ public class Tests extends OHCoreTestCase {
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
 		int id = setupTestPatientVaccine(false);
-		PatientVaccine found = patVacIoOperationRepository.findById(id).get();
+		PatientVaccine found = patVacIoOperationRepository.findById(id).orElse(null);
+		assertThat(found).isNotNull();
 		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
 
 		// then:
-		PatientVaccine result = patVacIoOperationRepository.findById(id).get();
+		PatientVaccine result = patVacIoOperationRepository.findById(id).orElse(null);
+		assertThat(result).isNotNull();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
@@ -307,7 +308,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
 		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
@@ -323,13 +325,12 @@ public class Tests extends OHCoreTestCase {
 	@Transactional // requires active session because of lazy loading patient
 	public void testMgrUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		PatientVaccine result = patVacManager.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result);
-		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
-		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
+		PatientVaccine updatedPatientVaccine = patVacManager.updatePatientVaccine(foundPatientVaccine);
+		assertThat(updatedPatientVaccine.getVaccineDate()).isEqualTo(newDate);
 	}
 
 	@Test
@@ -342,15 +343,16 @@ public class Tests extends OHCoreTestCase {
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		PatientVaccine result = patVacManager.newPatientVaccine(patientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
 	@Test
 	public void testMgrDeletePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(true);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
-		assertThat(patVacManager.deletePatientVaccine(foundPatientVaccine)).isTrue();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
+		patVacManager.deletePatientVaccine(foundPatientVaccine);
 		assertThat(patvacIoOperation.isCodePresent(code)).isFalse();
 	}
 
@@ -384,11 +386,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -403,11 +405,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -422,11 +424,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -441,11 +443,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -460,11 +462,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -479,11 +481,11 @@ public class Tests extends OHCoreTestCase {
 
 			patVacManager.newPatientVaccine(patientVaccine);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -498,9 +500,9 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
-		assertThat(patientVaccine1).isEqualTo(patientVaccine1);
 		assertThat(patientVaccine1)
 				.isNotNull()
+				.isEqualTo(patientVaccine1)
 				.isNotEqualTo("someString");
 
 		patientVaccine2.setCode(-99);
@@ -570,7 +572,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkPatientVaccineIntoDb(int code) {
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
 		testPatientVaccine.check(foundPatientVaccine);
 	}
 }

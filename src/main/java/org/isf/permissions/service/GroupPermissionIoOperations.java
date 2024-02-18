@@ -41,11 +41,11 @@ public class GroupPermissionIoOperations {
 	@Autowired
 	private GroupPermissionIoOperationRepository repository;
 
-	public List<GroupPermission> findByIdIn(List<Integer> ids) {
-		return this.repository.findByIdIn(ids);
+	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
+		return repository.findByIdIn(ids);
 	}
 
-	public List<GroupPermission> generateGroupPermissionList(Permission model, List<UserGroup> userGroups) {
+	public List<GroupPermission> generateGroupPermissionList(Permission model, List<UserGroup> userGroups) throws OHServiceException {
 		return userGroups.stream().map(ug -> {
 			GroupPermission gp = new GroupPermission();
 			gp.setPermission(model);
@@ -55,8 +55,9 @@ public class GroupPermissionIoOperations {
 		}).collect(Collectors.toList());
 	}
 
-	public List<GroupPermission> findByPermissionIdAndUserGroupCodes(Integer permissionId, List<String> userGroupCodes) {
-		return this.repository.findByPermission_IdAndUserGroup_CodeIn(permissionId, userGroupCodes);
+	public List<GroupPermission> findByPermissionIdAndUserGroupCodes(Integer permissionId, List<String> userGroupCodes)
+		throws OHServiceException {
+		return repository.findByPermission_IdAndUserGroup_CodeIn(permissionId, userGroupCodes);
 	}
 
 }

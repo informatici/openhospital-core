@@ -37,15 +37,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Price - model for the price entity
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 10/09/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PRICES")
 @EntityListeners(AuditingEntityListener.class)

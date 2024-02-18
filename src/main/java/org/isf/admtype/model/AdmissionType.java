@@ -33,20 +33,11 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Admission Type - model for the admission type entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 03/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_ADMISSIONTYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "ADMT_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "ADMT_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "ADMT_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "ADMT_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ADMT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "ADMT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ADMT_LAST_MODIFIED_DATE"))
@@ -63,8 +54,7 @@ public class AdmissionType extends Auditable<String> {
 	@Transient
 	private volatile int hashCode;
 	
-	public AdmissionType() 
-    {
+	public AdmissionType() {
 		super();
     }
 	 
@@ -77,13 +67,11 @@ public class AdmissionType extends Auditable<String> {
 	    this.description = aDescription;
     }
     
-    public String getCode() 
-    {
+    public String getCode() {
         return this.code;
     }
     
-    public void setCode(String aCode) 
-    {
+    public void setCode(String aCode) {
         this.code = aCode;
     }
 
@@ -111,7 +99,7 @@ public class AdmissionType extends Auditable<String> {
 		}
 		
 		AdmissionType admissionType = (AdmissionType)obj;
-		return (this.getCode().equals(admissionType.getCode()));
+		return this.getCode().equals(admissionType.getCode());
 	}
 	
 	@Override

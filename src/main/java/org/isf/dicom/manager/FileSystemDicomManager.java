@@ -110,10 +110,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @throws OHDicomException 
 	 */
 	@Override
-	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHDicomException {
+	public Long[] getSeriesDetail(int patientID, String seriesNumber) throws OHDicomException {
 		try {
 			// seriesNumber cannot be null, so it must return null
-			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null")) {
+			if (seriesNumber == null || seriesNumber.trim().isEmpty() || seriesNumber.equalsIgnoreCase("null")) {
 				return null;
 			}
 			File df = getSerieDir(patientID, seriesNumber, false);
@@ -125,7 +125,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			for (int i = 0; i < _longs.length; i++) {
 
 				try {
-					_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf(".")));
+					_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf('.')));
 				} catch (Exception e) {
 				}
 			}
@@ -150,24 +150,26 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * 
 	 * @param patientId, the id of patient
 	 * @param seriesNumber, the series number to delete
-	 * @return true if success
-	 * @throws OHDicomException 
+	 * @throws OHDicomException
 	 */
 	@Override
-	public boolean deleteSerie(int patientId, String seriesNumber) throws OHDicomException {
+	public void deleteSeries(int patientId, String seriesNumber) throws OHDicomException {
 		try {
 			// seriesNumber cannot be null, so it must return false
-			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null")) {
-				return false;
+			if (seriesNumber == null || seriesNumber.trim().isEmpty() || seriesNumber.equalsIgnoreCase("null")) {
+				throw new OHDicomException(new OHExceptionMessage("The series number is null or missing."));
 			}
 			File deleteFolder = getSerieDir(patientId, seriesNumber, false);
 			File[] f = deleteFolder.listFiles();
-			boolean deleted = true;
 
 			for (File file : f) {
-				deleted = deleted && file.delete();
+				if (!file.delete()) {
+					throw new OHDicomException(new OHExceptionMessage("File deletion for " + file.getName() + " failed."));
+				}
 			}
-			return deleted && deleteFolder.delete();
+			if (!deleteFolder.delete()) {
+				throw new OHDicomException(new OHExceptionMessage("File deletion for " + deleteFolder.getName() + " failed."));
+			}
 
 		} catch (Exception exception) {
 			throw new OHDicomException(exception,
@@ -185,7 +187,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	@Override
 	public FileDicom loadDetails(Long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		// seriesNumber cannot be null, so it must return null
-		if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null")) {
+		if (seriesNumber == null || seriesNumber.trim().isEmpty() || seriesNumber.equalsIgnoreCase("null")) {
 			return null;
 		}
 		if (idFile == null) {
@@ -256,7 +258,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 			// some times this number could be null, it's wrong, but I add
 			// line to avoid exception
-			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null")) {
+			if (seriesNumber == null || seriesNumber.trim().isEmpty() || seriesNumber.equalsIgnoreCase("null")) {
 				seriesNumber = SourceFiles.generateSeriesNumber(patId);
 				dicom.setDicomSeriesNumber(seriesNumber);
 				dicom.setDicomSeriesInstanceUID("<org_root>."+seriesNumber);
@@ -266,7 +268,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// dicomInstanceUID is used to identify a unique file in the series (like DM_FILE_ID in the DB)
 			// so cannot be empty and will be used only for this cycle
 			if (dicomInstanceUID == null || dicomInstanceUID.isEmpty()) {
-				dicomInstanceUID = seriesNumber + "." + idFile;
+				dicomInstanceUID = seriesNumber + '.' + idFile;
 				dicom.setDicomInstanceUID(dicomInstanceUID);
 			}
 
@@ -320,7 +322,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 */
 	private FileDicom loadMetadata(long idFile, int patientId, String series) throws IOException, SQLException {
 		// Series must exist, so we need to check it and return null in case
-		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) {
+		if (series == null || series.trim().isEmpty() || series.equalsIgnoreCase("null")) {
 			return null;
 		}
 		FileDicom rv = new FileDicom();
@@ -336,7 +338,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	*/
 	private FileDicom loadData(long idFile, int patientId, String series) throws IOException, SQLException, OHDicomException  {
 		// Series must exist, so we need to check it and return null in case
-		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) {
+		if (series == null || series.trim().isEmpty() || series.equalsIgnoreCase("null")) {
 			return null;
 		}
 		FileDicom rv = new FileDicom();
@@ -429,7 +431,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			int patId = dicom.getPatId();
 			String serieNumber = dicom.getDicomSeriesNumber();
 			String diuid = dicom.getDicomInstanceUID();
-			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null")) {
+			if (serieNumber == null || serieNumber.trim().isEmpty() || serieNumber.equalsIgnoreCase("null")) {
 				return false;
 			}
 			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null")) {
@@ -578,7 +580,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 		for (int i = 0; i < _longs.length; i++) {
 			try {
-				_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf(".")));
+				_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf('.')));
 			} catch (Exception e) {
 			}
 		}

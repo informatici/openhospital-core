@@ -75,7 +75,6 @@ public class TestMergePatient extends OHCoreTestCase {
 	private static TestAdmission testAdmission;
 	private static TestAdmissionType testAdmissionType;
 	private static TestBill testBill;
-	private static TestBillPayments testBillPayments;
 	private static TestDisease testDisease;
 	private static TestDiseaseType testDiseaseType;
 	private static TestPriceList testPriceList;
@@ -116,7 +115,7 @@ public class TestMergePatient extends OHCoreTestCase {
 		testAdmission = new TestAdmission();
 		testAdmissionType = new TestAdmissionType();
 		testBill = new TestBill();
-		testBillPayments = new TestBillPayments();
+		TestBillPayments testBillPayments = new TestBillPayments();
 		testDisease = new TestDisease();
 		testDiseaseType = new TestDiseaseType();
 		testPriceList = new TestPriceList();
@@ -230,7 +229,7 @@ public class TestMergePatient extends OHCoreTestCase {
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
 
 		// when:
-		assertThat(patientBrowserManager.mergePatient(mergedPatient, obsoletePatient)).isTrue();
+		patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 
 		// then:
 		assertThat(mergedPatient.getNote()).isEqualTo("Note 2\n\nNote 1");
@@ -250,7 +249,7 @@ public class TestMergePatient extends OHCoreTestCase {
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
 
 		// when:
-		assertThat(patientBrowserManager.mergePatient(mergedPatient, obsoletePatient)).isTrue();
+		patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 
 		// then:
 		assertThat(mergedPatient.getAge()).isGreaterThanOrEqualTo(21);   // in 2021 the value of age is 21
@@ -271,7 +270,7 @@ public class TestMergePatient extends OHCoreTestCase {
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
 
 		// when:
-		assertThat(patientBrowserManager.mergePatient(mergedPatient, obsoletePatient)).isTrue();
+		patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 
 		// then:
 		assertThat(mergedPatient.getAge()).isGreaterThanOrEqualTo(71);  // in 2021 the value of age is 71
@@ -313,10 +312,10 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -334,10 +333,10 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting one validation error messages"));
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting one validation error messages"));
 	}
 
 	@Test
@@ -355,10 +354,10 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting one validation error messages"));
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting one validation error messages"));
 	}
 
 	@Test
@@ -372,7 +371,7 @@ public class TestMergePatient extends OHCoreTestCase {
 			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
 			diseaseOut1.setCode("888");
 			Admission admission = testAdmission.setup(ward, patient1, admissionType, diseaseIn, diseaseOut1,
-					null, null, null, null, null, null, null, false);
+				null, null, null, null, null, null, null, false);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
@@ -387,10 +386,10 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting one validation error messages"));
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting one validation error messages"));
 	}
 
 	@Test
@@ -407,7 +406,7 @@ public class TestMergePatient extends OHCoreTestCase {
 			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
 			diseaseOut1.setCode("888");
 			Admission admission = testAdmission.setup(ward, patient2, admissionType, diseaseIn, diseaseOut1,
-					null, null, null, null, null, null, null, false);
+				null, null, null, null, null, null, null, false);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
@@ -419,41 +418,48 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
 		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting two validation error messages"));
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting two validation error messages"));
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) {
-		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
+		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).orElse(null);
+		assertThat(mergedPatientResult).isNotNull();
+		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).orElse(null);
+		assertThat(obsoletePatientResult).isNotNull();
 		assertThat(obsoletePatientResult.getDeleted()).isEqualTo('Y');
 		assertThat(mergedPatientResult.getDeleted()).isEqualTo('N');
 	}
 
 	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) throws OHException {
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
+		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).orElse(null);
+		assertThat(obsoletePatientResult).isNotNull();
 		assertThat(obsoletePatientResult.getDeleted()).isEqualTo('N');
 	}
 
 	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) throws OHException {
-		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
+		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).orElse(null);
+		assertThat(visitResult).isNotNull();
 		assertThat(visitResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	private void assertThatVisitIsStillAssignedToObsoletePatient(Visit visit, Patient obsoletePatient) throws OHException {
-		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
+		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).orElse(null);
+		assertThat(visitResult).isNotNull();
 		assertThat(visitResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
 	private void assertThatExaminationWasMovedFromObsoleteToMergedPatient(PatientExamination examination, Patient mergedPatient) throws OHException {
-		PatientExamination patientResult = examinationIoOperationRepository.findById(examination.getPex_ID()).get();
+		PatientExamination patientResult = examinationIoOperationRepository.findById(examination.getPex_ID()).orElse(null);
+		assertThat(patientResult).isNotNull();
 		assertThat(patientResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	private void assertThatExaminationIsStillAssignedToObsoletePatient(PatientExamination patientExamination, Patient obsoletePatient) throws OHException {
-		PatientExamination patientResult = examinationIoOperationRepository.findById(patientExamination.getPex_ID()).get();
+		PatientExamination patientResult = examinationIoOperationRepository.findById(patientExamination.getPex_ID()).orElse(null);
+		assertThat(patientResult).isNotNull();
 		assertThat(patientResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 

@@ -47,7 +47,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param deliveryResultType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDeliveryResultType(DeliveryResultType deliveryResultType, boolean insert) throws OHServiceException {
@@ -73,9 +73,9 @@ public class DeliveryResultTypeBrowserManager {
 
 	/**
 	 * Returns all stored {@link DeliveryResultType}s.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
-	 * @return the stored {@link DeliveryResultType}s, <code>null</code> if an error occurred.
+	 * @return the stored {@link DeliveryResultType}s, {@code null} if an error occurred.
 	 * @throws OHServiceException
 	 */
 	public List<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
@@ -84,36 +84,36 @@ public class DeliveryResultTypeBrowserManager {
 
 	/**
 	 * Stores the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to store.
-	 * @return <code>true</code> if the delivery result type has been stored.
+	 * @return the new {@link DeliveryResultType}.
 	 * @throws OHServiceException
 	 */
-	public boolean newDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
+	public DeliveryResultType newDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
 		validateDeliveryResultType(deliveryresultType, true);
 		return ioOperations.newDeliveryResultType(deliveryresultType);
 	}
 
 	/**
 	 * Updates the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to update.
-	 * @return <code>true</code> if the delivery result type has been updated, <code>false</code> otherwise.
+	 * @return the updated {@link DeliveryResultType}.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
+	public DeliveryResultType updateDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
 		validateDeliveryResultType(deliveryresultType, false);
 		return ioOperations.updateDeliveryResultType(deliveryresultType);
 	}
 
 	/**
 	 * Checks if the specified code is already used by others {@link DeliveryResultType}s.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -122,14 +122,13 @@ public class DeliveryResultTypeBrowserManager {
 
 	/**
 	 * Deletes the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to delete.
-	 * @return <code>true</code> if the delivery result type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
-		return ioOperations.deleteDeliveryResultType(deliveryresultType);
+	public void deleteDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
+		ioOperations.deleteDeliveryResultType(deliveryresultType);
 	}
 
 }

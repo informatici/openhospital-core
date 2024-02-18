@@ -127,12 +127,10 @@ public class SourceFiles extends Thread {
 			if (!value.isDirectory()) {
 				try {
 					loadDicom(fileDicom, value, patient);
+				} catch (OHDicomException ohDicomException) {
+					LOGGER.error("loadDicomDir: {}", ohDicomException.getMessages().get(0).getMessage());
 				} catch (Exception e) {
-					if (e instanceof OHDicomException) {
-						LOGGER.error("loadDicomDir: {}", ((OHDicomException) e).getMessages().get(0).getMessage());
-					} else {
-						throw e;
-					}
+					throw e;
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
@@ -471,7 +469,7 @@ public class SourceFiles extends Thread {
 			if (modality != null) {
 				dicomFileDetail.setModality(modality);
 			}
-			dicomFileDetail.setIdFile(0); //it trigger the DB save with SqlDicomManager
+			dicomFileDetail.setIdFile(0); //it will trigger the DB save with SqlDicomManager
 			try {
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);
 				//dicomFileDetail.setDicomSeriesNumber(dicom.getDicomSeriesNumber()); //series number could be generated if missing.

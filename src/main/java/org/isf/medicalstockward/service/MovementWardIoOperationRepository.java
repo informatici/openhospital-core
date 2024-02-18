@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -33,14 +33,28 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MovementWardIoOperationRepository extends JpaRepository<MovementWard, Integer> {
 
-	@Query(value = "select movWard from MovementWard movWard where movWard.wardTo.code=:idWardTo and (movWard.date>= :dateFrom and movWard.date < :dateTo)")
+	@Query(value = "select movWard from MovementWard movWard where movWard.wardTo.code=:idWardTo and (movWard.date >= :dateFrom and movWard.date < :dateTo)")
 	List<MovementWard> findWardMovements(@Param("idWardTo") String idWardTo,
-			@Param("dateFrom") LocalDateTime dateFrom,
-			@Param("dateTo") LocalDateTime dateTo);
+					@Param("dateFrom") LocalDateTime dateFrom,
+					@Param("dateTo") LocalDateTime dateTo);
 
 	List<MovementWard> findByPatient_code(int code);
 
-	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOVWARD WHERE MMVN_PAT_ID = :patId", nativeQuery = true)
+	@Query(value = "select movWard from MovementWard movWard where movWard.patient.code = :patId")
 	List<MovementWard> findWardMovementPat(@Param("patId") Integer patId);
 
+	@Query("select count(m) from MovementWard m where active=1")
+	long countAllActiveMovementsWard();
+
+	@Query(value = "select movWard from MovementWard movWard where movWard.medical.code = :medID")
+	List<MovementWard> findByMedicalCode(@Param("medID") int medID);
+
+	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOVWARD WHERE MMVN_WRD_ID_A = :wardID ORDER BY MMVN_ID DESC LIMIT 1", nativeQuery = true)
+	MovementWard findLastMovement(@Param("wardID") String wardID);
+
+	@Query(value = "select movWard from MovementWard movWard where movWard.ward.code = :wardCode and movWard.medical.code = :medicalCode and movWard.lot.code = :lotCode and movWard.date >= :date")
+	List<MovementWard> findByWardMedicalAndLotAfterOrSameDate(@Param("wardCode") String wardCode,
+					@Param("medicalCode") int medicalCode,
+					@Param("lotCode") String lotCode,
+					@Param("date") LocalDateTime date);
 }

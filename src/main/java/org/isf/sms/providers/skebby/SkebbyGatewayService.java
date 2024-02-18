@@ -111,7 +111,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
 		if (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty()) {
-			return userKey + ";" + token;
+			return userKey + ';' + token;
 		}
 
 		final String username = this.smsProperties.getProperty(KEY_USERNAME);
@@ -121,7 +121,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 	}
 
 	private boolean isAccessTokenAuthentication() {
-		// if user defined these properties, then it means that we will retrieve data with ACCESS_TOKEN (which does not expires -> SESSION_KEY instead expires)
+		// if user defined these properties, then it means that we will retrieve data with ACCESS_TOKEN (which does not expire -> SESSION_KEY instead expires)
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
 		return (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty());

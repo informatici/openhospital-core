@@ -53,7 +53,7 @@ public class ExamBrowsingManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param exam
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateExam(Exam exam, boolean insert) throws OHServiceException {
@@ -77,7 +77,7 @@ public class ExamBrowsingManager {
 	/**
 	 * Returns the list of {@link Exam}s
 	 *
-	 * @return the list of {@link Exam}s. It could be <code>null</code>
+	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
 	public List<Exam> getExams() throws OHServiceException {
@@ -88,7 +88,7 @@ public class ExamBrowsingManager {
 	 * Returns the list of {@link Exam}s that matches passed description
 	 *
 	 * @param description - the exam description
-	 * @return the list of {@link Exam}s. It could be <code>null</code>
+	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
 	public List<Exam> getExams(String description) throws OHServiceException {
@@ -99,7 +99,7 @@ public class ExamBrowsingManager {
 	 * Returns the list of {@link Exam}s by {@link ExamType} description
 	 *
 	 * @param description - the exam description
-	 * @return the list of {@link Exam}s. It could be <code>null</code>
+	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
 	public List<Exam> getExamsByTypeDescription(String description) throws OHServiceException {
@@ -109,7 +109,7 @@ public class ExamBrowsingManager {
 	/**
 	 * Returns the list of {@link ExamType}s
 	 *
-	 * @return the list of {@link ExamType}s. It could be <code>null</code>
+	 * @return the list of {@link ExamType}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
 	public List<ExamType> getExamType() throws OHServiceException {
@@ -122,7 +122,7 @@ public class ExamBrowsingManager {
 	 * true
 	 *
 	 * @param exam the {@link Exam}
-	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
+	 * @return {@code true} if the Exam code has already been used, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isKeyPresent(Exam exam) throws OHServiceException {
@@ -133,10 +133,10 @@ public class ExamBrowsingManager {
 	 * Insert a new {@link Exam} in the DB.
 	 *
 	 * @param exam - the {@link Exam} to insert
-	 * @return <code>true</code> if the {@link Exam} has been inserted, <code>false</code> otherwise
+	 * @return the newly persisted {@link Exam}.
 	 * @throws OHServiceException
 	 */
-	public boolean newExam(Exam exam) throws OHServiceException {
+	public Exam newExam(Exam exam) throws OHServiceException {
 		validateExam(exam, true);
 		return ioOperations.newExam(exam);
 	}
@@ -145,7 +145,7 @@ public class ExamBrowsingManager {
 	 * Updates an existing {@link Exam} in the db
 	 *
 	 * @param exam -  the {@link Exam} to update
-	 * @return <code>true</code> if the existing {@link Exam} has been updated, <code>false</code> otherwise
+	 * @return {@code true} if the existing {@link Exam} has been updated, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public Exam updateExam(Exam exam) throws OHServiceException {
@@ -157,10 +157,9 @@ public class ExamBrowsingManager {
 	 * Delete an {@link Exam}
 	 *
 	 * @param exam - the {@link Exam} to delete
-	 * @return <code>true</code> if the {@link Exam} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExam(Exam exam) throws OHServiceException {
-		return ioOperations.deleteExam(exam);
+	public void deleteExam(Exam exam) throws OHServiceException {
+		ioOperations.deleteExam(exam);
 	}
 }

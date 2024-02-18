@@ -6,7 +6,7 @@ The Core component is used by the [Java Swing desktop GUI][openhospital-gui], an
 
 ## How to build
 
-After having installed Java JDK 8+ and Maven, to build this project issue:  
+After having installed Java JDK 17+ and Maven (or using the provided Maven Wrapper `mvnw`), to build this project issue:  
 
     mvn package
 
@@ -18,11 +18,12 @@ To run the tests simply issue:
 
     mvn test
 
-Tests are run against an in-memory database (H2).  
-To test the application against MySQL, you can change [`database.properties`][database.prop] and run the Docker container in the root folder with:
+Tests are ran against an in-memory database (H2). To run tests against a MariaDB instance, you can change [`src/test/resources/resources/database.properties`][database.prop] and run the Docker container in the root folder with:
 
-    # clean previous build
+    # clean previous builds
     docker compose rm --stop --volumes --force
+    
+    # build and run a mariadb instance at localhost:3306
     docker-compose up
 
 

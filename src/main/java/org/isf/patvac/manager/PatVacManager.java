@@ -36,15 +36,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * ------------------------------------------
- * PatVacManager - patient-vaccine manager
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 14/11/2011 - claudia - inserted search condition on date
- * ------------------------------------------
- */
 @Component
 public class PatVacManager {
 
@@ -52,9 +43,9 @@ public class PatVacManager {
 	private PatVacIoOperations ioOperations;
 
 	/**
-	 * Returns all {@link PatientVaccine}s of today or one week ago
+	 * Returns all {@link PatientVaccine}s for today or one week ago.
 	 *
-	 * @param minusOneWeek - if <code>true</code> return the last week
+	 * @param minusOneWeek - if {@code true} return the last week
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
@@ -63,8 +54,7 @@ public class PatVacManager {
 	}
 
 	/**
-	 * Returns all {@link PatientVaccine}s within <code>dateFrom</code> and
-	 * <code>dateTo</code>
+	 * Returns all {@link PatientVaccine}s within {@code dateFrom} and {@code dateTo}.
 	 *
 	 * @param vaccineTypeCode
 	 * @param vaccineCode
@@ -82,10 +72,10 @@ public class PatVacManager {
 	}
 
 	/**
-	 * Inserts a {@link PatientVaccine} in the DB
+	 * Inserts a {@link PatientVaccine}.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the newly {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
 	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
@@ -94,10 +84,10 @@ public class PatVacManager {
 	}
 
 	/**
-	 * Updates a {@link PatientVaccine}
+	 * Updates a {@link PatientVaccine}.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @return the updated {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
 	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
@@ -106,21 +96,20 @@ public class PatVacManager {
 	}
 
 	/**
-	 * Deletes a {@link PatientVaccine}
+	 * Deletes a {@link PatientVaccine}.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-		return ioOperations.deletePatientVaccine(patVac);
+	public void deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		ioOperations.deletePatientVaccine(patVac);
 	}
 
 	/**
-	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
+	 * Returns the max progressive number within specified year or within current year if {@code 0}.
 	 *
 	 * @param year
-	 * @return <code>int</code> - the progressive number in the year
+	 * @return {@code int} - the progressive number in the year
 	 * @throws OHServiceException
 	 */
 	public int getProgYear(int year) throws OHServiceException {
@@ -132,7 +121,7 @@ public class PatVacManager {
 	}
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param patientVaccine
 	 * @throws OHDataValidationException

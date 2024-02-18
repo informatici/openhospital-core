@@ -160,7 +160,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		List<Malnutrition> malnutritions = malnutritionIoOperation.getMalnutritions(String.valueOf(foundMalnutrition.getAdmission().getId()));
 		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
 	}
@@ -168,7 +169,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLastMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		Malnutrition malnutrition = malnutritionIoOperation.getLastMalnutrition(foundMalnutrition.getAdmission().getId());
 		assertThat(malnutrition.getCode()).isEqualTo(code);
 	}
@@ -176,12 +178,14 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		foundMalnutrition.setHeight(200);
 		Malnutrition result = malnutritionIoOperation.updateMalnutrition(foundMalnutrition);
 		assertThat(result).isNotNull();
-		Malnutrition updateMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
+		Malnutrition updatedMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(updatedMalnutrition).isNotNull();
+		assertThat(updatedMalnutrition.getHeight()).isCloseTo(200.0f, within(0.000001f));
 	}
 
 	@Test
@@ -225,25 +229,24 @@ public class Tests extends OHCoreTestCase {
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 		Malnutrition result = malnutritionIoOperation.newMalnutrition(malnutrition);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 
 	@Test
 	public void testIoDeleteMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		boolean result = malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
-		assertThat(result).isTrue();
-		result = malnutritionIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
+		malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
+		assertThat(malnutritionIoOperation.isCodePresent(code)).isFalse();
 	}
 
-	// ===================================
 	@Test
 	public void testMgrGetMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		List<Malnutrition> malnutritions = malnutritionManager.getMalnutrition(String.valueOf(foundMalnutrition.getAdmission().getId()));
 		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
 	}
@@ -251,7 +254,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLastMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		Malnutrition malnutrition = malnutritionManager.getLastMalnutrition(foundMalnutrition.getAdmission().getId());
 		assertThat(malnutrition.getCode()).isEqualTo(code);
 	}
@@ -259,12 +263,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		foundMalnutrition.setHeight(200);
-		Malnutrition result = malnutritionManager.updateMalnutrition(foundMalnutrition);
-		assertThat(result).isNotNull();
-		Malnutrition updateMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
+		malnutritionManager.updateMalnutrition(foundMalnutrition);
+		Malnutrition updatedMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(updatedMalnutrition).isNotNull();
+		assertThat(updatedMalnutrition.getHeight()).isCloseTo(200.0f, within(0.000001f));
 	}
 
 	@Test
@@ -308,7 +313,7 @@ public class Tests extends OHCoreTestCase {
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 		Malnutrition result = malnutritionManager.newMalnutrition(malnutrition);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 
@@ -611,7 +616,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMalnutritionGetterSetter() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(malnutrition).isNotNull();
 
 		malnutrition.setCode(-1);
 		assertThat(malnutrition.getCode()).isEqualTo(-1);
@@ -699,7 +705,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMalnutritionHasCode() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(malnutrition).isNotNull();
 		// compute first time
 		int hashCode = malnutrition.hashCode();
 		assertThat(hashCode).isEqualTo(23 * 133 + code);
@@ -710,11 +717,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		boolean result = malnutritionManager.deleteMalnutrition(foundMalnutrition);
-		assertThat(result).isTrue();
-		result = malnutritionIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
+		malnutritionManager.deleteMalnutrition(foundMalnutrition);
+		assertThat(malnutritionIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	private int setupTestMalnutrition(boolean usingSet) throws OHException {
@@ -761,7 +767,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkMalnutritionIntoDb(int code) throws OHException {
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).get();
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMalnutrition).isNotNull();
 		testMalnutrition.check(foundMalnutrition);
 	}
 }

@@ -32,12 +32,12 @@ import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,13 +48,17 @@ public class UserBrowsingManager {
 	private MenuIoOperations ioOperations;
 
 	public static String getCurrentUser() {
-		return MDC.get("OHUser");
+		if (UserSession.getUser() != null) {
+			return UserSession.getUser().getUserName();
+		}
+		return null;
 	}
 
 	/**
 	 * Returns the list of {@link User}s.
 	 *
 	 * @return the list of {@link User}s
+	 * @throws OHServiceException
 	 */
 	public List<User> getUser() throws OHServiceException {
 		return ioOperations.getUser();
@@ -65,6 +69,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
+	 * @throws OHServiceException
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
 		return ioOperations.getUser(groupID);
@@ -75,6 +80,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param userName - user name
 	 * @return {@link User}
+	 * @throws OHServiceException
 	 */
 	public User getUserByName(String userName) throws OHServiceException {
 		return ioOperations.getUserByName(userName);
@@ -84,10 +90,10 @@ public class UserBrowsingManager {
 	 * Inserts a new {@link User} into the DB.
 	 *
 	 * @param user - the {@link User} to insert
-	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
+	 * @return the new {@link User}
 	 * @throws OHServiceException
 	 */
-	public boolean newUser(User user) throws OHServiceException {
+	public User newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
 		if (ioOperations.isUserNamePresent(username)) {
 			throw new OHDataIntegrityViolationException(
@@ -100,7 +106,8 @@ public class UserBrowsingManager {
 	 * Updates an existing {@link User} in the DB.
 	 *
 	 * @param user - the {@link User} to update
-	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if the user has been updated, {@code false} otherwise.
+	 * @throws OHServiceException
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
 		return ioOperations.updateUser(user);
@@ -110,7 +117,8 @@ public class UserBrowsingManager {
 	 * Updates the password of an existing {@link User} in the DB.
 	 *
 	 * @param user - the {@link User} to update
-	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if the user has been updated, {@code false} otherwise.
+	 * @throws OHServiceException
 	 */
 	public boolean updatePassword(User user) throws OHServiceException {
 		return ioOperations.updatePassword(user);
@@ -120,13 +128,13 @@ public class UserBrowsingManager {
 	 * Deletes an existing {@link User}.
 	 *
 	 * @param user - the {@link User} to delete
-	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
+	 * @throws OHServiceException
 	 */
-	public boolean deleteUser(User user) throws OHServiceException {
+	public void deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg")));
 		}
-		return ioOperations.deleteUser(user);
+		ioOperations.deleteUser(user);
 	}
 
 	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
@@ -156,6 +164,7 @@ public class UserBrowsingManager {
 	 * Lock the {@link User} from logging into the system.
 	 *
 	 * @param user the {@link User}
+	 * @throws OHServiceException
 	 */
 	public void lockUser(User user) throws OHServiceException {
 		user.setAccountLocked(true);
@@ -167,6 +176,7 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} so they can log into the system.
 	 *
 	 * @param user the {@link User}
+	 * @throws OHServiceException
 	 */
 	public void setLastLogin(User user) throws OHServiceException {
 		ioOperations.setLastLogin(user.getUserName(), TimeTools.getNow());
@@ -176,6 +186,7 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} so they can log into the system.
 	 *
 	 * @param user the {@link User}
+	 * @throws OHServiceException
 	 */
 	public void unlockUser(User user) throws OHServiceException {
 		user.setAccountLocked(false);
@@ -191,6 +202,7 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} after the required "lock time" has expired.
 	 *
 	 * @param user the {@link User}
+	 * @throws OHServiceException
 	 */
 	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
 		LocalDateTime lockedTime = user.getLockedTime();
@@ -211,6 +223,7 @@ public class UserBrowsingManager {
 	 * Returns the list of {@link UserGroup}s.
 	 *
 	 * @return the list of {@link UserGroup}s
+	 * @throws OHServiceException
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return ioOperations.getUserGroup();
@@ -221,6 +234,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
+	 * @throws OHServiceException
 	 */
 	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
 		return ioOperations.getMenu(aUser);
@@ -231,6 +245,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
+	 * @throws OHServiceException
 	 */
 	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		return ioOperations.getGroupMenu(aGroup);
@@ -241,10 +256,11 @@ public class UserBrowsingManager {
 	 *
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
-	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
+	 * @return {@code true} if the menu has been replaced, {@code false} otherwise.
+	 * @throws OHServiceException
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
-		return ioOperations.setGroupMenu(aGroup, menu, false);
+		return ioOperations.setGroupMenu(aGroup, menu);
 	}
 
 	/**
@@ -252,6 +268,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
+	 * @throws OHServiceException
 	 */
 	public String getUsrInfo(String userName) throws OHServiceException {
 		return ioOperations.getUsrInfo(userName);
@@ -261,9 +278,9 @@ public class UserBrowsingManager {
 	 * Deletes a {@link UserGroup}.
 	 *
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
+	 * @throws OHServiceException
 	 */
-	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
@@ -272,16 +289,17 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
-		return ioOperations.deleteGroup(aGroup);
+		ioOperations.deleteGroup(aGroup);
 	}
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights.
 	 *
 	 * @param aGroup - the {@link UserGroup} to insert
-	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
+	 * @return the new {@link UserGroup}
+	 * @throws OHServiceException
 	 */
-	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
+	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
 		String code = aGroup.getCode();
 		if (ioOperations.isGroupNamePresent(code)) {
 			throw new OHDataIntegrityViolationException(
@@ -294,17 +312,18 @@ public class UserBrowsingManager {
 	 * Updates an existing {@link UserGroup} in the DB.
 	 *
 	 * @param aGroup - the {@link UserGroup} to update
-	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @throws OHServiceException
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		return ioOperations.updateUserGroup(aGroup);
 	}
 
 	/**
-	 * Tests whether a password meets the requirment for various characters being present
+	 * Tests whether a password meets the requirement for various characters being present
 	 *
 	 * @param password
-	 * @return <code>true</code> if password is meets the minimum requirements, <code>false</code> otherwise.
+	 * @return {@code true} if password is meets the minimum requirements, {@code false} otherwise.
 	 */
 	public boolean isPasswordStrong(String password) {
 		if (password == null) {

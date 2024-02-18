@@ -43,40 +43,38 @@ public class PermissionIoOperations {
 	@Autowired
 	private GroupPermissionIoOperationRepository groupPermissionRepository;
 
-	public List<Permission> retrivePermisionsByGroupCode(String userGropupCode) {
-		return this.repository.findAllByUserGroupCode(userGropupCode);
+	public List<Permission> retrivePermisionsByGroupCode(String userGropupCode) throws OHServiceException {
+		return repository.findAllByUserGroupCode(userGropupCode);
 	}
 
-	public List<Permission> retrievePermissionsByCurrentLoggedInUser(String currentUserName) {
-		return this.repository.retrievePermissionsByCurrentLoggedInUser(currentUserName);
+	public List<Permission> retrievePermissionsByCurrentLoggedInUser(String currentUserName) throws OHServiceException {
+		return repository.retrievePermissionsByCurrentLoggedInUser(currentUserName);
 	}
 
-	public Permission retrievePermissionById(Integer id) {
-		return this.repository.findById(id).orElse(null);
+	public Permission retrievePermissionById(Integer id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 
-	public Permission retrievePermissionByName(String name) {
-		return this.repository.findByName(name);
-
+	public Permission retrievePermissionByName(String name) throws OHServiceException {
+		return repository.findByName(name);
 	}
 
-	public Permission insertPermission(Permission permission) {
-		Permission permissionResult = this.repository.save(permission);
+	public Permission insertPermission(Permission permission) throws OHServiceException {
+		Permission permissionResult = repository.save(permission);
 		permission.getGroupPermission().forEach(gp -> {
 			gp.setPermission(permissionResult);
-			this.groupPermissionRepository.save(gp);
+			groupPermissionRepository.save(gp);
 		});
-		return permission;
+		return permissionResult;
 	}
 
-	public Permission updatePermission(Permission permission) {
-		// All group permissions (could exists already on DB)
+	public Permission updatePermission(Permission permission) throws OHServiceException {
+		// All group permissions (could exist already in the DB)
 		List<GroupPermission> gp = permission.getGroupPermission();
 
-		Permission permissionUpdated = this.repository.save(permission);
+		Permission permissionUpdated = repository.save(permission);
 		// retrieve groupPermission stored in DB
-		List<String> userGroupCodes = gp.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
-		List<GroupPermission> groupPermissionInDB = this.groupPermissionRepository.findByPermission_id(permission.getId());
+		List<GroupPermission> groupPermissionInDB = groupPermissionRepository.findByPermission_id(permission.getId());
 
 		// calculate GroupPermission to delete
 		List<String> allUserGroupCodesToStore = gp.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
@@ -86,30 +84,29 @@ public class PermissionIoOperations {
 		List<String> allUserGroupCodesToInsert = allUserGroupCodesToStore.stream().filter(item -> !allUserGroupCodesOnDB.contains(item)).collect(Collectors.toList());
 
 		// delete obsolete relations
-		List<GroupPermission> groupPermissionToDelete = this.groupPermissionRepository.findByUserGroup_codeInAndPermission_id(allUserGroupCodesToDelete, permission.getId());
-		this.groupPermissionRepository.deleteAll(groupPermissionToDelete);
+		List<GroupPermission> groupPermissionToDelete = groupPermissionRepository.findByUserGroup_codeInAndPermission_id(allUserGroupCodesToDelete, permission.getId());
+		groupPermissionRepository.deleteAll(groupPermissionToDelete);
 
 		// store new relations
 		gp.forEach(item -> {
 			if (allUserGroupCodesToInsert.contains(item.getUserGroup().getCode())) {
 				item.setPermission(permissionUpdated);
-				this.groupPermissionRepository.save(item);
+				groupPermissionRepository.save(item);
 			}
 		});
-		return this.repository.getReferenceById(permissionUpdated.getId());
+		return repository.getReferenceById(permissionUpdated.getId());
 	}
 
-	public Boolean deletePermission(Integer id) {
-		this.repository.deleteById(id);
-		return Boolean.TRUE;
+	public void deletePermission(Integer id) throws OHServiceException {
+		repository.deleteById(id);
 	}
 
-	public List<Permission> retrieveAllPermissions() {
-		return this.repository.findAll();
+	public List<Permission> retrieveAllPermissions() throws OHServiceException {
+		return repository.findAll();
 	}
 
-	public boolean exists(int id) {
-		return this.repository.existsById(id);
+	public boolean exists(int id) throws OHServiceException {
+		return repository.existsById(id);
 	}
 
 }

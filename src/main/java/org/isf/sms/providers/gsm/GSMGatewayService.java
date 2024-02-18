@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,34 +24,28 @@ package org.isf.sms.providers.gsm;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.TooManyListenersException;
 
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.server.PortInUseException;
 import org.springframework.stereotype.Component;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
 
 /**
  * @author Mwithi 03/feb/2014
  */
 @Component
-public class GSMGatewayService implements SmsSenderInterface, SerialPortEventListener {
+public class GSMGatewayService implements SmsSenderInterface, SerialPortDataListener {
 
 	public static final String SERVICE_NAME = "gsm-gateway-service";
 	private static final Logger LOGGER = LoggerFactory.getLogger(GSMGatewayService.class);
 	private static final String EOF = "\r";
 
-	private Enumeration< ? > portList;
-	private CommPortIdentifier portId;
-	private String port;
 	private SerialPort serialPort;
 	private boolean connected;
 	private OutputStream outputStream;
@@ -69,66 +63,53 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 	 */
 	@Override
 	public boolean terminate() {
-		serialPort.close();
+		serialPort.closePort();
 		return true;
 	}
 
 	/**
 	 * Method that looks for the port specified
 	 * 
-	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
+	 * @return {@code true} if the COM port is ready to be used, {@code false} otherwise.
 	 */
 	@Override
 	public boolean initialize() {
 		LOGGER.debug("Initialize...");
 		connected = false;
-		portList = CommPortIdentifier.getPortIdentifiers();
-		port = GSMParameters.PORT;
-		while (portList.hasMoreElements()) {
+		SerialPort[] portList = SerialPort.getCommPorts();
+		String port = GSMParameters.PORT;
+		for (SerialPort comPort : portList) {
 
-			portId = (CommPortIdentifier) portList.nextElement();
-
-			if (portId.getName().equals(port) && portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+			if (comPort.getSystemPortName().equals(port)) {
 
 				LOGGER.debug("COM PORT found ({})", port);
+				serialPort = comPort;
 				break;
 
-			} else {
-				portId = null;
 			}
 		}
 
-		if (portId != null) {
+		if (serialPort != null) {
 			try {
-				serialPort = (SerialPort) portId.open("SmsSender", 1000);
-				if (serialPort != null) {
+				serialPort.openPort();
+				serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+				serialPort.addDataListener(this);
 
-					outputStream = serialPort.getOutputStream();
-					if (outputStream != null) {
-						inputStream = serialPort.getInputStream();
+				outputStream = serialPort.getOutputStream();
+				if (outputStream != null) {
+					inputStream = serialPort.getInputStream();
 
-						LOGGER.debug("Output stream OK");
-						connected = true;
-
-					} else {
-						LOGGER.debug("A problem occured on output stream");
-					}
+					LOGGER.debug("Output stream OK");
+					connected = true;
 
 				} else {
-					LOGGER.debug("Not possible to open the stream");
-				}
-
-				try {
-					serialPort.addEventListener(this);
-					serialPort.notifyOnDataAvailable(true);
-				} catch (TooManyListenersException e) {
-					LOGGER.debug("Too many listeners. ({})", e.toString());
+					LOGGER.debug("A problem occured on output stream");
 				}
 
 			} catch (PortInUseException e) {
-				LOGGER.error("Port in use: {}", portId.getCurrentOwner());
+				LOGGER.error("Port in use.");
 			} catch (Exception e) {
-				LOGGER.error("Failed to open port {}", portId.getName(), e);
+				LOGGER.error("Failed to open port {}", serialPort.getSystemPortName(), e);
 			}
 		} else {
 			LOGGER.error("COM PORT not found ({})!!!", port);
@@ -234,5 +215,10 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 	@Override
 	public String getRootKey() {
 		return SERVICE_NAME;
+	}
+
+	@Override
+	public int getListeningEvents() {
+		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 	}
 }

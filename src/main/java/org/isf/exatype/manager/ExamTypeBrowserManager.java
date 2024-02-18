@@ -44,7 +44,7 @@ public class ExamTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param examType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateExamType(ExamType examType, boolean insert) throws OHServiceException {
@@ -71,7 +71,7 @@ public class ExamTypeBrowserManager {
 	/**
 	 * Return the list of {@link ExamType}s.
 	 *
-	 * @return the list of {@link ExamType}s. It could be <code>null</code>
+	 * @return the list of {@link ExamType}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
 	public List<ExamType> getExamType() throws OHServiceException {
@@ -79,10 +79,10 @@ public class ExamTypeBrowserManager {
 	}
 
 	/**
-	 * Insert a new {@link ExamType} in the DB.
+	 * Insert a new {@link ExamType} into the DB.
 	 *
 	 * @param examType - the {@link ExamType} to insert.
-	 * @return <code>true</code> if the examType has been inserted, <code>false</code> otherwise.
+	 * @return the newly inserted {@link ExamType}.
 	 * @throws OHServiceException
 	 */
 	public ExamType newExamType(ExamType examType) throws OHServiceException {
@@ -94,7 +94,7 @@ public class ExamTypeBrowserManager {
 	 * Update an already existing {@link ExamType}.
 	 *
 	 * @param examType - the {@link ExamType} to update
-	 * @return <code>true</code> if the examType has been updated, <code>false</code> otherwise.
+	 * @return the updated {@link ExamType}.
 	 * @throws OHServiceException
 	 */
 	public ExamType updateExamType(ExamType examType) throws OHServiceException {
@@ -103,11 +103,11 @@ public class ExamTypeBrowserManager {
 	}
 
 	/**
-	 * This function controls the presence of a record with the same code as in
+	 * This checks for the presence of a record with the same code as in
 	 * the parameter.
 	 *
 	 * @param code - the code
-	 * @return <code>true</code> if the code is present, <code>false</code> otherwise.
+	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -118,10 +118,9 @@ public class ExamTypeBrowserManager {
 	 * Delete the passed {@link ExamType}.
 	 *
 	 * @param examType - the {@link ExamType} to delete.
-	 * @return <code>true</code> if the examType has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamType(ExamType examType) throws OHServiceException {
-		return ioOperations.deleteExamType(examType);
+	public void deleteExamType(ExamType examType) throws OHServiceException {
+		ioOperations.deleteExamType(examType);
 	}
 }

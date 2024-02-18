@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -48,7 +48,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	 *
 	 * @param movementType
 	 * @param insert
-	 *            <code>true</code> or updated <code>false</code>
+	 *            {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException {
@@ -91,7 +91,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	 *
 	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to save.
-	 * @return <code>true</code> if the medical stock movement type has been saved, <code>false</code> otherwise.
+	 * @return {@code true} if the medical stock movement type has been saved, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public MovementType newMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
@@ -104,7 +104,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	 *
 	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to update.
-	 * @return <code>true</code> if the medical stock movement type has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if the medical stock movement type has been updated, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public MovementType updateMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
@@ -117,7 +117,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	 *
 	 * @param code
 	 *            the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -129,19 +129,18 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	 *
 	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to delete.
-	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
-		return ioOperations.deleteMedicalDsrStockMovementType(medicalDsrStockMovementType);
+	public void deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		ioOperations.deleteMedicalDsrStockMovementType(medicalDsrStockMovementType);
 	}
 
 	/**
-	 * Get the {@link MovementType} code. In case of error a message error is shown and a <code>false</code> value is returned.
+	 * Get the {@link MovementType} code. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param code
 	 *            the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 */
 	public MovementType getMovementType(String code) {
 		return ioOperations.findOneByCode(code);

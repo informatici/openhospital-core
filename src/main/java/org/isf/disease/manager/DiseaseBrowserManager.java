@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -33,16 +33,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * ------------------------------------------
- * DiseaseBrowserManager - Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
- * -----------------------------------------
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version
- * 08/11/2006 - ross - added getDiseaseOpd members, and getDiseaseIpd to get only opd/ipd related diseases
- * ------------------------------------------
- */
 @Component
 public class DiseaseBrowserManager {
 
@@ -50,8 +40,8 @@ public class DiseaseBrowserManager {
 	private DiseaseIoOperations ioOperations;
 
 	/**
-	 * Returns all the stored {@link Disease} with ODP flag <code>true</code>.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * Returns all the stored {@link Disease} with ODP flag {@code true}.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases with ODP flag true.
 	 * @throws OHServiceException
@@ -62,7 +52,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Returns all diseases, deleted ones also
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases.
 	 * @throws OHServiceException
@@ -73,7 +63,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Returns all the stored {@link Disease} with the specified typecode and flag ODP true.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -84,10 +74,10 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with IPD_OUT flag <code>true</code>.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * Returns all the stored {@link Disease} with IPD_OUT flag {@code true}.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
-	 * @return the stored disease with IPD flag <code>true</code>.
+	 * @return the stored disease with IPD flag {@code true}.
 	 * @throws OHServiceException
 	 */
 	public List<Disease> getDiseaseIpdOut() throws OHServiceException {
@@ -95,8 +85,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_OUT <code>true</code>.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_OUT {@code true}.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -107,10 +97,10 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with IPD_IN flag <code>true</code>.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * Returns all the stored {@link Disease} with IPD_IN flag {@code true}.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
-	 * @return the stored disease with IPD flag <code>true</code>.
+	 * @return the stored disease with IPD flag {@code true}.
 	 * @throws OHServiceException
 	 */
 	public List<Disease> getDiseaseIpdIn() throws OHServiceException {
@@ -118,8 +108,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_IN <code>true</code>.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_IN {@code true}.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -131,7 +121,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Returns both OPD and IPDs diseases.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases.
 	 * @throws OHServiceException
@@ -142,7 +132,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Retrieves all OPD and IPDs {@link Disease} with the specified typecode.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return all the diseases with the specified typecode.
@@ -154,10 +144,10 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Gets a {@link Disease} with the specified code.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
+	 * In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param code the disease code.
-	 * @return the found disease, <code>null</code> if no disease has found.
+	 * @return the found disease, {@code null} if no disease has found.
 	 * @throws OHServiceException
 	 */
 	public Disease getDiseaseByCode(String code) throws OHServiceException {
@@ -166,7 +156,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Stores the specified {@link Disease}.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to store.
 	 * @return the disease that has been stored.
@@ -179,8 +169,8 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Updates the specified {@link Disease}.
-	 * If the disease has been updated concurrently a overwrite confirmation message is shown.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * If the disease has been updated concurrently an overwrite confirmation message is shown.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to update.
 	 * @return the disease that has been updated.
@@ -193,22 +183,21 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Mark as deleted the specified {@link Disease}.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to make delete.
-	 * @return <code>true</code> if the disease has been marked, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDisease(Disease disease) throws OHServiceException {
-		return ioOperations.deleteDisease(disease);
+	public void deleteDisease(Disease disease) throws OHServiceException {
+		ioOperations.deleteDisease(disease);
 	}
 
 	/**
 	 * Check if the specified code is used by other {@link Disease}s.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param code the code to check.
-	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
+	 * @return {@code true} if it is already used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -217,11 +206,11 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Checks if the specified description is used by a disease with the specified type code.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param description the description to check.
 	 * @param typeCode the disease type code.
-	 * @return <code>true</code> if is used, <code>false</code> otherwise.
+	 * @return {@code true} if is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean descriptionControl(String description, String typeCode) throws OHServiceException {
@@ -229,10 +218,43 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
+	 * Determine if the disease is one of the OPD diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is an OPD release disease, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getOPDDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getOPDDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdIn} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdIn=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdInDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdInDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdOut} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdOut=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdOutDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdOutDiseaseByCode(code);
+	}
+
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param disease
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDisease(Disease disease, boolean insert) throws OHServiceException {
@@ -240,7 +262,7 @@ public class DiseaseBrowserManager {
 
 		if (insert) {
 			String key = disease.getCode();
-			if (key.equals("")) {
+			if (key.isEmpty()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 			}
 			if (key.length() > 10) {
@@ -251,7 +273,7 @@ public class DiseaseBrowserManager {
 			}
 		}
 
-		if (disease.getDescription().equals("")) {
+		if (disease.getDescription().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 

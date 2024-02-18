@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,6 +23,7 @@ package org.isf.patient.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -34,6 +35,7 @@ import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.slf4j.Logger;
@@ -45,19 +47,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * PatientIoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version.
- * 03/11/2006 - ross - added toString method.
- * 11/08/2008 - alessandro - added father & mother's names.
- * 26/08/2008 - claudio - added birth date modified age.
- * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.
- * 03/12/2009 - Alex - added method for merge two patients history.
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
@@ -68,22 +57,23 @@ public class PatientIoOperations {
 	public static final String LOAD_FROM_DB = "DB";
 
 	public static final char NOT_DELETED_STATUS = 'N';
-	
+
 	@Autowired
 	private PatientIoOperationRepository repository;
-	
+
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
- 
+
 	@Autowired
 	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
 
 	@Autowired
 	private EntityManager entityManager;
+
 	/**
-	 * Method that returns the full list of Patients not logically deleted
+	 * Method that returns the full list of {@link Patient}s not logically deleted,
 	 *
-	 * @return the list of patients
+	 * @return the list of {@link Patient}s
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients() throws OHServiceException {
@@ -91,9 +81,9 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted by page
+	 * Method that returns the full list of {@link Patient}s not logically deleted by page.
 	 *
-	 * @return the list of patients
+	 * @return the list of {@link Patient}s
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
@@ -106,10 +96,10 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that returns the full list of Patients by parameters
+	 * Method that returns the full list of {@link Patient}s with specified parameters.
 	 *
 	 * @param parameters
-	 * @return
+	 * @return the list of {@link Patient}s.
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
@@ -117,7 +107,7 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted, having
+	 * Method that returns the full list of {@link Patient}s not logically deleted, having
 	 * the passed String in:<br>
 	 * - code<br>
 	 * - firstName<br>
@@ -125,8 +115,8 @@ public class PatientIoOperations {
 	 * - taxCode<br>
 	 * - note<br>
 	 *
-	 * @param keyword - String to search, <code>null</code> for full list
-	 * @return the list of Patients (could be empty)
+	 * @param keyword - String to search, use {@code null} for full list
+	 * @return the list of {@link Patient}s (could be empty),
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
@@ -134,10 +124,10 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that gets a Patient by his/her ID
+	 * Method that gets a {@link Patient}s by his/her ID.
 	 *
 	 * @param code
-	 * @return the Patient that match specified ID
+	 * @return the {@link Patient} that matches the specified ID or {@code null}.
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
@@ -151,10 +141,10 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that gets a Patient by his/her name
+	 * Method that gets a {@link Patient} by his/her name.
 	 * 
 	 * @param name
-	 * @return
+	 * @return the {@link Patient} that matches the specified ID or {@code null}.
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(String name) throws OHServiceException {
@@ -168,10 +158,10 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Get a Patient by his/her ID, even if he/her has been logically deleted
+	 * Get a {@link Patient} by his/her ID, even if he/her has been logically deleted.
 	 *
 	 * @param code
-	 * @return the list of Patients
+	 * @return  the {@link Patient} that matches the specified ID or {@code null}.
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
@@ -183,9 +173,9 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Save / update patient
+	 * Save / update a {@link Patient}.
 	 *
-	 * @param patient
+	 * @param patient the recently saved {@link Patient}.
 	 * @return saved / updated patient
 	 */
 	public Patient savePatient(Patient patient) {
@@ -203,7 +193,6 @@ public class PatientIoOperations {
 			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode())) {
 				this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 			}
-				
 			return patientSaved;
 		} catch (OHServiceException e) {
 			LOGGER.error("Exception in savePatient method.", e);
@@ -212,37 +201,41 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that updates an existing {@link Patient} in the db
+	 * Method that updates an existing {@link Patient}.
 	 *
 	 * @param patient - the {@link Patient} to update
-	 * @return true - if the existing {@link Patient} has been updated
+	 * @return the updated {@link Patient} object.
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatient(Patient patient) throws OHServiceException {
-		repository.save(patient);
-		return true;
+	public Patient updatePatient(Patient patient) throws OHServiceException {
+		return repository.save(patient);
 	}
 
 	/**
-	 * Method that logically deletes a Patient (not physically deleted)
+	 * Method that logically deletes a {@link Patient} (not physically deleted).
 	 *
 	 * @param patient
-	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatient(Patient patient) throws OHServiceException {
+	public void deletePatient(Patient patient) throws OHServiceException {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
-			repository.findById(patient.getCode()).get().setPatientProfilePhoto(null);
+			Optional<Patient> foundPatient = repository.findById(patient.getCode());
+			if (foundPatient.isPresent()) {
+				foundPatient.get().setPatientProfilePhoto(null);
+			} else {
+				LOGGER.error("Patient not found to delete with code {}.", patient.getCode());
+				throw new OHServiceException(new OHExceptionMessage("Patient not found to delete with code " + patient.getCode()));
+			}
 		} else {
-			this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
+			fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 		}
-		return  repository.updateDeleted(patient.getCode()) > 0;
+		repository.updateDeleted(patient.getCode());
 	}
 
 	/**
-	 * Method that check if a Patient is already present in the DB by his/her name
-	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
+	 * Method that check if a {@link Patient}  is already present in the DB by his/her name
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName),
 	 *
 	 * @param name
 	 * @return true - if the patient is already present
@@ -253,7 +246,7 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that get next PAT_ID is going to be used.
+	 * Method that gets the next PAT_ID that is going to be used.
 	 *
 	 * @return code
 	 * @throws OHServiceException
@@ -263,32 +256,30 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that merges all clinic details under the same PAT_ID
+	 * Method that merges all clinic details under the same PAT_ID.
 	 *
 	 * @param mergedPatient
 	 * @param obsoletePatient
-	 * @return true - if no OHServiceExceptions occurred
 	 * @throws OHServiceException
 	 */
-	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
+	public void mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
-		return true;
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the patient code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
-	 * Method that get cities is going to be used.
+	 * Method that returns a list of cities to be used.
 	 *
 	 * @return list of Cities
 	 * @throws OHServiceException
@@ -301,25 +292,28 @@ public class PatientIoOperations {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
-			return patient.getPatientProfilePhoto();
 		} else {
 			((Session) this.entityManager.getDelegate()).evict(patient);
 			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			return patient.getPatientProfilePhoto();
 		}
+		return patient.getPatientProfilePhoto();
 	}
 
-	public PagedResponse<Patient> setPaginationData(Page<Patient> pages){
-		PagedResponse<Patient> data = new PagedResponse<Patient>();
+	PagedResponse<Patient> setPaginationData(Page<Patient> pages){
+		PagedResponse<Patient> data = new PagedResponse<>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+  
+	/**
+	 * Count all active {@link Patient}s
+	 * 
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public long countAllActivePatients() throws OHServiceException {
+		return repository.countAllActiveNotDeletedPatients();
+	}
+
 }

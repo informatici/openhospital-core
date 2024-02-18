@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -42,18 +42,17 @@ import org.springframework.transaction.annotation.Transactional;
  * Persistence class for Accounting module.
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class AccountingIoOperations {	
-	
+public class AccountingIoOperations {
+
 	@Autowired
 	private AccountingBillIoOperationRepository billRepository;
 	@Autowired
 	private AccountingBillPaymentIoOperationRepository billPaymentRepository;
 	@Autowired
 	private AccountingBillItemsIoOperationRepository billItemsRepository;
-	
-	
+
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.
 	 * @param patID the patient id.
@@ -66,7 +65,7 @@ public class AccountingIoOperations {
 		}
 		return billRepository.findByStatusOrderByDateDesc("O");
 	}
-	
+
 	/**
 	 * Get all the {@link Bill}s.
 	 * @return a list of bills.
@@ -75,7 +74,7 @@ public class AccountingIoOperations {
 	public List<Bill> getBills() throws OHServiceException {
 		return billRepository.findAllByOrderByDateDesc();
 	}
-	
+
 	/**
 	 * Get the {@link Bill} with specified billID.
 	 * @param billID
@@ -91,17 +90,17 @@ public class AccountingIoOperations {
 	 * @return a list of user id.
 	 * @throws OHServiceException if an error occurs retrieving the users list.
 	 */
-    public List<String> getUsers() throws OHServiceException {
-    	Set<String> accountingUsers = new TreeSet<>(String::compareTo);
-    	accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
-    	accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
+	public List<String> getUsers() throws OHServiceException {
+		Set<String> accountingUsers = new TreeSet<>(String::compareTo);
+		accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
+		accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
 		return new ArrayList<>(accountingUsers);
 	}
 
 	/**
 	 * Returns the {@link BillItems} associated to the specified {@link Bill} id or all 
 	 * the stored {@link BillItems} if no id is provided. 
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return a list of {@link BillItems} associated to the bill id or all the stored bill items.
 	 * @throws OHServiceException if an error occurs retrieving the bill items.
 	 */
@@ -126,7 +125,7 @@ public class AccountingIoOperations {
 	/**
 	 * Retrieves all the {@link BillPayments} for the specified {@link Bill} id, or all 
 	 * the stored {@link BillPayments} if no id is indicated.
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return the list of bill payments.
 	 * @throws OHServiceException if an error occurs retrieving the bill payments.
 	 */
@@ -140,64 +139,59 @@ public class AccountingIoOperations {
 	/**
 	 * Stores a new {@link Bill}.
 	 * @param newBill the bill to store.
-	 * @return the generated {@link Bill} id.
+	 * @return the persisted Bill object
 	 * @throws OHServiceException if an error occurs storing the bill.
 	 */
-	public int newBill(Bill newBill) throws OHServiceException {
-		return billRepository.save(newBill).getId();
+	public Bill newBill(Bill newBill) throws OHServiceException {
+		return billRepository.save(newBill);
 	}
 
 	/**
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
 	 * @param bill the bill.
 	 * @param billItems the bill items to store.
-	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newBillItems(Bill bill, List<BillItems> billItems) throws OHServiceException {
+	public void newBillItems(Bill bill, List<BillItems> billItems) throws OHServiceException {
 		billItemsRepository.deleteWhereId(bill.getId());
 		for (BillItems item : billItems) {
 			item.setBill(bill);
 			billItemsRepository.save(item);
 		}
-		return true;
 	}
 
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
 	 * @param bill the bill.
 	 * @param payItems the bill payments.
-	 * @return <code>true</code> if the payment have stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store procedure.
 	 */
-	public boolean newBillPayments(Bill bill, List<BillPayments> payItems) throws OHServiceException {
+	public void newBillPayments(Bill bill, List<BillPayments> payItems) throws OHServiceException {
 		billPaymentRepository.deleteWhereId(bill.getId());
 		for (BillPayments payment : payItems) {
 			payment.setBill(bill);
 			billPaymentRepository.save(payment);
 		}
-		return true;
 	}
 
 	/**
 	 * Updates the specified {@link Bill}.
 	 * @param updateBill the bill to update.
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateBill(Bill updateBill) throws OHServiceException {
-		return billRepository.save(updateBill) != null;
+	public Bill updateBill(Bill updateBill) throws OHServiceException {
+		return billRepository.save(updateBill);
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.
+	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
+	 * If the Bill is not found it is silently ignored.
 	 * @param deleteBill the bill to delete.
-	 * @return <code>true</code> if the bill has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the bill.
 	 */
-	public boolean deleteBill(Bill deleteBill) throws OHServiceException {
-		billRepository.updateDeleteWhereId(deleteBill.getId());
-		return true;
+	public void deleteBill(Bill deleteBill) throws OHServiceException {
+		billRepository.deleteById(deleteBill.getId());
 	}
 
 	/**
@@ -244,7 +238,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<BillPayments> getPaymentsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
-			throws OHServiceException {
+					throws OHServiceException {
 		return billPaymentRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
@@ -304,6 +298,17 @@ public class AccountingIoOperations {
 			return billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
 		}
 		return billRepository.findAllWhereDatesAndBillItem(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo),
-				billItem.getItemDescription());
+						billItem.getItemDescription());
 	}
+
+	/**
+	 * Count active {@link Bill}s
+	 * 
+	 * @return the number of recorded {@link Bill}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveBills() {
+		return this.billRepository.countAllActiveBills();
+	}
+
 }

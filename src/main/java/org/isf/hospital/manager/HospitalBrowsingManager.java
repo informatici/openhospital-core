@@ -40,9 +40,9 @@ public class HospitalBrowsingManager {
 	private HospitalIoOperations ioOperations;
 
 	/**
-	 * Reads from database hospital information
+	 * Reads from the database the {@link Hospital} information.
 	 *
-	 * @return {@link Hospital} object
+	 * @return the {@link Hospital} object
 	 * @throws OHServiceException
 	 */
 	public Hospital getHospital() throws OHServiceException {
@@ -50,9 +50,9 @@ public class HospitalBrowsingManager {
 	}
 
 	/**
-	 * Reads from database currency cod
+	 * Reads from the database the currency code.
 	 *
-	 * @return currency cod
+	 * @return the currency code
 	 * @throws OHServiceException
 	 */
 	public String getHospitalCurrencyCod() throws OHServiceException {
@@ -60,9 +60,9 @@ public class HospitalBrowsingManager {
 	}
 
 	/**
-	 * Updates hospital information
+	 * Updates the {@link Hospital} information.
 	 *
-	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
+	 * @return return the updated {@link Hospital} object.
 	 * @throws OHServiceException
 	 */
 	public Hospital updateHospital(Hospital hospital) throws OHServiceException {

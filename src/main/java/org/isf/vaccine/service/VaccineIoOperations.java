@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,52 +30,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This class offers the io operations for recovering and managing
- * vaccine records from the database
- *
- * @author Eva
- * 
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class VaccineIoOperations {
 
 	@Autowired
 	private VaccineIoOperationRepository repository;
-	
+
 	/**
-	 * Returns the list of {@link Vaccine}s based on vaccine type code
+	 * Returns the list of {@link Vaccine}s based on vaccine type code.
 	 *
-	 * @param vaccineTypeCode - the type code. If <code>null</code> returns all {@link Vaccine}s in the DB
+	 * @param vaccineTypeCode - the type code. If {@code null} returns all {@link Vaccine}s in the DB
 	 * @return the list of {@link Vaccine}s
 	 * @throws OHServiceException 
 	 */
 	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
-		return vaccineTypeCode != null ?
-				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
-				repository.findAllByOrderByDescriptionAsc();
+		return vaccineTypeCode != null ? repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) : repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
-	 * Inserts a new {@link Vaccine} in the DB
+	 * Inserts a new {@link Vaccine} into the DB.
 	 *
 	 * @param vaccine - the item to insert
-	 * @return vaccine that has been inserted
+	 * @return the newly inserted {@link Vaccine} object.
 	 * @throws OHServiceException 
 	 */
 	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
 		return repository.save(vaccine);
 	}
-	
+
 	/**
-	 * Updates a {@link Vaccine} in the DB
+	 * Updates a {@link Vaccine} in the DB.
 	 *
 	 * @param vaccine - the item to update
-	 * @return vaccine that has been updated
+	 * @return the updated {@link Vaccine} object.
 	 * @throws OHServiceException 
 	 */
 	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
@@ -83,40 +72,44 @@ public class VaccineIoOperations {
 	}
 
 	/**
-	 * Deletes a {@link Vaccine} in the DB
+	 * Deletes a {@link Vaccine} in the DB.
 	 *
 	 * @param vaccine - the item to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteVaccine(Vaccine vaccine) throws OHServiceException {
+	public void deleteVaccine(Vaccine vaccine) throws OHServiceException {
 		repository.delete(vaccine);
-		return true;
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the vaccine code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
-	 * Returns the {@link Vaccine} based on code
+	 * Returns the {@link Vaccine} based on its code.
 	 *
 	 * @param code - the code, must not be {@literal null}
-	 * @return the {@link Vaccine} or {@literal null} if none found
-	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 * @return the {@link Vaccine} or {@literal null} if not found
 	 */
-	public Vaccine findVaccine(String code) {
-		if (code != null) {
-			return repository.findById(code).orElse(null);
-		}
-		throw new IllegalArgumentException("code must not be null");
+	public Vaccine findVaccine(String code) throws OHServiceException {
+		return repository.findById(code).orElse(null);
+	}
+
+	/**
+	 * Count active {@link Vaccine}s
+	 * 
+	 * @return the number of recorded {@link Vaccine}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveVaccinations() {
+		return this.repository.countAllActiveVaccinations();
 	}
 
 }

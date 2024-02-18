@@ -41,9 +41,9 @@ public class PatientConsensusBrowserManager {
 	private PatientConsensusIoOperation ioOperations;
 
 	/**
-	 * Return the {@link PatientConsensus}
+	 * Return the {@link PatientConsensus} for the specified user id.
 	 *
-	 * @return the {@link PatientConsensus}s. It could be <code>empty</code>qq.
+	 * @return the {@link PatientConsensus}s. It could be {@code empty}qq.
 	 * @throws OHServiceException
 	 */
 	public Optional<PatientConsensus> getPatientConsensusByUserId(Integer userId) throws OHServiceException {
@@ -52,9 +52,9 @@ public class PatientConsensusBrowserManager {
 
 
 	/**
-	 * Update an {@link PatientConsensus}
+	 * Update a {@link PatientConsensus}.
 	 *
-	 * @param PatientConsensus - the {@link PatientConsensus} to update
+	 * @param patientConsensus - the {@link PatientConsensus} to update
 	 * @return the {@link PatientConsensus}.
 	 * @throws OHServiceException
 	 */
@@ -77,16 +77,14 @@ public class PatientConsensusBrowserManager {
 
 
 	/**
-	 * Checks if an <code>username</code> has a {@link PatientConsensus}
+	 * Checks if n user specified by its {@code code} has a {@link PatientConsensus}.
 	 *
-	 * @param username - the username
-	 * @return <code>true</code> if the username has a PatientConsensus, <code>false</code> otherwise.
+	 * @param code - the user's id code
+	 * @return {@code true} if the username has a PatientConsensus, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean existsByPatientCode(Integer code) throws OHServiceException {
 		return ioOperations.existsByPatientCode(code);
 	}
-
-
 
 }

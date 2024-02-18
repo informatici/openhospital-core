@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,10 +27,10 @@ public final class Version extends ConfigurationProperties {
 	private static final boolean EXIT_ON_FAIL = true;
 
 	public static String VER_MAJOR;
-    public static String VER_MINOR;
-    public static String VER_RELEASE;
-    
-    private static Version mySingleData;
+	public static String VER_MINOR;
+	public static String VER_RELEASE;
+
+	private static Version mySingleData;
 
 	private Version(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
@@ -51,4 +51,8 @@ public final class Version extends ConfigurationProperties {
 		mySingleData = new Version(FILE_PROPERTIES);
 	}
 
+	@Override
+	public String toString() {
+		return Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE);
+	}
 }

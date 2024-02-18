@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -105,7 +105,8 @@ public class Tests extends OHCoreTestCase {
 		// given:
 		int id = setupTestVisit(false);
 		// when:
-		Visit foundVisit = visitsIoOperationRepository.findById(id).get();
+		Visit foundVisit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundVisit).isNotNull();
 		List<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 		// then:
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(foundVisit.getDate(), within(1, ChronoUnit.SECONDS));
@@ -115,7 +116,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVisitShouldReturnAllVisitsWhenZeroPatientCodeProvided() throws Exception {
 		// given:
 		int id = setupTestVisit(false);
-		Visit foundVisit = visitsIoOperationRepository.findById(id).get();
+		Visit foundVisit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundVisit).isNotNull();
 
 		// when:
 		List<Visit> visits = visitsIoOperation.getVisits(0);
@@ -127,7 +129,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetVisitsWardNullWardId() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(null);
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -135,7 +138,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetVisitsWardWardId() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -163,7 +167,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitPatientCode() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitManager.getVisits(visit.getPatient().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -171,7 +176,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitNoPatientCode() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitManager.getVisits(0);
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -179,7 +185,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitsWard() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitManager.getVisitsWard();
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -187,7 +194,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitsWardWardId() throws Exception {
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		List<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
@@ -233,7 +241,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewVisitsSMSFalse() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		visit.setSms(false);
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
@@ -243,7 +252,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewVisitsSMSTrueDatePassed() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 	}
@@ -254,7 +264,8 @@ public class Tests extends OHCoreTestCase {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		LocalDateTime date = TimeTools.getNow();
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		visit.setDate(date.plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
@@ -270,7 +281,8 @@ public class Tests extends OHCoreTestCase {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).get();
+		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
+		assertThat(visit).isNotNull();
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		visit.setNote(longText + ' ' + longText);
 		visit.setDate(TimeTools.getNow().plusMonths(1));

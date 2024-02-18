@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,86 +44,78 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Medical Ward - model for the medical ward entity
- * -----------------------------------------
- * modification history
- * ? - mwithi
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
-@Table(name="OH_MEDICALDSRSTOCKMOVWARD")
+@Table(name = "OH_MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMVN_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MMVN_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMVN_LAST_MODIFIED_DATE"))
 public class MovementWard extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="MMVN_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "MMVN_ID")
 	private int code;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMVN_WRD_ID_A")
+	@JoinColumn(name = "MMVN_WRD_ID_A")
 	private Ward ward;
-	
+
 	@ManyToOne
-	@JoinColumn(name="MMVN_LT_ID")	
+	@JoinColumn(name = "MMVN_LT_ID")
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMVN_DATE")		// SQL type: datetime
+	@Column(name = "MMVN_DATE") // SQL type: datetime
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="MMVN_IS_PATIENT")
+	@Column(name = "MMVN_IS_PATIENT")
 	private boolean isPatient;
-	
+
 	@ManyToOne
-	@JoinColumn(name="MMVN_PAT_ID")
+	@JoinColumn(name = "MMVN_PAT_ID")
 	private Patient patient;
-	
-	@Column(name="MMVN_PAT_AGE")
+
+	@Column(name = "MMVN_PAT_AGE")
 	private int age;
-	
-	@Column(name="MMVN_PAT_WEIGHT")
+
+	@Column(name = "MMVN_PAT_WEIGHT")
 	private float weight;
 
 	@NotNull
-	@Column(name="MMVN_DESC")
+	@Column(name = "MMVN_DESC")
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name="MMVN_MDSR_ID")
+	@JoinColumn(name = "MMVN_MDSR_ID")
 	private Medical medical;
 
 	@NotNull
-	@Column(name="MMVN_MDSR_QTY")
+	@Column(name = "MMVN_MDSR_QTY")
 	private Double quantity;
 
 	@NotNull
-	@Column(name="MMVN_MDSR_UNITS")
+	@Column(name = "MMVN_MDSR_UNITS")
 	private String units;
 
 	@Transient
 	private volatile int hashCode;
-	
+
 	@ManyToOne
-	@JoinColumn(name="MMVN_WRD_ID_A_TO")	
+	@JoinColumn(name = "MMVN_WRD_ID_A_TO")
 	private Ward wardTo;
-	
+
 	@ManyToOne
-	@JoinColumn(name="MMVN_WRD_ID_A_FROM")	
+	@JoinColumn(name = "MMVN_WRD_ID_A_FROM")
 	private Ward wardFrom;
-	
-	public MovementWard() {}
-	
+
+	public MovementWard() {
+	}
+
 	/**
 	 * 
 	 * @param ward
@@ -138,7 +130,7 @@ public class MovementWard extends Auditable<String> {
 	 * @param units
 	 */
 	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units) {
+					Double quantity, String units) {
 		super();
 		this.ward = ward;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -153,7 +145,7 @@ public class MovementWard extends Auditable<String> {
 	}
 
 	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units, Lot lot) {
+					Double quantity, String units, Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -168,7 +160,7 @@ public class MovementWard extends Auditable<String> {
 		this.lot = lot;
 	}
 
-    /**
+	/**
 	 * 
 	 * @param ward
 	 * @param date
@@ -180,29 +172,30 @@ public class MovementWard extends Auditable<String> {
 	 * @param medical
 	 * @param quantity
 	 * @param units
-     * @param wardTo
-     * @param wardFrom
+	 * @param wardTo
+	 * @param wardFrom
 	 */
-    public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-		    Double quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
-	    super();
-	    this.ward = ward;
-	    this.date = TimeTools.truncateToSeconds(date);
-	    this.isPatient = isPatient;
-	    this.patient = patient;
-	    this.age = age;
-	    this.weight = weight;
-	    this.description = description;
-	    this.medical = medical;
-	    this.quantity = quantity;
-	    this.units = units;
-	    this.wardTo = wardTo;
-	    this.wardFrom = wardFrom;
-	    this.lot = lot;
-    }
-
-	public MovementWard(Ward ward, Lot lot, String description, Medical medical, Double quantity, String units) {
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
+					Double quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
 		super();
+		this.ward = ward;
+		this.date = TimeTools.truncateToSeconds(date);
+		this.isPatient = isPatient;
+		this.patient = patient;
+		this.age = age;
+		this.weight = weight;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+		this.wardTo = wardTo;
+		this.wardFrom = wardFrom;
+		this.lot = lot;
+	}
+
+	public MovementWard(LocalDateTime date, Ward ward, Lot lot, String description, Medical medical, Double quantity, String units) {
+		super();
+		this.date = date;
 		this.ward = ward;
 		this.lot = lot;
 		this.description = description;
@@ -331,20 +324,20 @@ public class MovementWard extends Auditable<String> {
 		if (!(obj instanceof MovementWard)) {
 			return false;
 		}
-		MovementWard movement = (MovementWard)obj;
+		MovementWard movement = (MovementWard) obj;
 		return (this.getCode() == movement.getCode());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
 
-	        c = m * c + code;
-	        
-	        this.hashCode = c;
-	    }
-	    return this.hashCode;
-	}	
+			c = m * c + code;
+
+			this.hashCode = c;
+		}
+		return this.hashCode;
+	}
 }

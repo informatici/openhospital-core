@@ -33,17 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * ExamIoOperations - provides the I/O operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''")
- *                     when record locked all data is saved now, not only descritpion
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -102,56 +91,51 @@ public class ExamIoOperations {
 	 * Insert a new {@link Exam} in the DB.
 	 * 
 	 * @param exam - the {@link Exam} to insert
-	 * @return <code>true</code> if the {@link Exam} has been inserted, <code>false</code> otherwise
+	 * @return the newly persisted {@link Exam}.
 	 * @throws OHServiceException 
 	 */
-	public boolean newExam(Exam exam) throws OHServiceException {
-		return repository.save(exam) != null;
+	public Exam newExam(Exam exam) throws OHServiceException {
+		return repository.save(exam);
 	}
 
 	/**
 	 * Insert a new {@link ExamRow} in the DB.
 	 * 
 	 * @param examRow - the {@link ExamRow} to insert
-	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
+	 * @return the newly persisted {@link ExamRow}.
 	 * @throws OHServiceException
 	 */
-	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
-		return rowRepository.save(examRow) != null;
+	public ExamRow newExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow);
 	}
 
 	/**
 	 * Update an already existing {@link Exam}.
 	 * @param exam - the {@link Exam} to update
-	 * @return <code>true</code> if the {@link Exam} has been updated, <code>false</code> otherwise
+	 * @return the updated {@link Exam}.
 	 * @throws OHServiceException
 	 */
 	public Exam updateExam(Exam exam) throws OHServiceException {
-		
 		return repository.save(exam);
 	}
 
 	/**
 	 * Delete an {@link Exam}
 	 * @param exam - the {@link Exam} to delete
-	 * @return <code>true</code> if the {@link Exam} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExam(Exam exam) throws OHServiceException {
+	public void deleteExam(Exam exam) throws OHServiceException {
 		rowRepository.deleteByExam_Code(exam.getCode());
 		repository.delete(exam);
-		return true;
 	}
 
 	/**
 	 * Delete an {@link ExamRow}.
 	 * @param examRow - the {@link ExamRow} to delete
-	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
+	public void deleteExamRow(ExamRow examRow) throws OHServiceException {
 		rowRepository.delete(examRow);
-		return true;
 	}
 
 	/**
@@ -160,7 +144,7 @@ public class ExamIoOperations {
 	 * true
 	 * 
 	 * @param exam the {@link Exam}
-	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
+	 * @return {@code true} if the Exam code has already been used, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isKeyPresent(Exam exam) throws OHServiceException {
@@ -171,7 +155,7 @@ public class ExamIoOperations {
 	 * Sanitize the given {@link String} value. 
 	 * This method is maintained only for backward compatibility.
 	 * @param value the value to sanitize.
-	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
+	 * @return the sanitized value or {@code null} if the passed value is {@code null}.
 	 */
 	protected String sanitize(String value) {
 		if (value == null) {
@@ -184,7 +168,7 @@ public class ExamIoOperations {
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -195,7 +179,7 @@ public class ExamIoOperations {
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam row code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isRowPresent(Integer code) throws OHServiceException {

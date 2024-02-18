@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,17 +21,31 @@
  */
 package org.isf.menu.model;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
 @Table(name = "OH_USER_SETTINGS")
-public class UserSetting {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "USS_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "USS_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "USS_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "USS_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "USS_LAST_MODIFIED_DATE"))
+public class UserSetting extends Auditable<String> {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "USS_ID")
 	private int id;
 

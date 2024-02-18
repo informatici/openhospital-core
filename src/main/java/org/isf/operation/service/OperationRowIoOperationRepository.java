@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,6 +28,7 @@ import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -43,6 +44,9 @@ public interface OperationRowIoOperationRepository extends JpaRepository<Operati
 	OperationRow findById(int id);
 
 	List<OperationRow> findByOpd(Opd opd);
-	 
+
 	List<OperationRow> findByAdmissionPatientOrOpdPatient(Patient patient, Patient patient1);
+
+	@Query("select count(o) from OperationRow o where active=1")
+	long countAllActiveOperations();
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.isf.accounting.model.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -42,16 +41,12 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	List<Bill> findByBillPatientCode(int patientCode);
 
-	@Modifying
-	@Query(value = "update Bill b set b.status='D' where b.id = :billId")
-	void updateDeleteWhereId(@Param("billId") Integer billId);
-
 	@Query(value = "select b from Bill b where b.date >= :dateFrom and b.date < :dateTo")
 	List<Bill> findByDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	@Query(value = "select b from Bill b where b.billPatient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
 	List<Bill> findByDateAndPatient(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
-			@Param("patientCode") Integer patientCode);
+					@Param("patientCode") Integer patientCode);
 
 	@Query(value = "select b from Bill b where b.status='O' and b.billPatient.id = :patID")
 	List<Bill> findAllPendindBillsByBillPatient(@Param("patID") int patID);
@@ -69,4 +64,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	@Query(value = "select distinct b.user FROM Bill b ORDER BY b.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
+
+	@Query("select count(b) from Bill b where active=1")
+	long countAllActiveBills();
 }

@@ -33,6 +33,7 @@ import org.isf.opetype.service.OperationTypeIoOperation;
 import org.isf.opetype.service.OperationTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,7 +75,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
 		List<OperationType> operationTypes = operationTypeIoOperation.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
@@ -82,19 +84,19 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
 		foundOperationType.setDescription("Update");
-		OperationType result = operationTypeIoOperation.updateOperationType(foundOperationType);
-		assertThat(result);
-		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
-		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
+		OperationType updatedOperationType = operationTypeIoOperation.updateOperationType(foundOperationType);
+		assertThat(updatedOperationType).isNotNull();
+		assertThat(updatedOperationType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
 		OperationType result = operationTypeIoOperation.newOperationType(operationType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -108,17 +110,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
-		boolean result = operationTypeIoOperation.deleteOperationType(foundOperationType);
-		assertThat(result).isTrue();
-		result = operationTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
+		operationTypeIoOperation.deleteOperationType(foundOperationType);
+		assertThat(operationTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
 		List<OperationType> operationTypes = operationTypeBrowserManager.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
@@ -126,17 +128,18 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
 		foundOperationType.setDescription("Update");
-		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType));
-		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
-		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
+		OperationType updatedOperationType = operationTypeBrowserManager.updateOperationType(foundOperationType);
+		assertThat(updatedOperationType).isNotNull();
+		assertThat(updatedOperationType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		assertThat(operationTypeBrowserManager.newOperationType(operationType));
+		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isNotNull();
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -149,9 +152,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteOperationType() throws Exception {
 		String code = setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
-		assertThat(operationTypeBrowserManager.deleteOperationType(foundOperationType)).isTrue();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
+		operationTypeBrowserManager.deleteOperationType(foundOperationType);
 		assertThat(operationTypeBrowserManager.isCodePresent(code)).isFalse();
+	}
+
+	@Test
+	public void testMgrDeleteOperationTypeNotFound() throws Exception {
+		assertThatThrownBy(() ->
+			operationTypeBrowserManager.deleteOperationType(null))
+			.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
@@ -224,8 +235,8 @@ public class Tests extends OHCoreTestCase {
 	public void testOperationTypeEquals() throws Exception {
 		OperationType operationType = new OperationType("Z", "description");
 
-		assertThat(operationType).isEqualTo(operationType);
 		assertThat(operationType)
+				.isEqualTo(operationType)
 				.isNotNull()
 				.isNotEqualTo("someString");
 
@@ -261,7 +272,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkOperationTypeIntoDb(String code) throws OHException {
-		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOperationType).isNotNull();
 		testOperationType.check(foundOperationType);
 	}
 }

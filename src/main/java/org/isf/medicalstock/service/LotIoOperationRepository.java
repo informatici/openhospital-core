@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -51,4 +51,12 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 			+ " join OH_MEDICALDSRSTOCKMOVTYPE on MMV_MMVT_ID_A=MMVT_ID_A "
 			+ "where LT_ID_A=:code group by LT_ID_A order by LT_DUE_DATE", nativeQuery = true)
 	List<Object[]> findAllWhereLot(@Param("code") String code);
+
+	@Query("SELECT m.lot.code, COALESCE(SUM(CASE WHEN m.type.type LIKE '+%' THEN m.quantity ELSE -m.quantity END), 0) " +
+					"FROM Movement m WHERE m.lot.code IN :lotCodes GROUP BY m.lot.code")
+	List<Object[]> getMainStoreQuantities(@Param("lotCodes") List<String> lotCodes);
+
+	@Query("SELECT w.id.lot.code, COALESCE(SUM(w.in_quantity - w.out_quantity), 0.0) " +
+					"FROM MedicalWard w WHERE w.id.lot.code IN :lotCodes GROUP BY w.id.lot.code")
+	List<Object[]> getWardsTotalQuantities(@Param("lotCodes") List<String> lotCodes);
 }

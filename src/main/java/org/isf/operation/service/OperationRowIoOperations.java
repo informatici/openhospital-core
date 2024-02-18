@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,6 +30,7 @@ import org.isf.operation.model.OperationRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,20 +39,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @author hp
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class OperationRowIoOperations {
-	
-    @Autowired
-    private OperationRowIoOperationRepository repository;
-    
-    public List<OperationRow> getOperationRow() throws OHServiceException{
-        return repository.findByOrderByOpDateDesc();
-    }
 
-    public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException{
-        return repository.findByAdmission(adm);
-    }
+	@Autowired
+	private OperationRowIoOperationRepository repository;
+
+	public List<OperationRow> getOperationRow() throws OHServiceException {
+		return repository.findByOrderByOpDateDesc();
+	}
+
+	public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException {
+		return repository.findByAdmission(adm);
+	}
 
 	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		if (opd.isPersisted()) {
@@ -60,13 +61,13 @@ public class OperationRowIoOperations {
 		return new ArrayList<>();
 	}
 
-	public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException {
+	public void deleteOperationRow(OperationRow operationRow) throws OHServiceException {
 		OperationRow found = repository.findById(operationRow.getId());
 		if (found != null) {
 			repository.delete(found);
-			return true;
+		} else {
+			throw new OHServiceException(new OHExceptionMessage("angal.operationrow.not.found.msg"));
 		}
-		return false;
 	}
 
 	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
@@ -87,10 +88,21 @@ public class OperationRowIoOperations {
 	}
 
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
-		 return repository.save(opRow);
+		return repository.save(opRow);
 	}
 
 	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
 		return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
 	}
+
+	/**
+	 * Count active {@link OperationRow}s
+	 * 
+	 * @return the number of recorded {@link OperationRow}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveOperations() {
+		return this.repository.countAllActiveOperations();
+	}
+
 }
