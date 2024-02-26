@@ -325,10 +325,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Get {@link MovementWard}s with the specified criteria.
-	 * @param wardCode
-	 * @param medicalCode
-	 * @param lotCode
-	 * @param date
+	 * @param medID - medical id.
 	 * @return
 	 */
 	public List<MovementWard> getMovementWardByMedical(int medID) throws OHServiceException {
@@ -349,8 +346,8 @@ public class MedicalStockWardIoOperations {
 	/**
 	 * Get all {@link MovementWard} with the specified criteria.
 	 * 
-	 * @param WardCode - the ward code.
-	 * @param medID - the medical code.
+	 * @param wardCode - the ward code.
+	 * @param medicalCode - the medical code.
 	 * @param lotCode - the lot code.
 	 * @param date - the date of the movement.
 	 * @return the retrieved all the movements.
