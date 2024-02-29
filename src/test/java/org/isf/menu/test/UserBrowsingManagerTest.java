@@ -81,4 +81,26 @@ public class UserBrowsingManagerTest extends OHCoreTestCase {
 		assertThat(userBrowsingManager.isPasswordStrong("^abcdef1>")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("AaBbCcDdeF1/")).isTrue();
 	}
+
+	@Test
+	public void passwordStrengthVariations() {
+		// Null or empty password
+		assertThat(userBrowsingManager.isPasswordStrong(null)).isFalse();
+		assertThat(userBrowsingManager.isPasswordStrong("")).isFalse();
+
+
+
+		assertThat(userBrowsingManager.isPasswordStrong("Abcdefg1")).isFalse();
+
+
+		assertThat(userBrowsingManager.isPasswordStrong("Abcd ef1@")).isFalse();
+
+
+		assertThat(userBrowsingManager.isPasswordStrong("@#$%^&*")).isFalse();
+
+
+		GeneralData.STRONGPASSWORD = false;
+		assertThat(userBrowsingManager.isPasswordStrong("abc123")).isTrue();
+	}
+
 }

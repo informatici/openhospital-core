@@ -53,6 +53,9 @@ public class HospitalIoOperations {
 	 */
 	public Hospital getHospital() throws OHServiceException {
 		List<Hospital> hospitals = repository.findAll();
+		if (hospitals.isEmpty()) {
+			throw new OHServiceException("No Hospital data found");
+		}
 		return hospitals.get(0);
 	}
 	

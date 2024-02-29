@@ -31,6 +31,7 @@ import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperationRepository;
 import org.isf.hospital.service.HospitalIoOperations;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -78,6 +79,11 @@ public class Tests extends OHCoreTestCase {
 		assertThat(getHospital).isEqualTo(foundHospital);
 	}
 
+	@Test(expected = OHServiceException.class)
+	public void testGetHospital_NoHospitalData() throws Exception {
+		hospitalIoOperation.getHospital();
+	}
+
 	@Test
 	public void testIoUpdateHospital() throws Exception {
 		String code = setupTestHospital(false);
@@ -87,6 +93,7 @@ public class Tests extends OHCoreTestCase {
 		Hospital updatedHospital = hospitalIoOperation.updateHospital(foundHospital);
 		assertThat(updatedHospital.getDescription()).isEqualTo("Update");
 	}
+
 
 	@Test
 	public void testIoGetHospitalCurrencyCod() throws Exception {

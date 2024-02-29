@@ -55,7 +55,10 @@ public class OHServiceException extends Exception {
 		this.messages.add(message);
 	}
 
-	public List<OHExceptionMessage> getMessages() {
+    public OHServiceException(String noHospitalDataFound) {
+    }
+
+    public List<OHExceptionMessage> getMessages() {
 		return messages;
 	}
 }
