@@ -97,3 +97,4 @@ source step_a100_logviewer.sql;
 source step_a101_add_delete_btn_in_medicalstock.sql;
 source step_a102_add_delete_btn_in_medicalstockward.sql;
 source step_a103_fix_MedicalDsrStockMovementTypeBrowser.sql;
+source step_a10X_create_table_inv_and_invr.sql;
