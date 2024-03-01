@@ -67,8 +67,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public MedicalInventoryRow() {
 	}
 
-	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical,
-					Lot lot, double unitPrice) {
+	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical, Lot lot, double unitPrice) {
 		this.id = id;
 		this.theoreticQty = theoreticQty;
 		this.realQty = realQty;
