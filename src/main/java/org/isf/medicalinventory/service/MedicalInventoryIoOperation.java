@@ -23,6 +23,7 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -84,7 +85,6 @@ public class MedicalInventoryIoOperation {
 	 */
 	public boolean referenceExists(String reference) {
 		MedicalInventory medInv = repository.findByReference(reference);
-		
 		if (medInv != null)  {
 			return true;
 		}
@@ -153,5 +153,16 @@ public class MedicalInventoryIoOperation {
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHException {
 		Pageable pageable = PageRequest.of(page, size);
 		return repository.findInventoryByParamsPageable(dateFrom, dateTo, status, type, pageable);
+	}
+	
+	/**
+	 * Checks if the code is already in use
+	 *
+	 * @param id - the MedicalInventory code
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
+	 * @throws OHServiceException 
+	 */
+	public boolean isCodePresent(Integer id) throws OHServiceException {
+		return repository.existsById(id);
 	}
 }

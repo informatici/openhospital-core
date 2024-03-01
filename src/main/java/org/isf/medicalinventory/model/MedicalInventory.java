@@ -32,6 +32,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -51,18 +52,23 @@ public class MedicalInventory extends Auditable<String> {
 	@Column(name = "MINVT_ID")
 	private Integer id;
 
+	@NotNull
 	@Column(name = "MINVT_STATUS")
 	private String status;
 
+	@NotNull
 	@Column(name = "MINVT_DATE")
 	private LocalDateTime inventoryDate;
 
+	@NotNull
 	@Column(name = "MINVT_US_ID_A")
 	private String user;
 
+	@NotNull
 	@Column(name = "MINVT_REFERENCE")
 	private String inventoryReference;
 
+	@NotNull
 	@Column(name = "MINVT_TYPE")
 	private String inventoryType;
 
@@ -73,6 +79,10 @@ public class MedicalInventory extends Auditable<String> {
 	@Column(name="MINVT_LOCK")
 	private Integer lock;
 	
+	public MedicalInventory() {
+		super();
+	}
+
 	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user, String reference, String type, String ward) {
 		this.id = id;
 		this.status = status;
@@ -95,7 +105,7 @@ public class MedicalInventory extends Auditable<String> {
 		return status;
 	}
 
-	public void setState(String status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

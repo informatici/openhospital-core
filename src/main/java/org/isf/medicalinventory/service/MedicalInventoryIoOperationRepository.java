@@ -23,35 +23,36 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import feign.Param;
 
 @Repository
 public interface MedicalInventoryIoOperationRepository extends JpaRepository<MedicalInventory, Integer> {
 
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.reference LIKE %:reference% ")
-	MedicalInventory findByReference(@Param("reference") String reference);
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryReference = :inventoryReference")
+	MedicalInventory findByReference(@Param("inventoryReference") String inventoryReference);
 	
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.status LIKE %:status% and medinv.wardCode LIKE %:wardCode%")
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.status = :status and medinv.ward = :wardCode")
 	List<MedicalInventory> findInventoryByStatusAnvWardCode(@Param("status") String status, @Param("wardCode") String wardCode);
 	
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.status LIKE %:status% ")
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.status = :status")
 	List<MedicalInventory> findInventoryByStatus(@Param("status") String status);
 
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.date >= :dateFrom and medinv.date < :dateTo "
-					+ "and medinv.status LIKE %:status% and medinv.type LIKE %:type%")
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo "
+					+ "and medinv.status = :status and medinv.inventoryType = :type")
 	List<MedicalInventory> findInventoryByParams(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, 
 					@Param("status") String status, @Param("type") String type);
 	
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.date >= :dateFrom and medinv.date < :dateTo "
-					+ "and medinv.status LIKE %:status% and medinv.type LIKE %:type%")
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo "
+					+ "and medinv.status = :status and medinv.inventoryType = :type")
 	Page<MedicalInventory> findInventoryByParamsPageable(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, 
 					@Param("status") String status, @Param("type") String type, Pageable pageable);
 

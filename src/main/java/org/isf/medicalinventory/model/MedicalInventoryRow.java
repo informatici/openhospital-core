@@ -7,8 +7,11 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -30,26 +33,32 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@Column(name = "MINVTR_ID")
 	private Integer id;
 
+	@NotNull
 	@Column(name = "MINVTR_THEORITIC_QTY")
-	private double theoreticqty;
+	private double theoreticQty;
 
+	@NotNull
 	@Column(name = "MINVTR_REAL_QTY")
-	private double realqty;
+	private double realQty;
 
-	@Column(name = "MINVTR_MINVT_ID")
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="MINVTR_MINVT_ID")
 	private MedicalInventory inventory;
 
-	@Column(name = "MINVTR_MDSR_ID")
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="MINVTR_MDSR_ID")
 	private Medical medical;
 
-	@Column(name = "MINVTR_LT_ID_A")
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="MINVTR_LT_ID_A")
 	private Lot lot;
 
+	@NotNull
 	@Column(name = "MINVTR_U_PRICE")
-	private double unitprice;
-
-	@Column(name = "MINVTR_COST")
-	private double cost;
+	private double unitPrice;
 	
 	@Version
 	@Column(name="MINVTR_LOCK")
@@ -58,16 +67,15 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public MedicalInventoryRow() {
 	}
 
-	public MedicalInventoryRow(Integer id, double theoreticqty, double realqty, MedicalInventory inventory, Medical medical,
-					Lot lot, double unitprice, double cost) {
+	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical,
+					Lot lot, double unitPrice) {
 		this.id = id;
-		this.theoreticqty = theoreticqty;
-		this.realqty = realqty;
+		this.theoreticQty = theoreticQty;
+		this.realQty = realQty;
 		this.inventory = inventory;
 		this.medical = medical;
 		this.lot = lot;
-		this.unitprice = unitprice;
-		this.cost = cost;
+		this.unitPrice = unitPrice;
 	}
 
 	public Integer getId() {
@@ -78,20 +86,20 @@ public class MedicalInventoryRow extends Auditable<String> {
 		this.id = id;
 	}
 
-	public double getTheoreticqty() {
-		return theoreticqty;
+	public double getTheoreticQty() {
+		return theoreticQty;
 	}
 
-	public void setTheoreticqty(double theoreticqty) {
-		this.theoreticqty = theoreticqty;
+	public void setTheoreticQty(double theoreticQty) {
+		this.theoreticQty = theoreticQty;
 	}
 
-	public double getRealqty() {
-		return realqty;
+	public double getRealQty() {
+		return realQty;
 	}
 
-	public void setRealqty(double realqty) {
-		this.realqty = realqty;
+	public void setRealqty(double realQty) {
+		this.realQty = realQty;
 	}
 
 	public MedicalInventory getInventory() {
@@ -119,19 +127,11 @@ public class MedicalInventoryRow extends Auditable<String> {
 	}
 
 	public double getUnitPrice() {
-		return unitprice;
+		return unitPrice;
 	}
 
-	public void setUnitPrice(double unitprice) {
-		this.unitprice = unitprice;
-	}
-
-	public double getCost() {
-		return cost;
-	}
-
-	public void setCost(double cost) {
-		this.cost = cost;
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 	public String getSearchString() {
