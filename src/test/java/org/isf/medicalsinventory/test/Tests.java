@@ -50,7 +50,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class Tests extends OHCoreTestCase{
+public class Tests extends OHCoreTestCase {
 	
 	private static TestMedicalInventory testMedicalInventory;
 	private static TestMedicalInventoryRow testMedicalInventoryRow;
