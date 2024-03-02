@@ -23,7 +23,6 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -53,7 +52,7 @@ public class MedicalInventoryIoOperation {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory newMedicalInventory(MedicalInventory medicalinventory) throws OHServiceException {
-			return repository.save(medicalinventory);
+		return repository.save(medicalinventory);
 	}
 	
 	/**

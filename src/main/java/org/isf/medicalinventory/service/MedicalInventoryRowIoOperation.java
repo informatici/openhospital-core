@@ -46,7 +46,7 @@ public class MedicalInventoryRowIoOperation {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalinventoryRow) throws OHServiceException {
-			return repository.save(medicalinventoryRow);
+		return repository.save(medicalinventoryRow);
 	}
 	
 	/**
