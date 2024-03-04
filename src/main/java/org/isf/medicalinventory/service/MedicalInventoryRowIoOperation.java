@@ -50,7 +50,7 @@ public class MedicalInventoryRowIoOperation {
 	}
 	
 	/**
-	 * Update an existing MedicalInventoryRow {@link MedicalInventoryRow}.
+	 * Update an existing {@link MedicalInventoryRow}.
 	 *
 	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to update
 	 * @return the updated {@link MedicalInventoryRow} object.
