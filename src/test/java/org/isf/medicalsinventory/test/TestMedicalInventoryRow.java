@@ -32,7 +32,6 @@ public class TestMedicalInventoryRow {
 	private Integer id = 1;
 	private double theoreticQty = 50.0;
 	private double realqty = 50.0;
-	private double unitPrice = 150;
 	
 	public MedicalInventoryRow setup(MedicalInventory inventory, Medical medical, Lot lot, boolean usingSet) throws OHException {
 		MedicalInventoryRow medInventoryRow;
@@ -41,7 +40,7 @@ public class TestMedicalInventoryRow {
 			setParameters(medInventoryRow);
 		} else {
 			// Create MedicalInventoryRow with all parameters 
-			medInventoryRow = new MedicalInventoryRow(id, theoreticQty, realqty, inventory, medical, lot, unitPrice);
+			medInventoryRow = new MedicalInventoryRow(id, theoreticQty, realqty, inventory, medical, lot);
 		}
 		return medInventoryRow;
 	}
@@ -50,7 +49,6 @@ public class TestMedicalInventoryRow {
 		medInventoryRow.setId(id);
 		medInventoryRow.setTheoreticQty(theoreticQty);
 		medInventoryRow.setRealqty(realqty);
-		medInventoryRow.setUnitPrice(unitPrice);
 	}
 	
 	
