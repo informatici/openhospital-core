@@ -61,7 +61,7 @@ public class MedicalInventoryRowIoOperation {
 	}
 	
 	/**
-	 * Deletes the specified {@link MedicalInventoryRow}.
+	 * Delete the specified {@link MedicalInventoryRow}.
 	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to delete.
 	 * @throws OHServiceException if an error occurs during the medicalInventoryRow deletion.
 	 */
