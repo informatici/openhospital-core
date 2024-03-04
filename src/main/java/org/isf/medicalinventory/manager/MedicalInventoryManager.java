@@ -94,7 +94,7 @@ public class MedicalInventoryManager {
 	}
 	
 	/**
-	 * Return a list of results ({@link MedicalInventory}s) for passed params.
+	 * Return a list {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
