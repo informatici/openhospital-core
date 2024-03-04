@@ -39,7 +39,7 @@ public class MedicalInventoryRowIoOperation {
 	private MedicalInventoryRowIoOperationRepository repository;
 	
 	/**
-	 * Insert a new Medical InventoryRow exam {@link MedicalInventoryRow} and return the generated MedicalInventoryRow.
+	 * Insert a new {@link MedicalInventoryRow}.
 	 *
 	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to insert
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
