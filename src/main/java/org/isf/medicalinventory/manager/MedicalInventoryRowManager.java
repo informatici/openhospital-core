@@ -21,9 +21,72 @@
  */
 package org.isf.medicalinventory.manager;
 
+import java.util.List;
+
+import org.isf.medicalinventory.model.MedicalInventoryRow;
+import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
+import org.isf.utils.exception.OHServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MedicalInventoryRowManager {
+	
+	@Autowired
+	private MedicalInventoryRowIoOperation iOoperation;
+	
+	/**
+	 * Insert a new {@link MedicalInventoryRow}.
+	 *
+	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to insert
+	 * @return the newly persisted {@link MedicalInventoryRow} object.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalinventoryRow) throws OHServiceException {
+		return iOoperation.newMedicalInventoryRow(medicalinventoryRow);
+	}
+	
+	/**
+	 * Update an existing {@link MedicalInventoryRow}.
+	 *
+	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to update
+	 * @return the updated {@link MedicalInventoryRow} object.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		return iOoperation.updateMedicalInventoryRow(medicalInventoryRow);
+	}
+	
+	/**
+	 * Delete the specified {@link MedicalInventoryRow}.
+	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to delete.
+	 * @throws OHServiceException if an error occurs during the medicalInventoryRow deletion.
+	 */
+	public void deleteMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		iOoperation.deleteMedicalInventoryRow(medicalInventoryRow);
+	}
+	
+	/**
+	 * Return a list of {@link MedicalInventoryRow}s for passed params.
+	 
+	 * @param inventoryId - the Invetory Id
+	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}
+	 * @throws OHServiceException
+	 */
+	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
+		return iOoperation.getMedicalInventoryRowByInventoryId(inventoryId);
+	}
+	
+	/**
+	 * Return a list of {@link MedicalInventoryRow}s for passed params.
+	 
+	 * @param inventoryId - the Invetory Id.
+	 * @param medicalCode - the medical code.
+	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}
+	 * @throws OHServiceException
+	 */
+	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId, int medicalCode) throws OHServiceException {
+		return iOoperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
+	}
 
 }
