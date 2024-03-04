@@ -40,7 +40,7 @@ public class MedicalInventoryManager {
 	private MedicalInventoryIoOperation ioOperations;
 	
 	/**
-	 * Insert a new MedicalInventory exam {@link MedicalInventory} and return the generated MedicalInventory.
+	 * Insert a new {@link MedicalInventory}.
 	 *
 	 * @param medicalInventory - the {@link MedicalInventory} to insert
 	 * @return the newly persisted {@link MedicalInventory} object.
