@@ -81,7 +81,7 @@ public class MedicalInventoryRowIoOperation {
 	}
 	
 	/**
-	 * Return a list of results ({@link MedicalInventoryRow}s) for passed params.
+	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 
 	 * @param inventoryId - the Invetory Id.
 	 * @param medicalCode - the medical code.
