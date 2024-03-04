@@ -84,14 +84,13 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public MedicalInventoryRow() {
 	}
 
-	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical, Lot lot, double unitPrice) {
+	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical, Lot lot) {
 		this.id = id;
 		this.theoreticQty = theoreticQty;
 		this.realQty = realQty;
 		this.inventory = inventory;
 		this.medical = medical;
 		this.lot = lot;
-		this.unitPrice = unitPrice;
 	}
 
 	public Integer getId() {
@@ -140,14 +139,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 
 	public void setLot(Lot lot) {
 		this.lot = lot;
-	}
-
-	public double getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
 	}
 
 	public String getSearchString() {
