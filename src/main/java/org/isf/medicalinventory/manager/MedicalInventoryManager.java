@@ -73,7 +73,7 @@ public class MedicalInventoryManager {
 	/**
 	 * Check if the reference number is already used
 	 * 
-	 * @param reference - the MedicalInventory reference
+	 * @param reference - the {@link MedicalInventory} reference
 	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
