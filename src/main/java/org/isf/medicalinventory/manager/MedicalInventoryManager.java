@@ -62,7 +62,7 @@ public class MedicalInventoryManager {
 	}
 	
 	/**
-	 * Deletes the specified {@link MedicalInventory}.
+	 * Delete the specified {@link MedicalInventory}.
 	 * @param medicalInventory - the {@link MedicalInventory} to delete.
 	 * @throws OHServiceException if an error occurs during the medicalInventory deletion.
 	 */
