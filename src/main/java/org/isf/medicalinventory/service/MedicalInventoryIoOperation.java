@@ -157,7 +157,7 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Checks if the code is already in use
 	 *
-	 * @param id - the MedicalInventory code
+	 * @param id - the {@link MedicalInventory} code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
