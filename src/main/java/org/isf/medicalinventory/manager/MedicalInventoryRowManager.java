@@ -76,17 +76,4 @@ public class MedicalInventoryRowManager {
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
 		return iOoperation.getMedicalInventoryRowByInventoryId(inventoryId);
 	}
-	
-	/**
-	 * Return a list of {@link MedicalInventoryRow}s for passed params.
-	 
-	 * @param inventoryId - the Invetory Id.
-	 * @param medicalCode - the medical code.
-	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}
-	 * @throws OHServiceException
-	 */
-	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId, int medicalCode) throws OHServiceException {
-		return iOoperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
-	}
-
 }
