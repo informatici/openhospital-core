@@ -76,10 +76,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name="MINVTR_LT_ID_A")
 	private Lot lot;
-
-	@NotNull
-	@Column(name = "MINVTR_U_PRICE")
-	private double unitPrice;
 	
 	@Version
 	@Column(name="MINVTR_LOCK")
