@@ -145,11 +145,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetMedicalInventoryWithStatus() throws Exception {
 		int id = setupTestMedicalInventory(false);
-		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventory).isNotNull();
+		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(firstMedicalInventory).isNotNull();
+		Ward ward = testWard.setup(false);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		String status = "validated";
+		inventory.setStatus(status);
+		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
+		assertThat(secondMedicalInventory).isNotNull();
 		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation
-				.getMedicalInventoryByStatus(foundMedicalInventory.getStatus());
-		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(foundMedicalInventory.getStatus());
+				.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
+		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
 	
 	@Test
