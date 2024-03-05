@@ -105,7 +105,7 @@ public class Tests extends OHCoreTestCase {
 	}
 	
 	@Test
-	public void testIoGetMedicalInventorys() throws Exception {
+	public void testIoGetMedicalInventories() throws Exception {
 		int id = setupTestMedicalInventory(false);
 		MedicalInventory foundMedicalinventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalinventory).isNotNull();
