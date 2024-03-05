@@ -155,12 +155,20 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetMedicalInventoryWithStatusAndWard() throws Exception {
 		int id = setupTestMedicalInventory(false);
-		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventory).isNotNull();
+		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(firstMedicalInventory).isNotNull();
+		Ward ward = testWard.setup(false);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		String wardCode = "P";
+		String status = "validated";
+		inventory.setWard(wardCode);
+		inventory.setStatus(status);
+		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
+		assertThat(secondMedicalInventory).isNotNull();
 		List<MedicalInventory> medicalinventories = medicalInventoryIoOperation
-				.getMedicalInventoryByStatusAndWard(foundMedicalInventory.getStatus(), foundMedicalInventory.getWard());
-		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(foundMedicalInventory.getStatus());
-		assertThat(medicalinventories.get(0).getWard()).isEqualTo(foundMedicalInventory.getWard());
+				.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(), firstMedicalInventory.getWard());
+		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
+		assertThat(medicalinventories.get(0).getWard()).isEqualTo(firstMedicalInventory.getWard());
 	}
 	
 	@Test
