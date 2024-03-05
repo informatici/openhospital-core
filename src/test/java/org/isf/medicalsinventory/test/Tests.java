@@ -147,9 +147,9 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestMedicalInventory(false);
 		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalinventories = medicalInventoryIoOperation
+		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation
 				.getMedicalInventoryByStatus(foundMedicalInventory.getStatus());
-		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(foundMedicalInventory.getStatus());
+		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(foundMedicalInventory.getStatus());
 	}
 	
 	@Test
