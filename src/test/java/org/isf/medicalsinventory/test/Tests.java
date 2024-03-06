@@ -45,9 +45,9 @@ import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Tests extends OHCoreTestCase {
@@ -83,7 +83,7 @@ public class Tests extends OHCoreTestCase {
 	LotIoOperationRepository lotIoOperationRepository;
 	
 	
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() {
 		testMedicalInventory = new TestMedicalInventory();
 		testWard = new TestWard();
@@ -93,7 +93,7 @@ public class Tests extends OHCoreTestCase {
 		testMedicalType = new TestMedicalType();
 	}
 	
-	@Before
+	@BeforeEach 
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
