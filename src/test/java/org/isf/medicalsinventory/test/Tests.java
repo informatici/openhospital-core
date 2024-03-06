@@ -156,7 +156,7 @@ public class Tests extends OHCoreTestCase {
 		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation
 				.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
-		assertThat(medicalInventories.size()).isEqualTo(1);
+		assertThat(medicalInventories).hasSize(1);
 	}
 	
 	@Test
