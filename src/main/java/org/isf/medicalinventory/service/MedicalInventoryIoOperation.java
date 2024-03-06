@@ -116,7 +116,7 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventory() throws OHException {
@@ -126,11 +126,11 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 * 
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param dateFrom - the lower date for the range.
+	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param type - the {@link MedicalInventory} type.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHException {
@@ -140,13 +140,13 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param dateFrom - the lower date for the range.
+	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param type - the {@link MedicalInventory} type.
 	 * @param page - the page number.
 	 * @param size - the page size.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHException {
@@ -155,10 +155,10 @@ public class MedicalInventoryIoOperation {
 	}
 	
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
-	 * @param id - the {@link MedicalInventory} code
-	 * @return {@code true} if the code is already in use, {@code false} otherwise
+	 * @param id - the {@link MedicalInventory} code.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer id) throws OHServiceException {
