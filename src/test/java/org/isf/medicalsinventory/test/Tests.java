@@ -156,6 +156,7 @@ public class Tests extends OHCoreTestCase {
 		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation
 				.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
+		assertThat(medicalInventories.size()).isEqualTo(1);
 	}
 	
 	@Test
@@ -175,6 +176,7 @@ public class Tests extends OHCoreTestCase {
 				.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(), firstMedicalInventory.getWard());
 		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 		assertThat(medicalinventories.get(0).getWard()).isEqualTo(firstMedicalInventory.getWard());
+		assertThat(medicalinventories.size()).isEqualTo(1);
 	}
 	
 	@Test
