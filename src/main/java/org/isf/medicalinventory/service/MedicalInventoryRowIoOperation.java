@@ -41,7 +41,7 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Insert a new {@link MedicalInventoryRow}.
 	 *
-	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to insert
+	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to insert.
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
@@ -52,7 +52,7 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Update an existing {@link MedicalInventoryRow}.
 	 *
-	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to update
+	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to update.
 	 * @return the updated {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
@@ -63,7 +63,7 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Delete the specified {@link MedicalInventoryRow}.
 	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to delete.
-	 * @throws OHServiceException if an error occurs during the medicalInventoryRow deletion.
+	 * @throws OHServiceException
 	 */
 	public void deleteMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
 		repository.delete(medicalInventoryRow);
@@ -72,8 +72,8 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 
-	 * @param inventoryId - the Invetory Id
-	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}
+	 * @param inventoryId - the Invetory Id.
+	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {

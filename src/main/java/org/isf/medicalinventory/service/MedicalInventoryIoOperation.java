@@ -47,7 +47,7 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Insert a new {@link MedicalInventory}.
 	 *
-	 * @param medicalInventory - the {@link MedicalInventory} to insert
+	 * @param medicalInventory - the {@link MedicalInventory} to insert.
 	 * @return the newly persisted {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
@@ -58,7 +58,7 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Update an existing {@link MedicalInventory}.
 	 *
-	 * @param medicalInventory - the {@link MedicalInventory} to update
+	 * @param medicalInventory - the {@link MedicalInventory} to update.
 	 * @return the updated {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
@@ -76,10 +76,10 @@ public class MedicalInventoryIoOperation {
 	}
 	
 	/**
-	 * Check if the reference number is already used
+	 * Check if the reference number is already used.
 	 * 
-	 * @param reference - the {@link MedicalInventory} reference
-	 * @return {@code true} if the code is already in use, {@code false} otherwise
+	 * @param reference - the {@link MedicalInventory} reference.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean referenceExists(String reference) {
@@ -95,7 +95,7 @@ public class MedicalInventoryIoOperation {
 	 *
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param wardCode - the {@link Ward} code.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHException {
@@ -106,7 +106,7 @@ public class MedicalInventoryIoOperation {
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHException {

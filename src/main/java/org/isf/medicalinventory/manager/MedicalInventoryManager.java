@@ -42,7 +42,7 @@ public class MedicalInventoryManager {
 	/**
 	 * Insert a new {@link MedicalInventory}.
 	 *
-	 * @param medicalInventory - the {@link MedicalInventory} to insert
+	 * @param medicalInventory - the {@link MedicalInventory} to insert.
 	 * @return the newly persisted {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
@@ -53,7 +53,7 @@ public class MedicalInventoryManager {
 	/**
 	 * Update an existing {@link MedicalInventory}.
 	 *
-	 * @param medicalInventory - the {@link MedicalInventory} to update
+	 * @param medicalInventory - the {@link MedicalInventory} to update.
 	 * @return the updated {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
@@ -64,17 +64,17 @@ public class MedicalInventoryManager {
 	/**
 	 * Delete the specified {@link MedicalInventory}.
 	 * @param medicalInventory - the {@link MedicalInventory} to delete.
-	 * @throws OHServiceException if an error occurs during the medicalInventory deletion.
+	 * @throws OHServiceException
 	 */
 	public void deleteMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		ioOperations.deleteMedicalInventory(medicalInventory);
 	}
 	
 	/**
-	 * Check if the reference number is already used
+	 * Check if the reference number is already used.
 	 * 
-	 * @param reference - the {@link MedicalInventory} reference
-	 * @return {@code true} if the code is already in use, {@code false} otherwise
+	 * @param reference - the {@link MedicalInventory} reference.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean referenceExists(String reference) {
@@ -86,7 +86,7 @@ public class MedicalInventoryManager {
 	 *
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param wardCode - the {@link Ward} code.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHException {
@@ -97,7 +97,7 @@ public class MedicalInventoryManager {
 	 * Return a list {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHException {
@@ -121,7 +121,7 @@ public class MedicalInventoryManager {
 	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param type - the {@link MedicalInventory} type.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHException {
@@ -131,13 +131,13 @@ public class MedicalInventoryManager {
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param dateFrom - the lower date for the range.
+	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param type - the {@link MedicalInventory} type.
 	 * @param page - the page number.
 	 * @param size - the page size.
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHException {
