@@ -107,7 +107,7 @@ public class MedicalInventoryManager {
 	/**
 	 * Return a list of results {@link MedicalInventory}s for passed params.
 	 *
-	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}
+	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventory() throws OHException {
