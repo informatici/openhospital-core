@@ -117,7 +117,7 @@ public class MedicalInventoryManager {
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 * 
-	 * @param dateFrom - the lower date for the range
+	 * @param dateFrom - the lowest date for the range.
 	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
 	 * @param type - the {@link MedicalInventory} type.
