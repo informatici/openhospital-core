@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +97,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHServiceException {
 		return repository.findInventoryByStatusAnvWardCode(status, wardCode);
 	}
 	
@@ -109,7 +108,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHServiceException {
 		return repository.findInventoryByStatus(status);
 	}
 	
@@ -119,7 +118,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventory() throws OHException {
+	public List<MedicalInventory> getMedicalInventory() throws OHServiceException {
 		return repository.findAll();
 	}
 	
@@ -133,7 +132,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
 		return repository.findInventoryByParams(dateFrom, dateTo, status, type);
 	}
 	
@@ -149,7 +148,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHException {
+	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
 		Pageable pageable = PageRequest.of(page, size);
 		return repository.findInventoryByParamsPageable(dateFrom, dateTo, status, type, pageable);
 	}
