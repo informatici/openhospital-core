@@ -54,12 +54,22 @@ public class MedicalsIoOperations
 	
 	/**
 	 * Retrieves the specified {@link Medical}.
-	 * @param code the medical code
+	 * @param code the medical id.
 	 * @return the stored medical.
 	 * @throws OHServiceException if an error occurs retrieving the stored medical.
 	 */
 	public Medical getMedical(int code) throws OHServiceException {
 		return repository.findById(code).orElse(null);
+	}
+	
+	/**
+	 * Retrieves the specified {@link Medical}.
+	 * @param code the medical code.
+	 * @return the stored medical.
+	 * @throws OHServiceException if an error occurs retrieving the stored medical.
+	 */
+	public Medical getMedicalByMedicalCode(String code) throws OHServiceException {
+		return repository.findOneWhereProductCode(code);
 	}
 
 	/**
