@@ -23,7 +23,6 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.springframework.data.domain.Page;
