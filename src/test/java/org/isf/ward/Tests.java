@@ -603,7 +603,6 @@ class Tests extends OHCoreTestCase {
 	void testWardEquals() throws Exception {
 		Ward ward = testWard.setup(false);
 		assertThat(ward)
-			.isEqualTo(ward)
 			.isNotNull()
 			.isNotEqualTo("someString");
 

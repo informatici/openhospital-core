@@ -56,7 +56,6 @@ import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -275,22 +274,18 @@ class Tests extends OHCoreTestCase {
 		assertThat(count).isPositive();
 	}
 
-	@Disabled
-	// Reason ignored when running CI it generates this error:
-	//    java.awt.HeadlessException:
-	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
 	@Test
 	void testSourceFilesConstructorDirectoryNumberOfFiles() throws Exception {
 		ThumbnailViewGui thumbnailViewGui = new ThumbnailViewGui();
 		thumbnailViewGui.initialize();
-		SourceFiles sourceFiles = new SourceFiles(new FileDicom(), new File("src/test/resources/org/isf/dicom/test/dicomdir/"), 2, 1, thumbnailViewGui,
+		SourceFiles sourceFiles = new SourceFiles(new FileDicom(), new File("src/test/resources/org/isf/dicom/dicomdir/"), 2, 1, thumbnailViewGui,
 				new DicomLoader(1, new JFrame()));
 		assertThat(sourceFiles).isNotNull();
 		assertThat(sourceFiles.working()).isTrue();
 		while (sourceFiles.working()) {
 			Thread.sleep(2000);
 		}
-		assertThat(sourceFiles.getLoaded()).isEqualTo(1);
+		assertThat(sourceFiles.getLoaded()).isEqualTo(2);
 		cleanupDicomFiles(2);
 	}
 
@@ -349,8 +344,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
 	}
 
-	// This test requires access to the opencv native libraries
-	@Disabled
 	@Test
 	void testFileDicomGetThumbnailsAsImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);

@@ -371,8 +371,6 @@ class Tests extends OHCoreTestCase {
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundTherapyRow)
 			.isNotNull()
-			.isEqualTo(foundTherapyRow)
-			.isNotNull()
 			.isNotEqualTo("someString");
 
 		MedicalType medicalType = testMedicalType.setup(false);

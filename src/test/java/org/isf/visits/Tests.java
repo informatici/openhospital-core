@@ -607,7 +607,6 @@ class Tests extends OHCoreTestCase {
 		Visit visit = visitManager.findVisit(id);
 
 		assertThat(visit)
-			.isEqualTo(visit)
 			.isNotNull()
 			.isNotEqualTo("someString");
 

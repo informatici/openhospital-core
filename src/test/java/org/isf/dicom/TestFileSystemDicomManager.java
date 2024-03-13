@@ -280,14 +280,14 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	@Test
 	void testDeleteSeriesDetailSeriesNumberEmptyString() throws Exception {
 		assertThatThrownBy(() ->
-				fileSystemDicomManager.deleteSeries(1, "     "))
+			fileSystemDicomManager.deleteSeries(1, "     "))
 			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
 	void testDeleteSeriesDetailSeriesNumberNullString() throws Exception {
 		assertThatThrownBy(() ->
-				fileSystemDicomManager.deleteSeries(1, "nuLL"))
+			fileSystemDicomManager.deleteSeries(1, "nuLL"))
 			.isInstanceOf(OHDicomException.class);
 	}
 

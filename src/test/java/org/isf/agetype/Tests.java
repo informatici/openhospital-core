@@ -186,11 +186,11 @@ class Tests extends OHCoreTestCase {
 
 		// Range overlap
 		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 		// Age range not defined
 		foundAgeType2.setFrom(90);
 		foundAgeType2.setTo(100);
@@ -198,11 +198,11 @@ class Tests extends OHCoreTestCase {
 		ageTypes2.add(foundAgeType);
 		ageTypes2.add(foundAgeType2);
 		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes2))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	private String setupTestAgeType(boolean usingSet) throws Exception {

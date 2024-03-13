@@ -79,7 +79,6 @@ import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -580,7 +579,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
 	}
 
-	@Disabled
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
 	@Transactional
