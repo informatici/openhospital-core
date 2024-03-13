@@ -274,6 +274,10 @@ class Tests extends OHCoreTestCase {
 		assertThat(count).isPositive();
 	}
 
+	//@Disabled
+	// Reason ignored when running CI it generates this error (runs fine locally)
+	//    java.awt.HeadlessException:
+	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
 	@Test
 	void testSourceFilesConstructorDirectoryNumberOfFiles() throws Exception {
 		ThumbnailViewGui thumbnailViewGui = new ThumbnailViewGui();
