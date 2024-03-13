@@ -56,6 +56,7 @@ import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -274,7 +275,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(count).isPositive();
 	}
 
-	//@Disabled
+	@Disabled
 	// Reason ignored when running CI it generates this error (runs fine locally)
 	//    java.awt.HeadlessException:
 	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
