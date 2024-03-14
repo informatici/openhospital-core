@@ -219,7 +219,7 @@ public class MedicalsIoOperations
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isMedicalReferencedInStockMovement(int code) throws OHServiceException {
-		return moveRepository.findAllByMedicalCode(code) != null;
+		return moveRepository.findAllByMedicalCode(code).size() > 0;
 	}
 
 	/**
