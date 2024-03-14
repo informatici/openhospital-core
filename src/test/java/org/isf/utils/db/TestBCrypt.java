@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class TestBCrypt {
+class TestBCrypt {
 
 	String testVectors[][] = {   // [0] = plain;  [1] = salt; [2] = expected
 			{ "",
@@ -46,7 +46,7 @@ public class TestBCrypt {
 	};
 
 	@Test
-	public void testHashpw() throws Exception {
+	void testHashpw() throws Exception {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			String plain = testVectors[idx][0];
 			String salt = testVectors[idx][1];
@@ -57,7 +57,7 @@ public class TestBCrypt {
 	}
 
 	@Test
-	public void testGensaltInt() throws Exception {
+	void testGensaltInt() throws Exception {
 		for (int idx = 4; idx <= testVectors.length; idx++) {
 			for (int jdx = 0; jdx < testVectors.length; jdx += 4) {
 				String plain = testVectors[jdx][0];
@@ -70,7 +70,7 @@ public class TestBCrypt {
 	}
 
 	@Test
-	public void testGensalt() {
+	void testGensalt() {
 		for (int idx = 0; idx < testVectors.length; idx += 4) {
 			String plain = testVectors[idx][0];
 			String salt = BCrypt.gensalt();
@@ -81,7 +81,7 @@ public class TestBCrypt {
 	}
 
 	@Test
-	public void testCheckpwSuccess() {
+	void testCheckpwSuccess() {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			String plain = testVectors[idx][0];
 			String expected = testVectors[idx][2];
@@ -90,7 +90,7 @@ public class TestBCrypt {
 	}
 
 	@Test
-	public void testCheckpwFailure() {
+	void testCheckpwFailure() {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			int broken_index = (idx + 4) % testVectors.length;
 			String plain = testVectors[idx][0];
@@ -100,7 +100,7 @@ public class TestBCrypt {
 	}
 
 	@Test
-	public void testInternationalChars() {
+	void testInternationalChars() {
 		String pw1 = "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605";
 		String pw2 = "????????";
 
