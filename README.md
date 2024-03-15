@@ -18,7 +18,7 @@ To run the tests simply issue:
 
     mvn test
 
-Note: tests are ran against an in-memory database (H2). 
+Note: tests are run against an in-memory database (H2). 
 
 To run tests against a MariaDB instance:
 
