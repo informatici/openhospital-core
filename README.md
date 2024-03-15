@@ -18,7 +18,29 @@ To run the tests simply issue:
 
     mvn test
 
-Tests are ran against an in-memory database (H2). To run tests against a MariaDB instance, you can change [`src/test/resources/resources/database.properties`][database.prop] and run the Docker container in the root folder with:
+Note: tests are ran against an in-memory database (H2). 
+
+To run tests against a MariaDB instance:
+
+you can change [`src/test/resources/resources/database.properties`][database.prop] 
+
+From:
+
+    jdbc.class=org.h2.Driver
+    jdbc.url=jdbc:h2:mem:myDb;MODE=MySQL;IGNORECASE=TRUE;DB_CLOSE_DELAY=-1
+
+    hibernate.dialect=org.hibernate.dialect.H2Dialect
+    hibernate.hbm2ddl.auto=update
+    jdbc.username=root
+    jdbc.password=root
+
+To:
+
+    jdbc.url=jdbc:mysql://localhost:3306/oh
+    jdbc.username=isf
+    jdbc.password=isf123
+
+Then, run the Docker container in the root folder with:
 
     # clean previous builds
     docker compose rm --stop --volumes --force
