@@ -55,7 +55,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	private Integer id;
 
 	@NotNull
-	@Column(name = "MINVTR_THEORITIC_QTY")
+	@Column(name = "MINVTR_THEORETIC_QTY")
 	private double theoreticQty;
 
 	@NotNull
