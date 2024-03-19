@@ -64,7 +64,7 @@ public class MedicalsIoOperations
 	
 	/**
 	 * Retrieves the specified {@link Medical}.
-	 * @param code the medical prod_code.
+	 * @param prod_code the medical prod_code.
 	 * @return the stored medical.
 	 * @throws OHServiceException if an error occurs retrieving the stored medical.
 	 */
