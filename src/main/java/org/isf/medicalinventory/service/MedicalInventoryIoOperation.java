@@ -61,7 +61,7 @@ public class MedicalInventoryIoOperation {
 	 * @return the updated {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory updateMedicalInventoryRow(MedicalInventory medicalInventory) throws OHServiceException {
+	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		return repository.save(medicalInventory);
 	}
 	

@@ -57,7 +57,7 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		return ioOperations.updateMedicalInventoryRow(medicalInventory);
+		return ioOperations.updateMedicalInventory(medicalInventory);
 	}
 	
 	/**

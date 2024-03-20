@@ -77,6 +77,9 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@JoinColumn(name="MINVTR_LT_ID_A")
 	private Lot lot;
 	
+	@Column(name = "MINVTR_IS_NEW_LOT")
+	private boolean isNewLot;
+	
 	@Version
 	@Column(name="MINVTR_LOCK")
 	private Integer lock;
@@ -139,6 +142,19 @@ public class MedicalInventoryRow extends Auditable<String> {
 
 	public void setLot(Lot lot) {
 		this.lot = lot;
+	}
+	
+	public boolean isNewLot() {
+		return isNewLot;
+	}
+
+	
+	public void setNewLot(boolean isNewLot) {
+		this.isNewLot = isNewLot;
+	}
+
+	public void setRealQty(double realQty) {
+		this.realQty = realQty;
 	}
 
 	public String getSearchString() {
