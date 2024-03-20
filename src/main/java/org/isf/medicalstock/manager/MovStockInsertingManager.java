@@ -390,9 +390,11 @@ public class MovStockInsertingManager {
 	}
 	
 	/**
-	 * Get the specified {@link Lot}.
+	 * Stores the specified {@link Lot}.
 	 * @param lotCode the {@link Lot} code.
-	 * @return the retrieve {@link Lot} object.
+	 * @param lot the lot to store.
+	 * @param medical
+	 * @return the stored {@link Lot} object.
 	 * @throws OHServiceException if an error occurred storing the lot.
 	 */
 	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
