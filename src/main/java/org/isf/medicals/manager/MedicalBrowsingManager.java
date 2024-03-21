@@ -33,6 +33,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
@@ -79,6 +80,18 @@ public class MedicalBrowsingManager {
 	 */
 	public List<Medical> getMedicals() throws OHServiceException {
 		return ioOperations.getMedicals(null, false);
+	}
+	
+	/**
+	 * Returns the medicals.
+	 *
+	 * @param page - the page number.
+	 * @param size - the page size.
+	 * @return the list of {@link Medical}s. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public Page<Medical> getMedicalsPageable(int page, int size) throws OHServiceException {
+		return ioOperations.getMedicalsPageable(page, size);
 	}
 
 	/**
