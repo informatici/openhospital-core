@@ -82,7 +82,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	
 	@Version
 	@Column(name="MINVTR_LOCK")
-	private Integer lock;
+	private int lock;
 
 	public MedicalInventoryRow() {
 	}
@@ -155,6 +155,15 @@ public class MedicalInventoryRow extends Auditable<String> {
 
 	public void setRealQty(double realQty) {
 		this.realQty = realQty;
+	}
+	
+	public int getLock() {
+		return lock;
+	}
+
+	
+	public void setLock(int lock) {
+		this.lock = lock;
 	}
 
 	public String getSearchString() {
