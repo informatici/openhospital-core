@@ -59,6 +59,17 @@ public class MedicalBrowsingManager {
 	public Medical getMedical(int code) throws OHServiceException {
 		return ioOperations.getMedical(code);
 	}
+	
+	/**
+	 * Returns the requested medical.
+	 *
+	 * @param prod_code the medical prod_code.
+	 * @return the retrieved medical.
+	 * @throws OHServiceException
+	 */
+	public Medical getMedicalByMedicalCode(String prod_code) throws OHServiceException {
+		return ioOperations.getMedicalByMedicalCode(prod_code);
+	}
 
 	/**
 	 * Returns all the medicals.
