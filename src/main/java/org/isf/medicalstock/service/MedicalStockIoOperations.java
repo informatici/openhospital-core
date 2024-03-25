@@ -259,6 +259,26 @@ public class MedicalStockIoOperations {
 	public boolean lotExists(String lotCode) throws OHServiceException {
 		return lotRepository.findById(String.valueOf(lotCode)).orElse(null) != null;
 	}
+	
+	/**
+	 * Retrieves the {@link Lot}.
+	 * @param lotCode the lot code.
+	 * @return the retrieved {@link Lot}.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public Lot getLot(String lotCode) throws OHServiceException {
+		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+	}
+	
+	/**
+	 * Update the {@link Lot}.
+	 * @param lot - the lot.
+	 * @return the {@link Lot} updated.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public Lot updateLot(Lot lot) throws OHServiceException {
+		return lotRepository.save(lot);
+	}
 
 	/**
 	 * Stores the specified {@link Lot}.

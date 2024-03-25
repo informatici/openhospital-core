@@ -35,7 +35,7 @@ import org.springframework.stereotype.Repository;
 public interface MovementIoOperationRepository extends JpaRepository<Movement, Integer>, MovementIoOperationRepositoryCustom {
 
 	@Query(value = "select m from Movement m join m.medical med where med.code = :code")
-	Movement findAllByMedicalCode(@Param("code") Integer code);
+	List<Movement> findAllByMedicalCode(@Param("code") Integer code);
 
 	@Query(value = "select m from Movement m join m.medical med where med.code = :code")
 	Movement findAllByMedicalCodeOrderByLot_(@Param("code") Integer code);
