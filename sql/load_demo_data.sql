@@ -1587,6 +1587,8 @@ INSERT INTO `oh_groupmenu` (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `
 INSERT INTO `oh_groupmenu` (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `GM_CREATED_BY`, `GM_CREATED_DATE`, `GM_LAST_MODIFIED_BY`, `GM_LAST_MODIFIED_DATE`) VALUES (342,'laboratorist','help',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `GM_CREATED_BY`, `GM_CREATED_DATE`, `GM_LAST_MODIFIED_BY`, `GM_LAST_MODIFIED_DATE`) VALUES (343,'admin','btnpharmstockcmovdelete',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `GM_CREATED_BY`, `GM_CREATED_DATE`, `GM_LAST_MODIFIED_BY`, `GM_LAST_MODIFIED_DATE`) VALUES (344,'admin','btnmedicalswarddelete',1,NULL,NULL,NULL,NULL);
+INSERT INTO `oh_groupmenu` (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `GM_CREATED_BY`, `GM_CREATED_DATE`, `GM_LAST_MODIFIED_BY`, `GM_LAST_MODIFIED_DATE`) VALUES (346,'admin','inventory',1,NULL,NULL,NULL,NULL);
+
 /*!40000 ALTER TABLE `oh_groupmenu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2748,6 +2750,28 @@ INSERT INTO `oh_medicaldsr` (`MDSR_ID`, `MDSR_MDSRT_ID_A`, `MDSR_CODE`, `MDSR_DE
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `oh_medicaldsrinventory`
+--
+
+LOCK TABLES `oh_medicaldsrinventory` WRITE;
+/*!40000 ALTER TABLE `oh_medicalinventory` DISABLE KEYS */;
+INSERT INTO `oh_medicaldsrinventory`(`MINVT_ID`, `MINVT_STATUS`, `MINVT_DATE`, `MINVT_US_ID_A`, `MINVT_REFERENCE`, `MINVT_TYPE`, `MINVT_WRD_ID_A`, `MINVT_LOCK`, `MINVT_CREATED_BY`, `MINVT_CREATED_DATE`, `MINVT_LAST_MODIFIED_BY`, `MINVT_LAST_MODIFIED_DATE`, `MINVT_ACTIVE`) VALUES (1,'validated','2024-03-18 00:00:00','admin','ref-1','principal',NULL,1,NULL,NULL,NULL,NULL,1);
+/*!40000 ALTER TABLE `oh_medicaldsrinventory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `oh_medicaldsrinventoryrow`
+--
+
+LOCK TABLES `oh_medicalinventoryrow` WRITE;
+/*!40000 ALTER TABLE `oh_medicaldsrinventoryrow` DISABLE KEYS */;
+INSERT INTO `oh_medicaldsrinventoryrow`(`MINVTR_ID`, `MINVTR_THEORETIC_QTY`, `MINVTR_REAL_QTY`, `MINVTR_INVT_ID`, `MINVTR_MDSR_ID`, `MINVTR_LT_ID_A`, `MINVTR_LOCK`, `MINVTR_CREATED_BY`, `MINVTR_CREATED_DATE`, `MINVTR_LAST_MODIFIED_BY`, `MINVTR_LAST_MODIFIED_DATE`, `MINVTR_ACTIVE`) VALUES (1,0,0,1,103,'-1554622624438837880',1,NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_medicaldsrinventoryrow`(`MINVTR_ID`, `MINVTR_THEORETIC_QTY`, `MINVTR_REAL_QTY`, `MINVTR_INVT_ID`, `MINVTR_MDSR_ID`, `MINVTR_LT_ID_A`, `MINVTR_LOCK`, `MINVTR_CREATED_BY`, `MINVTR_CREATED_DATE`, `MINVTR_LAST_MODIFIED_BY`, `MINVTR_LAST_MODIFIED_DATE`, `MINVTR_ACTIVE`) VALUES (2,0,0,1,104,'-1769145966120870973',1,NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_medicaldsrinventoryrow`(`MINVTR_ID`, `MINVTR_THEORETIC_QTY`, `MINVTR_REAL_QTY`, `MINVTR_INVT_ID`, `MINVTR_MDSR_ID`, `MINVTR_LT_ID_A`, `MINVTR_LOCK`, `MINVTR_CREATED_BY`, `MINVTR_CREATED_DATE`, `MINVTR_LAST_MODIFIED_BY`, `MINVTR_LAST_MODIFIED_DATE`, `MINVTR_ACTIVE`) VALUES (3,0,0,1,415,'-4111916415666582009',1,NULL,NULL,NULL,NULL,1);
+/*!40000 ALTER TABLE `oh_medicaldsrinventoryrow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `oh_medicaldsrlot`
 --
 
@@ -3038,6 +3062,7 @@ INSERT INTO `oh_menuitem` (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTI
 INSERT INTO `oh_menuitem` (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTIP`, `MNI_SHORTCUT`, `MNI_SUBMENU`, `MNI_CLASS`, `MNI_IS_SUBMENU`, `MNI_POSITION`) VALUES ('vaccinetype','angal.menu.btn.vaccinetype','angal.menu.vaccinetype','x','V','types','org.isf.vactype.gui.VaccineTypeBrowser','N',12);
 INSERT INTO `oh_menuitem` (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTIP`, `MNI_SHORTCUT`, `MNI_SUBMENU`, `MNI_CLASS`, `MNI_IS_SUBMENU`, `MNI_POSITION`) VALUES ('ward','angal.menu.btn.ward','angal.menu.ward','x','W','generaldata','org.isf.ward.gui.WardBrowser','N',2);
 INSERT INTO `oh_menuitem` (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTIP`, `MNI_SHORTCUT`, `MNI_SUBMENU`, `MNI_CLASS`, `MNI_IS_SUBMENU`, `MNI_POSITION`) VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','W','main','org.isf.visits.gui.VisitView','N',7);
+INSERT INTO `oh_menuitem` (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTIP`, `MNI_SHORTCUT`, `MNI_SUBMENU`, `MNI_CLASS`, `MNI_IS_SUBMENU`, `MNI_POSITION`) VALUES ('inventory','angal.menu.btn.inventory','angal.menu.inventory','x','I','pharmacy','org.isf.medicalinventory.gui.InventoryBrowser','N',6);
 /*!40000 ALTER TABLE `oh_menuitem` ENABLE KEYS */;
 UNLOCK TABLES;
 

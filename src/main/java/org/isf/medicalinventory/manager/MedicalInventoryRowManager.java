@@ -68,7 +68,7 @@ public class MedicalInventoryRowManager {
 	
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
-	 	 *
+	 *
 	 * @param inventoryId - the Invetory Id.
 	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
