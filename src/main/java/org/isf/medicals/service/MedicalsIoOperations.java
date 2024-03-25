@@ -114,11 +114,11 @@ public class MedicalsIoOperations
 	}
 	
 	/**
-	 * Returns the medicals.
+	 * Returns the medicals pageable.
 	 *
 	 * @param page - the page number.
 	 * @param size - the page size.
-	 * @return the list of {@link Medical}s. It could be {@code empty}.
+	 * @return the list of {@link Medical}s pageable. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public Page<Medical> getMedicalsPageable(int size, int page) throws OHServiceException {
