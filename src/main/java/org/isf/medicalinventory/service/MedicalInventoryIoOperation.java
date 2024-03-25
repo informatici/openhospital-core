@@ -134,7 +134,7 @@ public class MedicalInventoryIoOperation {
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
 		if (status == null) {
-			return repository.findInventoryByParamsPageablewithoutSatus(dateFrom, dateTo, type);
+			return repository.findInventoryByParamswithoutSatus(dateFrom, dateTo, type);
 		}
 		return repository.findInventoryByParams(dateFrom, dateTo, status, type);
 	}
