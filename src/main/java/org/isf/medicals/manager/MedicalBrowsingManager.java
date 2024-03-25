@@ -64,7 +64,7 @@ public class MedicalBrowsingManager {
 	/**
 	 * Returns the requested medical.
 	 *
-	 * @param code the medical prod_code.
+	 * @param prod_code the medical prod_code.
 	 * @return the retrieved medical.
 	 * @throws OHServiceException
 	 */
