@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +56,8 @@ public class MedicalInventoryManager {
 	 * @return the updated {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory updateMedicalInventoryRow(MedicalInventory medicalInventory) throws OHServiceException {
-		return ioOperations.updateMedicalInventoryRow(medicalInventory);
+	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		return ioOperations.updateMedicalInventory(medicalInventory);
 	}
 	
 	/**
@@ -89,7 +88,7 @@ public class MedicalInventoryManager {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHServiceException {
 		return ioOperations.getMedicalInventoryByStatusAndWard(status, wardCode);
 	}
 	
@@ -100,7 +99,7 @@ public class MedicalInventoryManager {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHServiceException {
 		return ioOperations.getMedicalInventoryByStatus(status);
 	}
 	
@@ -110,7 +109,7 @@ public class MedicalInventoryManager {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventory() throws OHException {
+	public List<MedicalInventory> getMedicalInventory() throws OHServiceException {
 		return ioOperations.getMedicalInventory();
 	}
 	
@@ -124,7 +123,7 @@ public class MedicalInventoryManager {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHException {
+	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
 		return ioOperations.getMedicalInventoryByParams(dateFrom, dateTo, status, type);
 	}
 	
@@ -140,7 +139,7 @@ public class MedicalInventoryManager {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHException {
+	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
 		return ioOperations.getMedicalInventoryByParamsPageable(dateFrom, dateTo, status, type, page, size);
 	}
 }
