@@ -156,11 +156,11 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.12.1</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.2</version>
+				<version>3.2.5</version>
 				<configuration>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
@@ -277,8 +277,7 @@
 						<project.inceptionYear>2006</project.inceptionYear>
 						<project.name>Open Hospital</project.name>
 						<project.url>www.open-hospital.org</project.url>
-						<project.description>Open Hospital is a free and open source software for healthcare data
-							management.
+						<project.description>Open Hospital is a free and open source software for healthcare data management.
 						</project.description>
 					</properties>
 				</configuration>
