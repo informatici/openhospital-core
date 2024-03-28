@@ -21,8 +21,6 @@
  */
 package org.isf.medicalinventory.model;
 
-import java.util.Optional;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
