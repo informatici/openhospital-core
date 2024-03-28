@@ -21,6 +21,8 @@
  */
 package org.isf.medicalinventory.model;
 
+import java.util.Optional;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -167,9 +169,12 @@ public class MedicalInventoryRow extends Auditable<String> {
 	}
 
 	public String getSearchString() {
-		StringBuffer sbNameCode = new StringBuffer();
-		sbNameCode.append(getMedical() != null ? getMedical().getDescription().toLowerCase() : "");
-		sbNameCode.append(getMedical() != null ? getMedical().getProdCode().toLowerCase() : "");
-		return sbNameCode.toString();
+		 Medical medical = getMedical();
+		 StringBuilder sbNameCode = new StringBuilder();
+		 if (medical != null) {
+			 sbNameCode.append(medical.getDescription().toLowerCase())
+		       .append(medical.getProdCode().toLowerCase());
+		 }
+		 return sbNameCode.toString();
 	}
 }
