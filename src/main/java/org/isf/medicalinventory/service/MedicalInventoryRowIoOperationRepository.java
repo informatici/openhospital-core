@@ -32,6 +32,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicalInventoryRowIoOperationRepository extends JpaRepository<MedicalInventoryRow, Integer> {
 
-	@Query(value = "select medinvrow from MedicalInventoryRow medinvrow where medinvrow.inventory = :inventoryId")
+	@Query(value = "select medinvrow from MedicalInventoryRow medinvrow where medinvrow.inventory.id = :inventoryId")
 	List<MedicalInventoryRow> findByInventoryId(@Param("inventoryId") int inventoryId);
 }

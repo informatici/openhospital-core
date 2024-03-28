@@ -50,8 +50,8 @@ public class MedicalInventoryIoOperation {
 	 * @return the newly persisted {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory newMedicalInventory(MedicalInventory medicalinventory) throws OHServiceException {
-		return repository.save(medicalinventory);
+	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		return repository.save(medicalInventory);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class MedicalInventoryIoOperation {
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
 		if (status == null) {
-			return repository.findInventoryByParamsPageablewithoutSatus(dateFrom, dateTo, type);
+			return repository.findInventoryByParamsWithoutStatus(dateFrom, dateTo, type);
 		}
 		return repository.findInventoryByParams(dateFrom, dateTo, status, type);
 	}
@@ -154,7 +154,7 @@ public class MedicalInventoryIoOperation {
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
 		Pageable pageable = PageRequest.of(page, size);
 		if (status == null) {
-			return repository.findInventoryByParamsPageablewithoutSatus(dateFrom, dateTo, type, pageable);
+			return repository.findInventoryByParamsWithoutStatusPageable(dateFrom, dateTo, type, pageable);
 		}
 		return repository.findInventoryByParamsPageable(dateFrom, dateTo, status, type, pageable);
 	}
