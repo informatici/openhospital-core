@@ -287,6 +287,7 @@ public class VisitManager {
 					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
 						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
 						Sms sms = new Sms();
+						sms.setSmsDate(date);
 						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());
 						sms.setSmsText(prepareSmsFromVisit(visit));

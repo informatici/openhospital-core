@@ -1077,7 +1077,6 @@ class Tests extends OHCoreTestCase {
 		medicalType2.setCode("ABCDE");
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		medical2.setDescription("Medical 2");
-		medical2.setCode(99);
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("Y");
 		ward2.setDescription("Ward 2");

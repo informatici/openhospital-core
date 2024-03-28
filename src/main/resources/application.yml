@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: ${jdbc.class:com.mysql.cj.jdbc.Driver}
+    url: ${jdbc.url:jdbc:mysql://localhost:3306/oh}
+    username: ${jdbc.username:isf}
+    password: ${jdbc.password:isf123}
+  jpa:
+    properties:
+      hibernate:
+        show_sql: ${hibernate.show_sql:false}
+        format_sql: ${hibernate.format_sql:true}
+        dialect: ${hibernate.dialect:org.hibernate.dialect.MySQLDialect}
+        hbm2ddl:
+          auto: ${hibernate.hbm2ddl.auto:none}
+  cloud:
+    compatibility-verifier:
+      enabled: false
+

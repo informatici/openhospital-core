@@ -195,8 +195,7 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrValidationCodeTooLong() throws Exception {
-		String code = setupTestVaccineType(true);
-		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineType.setCode("thisIsACodeThatIsTooLong");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
 			.isInstanceOf(OHDataValidationException.class)

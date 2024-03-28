@@ -561,6 +561,7 @@ class Tests extends OHCoreTestCase {
 			assertThat(medical).isNotNull();
 			medical.setProdCode("");
 			MedicalType medicalType = new MedicalType("code", "description");
+			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 			medical.setType(medicalType);
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
