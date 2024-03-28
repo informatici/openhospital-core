@@ -21,28 +21,30 @@
  */
 package org.isf.telemetry.service.remote;
 
-import java.util.Properties;
-
-import javax.annotation.Resource;
-
 import org.isf.generaldata.ParamsData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import feign.Feign;
 import feign.slf4j.Slf4jLogger;
 
 @Component
+@PropertySource("classpath:telemetry.properties")
 public class TelemetryDataCollectorGatewayService {
 
 	private static final String RESPONSE_SUCCESS = "OK";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDataCollectorGatewayService.class);
 
-	@Resource(name = "telemetryProperties")
-	private Properties properties;
+	private Environment properties;
+
+	public TelemetryDataCollectorGatewayService(Environment properties) {
+		this.properties = properties;
+	}
 
 	public boolean send(String data) {
 		ParamsData paramsDataClient = ParamsData.getInstance();

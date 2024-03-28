@@ -102,6 +102,7 @@ public class SmsManager {
 			for (String part : parts) {
 				Sms sms = new Sms();
 				sms.setSmsNumber(number);
+				sms.setSmsDate(smsToSend.getSmsDate());
 				sms.setSmsDateSched(schedDate);
 				sms.setSmsUser(UserBrowsingManager.getCurrentUser());
 				sms.setSmsText(part);

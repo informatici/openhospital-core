@@ -33,8 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class AccountingPatientMergedEventListener {
+
 	@Autowired
-	AccountingIoOperations accountingIoOperations;
+	private AccountingIoOperations accountingIoOperations;
 
 	@EventListener
 	@Transactional

@@ -30,8 +30,13 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.providers.gsm.GSMParameters;
@@ -155,11 +160,16 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 	 * @param port
 	 */
 	private void save(String port) {
-		PropertiesConfiguration config;
 		try {
-			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
+			Parameters params = new Parameters();
+			FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+				new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+					.configure(params.properties()
+						.setFileName(GSMParameters.FILE_PROPERTIES)
+						.setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+			Configuration config = builder.getConfiguration();
 			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
-			config.save();
+			builder.save();
 			LOGGER.error("Port saved in {}", GSMParameters.FILE_PROPERTIES);
 		} catch (ConfigurationException ce) {
 			LOGGER.error(ce.getMessage(), ce);

@@ -34,6 +34,7 @@ import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.disease.service.DiseaseIoOperations;
 import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
+import org.isf.distype.service.DiseaseTypeIoOperation;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -57,6 +58,8 @@ class Tests extends OHCoreTestCase {
 	DiseaseBrowserManager diseaseBrowserManager;
 	@Autowired
 	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
+	@Autowired
+	DiseaseTypeIoOperation diseaseTypeIoOperation;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -137,7 +140,8 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testIoNewDisease() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, true);
+		DiseaseType savedDiseaseType = diseaseTypeIoOperation.newDiseaseType(diseaseType);
+		Disease disease = testDisease.setup(savedDiseaseType, true);
 		Disease result = diseaseIoOperation.newDisease(disease);
 		assertThat(result.getCode()).isEqualTo("999");
 		checkDiseaseIntoDb(disease.getCode());
@@ -250,6 +254,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrNewDisease() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
+		diseaseTypeIoOperation.newDiseaseType(diseaseType);
 		Disease disease = testDisease.setup(diseaseType, true);
 		Disease result = diseaseBrowserManager.newDisease(disease);
 		assertThat(result.getCode()).isEqualTo("999");

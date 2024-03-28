@@ -35,9 +35,11 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
+import org.isf.menu.model.User;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHDataValidationException;
@@ -78,6 +80,7 @@ class Tests extends OHCoreTestCase {
 
 	@BeforeAll
 	static void setUpClass() {
+		UserSession.setUser(new User("TestUser", null, "testpass", "test"));
 		testVisit = new TestVisit();
 		testPatient = new TestPatient();
 		testWard = new TestWard();

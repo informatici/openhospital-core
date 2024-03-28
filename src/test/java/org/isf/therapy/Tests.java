@@ -35,10 +35,12 @@ import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
+import org.isf.menu.model.User;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.manager.TherapyManager;
@@ -80,6 +82,7 @@ class Tests extends OHCoreTestCase {
 
 	@BeforeAll
 	static void setUpClass() {
+		UserSession.setUser(new User("TestUser", null, "testpass", "test"));
 		testTherapyRow = new TestTherapy();
 		testPatient = new TestPatient();
 		testMedical = new TestMedical();
@@ -362,7 +365,7 @@ class Tests extends OHCoreTestCase {
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundTherapyRow)
 			.isNotNull()
-			.hasToString("1 - 10 9.9/11/12");
+			.hasToString(Integer.toString(foundTherapyRow.getMedical()) + " - 10 9.9/11/12");
 	}
 
 	@Test
@@ -451,6 +454,7 @@ class Tests extends OHCoreTestCase {
 		medicalType2.setCode("someOtherCode");
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		medical2.setCode(-99);
+		medical2.setLock(1);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType2);
 		medicalsIoOperationRepository.saveAndFlush(medical2);
 
@@ -482,7 +486,7 @@ class Tests extends OHCoreTestCase {
 	private int setupTestTherapyRow(boolean usingSet) throws OHException {
 		TherapyRow therapyRow;
 		MedicalType medicalType = testMedicalType.setup(false);
-		Medical medical = testMedical.setup(medicalType, false);
+		Medical medical = testMedical.setup(medicalType, true);
 		Patient patient = testPatient.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);

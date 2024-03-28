@@ -517,11 +517,13 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void mgrBillItemsChecks() throws Exception {
 		int id = setupTestBillItems(false);
+		BillItems billitem = accountingBillItemsIoOperationRepository.findById(id).orElse(null);
+		assertThat(billitem).isNotNull();
 		List<BillItems> billItems = billBrowserManager.getItems(0);
 		assertThat(billItems).isEmpty();
 		billItems = billBrowserManager.getItems(99999);
 		assertThat(billItems).isEmpty();
-		billItems = billBrowserManager.getItems(id);
+		billItems = billBrowserManager.getItems(billitem.getBill().getId());
 		assertThat(billItems).hasSize(1);
 	}
 

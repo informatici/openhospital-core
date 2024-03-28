@@ -581,13 +581,12 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	@Transactional
 	void testIoLoadAdmittedPatient(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionIoOperation.getAdmission(id);
 		assertThat(admission).isNotNull();
-		assertThat(admissionIoOperation.loadAdmittedPatient(id)).isNotNull();
+		assertThat(admissionIoOperation.loadAdmittedPatient(admission.getPatient().getCode())).isNotNull();
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1283,11 +1282,11 @@ class Tests extends OHCoreTestCase {
 		}
 	}
 
-	private int setupTestAdmission(boolean usingSet) throws OHException, InterruptedException {
+	private int setupTestAdmission(boolean usingSet) throws OHException, InterruptedException, OHServiceException {
 		return setupTestAdmission(usingSet, false);
 	}
 
-	private int setupTestAdmission(boolean usingSet, boolean maternity) throws OHException, InterruptedException {
+	private int setupTestAdmission(boolean usingSet, boolean maternity) throws OHException, InterruptedException, OHServiceException {
 		Ward ward = testWard.setup(false, maternity);
 		Patient patient = testPatient.setup(false);
 		AdmissionType admissionType = testAdmissionType.setup(false);
@@ -1324,8 +1323,8 @@ class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
-		admissionIoOperationRepository.saveAndFlush(admission);
-		return admission.getId();
+		Admission savedAdmission = admissionIoOperation.newAdmission(admission);
+		return savedAdmission.getId();
 	}
 
 	private void checkAdmissionIntoDb(int id) throws OHServiceException {

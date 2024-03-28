@@ -21,6 +21,8 @@
  */
 package org.isf.utils.db;
 
+import jakarta.validation.ValidationException;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -52,7 +54,7 @@ public class OHServiceExceptionTranslator {
 	public Object translateSqlExceptionToOHServiceException(ProceedingJoinPoint pjp) throws OHServiceException {
 		try {
 			return pjp.proceed();
-		} catch (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException | ValidationException e) {
 			throw new OHDataIntegrityViolationException(e,
 			                                            new OHExceptionMessage(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg")));
 		} catch (InvalidDataAccessResourceUsageException e) {

@@ -22,9 +22,6 @@
 package org.isf.sms.providers.skebby;
 
 import java.awt.TrayIcon.MessageType;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
@@ -35,8 +32,9 @@ import org.isf.sms.providers.skebby.model.SckebbySmsResponse;
 import org.isf.sms.providers.skebby.remote.SkebbyGatewayRemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import feign.Feign;
@@ -44,6 +42,7 @@ import feign.FeignException;
 import feign.slf4j.Slf4jLogger;
 
 @Component
+@PropertySource("classpath:sms.properties")
 public class SkebbyGatewayService implements SmsSenderInterface {
 
 	private static final String SERVICE_NAME = "skebby-gateway-service";
@@ -59,11 +58,14 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkebbyGatewayService.class);
 
-	@Resource(name = "smsProperties")
-	private Properties smsProperties;
+	private final Environment smsProperties;
 
-	@Autowired
-	private SkebbyGatewayConverter skebbyGatewayConverter;
+	private final SkebbyGatewayConverter skebbyGatewayConverter;
+
+	public SkebbyGatewayService(Environment smsProperties, SkebbyGatewayConverter skebbyGatewayConverter) {
+		this.smsProperties = smsProperties;
+		this.skebbyGatewayConverter = skebbyGatewayConverter;
+	}
 
 	@Override
 	public boolean sendSMS(Sms sms) {

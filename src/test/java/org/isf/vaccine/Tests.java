@@ -212,8 +212,8 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrValidationCodeEmpty() throws Exception {
-		String code = setupTestVaccine(true);
-		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
+		VaccineType vaccineType = testVaccineType.setup(false);
+		Vaccine vaccine = testVaccine.setup(vaccineType, true);
 		vaccine.setCode("");
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
 			.isInstanceOf(OHDataValidationException.class)
@@ -225,8 +225,8 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrValidationCodeTooLong() throws Exception {
-		String code = setupTestVaccine(true);
-		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
+		VaccineType vaccineType = testVaccineType.setup(false);
+		Vaccine vaccine = testVaccine.setup(vaccineType, true);
 		vaccine.setCode("thisIsACodeThatIsTooLong");
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
 			.isInstanceOf(OHDataValidationException.class)

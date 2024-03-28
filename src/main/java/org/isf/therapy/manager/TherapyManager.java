@@ -195,6 +195,7 @@ public class TherapyManager {
 							sms.setSmsUser(UserBrowsingManager.getCurrentUser());
 							sms.setModule("therapy");
 							sms.setModuleID(String.valueOf(patID));
+							sms.setSmsDate(date);
 							smsOp.saveOrUpdate(sms);
 						}
 					}

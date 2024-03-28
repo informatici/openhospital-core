@@ -42,6 +42,7 @@ import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -58,6 +59,7 @@ class Tests extends OHCoreTestCase {
 	private static TestMedical testMedical;
 	private static TestLot testLot;
 	private static TestMedicalType testMedicalType;
+
 	@Autowired
 	MedicalInventoryIoOperationRepository medIvnIoOperationRepository;
 	
@@ -81,8 +83,7 @@ class Tests extends OHCoreTestCase {
 	
 	@Autowired
 	LotIoOperationRepository lotIoOperationRepository;
-	
-	
+
 	@BeforeAll
 	static void setUpClass() {
 		testMedicalInventory = new TestMedicalInventory();
@@ -182,17 +183,18 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testIoNewMedicalInventoryRow() throws Exception {
 		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
 		MedicalType medicalType = testMedicalType.setup(false);
-		Medical medical = testMedical.setup(medicalType, false);
-		Lot lot = testLot.setup(medical, false);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(inventory, medical, lot, false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
 		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
 		lotIoOperationRepository.saveAndFlush(lot);
-		medIvnIoOperationRepository.saveAndFlush(inventory);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
 		MedicalInventoryRow newMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
-		checkMedicalInventoryIntoDb(newMedicalInventoryRow.getId());
+		checkMedicalInventoryRowIntoDb(newMedicalInventoryRow.getId());
 	}
 
 	@Test
@@ -206,31 +208,39 @@ class Tests extends OHCoreTestCase {
 		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualTo(realQty);
 	}
 	
-	private int setupTestMedicalInventory(boolean usingSet) throws OHException {
+	private int setupTestMedicalInventory(boolean usingSet) throws OHException, OHServiceException {
 		Ward ward = testWard.setup(false);
 		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
-		medIvnIoOperationRepository.saveAndFlush(medicalInventory);
-		return medicalInventory.getId();
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory savedMedicalInventory = medicalInventoryIoOperation.newMedicalInventory(medicalInventory);
+		return savedMedicalInventory.getId();
 	}
 	
 	private void checkMedicalInventoryIntoDb(int id) throws OHException {
 		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventory).isNotNull();
-		testMedicalInventory.check(foundMedicalInventory);
+		testMedicalInventory.check(foundMedicalInventory, id);
 	}
-	
-	private int setupTestMedicalInventoryRow(boolean usingSet) throws OHException {
+
+	private void checkMedicalInventoryRowIntoDb(int id) throws OHException {
+		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundMedicalInventoryRow).isNotNull();
+		testMedicalInventoryRow.check(foundMedicalInventoryRow, foundMedicalInventoryRow.getId());
+	}
+
+	private int setupTestMedicalInventoryRow(boolean usingSet) throws OHServiceException, OHException {
 		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
 		MedicalType medicalType = testMedicalType.setup(false);
-		Medical medical = testMedical.setup(null, false);
-		Lot lot = testLot.setup(medical, false);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(inventory, medical, lot, false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
 		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
 		lotIoOperationRepository.saveAndFlush(lot);
-		medIvnIoOperationRepository.saveAndFlush(inventory);
-		medIvnRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
-		return medicalInventoryRow.getId();
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		MedicalInventoryRow savedMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
+		return savedMedicalInventoryRow.getId();
 	}
 }
