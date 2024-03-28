@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
@@ -33,8 +35,10 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
@@ -417,5 +421,17 @@ public class MovStockInsertingManager {
 			dischargeMovement.add(ioOperations.prepareDischargingMovement(movement));
 			return dischargeMovement;
 		}
+	}
+	
+	/**
+	 * Prepare the insert of the specified {@link Movement}
+	 *
+	 * @param movement - the movement to store.
+	 * @return the stored {@link Movement} object.
+	 * @throws OHServiceException
+	 */
+	public Movement prepareDishargingMovementInventory(Movement movement) throws OHServiceException {
+		Movement result = ioOperations.prepareDischargingMovement(movement);
+		return result;
 	}
 }
