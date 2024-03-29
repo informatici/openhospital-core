@@ -42,7 +42,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 @Component
 public class GSMGatewayService implements SmsSenderInterface, SerialPortDataListener {
 
-	public static final String SERVICE_NAME = "gsm-gateway-service";
+	String serviceName = SmsConfig.SERVICE_NAME;
 	private static final Logger LOGGER = LoggerFactory.getLogger(GSMGatewayService.class);
 	private static final String EOF = "\r";
 
@@ -209,12 +209,12 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 
 	@Override
 	public String getName() {
-		return SERVICE_NAME;
+		return serviceName;
 	}
 
 	@Override
 	public String getRootKey() {
-		return SERVICE_NAME;
+		return serviceName;
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
+import org.isf.lab.service.LabPrintOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -51,6 +52,9 @@ public class LabManager {
 
 	@Autowired
 	private LabIoOperations ioOperations;
+	@Autowired
+	private LabPrintOperations labPrintOperations;
+
 
 	protected HashMap<String, String> materialHashMap;
 	private Integer procedure;
@@ -187,7 +191,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
+		List<LaboratoryForPrint> labs = labPrintOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
 		return labs;
 	}
@@ -205,7 +209,7 @@ public class LabManager {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 					throws OHServiceException {
-		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
+		return labPrintOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
 	}
 
 	/**

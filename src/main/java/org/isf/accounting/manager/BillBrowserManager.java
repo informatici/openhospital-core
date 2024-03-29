@@ -54,40 +54,72 @@ public class BillBrowserManager {
 	 * @throws OHDataValidationException
 	 */
 	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
-		LocalDateTime today = TimeTools.getNow();
-		LocalDateTime upDate;
-		LocalDateTime firstPay = LocalDateTime.from(today);
-		LocalDateTime lastPay = LocalDateTime.from(today);
+		validateBillDates(bill, billPayments, errors);
+		validatePaymentDates(billPayments, errors);
+		validatePatientName(bill, errors);
+		validateBillStatusAndBalance(bill, errors);
 
-		LocalDateTime billDate = bill.getDate();
-		if (!billPayments.isEmpty()) {
-			firstPay = billPayments.get(0).getDate();
-			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
-			upDate = lastPay;
-		} else {
-			upDate = billDate;
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
 		}
-		bill.setUpdate(upDate);
-        
+	}
+
+	/**
+	 *
+	 * @param bill
+	 * @param billPayments
+	 * @param errors
+	 */
+
+	private void validateBillDates(Bill bill, List<BillPayments> billPayments, List<OHExceptionMessage> errors) {
+		LocalDateTime today = TimeTools.getNow();
+		LocalDateTime billDate = bill.getDate();
+		LocalDateTime firstPay = billPayments.isEmpty() ? today : billPayments.get(0).getDate();
+
 		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
-		}
-		if (lastPay.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg")));
 		}
 		if (billDate.isAfter(firstPay)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg")));
 		}
+	}
+
+	/**
+	 *
+	 * @param billPayments
+	 * @param errors
+	 */
+	private void validatePaymentDates(List<BillPayments> billPayments, List<OHExceptionMessage> errors) {
+		LocalDateTime today = TimeTools.getNow();
+		LocalDateTime lastPay = billPayments.isEmpty() ? today : billPayments.get(billPayments.size() - 1).getDate();
+
+		if (lastPay.isAfter(today)) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg")));
+		}
+	}
+
+	/**
+	 *
+	 * @param bill
+	 * @param errors
+	 */
+	private void validatePatientName(Bill bill, List<OHExceptionMessage> errors) {
 		if (bill.getPatName().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg")));
 		}
-		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
+	}
+
+	/**
+	 *
+	 * @param bill
+	 * @param errors
+	 */
+
+	private void validateBillStatusAndBalance(Bill bill, List<OHExceptionMessage> errors) {
+		if ("C".equals(bill.getStatus()) && bill.getBalance() != 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg")));
-		}
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
 		}
 	}
 

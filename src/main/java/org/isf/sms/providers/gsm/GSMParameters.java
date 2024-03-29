@@ -50,12 +50,12 @@ public class GSMParameters extends ConfigurationProperties {
 	private GSMParameters(String fileProperties) {
 		super(fileProperties);
 
-		PORT = myGetProperty(GSMGatewayService.SERVICE_NAME + ".port", DEFAULT_PORT);
-		DRIVERNAME = myGetProperty(GSMGatewayService.SERVICE_NAME + ".driver-name", DEFAULT_DRIVERNAME);
-		CMGF = myGetProperty(GSMGatewayService.SERVICE_NAME + ".cmgf", DEFAULT_CMGF);
-		CSMP = myGetProperty(GSMGatewayService.SERVICE_NAME + ".csmp", DEFAULT_CSMP);
-		GMM = myGetProperty(GSMGatewayService.SERVICE_NAME + ".gmm", DEFAULT_GMM);
-		CMGS = myGetProperty(GSMGatewayService.SERVICE_NAME + ".cmgs", DEFAULT_CMGS);
+		PORT = myGetProperty(SmsConfig.SERVICE_NAME + ".port", DEFAULT_PORT);
+		DRIVERNAME = myGetProperty(SmsConfig.SERVICE_NAME + ".driver-name", DEFAULT_DRIVERNAME);
+		CMGF = myGetProperty(SmsConfig.SERVICE_NAME + ".cmgf", DEFAULT_CMGF);
+		CSMP = myGetProperty(SmsConfig.SERVICE_NAME + ".csmp", DEFAULT_CSMP);
+		GMM = myGetProperty(SmsConfig.SERVICE_NAME + ".gmm", DEFAULT_GMM);
+		CMGS = myGetProperty(SmsConfig.SERVICE_NAME + ".cmgs", DEFAULT_CMGS);
 
 	}
 

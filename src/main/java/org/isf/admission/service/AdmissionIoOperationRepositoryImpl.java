@@ -62,63 +62,74 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	private EntityManager entityManager;
 
 	@Override
-	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
-					LocalDateTime[] dischargeRange) throws OHServiceException {
+	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) throws OHServiceException {
 		String[] terms = getTermsToSearch(searchTerms);
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
-		if (terms.length == 1) {
-			try {
-				int code = Integer.parseInt(terms[0]);
-				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryCode, "AdmittedPatient");
-				nativeQuery.setParameter("param0", code);
-
-				return parseResultSet(admittedPatients, nativeQuery);
-
-			} catch (NumberFormatException nfe) {
-				// used to see if the search parameter is a patient code (number)
-			}
+		if (isSingleTerm(terms)) {
+			return handleSingleTermSearch(terms, admittedPatients);
 		}
 
-		if ((admissionRange != null && (admissionRange[0] != null || admissionRange[1] != null)) ||
-						(dischargeRange != null && (dischargeRange[0] != null || dischargeRange[1] != null))) {
-			StringBuilder rangePredicate = new StringBuilder("( (ADM_DELETED='N') or (ADM_DELETED is null ) )");
-			if (admissionRange != null) {
-
-				if (admissionRange[0] != null) {
-					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) >= '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
-									.append('\'');
-				}
-				if (admissionRange[1] != null) {
-					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) <= '").append(TimeTools.formatDateTime(admissionRange[1], YYYY_MM_DD))
-									.append('\'');
-				}
-			}
-			if (dischargeRange != null) {
-
-				if (dischargeRange[0] != null) {
-					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) >= '").append(TimeTools.formatDateTime(dischargeRange[0], YYYY_MM_DD))
-									.append('\'');
-				}
-				if (dischargeRange[1] != null) {
-					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) <= '").append(TimeTools.formatDateTime(dischargeRange[1], YYYY_MM_DD))
-									.append('\'');
-				}
-			}
-			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
-			String paramTerms = like(terms);
-			nativeQuery.setParameter("param0", paramTerms);
-
-			return parseResultSet(admittedPatients, nativeQuery);
-
+		if (hasValidRange(admissionRange, dischargeRange)) {
+			return handleRangeSearch(terms, admissionRange, dischargeRange, admittedPatients);
 		} else {
-
-			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryTerms, "AdmittedPatient");
-			String paramTerms = like(terms);
-			nativeQuery.setParameter("param0", paramTerms);
-
-			return parseResultSet(admittedPatients, nativeQuery);
+			return handleTermsSearch(terms, admittedPatients);
 		}
 	}
+
+	private boolean isSingleTerm(String[] terms) {
+		return terms.length == 1;
+	}
+
+	private List<AdmittedPatient> handleSingleTermSearch(String[] terms, List<AdmittedPatient> admittedPatients) {
+		try {
+			int code = Integer.parseInt(terms[0]);
+			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryCode, "AdmittedPatient");
+			nativeQuery.setParameter("param0", code);
+			return parseResultSet(admittedPatients, nativeQuery);
+		} catch (NumberFormatException | OHServiceException nfe) {
+			// The term is not a code; proceed to other search types
+		}
+		return admittedPatients;
+	}
+
+	private boolean hasValidRange(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) {
+		return (admissionRange != null && (admissionRange[0] != null || admissionRange[1] != null)) ||
+			(dischargeRange != null && (dischargeRange[0] != null || dischargeRange[1] != null));
+	}
+
+	private List<AdmittedPatient> handleRangeSearch(String[] terms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange, List<AdmittedPatient> admittedPatients) throws OHServiceException {
+		StringBuilder rangePredicate = buildRangePredicate(admissionRange, dischargeRange);
+		Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
+		String paramTerms = like(terms);
+		nativeQuery.setParameter("param0", paramTerms);
+		return parseResultSet(admittedPatients, nativeQuery);
+	}
+
+	private StringBuilder buildRangePredicate(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) {
+		StringBuilder rangePredicate = new StringBuilder("( (ADM_DELETED='N') or (ADM_DELETED is null ) )");
+		appendDateRangePredicate(rangePredicate, "ADM_DATE_ADM", admissionRange);
+		appendDateRangePredicate(rangePredicate, "ADM_DATE_DIS", dischargeRange);
+		return rangePredicate;
+	}
+
+	private void appendDateRangePredicate(StringBuilder predicate, String columnName, LocalDateTime[] dateRange) {
+		if (dateRange != null) {
+			if (dateRange[0] != null) {
+				predicate.append(" and ").append("DATE(").append(columnName).append(") >= '").append(TimeTools.formatDateTime(dateRange[0], "yyyy-MM-dd")).append('\'');
+			}
+			if (dateRange[1] != null) {
+				predicate.append(" and ").append("DATE(").append(columnName).append(") <= '").append(TimeTools.formatDateTime(dateRange[1], "yyyy-MM-dd")).append('\'');
+			}
+		}
+	}
+
+	private List<AdmittedPatient> handleTermsSearch(String[] terms, List<AdmittedPatient> admittedPatients) throws OHServiceException {
+		Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryTerms, "AdmittedPatient");
+		String paramTerms = like(terms);
+		nativeQuery.setParameter("param0", paramTerms);
+		return parseResultSet(admittedPatients, nativeQuery);
+	}
+
 
 	private List<AdmittedPatient> parseResultSet(List<AdmittedPatient> admittedPatients, Query nativeQuery) throws OHServiceException {
 		List<Object[]> results = nativeQuery.getResultList();
