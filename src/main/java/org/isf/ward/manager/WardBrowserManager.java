@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
  * @author Rick
  */
 @Component
-public class WardBrowserManager {
+public class 	WardBrowserManager {
 
 	@Autowired
 	private AdmissionBrowserManager admManager;

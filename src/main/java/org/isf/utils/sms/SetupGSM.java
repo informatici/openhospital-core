@@ -35,6 +35,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.providers.gsm.GSMParameters;
+import org.isf.sms.providers.gsm.SmsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.PortInUseException;
@@ -65,7 +66,7 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 	public SetupGSM() {
 		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
 
-		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
+		String model = props.getProperty(SmsConfig.SERVICE_NAME + ".gmm");
 
 		SerialPort[] portList = SerialPort.getCommPorts();
 		LOGGER.info("Found {} ports: {}", portList.length, portList.toString());
@@ -158,7 +159,7 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 		PropertiesConfiguration config;
 		try {
 			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
-			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
+			config.setProperty(SmsConfig.SERVICE_NAME + ".port", port);
 			config.save();
 			LOGGER.error("Port saved in {}", GSMParameters.FILE_PROPERTIES);
 		} catch (ConfigurationException ce) {

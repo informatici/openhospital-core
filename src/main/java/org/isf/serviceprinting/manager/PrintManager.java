@@ -1,24 +1,3 @@
-/*
- * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
- *
- * Open Hospital is a free and open source software for healthcare data management.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * https://www.gnu.org/licenses/gpl-3.0-standalone.html
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
 package org.isf.serviceprinting.manager;
 
 import java.io.File;
@@ -53,20 +32,17 @@ import net.sf.jasperreports.view.JasperViewer;
 public class PrintManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintManager.class);
-
 	public static final int toDisplay = 0;
-
 	public static final int toPdf = 1;
-
 	public static final int toPrint = 2;
-	
+
 	@Autowired
 	private HospitalBrowsingManager hospitalManager;
-	
+
 	public PrintManager() {}
-	
+
 	public void print(String filename, List<?> toPrint, int action) throws OHServiceException {
-		
+
 		Map<String, Object> parameters = new HashMap<>();
 		Hospital hospital = hospitalManager.getHospital();
 		parameters.put("ospedaleNome", hospital.getDescription());
@@ -80,40 +56,62 @@ public class PrintManager {
 		File jasperFile = new File("rpt_base/" + filename + ".jasper");
 		try {
 			if (jasperFile.isFile()) {
-				JasperReport jasperReport = (JasperReport) JRLoader
-				.loadObject(jasperFile);
-				JasperPrint jasperPrint = JasperFillManager.fillReport(
-						jasperReport, parameters, dataSource);
-				switch (action) {
-				case 0:
-					if (GeneralData.INTERNALVIEWER) {
-						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
-					} else {
-						String pdfFile = "rpt_base/PDF/" + filename + ".pdf";
-						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
-						try {
-							Runtime rt = Runtime.getRuntime();
-							rt.exec(GeneralData.VIEWER + ' ' + pdfFile);
-						} catch(Exception exception) {
-							LOGGER.error(exception.getMessage(), exception);
-						}
-					}
-					break;
-				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt_base/PDF/"+
-							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
-							+".pdf");
-					break;
-				case 2:JasperPrintManager.printReport(jasperPrint, true);
-					break;
-				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
-					break;
-				}
+				JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+
+				PrintAction printAction = selectPrintAction(action);
+				printAction.execute(jasperPrint, filename);
+
 			} else {
-				JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+				JOptionPane.showMessageDialog(null, MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
 			}
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
+		}
+	}
+
+	/**
+	 *
+	 * @param action
+	 * @return
+	 */
+	private PrintAction selectPrintAction(int action) {
+		switch (action) {
+			case toDisplay:
+				return new DisplayReportAction();
+			case toPdf:
+				return new ExportToPdfAction();
+			case toPrint:
+				return new DirectPrintAction();
+			default:
+				throw new IllegalArgumentException("Invalid print action");
+		}
+	}
+
+
+	private interface PrintAction {
+		void execute(JasperPrint jasperPrint, String filename) throws JRException, OHServiceException;
+	}
+
+	private class DisplayReportAction implements PrintAction {
+		@Override
+		public void execute(JasperPrint jasperPrint, String filename) throws JRException, OHServiceException {
+			JasperViewer.viewReport(jasperPrint, false, new Locale(GeneralData.LANGUAGE));
+		}
+	}
+
+	private class ExportToPdfAction implements PrintAction {
+		@Override
+		public void execute(JasperPrint jasperPrint, String filename) throws JRException, OHServiceException {
+			JasperExportManager.exportReportToPdfFile(jasperPrint, "rpt_base/PDF/" + filename + ".pdf");
+		}
+	}
+
+	private class DirectPrintAction implements PrintAction {
+		@Override
+		public void execute(JasperPrint jasperPrint, String filename) throws JRException, OHServiceException {
+			JasperPrintManager.printReport(jasperPrint, true);
 		}
 	}
 }

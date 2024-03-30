@@ -214,7 +214,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 
 	@Override
 	public String getRootKey() {
-		return serviceName;
+		return serviceName    ;
 	}
 
 	@Override
