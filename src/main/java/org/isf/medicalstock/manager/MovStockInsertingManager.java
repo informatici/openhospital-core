@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -35,13 +34,14 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
-import org.isf.utils.db.DbQueryLogger;
+import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +53,9 @@ public class MovStockInsertingManager {
 	private MedicalStockIoOperations ioOperations;
 	@Autowired
 	private MedicalsIoOperations ioOperationsMedicals;
+	
+	@Autowired
+	private MedicalStockWardIoOperations ioOperationsMedicalsWard;
 
 	public MovStockInsertingManager() {
 	}
@@ -427,11 +430,76 @@ public class MovStockInsertingManager {
 	 * Prepare the insert of the specified {@link Movement}
 	 *
 	 * @param movement - the movement to store.
-	 * @return the stored {@link Movement} object.
-	 * @throws OHServiceException
+	 * @return {@code true} if is already used,{@code false} otherwise.
+	 * @throws OHServiceException.
 	 */
-	public Movement prepareDishargingMovementInventory(Movement movement) throws OHServiceException {
-		Movement result = ioOperations.prepareDischargingMovement(movement);
-		return result;
+	@Transactional(rollbackFor = OHServiceException.class)
+	public boolean prepareDishargingOrChargeMovementInventory(Movement movement) throws OHServiceException {
+		Movement mov = ioOperations.prepareDischargingMovement(movement);
+		boolean stockQuantityUpdated = false;
+		if (mov != null) {
+			Medical medical = ioOperationsMedicals.getMedical(movement.getMedical().getCode());
+			if (medical != null) {
+				stockQuantityUpdated = this.updateStockQuantity(mov);
+			}
+			if (stockQuantityUpdated) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean updateStockQuantity(Movement movement) throws OHServiceException {
+		String movType = movement.getType().getType();
+		if (movType.equals("+")) {	
+			Ward ward = movement.getWard();
+			Medical medical = movement.getMedical();
+			Lot lot = movement.getLot();
+			int quantity = movement.getQuantity();
+			if (ward != null) {
+				return this.updateMedicalWardQuantity(ward, medical, lot, quantity, movType);
+			} else {
+				double realQty = medical.getInqty() + quantity;
+				medical.setInqty(realQty);
+				ioOperationsMedicals.updateMedical(medical);
+				return true;
+			}
+			
+		} else {
+			Ward ward = movement.getWard();
+			Medical medical = movement.getMedical();
+			Lot lot = movement.getLot();
+			int quantity = movement.getQuantity();
+			if (ward != null) {
+				return this.updateMedicalWardQuantity(ward, medical, lot, quantity, movType);
+			} else {
+				double realQty = medical.getOutqty() + quantity;
+				medical.setOutqty(realQty);
+				ioOperationsMedicals.updateMedical(medical);
+				return true;
+			}
+		}
+	}
+	
+	private boolean updateMedicalWardQuantity(Ward ward, Medical medical, Lot lot, int quantity, String movType) throws OHServiceException {
+		String wardCode = ward.getCode();
+		int medicalCode = medical.getCode();
+		String lotCode = lot.getCode();
+		MedicalWard medicalWard = ioOperationsMedicalsWard.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
+		if (medicalWard != null) {
+			if (movType.equals("+")) {
+				float realQty = quantity + medicalWard.getIn_quantity();
+				medicalWard.setIn_quantity(realQty);
+				ioOperationsMedicalsWard.updateMedicalWard(medicalWard);
+				return  true;
+			} else {
+				float realQty = quantity + medicalWard.getOut_quantity();
+				medicalWard.setOut_quantity(realQty);
+				ioOperationsMedicalsWard.updateMedicalWard(medicalWard);
+				return  true;
+			}
+			
+		}
+		return false;
 	}
 }

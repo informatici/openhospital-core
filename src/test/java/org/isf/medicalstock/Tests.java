@@ -1374,6 +1374,20 @@ class Tests extends OHCoreTestCase {
 		Optional<Movement> followingMovement2 = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement2).isNotPresent();
 	}
+	
+	public void testPrepareDishargingOrChargeMovementInventory() throws OHException, OHServiceException {
+		int code = setupTestMovement(false);
+		int quantity = 10;
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		movement.setWard(null);
+		movement.setSupplier(null);
+		movement.setQuantity(quantity);
+		Movement updateMovement = movementIoOperationRepository.saveAndFlush(movement);
+		assertThat(updateMovement).isNotNull();
+		boolean isStore = movStockInsertingManager.prepareDishargingOrChargeMovementInventory(updateMovement);
+		assertThat(isStore).isTrue();
+	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);

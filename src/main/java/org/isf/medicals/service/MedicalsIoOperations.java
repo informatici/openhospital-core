@@ -121,7 +121,7 @@ public class MedicalsIoOperations
 	 * @return the list of {@link Medical}s pageable. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public Page<Medical> getMedicalsPageable(int size, int page) throws OHServiceException {
+	public Page<Medical> getMedicalsPageable(int page, int size) throws OHServiceException {
 		Pageable pageable = PageRequest.of(page, size);
 		return repository.findAllPageable(pageable);
 	}
