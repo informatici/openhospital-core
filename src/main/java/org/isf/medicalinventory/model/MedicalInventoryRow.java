@@ -76,10 +76,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name="MINVTR_LT_ID_A")
 	private Lot lot;
-	
-	@Column(name = "MINVTR_IS_NEW_LOT")
-	private boolean isNewLot;
-	
+
 	@Version
 	@Column(name="MINVTR_LOCK")
 	private Integer lock;
