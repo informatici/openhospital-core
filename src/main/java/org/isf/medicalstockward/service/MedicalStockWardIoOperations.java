@@ -258,7 +258,12 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public List<MedicalWard> getMedicalsWard(String wardId, int medId) throws OHServiceException {
-		return repository.findAllWhereWardAndMedical(wardId, medId);
+		List<MedicalWard> medicalWards = repository.findAllWhereWardAndMedical(wardId, medId);
+		for (MedicalWard medicalWard : medicalWards) {
+			double qty = medicalWard.getIn_quantity() - medicalWard.getOut_quantity();
+			medicalWard.setQty(qty);
+		}
+		return medicalWards;
 
 	}
 
