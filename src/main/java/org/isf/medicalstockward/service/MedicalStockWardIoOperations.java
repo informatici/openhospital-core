@@ -249,6 +249,19 @@ public class MedicalStockWardIoOperations {
 		return medicalWards;
 	}
 
+	/**
+	 * Gets all the {@link Medical}s associated to Specified {@link Ward}.
+	 * 
+	 * @param wardId the ward id.
+	 * @param medId  the medical id.
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException if an error occurs during the medical retrieving.
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId) throws OHServiceException {
+		return repository.findAllWhereWardAndMedical(wardId, medId);
+
+	}
+
 	public List<MovementWard> findAllForPatient(Patient patient) {
 		return movementRepository.findByPatient_code(patient.getCode());
 	}

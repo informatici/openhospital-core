@@ -88,6 +88,18 @@ public class MovWardBrowserManager {
 	}
 
 	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward
+	 * 
+	 * @param wardId the ward id.
+	 * @param medId  the medical id.
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, medId);
+	}
+
+	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
 	 * (total quantity, regardless the lot)
 	 *
