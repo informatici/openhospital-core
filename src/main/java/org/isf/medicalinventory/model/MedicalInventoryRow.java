@@ -140,15 +140,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public void setLot(Lot lot) {
 		this.lot = lot;
 	}
-	
-	public boolean isNewLot() {
-		return isNewLot;
-	}
-
-	
-	public void setNewLot(boolean isNewLot) {
-		this.isNewLot = isNewLot;
-	}
 
 	public void setRealQty(double realQty) {
 		this.realQty = realQty;
