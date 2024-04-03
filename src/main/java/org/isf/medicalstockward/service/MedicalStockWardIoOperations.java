@@ -250,18 +250,25 @@ public class MedicalStockWardIoOperations {
 	}
 
 	/**
-	 * Gets all the {@link Medical}s associated to Specified {@link Ward}.
+	 * Gets all the {@link Medical}s associated to Specified {@link Ward} and
+	 * Specified {@link Medical}.
 	 * 
-	 * @param wardId the ward id.
-	 * @param medId  the medical id.
+	 * @param wardId      the ward id.
+	 * @param medId       the medical id.
+	 * @param stripeEmpty - if {@code true}, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
-	public List<MedicalWard> getMedicalsWard(String wardId, int medId) throws OHServiceException {
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId, boolean stripeEmpty) throws OHServiceException {
 		List<MedicalWard> medicalWards = repository.findAllWhereWardAndMedical(wardId, medId);
-		for (MedicalWard medicalWard : medicalWards) {
-			double qty = medicalWard.getIn_quantity() - medicalWard.getOut_quantity();
-			medicalWard.setQty(qty);
+		for (int i = 0; i < medicalWards.size(); i++) {
+			double qty = medicalWards.get(i).getIn_quantity() - medicalWards.get(i).getOut_quantity();
+			medicalWards.get(i).setQty(qty);
+
+			if (stripeEmpty && qty == 0) {
+				medicalWards.remove(i);
+				i = i - 1;
+			}
 		}
 		return medicalWards;
 
