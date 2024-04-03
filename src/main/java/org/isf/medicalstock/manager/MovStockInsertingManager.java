@@ -451,7 +451,7 @@ public class MovStockInsertingManager {
 	
 	private boolean updateStockQuantity(Movement movement) throws OHServiceException {
 		String movType = movement.getType().getType();
-		if (movType.equals("+")) {	
+		if (movType.contains("+")) {	
 			Ward ward = movement.getWard();
 			Medical medical = movement.getMedical();
 			Lot lot = movement.getLot();
@@ -487,7 +487,7 @@ public class MovStockInsertingManager {
 		String lotCode = lot.getCode();
 		MedicalWard medicalWard = ioOperationsMedicalsWard.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
 		if (medicalWard != null) {
-			if (movType.equals("+")) {
+			if (movType.contains("+")) {
 				float realQty = quantity + medicalWard.getIn_quantity();
 				medicalWard.setIn_quantity(realQty);
 				ioOperationsMedicalsWard.updateMedicalWard(medicalWard);
