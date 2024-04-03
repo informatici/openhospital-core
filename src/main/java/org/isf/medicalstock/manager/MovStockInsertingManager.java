@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
@@ -34,14 +33,11 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
-import org.isf.medicalstockward.model.MedicalWard;
-import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,9 +49,6 @@ public class MovStockInsertingManager {
 	private MedicalStockIoOperations ioOperations;
 	@Autowired
 	private MedicalsIoOperations ioOperationsMedicals;
-	
-	@Autowired
-	private MedicalStockWardIoOperations ioOperationsMedicalsWard;
 
 	public MovStockInsertingManager() {
 	}
