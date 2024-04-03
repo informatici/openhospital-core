@@ -427,79 +427,15 @@ public class MovStockInsertingManager {
 	}
 	
 	/**
-	 * Prepare the insert of the specified {@link Movement}
+	 * Save the specified {@link Movement}
 	 *
 	 * @param movement - the movement to store.
-	 * @return {@code true} if is already used,{@code false} otherwise.
+	 * @return the stored {@link Movement} object.
 	 * @throws OHServiceException.
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean prepareDishargingOrChargeMovementInventory(Movement movement) throws OHServiceException {
-		Movement mov = ioOperations.prepareDischargingMovement(movement);
-		boolean stockQuantityUpdated = false;
-		if (mov != null) {
-			Medical medical = ioOperationsMedicals.getMedical(movement.getMedical().getCode());
-			if (medical != null) {
-				stockQuantityUpdated = this.updateStockQuantity(mov);
-			}
-			if (stockQuantityUpdated) {
-				return true;
-			}
-		}
-		return false;
+	public Movement storeMovement(Movement movement) throws OHServiceException {
+		return ioOperations.newMovement(movement);
 	}
 	
-	private boolean updateStockQuantity(Movement movement) throws OHServiceException {
-		String movType = movement.getType().getType();
-		if (movType.contains("+")) {	
-			Ward ward = movement.getWard();
-			Medical medical = movement.getMedical();
-			Lot lot = movement.getLot();
-			int quantity = movement.getQuantity();
-			if (ward != null) {
-				return this.updateMedicalWardQuantity(ward, medical, lot, quantity, movType);
-			} else {
-				double realQty = medical.getInqty() + quantity;
-				medical.setInqty(realQty);
-				ioOperationsMedicals.updateMedical(medical);
-				return true;
-			}
-			
-		} else {
-			Ward ward = movement.getWard();
-			Medical medical = movement.getMedical();
-			Lot lot = movement.getLot();
-			int quantity = movement.getQuantity();
-			if (ward != null) {
-				return this.updateMedicalWardQuantity(ward, medical, lot, quantity, movType);
-			} else {
-				double realQty = medical.getOutqty() + quantity;
-				medical.setOutqty(realQty);
-				ioOperationsMedicals.updateMedical(medical);
-				return true;
-			}
-		}
-	}
-	
-	private boolean updateMedicalWardQuantity(Ward ward, Medical medical, Lot lot, int quantity, String movType) throws OHServiceException {
-		String wardCode = ward.getCode();
-		int medicalCode = medical.getCode();
-		String lotCode = lot.getCode();
-		MedicalWard medicalWard = ioOperationsMedicalsWard.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
-		if (medicalWard != null) {
-			if (movType.contains("+")) {
-				float realQty = quantity + medicalWard.getIn_quantity();
-				medicalWard.setIn_quantity(realQty);
-				ioOperationsMedicalsWard.updateMedicalWard(medicalWard);
-				return  true;
-			} else {
-				float realQty = quantity + medicalWard.getOut_quantity();
-				medicalWard.setOut_quantity(realQty);
-				ioOperationsMedicalsWard.updateMedicalWard(medicalWard);
-				return  true;
-			}
-			
-		}
-		return false;
-	}
 }
