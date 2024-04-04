@@ -418,17 +418,4 @@ public class MovStockInsertingManager {
 			return dischargeMovement;
 		}
 	}
-	
-	/**
-	 * Save the specified {@link Movement}
-	 *
-	 * @param movement - the movement to store.
-	 * @return the stored {@link Movement} object.
-	 * @throws OHServiceException.
-	 */
-	@Transactional(rollbackFor = OHServiceException.class)
-	public Movement storeMovement(Movement movement) throws OHServiceException {
-		return ioOperations.newMovement(movement);
-	}
-	
 }
