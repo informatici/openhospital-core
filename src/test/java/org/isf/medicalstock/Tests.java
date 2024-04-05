@@ -828,7 +828,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(movement).isNotNull();
 		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
-		List<Movement> newDischarging = movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo");
+		List<Movement> newDischarging = movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo", true);
 		assertThat(newDischarging).hasSize(1);
 	}
 
@@ -842,7 +842,7 @@ class Tests extends OHCoreTestCase {
 			movement.setRefNo(null);
 			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
-			movStockInsertingManager.newMultipleDischargingMovements(movements, null);
+			movStockInsertingManager.newMultipleDischargingMovements(movements, null, true);
 		})
 						.isInstanceOf(OHDataValidationException.class)
 						.has(
@@ -861,7 +861,7 @@ class Tests extends OHCoreTestCase {
 		movements.add(movement);
 		boolean automaticlotOut = GeneralData.AUTOMATICLOT_OUT;
 		GeneralData.AUTOMATICLOT_OUT = true;
-		List<Movement> inserting = movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo");
+		List<Movement> inserting = movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo", true);
 		assertThat(inserting).hasSize(1);
 		GeneralData.AUTOMATICLOT_OUT = automaticlotOut;
 	}
