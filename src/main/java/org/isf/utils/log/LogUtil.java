@@ -26,8 +26,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Appender;
+import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.RollingFileAppender;
 
 public class LogUtil {
 
@@ -43,7 +43,7 @@ public class LogUtil {
 		Logger rootLogger = Logger.getRootLogger();
 		Appender appender = rootLogger.getAppender("RollingFile");
 
-		if (appender instanceof RollingFileAppender rollingFileAppender) {
+		if (appender instanceof DailyRollingFileAppender rollingFileAppender) {
 			String relativePath = rollingFileAppender.getFile();
 			return new File(relativePath).getAbsolutePath();
 		} else {
