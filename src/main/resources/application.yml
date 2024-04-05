@@ -3,8 +3,12 @@ server:
 
 spring:
   datasource:
-    driver-class-name: ${jdbc.class:com.mysql.cj.jdbc.Driver}
-    url: ${jdbc.url:jdbc:mysql://localhost:3306/oh}
+    ## using Mariadb
+    driver-class-name: ${jdbc.class:org.mariadb.jdbc.Driver}
+    url: ${jdbc.url:jdbc:mariadb://localhost:3306/oh}
+    ## using MySql
+    ##driver-class-name: ${jdbc.class:com.mysql.cj.jdbc.Driver}
+    ##url: ${jdbc.url:jdbc:mysql://localhost:3306/oh}
     username: ${jdbc.username:isf}
     password: ${jdbc.password:isf123}
   jpa:
@@ -12,7 +16,6 @@ spring:
       hibernate:
         show_sql: ${hibernate.show_sql:false}
         format_sql: ${hibernate.format_sql:true}
-        dialect: ${hibernate.dialect:org.hibernate.dialect.MySQLDialect}
         hbm2ddl:
           auto: ${hibernate.hbm2ddl.auto:none}
   cloud:
