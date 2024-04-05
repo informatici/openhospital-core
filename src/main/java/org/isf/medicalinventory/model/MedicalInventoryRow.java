@@ -50,7 +50,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MedicalInventoryRow extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MINVTR_ID")
 	private Integer id;
 

@@ -52,7 +52,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	 * Code of the medical
 	 */
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="MDSR_ID")
 	private Integer code;
 

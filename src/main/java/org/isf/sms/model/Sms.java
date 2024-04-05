@@ -42,7 +42,7 @@ import org.isf.utils.time.TimeTools;
 public class Sms {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SMS_ID")
 	private int smsId;
 

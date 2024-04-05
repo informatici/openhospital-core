@@ -23,6 +23,7 @@ package org.isf.menu.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ColumnResult;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityResult;
 import jakarta.persistence.FieldResult;
@@ -31,6 +32,7 @@ import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+import org.hibernate.type.YesNoConverter;
 import org.isf.generaldata.MessageBundle;
 import org.springframework.data.annotation.Transient;
 
@@ -80,6 +82,7 @@ public class UserMenuItem {
 	@Column(name="MNI_CLASS")
 	private String	myClass;
 
+	@Convert(converter = YesNoConverter.class)
 	@NotNull
 	@Column(name="MNI_IS_SUBMENU")
 	private boolean	isASubMenu;

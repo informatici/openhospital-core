@@ -58,7 +58,7 @@ import com.drew.lang.annotations.Nullable;
 public class Opd extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="OPD_ID") 
 	private int code;
 	

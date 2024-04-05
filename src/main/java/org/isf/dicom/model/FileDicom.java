@@ -67,7 +67,7 @@ public class FileDicom extends Auditable<String> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
 
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "DM_FILE_ID")
 	private long idFile;
 

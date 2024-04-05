@@ -46,7 +46,7 @@ public class GroupMenu extends Auditable<String> {
 
 	@Id
 	@Column(name = "GM_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer code;
 
 	@Column(name = "GM_UG_ID_A")

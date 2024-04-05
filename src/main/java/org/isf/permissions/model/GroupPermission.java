@@ -45,7 +45,7 @@ import org.isf.utils.db.Auditable;
 public class GroupPermission extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "GP_ID")
 	private int id;
 

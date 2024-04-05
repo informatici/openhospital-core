@@ -60,7 +60,7 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	public static final int PEX_NOTE_LENGTH = 2000;
 	
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PEX_ID")
 	private int pex_ID;
 

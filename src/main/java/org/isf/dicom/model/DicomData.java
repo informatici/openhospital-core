@@ -51,7 +51,7 @@ public class DicomData {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DicomData.class);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "DMD_DATA_ID")
 	private long code;
 

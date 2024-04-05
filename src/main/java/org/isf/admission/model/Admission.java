@@ -67,7 +67,7 @@ entities={
 public class Admission extends Auditable<String> implements Comparable<Admission> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ADM_ID")
 	private int id;                            // admission key
 

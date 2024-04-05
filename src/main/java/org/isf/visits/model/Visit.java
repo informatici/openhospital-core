@@ -55,7 +55,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Visit extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "VST_ID")
 	private int visitID;
 
