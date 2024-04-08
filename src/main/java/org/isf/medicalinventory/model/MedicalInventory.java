@@ -148,11 +148,11 @@ public class MedicalInventory extends Auditable<String> {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-
+	
 	public int getLock() {
 		return lock;
 	}
-
+	
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
