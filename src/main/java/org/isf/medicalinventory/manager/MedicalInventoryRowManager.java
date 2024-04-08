@@ -42,8 +42,8 @@ public class MedicalInventoryRowManager {
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow ) throws OHServiceException {
-		return iOoperation.newMedicalInventoryRow(medicalInventoryRow );
+	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		return iOoperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
 	
 	/**

@@ -45,8 +45,8 @@ public class MedicalInventoryRowIoOperation {
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow ) throws OHServiceException {
-		return repository.save(medicalInventoryRow );
+	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		return repository.save(medicalInventoryRow);
 	}
 	
 	/**

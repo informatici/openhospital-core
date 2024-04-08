@@ -160,7 +160,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public int getLock() {
 		return lock;
 	}
-
 	
 	public void setLock(int lock) {
 		this.lock = lock;
