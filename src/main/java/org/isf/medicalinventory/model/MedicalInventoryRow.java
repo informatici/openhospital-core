@@ -165,14 +165,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 		this.lock = lock;
 	}
 
-	public int getLock() {
-		return lock;
-	}
-
-	public void setLock(int lock) {
-		this.lock = lock;
-	}
-
 	public String getSearchString() {
 		 Medical medical = getMedical();
 		 StringBuilder sbNameCode = new StringBuilder();
