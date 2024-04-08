@@ -1,0 +1,2 @@
+INSERT INTO OH_MENUITEM (`MNI_ID_A`, `MNI_BTN_LABEL`, `MNI_LABEL`, `MNI_TOOLTIP`, `MNI_SHORTCUT`, `MNI_SUBMENU`, `MNI_CLASS`, `MNI_IS_SUBMENU`, `MNI_POSITION`) VALUES ('inventory','angal.menu.btn.inventory','angal.menu.invertory','x','I','pharmacy','org.isf.medicalinventory.gui.InventoryBrowser','N',6);
+INSERT INTO OH_GROUPMENU (`GM_ID`, `GM_UG_ID_A`, `GM_MNI_ID_A`, `GM_ACTIVE`, `GM_CREATED_BY`, `GM_CREATED_DATE`, `GM_LAST_MODIFIED_BY`, `GM_LAST_MODIFIED_DATE`) VALUES (346,'admin','inventory',1,NULL,NULL,NULL,NULL);
