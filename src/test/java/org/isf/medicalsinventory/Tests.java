@@ -149,14 +149,14 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = "validated";
+		String status = "STATUS";
 		inventory.setStatus(status);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
 		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation
 				.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
-		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 		assertThat(medicalInventories).hasSize(1);
+		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
 	
 	@Test
@@ -166,6 +166,8 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		int idInventory = 2;
+		inventory.setId(idInventory);
 		String wardCode = "P";
 		String status = "validated";
 		inventory.setWard(wardCode);
@@ -174,9 +176,9 @@ class Tests extends OHCoreTestCase {
 		assertThat(secondMedicalInventory).isNotNull();
 		List<MedicalInventory> medicalinventories = medicalInventoryIoOperation
 				.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(), firstMedicalInventory.getWard());
+		assertThat(medicalinventories).hasSize(1);
 		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 		assertThat(medicalinventories.get(0).getWard()).isEqualTo(firstMedicalInventory.getWard());
-		assertThat(medicalinventories).hasSize(1);
 	}
 	
 	@Test

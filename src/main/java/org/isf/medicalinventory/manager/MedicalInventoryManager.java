@@ -25,18 +25,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.medicalinventory.model.MedicalInventory;
+import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MedicalInventoryManager {
 
 	@Autowired
 	private MedicalInventoryIoOperation ioOperations;
+	
+	@Autowired
+	private MedicalInventoryRowManager medicalInventoryRowManager;
 	
 	/**
 	 * Insert a new {@link MedicalInventory}.
@@ -45,8 +50,8 @@ public class MedicalInventoryManager {
 	 * @return the newly persisted {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory newMedicalInventory(MedicalInventory medicalinventory) throws OHServiceException {
-		return ioOperations.newMedicalInventory(medicalinventory);
+	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		return ioOperations.newMedicalInventory(medicalInventory);
 	}
 	
 	/**
@@ -65,7 +70,12 @@ public class MedicalInventoryManager {
 	 * @param medicalInventory - the {@link MedicalInventory} to delete.
 	 * @throws OHServiceException
 	 */
+	@Transactional(rollbackFor = OHServiceException.class)
 	public void deleteMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		List<MedicalInventoryRow> inventoryRowList = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(medicalInventory.getId());
+		for (MedicalInventoryRow invRow: inventoryRowList) {
+			medicalInventoryRowManager.deleteMedicalInventoryRow(invRow);
+		}
 		ioOperations.deleteMedicalInventory(medicalInventory);
 	}
 	

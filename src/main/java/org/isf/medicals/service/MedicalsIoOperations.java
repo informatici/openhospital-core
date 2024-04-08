@@ -28,6 +28,9 @@ import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +111,19 @@ public class MedicalsIoOperations
 			return getMedicalsByType(type, nameSorted);
 		}
 		return getMedicals(nameSorted);
+	}
+	
+	/**
+	 * Returns the medicals pageable.
+	 *
+	 * @param page - the page number.
+	 * @param size - the page size.
+	 * @return the list of {@link Medical}s pageable. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public Page<Medical> getMedicalsPageable(int page, int size) throws OHServiceException {
+		Pageable pageable = PageRequest.of(page, size);
+		return repository.findAllPageable(pageable);
 	}
 
 	/**
