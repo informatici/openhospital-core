@@ -88,6 +88,20 @@ public class MovWardBrowserManager {
 	}
 
 	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward and the
+	 * specified medical
+	 * 
+	 * @param wardId      the ward id.
+	 * @param medId       the medical id.
+	 * @param stripeEmpty - if {@code true}, stripes the empty lots
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId, boolean stripeEmpty) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, medId, stripeEmpty);
+	}
+
+	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
 	 * (total quantity, regardless the lot)
 	 *
