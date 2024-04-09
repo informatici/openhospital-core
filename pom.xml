@@ -23,7 +23,7 @@
 	<version>1.14.1-SNAPSHOT</version>
 
 	<properties>
-		<oh.version>1.14.0-SNAPSHOT</oh.version>
+		<oh.version>1.14.1-SNAPSHOT</oh.version>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>6.21.2</jasperreports.version>
