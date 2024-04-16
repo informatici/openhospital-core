@@ -19,32 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.ward.service;
+package org.isf;
 
-import java.util.List;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import org.isf.ward.model.Ward;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+@SpringBootApplication
+public class OpenHospitalCoreApplication {
 
-@Repository
-public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
+	public static void main(String[] args) {
+		SpringApplication application = new SpringApplication(OpenHospitalCoreApplication.class);
+		application.run(args);
+	}
 
-	List<Ward> findAllByOrderByDescriptionAsc();
-
-	List<Ward> findByCodeNot(String code);
-
-	List<Ward> findByCodeContains(String id);
-
-	List<Ward> findByIsOpdIsTrue();
-
-	@Query(value = "SELECT w FROM Ward w WHERE w.beds > 0 ORDER BY w.description")
-	List<Ward> findByBedsGreaterThanZero();
-
-	@Query("select count(w) from Ward w where active=1")
-	long countAllActiveWards();
-
-	@Query("select sum(w.beds) from Ward w where active=1")
-	long countAllActiveBeds();
 }

@@ -23,14 +23,15 @@ package org.isf.sms.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.time.TimeTools;
 
@@ -42,7 +43,7 @@ import org.isf.utils.time.TimeTools;
 public class Sms {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SMS_ID")
 	private int smsId;
 
@@ -78,6 +79,13 @@ public class Sms {
 
 	@Transient
 	private volatile int hashCode;
+
+	@PrePersist
+	void prePersist() {
+		if (smsDate == null) {
+			smsDate = TimeTools.getNow();
+		}
+	}
 
 	public Sms() {
 	}

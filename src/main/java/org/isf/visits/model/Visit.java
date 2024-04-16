@@ -24,18 +24,18 @@ package org.isf.visits.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
@@ -55,7 +55,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Visit extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "VST_ID")
 	private int visitID;
 

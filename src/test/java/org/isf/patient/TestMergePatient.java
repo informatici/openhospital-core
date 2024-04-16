@@ -191,14 +191,14 @@ class TestMergePatient extends OHCoreTestCase {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setAddress(null);
-		patient1.setCity(null);
+		patient1.setCity("TestCity");
 		patient1.setNextKin(null);
 		patient1.setTelephone(null);
-		patient1.setMotherName(null);
+		patient1.setMotherName("TestMotherName");
 		patient1.setMother('U');
-		patient1.setFatherName(null);
+		patient1.setFatherName("TestFatherName");
 		patient1.setFather('U');
-		patient1.setBloodType(null);
+		patient1.setBloodType("0-/+");
 		patient1.setHasInsurance('U');
 		patient1.setParentTogether('U');
 		patient1.setNote(null);

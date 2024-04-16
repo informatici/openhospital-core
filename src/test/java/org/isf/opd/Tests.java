@@ -222,6 +222,7 @@ class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
+		disease2.setCode("299");
 		
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
@@ -277,6 +278,7 @@ class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
+		disease2.setCode("499");
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
@@ -308,6 +310,7 @@ class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("699");
 		Ward ward = testWard.setup(false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -547,8 +550,10 @@ class Tests extends OHCoreTestCase {
 
 		Patient patient2 = testPatient.setup(false);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+		diseaseType2.setCode("AZ");
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
+		disease2.setCode("399");
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
@@ -606,6 +611,7 @@ class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
+		disease2.setCode("799");
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
@@ -1203,34 +1209,40 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 
-		disease.setCode("1");
-		disease.setOpdInclude(true);
-		disease.setDescription("code = 1 and is OPD");
-		diseaseIoOperationRepository.saveAndFlush(disease);
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode("1");
+		disease2.setOpdInclude(true);
+		disease2.setDescription("code = 1 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease2);
 
-		disease.setCode("2");
-		disease.setOpdInclude(true);
-		disease.setDescription("code = 2 and is OPD");
-		diseaseIoOperationRepository.saveAndFlush(disease);
+		Disease disease3 = testDisease.setup(diseaseType, false);
+		disease3.setCode("2");
+		disease3.setOpdInclude(true);
+		disease3.setDescription("code = 2 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease3);
 
-		disease.setCode("3");
-		disease.setOpdInclude(true);
-		disease.setDescription("code = 3 and is OPD");
-		diseaseIoOperationRepository.saveAndFlush(disease);
+		Disease disease4 = testDisease.setup(diseaseType, false);
+		disease4.setCode("3");
+		disease4.setOpdInclude(true);
+		disease4.setDescription("code = 3 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease4);
 
-		disease.setCode("101");
-		disease.setOpdInclude(false);
-		disease.setDescription("code = 101 and is NOT OPD");
-		diseaseIoOperationRepository.saveAndFlush(disease);
+		Disease disease5 = testDisease.setup(diseaseType, false);
+		disease5.setCode("101");
+		disease5.setOpdInclude(false);
+		disease5.setDescription("code = 101 and is NOT OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease5);
 
-		disease.setCode("102");
-		disease.setOpdInclude(false);
-		disease.setDescription("code = 102 and is NOT OPD");
-		diseaseIoOperationRepository.saveAndFlush(disease);
+		Disease disease6 = testDisease.setup(diseaseType, false);
+		disease6.setCode("102");
+		disease6.setOpdInclude(false);
+		disease6.setDescription("code = 102 and is NOT OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease6);
 
-		disease.setCode("103");
-		disease.setOpdInclude(false);
-		disease.setDescription("code = 103 and is NOT OPD");
+		Disease disease7 = testDisease.setup(diseaseType, false);
+		disease7.setCode("103");
+		disease7.setOpdInclude(false);
+		disease7.setDescription("code = 103 and is NOT OPD");
 		diseaseIoOperationRepository.saveAndFlush(disease);
 	}
 
@@ -1244,6 +1256,7 @@ class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("199");
 		Ward ward = testWard.setup(false);
 		Visit nextVisit = testVisit.setup(patient, false, ward);
 		
