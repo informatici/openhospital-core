@@ -78,8 +78,7 @@ public class MedicalInventoryRowManager {
 	}
 
 	/**
-	 * Return a list of {@link MedicalInventoryRow}s by Inventory Id and medical
-	 * code.
+	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
 	 * 
 	 * @param inventoryId - the Inventory Id.
 	 * @param medicalCode - the medical code.
