@@ -145,8 +145,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
-			<artifactId>dcm4che-imageio-opencv</artifactId>
-			<version>5.31.1</version>
+			<artifactId>dcm4che-imageio</artifactId>
+			<version>5.31.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
