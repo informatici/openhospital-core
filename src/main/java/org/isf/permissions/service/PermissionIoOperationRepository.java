@@ -35,7 +35,7 @@ public interface PermissionIoOperationRepository extends JpaRepository<Permissio
 	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
 	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
 
-	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName from User where active=1 and userName like :currentUserName))")
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName.code from User where active=1 and userName like :currentUserName))")
 	List<Permission> retrievePermissionsByCurrentLoggedInUser(@Param("currentUserName") String currentUserName);
 
 	Permission findByName(String name);

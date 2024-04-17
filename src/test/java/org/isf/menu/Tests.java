@@ -54,17 +54,17 @@ class Tests extends OHCoreTestCase {
 	private static TestGroupMenu testGroupMenu;
 
 	@Autowired
-	MenuIoOperations menuIoOperation;
+	private MenuIoOperations menuIoOperation;
 	@Autowired
-	UserBrowsingManager userBrowsingManager;
+	private UserBrowsingManager userBrowsingManager;
 	@Autowired
-	GroupMenuIoOperationRepository groupMenuIoOperationRepository;
+	private GroupMenuIoOperationRepository groupMenuIoOperationRepository;
 	@Autowired
-	UserGroupIoOperationRepository userGroupIoOperationRepository;
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
 	@Autowired
-	UserIoOperationRepository userIoOperationRepository;
+	private UserIoOperationRepository userIoOperationRepository;
 	@Autowired
-	UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
+	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {

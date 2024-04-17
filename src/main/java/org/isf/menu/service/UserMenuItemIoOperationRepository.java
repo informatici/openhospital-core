@@ -36,7 +36,7 @@ public interface UserMenuItemIoOperationRepository extends JpaRepository<UserMen
 			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
 			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup, User user " +
 			"where (user.userName=:userId) " +
-			"and (user.userGroupName=userGroup.code) " +
+			"and (user.userGroupName.code=userGroup.code) " +
 			"and (userGroup.code=groupMenu.userGroup) " +
 			"and (menuItem.code=groupMenu.menuItem) " +
 			"order by menuItem.position")

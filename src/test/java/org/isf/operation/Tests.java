@@ -820,6 +820,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrRowUpdateOperationRowNotFound() throws Exception {
 		int id = setupTestOperationRowWithAdmission(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		operationRowIoOperationRepository.delete(operationRow);
 		operationRow.setId(-9999);
 		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isNull();
 	}
