@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class AdmissionTypeIoOperation 
-{
+public class AdmissionTypeIoOperation {
 
-	@Autowired
 	private AdmissionTypeIoOperationRepository repository;
-	
+
+	public AdmissionTypeIoOperation(AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository) {
+		this.repository = admissionTypeIoOperationRepository;
+	}
+
 	/**
 	 * Returns all the available {@link AdmissionType}s.
 	 * @return a list of admission types.

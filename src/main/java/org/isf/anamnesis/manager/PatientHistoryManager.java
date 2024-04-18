@@ -23,14 +23,16 @@ package org.isf.anamnesis.manager;
 
 import org.isf.anamnesis.model.PatientHistory;
 import org.isf.anamnesis.service.PatientHistoryIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientHistoryManager {
 
-	@Autowired
 	private PatientHistoryIoOperations ioOperations;
+
+	public PatientHistoryManager(PatientHistoryIoOperations patientHistoryIoOperations) {
+		this.ioOperations = patientHistoryIoOperations;
+	}
 
 	public PatientHistory getByPatientId(int patientId) {
 		return ioOperations.getByPatientId(patientId);
