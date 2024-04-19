@@ -24,7 +24,6 @@ package org.isf.hospital.manager;
 import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,8 +35,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class HospitalBrowsingManager {
 
-	@Autowired
 	private HospitalIoOperations ioOperations;
+
+	public HospitalBrowsingManager(HospitalIoOperations hospitalIoOperations) {
+		this.ioOperations = hospitalIoOperations;
+	}
 
 	/**
 	 * Reads from the database the {@link Hospital} information.

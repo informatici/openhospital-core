@@ -32,7 +32,6 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,8 +45,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExamBrowsingManager {
 
-	@Autowired
 	private ExamIoOperations ioOperations;
+
+	public ExamBrowsingManager(ExamIoOperations examIoOperations) {
+		this.ioOperations = examIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
