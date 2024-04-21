@@ -30,7 +30,6 @@ import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +38,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MalnutritionManager {
 
-	@Autowired
 	private MalnutritionIoOperation ioOperation;
+
+	public MalnutritionManager(MalnutritionIoOperation malnutritionIoOperation) {
+		this.ioOperation = malnutritionIoOperation;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
