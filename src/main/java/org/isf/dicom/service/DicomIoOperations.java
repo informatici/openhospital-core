@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.dicom.model.FileDicom;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DicomIoOperations {
 
-	@Autowired
 	private DicomIoOperationRepository repository;
-	
+
+	public DicomIoOperations(DicomIoOperationRepository dicomIoOperationRepository) {
+		this.repository = dicomIoOperationRepository;
+	}
+
 	/**
 	 * Load a list of file id for a series.
 	 * 

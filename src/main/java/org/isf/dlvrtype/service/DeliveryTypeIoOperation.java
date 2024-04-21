@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class DeliveryTypeIoOperation {
-	
-	@Autowired
+
 	private DeliveryTypeIoOperationRepository repository;
-	    
+
+	public DeliveryTypeIoOperation(DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository) {
+		this.repository = deliveryTypeIoOperationRepository;
+	}
+
 	/**
 	 * Returns all stored {@link DeliveryType}s.
 	 * @return all stored delivery types.

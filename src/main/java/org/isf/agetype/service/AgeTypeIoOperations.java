@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.agetype.model.AgeType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class AgeTypeIoOperations {
-	@Autowired
+
 	private AgeTypeIoOperationRepository repository;
-	
+
+	public AgeTypeIoOperations(AgeTypeIoOperationRepository ageTypeIoOperationRepository) {
+		this.repository = ageTypeIoOperationRepository;
+	}
+
 	/**
 	 * Returns all available age types.
 	 * @return a list of {@link AgeType}.

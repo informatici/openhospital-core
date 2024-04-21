@@ -31,14 +31,16 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DicomTypeBrowserManager {
 
-	@Autowired
 	private DicomTypeIoOperation ioOperations;
+
+	public DicomTypeBrowserManager(DicomTypeIoOperation dicomTypeIoOperation) {
+		this.ioOperations = dicomTypeIoOperation;
+	}
 
 	public DicomType newDicomType(DicomType dicomType) throws OHServiceException {
 		validateDicomType(dicomType, true);

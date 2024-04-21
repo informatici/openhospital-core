@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AgeTypeBrowserManager {
 
-	@Autowired
 	private AgeTypeIoOperations ioOperations;
+
+	public AgeTypeBrowserManager(AgeTypeIoOperations ageTypeIoOperations) {
+		this.ioOperations = ageTypeIoOperations;
+	}
 
 	/**
 	 * Returns all available age types.
