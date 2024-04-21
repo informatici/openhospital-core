@@ -36,7 +36,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,14 +47,19 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MedicalStockWardIoOperations {
 
-	@Autowired
 	private MedicalStockWardIoOperationRepository repository;
 
-	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
+
+	public MedicalStockWardIoOperations(MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository,
+	                                    MovementWardIoOperationRepository movementWardIoOperationRepository,
+	                                    LotIoOperationRepository lotIoOperationRepository) {
+		this.repository = medicalStockWardIoOperationRepository;
+		this.movementRepository = movementWardIoOperationRepository;
+		this.lotRepository = lotIoOperationRepository;
+	}
 
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.

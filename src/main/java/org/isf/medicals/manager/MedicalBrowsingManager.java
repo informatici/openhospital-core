@@ -32,7 +32,6 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -47,8 +46,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalBrowsingManager {
 
-	@Autowired
 	private MedicalsIoOperations ioOperations;
+
+	public MedicalBrowsingManager(MedicalsIoOperations medicalsIoOperations) {
+		this.ioOperations = medicalsIoOperations;
+	}
 
 	/**
 	 * Returns the requested medical.
