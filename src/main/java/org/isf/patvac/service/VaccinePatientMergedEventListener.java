@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class VaccinePatientMergedEventListener {
 
-	PatVacIoOperations patVacIoOperations;
+	private PatVacIoOperations patVacIoOperations;
 
 	public VaccinePatientMergedEventListener(PatVacIoOperations patVacIoOperations) {
 		this.patVacIoOperations = patVacIoOperations;
