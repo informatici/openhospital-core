@@ -42,18 +42,20 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class LabManager {
 
-	@Autowired
 	private LabIoOperations ioOperations;
 
 	protected HashMap<String, String> materialHashMap;
 	private Integer procedure;
+
+	public LabManager(LabIoOperations labIoOperations) {
+		this.ioOperations = labIoOperations;
+	}
 
 	protected void setPatientConsistency(Laboratory laboratory) {
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {

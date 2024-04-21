@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +41,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class HospitalIoOperations {
 
-	@Autowired
 	private HospitalIoOperationRepository repository;
-	
+
+	public HospitalIoOperations(HospitalIoOperationRepository hospitalIoOperationRepository) {
+		this.repository = hospitalIoOperationRepository;
+	}
+
 	/**
 	 * Reads from database {@link Hospital} information.
 	 * 
