@@ -36,7 +36,6 @@ import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRException;
@@ -60,10 +59,11 @@ public class PrintManager {
 
 	public static final int toPrint = 2;
 	
-	@Autowired
 	private HospitalBrowsingManager hospitalManager;
 	
-	public PrintManager() {}
+	public PrintManager(HospitalBrowsingManager hospitalManager) {
+		this.hospitalManager = hospitalManager;
+	}
 	
 	public void print(String filename, List<?> toPrint, int action) throws OHServiceException {
 		
