@@ -47,7 +47,7 @@ public class DbJpaUtil {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DbJpaUtil.class);
 
-	private static EntityManagerFactory entityManagerFactory = Context.getApplicationContext().getBean("entityManagerFactory",EntityManagerFactory.class);
+	private static EntityManagerFactory entityManagerFactory = Context.getApplicationContext().getBean("entityManagerFactory", EntityManagerFactory.class);
 	private static EntityManager entityManager;
 	private static Query query;
 
