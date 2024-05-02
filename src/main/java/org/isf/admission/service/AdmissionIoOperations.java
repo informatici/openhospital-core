@@ -46,7 +46,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,17 +56,23 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class AdmissionIoOperations {
 
-	@Autowired
 	private AdmissionIoOperationRepository repository;
 
-	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
 
-	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
 
-	@Autowired
 	private PatientIoOperationRepository patientRepository;
+
+	public AdmissionIoOperations(AdmissionIoOperationRepository admissionIoOperationRepository,
+	                             AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository,
+	                             DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository,
+	                             PatientIoOperationRepository patientIoOperationRepository) {
+		this.repository = admissionIoOperationRepository;
+		this.typeRepository = admissionTypeIoOperationRepository;
+		this.dischargeRepository = dischargeTypeIoOperationRepository;
+		this.patientRepository = patientIoOperationRepository;
+	}
 
 	/**
 	 * Returns all patients with ward in which they are admitted.

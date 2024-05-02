@@ -38,14 +38,16 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserBrowsingManager {
 
-	@Autowired
 	private MenuIoOperations ioOperations;
+
+	public UserBrowsingManager(MenuIoOperations menuIoOperations) {
+		this.ioOperations = menuIoOperations;
+	}
 
 	public static String getCurrentUser() {
 		if (UserSession.getUser() != null) {

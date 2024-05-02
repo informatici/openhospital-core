@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.disctype.model.DischargeType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DischargeTypeIoOperation {
 
-	@Autowired
 	private DischargeTypeIoOperationRepository repository;
-	
+
+	public DischargeTypeIoOperation(DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository) {
+		this.repository = dischargeTypeIoOperationRepository;
+	}
+
 	/**
 	 * Method that returns all {@link DischargeType}s in a list
 	 * 

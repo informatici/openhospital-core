@@ -36,7 +36,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,14 +47,19 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MedicalStockWardIoOperations {
 
-	@Autowired
 	private MedicalStockWardIoOperationRepository repository;
 
-	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
+
+	public MedicalStockWardIoOperations(MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository,
+	                                    MovementWardIoOperationRepository movementWardIoOperationRepository,
+	                                    LotIoOperationRepository lotIoOperationRepository) {
+		this.repository = medicalStockWardIoOperationRepository;
+		this.movementRepository = movementWardIoOperationRepository;
+		this.lotRepository = lotIoOperationRepository;
+	}
 
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -235,7 +239,26 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
-		List<MedicalWard> medicalWards = repository.findAllWhereWard(wardId);
+		return getMedicalsWard(String.valueOf(wardId), 0, stripeEmpty);
+	}
+
+	/**
+	 * Get the list of {@link Medical} associated to the specified {@link Ward} and
+	 * the specified {@code id}, divided by {@link id}.
+	 *
+	 * @param wardId the ward id.
+	 * @param medId the medical id.
+	 * @param stripeEmpty if {@code true}, stripes the empty lots
+	 * @return the requested medical, divided by lots
+	 * @throws OHServiceException if an error occurs during the medical retrieving.
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId, boolean stripeEmpty) throws OHServiceException {
+		List<MedicalWard> medicalWards;
+		if (medId == 0) {
+			medicalWards = repository.findAllWhereWard(wardId);
+		} else {
+			medicalWards = repository.findAllWhereWardAndMedical(wardId, medId);
+		}
 		for (int i = 0; i < medicalWards.size(); i++) {
 			double qty = medicalWards.get(i).getIn_quantity() - medicalWards.get(i).getOut_quantity();
 			medicalWards.get(i).setQty(qty);
@@ -245,8 +268,8 @@ public class MedicalStockWardIoOperations {
 				i = i - 1;
 			}
 		}
-
 		return medicalWards;
+
 	}
 
 	public List<MovementWard> findAllForPatient(Patient patient) {

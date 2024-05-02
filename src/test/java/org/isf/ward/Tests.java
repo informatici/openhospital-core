@@ -24,6 +24,7 @@ package org.isf.ward;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +35,8 @@ import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
+import org.isf.patient.model.Patient;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
@@ -62,6 +65,8 @@ class Tests extends OHCoreTestCase {
 	AdmissionIoOperationRepository admissionIoOperationRepository;
 	@Autowired
 	AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
+	@Autowired
+	PatientIoOperationRepository patientIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -98,12 +103,15 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(ward).isNotNull();
+		Patient patient = new Patient();
+		patient.setBirthDate(LocalDate.now().minusYears(45));
+		patientIoOperationRepository.save(patient);
 		LocalDateTime admDate = TimeTools.getNow();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
-		Admission admission1 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
+		Admission admission1 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
 				"TestUserId", 'N');
-		Admission admission2 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
+		Admission admission2 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
 				"TestUserId", 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
@@ -311,12 +319,17 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(ward).isNotNull();
-		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
+		Patient patient = new Patient();
+		patient.setBirthDate(LocalDate.now().minusYears(45));
+		patientIoOperationRepository.save(patient);
+		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
+		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, 'N');
-		Admission admission2 = new Admission(2, 1, null, ward, 1, null, null, null, null, null,
+		Admission admission2 = new Admission(2, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, 'N');
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThat(wardBrowserManager.getCurrentOccupation(ward)).isEqualTo(2);
@@ -420,12 +433,17 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(ward).isNotNull();
-		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
+		Patient patient = new Patient();
+		patient.setBirthDate(LocalDate.now().minusYears(45));
+		patientIoOperationRepository.save(patient);
+		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
+		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 			null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, 'N');
-		Admission admission2 = new Admission(2, 1, null, ward, 1, null, null, null, null, null,
+		Admission admission2 = new Admission(2, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 			null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, 'N');
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThatThrownBy(() -> wardBrowserManager.deleteWard(ward))

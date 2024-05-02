@@ -33,14 +33,16 @@ import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatVacManager {
 
-	@Autowired
 	private PatVacIoOperations ioOperations;
+
+	public PatVacManager(PatVacIoOperations patVacIoOperations) {
+		this.ioOperations = patVacIoOperations;
+	}
 
 	/**
 	 * Returns all {@link PatientVaccine}s for today or one week ago.

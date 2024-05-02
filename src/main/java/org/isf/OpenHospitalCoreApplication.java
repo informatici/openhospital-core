@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,30 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.menu.manager;
+package org.isf;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author Nanni
- */
-public class Context {
+@SpringBootApplication
+public class OpenHospitalCoreApplication {
 
-	private static ApplicationContext applicationContext;
-
-	public Context(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
-
-	/**
-	 * Returns the main {@link ApplicationContext}.
-	 */
-	public static ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
-
-	public static void setApplicationContext(ApplicationContext applicationContext) {
-		Context.applicationContext = applicationContext;
+	public static void main(String[] args) {
+		SpringApplication application = new SpringApplication(OpenHospitalCoreApplication.class);
+		application.run(args);
 	}
 
 }

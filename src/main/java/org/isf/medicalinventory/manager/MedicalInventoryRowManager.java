@@ -26,15 +26,17 @@ import java.util.List;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MedicalInventoryRowManager {
-	
-	@Autowired
+
 	private MedicalInventoryRowIoOperation iOoperation;
-	
+
+	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation) {
+		this.iOoperation = medicalInventoryRowIoOperation;
+	}
+
 	/**
 	 * Insert a new {@link MedicalInventoryRow}.
 	 *
@@ -42,8 +44,8 @@ public class MedicalInventoryRowManager {
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow ) throws OHServiceException {
-		return iOoperation.newMedicalInventoryRow(medicalInventoryRow );
+	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		return iOoperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
 	
 	/**

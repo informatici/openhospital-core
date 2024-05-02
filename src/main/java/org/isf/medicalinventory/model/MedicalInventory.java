@@ -23,16 +23,16 @@ package org.isf.medicalinventory.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,7 +48,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MedicalInventory extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MINVT_ID")
 	private Integer id;
 
@@ -148,12 +148,10 @@ public class MedicalInventory extends Auditable<String> {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-
 	
 	public int getLock() {
 		return lock;
 	}
-
 	
 	public void setLock(int lock) {
 		this.lock = lock;

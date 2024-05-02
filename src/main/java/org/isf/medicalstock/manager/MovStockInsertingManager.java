@@ -38,19 +38,19 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovStockInsertingManager {
 
-	@Autowired
 	private MedicalStockIoOperations ioOperations;
-	@Autowired
+
 	private MedicalsIoOperations ioOperationsMedicals;
 
-	public MovStockInsertingManager() {
+	public MovStockInsertingManager(MedicalStockIoOperations medicalStockIoOperations, MedicalsIoOperations medicalsIoOperations) {
+		this.ioOperations = medicalStockIoOperations;
+		this.ioOperationsMedicals = medicalsIoOperations;
 	}
 
 	/**

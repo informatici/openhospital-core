@@ -27,7 +27,6 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,13 +47,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class MedicalsIoOperations 
-{
-	@Autowired
+public class MedicalsIoOperations {
+
 	private MedicalsIoOperationRepository repository;
-	@Autowired	
+
 	private MovementIoOperationRepository moveRepository;
-	
+
+	public MedicalsIoOperations(MedicalsIoOperationRepository medicalsIoOperationRepository, MovementIoOperationRepository movementIoOperationRepository) {
+		this.repository = medicalsIoOperationRepository;
+		this.moveRepository = movementIoOperationRepository;
+	}
+
 	/**
 	 * Retrieves the specified {@link Medical}.
 	 * @param code the medical code.

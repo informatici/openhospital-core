@@ -31,14 +31,16 @@ import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PregnantTreatmentTypeBrowserManager {
 
-	@Autowired
 	private PregnantTreatmentTypeIoOperation ioOperations;
+
+	public PregnantTreatmentTypeBrowserManager(PregnantTreatmentTypeIoOperation pregnantTreatmentTypeIoOperation) {
+		this.ioOperations = pregnantTreatmentTypeIoOperation;
+	}
 
 	/**
 	 * Return the list of {@link PregnantTreatmentType}s.

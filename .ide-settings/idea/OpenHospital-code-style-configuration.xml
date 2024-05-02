@@ -1,4 +1,4 @@
-<code_scheme name="Open Hospital profile" version="173">
+<code_scheme name="Open Hospital profile" version="174">
   <option name="RIGHT_MARGIN" value="160" />
   <JavaCodeStyleSettings>
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
@@ -13,6 +13,8 @@
         <package name="java" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="javax" withSubpackages="true" static="false" />
+        <emptyLine />
+        <package name="jakarta" withSubpackages="true" static="false" />
         <emptyLine />
         <package name="org" withSubpackages="true" static="false" />
         <emptyLine />

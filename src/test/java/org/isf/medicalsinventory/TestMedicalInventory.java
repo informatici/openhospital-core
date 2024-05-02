@@ -64,7 +64,7 @@ public class TestMedicalInventory {
 		medInventory.setWard(ward);
 	}
 	
-	public void check(MedicalInventory medInventory) {
+	public void check(MedicalInventory medInventory, int id) {
 		assertThat(medInventory.getId()).isEqualTo(id);
 		assertThat(medInventory.getStatus()).isEqualTo(status);
 		assertThat(medInventory.getInventoryDate()).isCloseTo(inventoryDate, within(1, ChronoUnit.SECONDS));
