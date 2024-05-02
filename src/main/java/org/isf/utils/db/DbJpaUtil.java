@@ -35,28 +35,26 @@ import jakarta.persistence.QueryTimeoutException;
 import jakarta.persistence.TransactionRequiredException;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Class that executes a query using JPA
  */
-public class DbJpaUtil 
-{
+public class DbJpaUtil {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DbJpaUtil.class);
 
-	private static ApplicationContext context =	new ClassPathXmlApplicationContext("applicationContext.xml");
-	private static EntityManagerFactory entityManagerFactory = context.getBean("entityManagerFactory", EntityManagerFactory.class);
+	private static EntityManagerFactory entityManagerFactory = Context.getApplicationContext().getBean("entityManagerFactory", EntityManagerFactory.class);
 	private static EntityManager entityManager;
 	private static Query query;
 
 	/**
      * Constructor that initialize the entity Manager
      */
-	public DbJpaUtil() {}	
+	public DbJpaUtil() {}
 	
 	/**
      * Constructor that initialize the entity Manager

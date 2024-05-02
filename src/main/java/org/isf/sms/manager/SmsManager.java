@@ -33,7 +33,6 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,10 +41,10 @@ public class SmsManager {
 	public static final int MAX_LENGHT = 160;
 	private static final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 
-	@Autowired
 	private SmsOperations smsOperations;
 
-	public SmsManager() {
+	public SmsManager(SmsOperations smsOperations) {
+		this.smsOperations = smsOperations;
 	}
 
 	/**
