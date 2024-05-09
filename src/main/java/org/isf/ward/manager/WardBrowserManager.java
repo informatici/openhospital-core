@@ -35,7 +35,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.validator.EmailValidator;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,11 +46,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class WardBrowserManager {
 
-	@Autowired
 	private AdmissionBrowserManager admManager;
 	
-	@Autowired
 	private WardIoOperations ioOperations;
+
+	public WardBrowserManager(AdmissionBrowserManager admissionBrowserManager, WardIoOperations wardIoOperations) {
+		this.admManager = admissionBrowserManager;
+		this.ioOperations = wardIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
