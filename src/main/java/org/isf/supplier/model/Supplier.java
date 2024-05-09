@@ -22,6 +22,7 @@
 package org.isf.supplier.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -237,5 +238,16 @@ public class Supplier extends Auditable<String> implements Serializable {
 	    }
 	  
 	    return this.hashCode;
-	}	
+	}
+	
+	public static class SupplierNameComparator implements Comparator<Supplier> {
+
+		@Override
+		public int compare(Supplier object1, Supplier object2) {
+			if (object2.getSupName() == null) {
+				return -1;
+			}
+			return object1.getSupName().compareTo(object2.getSupName());
+		}
+	}
 }
