@@ -34,7 +34,6 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,12 +45,17 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class AccountingIoOperations {
 
-	@Autowired
 	private AccountingBillIoOperationRepository billRepository;
-	@Autowired
 	private AccountingBillPaymentIoOperationRepository billPaymentRepository;
-	@Autowired
 	private AccountingBillItemsIoOperationRepository billItemsRepository;
+
+	public AccountingIoOperations(AccountingBillIoOperationRepository accountingBillIoOperationRepository,
+	                              AccountingBillPaymentIoOperationRepository accountingBillPaymentIoOperationRepository,
+	                              AccountingBillItemsIoOperationRepository accountingBillItemsIoOperationRepository) {
+		this.billRepository = accountingBillIoOperationRepository;
+		this.billPaymentRepository = accountingBillPaymentIoOperationRepository;
+		this.billItemsRepository = accountingBillItemsIoOperationRepository;
+	}
 
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.

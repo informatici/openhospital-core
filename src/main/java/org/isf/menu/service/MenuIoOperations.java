@@ -32,7 +32,6 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,14 +40,22 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MenuIoOperations {
 
-	@Autowired
 	private UserIoOperationRepository repository;
-	@Autowired
+
 	private UserGroupIoOperationRepository groupRepository;
-	@Autowired
+
 	private UserMenuItemIoOperationRepository menuRepository;
-	@Autowired
+
 	private GroupMenuIoOperationRepository groupMenuRepository;
+
+	public MenuIoOperations(UserIoOperationRepository userIoOperationRepository, UserGroupIoOperationRepository userGroupIoOperationRepository,
+	                        UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
+	                        GroupMenuIoOperationRepository groupMenuIoOperationRepository) {
+		this.repository = userIoOperationRepository;
+		this.groupRepository = userGroupIoOperationRepository;
+		this.menuRepository = userMenuItemIoOperationRepository;
+		this.groupMenuRepository = groupMenuIoOperationRepository;
+	}
 
 	/**
 	 * Returns the list of {@link User}s

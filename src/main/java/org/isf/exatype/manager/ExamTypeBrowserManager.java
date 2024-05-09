@@ -31,14 +31,16 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExamTypeBrowserManager {
 
-	@Autowired
 	private ExamTypeIoOperation ioOperations;
+
+	public ExamTypeBrowserManager(ExamTypeIoOperation examTypeIoOperation) {
+		this.ioOperations = examTypeIoOperation;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

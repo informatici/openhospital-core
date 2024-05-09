@@ -43,7 +43,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,17 +60,22 @@ public class MedicalStockIoOperations {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MedicalStockIoOperations.class);
 
-	@Autowired
 	private MovementIoOperationRepository movRepository;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
 
-	@Autowired
 	private MedicalsIoOperationRepository medicalRepository;
 
-	@Autowired
 	private MedicalStockWardIoOperationRepository medicalStockRepository;
+
+	public MedicalStockIoOperations(MovementIoOperationRepository movementIoOperationRepository, LotIoOperationRepository lotIoOperationRepository,
+	                                MedicalsIoOperationRepository medicalsIoOperationRepository,
+	                                MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository) {
+		this.movRepository = movementIoOperationRepository;
+		this.lotRepository = lotIoOperationRepository;
+		this.medicalRepository = medicalsIoOperationRepository;
+		this.medicalStockRepository = medicalStockWardIoOperationRepository;
+	}
 
 	public enum MovementOrder {
 		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
