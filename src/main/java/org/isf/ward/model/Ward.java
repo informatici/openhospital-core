@@ -33,6 +33,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -319,25 +320,11 @@ public class Ward extends Auditable<String> {
 		return this.hashCode;
 	}
 
-	public static class WardCodeComparator implements Comparator<Ward> {
-
-		@Override
-		public int compare(Ward object1, Ward object2) {
-			if (object2.getCode() == null) {
-				return -1;
-			}
-			return object1.getCode().compareTo(object2.getCode());
-		}
-	}
-
 	public static class WardDescriptionComparator implements Comparator<Ward> {
 
 		@Override
 		public int compare(Ward object1, Ward object2) {
-			if (object2.getDescription() == null) {
-				return -1;
-			}
-			return object1.getDescription().compareTo(object2.getDescription());
+			return StringUtils.compare(object1.getDescription(), object2.getDescription());
 		}
 	}
 }
