@@ -27,14 +27,16 @@ import java.util.Optional;
 import org.isf.menu.model.UserSetting;
 import org.isf.menu.service.UserSettingOperationRepository;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserSettingManager {
 
-	@Autowired
 	private UserSettingOperationRepository userSettingIoOperationRepository;
+
+	public UserSettingManager(UserSettingOperationRepository userSettingOperationRepository) {
+		this.userSettingIoOperationRepository = userSettingOperationRepository;
+	}
 
 	/**
 	 * Inserts a new {@link UserSetting} into the DB.

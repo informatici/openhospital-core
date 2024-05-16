@@ -27,7 +27,9 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,21 +47,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class MedicalsIoOperations 
-{
-	@Autowired
+public class MedicalsIoOperations {
+
 	private MedicalsIoOperationRepository repository;
-	@Autowired	
+
 	private MovementIoOperationRepository moveRepository;
-	
+
+	public MedicalsIoOperations(MedicalsIoOperationRepository medicalsIoOperationRepository, MovementIoOperationRepository movementIoOperationRepository) {
+		this.repository = medicalsIoOperationRepository;
+		this.moveRepository = movementIoOperationRepository;
+	}
+
 	/**
 	 * Retrieves the specified {@link Medical}.
-	 * @param code the medical code
+	 * @param code the medical code.
 	 * @return the stored medical.
 	 * @throws OHServiceException if an error occurs retrieving the stored medical.
 	 */
 	public Medical getMedical(int code) throws OHServiceException {
 		return repository.findById(code).orElse(null);
+	}
+	
+	/**
+	 * Retrieves the specified {@link Medical}.
+	 * @param prod_code the medical prod_code.
+	 * @return the stored medical.
+	 * @throws OHServiceException if an error occurs retrieving the stored medical.
+	 */
+	public Medical getMedicalByMedicalCode(String prod_code) throws OHServiceException {
+		return repository.findOneWhereProductCode(prod_code);
 	}
 
 	/**
@@ -98,6 +114,19 @@ public class MedicalsIoOperations
 			return getMedicalsByType(type, nameSorted);
 		}
 		return getMedicals(nameSorted);
+	}
+	
+	/**
+	 * Returns the medicals pageable.
+	 *
+	 * @param page - the page number.
+	 * @param size - the page size.
+	 * @return the list of {@link Medical}s pageable. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public Page<Medical> getMedicalsPageable(int page, int size) throws OHServiceException {
+		Pageable pageable = PageRequest.of(page, size);
+		return repository.findAllPageable(pageable);
 	}
 
 	/**

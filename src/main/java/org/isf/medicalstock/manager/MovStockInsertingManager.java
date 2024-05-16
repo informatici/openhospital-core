@@ -38,19 +38,19 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovStockInsertingManager {
 
-	@Autowired
 	private MedicalStockIoOperations ioOperations;
-	@Autowired
+
 	private MedicalsIoOperations ioOperationsMedicals;
 
-	public MovStockInsertingManager() {
+	public MovStockInsertingManager(MedicalStockIoOperations medicalStockIoOperations, MedicalsIoOperations medicalsIoOperations) {
+		this.ioOperations = medicalStockIoOperations;
+		this.ioOperationsMedicals = medicalsIoOperations;
 	}
 
 	/**
@@ -337,15 +337,23 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Stores the specified {@link Lot}.
-	 * @param lotCode the {@link Lot} code.
-	 * @param lot the lot to store.
-	 * @param medical
-	 * @return the stored {@link Lot} object.
-	 * @throws OHServiceException if an error occurred storing the lot.
+	 * Retrieves the {@link Lot}.
+	 * @param lotCode - the lot code.
+	 * @return the retrieved {@link Lot}.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
-		return ioOperations.storeLot(lotCode, lot, medical);
+	public Lot getLot(String lotCode) throws OHServiceException {
+		return ioOperations.getLot(lotCode);
+	}
+	
+	/**
+	 * Update the {@link Lot}.
+	 * @param lot - the lot.
+	 * @return the {@link Lot} updated.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public Lot updateLot(Lot lot) throws OHServiceException {
+		return ioOperations.updateLot(lot);
 	}
 
 	/**
@@ -379,6 +387,18 @@ public class MovStockInsertingManager {
 			}
 		}
 		return dischargingMovements;
+	}
+	
+	/**
+	 * Stores the specified {@link Lot}.
+	 * @param lotCode the {@link Lot} code.
+	 * @param lot the lot to store.
+	 * @param medical
+	 * @return the stored {@link Lot} object.
+	 * @throws OHServiceException if an error occurred storing the lot.
+	 */
+	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
+		return ioOperations.storeLot(lotCode, lot, medical);
 	}
 
 	/**

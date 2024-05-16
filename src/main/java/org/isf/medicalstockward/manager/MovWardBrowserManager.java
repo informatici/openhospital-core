@@ -42,15 +42,17 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovWardBrowserManager {
 
-	@Autowired
 	private MedicalStockWardIoOperations ioOperations;
+
+	public MovWardBrowserManager(MedicalStockWardIoOperations medicalStockWardIoOperations) {
+		this.ioOperations = medicalStockWardIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -85,6 +87,20 @@ public class MovWardBrowserManager {
 	 */
 	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
 		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
+	}
+
+	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward and the
+	 * specified medical
+	 * 
+	 * @param wardId      the ward id.
+	 * @param medId       the medical id.
+	 * @param stripeEmpty - if {@code true}, stripes the empty lots
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId, boolean stripeEmpty) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, medId, stripeEmpty);
 	}
 
 	/**
@@ -243,7 +259,7 @@ public class MovWardBrowserManager {
 	 * Deletes the specified {@link MedicalWard}.
 	 *
 	 * @param medWard - the MedicalWard to delete. 
-	 * @throws OHServiceException.
+	 * @throws OHServiceException
 	 */
 	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		ioOperations.deleteMedicalWard(medWard);
@@ -253,7 +269,7 @@ public class MovWardBrowserManager {
 	 * Updates the specified {@link MedicalWard}.
 	 *
 	 * @param medWard - the MedicalWard to update. 
-	 * @throws OHServiceException.
+	 * @throws OHServiceException
 	 */
 	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
 		return ioOperations.updateMedicalWard(medWard);

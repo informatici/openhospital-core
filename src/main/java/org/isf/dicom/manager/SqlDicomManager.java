@@ -24,7 +24,6 @@ package org.isf.dicom.manager;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,10 +35,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SqlDicomManager implements DicomManagerInterface {
 
-	@Autowired
 	private DicomIoOperations ioOperations;
 
-	public SqlDicomManager() {
+	public SqlDicomManager(DicomIoOperations dicomIoOperations) {
+		this.ioOperations = dicomIoOperations;
 	}
 
 	/**

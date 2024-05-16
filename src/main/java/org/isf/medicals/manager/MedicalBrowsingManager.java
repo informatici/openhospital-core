@@ -32,7 +32,7 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,8 +46,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalBrowsingManager {
 
-	@Autowired
 	private MedicalsIoOperations ioOperations;
+
+	public MedicalBrowsingManager(MedicalsIoOperations medicalsIoOperations) {
+		this.ioOperations = medicalsIoOperations;
+	}
 
 	/**
 	 * Returns the requested medical.
@@ -59,6 +62,17 @@ public class MedicalBrowsingManager {
 	public Medical getMedical(int code) throws OHServiceException {
 		return ioOperations.getMedical(code);
 	}
+	
+	/**
+	 * Returns the requested medical.
+	 *
+	 * @param prod_code the medical prod_code.
+	 * @return the retrieved medical.
+	 * @throws OHServiceException
+	 */
+	public Medical getMedicalByMedicalCode(String prod_code) throws OHServiceException {
+		return ioOperations.getMedicalByMedicalCode(prod_code);
+	}
 
 	/**
 	 * Returns all the medicals.
@@ -68,6 +82,18 @@ public class MedicalBrowsingManager {
 	 */
 	public List<Medical> getMedicals() throws OHServiceException {
 		return ioOperations.getMedicals(null, false);
+	}
+	
+	/**
+	 * Returns the medicals pageable.
+	 *
+	 * @param page - the page number.
+	 * @param size - the page size.
+	 * @return the list of {@link Medical}s pageable. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public Page<Medical> getMedicalsPageable(int page, int size) throws OHServiceException {
+		return ioOperations.getMedicalsPageable(page, size);
 	}
 
 	/**

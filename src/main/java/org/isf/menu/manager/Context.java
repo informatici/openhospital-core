@@ -21,7 +21,6 @@
  */
 package org.isf.menu.manager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -29,8 +28,11 @@ import org.springframework.context.ApplicationContext;
  */
 public class Context {
 
-	@Autowired
 	private static ApplicationContext applicationContext;
+
+	public Context(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
 	/**
 	 * Returns the main {@link ApplicationContext}.

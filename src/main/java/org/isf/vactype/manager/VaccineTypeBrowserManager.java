@@ -31,14 +31,16 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.vactype.model.VaccineType;
 import org.isf.vactype.service.VacTypeIoOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VaccineTypeBrowserManager {
 
-	@Autowired
 	private VacTypeIoOperation ioOperations;
+
+	public VaccineTypeBrowserManager( VacTypeIoOperation vacTypeIoOperation) {
+		this.ioOperations = vacTypeIoOperation;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
@@ -60,7 +62,7 @@ public class VaccineTypeBrowserManager {
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
-		if (insert && isCodePresent(vaccineType.getCode())) {
+		if (insert && !key.isEmpty() && isCodePresent(key)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
 		if (!errors.isEmpty()) {

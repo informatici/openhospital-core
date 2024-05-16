@@ -43,7 +43,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,17 +60,22 @@ public class MedicalStockIoOperations {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MedicalStockIoOperations.class);
 
-	@Autowired
 	private MovementIoOperationRepository movRepository;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
 
-	@Autowired
 	private MedicalsIoOperationRepository medicalRepository;
 
-	@Autowired
 	private MedicalStockWardIoOperationRepository medicalStockRepository;
+
+	public MedicalStockIoOperations(MovementIoOperationRepository movementIoOperationRepository, LotIoOperationRepository lotIoOperationRepository,
+	                                MedicalsIoOperationRepository medicalsIoOperationRepository,
+	                                MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository) {
+		this.movRepository = movementIoOperationRepository;
+		this.lotRepository = lotIoOperationRepository;
+		this.medicalRepository = medicalsIoOperationRepository;
+		this.medicalStockRepository = medicalStockWardIoOperationRepository;
+	}
 
 	public enum MovementOrder {
 		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
@@ -258,6 +262,26 @@ public class MedicalStockIoOperations {
 	 */
 	public boolean lotExists(String lotCode) throws OHServiceException {
 		return lotRepository.findById(String.valueOf(lotCode)).orElse(null) != null;
+	}
+	
+	/**
+	 * Retrieves the {@link Lot}.
+	 * @param lotCode the lot code.
+	 * @return the retrieved {@link Lot}.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public Lot getLot(String lotCode) throws OHServiceException {
+		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+	}
+	
+	/**
+	 * Update the {@link Lot}.
+	 * @param lot - the lot.
+	 * @return the {@link Lot} updated.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public Lot updateLot(Lot lot) throws OHServiceException {
+		return lotRepository.save(lot);
 	}
 
 	/**

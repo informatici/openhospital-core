@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.exatype.model.ExamType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExamTypeIoOperation {
 
-	@Autowired
 	private ExamTypeIoOperationRepository repository;
-	
+
+	public ExamTypeIoOperation(ExamTypeIoOperationRepository examTypeIoOperationRepository) {
+		this.repository = examTypeIoOperationRepository;
+	}
+
 	/**
 	 * Return the list of {@link ExamType}s.
 	 * @return the list of {@link ExamType}s.

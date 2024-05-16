@@ -38,18 +38,20 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExaminationBrowserManager {
 
-	@Autowired
 	private ExaminationOperations ioOperations;
 
 	protected HashMap<String, String> diuresisDescriptionHashMap;
 	protected HashMap<String, String> bowelDescriptionHashMap;
 	protected LinkedHashMap<String, String> auscultationHashMap;
+
+	public ExaminationBrowserManager(ExaminationOperations examinationOperations) {
+		this.ioOperations = examinationOperations;
+	}
 
 	/**
 	 * Default PatientExamination

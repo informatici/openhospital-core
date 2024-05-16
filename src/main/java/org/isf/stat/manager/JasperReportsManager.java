@@ -62,7 +62,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -91,11 +90,14 @@ public class JasperReportsManager {
 
 	private static final String RPT_BASE = "rpt_base";
 
-	@Autowired
 	private HospitalBrowsingManager hospitalManager;
 
-	@Autowired
 	private DataSource dataSource;
+
+	public JasperReportsManager(HospitalBrowsingManager hospitalBrowsingManager, DataSource dataSource) {
+		this.hospitalManager = hospitalBrowsingManager;
+		this.dataSource = dataSource;
+	}
 
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
