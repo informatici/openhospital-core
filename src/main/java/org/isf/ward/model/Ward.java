@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,6 +21,8 @@
  */
 package org.isf.ward.model;
 
+import java.util.Comparator;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,11 +33,12 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_WARD")
+@Table(name = "OH_WARD")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "WRD_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "WRD_CREATED_DATE", updatable = false))
@@ -45,66 +48,67 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Ward extends Auditable<String> {
 
 	@Id
-	@Column(name="WRD_ID_A")	
+	@Column(name = "WRD_ID_A")
 	private String code;
 
 	@NotNull
-	@Column(name="WRD_NAME")
+	@Column(name = "WRD_NAME")
 	private String description;
-	
-	@Column(name="WRD_TELE")
+
+	@Column(name = "WRD_TELE")
 	private String telephone;
-	
-	@Column(name="WRD_FAX")
+
+	@Column(name = "WRD_FAX")
 	private String fax;
-	
-	@Column(name="WRD_EMAIL")
+
+	@Column(name = "WRD_EMAIL")
 	private String email;
 
 	@NotNull
-	@Column(name="WRD_NBEDS")
+	@Column(name = "WRD_NBEDS")
 	private Integer beds;
 
 	@NotNull
-	@Column(name="WRD_NQUA_NURS")
+	@Column(name = "WRD_NQUA_NURS")
 	private Integer nurs;
 
 	@NotNull
-	@Column(name="WRD_NDOC")
+	@Column(name = "WRD_NDOC")
 	private Integer docs;
-	
-	@Column(name="WRD_IS_OPD")	
+
+	@Column(name = "WRD_IS_OPD")
 	private boolean isOpd;
 
 	@NotNull
-	@Column(name="WRD_IS_PHARMACY")	
+	@Column(name = "WRD_IS_PHARMACY")
 	private boolean isPharmacy;
 
 	@NotNull
-	@Column(name="WRD_IS_MALE")   
+	@Column(name = "WRD_IS_MALE")
 	private boolean isMale;
 
 	@NotNull
-	@Column(name="WRD_IS_FEMALE")	
+	@Column(name = "WRD_IS_FEMALE")
 	private boolean isFemale;
 
 	@NotNull
-	@Column(name="WRD_VISIT_DURATION")
+	@Column(name = "WRD_VISIT_DURATION")
 	private int visitDuration;
 
 	@Version
-	@Column(name="WRD_LOCK")
+	@Column(name = "WRD_LOCK")
 	private Integer lock;
-	
+
 	@Transient
 	private volatile int hashCode;
-	
+
 	public Ward() {
 		super();
 	}
 
-	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
-			boolean isMale, boolean isFemale) {
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd,
+					boolean isPharmacy,
+					boolean isMale, boolean isFemale) {
 		this(code, description, telephone, fax, email, beds, nurs, docs, isOpd, isPharmacy, isMale, isFemale, 30);
 	}
 
@@ -122,8 +126,9 @@ public class Ward extends Auditable<String> {
 	 * @param isFemale
 	 * @param visitDuration
 	 */
-	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
-			boolean isMale, boolean isFemale, int visitDuration) {
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd,
+					boolean isPharmacy,
+					boolean isMale, boolean isFemale, int visitDuration) {
 		super();
 		this.code = code;
 		this.description = description;
@@ -140,14 +145,14 @@ public class Ward extends Auditable<String> {
 		this.visitDuration = visitDuration;
 	}
 
-	//TODO: to reduce number of constructors
+	// TODO: to reduce number of constructors
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
-			boolean isFemale) {
+					boolean isFemale) {
 		this(code, description, telephone, fax, email, beds, nurs, docs, isMale, isFemale, 30);
 	}
 
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
-			boolean isFemale, int visitDuration) {
+					boolean isFemale, int visitDuration) {
 		super();
 		this.code = code;
 		this.description = description;
@@ -235,15 +240,15 @@ public class Ward extends Auditable<String> {
 	public void setLock(Integer aLock) {
 		this.lock = aLock;
 	}
-	
+
 	public boolean isOpd() {
 		return isOpd;
 	}
-	
+
 	public void setOpd(boolean isOPD) {
 		this.isOpd = isOPD;
 	}
-	
+
 	public boolean isPharmacy() {
 		return isPharmacy;
 	}
@@ -279,15 +284,15 @@ public class Ward extends Auditable<String> {
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Ward
-				&& (getCode().equals(((Ward) anObject).getCode()))
-				&& getDescription().equalsIgnoreCase(((Ward) anObject).getDescription())
-				&& getTelephone().equalsIgnoreCase(((Ward) anObject).getTelephone())
-				&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax()))
-				&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail()))
-				&& (getBeds().equals(((Ward) anObject).getBeds()))
-				&& (getNurs().equals(((Ward) anObject).getNurs()))
-				&& (getDocs().equals(((Ward) anObject).getDocs()))
-				&& (getVisitDuration() == ((Ward) anObject).getVisitDuration());
+						&& (getCode().equals(((Ward) anObject).getCode()))
+						&& getDescription().equalsIgnoreCase(((Ward) anObject).getDescription())
+						&& getTelephone().equalsIgnoreCase(((Ward) anObject).getTelephone())
+						&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax()))
+						&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail()))
+						&& (getBeds().equals(((Ward) anObject).getBeds()))
+						&& (getNurs().equals(((Ward) anObject).getNurs()))
+						&& (getDocs().equals(((Ward) anObject).getDocs()))
+						&& (getVisitDuration() == ((Ward) anObject).getVisitDuration());
 	}
 
 	@Override
@@ -297,9 +302,9 @@ public class Ward extends Auditable<String> {
 
 	public String debug() {
 		return "Ward [code=" + code + ", description=" + description + ", telephone=" + telephone + ", fax=" + fax
-				+ ", email=" + email + ", beds=" + beds + ", nurs=" + nurs + ", docs=" + docs + ", isPharmacy="
-				+ isPharmacy + ", isMale=" + isMale + ", isFemale=" + isFemale + ", lock=" + lock + ", hashCode="
-				+ hashCode + ']';
+						+ ", email=" + email + ", beds=" + beds + ", nurs=" + nurs + ", docs=" + docs + ", isPharmacy="
+						+ isPharmacy + ", isMale=" + isMale + ", isFemale=" + isFemale + ", lock=" + lock + ", hashCode="
+						+ hashCode + ']';
 	}
 
 	@Override
@@ -314,7 +319,12 @@ public class Ward extends Auditable<String> {
 		}
 		return this.hashCode;
 	}
-	
-	
 
+	public static class WardDescriptionComparator implements Comparator<Ward> {
+
+		@Override
+		public int compare(Ward object1, Ward object2) {
+			return StringUtils.compare(object1.getDescription(), object2.getDescription());
+		}
+	}
 }
