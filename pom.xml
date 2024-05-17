@@ -20,10 +20,10 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.14.1-SNAPSHOT</version>
+	<version>1.14.2-SNAPSHOT</version>
 
 	<properties>
-		<oh.version>1.14.1-SNAPSHOT</oh.version>
+		<oh.version>1.14.2-SNAPSHOT</oh.version>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>6.21.3</jasperreports.version>
