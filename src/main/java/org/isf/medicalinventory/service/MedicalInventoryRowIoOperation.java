@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MedicalInventoryRowIoOperation {
 
-	@Autowired
 	private MedicalInventoryRowIoOperationRepository repository;
-	
+
+	public MedicalInventoryRowIoOperation(MedicalInventoryRowIoOperationRepository medicalInventoryRowIoOperationRepository) {
+		this.repository = medicalInventoryRowIoOperationRepository;
+	}
+
 	/**
 	 * Insert a new {@link MedicalInventoryRow}.
 	 *

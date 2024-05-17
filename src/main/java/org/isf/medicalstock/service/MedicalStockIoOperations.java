@@ -43,7 +43,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,17 +60,22 @@ public class MedicalStockIoOperations {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MedicalStockIoOperations.class);
 
-	@Autowired
 	private MovementIoOperationRepository movRepository;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
 
-	@Autowired
 	private MedicalsIoOperationRepository medicalRepository;
 
-	@Autowired
 	private MedicalStockWardIoOperationRepository medicalStockRepository;
+
+	public MedicalStockIoOperations(MovementIoOperationRepository movementIoOperationRepository, LotIoOperationRepository lotIoOperationRepository,
+	                                MedicalsIoOperationRepository medicalsIoOperationRepository,
+	                                MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository) {
+		this.movRepository = movementIoOperationRepository;
+		this.lotRepository = lotIoOperationRepository;
+		this.medicalRepository = medicalsIoOperationRepository;
+		this.medicalStockRepository = medicalStockWardIoOperationRepository;
+	}
 
 	public enum MovementOrder {
 		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
@@ -413,16 +417,16 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all the stored {@link Movement} with the specified criteria.
-	 * @param medicalCode the medical code.
-	 * @param medicalType the medical type.
-	 * @param wardId the ward type.
-	 * @param movType the movement type.
-	 * @param movFrom the lower bound for the movement date range.
-	 * @param movTo the upper bound for the movement date range.
-	 * @param lotPrepFrom the lower bound for the lot preparation date range.
-	 * @param lotPrepTo the upper bound for the lot preparation date range.
-	 * @param lotDueFrom the lower bound for the lot due date range.
-	 * @param lotDueTo the lower bound for the lot due date range.
+	 * @param medicalCode the {@link Medical} code (optional).
+	 * @param medicalTypeCode the {@link MedicalType} code (optional).
+	 * @param wardId the {@link Ward} id (optional).
+	 * @param movTypeCode the {@link MovementType} code or {@code "+"}/{@code "-"} for all charge/discharge types (optional).
+	 * @param movFrom the lower bound for the movement date range (optional).
+	 * @param movTo the upper bound for the movement date range (optional).
+	 * @param lotPrepFrom the lower bound for the lot preparation date range (optional).
+	 * @param lotPrepTo the upper bound for the lot preparation date range (optional).
+	 * @param lotDueFrom the lower bound for the lot due date range (optional).
+	 * @param lotDueTo the lower bound for the lot due date range (optional).
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */

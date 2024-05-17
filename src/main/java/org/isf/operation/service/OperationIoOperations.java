@@ -28,7 +28,6 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PagedResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -39,9 +38,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class OperationIoOperations {
 
-	@Autowired
 	private OperationIoOperationRepository repository;
-	
+
+	public OperationIoOperations(OperationIoOperationRepository operationIoOperationRepository) {
+		this.repository = operationIoOperationRepository;
+	}
+
 	/**
 	 * Return the {@link Operation}s whose type matches specified string
 	 * 

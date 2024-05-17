@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +38,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliveryTypeBrowserManager {
 
-	@Autowired
 	private DeliveryTypeIoOperation ioOperations;
+
+	public DeliveryTypeBrowserManager(DeliveryTypeIoOperation deliveryTypeIoOperation) {
+		this.ioOperations = deliveryTypeIoOperation;
+	}
 
 	/**
 	 * Returns all stored {@link DeliveryType}s.

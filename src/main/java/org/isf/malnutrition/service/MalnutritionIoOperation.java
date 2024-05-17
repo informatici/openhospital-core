@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +37,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MalnutritionIoOperation {
 
-	@Autowired
 	private MalnutritionIoOperationRepository repository;
-	
+
+	public MalnutritionIoOperation(MalnutritionIoOperationRepository malnutritionIoOperationRepository) {
+		this.repository = malnutritionIoOperationRepository;
+	}
+
 	/**
 	 * Returns all the available {@link Malnutrition} for the specified admission id.
 	 * @param admissionId the admission id
