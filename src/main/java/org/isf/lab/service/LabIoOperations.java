@@ -38,7 +38,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,11 +49,14 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class LabIoOperations {
 
-	@Autowired
 	private LabIoOperationRepository repository;
 
-	@Autowired
 	private LabRowIoOperationRepository rowRepository;
+
+	public LabIoOperations(LabIoOperationRepository labIoOperationRepository, LabRowIoOperationRepository labRowIoOperationRepository) {
+		this.repository = labIoOperationRepository;
+		this.rowRepository = labRowIoOperationRepository;
+	}
 
 	/**
 	 * Return a list of results ({@link LaboratoryRow}s) for passed lab code.

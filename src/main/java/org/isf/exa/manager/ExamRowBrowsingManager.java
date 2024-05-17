@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExamRowBrowsingManager {
 
-	@Autowired
 	private ExamRowIoOperations ioOperations;
+
+	public ExamRowBrowsingManager(ExamRowIoOperations examRowIoOperations) {
+		this.ioOperations = examRowIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

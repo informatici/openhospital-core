@@ -31,14 +31,16 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VaccineBrowserManager {
 
-	@Autowired
 	private VaccineIoOperations ioOperations;
+
+	public VaccineBrowserManager(VaccineIoOperations vaccineIoOperations) {
+		this.ioOperations = vaccineIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.

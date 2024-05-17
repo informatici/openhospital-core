@@ -33,7 +33,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,8 +45,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class OpdIoOperations {
 
-	@Autowired
 	private OpdIoOperationRepository repository;
+
+	public OpdIoOperations(OpdIoOperationRepository opdIoOperationRepository) {
+		this.repository = opdIoOperationRepository;
+	}
 
 	/**
 	 * Return all {@link Opd}s for today or one week ago.

@@ -36,15 +36,17 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class BillBrowserManager {
 
-	@Autowired
 	private AccountingIoOperations ioOperations;
+
+	public BillBrowserManager(AccountingIoOperations accountingIoOperations) {
+		this.ioOperations = accountingIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

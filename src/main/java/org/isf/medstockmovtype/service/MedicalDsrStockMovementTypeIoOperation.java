@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +37,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MedicalDsrStockMovementTypeIoOperation {
 
-	@Autowired
 	private MedicalDsrStockMovementTypeIoOperationRepository repository;
-	
+
+	public MedicalDsrStockMovementTypeIoOperation(MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository) {
+		this.repository = medicalDsrStockMovementTypeIoOperationRepository;
+	}
+
 	/**
 	 * Retrieves all the stored {@link MovementType}.
 	 * @return all the stored {@link MovementType}s.

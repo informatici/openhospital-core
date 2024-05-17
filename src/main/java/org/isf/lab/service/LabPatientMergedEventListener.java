@@ -27,7 +27,6 @@ import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class LabPatientMergedEventListener {
 
-	@Autowired
-	LabIoOperations labIoOperations;
+	private LabIoOperations labIoOperations;
+
+	public LabPatientMergedEventListener(LabIoOperations labIoOperations) {
+		this.labIoOperations = labIoOperations;
+	}
 
 	@EventListener
 	@Transactional
