@@ -32,7 +32,6 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -43,8 +42,11 @@ public class TelemetryDataCollector extends AbstractDataCollector {
 	private static final String ID = "TEL_ID";
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDataCollector.class);
 
-	@Autowired
 	private TelemetryManager telemetryManager;
+
+	public TelemetryDataCollector(TelemetryManager telemetryManager) {
+		this.telemetryManager = telemetryManager;
+	}
 
 	@Override
 	public String getId() {

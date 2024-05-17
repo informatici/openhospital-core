@@ -26,14 +26,16 @@ import java.util.List;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.PermissionIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PermissionManager {
 
-	@Autowired
 	private PermissionIoOperations operations;
+
+	public PermissionManager(PermissionIoOperations permissionIoOperations) {
+		this.operations = permissionIoOperations;
+	}
 
 	public List<Permission> retrievePermissionsByGroupCode(String userGroupCode) throws OHServiceException {
 		return operations.retrivePermisionsByGroupCode(userGroupCode);

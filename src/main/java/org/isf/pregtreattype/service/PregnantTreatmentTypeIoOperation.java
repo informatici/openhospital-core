@@ -26,7 +26,6 @@ import java.util.List;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PregnantTreatmentTypeIoOperation {
 
-	@Autowired
 	private PregnantTreatmentTypeIoOperationRepository repository;
-	
+
+	public PregnantTreatmentTypeIoOperation(PregnantTreatmentTypeIoOperationRepository pregnantTreatmentTypeIoOperationRepository) {
+		this.repository = pregnantTreatmentTypeIoOperationRepository;
+	}
 	
 	/**
 	 * Return the list of {@link PregnantTreatmentType}s.
