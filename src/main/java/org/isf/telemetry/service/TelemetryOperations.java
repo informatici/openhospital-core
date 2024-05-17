@@ -23,7 +23,6 @@ package org.isf.telemetry.service;
 
 import org.isf.telemetry.model.Telemetry;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,17 +31,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.REQUIRED)
 public class TelemetryOperations {
 
-	@Autowired
-	private TelemetryRepository repository;
+	private TelemetryRepository telemetryRepository;
 
-	public TelemetryOperations() {
+	public TelemetryOperations(TelemetryRepository telemetryRepository) {
+		this.telemetryRepository = telemetryRepository;
 	}
 
 	public boolean saveOrUpdate(Telemetry telemetry) throws OHServiceException {
-		return repository.save(telemetry) != null;
+		return telemetryRepository.save(telemetry) != null;
 	}
 
 	public Telemetry retrieveFirst() {
-		return this.repository.findFirstByOrderById_SoftwareUUIDAsc();
+		return this.telemetryRepository.findFirstByOrderById_SoftwareUUIDAsc();
 	}
 }

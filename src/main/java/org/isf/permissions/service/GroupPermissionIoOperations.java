@@ -29,7 +29,6 @@ import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +37,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class GroupPermissionIoOperations {
 
-	@Autowired
 	private GroupPermissionIoOperationRepository repository;
+
+	public GroupPermissionIoOperations(GroupPermissionIoOperationRepository groupPermissionIoOperationRepository) {
+		this.repository = groupPermissionIoOperationRepository;
+	}
 
 	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
 		return repository.findByIdIn(ids);

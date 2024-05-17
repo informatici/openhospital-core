@@ -31,14 +31,16 @@ import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PricesOthersManager {
 
-	@Autowired
 	private PriceOthersIoOperations ioOperations;
+
+	public PricesOthersManager(PriceOthersIoOperations priceOthersIoOperations) {
+		this.ioOperations = priceOthersIoOperations;
+	}
 
 	/**
 	 * Return a list of {@link PricesOthers}s.

@@ -31,7 +31,6 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +42,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class OperationRowIoOperations {
 
-	@Autowired
 	private OperationRowIoOperationRepository repository;
+
+	public OperationRowIoOperations(OperationRowIoOperationRepository operationRowIoOperationRepository) {
+		this.repository = operationRowIoOperationRepository;
+	}
 
 	public List<OperationRow> getOperationRow() throws OHServiceException {
 		return repository.findByOrderByOpDateDesc();

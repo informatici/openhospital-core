@@ -41,27 +41,30 @@ import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class TherapyManager {
 
-	@Autowired
 	private TherapyIoOperations ioOperations;
 
-	@Autowired
 	private SmsOperations smsOp;
 
-	@Autowired
 	private PatientBrowserManager patientManager;
 
-	@Autowired
 	private MedicalBrowsingManager medManager;
 
-	@Autowired
 	private MovWardBrowserManager wardManager;
+
+	public TherapyManager(TherapyIoOperations therapyIoOperations, SmsOperations smsOperations, PatientBrowserManager patientBrowserManager,
+	                      MedicalBrowsingManager medicalBrowsingManager, MovWardBrowserManager movWardBrowserManager) {
+		this.ioOperations = therapyIoOperations;
+		this.smsOp = smsOperations;
+		this.patientManager = patientBrowserManager;
+		this.medManager = medicalBrowsingManager;
+		this.wardManager = movWardBrowserManager;
+	}
 
 	/**
 	 * Returns a {@link Therapy} object from a {@link TherapyRow} (DB record)

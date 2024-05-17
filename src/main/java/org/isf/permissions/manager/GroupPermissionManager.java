@@ -28,14 +28,16 @@ import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.GroupPermissionIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GroupPermissionManager {
 
-	@Autowired
 	private GroupPermissionIoOperations operations;
+
+	public GroupPermissionManager(GroupPermissionIoOperations groupPermissionIoOperations) {
+		this.operations = groupPermissionIoOperations;
+	}
 
 	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
 		return operations.findByIdIn(ids);

@@ -31,14 +31,16 @@ import org.isf.patconsensus.service.PatientConsensusIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientConsensusBrowserManager {
 
-	@Autowired
 	private PatientConsensusIoOperation ioOperations;
+
+	public PatientConsensusBrowserManager(PatientConsensusIoOperation patientConsensusIoOperation) {
+		this.ioOperations = patientConsensusIoOperation;
+	}
 
 	/**
 	 * Return the {@link PatientConsensus} for the specified user id.

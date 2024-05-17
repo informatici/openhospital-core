@@ -34,17 +34,19 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OperationBrowserManager {
 
-	@Autowired
 	private OperationIoOperations ioOperations;
 	
 	LinkedHashMap<String, String> resultsListHashMap;
+
+	public OperationBrowserManager(OperationIoOperations operationIoOperations) {
+		this.ioOperations = operationIoOperations;
+	}
 
 	/**
 	 * Return the list of {@link Operation}s

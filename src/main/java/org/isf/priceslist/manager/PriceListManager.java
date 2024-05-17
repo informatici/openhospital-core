@@ -34,14 +34,16 @@ import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PriceListManager {
 
-	@Autowired
 	private PricesListIoOperations ioOperations;
+
+	public PriceListManager(PricesListIoOperations pricesListIoOperations) {
+		this.ioOperations = pricesListIoOperations;
+	}
 
 	/**
 	 * Return the list of {@link PriceList}s in the DB
