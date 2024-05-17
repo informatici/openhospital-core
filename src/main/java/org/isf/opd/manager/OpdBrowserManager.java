@@ -40,7 +40,6 @@ import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -51,10 +50,13 @@ public class OpdBrowserManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpdBrowserManager.class);
 
-	@Autowired
 	private OpdIoOperations ioOperations;
-	@Autowired
 	private DiseaseBrowserManager diseaseBrowserManager;
+
+	public OpdBrowserManager(OpdIoOperations opdIoOperations, DiseaseBrowserManager diseaseBrowserManager) {
+		this.ioOperations = opdIoOperations;
+		this.diseaseBrowserManager = diseaseBrowserManager;
+	}
 
 	protected void setPatientConsistency(Opd opd) {
 		if (GeneralData.OPDEXTENDED && opd.getPatient() != null) {

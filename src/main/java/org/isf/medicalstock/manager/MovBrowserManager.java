@@ -40,30 +40,24 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovBrowserManager {
 
-	@Autowired
 	private MedicalStockIoOperations ioOperations;
 
-	@Autowired
 	private LotIoOperationRepository lotRepository;
 
-	@Autowired
-	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
-
-	@Autowired
 	private MedicalsIoOperations medicalsIoOperation;
 
-	@Autowired
+	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
+
 	private MovWardBrowserManager movWardBrowserManager;
 
 	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
-					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
+	                         MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;

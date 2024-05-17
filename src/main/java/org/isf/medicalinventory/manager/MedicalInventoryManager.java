@@ -29,7 +29,6 @@ import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +36,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MedicalInventoryManager {
 
-	@Autowired
 	private MedicalInventoryIoOperation ioOperations;
-	
-	@Autowired
+
 	private MedicalInventoryRowManager medicalInventoryRowManager;
-	
+
+	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager) {
+		this.ioOperations = medicalInventoryIoOperation;
+		this.medicalInventoryRowManager = medicalInventoryRowManager;
+	}
+
 	/**
 	 * Insert a new {@link MedicalInventory}.
 	 *

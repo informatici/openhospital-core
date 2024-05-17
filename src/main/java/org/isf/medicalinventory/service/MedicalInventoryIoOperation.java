@@ -28,7 +28,6 @@ import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,9 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MedicalInventoryIoOperation {
 
-	@Autowired
 	private MedicalInventoryIoOperationRepository repository;
-	
+
+	public MedicalInventoryIoOperation(MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository) {
+		this.repository = medicalInventoryIoOperationRepository;
+	}
+
 	/**
 	 * Insert a new {@link MedicalInventory}.
 	 *

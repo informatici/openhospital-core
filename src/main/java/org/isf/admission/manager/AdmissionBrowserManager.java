@@ -41,21 +41,23 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdmissionBrowserManager {
 
-	@Autowired
 	private AdmissionIoOperations ioOperations;
 
-	@Autowired
 	private DiseaseBrowserManager diseaseManager;
 
 	// TODO: to centralize
 	protected static final int DEFAULT_PAGE_SIZE = 80;
+
+	public AdmissionBrowserManager(AdmissionIoOperations admissionIoOperations, DiseaseBrowserManager diseaseBrowserManager) {
+		this.ioOperations = admissionIoOperations;
+		this.diseaseManager = diseaseBrowserManager;
+	}
 
 	/**
 	 * Returns all patients with ward in which they are admitted.

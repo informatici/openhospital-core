@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +38,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiseaseTypeBrowserManager {
 
-	@Autowired
 	private DiseaseTypeIoOperation ioOperations;
+
+	public DiseaseTypeBrowserManager(DiseaseTypeIoOperation diseaseTypeIoOperation) {
+		this.ioOperations = diseaseTypeIoOperation;
+	}
 
 	/**
 	 * Returns all the stored {@link DiseaseType}s.

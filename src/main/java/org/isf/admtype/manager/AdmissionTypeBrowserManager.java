@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdmissionTypeBrowserManager {
 
-	@Autowired
 	private AdmissionTypeIoOperation ioOperations;
+
+	public AdmissionTypeBrowserManager(AdmissionTypeIoOperation admissionTypeIoOperation) {
+		this.ioOperations = admissionTypeIoOperation;
+	}
 
 	/**
 	 * Returns all the available {@link AdmissionType}s.

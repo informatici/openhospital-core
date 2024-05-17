@@ -24,7 +24,6 @@ package org.isf.anamnesis.service;
 import org.isf.anamnesis.model.PatientHistory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PatientHistoryIoOperations {
 
-	@Autowired
 	private PatientHistoryIoOperationRepository repository;
+
+	public PatientHistoryIoOperations(PatientHistoryIoOperationRepository patientHistoryIoOperationRepository) {
+		this.repository = patientHistoryIoOperationRepository;
+	}
 
 	public PatientHistory getByPatientId(int patId) {
 		return repository.findByPatientId(patId);

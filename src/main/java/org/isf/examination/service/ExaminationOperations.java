@@ -29,7 +29,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -43,10 +42,10 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExaminationOperations {
 
-	@Autowired
 	private ExaminationIoOperationRepository repository;
 	
-	public ExaminationOperations() {
+	public ExaminationOperations(ExaminationIoOperationRepository examinationIoOperationRepository) {
+		this.repository = examinationIoOperationRepository;
 	}
 
 	/**

@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.PatientMergedEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MovementWardPatientMergedEventListener {
 
-	@Autowired
-	MedicalStockWardIoOperations medicalStockWardIoOperations;
+	private MedicalStockWardIoOperations medicalStockWardIoOperations;
+
+	public MovementWardPatientMergedEventListener(MedicalStockWardIoOperations medicalStockWardIoOperations) {
+		this.medicalStockWardIoOperations = medicalStockWardIoOperations;
+	}
 
 	@EventListener
 	@Transactional

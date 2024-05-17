@@ -29,7 +29,6 @@ import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,10 +43,14 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class WardIoOperations {
 
-	@Autowired
 	private WardIoOperationRepository repository;
-	@Autowired
+
 	private AdmissionIoOperationRepository admissionRepository;
+
+	public WardIoOperations(WardIoOperationRepository wardIoOperationRepository, AdmissionIoOperationRepository admissionIoOperationRepository) {
+		this.repository = wardIoOperationRepository;
+		this.admissionRepository = admissionIoOperationRepository;
+	}
 
 	/**
 	 * Retrieves the number of patients currently admitted in the {@link Ward}

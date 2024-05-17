@@ -28,14 +28,16 @@ import java.util.Map;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SupplierBrowserManager {
 
-	@Autowired
 	private SupplierOperations ioOperations;
+
+	public SupplierBrowserManager(SupplierOperations supplierOperations) {
+		this.ioOperations = supplierOperations;
+	}
 
 	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
 		return ioOperations.saveOrUpdate(supplier);

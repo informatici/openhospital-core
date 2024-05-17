@@ -28,7 +28,6 @@ import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,12 +36,15 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExamRowIoOperations {
 
-	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
-	
-	@Autowired
+
 	private ExamTypeIoOperationRepository typeRepository;
-	
+
+	public ExamRowIoOperations(ExamRowIoOperationRepository examRowIoOperationRepository, ExamTypeIoOperationRepository examTypeIoOperationRepository) {
+		this.rowRepository = examRowIoOperationRepository;
+		this.typeRepository = examTypeIoOperationRepository;
+	}
+
 	/**
 	 * Returns a list of {@link ExamRow}s that matches passed exam code and description
 	 * @param aExamCode - the exam code

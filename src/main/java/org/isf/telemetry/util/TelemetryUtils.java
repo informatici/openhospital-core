@@ -31,7 +31,6 @@ import org.isf.telemetry.service.remote.TelemetryDataCollectorGatewayService;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -43,14 +42,18 @@ public class TelemetryUtils {
 
 	private static final boolean IGNORE_EXCEPTIONS = true;
 
-	@Autowired
 	private DataCollectorProviderService dataCollectorProvider;
 
-	@Autowired
 	private TelemetryDataCollectorGatewayService telemetryGatewayService;
 
-	@Autowired
 	private TelemetryManager telemetryManager;
+
+	public TelemetryUtils(DataCollectorProviderService dataCollectorProvider, TelemetryDataCollectorGatewayService telemetryGatewayService,
+	                      TelemetryManager telemetryManager) {
+		this.dataCollectorProvider = dataCollectorProvider;
+		this.telemetryGatewayService = telemetryGatewayService;
+		this.telemetryManager = telemetryManager;
+	}
 
 	public Map<String, Map<String, String>> retrieveDataToSend(Map<String, Boolean> consentMap) throws OHException {
 		List<String> enabledCollectors = consentMap.keySet().stream()
