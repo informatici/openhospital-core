@@ -98,3 +98,4 @@ source step_a101_add_delete_btn_in_medicalstock.sql;
 source step_a102_add_delete_btn_in_medicalstockward.sql;
 source step_a103_fix_MedicalDsrStockMovementTypeBrowser.sql;
 source step_a104_add_inventory_in_pharmacy.sql;
+source step_105_alter_table_inventoryrow.sql;

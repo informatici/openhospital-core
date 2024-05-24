@@ -1,0 +1,2 @@
+ALTER TABLE oh_medicaldsrinventoryrow
+	MODIFY COLUMN MINVTR_LT_ID_A VARCHAR(50) NULL;
