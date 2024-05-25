@@ -40,7 +40,7 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSR")
+@Table(name = "OH_MEDICALDSR")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MDSR_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MDSR_CREATED_DATE", updatable = false))
@@ -48,19 +48,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "active", column = @Column(name = "MDSR_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSR_LAST_MODIFIED_DATE"))
 public class Medical extends Auditable<String> implements Comparable<Medical>, Cloneable {
+
 	/**
 	 * Code of the medical
 	 */
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="MDSR_ID")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MDSR_ID")
 	private Integer code;
 
 	/**
 	 * Code of the product
 	 */
 	@NotNull
-	@Column(name="MDSR_CODE")	
+	@Column(name = "MDSR_CODE")
 	private String prod_code;
 
 	/**
@@ -68,66 +69,69 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	 */
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MDSR_MDSRT_ID_A")
+	@JoinColumn(name = "MDSR_MDSRT_ID_A")
 	private MedicalType type;
 
 	/**
 	 * Description of the medical
 	 */
 	@NotNull
-	@Column(name="MDSR_DESC")
+	@Column(name = "MDSR_DESC")
 	private String description;
 
 	/**
 	 * Initial quantity
 	 */
 	@NotNull
-	@Column(name="MDSR_INI_STOCK_QTI")
+	@Column(name = "MDSR_INI_STOCK_QTI")
 	private double initialqty;
-	
+
 	/**
 	 * Pieces per packet
 	 */
 	@NotNull
-	@Column(name="MDSR_PCS_X_PCK")
+	@Column(name = "MDSR_PCS_X_PCK")
 	private Integer pcsperpck;
 
 	/**
 	 * Input quantity
 	 */
 	@NotNull
-	@Column(name="MDSR_IN_QTI")
+	@Column(name = "MDSR_IN_QTI")
 	private double inqty;
 
 	/**
 	 * Out quantity
 	 */
 	@NotNull
-	@Column(name="MDSR_OUT_QTI")
+	@Column(name = "MDSR_OUT_QTI")
 	private double outqty;
-	
+
 	/**
 	 * Minimum quantity
 	 */
 	@NotNull
-	@Column(name="MDSR_MIN_STOCK_QTI")
+	@Column(name = "MDSR_MIN_STOCK_QTI")
 	private double minqty;
 
 	/**
 	 * Lock control
 	 */
 	@Version
-	@Column(name="MDSR_LOCK")
+	@Column(name = "MDSR_LOCK")
 	private Integer lock;
-	
+
+	@NotNull
+	@Column(name = "MDSR_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N'; // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+
 	@Transient
 	private volatile int hashCode;
-		
 
-	public Medical() { }
-	
-	
-	public Medical(Integer code) { 
+	public Medical() {
+	}
+
+	public Medical(Integer code) {
 		super();
 		this.code = code;
 	}
@@ -135,7 +139,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	 * Constructor
 	 */
 	public Medical(Integer code, MedicalType type, String prodCode, String description,
-			double initialqty, Integer pcsperpck, double minqty, double inqty, double outqty) {
+					double initialqty, Integer pcsperpck, double minqty, double inqty, double outqty) {
 		super();
 		this.code = code;
 		this.type = type;
@@ -143,13 +147,12 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.description = description;
 		this.initialqty = initialqty;
 		this.pcsperpck = pcsperpck;
-		this.minqty=minqty;
+		this.minqty = minqty;
 		this.inqty = inqty;
 		this.outqty = outqty;
 	}
-	
-	public double getTotalQuantity()
-	{
+
+	public double getTotalQuantity() {
 		return initialqty + inqty - outqty;
 	}
 
@@ -232,6 +235,14 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.pcsperpck = pcsperpck;
 	}
 
+	public char getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(char deleted) {
+		this.deleted = deleted;
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 		if (!(anObject instanceof Medical)) {
@@ -246,9 +257,9 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		return (getCode().equals(((Medical) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Medical) anObject).getDescription())
 						&& getType().equals(((Medical) anObject).getType())
-						&& getInitialqty()==(((Medical) anObject).getInitialqty()) 
-						&& getInqty()==(((Medical) anObject).getInqty())
-						&& getOutqty()==(((Medical) anObject).getOutqty()));
+						&& getInitialqty() == (((Medical) anObject).getInitialqty())
+						&& getInqty() == (((Medical) anObject).getInqty())
+						&& getOutqty() == (((Medical) anObject).getOutqty()));
 	}
 
 	@Override
@@ -263,20 +274,20 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+		return super.clone();
+	}
 }
