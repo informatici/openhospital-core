@@ -116,8 +116,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Store the specified {@link Movement} by using automatically the most old lots
-	 * and splitting in more movements if required
+	 * Store the specified {@link Movement} by using automatically the most old lots and splitting in more movements if required
 	 * @param movement - the {@link Movement} to store
 	 * @throws OHServiceException
 	 */
@@ -273,11 +272,9 @@ public class MedicalStockIoOperations {
 	/**
 	 * Retrieves the {@link Lot}.
 	 * 
-	 * @param lotCode
-	 *            the lot code.
+	 * @param lotCode the lot code.
 	 * @return the retrieved {@link Lot}.
-	 * @throws OHServiceException
-	 *             if an error occurs during the check.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
 		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
@@ -286,11 +283,9 @@ public class MedicalStockIoOperations {
 	/**
 	 * Update the {@link Lot}.
 	 * 
-	 * @param lot
-	 *            - the lot.
+	 * @param lot - the lot.
 	 * @return the {@link Lot} updated.
-	 * @throws OHServiceException
-	 *             if an error occurs during the check.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot updateLot(Lot lot) throws OHServiceException {
 		return lotRepository.save(lot);
@@ -381,14 +376,10 @@ public class MedicalStockIoOperations {
 	 * If the date is present in the table, the balance is updated If the date is not present, a new balance is inserted for the date and the previous one is
 	 * updated with the current date as 'next mov date' and calculated the days of stock for the previous balance
 	 * 
-	 * @param dbQuery
-	 *            the {@link DbQueryLogger} to use.
-	 * @param medicalCode
-	 *            the medical code.
-	 * @param date
-	 *            the date of the new balance
-	 * @param incrementQuantity
-	 *            the quantity to add (remove if negative) to the current latest balance.
+	 * @param dbQuery the {@link DbQueryLogger} to use.
+	 * @param medicalCode the medical code.
+	 * @param date the date of the new balance
+	 * @param incrementQuantity the quantity to add (remove if negative) to the current latest balance.
 	 */
 	private MedicalStock updateMedicalStockTable(Medical medical, LocalDate date, int incrementQuantity) throws OHServiceException {
 
@@ -464,8 +455,8 @@ public class MedicalStockIoOperations {
 	/**
 	 * Retrieves all the stored {@link Movement}s for the specified {@link Ward}.
 	 * @param wardId the ward id.
-	 * @param dateTo 
-	 * @param dateFrom 
+	 * @param dateTo
+	 * @param dateFrom
 	 * @return the list of retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
@@ -569,8 +560,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top
-	 * Lots with zero quantities will be stripped out
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
@@ -621,7 +611,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Returns the date of the last movement
-	 * @return 
+	 * @return
 	 * @throws OHServiceException
 	 */
 	public LocalDateTime getLastMovementDate() throws OHServiceException {
@@ -638,11 +628,10 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves all the movement associated to the specified reference number.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Retrieves all the movement associated to the specified reference number. In case of error a message error is shown and a {@code null} value is returned.
 	 * @param refNo the reference number.
 	 * @return the retrieved movements.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovementsByReference(String refNo) throws OHServiceException {
 		return movRepository.findAllByRefNo(refNo);
@@ -652,7 +641,7 @@ public class MedicalStockIoOperations {
 	 * Retrieves the last movement.
 	 * 
 	 * @return the retrieved movement.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public Movement getLastMovement() throws OHServiceException {
 		return movRepository.findLastMovement();
@@ -662,7 +651,7 @@ public class MedicalStockIoOperations {
 	 * Deletes the movement.
 	 * 
 	 * @param movement - the movement to delete
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public void deleteMovement(Movement movement) throws OHServiceException {
 		Medical medical = movement.getMedical();
@@ -685,9 +674,8 @@ public class MedicalStockIoOperations {
 			}
 			if (newQuantity == 0) {
 				medicalStockRepository.delete(lastMedicalStock);
-				medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(code);
-				if (!medicalStockList.isEmpty()) {
-					lastMedicalStock = medicalStockList.get(0);
+				if (medicalStockList.size() > 1) {
+					lastMedicalStock = medicalStockList.get(1);
 					lastMedicalStock.setNextMovDate(null);
 					lastMedicalStock.setDays(null);
 					medicalStockRepository.save(lastMedicalStock);
@@ -700,13 +688,12 @@ public class MedicalStockIoOperations {
 		} else {
 			if (lastMedicalStock.getBalance() == 0) {
 				medicalStockRepository.delete(lastMedicalStock);
-				medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(code);
-				if (medicalStockList.isEmpty()) {
+				if (medicalStockList.size() == 1) {
 					throw new OHServiceException(new OHExceptionMessage(
 									"Medical '" + medical.getDescription() + "' (" + code
 													+ ") quantity prior the delete movement not found (not possible after discharge movement)."));
 				} else {
-					lastMedicalStock = medicalStockList.get(0);
+					lastMedicalStock = medicalStockList.get(1);
 					lastMedicalStock.setNextMovDate(null);
 					lastMedicalStock.setDays(null);
 					medicalStockRepository.save(lastMedicalStock);
