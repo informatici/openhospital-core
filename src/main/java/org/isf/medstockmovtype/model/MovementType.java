@@ -34,7 +34,7 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSRSTOCKMOVTYPE")
+@Table(name = "OH_MEDICALDSRSTOCKMOVTYPE")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MMVT_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MMVT_CREATED_DATE", updatable = false))
@@ -44,88 +44,100 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MovementType extends Auditable<String> {
 
 	@Id
-	@Column(name="MMVT_ID_A")	   
-    private String code;
+	@Column(name = "MMVT_ID_A")
+	private String code;
 
 	@NotNull
-	@Column(name="MMVT_DESC")	
-    private String description;
+	@Column(name = "MMVT_DESC")
+	private String description;
 
 	@NotNull
-	@Column(name="MMVT_TYPE")	
-    private String type;
+	@Column(name = "MMVT_TYPE")
+	private String type;
+
+	@NotNull
+	@Column(name = "MMVT_CATEGORY")
+	private String category; // 'production' or 'inventory'
 
 	@Transient
 	private volatile int hashCode;
 
 	public MovementType() {
 	}
-    
-    /**
-     * @param code
-     * @param description
-     * @param type
-     */
-    public MovementType(String code, String description, String type) {
-	    this.code = code;
-	    this.description = description;
-	    this.type = type;
-    }
-    
-    public String getCode() {
-        return this.code;
-    }
-    
-    public void setCode(String code) {
-        this.code = code;
-    }
-    
-    public String getDescription() {
-        return this.description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+
+	/**
+	 * @param code
+	 * @param description
+	 * @param type
+	 */
+	public MovementType(String code, String description, String type) {
+		this.code = code;
+		this.description = description;
+		this.type = type;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getType() {
 		return type;
 	}
-	
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-    @Override
-    public String toString() {
-        return getDescription();
-    }
-    
-    @Override
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	@Override
+	public String toString() {
+		return getDescription();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof MovementType)) {
 			return false;
 		}
-		
-		MovementType movementType = (MovementType)obj;
+
+		MovementType movementType = (MovementType) obj;
 		return (this.getCode().equals(movementType.getCode()));
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }

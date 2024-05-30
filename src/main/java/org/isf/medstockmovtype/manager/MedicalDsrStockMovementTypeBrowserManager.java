@@ -22,7 +22,9 @@
 package org.isf.medstockmovtype.manager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
@@ -31,6 +33,7 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.validator.DefaultSorter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -45,18 +48,54 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		this.ioOperations = medicalDsrStockMovementTypeIoOperation;
 	}
 
+	protected LinkedHashMap<String, String> categoryHashMap;
+
+	private void buildCategoryHashMap() {
+		categoryHashMap = new LinkedHashMap<>(6);
+		categoryHashMap.put("production", MessageBundle.getMessage("angal.medstockmovtype.category.production.txt"));
+		categoryHashMap.put("inventory", MessageBundle.getMessage("angal.medstockmovtype.category.inventory.txt"));
+	}
+
+	public List<String> getCategoryList() {
+		if (categoryHashMap == null) {
+			buildCategoryHashMap();
+		}
+		List<String> categoryDescriptionList = new ArrayList<>(categoryHashMap.values());
+		categoryDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.medstockmovtype.category.production.txt")));
+		return categoryDescriptionList;
+	}
+
+	public String getCategoryTranslated(String categoryKey) {
+		if (categoryHashMap == null) {
+			buildCategoryHashMap();
+		}
+		return categoryHashMap.get(categoryKey);
+	}
+
+	public String getCategoryKey(String description) {
+		if (categoryHashMap == null) {
+			buildCategoryHashMap();
+		}
+		for (Map.Entry<String, String> entry : categoryHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
+			}
+		}
+		return "";
+	}
+
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param movementType
-	 * @param insert
-	 *            {@code true} or updated {@code false}
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException {
 		String key = movementType.getCode();
 		String key2 = movementType.getType();
 		String description = movementType.getDescription();
+		String category = movementType.getCategory();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
@@ -69,6 +108,12 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		}
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+		}
+		if (category.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidcategory.msg")));
+		}
+		if (category.length() > 10) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10)));
 		}
 		if (insert && isCodePresent(key)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
@@ -91,8 +136,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	/**
 	 * Save the specified {@link MovementType}.
 	 *
-	 * @param medicalDsrStockMovementType
-	 *            the medical stock movement type to save.
+	 * @param medicalDsrStockMovementType the medical stock movement type to save.
 	 * @return {@code true} if the medical stock movement type has been saved, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -104,8 +148,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	/**
 	 * Updates the specified {@link MovementType}.
 	 *
-	 * @param medicalDsrStockMovementType
-	 *            the medical stock movement type to update.
+	 * @param medicalDsrStockMovementType the medical stock movement type to update.
 	 * @return {@code true} if the medical stock movement type has been updated, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -117,8 +160,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	/**
 	 * Checks if the specified {@link MovementType} code is already used.
 	 *
-	 * @param code
-	 *            the code to check.
+	 * @param code the code to check.
 	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -129,8 +171,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	/**
 	 * Deletes the specified {@link MovementType}.
 	 *
-	 * @param medicalDsrStockMovementType
-	 *            the medical stock movement type to delete.
+	 * @param medicalDsrStockMovementType the medical stock movement type to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
@@ -140,8 +181,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 	/**
 	 * Get the {@link MovementType} code. In case of error a message error is shown and a {@code false} value is returned.
 	 *
-	 * @param code
-	 *            the code to check.
+	 * @param code the code to check.
 	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 */
 	public MovementType getMovementType(String code) {

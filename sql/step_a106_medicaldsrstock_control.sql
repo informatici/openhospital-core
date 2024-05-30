@@ -1,3 +1,6 @@
+-- Add consumption flag to movementstock types
+ALTER TABLE OH_MEDICALDSRSTOCKMOVTYPE ADD COLUMN MMVT_CATEGORY VARCHAR(10) NOT NULL DEFAULT 'production' AFTER `MMVT_TYPE` COMMENT 'production or inventory';
+
 -- Create new table for balances history
 CREATE TABLE OH_MEDICALDSRSTOCK (
   MS_ID int(11) NOT NULL AUTO_INCREMENT,
