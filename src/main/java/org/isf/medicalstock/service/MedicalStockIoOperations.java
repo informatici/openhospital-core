@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstock.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,9 +34,13 @@ import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.MedicalStock;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medtype.model.MedicalType;
+import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -48,10 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Persistence class for MedicalStock module.
- * 		   modified by alex:
- * 			- reflection from Medicals product code
- * 			- reflection from Medicals pieces per packet
- * 			- added complete Ward and Movement construction in getMovement()
  */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -66,15 +67,19 @@ public class MedicalStockIoOperations {
 
 	private MedicalsIoOperationRepository medicalRepository;
 
-	private MedicalStockWardIoOperationRepository medicalStockRepository;
+	private MedicalStockIoOperationRepository medicalStockRepository;
+
+	private MedicalStockWardIoOperationRepository medicalStockWardRepository;
 
 	public MedicalStockIoOperations(MovementIoOperationRepository movementIoOperationRepository, LotIoOperationRepository lotIoOperationRepository,
-	                                MedicalsIoOperationRepository medicalsIoOperationRepository,
-	                                MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository) {
+					MedicalsIoOperationRepository medicalsIoOperationRepository,
+					MedicalStockIoOperationRepository medicalStockIoOperationRepository,
+					MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository) {
 		this.movRepository = movementIoOperationRepository;
 		this.lotRepository = lotIoOperationRepository;
 		this.medicalRepository = medicalsIoOperationRepository;
-		this.medicalStockRepository = medicalStockWardIoOperationRepository;
+		this.medicalStockRepository = medicalStockIoOperationRepository;
+		this.medicalStockWardRepository = medicalStockWardIoOperationRepository;
 	}
 
 	public enum MovementOrder {
@@ -83,6 +88,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Checks if we are in automatic lot mode.
+	 * 
 	 * @return {@code true} if automatic lot mode, {@code false} otherwise.
 	 */
 	private boolean isAutomaticLotMode() {
@@ -98,7 +104,7 @@ public class MedicalStockIoOperations {
 	public List<Integer> getMedicalsFromLot(String lotCode) throws OHServiceException {
 		return movRepository.findAllByLot(lotCode);
 	}
-	
+
 	/**
 	 * Retrieves all movements referencing the specified lot.
 	 * @param lot - the lot.
@@ -263,22 +269,28 @@ public class MedicalStockIoOperations {
 	public boolean lotExists(String lotCode) throws OHServiceException {
 		return lotRepository.findById(String.valueOf(lotCode)).orElse(null) != null;
 	}
-	
+
 	/**
 	 * Retrieves the {@link Lot}.
-	 * @param lotCode the lot code.
+	 * 
+	 * @param lotCode
+	 *            the lot code.
 	 * @return the retrieved {@link Lot}.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
 		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
 	}
-	
+
 	/**
 	 * Update the {@link Lot}.
-	 * @param lot - the lot.
+	 * 
+	 * @param lot
+	 *            - the lot.
 	 * @return the {@link Lot} updated.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
 	public Lot updateLot(Lot lot) throws OHServiceException {
 		return lotRepository.save(lot);
@@ -309,12 +321,16 @@ public class MedicalStockIoOperations {
 		if (movement.getType().getType().contains("+")) {
 			// incoming medical stock
 			Medical medical = movement.getMedical();
-			return updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
+			Medical updatedMedical = updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
+			updateMedicalStockTable(updatedMedical, movement.getDate().toLocalDate(), movement.getQuantity());
+			return updatedMedical;
+
 		} else {
 			// outgoing medical stock
 			Medical medical = movement.getMedical();
 			try {
 				Medical updatedMedical = updateMedicalOutcomingQuantity(medical.getCode(), movement.getQuantity());
+				updateMedicalStockTable(updatedMedical, movement.getDate().toLocalDate(), -movement.getQuantity());
 				Ward ward = movement.getWard();
 				if (ward != null) {
 					// updates stock quantity for wards
@@ -360,6 +376,61 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
+	 * Updates the medical stock balance for the specified medical at the specified date.
+	 * 
+	 * If the date is present in the table, the balance is updated If the date is not present, a new balance is inserted for the date and the previous one is
+	 * updated with the current date as 'next mov date' and calculated the days of stock for the previous balance
+	 * 
+	 * @param dbQuery
+	 *            the {@link DbQueryLogger} to use.
+	 * @param medicalCode
+	 *            the medical code.
+	 * @param date
+	 *            the date of the new balance
+	 * @param incrementQuantity
+	 *            the quantity to add (remove if negative) to the current latest balance.
+	 */
+	private MedicalStock updateMedicalStockTable(Medical medical, LocalDate date, int incrementQuantity) throws OHServiceException {
+
+		List<MedicalStock> medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(medical.getCode());
+		MedicalStock medicalStock;
+
+		if (medicalStockList.isEmpty()) {
+			// first insert
+			medicalStock = new MedicalStock();
+			medicalStock.setMedical(medical);
+			medicalStock.setBalanceDate(date);
+			medicalStock.setBalance(incrementQuantity); // balance = first increment
+			return medicalStockRepository.save(medicalStock);
+
+		} else {
+
+			medicalStock = medicalStockList.get(0);
+			if (TimeTools.isSameDay(date, medicalStock.getBalanceDate())) {
+				// update
+				int balance = medicalStock.getBalance();
+				medicalStock.setBalance(balance + incrementQuantity);
+				medicalStock.setBalanceDate(date);
+				return medicalStockRepository.save(medicalStock);
+
+			} else {
+				// update previous
+				medicalStock.setNextMovDate(date);
+				medicalStock.setDays(TimeTools.getDaysBetweenDates(medicalStock.getBalanceDate(), date, true));
+				medicalStockRepository.save(medicalStock);
+
+				// insert new
+				int newBalance = medicalStock.getBalance() + incrementQuantity;
+				MedicalStock newMedicalStock = new MedicalStock();
+				newMedicalStock.setMedical(medical);
+				newMedicalStock.setBalanceDate(date);
+				newMedicalStock.setBalance(newBalance);
+				return medicalStockRepository.save(newMedicalStock);
+			}
+		}
+	}
+
+	/**
 	 * Updates medical quantity for the specified ward.
 	 * @param ward the ward.
 	 * @param medical the medical.
@@ -369,16 +440,16 @@ public class MedicalStockIoOperations {
 	 */
 	@SuppressWarnings("unchecked")
 	protected MedicalWard updateMedicalWardQuantity(Ward ward, Medical medical, int quantity, Lot lot) throws OHServiceException {
-		MedicalWard medicalWard = medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
+		MedicalWard medicalWard = medicalStockWardRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
 
 		if (medicalWard != null) {
 			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
-			medicalStockRepository.save(medicalWard);
+			medicalStockWardRepository.save(medicalWard);
 		} else {
 			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
-			medicalStockRepository.insertMedicalWard(ward.getCode(), medical.getCode(), (double) quantity, lot.getCode());
+			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), (double) quantity, lot.getCode());
 		}
-		return medicalStockRepository.save(medicalWard);
+		return medicalStockWardRepository.save(medicalWard);
 	}
 
 	/**
@@ -576,7 +647,7 @@ public class MedicalStockIoOperations {
 	public List<Movement> getMovementsByReference(String refNo) throws OHServiceException {
 		return movRepository.findAllByRefNo(refNo);
 	}
-	
+
 	/**
 	 * Retrieves the last movement.
 	 * 
@@ -586,7 +657,7 @@ public class MedicalStockIoOperations {
 	public Movement getLastMovement() throws OHServiceException {
 		return movRepository.findLastMovement();
 	}
-	
+
 	/**
 	 * Deletes the movement.
 	 * 
@@ -594,6 +665,58 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public void deleteMovement(Movement movement) throws OHServiceException {
+		Medical medical = movement.getMedical();
+		int code = medical.getCode();
+		List<MedicalStock> medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(code);
+		if (medicalStockList.isEmpty()) {
+			throw new OHServiceException(new OHExceptionMessage("Medical '" + medical.getDescription() + "' (" + code + ") not found (not possible)."));
+		}
+		MovementType movType = movement.getType();
+		MedicalStock lastMedicalStock = medicalStockList.get(0);
+		if (movType.getType().contains("+")) {
+			if (lastMedicalStock.getBalance() == 0) {
+				throw new OHServiceException(new OHExceptionMessage(
+								"Medical '" + medical.getDescription() + "' (" + code + ") quantity was zero (not possible after charge movement)."));
+			}
+			int newQuantity = lastMedicalStock.getBalance() - movement.getQuantity();
+			if (newQuantity < 0) {
+				throw new OHServiceException(new OHExceptionMessage(
+								"Medical '" + medical.getDescription() + "' (" + code + ") quantity was less than last movement quantity (not possible)."));
+			}
+			if (newQuantity == 0) {
+				medicalStockRepository.delete(lastMedicalStock);
+				medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(code);
+				if (!medicalStockList.isEmpty()) {
+					lastMedicalStock = medicalStockList.get(0);
+					lastMedicalStock.setNextMovDate(null);
+					lastMedicalStock.setDays(null);
+					medicalStockRepository.save(lastMedicalStock);
+				}
+			} else {
+				lastMedicalStock.setBalance(newQuantity);
+				lastMedicalStock.setBalanceDate(movement.getDate().toLocalDate());
+				medicalStockRepository.save(lastMedicalStock);
+			}
+		} else {
+			if (lastMedicalStock.getBalance() == 0) {
+				medicalStockRepository.delete(lastMedicalStock);
+				medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(code);
+				if (medicalStockList.isEmpty()) {
+					throw new OHServiceException(new OHExceptionMessage(
+									"Medical '" + medical.getDescription() + "' (" + code
+													+ ") quantity prior the delete movement not found (not possible after discharge movement)."));
+				} else {
+					lastMedicalStock = medicalStockList.get(0);
+					lastMedicalStock.setNextMovDate(null);
+					lastMedicalStock.setDays(null);
+					medicalStockRepository.save(lastMedicalStock);
+				}
+			} else {
+				int newQuantity = lastMedicalStock.getBalance() + movement.getQuantity();
+				lastMedicalStock.setBalance(newQuantity);
+				medicalStockRepository.save(lastMedicalStock);
+			}
+		}
 		movRepository.delete(movement);
 	}
 
