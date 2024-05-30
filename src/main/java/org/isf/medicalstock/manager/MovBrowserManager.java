@@ -57,7 +57,7 @@ public class MovBrowserManager {
 	private MovWardBrowserManager movWardBrowserManager;
 
 	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
-	                         MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
+					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
@@ -178,10 +178,10 @@ public class MovBrowserManager {
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 			List<Movement> movementWithSameLot = ioOperations.getMovementByLot(lot);
+			ioOperations.deleteMovement(lastMovement);
 			if (movementWithSameLot.size() == 1) {
 				lotRepository.deleteById(lot.getCode());
 			}
-			ioOperations.deleteMovement(lastMovement);
 		} else {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
