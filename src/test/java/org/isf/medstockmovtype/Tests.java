@@ -213,6 +213,24 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrMovementTypeValidationNoCategory() throws Exception {
+		assertThatThrownBy(() -> {
+			MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", null);
+			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
+		})
+						.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrMovementTypeValidationCategoryNotAllowed() throws Exception {
+		assertThatThrownBy(() -> {
+			MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "abcdefg");
+			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
+		})
+						.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
 	void testMovementTypeToString() throws Exception {
 		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "production");
 		assertThat(movementType).hasToString("TestDescription");

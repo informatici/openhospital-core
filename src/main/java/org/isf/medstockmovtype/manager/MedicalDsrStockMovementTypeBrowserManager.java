@@ -96,6 +96,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		String key2 = movementType.getType();
 		String description = movementType.getDescription();
 		String category = movementType.getCategory();
+		buildCategoryHashMap();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
@@ -109,11 +110,14 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
-		if (category.isEmpty()) {
+		if (category == null || category.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidcategory.msg")));
 		}
-		if (category.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10)));
+
+		if (!categoryHashMap.keySet().contains(category)) {
+			String messageParameter = String.join(", ", categoryHashMap.keySet());
+			errors.add(new OHExceptionMessage(
+							MessageBundle.formatMessage("angal.medstockmovtype.allowedcategoriesare.fmt.msg", messageParameter)));
 		}
 		if (insert && isCodePresent(key)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
