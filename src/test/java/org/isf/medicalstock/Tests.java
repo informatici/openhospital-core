@@ -41,6 +41,7 @@ import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicalstock.manager.MovBrowserManager;
 import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.MedicalStock;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
@@ -86,6 +87,7 @@ class Tests extends OHCoreTestCase {
 	private static TestMovementType testMovementType;
 	private static TestWard testWard;
 	private static TestSupplier testSupplier;
+	private static TestMedicalStock testMedicalStock;
 
 	@Autowired
 	MedicalStockIoOperations medicalStockIoOperation;
@@ -188,6 +190,18 @@ class Tests extends OHCoreTestCase {
 	void testMovementSets(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(true);
+		checkMovementIntoDb(code);
+	}
+
+	void testMedicalStockGets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMedicalStock(false);
+		checkMovementIntoDb(code);
+	}
+
+	void testMedicalStockSets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMedicalStock(true);
 		checkMovementIntoDb(code);
 	}
 
@@ -1423,6 +1437,13 @@ class Tests extends OHCoreTestCase {
 		movementListForManager.add(movement);
 		movStockInsertingManager.newMultipleChargingMovements(movementListForManager, movement.getRefNo());
 		return movement.getCode();
+	}
+
+	private int setupTestMedicalStock(boolean usingSet) throws OHException {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		MedicalStock medicalStock = testMedicalStock.setup(medical, false);
+		return medicalStock.getCode();
 	}
 
 	private void checkMovementIntoDb(int code) {
