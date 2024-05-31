@@ -1419,7 +1419,7 @@ class Tests extends OHCoreTestCase {
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);
-		List<Movement> movementListForManager = new ArrayList<Movement>();
+		List<Movement> movementListForManager = new ArrayList<Movement>(1);
 		movementListForManager.add(movement);
 		movStockInsertingManager.newMultipleChargingMovements(movementListForManager, movement.getRefNo());
 		return movement.getCode();
