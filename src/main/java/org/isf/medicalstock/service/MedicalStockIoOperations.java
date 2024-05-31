@@ -386,6 +386,10 @@ public class MedicalStockIoOperations {
 		List<MedicalStock> medicalStockList = medicalStockRepository.findByMedicalCodeOrderByBalanceDateDesc(medical.getCode());
 		MedicalStock medicalStock;
 
+		if (medicalStockList.isEmpty() && incrementQuantity < 0) {
+			throw new OHServiceException(
+							new OHExceptionMessage("Medical '" + medical.getDescription() + "' (" + medical.getCode() + ") not found (not possible)."));
+		}
 		if (medicalStockList.isEmpty()) {
 			// first insert
 			medicalStock = new MedicalStock();

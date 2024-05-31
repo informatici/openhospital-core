@@ -25,7 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,7 @@ import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -1386,6 +1390,101 @@ class Tests extends OHCoreTestCase {
 		movBrowserManager.deleteLastMovement(movement2);
 		Optional<Movement> followingMovement2 = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement2).isNotPresent();
+	}
+
+	@Test
+	void testIoUpdateMedicalStockTableSameDate() throws Exception {
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		Medical medical = movement.getMedical();
+		LocalDateTime dateTime = movement.getDate();
+		int quantity = movement.getQuantity();
+		int remainQuantity = quantity - quantity / 2; // to overcome tests with not even quantities
+
+		MedicalStockIoOperations medicalStockIoOperation = new MedicalStockIoOperations(movementIoOperationRepository, lotIoOperationRepository,
+						medicalsIoOperationRepository, medicalStockIoOperationRepository, medicalStockWardIoOperationRepository);
+
+		Method method = medicalStockIoOperation.getClass().getDeclaredMethod("updateMedicalStockTable", Medical.class, LocalDate.class, int.class);
+		method.setAccessible(true);
+		assertThat((MedicalStock) method.invoke(medicalStockIoOperation, medical, dateTime.toLocalDate(), -quantity / 2)).extracting("balance")
+						.isEqualTo(remainQuantity);
+		assertThat((MedicalStock) method.invoke(medicalStockIoOperation, medical, dateTime.toLocalDate(), -remainQuantity)).extracting("balance")
+						.isEqualTo(0);
+	}
+
+	@Test
+	void testIoUpdateMedicalStockTableDifferentDate() throws Exception {
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		Medical medical = movement.getMedical();
+		int quantity = movement.getQuantity();
+
+		MedicalStockIoOperations medicalStockIoOperation = new MedicalStockIoOperations(movementIoOperationRepository, lotIoOperationRepository,
+						medicalsIoOperationRepository, medicalStockIoOperationRepository, medicalStockWardIoOperationRepository);
+
+		Method method = medicalStockIoOperation.getClass().getDeclaredMethod("updateMedicalStockTable", Medical.class, LocalDate.class, int.class);
+		method.setAccessible(true);
+		LocalDate newDate = LocalDate.now();
+		int days = TimeTools.getDaysBetweenDates(movement.getDate().toLocalDate(), newDate, true);
+		assertThat((MedicalStock) method.invoke(medicalStockIoOperation, medical, newDate, quantity)).extracting("balance").isEqualTo(quantity * 2);
+		List<MedicalStock> medicalStockList = medicalStockIoOperationRepository.findByMedicalCodeOrderByBalanceDateDesc(medical.getCode());
+		assertThat(medicalStockList.size()).isEqualTo(2);
+		// previous record updated
+		assertThat(medicalStockList.get(1).getBalance()).isEqualTo(quantity);
+		assertThat(medicalStockList.get(1).getNextMovDate()).isEqualTo(newDate);
+		assertThat(medicalStockList.get(1).getDays()).isEqualTo(days);
+		// new record
+		assertThat(medicalStockList.get(0).getNextMovDate()).isNull();
+		assertThat(medicalStockList.get(0).getDays()).isNull();
+	}
+
+	@Test
+	void testIoUpdateMedicalStockTableEmptyTable() throws Exception {
+
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		LocalDate newDate = LocalDate.now();
+		int quantity = 10;
+
+		MedicalStockIoOperations medicalStockIoOperation = new MedicalStockIoOperations(movementIoOperationRepository, lotIoOperationRepository,
+						medicalsIoOperationRepository, medicalStockIoOperationRepository, medicalStockWardIoOperationRepository);
+
+		Method method = medicalStockIoOperation.getClass().getDeclaredMethod("updateMedicalStockTable", Medical.class, LocalDate.class, int.class);
+		method.setAccessible(true);
+		assertThat((MedicalStock) method.invoke(medicalStockIoOperation, medical, newDate, quantity)).extracting("balance").isEqualTo(quantity);
+
+	}
+
+	@Test
+	void testIoUpdateMedicalStockTableEmptyTableWithNegativeQuantity() throws Exception {
+		assertThatThrownBy(() -> {
+			MedicalType medicalType = testMedicalType.setup(false);
+			Medical medical = testMedical.setup(medicalType, false);
+			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+			medicalsIoOperationRepository.saveAndFlush(medical);
+			LocalDate newDate = LocalDate.now();
+			int quantity = -10;
+
+			MedicalStockIoOperations medicalStockIoOperation = new MedicalStockIoOperations(movementIoOperationRepository, lotIoOperationRepository,
+							medicalsIoOperationRepository, medicalStockIoOperationRepository, medicalStockWardIoOperationRepository);
+
+			Method method = medicalStockIoOperation.getClass().getDeclaredMethod("updateMedicalStockTable", Medical.class, LocalDate.class, int.class);
+			method.setAccessible(true);
+			try {
+				method.invoke(medicalStockIoOperation, medical, newDate, quantity);
+			} catch (InvocationTargetException e) {
+				if (e.getCause() instanceof OHServiceException) {
+					throw (OHServiceException) e.getCause();
+				} else {
+					throw e;
+				}
+			}
+		})
+						.isInstanceOf(OHServiceException.class);
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {
