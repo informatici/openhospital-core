@@ -36,6 +36,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.medicals.model.Medical;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -49,11 +50,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MedicalStock extends Auditable<String> {
 
 	public MedicalStock() {
-		super();
 	}
 
 	public MedicalStock(@NotNull Medical medical, @NotNull LocalDate balanceDate, @NotNull int balance, LocalDate nextMovDate, Integer days) {
-		super();
 		this.medical = medical;
 		this.balanceDate = balanceDate;
 		this.balance = balance;
