@@ -418,4 +418,8 @@ public class MovStockInsertingManager {
 			return dischargeMovement;
 		}
 	}
+
+	public void deleteLot(Lot lot) throws OHServiceException {
+		ioOperations.deletLot(lot);
+	}
 }

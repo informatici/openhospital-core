@@ -25,16 +25,21 @@ import java.util.List;
 
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
+import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Component;
+
+import jakarta.transaction.Transactional;
 
 @Component
 public class MedicalInventoryRowManager {
 
 	private MedicalInventoryRowIoOperation iOoperation;
+	private MovStockInsertingManager movStockInsertingManager;
 
-	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation) {
+	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovStockInsertingManager movStockInsertingManager) {
 		this.iOoperation = medicalInventoryRowIoOperation;
+		this.movStockInsertingManager = movStockInsertingManager;
 	}
 
 	/**
@@ -77,5 +82,24 @@ public class MedicalInventoryRowManager {
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
 		return iOoperation.getMedicalInventoryRowByInventoryId(inventoryId);
+	}
+
+	/**
+	 * Delete a list of inventory rows {@link MedicalInventoryRow}s
+	 *
+	 * @param inventoryRowsToDelete - the list of {@link MedicalInventoryRow}s
+	 * 
+	 * @throws OHServiceException
+	 */
+	@Transactional(rollbackOn = OHServiceException.class)
+	public void deleteMedicalInventoryRows(List<MedicalInventoryRow> inventoryRowsToDelete) throws OHServiceException {
+		for (MedicalInventoryRow invRow : inventoryRowsToDelete) {
+			if (invRow.isNewLot()) {
+				this.deleteMedicalInventoryRow(invRow);
+				movStockInsertingManager.deleteLot(invRow.getLot());		
+			} else {
+				this.deleteMedicalInventoryRow(invRow);
+			}	
+		}
 	}
 }

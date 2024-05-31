@@ -607,4 +607,8 @@ public class MedicalStockIoOperations {
 		return this.movRepository.countAllActiveMovements();
 	}
 
+	public void deletLot(Lot lot) throws OHServiceException {
+		lotRepository.delete(lot);
+	}
+
 }
