@@ -373,7 +373,7 @@ public class MedicalStockIoOperations {
 	/**
 	 * Updates the medical stock balance for the specified medical at the specified date.
 	 * 
-	 * If the date is present in the table, the balance is updated If the date is not present, a new balance is inserted for the date and the previous one is
+	 * If the date is present in the table, the balance is updated. If the date is not present, a new balance is inserted for the date and the previous one is
 	 * updated with the current date as 'next mov date' and calculated the days of stock for the previous balance
 	 * 
 	 * @param dbQuery the {@link DbQueryLogger} to use.

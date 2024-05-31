@@ -46,7 +46,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MS_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MS_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "MS_ACTIVE"))
-public class MedicalStock {
+public class MedicalStock extends Auditable<String> {
 
 	public MedicalStock() {
 		super();
