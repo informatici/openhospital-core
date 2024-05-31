@@ -116,15 +116,14 @@ class Tests extends OHCoreTestCase {
 
 	static Stream<Arguments> automaticlot() {
 		return Stream.of(
-			Arguments.of(false, false, false),
-			Arguments.of(false, false, true),
-			Arguments.of(false, true, false),
-			Arguments.of(false, true, true),
-			Arguments.of(true, false, false),
-			Arguments.of(true, false, true),
-			Arguments.of(true, true, false),
-			Arguments.of(true, true, true)
-		);
+						Arguments.of(false, false, false),
+						Arguments.of(false, false, true),
+						Arguments.of(false, true, false),
+						Arguments.of(false, true, true),
+						Arguments.of(true, false, false),
+						Arguments.of(true, false, true),
+						Arguments.of(true, true, false),
+						Arguments.of(true, true, true));
 	}
 
 	private static void setGeneralData(boolean in, boolean out, boolean toward) {
@@ -672,12 +671,12 @@ class Tests extends OHCoreTestCase {
 			Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 			assertThat(foundMovement).isNotNull();
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
-				foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, null, fromDate, toDate, fromDate, toDate);
+							foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, null, fromDate, toDate, fromDate, toDate);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -690,12 +689,12 @@ class Tests extends OHCoreTestCase {
 			Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 			assertThat(foundMovement).isNotNull();
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
-				foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, null, toDate, fromDate, toDate);
+							foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, null, toDate, fromDate, toDate);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -708,12 +707,12 @@ class Tests extends OHCoreTestCase {
 			Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 			assertThat(foundMovement).isNotNull();
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
-				foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, fromDate, toDate, fromDate, null);
+							foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, fromDate, toDate, fromDate, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -724,7 +723,7 @@ class Tests extends OHCoreTestCase {
 		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMovement).isNotNull();
 		List<Movement> movements = movBrowserManager.getMovements(null, null, foundMovement.getWard().getCode(), null,
-			null, null, null, null, null, null);
+						null, null, null, null, null, null);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -813,10 +812,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHDataValidationException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHDataValidationException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -844,10 +843,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleDischargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -889,10 +888,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -908,10 +907,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -925,10 +924,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -944,10 +943,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 3, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 3, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -963,7 +962,7 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 		// NB: number of messages not checked because it varies dependent on GeneralData values
 	}
 
@@ -979,10 +978,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 3, "Expecting three validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 3, "Expecting three validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -997,10 +996,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors: "));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors: "));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1015,10 +1014,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1033,10 +1032,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1056,7 +1055,7 @@ class Tests extends OHCoreTestCase {
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 			GeneralData.LOTWITHCOST = lotWithCost;
 		})
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 		// NB: number of messages not checked because it varies dependent on GeneralData values
 	}
 
@@ -1073,10 +1072,10 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHDataValidationException) e).getMessages().size() == 2, "Expecting two validation errors"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHDataValidationException) e).getMessages().size() == 2, "Expecting two validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1092,7 +1091,7 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 		// NB: number of messages not checked because it varies dependent on GeneralData values
 	}
 
@@ -1109,7 +1108,7 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 		// NB: number of messages not checked because it varies dependent on GeneralData values
 	}
 
@@ -1127,7 +1126,7 @@ class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 		// NB: number of messages not checked because it varies dependent on GeneralData values
 	}
 
@@ -1164,9 +1163,9 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestLot(true);
 		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
 		assertThat(lot)
-			.isEqualTo(lot)
-			.isNotNull()
-			.isNotEqualTo("someString");
+						.isEqualTo(lot)
+						.isNotNull()
+						.isNotEqualTo("someString");
 
 		Lot lot2 = new Lot(null);
 		assertThat(lot).isNotEqualTo(lot2);
@@ -1267,7 +1266,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovement(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovement(false);
+		int code = setupTestMovementUsingManager(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code);
 		assertThat(movement).isPresent();
 		movBrowserManager.deleteLastMovement(movement.get());
@@ -1403,6 +1402,26 @@ class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);
 		movementIoOperationRepository.saveAndFlush(movement);
+		return movement.getCode();
+	}
+
+	private int setupTestMovementUsingManager(boolean usingSet) throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		MovementType movementType = testMovementType.setup(false);
+		Ward ward = testWard.setup(false);
+		Lot lot = testLot.setup(medical, false);
+		Supplier supplier = testSupplier.setup(false);
+		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
+		supplierIoOperationRepository.saveAndFlush(supplier);
+		wardIoOperationRepository.saveAndFlush(ward);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		lotIoOperationRepository.saveAndFlush(lot);
+		List<Movement> movementListForManager = new ArrayList<Movement>();
+		movementListForManager.add(movement);
+		movStockInsertingManager.newMultipleChargingMovements(movementListForManager, movement.getRefNo());
 		return movement.getCode();
 	}
 

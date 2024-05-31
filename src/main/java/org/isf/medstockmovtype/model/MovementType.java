@@ -69,11 +69,13 @@ public class MovementType extends Auditable<String> {
 	 * @param code
 	 * @param description
 	 * @param type
+	 * @param category
 	 */
-	public MovementType(String code, String description, String type) {
+	public MovementType(String code, String description, String type, String category) {
 		this.code = code;
 		this.description = description;
 		this.type = type;
+		this.category = category;
 	}
 
 	public String getCode() {
