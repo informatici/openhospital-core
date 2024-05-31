@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MedicalStockIoOperationRepository extends JpaRepository<MedicalStock, String> {
+public interface MedicalStockIoOperationRepository extends JpaRepository<MedicalStock, Integer> {
 
 	List<MedicalStock> findByMedicalCodeOrderByBalanceDateDesc(int medicalCode);
 

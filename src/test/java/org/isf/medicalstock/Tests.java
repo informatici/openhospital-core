@@ -44,6 +44,7 @@ import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.MedicalStock;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
+import org.isf.medicalstock.service.MedicalStockIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
@@ -91,6 +92,8 @@ class Tests extends OHCoreTestCase {
 
 	@Autowired
 	MedicalStockIoOperations medicalStockIoOperation;
+	@Autowired
+	MedicalStockIoOperationRepository medicalStockIoOperationRepository;
 	@Autowired
 	MovBrowserManager movBrowserManager;
 	@Autowired
@@ -193,16 +196,14 @@ class Tests extends OHCoreTestCase {
 		checkMovementIntoDb(code);
 	}
 
-	void testMedicalStockGets(boolean in, boolean out, boolean toward) throws Exception {
-		setGeneralData(in, out, toward);
+	void testMedicalStockGets() throws Exception {
 		int code = setupTestMedicalStock(false);
-		checkMovementIntoDb(code);
+		checkMedicalStockIntoDb(code);
 	}
 
-	void testMedicalStockSets(boolean in, boolean out, boolean toward) throws Exception {
-		setGeneralData(in, out, toward);
+	void testMedicalStockSets() throws Exception {
 		int code = setupTestMedicalStock(true);
-		checkMovementIntoDb(code);
+		checkMedicalStockIntoDb(code);
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1292,7 +1293,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovementDenied(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovement(false);
+		int code = setupTestMovementUsingManager(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		Medical medical = movement.getMedical();
@@ -1329,7 +1330,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovementWithPriorMovements(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovement(false);
+		int code = setupTestMovementUsingManager(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		Medical medical = movement.getMedical();
@@ -1439,6 +1440,12 @@ class Tests extends OHCoreTestCase {
 		return movement.getCode();
 	}
 
+	private void checkMovementIntoDb(int code) {
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		testMovement.check(foundMovement);
+	}
+
 	private int setupTestMedicalStock(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
@@ -1446,9 +1453,9 @@ class Tests extends OHCoreTestCase {
 		return medicalStock.getCode();
 	}
 
-	private void checkMovementIntoDb(int code) {
-		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMovement).isNotNull();
-		testMovement.check(foundMovement);
+	private void checkMedicalStockIntoDb(int code) {
+		MedicalStock foundMedicalStock = medicalStockIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMedicalStock).isNotNull();
+		testMedicalStock.check(foundMedicalStock);
 	}
 }
