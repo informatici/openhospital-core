@@ -113,7 +113,6 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		if (category == null || category.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidcategory.msg")));
 		}
-
 		if (!categoryHashMap.keySet().contains(category)) {
 			String messageParameter = String.join(", ", categoryHashMap.keySet());
 			errors.add(new OHExceptionMessage(
