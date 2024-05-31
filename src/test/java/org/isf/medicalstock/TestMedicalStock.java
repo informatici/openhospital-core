@@ -27,6 +27,7 @@ import java.time.LocalDate;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.MedicalStock;
+import org.isf.medicalstock.model.Movement;
 import org.isf.utils.exception.OHException;
 
 public class TestMedicalStock {
@@ -50,6 +51,16 @@ public class TestMedicalStock {
 		return medicalStock;
 	}
 
+	public MedicalStock setup(Movement movement) {
+		MedicalStock medicalStock = new MedicalStock();
+		medicalStock.setMedical(movement.getMedical());
+		medicalStock.setBalanceDate(movement.getDate().toLocalDate());
+		medicalStock.setBalance(movement.getQuantity());
+		medicalStock.setNextMovDate(null);
+		medicalStock.setDays(null);
+		return medicalStock;
+	}
+
 	public void setParameters(Medical medical, MedicalStock medicalStock) {
 		medicalStock.setMedical(medical);
 		medicalStock.setBalanceDate(balanceDate);
@@ -64,4 +75,5 @@ public class TestMedicalStock {
 		assertThat(medicalStock.getNextMovDate()).isEqualTo(nextMovDate);
 		assertThat(medicalStock.getDays()).isEqualTo(days);
 	}
+
 }

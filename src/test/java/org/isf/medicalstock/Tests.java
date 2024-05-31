@@ -146,6 +146,7 @@ class Tests extends OHCoreTestCase {
 		testMovementType = new TestMovementType();
 		testWard = new TestWard();
 		testSupplier = new TestSupplier();
+		testMedicalStock = new TestMedicalStock();
 	}
 
 	@BeforeEach
@@ -162,6 +163,7 @@ class Tests extends OHCoreTestCase {
 		testMovementType = null;
 		testWard = null;
 		testSupplier = null;
+		testMedicalStock = null;
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1281,7 +1283,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovement(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovementUsingManager(false);
+		int code = setupTestMovement(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code);
 		assertThat(movement).isPresent();
 		movBrowserManager.deleteLastMovement(movement.get());
@@ -1293,7 +1295,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovementDenied(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovementUsingManager(false);
+		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		Medical medical = movement.getMedical();
@@ -1330,7 +1332,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testDeleteLastMovementWithPriorMovements(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		int code = setupTestMovementUsingManager(false);
+		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		Medical medical = movement.getMedical();
@@ -1410,6 +1412,7 @@ class Tests extends OHCoreTestCase {
 		Lot lot = testLot.setup(medical, false);
 		Supplier supplier = testSupplier.setup(false);
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
+		MedicalStock medicalStock = testMedicalStock.setup(movement);
 		supplierIoOperationRepository.saveAndFlush(supplier);
 		wardIoOperationRepository.saveAndFlush(ward);
 		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
@@ -1417,26 +1420,7 @@ class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);
 		movementIoOperationRepository.saveAndFlush(movement);
-		return movement.getCode();
-	}
-
-	private int setupTestMovementUsingManager(boolean usingSet) throws Exception {
-		MedicalType medicalType = testMedicalType.setup(false);
-		Medical medical = testMedical.setup(medicalType, false);
-		MovementType movementType = testMovementType.setup(false);
-		Ward ward = testWard.setup(false);
-		Lot lot = testLot.setup(medical, false);
-		Supplier supplier = testSupplier.setup(false);
-		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
-		supplierIoOperationRepository.saveAndFlush(supplier);
-		wardIoOperationRepository.saveAndFlush(ward);
-		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		lotIoOperationRepository.saveAndFlush(lot);
-		List<Movement> movementListForManager = new ArrayList<Movement>(1);
-		movementListForManager.add(movement);
-		movStockInsertingManager.newMultipleChargingMovements(movementListForManager, movement.getRefNo());
+		medicalStockIoOperationRepository.saveAndFlush(medicalStock);
 		return movement.getCode();
 	}
 
