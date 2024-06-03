@@ -74,7 +74,6 @@ import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -1392,7 +1391,8 @@ class Tests extends OHCoreTestCase {
 		assertThat(followingMovement2).isNotPresent();
 	}
 
-	@Test
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
 	void testIoUpdateMedicalStockTableSameDate() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
@@ -1413,7 +1413,8 @@ class Tests extends OHCoreTestCase {
 						.isEqualTo(0);
 	}
 
-	@Test
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
 	void testIoUpdateMedicalStockTableDifferentDate() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
@@ -1440,7 +1441,8 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalStockList.get(0).getDays()).isNull();
 	}
 
-	@Test
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
 	void testIoUpdateMedicalStockTableEmptyTable() throws Exception {
 
 		MedicalType medicalType = testMedicalType.setup(false);
@@ -1459,7 +1461,8 @@ class Tests extends OHCoreTestCase {
 
 	}
 
-	@Test
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
 	void testIoUpdateMedicalStockTableEmptyTableWithNegativeQuantity() throws Exception {
 		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
