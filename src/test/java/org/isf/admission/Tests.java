@@ -604,7 +604,7 @@ class Tests extends OHCoreTestCase {
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
 	@Transactional
-		// requires active session because of lazy loading of patient photo
+	// requires active session because of lazy loading of patient photo
 	void testIoDeletePatientPhotoNoPatient(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		Patient deletedPatient = admissionIoOperation.deletePatientPhoto(-99999);
