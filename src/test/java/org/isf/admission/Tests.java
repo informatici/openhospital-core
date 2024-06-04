@@ -303,10 +303,10 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = LocalDateTime.parse(str2);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		// when:
-		List<Admission> patients = admissionIoOperation.getAdmissionsByAdmDate(dateFrom, dateTo);
+		List<Admission> admissions = admissionIoOperation.getAdmissionsByAdmDate(dateFrom, dateTo);
 
 		// then:
-		assertThat(patients.get(0).getId()).isEqualTo(foundAdmission.getId());
+		assertThat(admissions.get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
