@@ -308,6 +308,18 @@ public class AdmissionBrowserManager {
 	protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
+		Ward ward = admission.getWard();
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg")));
+			throw new OHDataValidationException(errors);
+		}
+
+		LocalDateTime dateIn = admission.getAdmDate();
+		if (dateIn == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg")));
+			throw new OHDataValidationException(errors);
+		}
+
 		/*
 		 * Initialize AdmissionBrowserManager
 		 */
@@ -321,17 +333,6 @@ public class AdmissionBrowserManager {
 		// get year prog ( not null)
 		if (admission.getYProg() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg")));
-		}
-
-		Ward ward = admission.getWard();
-		if (ward == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg")));
-			throw new OHDataValidationException(errors);
-		}
-		LocalDateTime dateIn = admission.getAdmDate();
-		if (dateIn == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg")));
-			throw new OHDataValidationException(errors);
 		}
 		if (dateIn.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg")));
@@ -467,6 +468,7 @@ public class AdmissionBrowserManager {
 				if (admission.getDisDate() == null) {
 					limit = today;
 				} else {
+
 					limit = admission.getDisDate();
 				}
 				if (visitDate.isBefore(dateIn) || visitDate.isAfter(limit)) {
@@ -502,6 +504,7 @@ public class AdmissionBrowserManager {
 				// date control
 				if (admission.getDeliveryDate() == null) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg")));
+					throw new OHDataValidationException(errors);
 				}
 				LocalDateTime limit;
 				if (admission.getDisDate() == null) {
