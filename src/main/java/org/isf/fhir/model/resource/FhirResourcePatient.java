@@ -2,12 +2,59 @@ package org.isf.fhir.model.resource;
 
 import java.util.List;
 
-import org.isf.fhir.model.FhirResourceType;
 import org.isf.fhir.model.FhirUseType;
 
-public record FhirResourcePatient(FhirResourceType resourceType, String id, FhirText text, List<FhirIdentifier> identifier,
-                                  boolean active, List<FhirName> name, String gender, FhirContact contact, FhirOrganization organization,
-                                  FhirOrganization managingOrganization) {
+public class FhirResourcePatient extends FhirResource {
+
+	private FhirText text;
+	private List<FhirIdentifier> identifier;
+	private boolean active;
+	private List<FhirName> name;
+	private String gender;
+	private List<FhirContact> contact;
+	private FhirOrganization managingOrganization;
+
+	public FhirResourcePatient() {
+	}
+
+	public FhirResourcePatient(FhirText text, List<FhirIdentifier> identifier, boolean active,
+		List<FhirName> name, String gender, List<FhirContact> contact, FhirOrganization managingOrganization) {
+		this.text = text;
+		this.identifier = identifier;
+		this.active = active;
+		this.name = name;
+		this.gender = gender;
+		this.contact = contact;
+		this.managingOrganization = managingOrganization;
+	}
+
+	public FhirText getText() {
+		return text;
+	}
+
+	public List<FhirIdentifier> getIdentifier() {
+		return identifier;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public List<FhirName> getName() {
+		return name;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public List<FhirContact> getContact() {
+		return contact;
+	}
+
+	public FhirOrganization getManagingOrganization() {
+		return managingOrganization;
+	}
 
 	public record FhirText(String status, String div) {
 
@@ -21,23 +68,23 @@ public record FhirResourcePatient(FhirResourceType resourceType, String id, Fhir
 
 	}
 
-	private record FhirCoding(String system, String code) {
+	public record FhirCoding(String system, String code) {
 
 	}
 
-	private record FhirName(FhirUseType use, String family, List<String> given) {
+	public record FhirName(FhirUseType use, String family, List<String> given) {
 
 	}
 
-	private record FhirContact(List<FhirContactRelationship> relationship) {
+	public record FhirContact(List<FhirContactRelationship> relationship, FhirOrganization organization) {
 
 	}
 
-	private record FhirContactRelationship(List<FhirCoding> coding) {
+	public record FhirContactRelationship(List<FhirCoding> coding) {
 
 	}
 
-	private record FhirOrganization(String reference, String display) {
+	public record FhirOrganization(String reference, String display) {
 
 	}
 
