@@ -1233,7 +1233,7 @@ class Tests extends OHCoreTestCase {
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		GeneralData.LANGUAGE = "en";
 
-		admission.setVisitDate(null);
+		admission.setVisitDate(null); // here just to increase code tests coverage
 		admission.setDeliveryDate(admission.getAdmDate().minusDays(30));
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
 				.isInstanceOf(OHDataValidationException.class)
