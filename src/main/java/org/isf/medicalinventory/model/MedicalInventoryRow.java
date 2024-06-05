@@ -151,7 +151,6 @@ public class MedicalInventoryRow extends Auditable<String> {
 		return isNewLot;
 	}
 
-	
 	public void setNewLot(boolean isNewLot) {
 		this.isNewLot = isNewLot;
 	}
