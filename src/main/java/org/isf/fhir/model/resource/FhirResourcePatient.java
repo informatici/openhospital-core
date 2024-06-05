@@ -1,7 +1,9 @@
 package org.isf.fhir.model.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.fhir.model.FhirResourceType;
 import org.isf.fhir.model.FhirUseType;
 
 public class FhirResourcePatient extends FhirResource {
@@ -17,8 +19,9 @@ public class FhirResourcePatient extends FhirResource {
 	public FhirResourcePatient() {
 	}
 
-	public FhirResourcePatient(FhirText text, List<FhirIdentifier> identifier, boolean active,
+	public FhirResourcePatient(FhirResourceType resourceType, String id, FhirText text, List<FhirIdentifier> identifier, boolean active,
 		List<FhirName> name, String gender, List<FhirContact> contact, FhirOrganization managingOrganization) {
+		super(resourceType, id);
 		this.text = text;
 		this.identifier = identifier;
 		this.active = active;
@@ -27,6 +30,9 @@ public class FhirResourcePatient extends FhirResource {
 		this.contact = contact;
 		this.managingOrganization = managingOrganization;
 	}
+
+
+
 
 	public FhirText getText() {
 		return text;
@@ -64,7 +70,7 @@ public class FhirResourcePatient extends FhirResource {
 
 	}
 
-	private record FhirPatientType(List<FhirCoding> coding, String system, String value) {
+	public record FhirPatientType(List<FhirCoding> coding) {
 
 	}
 
@@ -89,7 +95,65 @@ public class FhirResourcePatient extends FhirResource {
 	}
 
 
+	public static PatientBuilder builder() {
+		return new PatientBuilder();
+	}
 
+
+
+	public static class PatientBuilder {
+		private String id;
+		private FhirText text;
+		private List<FhirIdentifier> identifiers = new ArrayList<>();
+		private boolean active;
+		private List<FhirName> names = new ArrayList<>();
+		private String gender;
+		private List<FhirContact> contacts = new ArrayList<>();
+		private FhirOrganization managingOrganization;
+
+
+		public PatientBuilder withId(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public PatientBuilder withText(String status, String div) {
+			this.text = new FhirText(status, div);
+			return this;
+		}
+
+		public PatientBuilder withIdentifier(FhirUseType useType, List<FhirCoding> fireCodings, String system, String value) {
+			identifiers.add(new FhirIdentifier(useType, new FhirPatientType(fireCodings), system, value ));
+			return this;
+		}
+
+		public PatientBuilder withActive(boolean active) {
+			this.active = active;
+			return this;
+		}
+
+		public PatientBuilder withName(FhirUseType use, String name, List<String> given) {
+			this.names.add(new FhirName(use, name, given));
+			return this;
+		}
+
+		public PatientBuilder withGender(String gender) {
+			this.gender = gender;
+			return this;
+		}
+
+		public PatientBuilder withContact(List<FhirCoding> fhirCodings, FhirOrganization organization) {
+			this.contacts.add(new FhirContact(List.of(new FhirContactRelationship(fhirCodings)), organization));
+			return this;
+		}
+		public PatientBuilder withManagingOrganization(FhirOrganization managingOrganization) {
+			this.managingOrganization = managingOrganization;
+			return this;
+		}
+		public FhirResourcePatient build() {
+			return new FhirResourcePatient(FhirResourceType.Patient, id, text, identifiers, active, names, gender, contacts, managingOrganization);
+		}
+	}
 
 
 	/*

@@ -12,7 +12,7 @@ public record FhirMessage(FhirResourceType resourceType,
                           String timestamp,
                           @JsonProperty("entry") List<FhirEntry> entries) {
 
-	private record FhirEntry(String fullUrl, FhirResource resource) {
+	public record FhirEntry(String fullUrl, FhirResource resource) {
 
 	}
 

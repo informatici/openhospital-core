@@ -1,26 +1,30 @@
 package org.isf.fhir;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.assertj.core.api.Assertions;
 import org.isf.fhir.model.FhirMessage;
 import org.isf.fhir.model.FhirResourceType;
+import org.isf.fhir.model.FhirUseType;
+import org.isf.fhir.model.resource.FhirResourcePatient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class FhirServiceTest {
+
 	@Autowired
 	private FhirService fhirService;
 
 	@Test
 	void testConvertStringToFhirMessage() {
 		Optional<FhirMessage> fhirMessage = fhirService.convertStringToFhirMessage(getFhirMessage());
-		Assertions.assertThat(fhirMessage).isPresent();
+		assertThat(fhirMessage).isPresent();
 	}
 
 	@Test
@@ -28,7 +32,29 @@ class FhirServiceTest {
 		FhirMessage fhirMessage = new FhirMessage(FhirResourceType.Bundle, UUID.randomUUID().toString(), FhirMessage.FhirMessageType.message,
 			Instant.now().toString(), List.of());
 		Optional<String> jsonRaw = fhirService.convertFhirMessageToJson(fhirMessage);
-		Assertions.assertThat(jsonRaw).isPresent();
+		assertThat(jsonRaw).isPresent();
+	}
+
+	@Test
+	void testConvertFhirMessageToJsonWithPatients() {
+		FhirMessage fhirMessage = new FhirMessage(FhirResourceType.Bundle, UUID.randomUUID().toString(), FhirMessage.FhirMessageType.message,
+			Instant.now().toString(), List.of(new FhirMessage.FhirEntry("http://url.com", createPatient())));
+		Optional<String> jsonRaw = fhirService.convertFhirMessageToJson(fhirMessage);
+		assertThat(jsonRaw).isPresent();
+		assertThat(jsonRaw.get()).contains("Patient");
+		assertThat(jsonRaw.get()).contains("http://url.com");
+		assertThat(jsonRaw.get()).contains("Donald");
+		assertThat(jsonRaw.get()).contains("Duck");
+	}
+
+	private FhirResourcePatient createPatient() {
+		return FhirResourcePatient.builder()
+			.withActive(true)
+			.withIdentifier(FhirUseType.usual, List.of(new FhirResourcePatient.FhirCoding("system", "code")), "system", "value")
+			.withContact(List.of(new FhirResourcePatient.FhirCoding("test", "M")), new FhirResourcePatient.FhirOrganization("reference", "display"))
+			.withName(FhirUseType.official, "Donald", List.of("Duck"))
+			.build();
+
 	}
 
 	private String getFhirMessage() {
@@ -158,6 +184,5 @@ class FhirServiceTest {
 			+ "  }]\n"
 			+ "}";
 	}
-
 
 }
