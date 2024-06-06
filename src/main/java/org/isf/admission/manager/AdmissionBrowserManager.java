@@ -139,7 +139,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(0, DEFAULT_PAGE_SIZE));
+		return ioOperations.getAdmissionsByAdmissionDatePages(dateFrom, dateTo, PageRequest.of(0, DEFAULT_PAGE_SIZE));
 	}
 
 	/**
@@ -166,22 +166,8 @@ public class AdmissionBrowserManager {
 	 * @return the list of Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Admission> getAdmissionsByDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmDate(dateFrom, dateTo);
-	}
-
-	/**
-	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
-	 * within the specified date range, divided by pages
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param page
-	 * @param size
-	 * @return the list of completed Admissions (could be empty)
-	 * @throws OHServiceException
-	 */
-	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo);
 	}
 
 	/**
@@ -311,19 +297,26 @@ public class AdmissionBrowserManager {
 		Ward ward = admission.getWard();
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg")));
-			throw new OHDataValidationException(errors);
 		}
 
 		LocalDateTime dateIn = admission.getAdmDate();
 		if (dateIn == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg")));
+		}
+
+		Patient patient = admission.getPatient();
+		if (patient == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionpatientcannotbeempty.msg")));
+		}
+		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 
 		/*
 		 * Initialize AdmissionBrowserManager
+		 *
+		 * ward, dateIn, and patient most all be resent for this next command to work
 		 */
-		Patient patient = admission.getPatient();
 		List<Admission> admList = getAdmissions(patient);
 
 		/*
@@ -519,7 +512,7 @@ public class AdmissionBrowserManager {
 
 			LocalDateTime ctrl2Date = admission.getCtrlDate2();
 			if (ctrl2Date != null) {
-				if (admission.getCtrlDate1() == null) {
+				if (ctrl1Date == null) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg")));
 				}
 				// date control
