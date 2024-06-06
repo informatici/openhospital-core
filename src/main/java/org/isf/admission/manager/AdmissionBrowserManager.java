@@ -497,16 +497,16 @@ public class AdmissionBrowserManager {
 				// date control
 				if (admission.getDeliveryDate() == null) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg")));
-					throw new OHDataValidationException(errors);
-				}
-				LocalDateTime limit;
-				if (admission.getDisDate() == null) {
-					limit = today;
 				} else {
-					limit = admission.getDisDate();
-				}
-				if (ctrl1Date.isBefore(admission.getDeliveryDate()) || ctrl1Date.isAfter(limit)) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg")));
+					LocalDateTime limit;
+					if (admission.getDisDate() == null) {
+						limit = today;
+					} else {
+						limit = admission.getDisDate();
+					}
+					if (ctrl1Date.isBefore(admission.getDeliveryDate()) || ctrl1Date.isAfter(limit)) {
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg")));
+					}
 				}
 			}
 
@@ -514,16 +514,17 @@ public class AdmissionBrowserManager {
 			if (ctrl2Date != null) {
 				if (ctrl1Date == null) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg")));
-				}
-				// date control
-				LocalDateTime limit;
-				if (admission.getDisDate() == null) {
-					limit = today;
 				} else {
-					limit = admission.getDisDate();
-				}
-				if (ctrl1Date != null && (ctrl2Date.isBefore(ctrl1Date) || ctrl2Date.isAfter(limit))) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg")));
+					// date control
+					LocalDateTime limit;
+					if (admission.getDisDate() == null) {
+						limit = today;
+					} else {
+						limit = admission.getDisDate();
+					}
+					if (ctrl1Date != null && (ctrl2Date.isBefore(ctrl1Date) || ctrl2Date.isAfter(limit))) {
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg")));
+					}
 				}
 			}
 			LocalDateTime abortDate = admission.getAbortDate();
