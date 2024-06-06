@@ -420,6 +420,6 @@ public class MovStockInsertingManager {
 	}
 
 	public void deleteLot(Lot lot) throws OHServiceException {
-		ioOperations.deletLot(lot);
+		ioOperations.deleteLot(lot);
 	}
 }
