@@ -1,0 +1,2 @@
+-- Fix "admin" user
+UPDATE OH_GROUPPERMISSION SET GP_P_ID_A = '140' WHERE (GP_ID = '140');
