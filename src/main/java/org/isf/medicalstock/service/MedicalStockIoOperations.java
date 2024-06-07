@@ -294,6 +294,9 @@ public class MedicalStockIoOperations {
 	 */
 	// TODO: verify why lotCode and medical params are needed
 	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
+		if (lotCode.equals("")) {
+			lotCode = this.generateLotCode();
+		}
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
 		return lotRepository.save(lot);
