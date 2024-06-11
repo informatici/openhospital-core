@@ -97,6 +97,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all medicals referencing the specified code.
+	 * 
 	 * @param lotCode the lot code.
 	 * @return the ids of medicals referencing the specified lot.
 	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
@@ -107,6 +108,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all movements referencing the specified lot.
+	 * 
 	 * @param lot - the lot.
 	 * @return the movements referencing the specified lot.
 	 * @throws OHServiceException if an error occurs retrieving the referencing movement.
@@ -117,6 +119,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Store the specified {@link Movement} by using automatically the most old lots and splitting in more movements if required
+	 * 
 	 * @param movement - the {@link Movement} to store
 	 * @throws OHServiceException
 	 */
@@ -166,6 +169,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Stores the specified {@link Movement}.
+	 * 
 	 * @param movement - the movement to store.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
@@ -197,6 +201,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
+	 * 
 	 * @param movement - the movement to store.
 	 * @return the prepared {@link Movement}.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -207,6 +212,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
+	 * 
 	 * @param movement - the movement to store.
 	 * @return {@code true} if the movement has been stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -227,6 +233,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Stores the specified {@link Movement}.
+	 * 
 	 * @param movement the movement to store.
 	 * @param lotCode the {@link Lot} code to use.
 	 * @return returns the stored {@link Movement} object.
@@ -243,6 +250,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Creates a new unique lot code.
+	 * 
 	 * @return the new unique code.
 	 * @throws OHServiceException if an error occurs during the code generation.
 	 */
@@ -261,6 +269,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Checks if the specified {@link Lot} exists.
+	 * 
 	 * @param lotCode the lot code.
 	 * @return {@code true} if exists, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -293,6 +302,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Stores the specified {@link Lot}.
+	 * 
 	 * @param lotCode the {@link Lot} code.
 	 * @param lot the lot to store.
 	 * @param medical
@@ -308,6 +318,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updated {@link Medical} stock quantity for the specified {@link Movement}.
+	 * 
 	 * @param movement the movement.
 	 * @return {@code true} if the quantity has been updated, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -340,6 +351,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates the incoming quantity for the specified medical.
+	 * 
 	 * @param medicalCode the medical code.
 	 * @param incrementQuantity the quantity to add.
 	 * @return the updated {@link Medical} object.
@@ -356,6 +368,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates the outcoming quantity for the specified medicinal.
+	 * 
 	 * @param medicalCode the medical code.
 	 * @param incrementQuantity the quantity to add to the current outcoming quantity.
 	 * @return the updated {@link Medical} object.
@@ -397,36 +410,34 @@ public class MedicalStockIoOperations {
 			medicalStock.setBalanceDate(date);
 			medicalStock.setBalance(incrementQuantity); // balance = first increment
 			return medicalStockRepository.save(medicalStock);
-
-		} else {
-
-			medicalStock = medicalStockList.get(0);
-			if (TimeTools.isSameDay(date, medicalStock.getBalanceDate())) {
-				// update
-				int balance = medicalStock.getBalance();
-				medicalStock.setBalance(balance + incrementQuantity);
-				medicalStock.setBalanceDate(date);
-				return medicalStockRepository.save(medicalStock);
-
-			} else {
-				// update previous
-				medicalStock.setNextMovDate(date);
-				medicalStock.setDays(TimeTools.getDaysBetweenDates(medicalStock.getBalanceDate(), date, true));
-				medicalStockRepository.save(medicalStock);
-
-				// insert new
-				int newBalance = medicalStock.getBalance() + incrementQuantity;
-				MedicalStock newMedicalStock = new MedicalStock();
-				newMedicalStock.setMedical(medical);
-				newMedicalStock.setBalanceDate(date);
-				newMedicalStock.setBalance(newBalance);
-				return medicalStockRepository.save(newMedicalStock);
-			}
 		}
+
+		medicalStock = medicalStockList.get(0);
+		if (TimeTools.isSameDay(date, medicalStock.getBalanceDate())) {
+			// update if the same date
+			int balance = medicalStock.getBalance();
+			medicalStock.setBalance(balance + incrementQuantity);
+			medicalStock.setBalanceDate(date);
+			return medicalStockRepository.save(medicalStock);
+		}
+
+		// update previous if different date
+		medicalStock.setNextMovDate(date);
+		medicalStock.setDays(TimeTools.getDaysBetweenDates(medicalStock.getBalanceDate(), date, true));
+		medicalStockRepository.save(medicalStock);
+
+		// insert new in the new date
+		int newBalance = medicalStock.getBalance() + incrementQuantity;
+		MedicalStock newMedicalStock = new MedicalStock();
+		newMedicalStock.setMedical(medical);
+		newMedicalStock.setBalanceDate(date);
+		newMedicalStock.setBalance(newBalance);
+		return medicalStockRepository.save(newMedicalStock);
 	}
 
 	/**
 	 * Updates medical quantity for the specified ward.
+	 * 
 	 * @param ward the ward.
 	 * @param medical the medical.
 	 * @param quantity the quantity to add to the current medical quantity.
@@ -449,6 +460,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Gets all the stored {@link Movement}.
+	 * 
 	 * @return all retrieved movement
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
@@ -458,6 +470,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all the stored {@link Movement}s for the specified {@link Ward}.
+	 * 
 	 * @param wardId the ward id.
 	 * @param dateTo
 	 * @param dateFrom
@@ -483,6 +496,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all the stored {@link Movement} with the specified criteria.
+	 * 
 	 * @param medicalCode the {@link Medical} code (optional).
 	 * @param medicalTypeCode the {@link MedicalType} code (optional).
 	 * @param wardId the {@link Ward} id (optional).
@@ -529,6 +543,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves {@link Movement}s for printing using specified filtering criteria.
+	 * 
 	 * @param medicalDescription the medical description.
 	 * @param medicalTypeCode the medical type code.
 	 * @param wardId the ward id.
@@ -565,6 +580,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out
+	 * 
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
@@ -615,6 +631,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Returns the date of the last movement
+	 * 
 	 * @return
 	 * @throws OHServiceException
 	 */
@@ -624,6 +641,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Check if the reference number is already used
+	 * 
 	 * @return {@code true} if is already used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -633,6 +651,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves all the movement associated to the specified reference number. In case of error a message error is shown and a {@code null} value is returned.
+	 * 
 	 * @param refNo the reference number.
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
