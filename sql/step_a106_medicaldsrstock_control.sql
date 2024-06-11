@@ -1,5 +1,5 @@
--- Add category to movementstock types: 'production' or 'inventory'
-ALTER TABLE OH_MEDICALDSRSTOCKMOVTYPE ADD COLUMN MMVT_CATEGORY VARCHAR(10) NOT NULL DEFAULT 'production' AFTER `MMVT_TYPE`;
+-- Add category to movementstock types: 'operational' or 'non-operational'
+ALTER TABLE OH_MEDICALDSRSTOCKMOVTYPE ADD COLUMN MMVT_CATEGORY VARCHAR(15) NOT NULL DEFAULT 'operational' AFTER `MMVT_TYPE`;
 
 -- Create new table for balances history
 CREATE TABLE OH_MEDICALDSRSTOCK (

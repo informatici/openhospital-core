@@ -52,8 +52,8 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 
 	private void buildCategoryHashMap() {
 		categoryHashMap = new LinkedHashMap<>(6);
-		categoryHashMap.put("production", MessageBundle.getMessage("angal.medstockmovtype.category.production.txt"));
-		categoryHashMap.put("inventory", MessageBundle.getMessage("angal.medstockmovtype.category.inventory.txt"));
+		categoryHashMap.put("operational", MessageBundle.getMessage("angal.medstockmovtype.category.operational.txt"));
+		categoryHashMap.put("non-operational", MessageBundle.getMessage("angal.medstockmovtype.category.nonoperational.txt"));
 	}
 
 	public List<String> getCategoryList() {
@@ -61,7 +61,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 			buildCategoryHashMap();
 		}
 		List<String> categoryDescriptionList = new ArrayList<>(categoryHashMap.values());
-		categoryDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.medstockmovtype.category.production.txt")));
+		categoryDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.medstockmovtype.category.operational.txt")));
 		return categoryDescriptionList;
 	}
 

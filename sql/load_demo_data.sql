@@ -2952,10 +2952,10 @@ UNLOCK TABLES;
 
 LOCK TABLES `oh_medicaldsrstockmovtype` WRITE;
 /*!40000 ALTER TABLE `oh_medicaldsrstockmovtype` DISABLE KEYS */;
-INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('charge','Charge','+','production',NULL,NULL,NULL,NULL,1);
-INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('discharge','Discharge','-','production',NULL,NULL,NULL,NULL,1);
-INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('inventory+','Inventory+','+','inventory','admin','2024-05-30 23:19:17','admin','2024-05-31 00:06:06',1);
-INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('inventory-','Inventory-','-','inventory','admin','2024-05-30 23:19:25','admin','2024-05-31 00:06:10',1);
+INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('charge','Charge','+','operational',NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('discharge','Discharge','-','operational',NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('inventory+','Inventory+','+','non-operational','admin','2024-05-30 23:19:17','admin','2024-05-31 00:06:06',1);
+INSERT INTO `oh_medicaldsrstockmovtype` (`MMVT_ID_A`, `MMVT_DESC`, `MMVT_TYPE`, `MMVT_CATEGORY`, `MMVT_CREATED_BY`, `MMVT_CREATED_DATE`, `MMVT_LAST_MODIFIED_BY`, `MMVT_LAST_MODIFIED_DATE`, `MMVT_ACTIVE`) VALUES ('inventory-','Inventory-','-','non-operational','admin','2024-05-30 23:19:25','admin','2024-05-31 00:06:10',1);
 /*!40000 ALTER TABLE `oh_medicaldsrstockmovtype` ENABLE KEYS */;
 UNLOCK TABLES;
 

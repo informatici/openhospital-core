@@ -57,7 +57,7 @@ public class MovementType extends Auditable<String> {
 
 	@NotNull
 	@Column(name = "MMVT_CATEGORY")
-	private String category; // 'production' or 'inventory'
+	private String category; // 'operational' or 'non-operational'
 
 	@Transient
 	private volatile int hashCode;

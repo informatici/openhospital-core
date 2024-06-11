@@ -31,7 +31,7 @@ public class TestMovementType {
 	private String code = "ZZABCD";
 	private String description = "TestDescription";
 	private String type = "+";
-	private String category = "production";
+	private String category = "operational";
 
 	public MovementType setup(boolean usingSet) throws OHException {
 		MovementType movementType;

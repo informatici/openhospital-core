@@ -167,7 +167,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrMovementTypeValidationNoKey() throws Exception {
 		assertThatThrownBy(() -> {
-			MovementType movementType = new MovementType("", "TestDescription", "+", "production");
+			MovementType movementType = new MovementType("", "TestDescription", "+", "operational");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
 						.isInstanceOf(OHDataValidationException.class);
@@ -176,7 +176,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrMovementTypeValidationKeyTooLong() throws Exception {
 		assertThatThrownBy(() -> {
-			MovementType movementType = new MovementType("abcdefghijklmnopqrstuvwxyz", "TestDescription", "+", "production");
+			MovementType movementType = new MovementType("abcdefghijklmnopqrstuvwxyz", "TestDescription", "+", "operational");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
 						.isInstanceOf(OHDataValidationException.class);
@@ -185,7 +185,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrMovementTypeValidationTypeTooLong() throws Exception {
 		assertThatThrownBy(() -> {
-			MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+++++", "production");
+			MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+++++", "operational");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
 						.isInstanceOf(OHDataValidationException.class);
@@ -194,7 +194,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrMovementTypeValidationNoDescription() throws Exception {
 		assertThatThrownBy(() -> {
-			MovementType movementType = new MovementType("ZZABCD", "", "+", "production");
+			MovementType movementType = new MovementType("ZZABCD", "", "+", "operational");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
 						.isInstanceOf(OHDataValidationException.class);
@@ -232,16 +232,16 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMovementTypeToString() throws Exception {
-		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "production");
+		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "operational");
 		assertThat(movementType).hasToString("TestDescription");
 	}
 
 	@Test
 	void testMovementTypeEquals() throws Exception {
-		MovementType movementType1 = new MovementType("ZZABCD", "TestDescription", "+", "production");
-		MovementType movementType2 = new MovementType("ABCDZZ", "TestDescription", "+", "production");
-		MovementType movementType3 = new MovementType("ZZABCD", "AnotherDescription", "+", "production");
-		MovementType movementType4 = new MovementType("ZZABCD", "TestDescription", "++", "production");
+		MovementType movementType1 = new MovementType("ZZABCD", "TestDescription", "+", "operational");
+		MovementType movementType2 = new MovementType("ABCDZZ", "TestDescription", "+", "operational");
+		MovementType movementType3 = new MovementType("ZZABCD", "AnotherDescription", "+", "operational");
+		MovementType movementType4 = new MovementType("ZZABCD", "TestDescription", "++", "operational");
 
 		assertThat(movementType1).isEqualTo(movementType1);
 		assertThat(movementType1)
@@ -253,7 +253,7 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMovementTypeHashCode() {
-		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "production");
+		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+", "operational");
 		// generate hashCode
 		int hashCode = movementType.hashCode();
 		assertThat(hashCode).isNotZero();
