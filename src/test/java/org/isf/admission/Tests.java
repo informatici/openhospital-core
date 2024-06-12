@@ -285,7 +285,7 @@ class Tests extends OHCoreTestCase {
 		int size = 10;
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		// when:
-		List<Admission> patients = admissionIoOperation.getAdmissionsByAdmissionDatePages(dateFrom, dateTo, PageRequest.of(page, size));
+		List<Admission> patients = admissionIoOperation.getAdmissionsByAdmissionDate(dateFrom, dateTo);
 
 		// then:
 		assertThat(patients.get(0).getId()).isEqualTo(foundAdmission.getId());
@@ -1531,24 +1531,6 @@ class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmissions(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		String str = "2000-01-01T10:11:30";
-		String str2 = "2023-05-05T10:11:30";
-		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo = LocalDateTime.parse(str2);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		// when:
-		List<Admission> patients = admissionBrowserManager.getAdmissions(dateFrom, dateTo);
-
-		// then:
-		assertThat(patients.get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")

@@ -319,19 +319,6 @@ public class AdmissionIoOperations {
 	}
 
 	/**
-	 * Returns the list of Admissions by pages
-	 *
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param pageable
-	 * @return the list of {@link Admission}.
-	 * @throws OHServiceException if an error occurs during database request.
-	 */
-	public List<Admission> getAdmissionsByAdmissionDatePages(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
-		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
-	}
-
-	/**
 	 * Returns the list of Admissions within a date range
 	 *
 	 * @param dateFrom
@@ -352,8 +339,8 @@ public class AdmissionIoOperations {
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
-		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo);
 	}
 
 	/**

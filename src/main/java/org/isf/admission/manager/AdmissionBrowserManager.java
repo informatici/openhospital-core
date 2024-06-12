@@ -51,9 +51,6 @@ public class AdmissionBrowserManager {
 
 	private DiseaseBrowserManager diseaseManager;
 
-	// TODO: to centralize
-	protected static final int DEFAULT_PAGE_SIZE = 80;
-
 	public AdmissionBrowserManager(AdmissionIoOperations admissionIoOperations, DiseaseBrowserManager diseaseBrowserManager) {
 		this.ioOperations = admissionIoOperations;
 		this.diseaseManager = diseaseBrowserManager;
@@ -128,18 +125,6 @@ public class AdmissionBrowserManager {
 	 */
 	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return ioOperations.getAdmissions(patient);
-	}
-
-	/**
-	 * Method that returns the list of Admissions not logically deleted
-	 * within the specified date range, divided by pages
-	 * @param dateFrom
-	 * @param dateTo
-	 * @return the list of Admissions (could be empty)
-	 * @throws OHServiceException
-	 */
-	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmissionDatePages(dateFrom, dateTo, PageRequest.of(0, DEFAULT_PAGE_SIZE));
 	}
 
 	/**
