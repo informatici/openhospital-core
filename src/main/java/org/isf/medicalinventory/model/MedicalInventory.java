@@ -23,6 +23,9 @@ package org.isf.medicalinventory.model;
 
 import java.time.LocalDateTime;
 
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +36,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
-
-import org.isf.utils.db.Auditable;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "OH_MEDICALDSRINVENTORY")
@@ -74,7 +74,19 @@ public class MedicalInventory extends Auditable<String> {
 
 	@Column(name = "MINVT_WRD_ID_A")
 	private String ward;
+	
+	@Column(name = "MINVT_CHARGE_TYPE")
+	private String changeType;
+	
+	@Column(name = "MINVT_DISCHARGE_TYPE")
+	private String dischangeType;
+	
+	@Column(name = "MINVT_SUPPLIER")
+	private int supplier;
 
+	@Column(name = "MINVT_DESTINATION")
+	private String destination;
+	
 	@Version
 	@Column(name="MINVT_LOCK")
 	private int lock;
@@ -155,5 +167,45 @@ public class MedicalInventory extends Auditable<String> {
 	
 	public void setLock(int lock) {
 		this.lock = lock;
+	}
+
+	
+	public String getChangeType() {
+		return changeType;
+	}
+
+	
+	public void setChangeType(String changeType) {
+		this.changeType = changeType;
+	}
+
+	
+	public String getDischangeType() {
+		return dischangeType;
+	}
+
+	
+	public void setDischangeType(String dischangeType) {
+		this.dischangeType = dischangeType;
+	}
+
+	
+	public int getSupplier() {
+		return supplier;
+	}
+
+	
+	public void setSupplier(int supplier) {
+		this.supplier = supplier;
+	}
+
+	
+	public String getDestination() {
+		return destination;
+	}
+
+	
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 }
