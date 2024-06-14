@@ -149,6 +149,18 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testGetDiseaseTypeFound() throws Exception {
+		String code = setupTestDiseaseType(false);
+		assertThat(diseaseTypeBrowserManager.getDiseaseType(code)).isNotNull();
+	}
+
+	@Test
+	void testGetDiseaseTypeNotFound() throws Exception {
+		setupTestDiseaseType(false);
+		assertThat(diseaseTypeBrowserManager.getDiseaseType("someCodeThatDoesNotExist")).isNull();
+	}
+
+	@Test
 	void testMgrDeleteDiseaseType() throws Exception {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
