@@ -82,7 +82,7 @@ public class DiseaseTypeBrowserManager {
 	 * Checks if the specified code is already used by any {@link DiseaseType}.
 	 *
 	 * @param code the code to check.
-	 * @return {@code true} if the code is used, false otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -128,14 +128,14 @@ public class DiseaseTypeBrowserManager {
 	}
 	
 	/**
-	 * Returns {@link DiseaseType}.
+	 * Returns a {@link DiseaseType} given the type code.
 	 *
 	 * @param code
 	 * @return  object {@link DiseaseType}, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public DiseaseType getDiseaseType(String code) throws OHServiceException {
-		return ioOperations.getDiseaseTypes(code);
+		return ioOperations.getDiseaseType(code);
 	}
 
 }
