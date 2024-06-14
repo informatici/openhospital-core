@@ -23,9 +23,6 @@ package org.isf.medicalinventory.model;
 
 import java.time.LocalDateTime;
 
-import org.isf.utils.db.Auditable;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +33,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "OH_MEDICALDSRINVENTORY")
@@ -103,6 +103,21 @@ public class MedicalInventory extends Auditable<String> {
 		this.inventoryReference = reference;
 		this.inventoryType = type;
 		this.ward = ward;
+	}
+
+	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user, String inventoryReference,
+					String inventoryType, String ward, String changeType, String dischangeType, int supplier, String destination) {
+		this.id = id;
+		this.status = status;
+		this.inventoryDate = inventoryDate;
+		this.user = user;
+		this.inventoryReference = inventoryReference;
+		this.inventoryType = inventoryType;
+		this.ward = ward;
+		this.changeType = changeType;
+		this.dischangeType = dischangeType;
+		this.supplier = supplier;
+		this.destination = destination;
 	}
 
 	public Integer getId() {

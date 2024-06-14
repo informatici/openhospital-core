@@ -82,6 +82,9 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@Version
 	@Column(name="MINVTR_LOCK")
 	private int lock;
+	
+	private transient double total;
+
 
 	public MedicalInventoryRow() {
 	}
@@ -161,6 +164,14 @@ public class MedicalInventoryRow extends Auditable<String> {
 	
 	public void setLock(int lock) {
 		this.lock = lock;
+	}
+	
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
 	public String getSearchString() {
