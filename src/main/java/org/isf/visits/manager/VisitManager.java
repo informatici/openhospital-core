@@ -45,8 +45,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,18 +54,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class VisitManager {
 
-	@Autowired
 	private VisitsIoOperations ioOperations;
 
-	@Autowired
 	private SmsOperations smsOp;
 
-	@Autowired
 	private OpdIoOperationRepository opdRepository;
 
-	@Autowired
-	private ApplicationContext applicationContext;
+	private PatientBrowserManager patientBrowserManager;
 
+	public VisitManager(VisitsIoOperations visitsIoOperations, SmsOperations smsOperations, OpdIoOperationRepository opdOperationIoRepository, PatientBrowserManager patientBrowserManager) {
+		this.ioOperations = visitsIoOperations;
+		this.smsOp = smsOperations;
+		this.opdRepository = opdOperationIoRepository;
+		this.patientBrowserManager = patientBrowserManager;
+	}
 	/**
 	 * Verify if the visit is valid for CRUD, if not throws an {@link OHServiceException} listing the validation errors.
 	 *
@@ -266,7 +266,6 @@ public class VisitManager {
 	@TranslateOHServiceException
 	public boolean newVisits(List<Visit> visits, List<Visit> removedVisits) throws OHServiceException {
 		if (!visits.isEmpty()) {
-			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();
 			for (Visit visit : removedVisits) {
 				deleteVisit(visit);
@@ -285,7 +284,7 @@ public class VisitManager {
 				if (visit.isSms()) {
 					LocalDateTime date = visit.getDate().minusDays(1);
 					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
-						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
+						Patient pat = patientBrowserManager.getPatientById(visit.getPatient().getCode());
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());

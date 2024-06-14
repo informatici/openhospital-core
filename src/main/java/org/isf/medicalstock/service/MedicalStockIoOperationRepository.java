@@ -19,29 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.service;
+package org.isf.medicalstock.service;
 
-import org.isf.telemetry.model.Telemetry;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
-@Service
-@Transactional(propagation = Propagation.REQUIRED)
-public class TelemetryOperations {
+import org.isf.medicalstock.model.MedicalStock;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-	private TelemetryRepository telemetryRepository;
+@Repository
+public interface MedicalStockIoOperationRepository extends JpaRepository<MedicalStock, Integer> {
 
-	public TelemetryOperations(TelemetryRepository telemetryRepository) {
-		this.telemetryRepository = telemetryRepository;
-	}
+	List<MedicalStock> findByMedicalCodeOrderByBalanceDateDesc(int medicalCode);
 
-	public boolean saveOrUpdate(Telemetry telemetry) throws OHServiceException {
-		return telemetryRepository.save(telemetry) != null;
-	}
-
-	public Telemetry retrieveFirst() {
-		return this.telemetryRepository.findFirstByOrderById_SoftwareUUIDAsc();
-	}
 }
