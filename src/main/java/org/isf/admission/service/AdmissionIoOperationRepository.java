@@ -54,13 +54,10 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);
 
 	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
-	List<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	List<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	@Query(value = "select a FROM Admission a WHERE a.disDate >= :dateFrom AND a.disDate <= :dateTo and a.deleted = 'N'")
-	List<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
-
-	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
-	List<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
+	List<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
 	Page<Admission> findAllWhere_AdmissionDate_Paginated(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
