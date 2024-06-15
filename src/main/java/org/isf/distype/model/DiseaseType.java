@@ -53,8 +53,7 @@ public class DiseaseType extends Auditable<String> {
 	@Transient
 	private volatile int hashCode;
 	
-	public DiseaseType() 
-    {
+	public DiseaseType() {
 		super();
     }
 	
@@ -90,12 +89,11 @@ public class DiseaseType extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof DiseaseType)) {
+		if (!(obj instanceof DiseaseType diseaseType)) {
 			return false;
 		}
-		
-		DiseaseType diseaseType = (DiseaseType)obj;
-		return (this.getCode().equals(diseaseType.getCode()));
+
+		return this.getCode().equals(diseaseType.getCode());
 	}
 
     @Override
