@@ -82,7 +82,7 @@ public class MedicalInventory extends Auditable<String> {
 	private String dischangeType;
 	
 	@Column(name = "MINVT_SUPPLIER")
-	private int supplier;
+	private Integer supplier;
 
 	@Column(name = "MINVT_DESTINATION")
 	private String destination;
@@ -205,12 +205,12 @@ public class MedicalInventory extends Auditable<String> {
 	}
 
 	
-	public int getSupplier() {
+	public Integer getSupplier() {
 		return supplier;
 	}
 
 	
-	public void setSupplier(int supplier) {
+	public void setSupplier(Integer supplier) {
 		this.supplier = supplier;
 	}
 
