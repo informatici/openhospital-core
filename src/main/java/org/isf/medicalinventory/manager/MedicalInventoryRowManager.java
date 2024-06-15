@@ -38,7 +38,7 @@ import jakarta.transaction.Transactional;
 @Component
 public class MedicalInventoryRowManager {
 
-	private MedicalInventoryRowIoOperation iOoperation;
+	private MedicalInventoryRowIoOperation ioOperation;
 	private MovStockInsertingManager movStockInsertingManager;
 
 	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovStockInsertingManager movStockInsertingManager) {
