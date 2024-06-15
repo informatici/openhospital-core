@@ -42,7 +42,7 @@ public class MedicalInventoryRowManager {
 	private MovStockInsertingManager movStockInsertingManager;
 
 	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovStockInsertingManager movStockInsertingManager) {
-		this.iOoperation = medicalInventoryRowIoOperation;
+		this.ioOperation = medicalInventoryRowIoOperation;
 		this.movStockInsertingManager = movStockInsertingManager;
 	}
 
@@ -54,7 +54,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		return iOoperation.newMedicalInventoryRow(medicalInventoryRow);
+		return ioOperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
 	
 	/**
@@ -65,12 +65,12 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		Optional<MedicalInventoryRow> medInvRow = iOoperation.getMedicalInventoryRowById(medicalInventoryRow.getId());
+		Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(medicalInventoryRow.getId());
 		if (medInvRow.isPresent()) {
 			MedicalInventoryRow medInvR = medInvRow.get();
 			medInvR.setLot(medicalInventoryRow.getLot());
 			medInvR.setRealqty(medicalInventoryRow.getRealQty());
-			return iOoperation.updateMedicalInventoryRow(medInvR);
+			return ioOperation.updateMedicalInventoryRow(medInvR);
 		}
 		throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventoryrow.notfound.msg")));
 	}
@@ -81,7 +81,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public void deleteMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		iOoperation.deleteMedicalInventoryRow(medicalInventoryRow);
+		ioOperation.deleteMedicalInventoryRow(medicalInventoryRow);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
-		return iOoperation.getMedicalInventoryRowByInventoryId(inventoryId);
+		return ioOperation.getMedicalInventoryRowByInventoryId(inventoryId);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class MedicalInventoryRowManager {
 	@Transactional(rollbackOn = OHServiceException.class)
 	public void deleteMedicalInventoryRows(List<MedicalInventoryRow> inventoryRowsToDelete) throws OHServiceException {
 		for (MedicalInventoryRow invRow : inventoryRowsToDelete) {
-			Optional<MedicalInventoryRow> medInvRow = iOoperation.getMedicalInventoryRowById(invRow.getId());
+			Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRow.getId());
 			if (medInvRow.isPresent()) {
 				MedicalInventoryRow invRowDelete = medInvRow.get();
 				if (invRowDelete.isNewLot()) {
