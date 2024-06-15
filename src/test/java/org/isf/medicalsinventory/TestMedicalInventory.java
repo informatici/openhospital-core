@@ -53,8 +53,7 @@ public class TestMedicalInventory {
 			setParameters(medInventory);
 		} else {
 			// Create MedicalInventory with all parameters 
-			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode(),
-							charge, discharge, supplier, destination);
+			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode(), charge, discharge, supplier, destination);
 		}
 		return medInventory;
 	}
