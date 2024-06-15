@@ -32,7 +32,7 @@ import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalInventory {
-	
+
 	private int id = 1;
 	private String status = "STATUS";
 	private LocalDateTime inventoryDate = LocalDateTime.now();
@@ -52,12 +52,13 @@ public class TestMedicalInventory {
 			medInventory = new MedicalInventory();
 			setParameters(medInventory);
 		} else {
-			// Create MedicalInventory with all parameters 
-			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode(), charge, discharge, supplier, destination);
+			// Create MedicalInventory with all parameters
+			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode(), charge, discharge, supplier,
+							destination);
 		}
 		return medInventory;
 	}
-	
+
 	public void setParameters(MedicalInventory medInventory) {
 		medInventory.setId(id);
 		medInventory.setStatus(status);
@@ -71,7 +72,7 @@ public class TestMedicalInventory {
 		medInventory.setSupplier(supplier);
 		medInventory.setDestination(destination);
 	}
-	
+
 	public void check(MedicalInventory medInventory, int id) {
 		assertThat(medInventory.getId()).isEqualTo(id);
 		assertThat(medInventory.getStatus()).isEqualTo(status);
