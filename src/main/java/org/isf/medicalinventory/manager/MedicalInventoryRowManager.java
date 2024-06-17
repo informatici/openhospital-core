@@ -70,6 +70,9 @@ public class MedicalInventoryRowManager {
 			MedicalInventoryRow medInvR = medInvRow.get();
 			medInvR.setLot(medicalInventoryRow.getLot());
 			medInvR.setRealqty(medicalInventoryRow.getRealQty());
+			if (medicalInventoryRow.isNewLot()) {
+				medInvR.setNewLot(true);
+			}
 			return ioOperation.updateMedicalInventoryRow(medInvR);
 		}
 		throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventoryrow.notfound.msg")));
