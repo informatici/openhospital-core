@@ -122,4 +122,19 @@ public class MedicalInventoryRowManager {
 			}	
 		}
 	}
+
+	/**
+	 * Return {@link MedicalInventoryRow} for passed param.
+	 *
+	 * @param invRowId - the MedicalInventoryRow Id.
+	 * @return the {@link MedicalInventoryRow} object.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventoryRow getMedicalInventoryRowById(Integer invRowId) {
+		Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRowId);
+		if (medInvRow.isPresent()) {
+			return medInvRow.get();
+		}
+		return null;
+	}
 }
