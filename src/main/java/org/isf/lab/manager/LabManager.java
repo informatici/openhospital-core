@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
@@ -115,17 +114,13 @@ public class LabManager {
 
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
-	 * 
+	 *
 	 * @param oneWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
-		return ioOperations.getLaboratory(oneWeek, pageNo, pageSize);
-	}
-	
 	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		return ioOperations.getLaboratoryPageable(oneWeek, pageNo, pageSize);
 	}
@@ -177,6 +172,7 @@ public class LabManager {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo, patient);
 	}
+
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
 	 * between specified dates and matching passed exam name. If a lab has multiple
@@ -482,8 +478,9 @@ public class LabManager {
 	}
 
 	/**
-	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 * Return the whole list of exams ({@link Laboratory}s) with the given code
 	 *
+	 * @param code the {@link Laboratory} code
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -500,8 +497,9 @@ public class LabManager {
 	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
 		return ioOperations.getLabRow(code);
 	}
-	
-	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size) throws OHServiceException {
+
+	public PagedResponse<Laboratory> getLaboratoryPageable(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size)
+			throws OHServiceException {
 		return ioOperations.getLaboratoryPageable(exam, dateFrom, dateTo, patient, page, size);
 	}
 
