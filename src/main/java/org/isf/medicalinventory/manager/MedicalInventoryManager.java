@@ -22,6 +22,7 @@
 package org.isf.medicalinventory.manager;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.isf.medicalinventory.model.MedicalInventory;
@@ -136,6 +137,8 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
+		dateFrom = LocalDateTime.of(dateFrom.toLocalDate(), LocalTime.MIN);
+		dateTo = LocalDateTime.of(dateTo.toLocalDate(), LocalTime.MAX);
 		return ioOperations.getMedicalInventoryByParams(dateFrom, dateTo, status, type);
 	}
 	
@@ -152,6 +155,8 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
+		dateFrom = LocalDateTime.of(dateFrom.toLocalDate(), LocalTime.MIN);
+		dateTo = LocalDateTime.of(dateTo.toLocalDate(), LocalTime.MAX);
 		return ioOperations.getMedicalInventoryByParamsPageable(dateFrom, dateTo, status, type, page, size);
 	}
 }
