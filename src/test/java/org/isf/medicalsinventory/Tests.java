@@ -117,7 +117,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void setTestMedicalInventoryGetsSets() throws Exception {
+	void testMedicalInventoryGetsSets() throws Exception {
 		int id = setupTestMedicalInventory(false);
 		MedicalInventory medicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(medicalInventory).isNotNull();
@@ -144,7 +144,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void setTestMedicalInventoryRowGetsSets() throws Exception {
+	void testMedicalInventoryRowGetsSets() throws Exception {
 		Integer id = setupTestMedicalInventoryRow(false);
 		MedicalInventoryRow medicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
 		assertThat(medicalInventoryRow).isNotNull();
