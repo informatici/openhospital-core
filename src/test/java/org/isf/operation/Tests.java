@@ -72,6 +72,7 @@ import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
@@ -352,6 +353,19 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testGetOperationPageable() throws Exception {
+		// given:
+		String code = setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+
+		// when:
+		PagedResponse<Operation> operations = operationBrowserManager.getOperationPageable(0, 10);
+
+		// then:
+		assertThat(operations.getData().get(0).getType().getDescription()).isEqualTo(foundOperation.getType().getDescription());
+	}
+
+	@Test
 	void testMgrGetOperationOpdOpdAdmission() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
@@ -467,10 +481,69 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetResultDescriptionKey() throws Exception {
+		assertThat(operationBrowserManager.getResultDescriptionKey("angal.operation.result.failure.txt")).isEqualTo("failure");
+
+		assertThat(operationBrowserManager.getResultDescriptionKey("the_description_is_not_there")).isEqualTo("");
+	}
+
+	@Test
+	void testMgrGetResultDescriptionList() throws Exception {
+		List<String> descriptionList = operationBrowserManager.getResultDescriptionList();
+		assertThat(descriptionList).isNotEmpty();
+	}
+
+	@Test
+	void testMgrGetResultDescriptionTranslated() throws Exception {
+		assertThat(operationBrowserManager.getResultDescriptionTranslated("failure")).isEqualTo("angal.operation.result.failure.txt");
+
+		assertThat(operationBrowserManager.getResultDescriptionTranslated("the_key_is_not_there")).isNull();
+	}
+
+	@Test
 	void testRowIoGetRowOperation() throws Exception {
 		setupTestOperationRow(false);
 		List<OperationRow> operationRows = operationRowIoOperations.getOperationRow();
 		assertThat(operationRows).hasSize(1);
+	}
+
+	@Test
+	void testRowIoCountAllActiveOperations() throws Exception {
+		setupTestOperationRow(false);
+		assertThat(operationRowIoOperations.countAllActiveOperations()).isEqualTo(1);
+	}
+
+	@Test
+	void testRowMgrGetOperationRowByPatientCode() throws Exception {
+		int id = setupTestOperationRowWithAdmission(true);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		Patient patient = operationRow.getAdmission().getPatient();
+		List<OperationRow> operationRows = operationRowBrowserManager.getOperationRowByPatientCode(patient);
+		assertThat(operationRows).isNotEmpty();
+		assertThat(operationRows.get(0).getAdmission().getPatient()).isEqualTo(patient);
+	}
+
+	@Test
+	void testRowIoGetOperationRowByPatient() throws Exception {
+		int id = setupTestOperationRowWithAdmission(true);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		Patient patient = operationRow.getAdmission().getPatient();
+		List<OperationRow> operationRows = operationRowIoOperations.getOperationRowByPatient(patient);
+		assertThat(operationRows).isNotEmpty();
+		assertThat(operationRows.get(0).getAdmission().getPatient()).isEqualTo(patient);
+	}
+
+	@Test
+	void testRowIoGetOperationRowByPatientNotFound() throws Exception {
+		int id = setupTestOperationRowWithAdmission(true);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		Patient patient = testPatient.setup(false);
+		patient.setSex('M');
+		patient.setFirstName("firstName");
+		patient.setSecondName("secondName");
+		patientIoOperationRepository.saveAndFlush(patient);
+		List<OperationRow> operationRows = operationRowIoOperations.getOperationRowByPatient(patient);
+		assertThat(operationRows).isEmpty();
 	}
 
 	@Test
