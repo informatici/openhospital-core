@@ -27,8 +27,6 @@ import java.lang.reflect.Method;
 import java.sql.Blob;
 
 import org.isf.OHCoreTestCase;
-import org.isf.generaldata.GeneralData;
-import org.isf.opd.TestOpd;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.FileSystemPatientPhotoRepository;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -42,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
-	private static TestOpd testOpd;
 
 	@Autowired
 	FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
@@ -53,9 +50,7 @@ class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 
 	@BeforeAll
 	static void setUpClass() {
-		GeneralData.PATIENTPHOTOSTORAGE = "FILE";
 		testPatient = new TestPatient();
-		testOpd = new TestOpd();
 	}
 
 	@BeforeEach
