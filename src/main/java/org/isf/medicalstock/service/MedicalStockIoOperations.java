@@ -580,6 +580,17 @@ public class MedicalStockIoOperations {
 		}
 		return pMovement;
 	}
+	
+	/**
+	 * Retrieves all the lot referred to the specified {@link Medical},
+	 * 
+	 * @param medical the medical.
+	 * @return a list of {@link Lot}.
+	 * @throws OHServiceException if an error occurs retrieving the lot list.
+	 */
+	public List<Lot> getAllLotsByMedical(Medical medical) throws OHServiceException {
+		return lotRepository.findByMedicalOrderByDueDate(medical.getCode());
+	}
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out

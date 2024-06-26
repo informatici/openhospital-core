@@ -235,6 +235,17 @@ public class MovStockInsertingManager {
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
+	
+	/**
+	 * Retrieves all the lot referred to the specified {@link Medical},
+	 * 
+	 * @param medical the medical.
+	 * @return a list of {@link Lot}.
+	 * @throws OHServiceException if an error occurs retrieving the lot list.
+	 */
+	public List<Lot> getAllLotsByMedical(Medical medical) throws OHServiceException {
+		return ioOperations.getAllLotsByMedical(medical);
+	}
 
 	/**
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
