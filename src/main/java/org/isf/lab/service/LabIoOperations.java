@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.isf.exa.model.Exam;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
@@ -78,23 +77,12 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
-		Pageable pageable = PageRequest.of(pageNo, pageSize);
-		if (oneWeek) {
-			LocalDateTime time2 = TimeTools.getDateToday24();
-			LocalDateTime time1 = time2.minusWeeks(1);
-			return repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable).getContent();
-
-		}
-		return repository.findAll(pageable).getContent();
-	}
-
 	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		if (oneWeek) {
 			LocalDateTime time2 = TimeTools.getDateToday24();
 			LocalDateTime time1 = time2.minusWeeks(1);
-			Page<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
+			Page<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDescPage(time1, time2, pageable);
 			return setPaginationData(pagedResult);
 		}
 		Page<Laboratory> pagedResult = repository.findAll(pageable);
@@ -123,7 +111,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return exam != null ? repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
+		return exam != null ? repository.findByLabDateBetweenAndExamDescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
 						TimeTools.truncateToSeconds(dateTo),
 						exam)
 						: repository.findByLabDateBetweenOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN)),
@@ -142,18 +130,20 @@ public class LabIoOperations {
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<Laboratory> laboritories = new ArrayList<>();
+		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
+		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
 
 		if (!exam.isEmpty() && patient != null) {
-			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(truncatedDateFrom, truncatedDateTo, exam, patient.getCode());
 		}
 		if (!exam.isEmpty() && patient == null) {
-			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo, exam);
 		}
 		if (patient != null && exam.isEmpty()) {
-			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+			laboritories = repository.findByLabDateBetweenAndPatientCode(truncatedDateFrom, truncatedDateTo, patient.getCode());
 		}
 		if (patient == null && exam.isEmpty()) {
-			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo);
 		}
 		return laboritories;
 	}
@@ -195,17 +185,20 @@ public class LabIoOperations {
 					throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		List<Laboratory> laboritories = new ArrayList<>();
+		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
+		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
+
 		if (exam != null && patient != null) {
-			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(truncatedDateFrom, truncatedDateTo, exam, patient.getCode());
 		}
 		if (exam != null && patient == null) {
-			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo, exam);
 		}
 		if (patient != null && exam == null) {
-			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+			laboritories = repository.findByLabDateBetweenAndPatientCode(truncatedDateFrom, truncatedDateTo, patient.getCode());
 		}
 		if (patient == null && exam == null) {
-			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo);
 		}
 		for (Laboratory laboratory : laboritories) {
 
@@ -275,13 +268,12 @@ public class LabIoOperations {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
+		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
+
 		Iterable<Laboratory> laboritories = exam != null
-						? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
-										TimeTools.truncateToSeconds(dateFrom),
-										TimeTools.truncateToSeconds(dateTo),
-										exam)
-						: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
-										TimeTools.truncateToSeconds(dateTo));
+						? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo, exam)
+						: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo);
 
 		for (Laboratory laboratory : laboritories) {
 			pLaboratory.add(new LaboratoryForPrint(
@@ -391,21 +383,23 @@ public class LabIoOperations {
 		return repository.findById(code);
 	}
 
-	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size)
+	public PagedResponse<Laboratory> getLaboratoryPageable(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size)
 					throws OHServiceException {
 		Page<Laboratory> laboritories = null;
+		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
+		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
 
 		if (exam != null && patient != null) {
-			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCodePage(dateFrom, dateTo, exam, patient, PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCodePage(truncatedDateFrom, truncatedDateTo, exam, patient, PageRequest.of(page, size));
 		}
 		if (exam != null && patient == null) {
-			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(dateFrom, dateTo, exam, PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(truncatedDateFrom, truncatedDateTo, exam, PageRequest.of(page, size));
 		}
 		if (patient != null && exam == null) {
-			laboritories = repository.findByLabDateBetweenAndPatientCodePage(dateFrom, dateTo, patient, PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenAndPatientCodePage(truncatedDateFrom, truncatedDateTo, patient, PageRequest.of(page, size));
 		}
 		if (patient == null && exam == null) {
-			laboritories = repository.findByLabDateBetweenOrderByLabDateDescPage(dateFrom, dateTo, PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDescPage(truncatedDateFrom, truncatedDateTo, PageRequest.of(page, size));
 		}
 		return setPaginationData(laboritories);
 	}

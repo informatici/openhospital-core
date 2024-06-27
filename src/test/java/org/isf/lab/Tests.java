@@ -43,6 +43,7 @@ import org.isf.lab.manager.LabRowManager;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
+import org.isf.lab.model.LaboratoryStatus;
 import org.isf.lab.service.LabIoOperationRepository;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.lab.service.LabRowIoOperationRepository;
@@ -160,7 +161,21 @@ class Tests extends OHCoreTestCase {
 		List<Laboratory> laboratories = labIoOperation.getLaboratory();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
-	
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryRowList(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+
+		List<LaboratoryRow> laboratoryRowList = labManager.getLaboratoryRowList(foundLaboratoryRow.getCode());
+		assertThat(laboratoryRowList.get(0).getCode()).isEqualTo(foundLaboratoryRow.getCode());
+	}
+
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
 	void testIoGetLaboratoryPageable(boolean labExtended) throws Exception {
@@ -412,6 +427,20 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
+	void testMgrGetLaboratoryPageable(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		int id = setupTestLaboratory(false);
+		boolean oneWeek = false;
+		int pageNo = 0;
+		int pageSize = 10;
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		PagedResponse<Laboratory> laboratories = labManager.getLaboratoryPageable(oneWeek, pageNo, pageSize);
+		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
 	void testMgrGetLaboratory(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		int id = setupTestLaboratory(false);
@@ -419,6 +448,179 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labManager.getLaboratory();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientPageable(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		int pageNo = 0;
+		int pageSize = 10;
+		PagedResponse<Laboratory> laboratories = labManager.getLaboratoryPageable(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+						laboratory.getLabDate(), foundLaboratoryRow.getLabId().getPatient(), pageNo, pageSize);
+		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithNullPatientForPrint(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+						laboratory.getLabDate(), null);
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientExamNullForPrint(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, laboratory.getLabDate(), laboratory.getLabDate(),
+						foundLaboratoryRow.getLabId().getPatient());
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientNullExamNullForPrint(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, laboratory.getLabDate(), laboratory.getLabDate(), null);
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientForPrint(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+			laboratory.getLabDate(), foundLaboratoryRow.getLabId().getPatient());
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithNullPatientPageable(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		int pageNo = 0;
+		int pageSize = 10;
+		PagedResponse<Laboratory> laboratories = labManager.getLaboratoryPageable(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+			laboratory.getLabDate(), null, pageNo, pageSize);
+		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientExamNull(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		int pageNo = 0;
+		int pageSize = 10;
+		PagedResponse<Laboratory> laboratories = labManager.getLaboratoryPageable(null, laboratory.getLabDate(), laboratory.getLabDate(),
+			foundLaboratoryRow.getLabId().getPatient(), pageNo, pageSize);
+		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientNullExamNull(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		int pageNo = 0;
+		int pageSize = 10;
+		PagedResponse<Laboratory> laboratories = labManager.getLaboratoryPageable(null, laboratory.getLabDate(), laboratory.getLabDate(), null, pageNo, pageSize);
+		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatient(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<Laboratory> laboratories = labManager.getLaboratory(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+						laboratory.getLabDate(), foundLaboratoryRow.getLabId().getPatient());
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithNullPatient(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<Laboratory> laboratories = labManager.getLaboratory(laboratory.getExam().getDescription(), laboratory.getLabDate(),
+						laboratory.getLabDate(), null);
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientEmptyExam(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<Laboratory> laboratories = labManager.getLaboratory("", laboratory.getLabDate(), laboratory.getLabDate(),
+						foundLaboratoryRow.getLabId().getPatient());
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryWithPatientNullEmptyExam(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		Integer id = setupTestLaboratoryRow(false);
+		checkLaboratoryRowIntoDb(id);
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
+		Laboratory laboratory = foundLaboratoryRow.getLabId();
+		List<Laboratory> laboratories = labManager.getLaboratory("", laboratory.getLabDate(), laboratory.getLabDate(), null);
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
@@ -450,8 +652,8 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
-		List<Laboratory> laboratories = labManager
-				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+		List<Laboratory> laboratories = labManager.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(),
+						foundLaboratory.getLabDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -623,7 +825,60 @@ class Tests extends OHCoreTestCase {
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			labManager.newLaboratory(laboratory, labRow);
 		})
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrUpdateExamRequestUnknownExam(boolean labExtended) {
+		GeneralData.LABEXTENDED = labExtended;
+		assertThatThrownBy(() -> {
+			labManager.updateExamRequest(-99, "status");
+		})
 				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrUpdateExamRequest(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		String DRAFT = LaboratoryStatus.draft.toString();
+		ExamType examType = testExamType.setup(false);
+		Exam exam = testExam.setup(examType, 1, false);
+		Patient patient = testPatient.setup(false);
+		examTypeIoOperationRepository.saveAndFlush(examType);
+		examIoOperationRepository.saveAndFlush(exam);
+		patientIoOperationRepository.saveAndFlush(patient);
+
+		List<String> labRow = new ArrayList<>();
+		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
+
+		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+
+		Laboratory updatedLaboratory = labManager.updateExamRequest(newLaboratory.getCode(), DRAFT);
+		assertThat(updatedLaboratory.getStatus()).isEqualTo(DRAFT);
+		assertThat(updatedLaboratory.getCode()).isEqualTo(newLaboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrLaboratory(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		ExamType examType = testExamType.setup(false);
+		Exam exam = testExam.setup(examType, 1, false);
+		Patient patient = testPatient.setup(false);
+		examTypeIoOperationRepository.saveAndFlush(examType);
+		examIoOperationRepository.saveAndFlush(exam);
+		patientIoOperationRepository.saveAndFlush(patient);
+
+		List<String> labRow = new ArrayList<>();
+		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
+
+		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+
+		Laboratory foundLaboratory = labManager.getLaboratory(newLaboratory.getCode()).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		assertThat(foundLaboratory.getCode()).isEqualTo(newLaboratory.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
