@@ -237,18 +237,21 @@ public class MovStockInsertingManager {
 	}
 	
 	/**
-	 * Retrieves all the lot referred to the specified {@link Medical},
+	 * Retrieves all the lot referred to the specified {@link Medical}, expiring first on top
 	 * 
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
 	 */
 	public List<Lot> getAllLotsByMedical(Medical medical) throws OHServiceException {
+		if (medical == null) {
+			return new ArrayList<>();
+		}
 		return ioOperations.getAllLotsByMedical(medical);
 	}
 
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top with zero quantities will be stripped out
 	 *
 	 * @param medical the medical.
 	 * @return the list of retrieved {@link Lot}s.
