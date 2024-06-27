@@ -757,7 +757,7 @@ public class MedicalStockIoOperations {
 	/**
 	 * Deletes the specified {@link lot}.
 	 *
-	 * @param admissionType the lot to delete.
+	 * @param lot the lot to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteLot(Lot lot) throws OHServiceException {
