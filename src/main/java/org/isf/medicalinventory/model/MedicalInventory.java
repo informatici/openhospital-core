@@ -76,10 +76,10 @@ public class MedicalInventory extends Auditable<String> {
 	private String ward;
 	
 	@Column(name = "MINVT_CHARGE_TYPE")
-	private String changeType;
+	private String chargeType;
 	
 	@Column(name = "MINVT_DISCHARGE_TYPE")
-	private String dischangeType;
+	private String dischargeType;
 	
 	@Column(name = "MINVT_SUPPLIER")
 	private Integer supplier;
@@ -106,7 +106,7 @@ public class MedicalInventory extends Auditable<String> {
 	}
 
 	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user, String inventoryReference,
-					String inventoryType, String ward, String changeType, String dischangeType, int supplier, String destination) {
+					String inventoryType, String ward, String chargeType, String dischargeType, int supplier, String destination) {
 		this.id = id;
 		this.status = status;
 		this.inventoryDate = inventoryDate;
@@ -114,8 +114,8 @@ public class MedicalInventory extends Auditable<String> {
 		this.inventoryReference = inventoryReference;
 		this.inventoryType = inventoryType;
 		this.ward = ward;
-		this.changeType = changeType;
-		this.dischangeType = dischangeType;
+		this.chargeType = chargeType;
+		this.dischargeType = dischargeType;
 		this.supplier = supplier;
 		this.destination = destination;
 	}

@@ -125,7 +125,7 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Movement> newAutomaticDischargingMovement(Movement movement) throws OHServiceException {
 		List<Movement> dischargingMovements = new ArrayList<>();
-		List<Lot> lots = getLotsByMedical(movement.getMedical());
+		List<Lot> lots = getLotsByMedical(movement.getMedical(), true);
 		Medical medical = movement.getMedical();
 		int qty = movement.getQuantity(); // movement initial quantity
 
@@ -633,10 +633,11 @@ public class MedicalStockIoOperations {
 	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out
 	 * 
 	 * @param medical the medical.
+	 * @param removeEmpty
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
 	 */
-	public List<Lot> getLotsByMedical(Medical medical) throws OHServiceException {
+	public List<Lot> getLotsByMedical(Medical medical, boolean removeEmpty) throws OHServiceException {
 		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
 
 		if (lots.isEmpty()) {
@@ -675,7 +676,9 @@ public class MedicalStockIoOperations {
 		}
 
 		// Remove empty lots
-		lots.removeIf(lot -> lot.getMainStoreQuantity() <= 0);
+		if (removeEmpty) {
+			lots.removeIf(lot -> lot.getMainStoreQuantity() <= 0);
+		}
 
 		return lots;
 	}

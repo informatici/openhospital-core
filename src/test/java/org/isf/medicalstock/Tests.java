@@ -229,7 +229,7 @@ class Tests extends OHCoreTestCase {
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMovement).isNotNull();
-		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical(), true);
 		assertThat(lots).hasSize(1);
 		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
 	}
@@ -245,7 +245,7 @@ class Tests extends OHCoreTestCase {
 		foundMovement.setQuantity(0);
 		movementIoOperationRepository.saveAndFlush(foundMovement);
 
-		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical(), true);
 		assertThat(lots).isEmpty();
 	}
 
@@ -319,7 +319,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
 
-		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical, true);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
 
@@ -754,7 +754,7 @@ class Tests extends OHCoreTestCase {
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMovement).isNotNull();
-		List<Lot> lots = movStockInsertingManager.getLotByMedical(foundMovement.getMedical());
+		List<Lot> lots = movStockInsertingManager.getLotByMedical(foundMovement.getMedical(), true);
 		assertThat(lots).hasSize(1);
 		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
 	}
@@ -763,7 +763,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testMgrGetLotsByMedicalNull(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
-		assertThat(movStockInsertingManager.getLotByMedical(null)).isEmpty();
+		assertThat(movStockInsertingManager.getLotByMedical(null, true)).isEmpty();
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")

@@ -67,8 +67,8 @@ public class TestMedicalInventory {
 		medInventory.setInventoryReference(inventoryReference);
 		medInventory.setInventoryType(inventoryType);
 		medInventory.setWard(ward);
-		medInventory.setChangeType(charge);
-		medInventory.setDischangeType(discharge);
+		medInventory.setChargeType(charge);
+		medInventory.setDischargeType(discharge);
 		medInventory.setSupplier(supplier);
 		medInventory.setDestination(destination);
 	}
@@ -81,8 +81,8 @@ public class TestMedicalInventory {
 		assertThat(medInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medInventory.getInventoryType()).isEqualTo(inventoryType);
 		assertThat(medInventory.getWard()).isEqualTo(ward);
-		assertThat(medInventory.getChangeType()).isEqualTo(charge);
-		assertThat(medInventory.getDischangeType()).isEqualTo(discharge);
+		assertThat(medInventory.getChargeType()).isEqualTo(charge);
+		assertThat(medInventory.getDischargeType()).isEqualTo(discharge);
 		assertThat(medInventory.getSupplier()).isEqualTo(supplier);
 		assertThat(medInventory.getDestination()).isEqualTo(destination);
 	}
