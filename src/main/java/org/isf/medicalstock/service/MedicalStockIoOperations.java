@@ -580,54 +580,6 @@ public class MedicalStockIoOperations {
 		}
 		return pMovement;
 	}
-	
-	/**
-	 * Retrieves all the lot referred to the specified {@link Medical}, expiring first on top
-	 * 
-	 * @param medical the medical.
-	 * @return a list of {@link Lot}.
-	 * @throws OHServiceException if an error occurs retrieving the lot list.
-	 */
-	public List<Lot> getAllLotsByMedical(Medical medical) throws OHServiceException {
-		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
-
-		if (lots.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		// Get all lot IDs
-		List<String> lotCodes = lots.stream().map(Lot::getCode).collect(Collectors.toList());
-
-		// Retrieve quantities in batch
-		List<Object[]> mainStoreQuantities = lotRepository.getMainStoreQuantities(lotCodes);
-		List<Object[]> wardsTotalQuantities = lotRepository.getWardsTotalQuantities(lotCodes);
-
-		// Process mainStoreQuantities and update lots
-		for (Object[] result : mainStoreQuantities) {
-			String lotCode = (String) result[0];
-			Integer mainStoreQuantity = ((Long) result[1]).intValue();
-
-			// Find the corresponding lot in the lots list
-			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
-
-			// Update the lot if found
-			matchingLot.ifPresent(lot -> lot.setMainStoreQuantity(mainStoreQuantity));
-		}
-
-		// Process wardsTotalQuantities and update lots
-		for (Object[] result : wardsTotalQuantities) {
-			String lotCode = (String) result[0];
-			Double wardsTotalQuantity = (Double) result[1];
-
-			// Find the corresponding lot in the lots list
-			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
-
-			// Update the lot if found
-			matchingLot.ifPresent(lot -> lot.setWardsTotalQuantity(wardsTotalQuantity));
-		}
-
-		return lots;
-	}
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out if removeEmpty is set to true.
