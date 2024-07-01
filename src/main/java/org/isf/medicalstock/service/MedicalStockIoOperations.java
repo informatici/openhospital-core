@@ -630,7 +630,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out if removeEmpty is set to true.
 	 * 
 	 * @param medical the medical.
 	 * @param removeEmpty

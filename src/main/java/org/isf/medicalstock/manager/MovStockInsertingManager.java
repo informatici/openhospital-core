@@ -237,7 +237,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top with zero quantities will be stripped out
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top with zero quantities will be stripped out if removeEmpty is set to true.
 	 *
 	 * @param medical the medical.
 	 * @param removeEmpty.
