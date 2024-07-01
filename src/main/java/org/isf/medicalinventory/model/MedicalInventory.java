@@ -185,23 +185,23 @@ public class MedicalInventory extends Auditable<String> {
 	}
 
 	
-	public String getChangeType() {
-		return changeType;
+	public String getChargeType() {
+		return chargeType;
 	}
 
 	
-	public void setChangeType(String changeType) {
-		this.changeType = changeType;
+	public void setChargeType(String chargeType) {
+		this.chargeType = chargeType;
 	}
 
 	
-	public String getDischangeType() {
-		return dischangeType;
+	public String getDischargeType() {
+		return dischargeType;
 	}
 
 	
-	public void setDischangeType(String dischangeType) {
-		this.dischangeType = dischangeType;
+	public void setDischargeType(String dischargeType) {
+		this.dischargeType = dischargeType;
 	}
 
 	
