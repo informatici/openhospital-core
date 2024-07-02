@@ -73,12 +73,25 @@ public class MedicalInventoryRowIoOperation {
 	
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
-	 
-	 * @param inventoryId - the Invetory Id.
+	 * 
+	 * @param inventoryId - the Inventory Id.
 	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
 		return repository.findByInventoryId(inventoryId);
+	}
+
+	/**
+	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
+	 * 
+	 * @param inventoryId - the Inventory Id.
+	 * @param medicalCode - the medical code.
+	 * @return the list of {@link MedicalInventoryRow}s.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId,
+			String medicalCode) throws OHServiceException {
+		return repository.findByInventoryIdAndMedicalCode(inventoryId, medicalCode);
 	}
 }

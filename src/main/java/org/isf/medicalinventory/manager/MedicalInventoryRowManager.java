@@ -71,11 +71,24 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 *
-	 * @param inventoryId - the Invetory Id.
+	 * @param inventoryId - the Inventory Id.
 	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
 		return iOoperation.getMedicalInventoryRowByInventoryId(inventoryId);
+	}
+
+	/**
+	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
+	 * 
+	 * @param inventoryId - the Inventory Id.
+	 * @param medicalCode - the medical code.
+	 * @return the list of {@link MedicalInventoryRow}s.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId,
+			String medicalCode) throws OHServiceException {
+		return iOoperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
 	}
 }
