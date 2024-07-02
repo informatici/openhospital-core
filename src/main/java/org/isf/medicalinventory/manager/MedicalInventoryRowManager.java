@@ -21,6 +21,7 @@
  */
 package org.isf.medicalinventory.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		validationMedicalInventoryRow(medicalInventoryRow);
 		return ioOperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
 	
@@ -65,17 +67,8 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(medicalInventoryRow.getId());
-		if (medInvRow.isPresent()) {
-			MedicalInventoryRow medInvR = medInvRow.get();
-			medInvR.setLot(medicalInventoryRow.getLot());
-			medInvR.setRealqty(medicalInventoryRow.getRealQty());
-			if (medicalInventoryRow.isNewLot()) {
-				medInvR.setNewLot(true);
-			}
-			return ioOperation.updateMedicalInventoryRow(medInvR);
-		}
-		throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventoryrow.notfound.msg")));
+		validationMedicalInventoryRow(medicalInventoryRow);
+		return ioOperation.updateMedicalInventoryRow(medicalInventoryRow);
 	}
 	
 	/**
@@ -136,5 +129,26 @@ public class MedicalInventoryRowManager {
 			return medInvRow.get();
 		}
 		return null;
+	}
+	
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
+	 *
+	 * @param medInventoryRow
+	 * @throws OHDataValidationException
+	 */
+	private void validationMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		
+		if (medicalInventoryRow.getInventory() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertinventory.msg")));
+		}
+		if (medicalInventoryRow.getMedical() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertmedical.msg")));
+		}
+		
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 }
