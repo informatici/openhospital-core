@@ -175,16 +175,22 @@ public class MedicalInventoryManager {
 	private void validationMedicalInventory(MedicalInventory medInventory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+		String reference = medInventory.getInventoryReference();
+		Integer inventoryId = medInventory.getId();
 		if (medInventory.getInventoryDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertavalidinventorydate.msg")));
 		}
 		if (medInventory.getInventoryDate() != null && medInventory.getInventoryDate().isAfter(tomorrow)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notdateinfuture.msg")));
 		}
-		if (medInventory.getInventoryReference() == null || medInventory.getInventoryReference().equals("")) {
+		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		}
-		
+		if (this.referenceExists(reference)) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
+			MessageDialog.error(null, "");
+			return ;
+		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
