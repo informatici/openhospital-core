@@ -33,6 +33,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.GeneralData;
@@ -116,6 +117,10 @@ public class Lot extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode;
+	
+	@Version
+	@Column(name="LT_LOCK")
+	private int lock;
 
 	public Lot() {
 	}
@@ -196,6 +201,14 @@ public class Lot extends Auditable<String> {
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+	
+	public int getLock() {
+		return lock;
+	}
+	
+	public void setLock(int lock) {
+		this.lock = lock;
 	}
 
 	@Override

@@ -23,6 +23,7 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -170,5 +171,20 @@ public class MedicalInventoryIoOperation {
 	 */
 	public boolean isCodePresent(Integer id) throws OHServiceException {
 		return repository.existsById(id);
+	}
+	
+	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
+	 * @param inventoryId - the {@link MedicalInventory} id.
+	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryById(Integer  inventoryId) throws OHServiceException {
+		Optional<MedicalInventory> inventory = repository.findById(inventoryId);
+		if (inventory.isPresent()) {
+			return inventory.get();
+		}
+		return null;
 	}
 }

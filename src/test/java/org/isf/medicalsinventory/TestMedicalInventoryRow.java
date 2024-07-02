@@ -34,6 +34,7 @@ public class TestMedicalInventoryRow {
 	private int id = 1;
 	private double theoreticQty = 50.0;
 	private double realQty = 50.0;
+	private boolean isNew = false;
 	
 	public MedicalInventoryRow setup(MedicalInventory inventory, Medical medical, Lot lot, boolean usingSet) throws OHException {
 		MedicalInventoryRow medInventoryRow;
@@ -54,11 +55,13 @@ public class TestMedicalInventoryRow {
 		medInventoryRow.setId(id);
 		medInventoryRow.setTheoreticQty(theoreticQty);
 		medInventoryRow.setRealqty(realQty);
+		medInventoryRow.setNewLot(isNew);
 	}
 
 	public void check(MedicalInventoryRow medicalInventoryRow, int id) {
 		assertThat(medicalInventoryRow.getId()).isEqualTo(id);
 		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualTo(theoreticQty);
 		assertThat(medicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(medicalInventoryRow.isNewLot()).isEqualTo(isNew);
 	}
 }
