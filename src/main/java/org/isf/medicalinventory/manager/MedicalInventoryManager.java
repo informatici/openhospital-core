@@ -95,7 +95,7 @@ public class MedicalInventoryManager {
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean referenceExists(String reference) {
+	public boolean referenceExists(String reference) throws OHServiceException {
 		return ioOperations.referenceExists(reference);
 	}
 	
@@ -167,12 +167,23 @@ public class MedicalInventoryManager {
 	}
 	
 	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
+	 * @param inventoryId - the {@link MedicalInventory} id.
+	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {
+		return ioOperations.getInventoryById(inventoryId);
+	}
+	
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param medInventory
 	 * @throws OHDataValidationException
 	 */
-	private void validationMedicalInventory(MedicalInventory medInventory) throws OHDataValidationException {
+	private void validationMedicalInventory(MedicalInventory medInventory) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		String reference = medInventory.getInventoryReference();
@@ -186,10 +197,13 @@ public class MedicalInventoryManager {
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		}
-		if (this.referenceExists(reference)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
-			MessageDialog.error(null, "");
-			return ;
+		boolean exist = ioOperations.referenceExists(reference);
+		if (exist) {
+			MedicalInventory medInv = ioOperations.getInventoryByReference(reference);
+			if (medInv != null && medInv.getId() != inventoryId) {
+				System.out.println(inventoryId+" "+medInv.getId());
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
+			}
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

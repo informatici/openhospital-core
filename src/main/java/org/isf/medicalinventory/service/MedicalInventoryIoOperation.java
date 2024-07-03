@@ -84,7 +84,7 @@ public class MedicalInventoryIoOperation {
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean referenceExists(String reference) {
+	public boolean referenceExists(String reference) throws OHServiceException {
 		MedicalInventory medInv = repository.findByReference(reference);
 		if (medInv != null)  {
 			return true;
@@ -176,11 +176,22 @@ public class MedicalInventoryIoOperation {
 	/**
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
+	 * @param reference - the {@link MedicalInventory} reference.
+	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryByReference(String  reference) throws OHServiceException {
+		return repository.findByReference(reference);
+	}
+
+	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
 	 * @param inventoryId - the {@link MedicalInventory} id.
 	 * @return {@link MedicalInventory}. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory getInventoryById(Integer  inventoryId) throws OHServiceException {
+	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {
 		Optional<MedicalInventory> inventory = repository.findById(inventoryId);
 		if (inventory.isPresent()) {
 			return inventory.get();

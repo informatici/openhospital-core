@@ -90,7 +90,7 @@ public class MedicalInventoryRowIoOperation {
 	 * @return {@link MedicalInventoryRow} with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
-	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(Integer id) {
+	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(Integer id) throws OHServiceException {
 		return repository.findById(id);
 	}
 }

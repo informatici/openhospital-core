@@ -123,11 +123,14 @@ public class MedicalInventoryRowManager {
 	 * @return the {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow getMedicalInventoryRowById(Integer invRowId) {
-		Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRowId);
-		if (medInvRow.isPresent()) {
-			return medInvRow.get();
+	public MedicalInventoryRow getMedicalInventoryRowById(Integer invRowId) throws OHServiceException {
+		if (invRowId != null) {
+			Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRowId);
+			if (medInvRow.isPresent()) {
+				return medInvRow.get();
+			}
 		}
+		
 		return null;
 	}
 	
