@@ -197,13 +197,9 @@ public class MedicalInventoryManager {
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		}
-		boolean exist = ioOperations.referenceExists(reference);
-		if (exist) {
-			MedicalInventory medInv = ioOperations.getInventoryByReference(reference);
-			if (medInv != null && medInv.getId() != inventoryId) {
-				System.out.println(inventoryId+" "+medInv.getId());
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
-			}
+		MedicalInventory medInv = ioOperations.getInventoryByReference(reference);
+		if (medInv != null && medInv.getId() != inventoryId) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
