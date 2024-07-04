@@ -178,6 +178,17 @@ public class MedicalInventoryManager {
 	}
 	
 	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
+	 * @param reference - the {@link MedicalInventory} reference.
+	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryByReference(String reference) throws OHServiceException {
+		return ioOperations.getInventoryByReference(reference);
+	}
+	
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param medInventory
@@ -187,7 +198,6 @@ public class MedicalInventoryManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		String reference = medInventory.getInventoryReference();
-		Integer inventoryId = medInventory.getId();
 		if (medInventory.getInventoryDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertavalidinventorydate.msg")));
 		}
@@ -196,10 +206,6 @@ public class MedicalInventoryManager {
 		}
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
-		}
-		MedicalInventory medInv = ioOperations.getInventoryByReference(reference);
-		if (medInv != null && medInv.getId() != inventoryId) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
