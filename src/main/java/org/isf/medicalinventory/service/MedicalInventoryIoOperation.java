@@ -177,7 +177,7 @@ public class MedicalInventoryIoOperation {
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
 	 * @param reference - the {@link MedicalInventory} reference.
-	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory getInventoryByReference(String  reference) throws OHServiceException {
@@ -188,7 +188,7 @@ public class MedicalInventoryIoOperation {
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
 	 * @param inventoryId - the {@link MedicalInventory} id.
-	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {

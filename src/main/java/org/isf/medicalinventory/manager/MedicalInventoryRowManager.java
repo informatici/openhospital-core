@@ -55,7 +55,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		validationMedicalInventoryRow(medicalInventoryRow);
+		validateMedicalInventoryRow(medicalInventoryRow);
 		return ioOperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
 	
@@ -67,7 +67,7 @@ public class MedicalInventoryRowManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
-		validationMedicalInventoryRow(medicalInventoryRow);
+		validateMedicalInventoryRow(medicalInventoryRow);
 		return ioOperation.updateMedicalInventoryRow(medicalInventoryRow);
 	}
 	
@@ -140,7 +140,7 @@ public class MedicalInventoryRowManager {
 	 * @param medInventoryRow
 	 * @throws OHDataValidationException
 	 */
-	private void validationMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
+	private void validateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		if (medicalInventoryRow.getInventory() == null) {

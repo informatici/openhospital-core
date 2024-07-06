@@ -758,6 +758,18 @@ class Tests extends OHCoreTestCase {
 		assertThat(lots).hasSize(1);
 		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
 	}
+	
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrGetLotsByMedicalWithEmptyLot(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		List<Lot> lots = movStockInsertingManager.getLotByMedical(foundMovement.getMedical(), false);
+		assertThat(lots).hasSize(1);
+		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
+	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")

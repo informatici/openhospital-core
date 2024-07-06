@@ -22,7 +22,6 @@
 package org.isf.medicalinventory.manager;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -58,7 +58,7 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		validationMedicalInventory(medicalInventory);
+		validateMedicalInventory(medicalInventory);
 		return ioOperations.newMedicalInventory(medicalInventory);
 	}
 	
@@ -70,7 +70,7 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		validationMedicalInventory(medicalInventory);
+		validateMedicalInventory(medicalInventory);
 		return ioOperations.updateMedicalInventory(medicalInventory);
 	}
 	
@@ -143,8 +143,8 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
-		dateFrom = LocalDateTime.of(dateFrom.toLocalDate(), LocalTime.MIN);
-		dateTo = LocalDateTime.of(dateTo.toLocalDate(), LocalTime.MAX);
+		dateFrom = TimeTools.getBeginningOfDay(dateFrom);
+		dateTo = TimeTools.getBeginningOfNextDay(dateTo);
 		return ioOperations.getMedicalInventoryByParams(dateFrom, dateTo, status, type);
 	}
 	
@@ -161,8 +161,8 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
-		dateFrom = LocalDateTime.of(dateFrom.toLocalDate(), LocalTime.MIN);
-		dateTo = LocalDateTime.of(dateTo.toLocalDate(), LocalTime.MAX);
+		dateFrom = TimeTools.getBeginningOfDay(dateFrom);
+		dateTo = TimeTools.getBeginningOfNextDay(dateTo);
 		return ioOperations.getMedicalInventoryByParamsPageable(dateFrom, dateTo, status, type, page, size);
 	}
 	
@@ -170,7 +170,7 @@ public class MedicalInventoryManager {
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
 	 * @param inventoryId - the {@link MedicalInventory} id.
-	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {
@@ -181,7 +181,7 @@ public class MedicalInventoryManager {
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
 	 * @param reference - the {@link MedicalInventory} reference.
-	 * @return {@link MedicalInventory}. It could be {@code empty}.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory getInventoryByReference(String reference) throws OHServiceException {
@@ -192,9 +192,9 @@ public class MedicalInventoryManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param medInventory
-	 * @throws OHDataValidationException
+	 * @throws OHServiceException
 	 */
-	private void validationMedicalInventory(MedicalInventory medInventory) throws OHServiceException {
+	private void validateMedicalInventory(MedicalInventory medInventory) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		String reference = medInventory.getInventoryReference();
