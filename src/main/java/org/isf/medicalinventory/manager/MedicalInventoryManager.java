@@ -192,9 +192,9 @@ public class MedicalInventoryManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param medInventory
-	 * @throws OHServiceException
+	 * @throws OHDataValidationException
 	 */
-	private void validateMedicalInventory(MedicalInventory medInventory) throws OHServiceException {
+	private void validateMedicalInventory(MedicalInventory medInventory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		String reference = medInventory.getInventoryReference();
