@@ -84,7 +84,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdateUserSettings() throws Exception {
+	void testUpdateUserSetting() throws Exception {
 		String name = setupTestUserSetting(true);
 		List<UserSetting> userSettings = userSettingManager.getUserSettingByUserName(name);
 		assertThat(userSettings).isNotNull();
