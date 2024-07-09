@@ -25,44 +25,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+public class TestSmsParameters {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
-	}
+	void testGetSmsParameters() {
+		SmsParameters.initialize();
 
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+		assertThat(SmsParameters.TIMEOUT).isEqualTo(3000);
+		assertThat(SmsParameters.LOOP).isEqualTo(15);
+		assertThat(SmsParameters.ICC).isEqualTo("+39");
 	}
 }

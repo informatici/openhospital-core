@@ -25,44 +25,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+class TestVersion {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
+	void testGetVersion() {
+		Version version = Version.getVersion();
+
+		assertThat(version).isNotNull();
+
+		assertThat(version.VER_MAJOR).isEqualTo("major_version");
+		assertThat(version.VER_MINOR).isEqualTo("minor_version");
+		assertThat(version.VER_RELEASE).isEqualTo("release_version");
 	}
 
 	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
+	void testToString() {
+		Version version = Version.getVersion();
 
-		assertThat(generalData).isNotNull();
+		assertThat(version).isNotNull();
 
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+		assertThat(version.toString()).isEqualTo("major_version.minor_version.release_version");
 	}
 }

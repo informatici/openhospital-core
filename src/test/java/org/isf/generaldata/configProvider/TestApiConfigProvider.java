@@ -19,50 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.generaldata;
+package org.isf.generaldata.configProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.isf.generaldata.GeneralData;
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+public class TestApiConfigProvider {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
+	void testGetTestParamsData() {
+		// NOTE: this uses a remote json file so things are bound to fail
+		GeneralData.initialize();
+		ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
+
+		assertThat(apiConfigProvider.getConfigData()).isNull();
+
+		assertThat(apiConfigProvider.get("someParam")).isNull();
+
+		// void method
+		apiConfigProvider.close();
 	}
 
 	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
+	void testGetTestParamsDataEmptyParmsUrl() {
+		GeneralData.initialize();
+		GeneralData.PARAMSURL = "";
+		ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
 
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+		assertThat(apiConfigProvider.getConfigData()).isNull();
 	}
 }

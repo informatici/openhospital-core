@@ -24,45 +24,24 @@ package org.isf.generaldata;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-class TestGeneralData {
+public class TestConfigurationProperties {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
+	void testConfigurationProperties() {
+
+		MockConfigClass mockConfigClass = new MockConfigClass("fileThatDoesNotExist");
+		assertThat(mockConfigClass.isInitialized()).isFalse();
+		assertThat(mockConfigClass.myGetProperty("someProperty", 0.0D)).isZero();
 	}
 
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+	class MockConfigClass extends ConfigurationProperties {
+		MockConfigClass(String fileProperties) {
+			super(fileProperties, false);
+		}
 	}
 }
