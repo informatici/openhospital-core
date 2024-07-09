@@ -19,50 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.generaldata;
+package org.isf.generaldata.configProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.isf.generaldata.GeneralData;
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+public class TestConfigProviderFactory {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
-	}
-
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+	void testConfigProviderFactoryJson() {
+		GeneralData.initialize();
+		// NOTE: this uses a remote json file so things are bound to fail
+		assertThat(ConfigProviderFactory.createConfigProvider()).isNotNull();
+		// Reset to a `properties` file
+		GeneralData.PARAMSURL = "some.properties";
+		assertThat(ConfigProviderFactory.createConfigProvider()).isNotNull();
 	}
 }
