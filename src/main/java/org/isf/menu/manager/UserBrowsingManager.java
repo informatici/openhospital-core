@@ -140,11 +140,11 @@ public class UserBrowsingManager {
 	}
 
 	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
-	// The original idea is that last login in time gets called frequently, and number of failed attempts less often, and locking/unloking users 
+	// The original idea is that last login in time gets called frequently, and number of failed attempts less often, and locking/unlocking users
 	// even more infrequently, etc. and only one or two columns changed value.  The thought was that rewriting the entire object everytime for each
 	// operation was too heavy handed.
 	/**
-	 * Increase the number of failed login attemptes for {@link User}.
+	 * Increase the number of failed login attempts for {@link User}.
 	 *
 	 * @param user the {@link User}
 	 */
@@ -154,7 +154,7 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Reset the number of failed login attemptes to zero for {@link User}.
+	 * Reset the number of failed login attempts to zero for {@link User}.
 	 *
 	 * @param user the {@link User}
 	 */
