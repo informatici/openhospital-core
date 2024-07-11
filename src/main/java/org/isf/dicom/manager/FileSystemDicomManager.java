@@ -609,18 +609,21 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		return ret;
 	}
 	
-	public class DicomDateComparator implements Comparator<FileDicom> {
+	public static class DicomDateComparator implements Comparator<FileDicom> {
 		
 		@Override
 		public int compare(FileDicom object1, FileDicom object2) {
-			if (object2.getDicomStudyDate() == null) {
+			if (object1.getDicomStudyDate() == null) {
 				return -1;
+			}
+			if (object2.getDicomStudyDate() == null) {
+				return 1;
 			}
 			return object1.getDicomStudyDate().compareTo(object2.getDicomStudyDate());
 		}
 	}
 
-	public class DicomTypeDateComparator implements Comparator<FileDicom> {
+	public static class DicomTypeDateComparator implements Comparator<FileDicom> {
 
 		@Override
 		public int compare(FileDicom object1, FileDicom object2) {
