@@ -150,5 +150,9 @@ public class TestAdmission {
 		assertThat(admission.getVisitDate()).isEqualTo(VISITDATE);
 		assertThat(admission.getWeight()).isEqualTo(weight);
 		assertThat(admission.getYProg()).isEqualTo(yProg);
+
+		assertThat(admission.getDeliveryResult()).isNotNull();
+		assertThat(admission.getDeliveryType()).isNotNull();
+		assertThat(admission.getPregTreatmentType()).isNotNull();
 	}
 }

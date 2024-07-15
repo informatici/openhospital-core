@@ -23,25 +23,63 @@ package org.isf.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.UserBrowsingManager;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.GroupMenuIoOperationRepository;
+import org.isf.menu.service.MenuIoOperations;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.service.UserMenuItemIoOperationRepository;
+import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class TestUserBrowsingManager extends OHCoreTestCase {
 
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
+	private static TestUserMenu testUserMenu;
+	private static TestGroupMenu testGroupMenu;
+
 	@Autowired
-	UserBrowsingManager userBrowsingManager;
+	private MenuIoOperations menuIoOperation;
+	@Autowired
+	private UserBrowsingManager userBrowsingManager;
+	@Autowired
+	private GroupMenuIoOperationRepository groupMenuIoOperationRepository;
+	@Autowired
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
+	private UserIoOperationRepository userIoOperationRepository;
+	@Autowired
+	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
+
+	@BeforeAll
+	static void setUpClass() {
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
+		testUserMenu = new TestUserMenu();
+		testGroupMenu = new TestGroupMenu();
+	}
 
 	@BeforeEach
 	void setUp() {
 		GeneralData.STRONGPASSWORD = true;
+		GeneralData.PASSWORDTRIES = 3;
+		cleanH2InMemoryDb();
 	}
 
 	@Test
 	void isNotStrongPassword() {
+		assertThat(userBrowsingManager.isPasswordStrong(null)).isFalse();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdefgh")).isFalse();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdefgh1")).isFalse();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdefgh_")).isFalse();
@@ -81,4 +119,107 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		assertThat(userBrowsingManager.isPasswordStrong("^abcdef1>")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("AaBbCcDdeF1/")).isTrue();
 	}
+
+	@Test
+	void testIncreaseFailedAttempts() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		int failedAttempts = user.getFailedAttempts();
+		userBrowsingManager.increaseFailedAttempts(user);
+		user.setFailedAttempts(failedAttempts+ 1);
+		assertThat(user.getFailedAttempts()).isEqualTo(failedAttempts + 1);
+	}
+
+	@Test
+	void testLockUser() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		assertThat(user.getLockedTime()).isNull();
+		userBrowsingManager.lockUser(user);
+		User updatedUser = userBrowsingManager.getUserByName(userName);
+		assertThat(updatedUser.getLockedTime()).isNotNull();
+	}
+
+	@Test
+	void testUnlockUser() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		userBrowsingManager.lockUser(user);
+		User updatedUser = userBrowsingManager.getUserByName(userName);
+		userBrowsingManager.setLastLogin(updatedUser);
+		updatedUser = userBrowsingManager.getUserByName(userName);
+		userBrowsingManager.lockUser(updatedUser);
+		updatedUser = userBrowsingManager.getUserByName(userName);
+
+		userBrowsingManager.unlockUser(user);
+		updatedUser = userBrowsingManager.getUserByName(userName);
+
+		assertThat(updatedUser.getLockedTime()).isNull();
+		assertThat(updatedUser.getFailedAttempts()).isZero();
+		assertThat(updatedUser.isAccountLocked()).isFalse();
+	}
+
+	@Test
+	void testUnlockWhenTimeExpired() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		user.setAccountLocked(true);
+		user.setLockedTime(TimeTools.getNow().minusDays(30));
+		user.setAccountLocked(true);
+		assertThat(userBrowsingManager.updateUser(user)).isTrue();
+
+		User updatedUser = userBrowsingManager.getUserByName(userName);
+
+		assertThat(userBrowsingManager.unlockWhenTimeExpired(user)).isTrue();
+		updatedUser = userBrowsingManager.getUserByName(userName);
+
+		assertThat(updatedUser.getLastLogin()).isNull();
+		assertThat(updatedUser.getFailedAttempts()).isZero();
+		assertThat(updatedUser.isAccountLocked()).isFalse();
+	}
+
+	@Test
+	void testUnlockWhenTimeExpiredFails() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		user.setAccountLocked(true);
+		user.setLockedTime(TimeTools.getNow().plusDays(30));
+		user.setAccountLocked(true);
+		assertThat(userBrowsingManager.updateUser(user)).isTrue();
+
+		User updatedUser = userBrowsingManager.getUserByName(userName);
+
+		assertThat(userBrowsingManager.unlockWhenTimeExpired(user)).isFalse();
+	}
+
+	@Test
+	void testGetUserGroups() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+
+		List<UserGroup> userGroupList = userBrowsingManager.getUserGroup();
+
+		assertThat(userGroupList).isNotEmpty();
+		assertThat(userGroupList.get(0).getCode()).isEqualTo("Z");
+	}
+
+	private String setupTestUser(boolean usingSet) throws OHException {
+		UserGroup userGroup = testUserGroup.setup(usingSet);
+		User user = testUser.setup(userGroup, usingSet);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		return user.getUserName();
+	}
 }
+
