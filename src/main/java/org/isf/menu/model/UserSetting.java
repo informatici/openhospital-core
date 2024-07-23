@@ -61,6 +61,15 @@ public class UserSetting extends Auditable<String> {
 	@Column(name = "USS_CONFIG_VALUE")
 	private String configValue;
 
+	public UserSetting() {
+	}
+
+	public UserSetting(String user, String configName, String configValue) {
+		this.user = user;
+		this.configName = configName;
+		this.configValue = configValue;
+	}
+
 	public int getId() {
 		return id;
 	}

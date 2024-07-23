@@ -25,44 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+class TestTxtPrinter {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
-	}
+	void testGetTxtPrinter() {
+		TxtPrinter txtPrinter = TxtPrinter.getTxtPrinter();
 
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
+		assertThat(txtPrinter).isNotNull();
 
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+		assertThat(TxtPrinter.ZPL_FONT_TYPE).isEqualTo("0");
+		assertThat(TxtPrinter.ZPL_ROW_HEIGHT).isEqualTo(25);
 	}
 }

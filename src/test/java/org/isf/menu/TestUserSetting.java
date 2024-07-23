@@ -19,50 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.generaldata;
+package org.isf.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
+import org.isf.menu.model.UserSetting;
+import org.isf.utils.exception.OHException;
 
-class TestGeneralData {
+public class TestUserSetting {
 
-	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
+	protected String user = "TestUser";
+	protected String configName = "TestConfigName";
+	protected String configValue = "TestConfigValue";
+
+	public UserSetting setup(boolean usingSet) throws OHException {
+		UserSetting userSetting;
+
+		if (usingSet) {
+			userSetting = new UserSetting();
+			setParameters(userSetting);
+		} else {
+			// Create User with all parameters 
+			userSetting = new UserSetting(user, configName, configValue);
+		}
+
+		return userSetting;
 	}
 
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
+	public void setParameters(UserSetting userSetting) {
+		userSetting.setUser(user);
+		userSetting.setConfigName(configName);
+		userSetting.setConfigValue(configValue);
 	}
 
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+	public void check(UserSetting userSetting) {
+		assertThat(userSetting.getUser()).isEqualTo(user);
+		assertThat(userSetting.getConfigName()).isEqualTo(configName);
+		assertThat(userSetting.getConfigValue()).isEqualTo(configValue);
 	}
 }

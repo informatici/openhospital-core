@@ -25,44 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+public class TestParamsData {
 
 	@Test
-	void testGetGeneralData() {
-		GeneralData generalData = GeneralData.getGeneralData();
-		
-		assertThat(generalData).isNotNull();
-		
-		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
-	}
+	void testGetTestParamsData() {
+		ParamsData paramsData = ParamsData.getInstance();
 
-	@Test
-	void testGetSingleUser() {
-		GeneralData generalData = GeneralData.getGeneralData();
+		assertThat(paramsData.getTelemetryUrl()).isEqualTo("https://europe-west1-open-hospital-telemetry.cloudfunctions.net/open-hospital-telemetry");
 
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getSINGLEUSER()).isFalse();
-	}
-
-	@Test
-	void testGetUsersListLogin() {
-		GeneralData generalData = GeneralData.getGeneralData();
-
-		assertThat(generalData).isNotNull();
-
-		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
-	}
-
-	@Test
-	void testReset() {
-		// get them one time
-		GeneralData generalData = GeneralData.getGeneralData();
-		// throw them away
-		GeneralData.reset();
-
-		// get it a second time
-		generalData = GeneralData.getGeneralData();
-		assertThat(generalData).isNotNull();
+		// void method
+		paramsData.close();
 	}
 }
