@@ -31,6 +31,9 @@ public class JasperReportResultDto implements Serializable {
     private String jasperFile;
     private String filename;
 
+    public JasperReportResultDto() {
+    }
+
     public JasperReportResultDto(JasperPrint jasperPrint, String jasperFile, String filename) {
         this.jasperPrint = jasperPrint;
         this.jasperFile = jasperFile;
