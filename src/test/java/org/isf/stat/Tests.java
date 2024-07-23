@@ -107,8 +107,8 @@ class Tests extends OHCoreTestCase {
 
 			JasperReportResultDto jasperReportResultDto = jasperReportsManager.getExamsListPdf();
 			assertThat(jasperReportResultDto).isNotNull();
-			assertThat(jasperReportResultDto.getFilename()).isEqualTo("rpt_base/PDF/examslist.pdf");
-			assertThat(jasperReportResultDto.getJasperFile()).isEqualTo("rpt_base/examslist.jasper");
+			assertThat(jasperReportResultDto.getFilename()).containsAnyOf("rpt_base/PDF/examslist.pdf", "rpt_base\\PDF\\examslist.pdf");
+			assertThat(jasperReportResultDto.getJasperFile()).containsAnyOf("rpt_base/examslist.jasper", "rpt_base\\examslist.jasper");
 		}
 	}
 
@@ -131,8 +131,8 @@ class Tests extends OHCoreTestCase {
 
 			JasperReportResultDto jasperReportResultDto = jasperReportsManager.getDiseasesListPdf();
 			assertThat(jasperReportResultDto).isNotNull();
-			assertThat(jasperReportResultDto.getFilename()).isEqualTo("rpt_base/PDF/diseaseslist.pdf");
-			assertThat(jasperReportResultDto.getJasperFile()).isEqualTo("rpt_base/diseaseslist.jasper");
+			assertThat(jasperReportResultDto.getFilename()).containsAnyOf("rpt_base/PDF/diseaseslist.pdf", "rpt_base\\PDF\\diseaseslist.pdf");
+			assertThat(jasperReportResultDto.getJasperFile()).containsAnyOf("rpt_base/diseaseslist.jasper", "rpt_base\\diseaseslist.jasper");
 		}
 	}
 
@@ -155,8 +155,8 @@ class Tests extends OHCoreTestCase {
 
 			JasperReportResultDto jasperReportResultDto = jasperReportsManager.getOperationsListPdf();
 			assertThat(jasperReportResultDto).isNotNull();
-			assertThat(jasperReportResultDto.getFilename()).isEqualTo("rpt_base/PDF/operationslist.pdf");
-			assertThat(jasperReportResultDto.getJasperFile()).isEqualTo("rpt_base/operationslist.jasper");
+			assertThat(jasperReportResultDto.getFilename()).containsAnyOf("rpt_base/PDF/operationslist.pdf", "rpt_base\\PDF\\operationslist.pdf");
+			assertThat(jasperReportResultDto.getJasperFile()).containsAnyOf("rpt_base/operationslist.jasper", "rpt_base\\operationslist.jasper");
 		}
 	}
 }
