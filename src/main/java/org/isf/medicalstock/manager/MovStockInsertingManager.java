@@ -235,6 +235,17 @@ public class MovStockInsertingManager {
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
+	
+	/**
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out.
+	 * 
+	 * @param medical the medical.
+	 * @return the list of retrieved {@link Lot}s.
+	 * @throws OHServiceException
+	 */
+	public List<Lot> getLotByMedical(Medical medical) throws OHServiceException {
+		return ioOperations.getLotsByMedical(medical, true);
+	}
 
 	/**
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top with zero quantities will be stripped out if removeEmpty is set to true.
