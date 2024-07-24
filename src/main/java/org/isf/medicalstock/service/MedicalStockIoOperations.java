@@ -136,12 +136,10 @@ public class MedicalStockIoOperations {
 							"angal.medicalstock.multipledischarging.movementexceedstheavailablequantityformedical", medicalQty, medical.getDescription())));
 		}
 		if (lots.isEmpty()) {
-			String message = MessageBundle.formatMessage(
-							"angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport",
+			String message = MessageBundle.formatMessage("angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport",
 							medical.getDescription());
 			LOGGER.error(message);
-			throw new OHServiceException(
-							new OHExceptionMessage(message));
+			throw new OHServiceException(new OHExceptionMessage(message));
 		}
 		for (Lot lot : lots) {
 			String lotCode = lot.getCode();
