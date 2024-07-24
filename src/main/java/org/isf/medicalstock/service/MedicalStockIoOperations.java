@@ -133,10 +133,12 @@ public class MedicalStockIoOperations {
 
 		if (qty > medicalQty) {
 			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(
-							"angal.medicalstock.multipledischarging.movementexceedstheavailablequantityformedical", medicalQty, medical.getDescription())));
+							"angal.medicalstock.multipledischarging.movementexceedstheavailablequantityformedical.fmt.msg", medicalQty,
+							medical.getDescription())));
 		}
 		if (lots.isEmpty()) {
-			String message = MessageBundle.formatMessage("angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport",
+			String message = MessageBundle.formatMessage(
+							"angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport.fmt.msg",
 							medical.getDescription());
 			LOGGER.error(message);
 			throw new OHServiceException(new OHExceptionMessage(message));
