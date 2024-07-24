@@ -264,15 +264,19 @@ class Tests extends OHCoreTestCase {
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
 	void testIoNewAutomaticDischargingMovementLotQuantityLessMovementQuantity(boolean in, boolean out, boolean toward) throws Exception {
-		setGeneralData(in, out, toward);
-		int code = setupTestMovement(false);
-		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
-		assertThat(movement).isNotNull();
-		movement.getLot().setMainStoreQuantity(10);
-		movement.setQuantity(100);
-		medicalStockIoOperation.newAutomaticDischargingMovement(movement);
-		List<Movement> movementsByRefNo = medicalStockIoOperation.getMovementsByReference(movement.getRefNo());
-		assertThat(movementsByRefNo).hasSize(2);
+		assertThatThrownBy(() -> {
+			setGeneralData(in, out, toward);
+			int code = setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+			assertThat(movement).isNotNull();
+			movement.getLot().setMainStoreQuantity(10);
+			movement.setQuantity(100);
+			medicalStockIoOperation.newAutomaticDischargingMovement(movement);
+		})
+						.isInstanceOf(OHServiceException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting one validation errors"));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
