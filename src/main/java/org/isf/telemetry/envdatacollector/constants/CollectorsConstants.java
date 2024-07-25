@@ -61,7 +61,7 @@ public interface CollectorsConstants {
 	String APP_LANGUAGE = "app_language";
 	String APP_SINGLEUSER = "app_singleuser";
 	String APP_DEBUG = "app_debug";
-	String APP_INTERNALVIEWER = "app_internaluser";
+	String APP_INTERNALVIEWER = "app_internalviewer";
 	String APP_SMSENABLED = "app_smsenabled";
 	String APP_VIDEOMODULEENABLED = "app_videomoduleenabled";
 	String APP_XMPPMODULEENABLED = "app_xmppmoduleenabled";
@@ -84,6 +84,9 @@ public interface CollectorsConstants {
 	String APP_LOTWITHCOST = "app_lotwithcost";
 	String APP_DICOMMODULEENABLED = "app_dicommoduleenabled";
 	String APP_DICOMTHUMBNAILS = "app_dicomthumbnails";
+	String APP_STRONGPASSWORD = "app_strongpassword";
+	String APP_USERSLISTLOGIN = "app_userslistlogin";
+
 	String OH_NUMBER_OF_PATIENTS = "oh_patients";
 	String OH_NUMBER_OF_USERS = "oh_users";
 	String OH_NUMBER_OF_ROLES = "oh_roles";
