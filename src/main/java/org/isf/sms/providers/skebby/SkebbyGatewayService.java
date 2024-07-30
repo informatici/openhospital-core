@@ -21,12 +21,11 @@
  */
 package org.isf.sms.providers.skebby;
 
-import java.awt.TrayIcon.MessageType;
-
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.isf.sms.providers.common.CustomCommonDecoder;
 import org.isf.sms.providers.common.CustomCommonEncoder;
+import org.isf.sms.providers.skebby.model.MessageType;
 import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
 import org.isf.sms.providers.skebby.model.SkebbySmsResponse;
 import org.isf.sms.providers.skebby.remote.SkebbyGatewayRemoteService;
