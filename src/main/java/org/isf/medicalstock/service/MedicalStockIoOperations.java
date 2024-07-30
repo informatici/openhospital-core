@@ -31,6 +31,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
+import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicalstock.model.Lot;
@@ -127,11 +128,20 @@ public class MedicalStockIoOperations {
 		List<Movement> dischargingMovements = new ArrayList<>();
 		List<Lot> lots = getLotsByMedical(movement.getMedical(), true);
 		Medical medical = movement.getMedical();
+		double medicalQty = medical.getTotalQuantity();
 		int qty = movement.getQuantity(); // movement initial quantity
 
+		if (qty > medicalQty) {
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(
+							"angal.medicalstock.multipledischarging.movementexceedstheavailablequantityformedical.fmt.msg", medicalQty,
+							medical.getDescription())));
+		}
 		if (lots.isEmpty()) {
-			LOGGER.warn("No lots with available quantity found for medical {}", medical.getDescription());
-			return dischargingMovements;
+			String message = MessageBundle.formatMessage(
+							"angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport.fmt.msg",
+							medical.getDescription());
+			LOGGER.error(message);
+			throw new OHServiceException(new OHExceptionMessage(message));
 		}
 		for (Lot lot : lots) {
 			String lotCode = lot.getCode();
