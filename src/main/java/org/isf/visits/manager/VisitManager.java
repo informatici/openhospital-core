@@ -320,7 +320,7 @@ public class VisitManager {
 
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Visit}
-	 * If the length exceeds {@code SmsManager.MAX_LENGHT} the message will be truncated to
+	 * If the length exceeds {@code SmsManager.MAX_LENGTH} the message will be truncated to
 	 * the maximum length.
 	 * (example:
 	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
@@ -336,8 +336,8 @@ public class VisitManager {
 		if (note != null && !note.isEmpty()) {
 			sb.append(" - ").append(note);
 		}
-		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
-			return sb.substring(0, SmsManager.MAX_LENGHT);
+		if (sb.toString().length() > SmsManager.MAX_LENGTH) {
+			return sb.substring(0, SmsManager.MAX_LENGTH);
 		}
 		return sb.toString();
 	}

@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsManager {
 
-	public static final int MAX_LENGHT = 160;
+	public static final int MAX_LENGTH = 160;
 	private static final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 
 	private SmsOperations smsOperations;
@@ -74,12 +74,12 @@ public class SmsManager {
 	}
 
 	/**
-	 * Save or Update a {@link Sms}. If the sms's text lenght is greater than
-	 * {@code MAX_LENGHT} it will throw a {@code testMaxLenghtError} error if
+	 * Save or Update a {@link Sms}. If the sms's text length is greater than
+	 * {@code MAX_LENGTH} it will throw a {@code testMaxLenghtError} error if
 	 * {@code split} parameter is set to {@code false}
 	 *
 	 * @param smsToSend - the {@link Sms} to save or update
-	 * @param split - specify if to split sms's text longer than {@code MAX_LENGHT}
+	 * @param split - specify if to split sms's text longer than {@code MAX_LENGTH}
 	 * @throws OHServiceException
 	 */
 	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
@@ -88,11 +88,11 @@ public class SmsManager {
 		List<Sms> smsList = new ArrayList<>();
 		String text = smsToSend.getSmsText();
 		int textLenght = text.length();
-		if (textLenght > MAX_LENGHT && !split) {
+		if (textLenght > MAX_LENGTH && !split) {
 			throw new OHDataValidationException(
-					new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT)));
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGTH)));
 		}
-		else if (textLenght > MAX_LENGHT && split) {
+		else if (textLenght > MAX_LENGTH && split) {
 
 			String[] parts = split(text);
 			String number = smsToSend.getSmsNumber();
@@ -122,20 +122,20 @@ public class SmsManager {
 
 	private String[] split(String text) {
 		int len = text.length();
-		if (len <= MAX_LENGHT) {
+		if (len <= MAX_LENGTH) {
 			return new String[] { text };
 		}
 
 		// Number of parts
-		int nParts = (len + MAX_LENGHT - 1) / MAX_LENGHT;
+		int nParts = (len + MAX_LENGTH - 1) / MAX_LENGTH;
 		String[] parts = new String[nParts];
 
 		// Break into parts
 		int offset = 0;
 		int i = 0;
 		while (i < nParts) {
-			parts[i] = text.substring(offset, Math.min(offset + MAX_LENGHT, len));
-			offset += MAX_LENGHT;
+			parts[i] = text.substring(offset, Math.min(offset + MAX_LENGTH, len));
+			offset += MAX_LENGTH;
 			i++;
 		}
 		return parts;
