@@ -21,10 +21,10 @@
  */
 package org.isf.sms.providers.skebby;
 
-import java.awt.TrayIcon.MessageType;
 import java.util.Collections;
 
 import org.isf.sms.model.Sms;
+import org.isf.sms.providers.skebby.model.MessageType;
 import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
 import org.springframework.stereotype.Component;
 
