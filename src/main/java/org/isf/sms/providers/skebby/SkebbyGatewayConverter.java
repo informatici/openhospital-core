@@ -25,14 +25,14 @@ import java.awt.TrayIcon.MessageType;
 import java.util.Collections;
 
 import org.isf.sms.model.Sms;
-import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
+import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SkebbyGatewayConverter {
 
-	public SckebbySmsRequest toServiceDTO(Sms sms, MessageType messageType, String sender) {
-		SckebbySmsRequest result = new SckebbySmsRequest();
+	public SkebbySmsRequest toServiceDTO(Sms sms, MessageType messageType, String sender) {
+		SkebbySmsRequest result = new SkebbySmsRequest();
 		result.setMessage(sms.getSmsText());
 		result.setRecipient(Collections.singletonList(sms.getSmsNumber()));
 		if (messageType != null) {

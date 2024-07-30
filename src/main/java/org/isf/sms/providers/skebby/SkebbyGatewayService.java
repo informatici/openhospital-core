@@ -27,8 +27,8 @@ import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.isf.sms.providers.common.CustomCommonDecoder;
 import org.isf.sms.providers.common.CustomCommonEncoder;
-import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
-import org.isf.sms.providers.skebby.model.SckebbySmsResponse;
+import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
+import org.isf.sms.providers.skebby.model.SkebbySmsResponse;
 import org.isf.sms.providers.skebby.remote.SkebbyGatewayRemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,11 +81,11 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 		final String sender = this.smsProperties.getProperty(KEY_SENDER);
 
-		SckebbySmsRequest smsSendingRequest = this.skebbyGatewayConverter.toServiceDTO(sms, messageType, sender);
+		SkebbySmsRequest smsSendingRequest = this.skebbyGatewayConverter.toServiceDTO(sms, messageType, sender);
 
 		SkebbyGatewayRemoteService httpClient = buildHttlClient();
 		System.out.println("Sending...");
-		SckebbySmsResponse result;
+		SkebbySmsResponse result;
 		try {
 			if (this.isAccessTokenAuthentication()) {
 				result = httpClient.sendSmsWithAccessToken(userKey, sessionKeyOrAccessToken, smsSendingRequest).getBody();
