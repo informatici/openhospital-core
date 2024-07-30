@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SckebbySmsRequest implements Serializable {
+public class SkebbySmsRequest implements Serializable {
 
 	private static final long serialVersionUID = -1860994148316130286L;
 

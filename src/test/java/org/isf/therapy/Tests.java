@@ -239,7 +239,7 @@ class Tests extends OHCoreTestCase {
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).hasSize(1);
-		assertThat(smsOperations.getList().get(0).getSmsText()).hasSize(SmsManager.MAX_LENGHT);
+		assertThat(smsOperations.getList().get(0).getSmsText()).hasSize(SmsManager.MAX_LENGTH);
 	}
 
 	@Test
