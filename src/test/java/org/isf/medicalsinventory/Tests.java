@@ -515,7 +515,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(newMedicalInventoryRow).isNotNull();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
-		assertThat(medicalInventoryRows.size()).isEqualTo(1);
+		assertThat(medicalInventoryRows).hasSize(1);
 		
 	}
 
