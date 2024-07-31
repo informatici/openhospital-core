@@ -24,6 +24,7 @@ package org.isf.medicalsinventory;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
@@ -494,6 +495,28 @@ class Tests extends OHCoreTestCase {
 		foundMedicalInventoryRow.setRealqty(realQty);
 		MedicalInventoryRow updatedMedicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(foundMedicalInventoryRow);
 		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualTo(realQty);
+	}
+	
+	@Test
+	void testMgrGetMedicalInventoryRowByInventoryId() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
+		lotIoOperationRepository.saveAndFlush(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		int inventoryId = medicalInventoryRow.getId();
+		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
+		assertThat(newMedicalInventoryRow).isNotNull();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows.size()).isEqualTo(1);
+		
 	}
 
 	private int setupTestMedicalInventory(boolean usingSet) throws OHException, OHServiceException {
