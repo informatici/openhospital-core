@@ -245,7 +245,7 @@ public class MedicalInventoryManager {
 		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(dischargeCode);
 		Supplier supplier = supplierManager.getByID(supplierId);
 		Ward ward = wardManager.findWard(wardCode);
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getNow();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			String reference = "Ref-"+LocalDateTime.now();
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
