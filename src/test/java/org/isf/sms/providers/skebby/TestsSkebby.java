@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms;
+package org.isf.sms.providers.skebby;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.sms.EnvironmentStub;
+import org.isf.sms.TestSms;
 import org.isf.sms.model.Sms;
-import org.isf.sms.providers.skebby.SkebbyGatewayConverter;
-import org.isf.sms.providers.skebby.SkebbyGatewayService;
 import org.isf.sms.providers.skebby.model.MessageType;
 import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
 import org.isf.sms.providers.skebby.model.SkebbySmsResponse;

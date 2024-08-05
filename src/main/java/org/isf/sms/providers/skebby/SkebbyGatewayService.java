@@ -44,16 +44,16 @@ import feign.slf4j.Slf4jLogger;
 @PropertySource("classpath:sms.properties")
 public class SkebbyGatewayService implements SmsSenderInterface {
 
-	public static final String SERVICE_NAME = "skebby-gateway-service";
-	public static final String RESPONSE_SUCCESS = "OK";
-	public static final String KEY_PASSWORD = "skebby-gateway-service.password";
-	public static final String KEY_USERNAME = "skebby-gateway-service.username";
-	public static final String KEY_MESSAGE_TYPE = "skebby-gateway-service.message-type";
+	private static final String SERVICE_NAME = "skebby-gateway-service";
+	private static final String RESPONSE_SUCCESS = "OK";
+	protected static final String KEY_PASSWORD = "skebby-gateway-service.password";
+	protected static final String KEY_USERNAME = "skebby-gateway-service.username";
+	protected static final String KEY_MESSAGE_TYPE = "skebby-gateway-service.message-type";
 
-	public static final String KEY_USER_KEY = "skebby-gateway-service.userKey";
-	public static final String KEY_ACCESS_TOKEN = "skebby-gateway-service.accessToken";
+	protected static final String KEY_USER_KEY = "skebby-gateway-service.userKey";
+	protected static final String KEY_ACCESS_TOKEN = "skebby-gateway-service.accessToken";
 
-	public static final String KEY_SENDER = "skebby-gateway-service.sender";
+	private static final String KEY_SENDER = "skebby-gateway-service.sender";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkebbyGatewayService.class);
 
