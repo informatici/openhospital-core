@@ -99,7 +99,7 @@ public class SkebbySmsRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SckebbySmsRequest [messageType=" + messageType + ", message=***" + ", recipient=***" + ", sender=***" + ", scheduledDeliveryTime="
+		return "SkebbySmsRequest [messageType=" + messageType + ", message=***" + ", recipient=***" + ", sender=***" + ", scheduledDeliveryTime="
 						+ scheduledDeliveryTime + ", orderId=" + orderId + ", returnCredits=" + returnCredits + ']';
 	}
 
