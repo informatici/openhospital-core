@@ -31,46 +31,33 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionManager {
 
-	private PermissionIoOperations operations;
+	private final PermissionIoOperations operations;
 
 	public PermissionManager(PermissionIoOperations permissionIoOperations) {
 		this.operations = permissionIoOperations;
 	}
 
-	public List<Permission> retrievePermissionsByGroupCode(String userGroupCode) throws OHServiceException {
+	public List<Permission> retrievePermissionsByGroupCode(String userGroupCode) {
 		return operations.retrivePermisionsByGroupCode(userGroupCode);
 	}
 
-	public List<Permission> retrievePermissionsByUsername(String currentUserName) throws OHServiceException {
+	public List<Permission> retrievePermissionsByUsername(String currentUserName) {
 		return operations.retrievePermissionsByCurrentLoggedInUser(currentUserName);
 	}
 
-	public Permission retrievePermissionById(Integer id) throws OHServiceException {
+	public Permission retrievePermissionById(Integer id) {
 		return operations.retrievePermissionById(id);
 	}
 
-	public Permission retrievePermissionByName(String name) throws OHServiceException {
+	public Permission retrievePermissionByName(String name) {
 		return operations.retrievePermissionByName(name);
 	}
 
-	public Permission insertPermission(Permission permission) throws OHServiceException {
-		return operations.insertPermission(permission);
-	}
-
-	public Permission updatePermission(Permission model) throws OHServiceException {
-		return operations.updatePermission(model);
-	}
-
-	public void deletePermission(Integer id) throws OHServiceException {
-		operations.deletePermission(id);
-	}
-
-	public List<Permission> retrieveAllPermissions() throws OHServiceException {
+	public List<Permission> retrieveAllPermissions() {
 		return operations.retrieveAllPermissions();
 	}
 
 	public boolean exists(int id) throws OHServiceException {
 		return operations.exists(id);
 	}
-
 }

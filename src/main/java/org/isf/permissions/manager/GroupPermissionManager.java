@@ -21,19 +21,17 @@
  */
 package org.isf.permissions.manager;
 
-import java.util.List;
-
-import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
-import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.GroupPermissionIoOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GroupPermissionManager {
 
-	private GroupPermissionIoOperations operations;
+	private final GroupPermissionIoOperations operations;
 
 	public GroupPermissionManager(GroupPermissionIoOperations groupPermissionIoOperations) {
 		this.operations = groupPermissionIoOperations;
@@ -42,14 +40,4 @@ public class GroupPermissionManager {
 	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
 		return operations.findByIdIn(ids);
 	}
-
-	public List<GroupPermission> findByPermissionIdAndUserGroupCodes(Integer permissionId, List<String> userGroupCodes)
-			throws OHServiceException {
-		return operations.findByPermissionIdAndUserGroupCodes(permissionId, userGroupCodes);
-	}
-
-	public List<GroupPermission> generateGroupPermissionList(Permission model, List<UserGroup> userGroups) throws OHServiceException {
-		return operations.generateGroupPermissionList(model, userGroups);
-	}
-
 }
