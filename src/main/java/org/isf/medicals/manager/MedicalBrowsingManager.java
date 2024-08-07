@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -169,7 +169,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public Medical newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		checkMedicalForInsert(medical, ignoreSimilar);
+		validateMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
 
@@ -193,7 +193,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public Medical updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		checkMedicalForUpdate(medical, ignoreSimilar);
+		validateMedicalForUpdate(medical, ignoreSimilar);
 		return ioOperations.updateMedical(medical);
 	}
 
@@ -218,7 +218,7 @@ public class MedicalBrowsingManager {
 	 * @param medical - the {@link Medical} to insert or update
 	 * @return list of {@link OHExceptionMessage}
 	 */
-	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
+	private List<OHExceptionMessage> validateMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg")));
@@ -233,42 +233,42 @@ public class MedicalBrowsingManager {
 	}
 
 	/**
-	 * Perform several checks on the provided medical, useful for insert
+	 * Perform several validation checks on the provided medical, useful for insert
 	 *
-	 * @param medical - the {@link Medical} to check
+	 * @param medical - the {@link Medical} to validate
 	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @throws OHServiceException
 	 */
-	private void checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		checkMedical(medical, ignoreSimilar, false);
+	private void validateMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		validateMedical(medical, ignoreSimilar, false);
 	}
 
 	/**
-	 * Perform several checks on the provided medical, useful for update
+	 * Perform several validation checks on the provided medical, useful for update
 	 *
-	 * @param medical - the {@link Medical} to check
+	 * @param medical - the {@link Medical} to validate
 	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @throws OHServiceException
 	 */
-	public void checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		checkMedical(medical, ignoreSimilar, true);
+	public void validateMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		validateMedical(medical, ignoreSimilar, true);
 	}
 
 	/**
-	 * Perform several checks on the provided medical, useful for update
+	 * Perform several validation checks on the provided medical, useful for update
 	 *
-	 * @param medical - the {@link Medical} to check
+	 * @param medical - the {@link Medical} to validate
 	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @param update - if {@code true}, it will not consider the actual {@link Medical}
 	 * @throws OHServiceException
 	 */
-	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
+	public void validateMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
 
 		//check commons
-		List<OHExceptionMessage> errors = new ArrayList<>(checkMedicalCommon(medical));
+		List<OHExceptionMessage> errors = new ArrayList<>(validateMedicalCommon(medical));
 
 		//check existing data
 		boolean productCodeExists = !medical.getProdCode().isEmpty() && ioOperations.productCodeExists(medical, update);
