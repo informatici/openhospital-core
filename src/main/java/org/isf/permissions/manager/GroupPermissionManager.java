@@ -21,12 +21,11 @@
  */
 package org.isf.permissions.manager;
 
+import java.util.List;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.service.GroupPermissionIoOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class GroupPermissionManager {
