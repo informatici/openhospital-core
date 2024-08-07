@@ -84,6 +84,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	 */
 	@NotNull
 	@Column(name = "MDSR_INI_STOCK_QTI")
+	@Deprecated
 	private double initialqty;
 
 	/**
@@ -138,14 +139,13 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	/**
 	 * Constructor
 	 */
-	public Medical(Integer code, MedicalType type, String prodCode, String description,
-					double initialqty, Integer pcsperpck, double minqty, double inqty, double outqty) {
+	public Medical(Integer code, MedicalType type, String prodCode, String description, Integer pcsperpck, double minqty, double inqty, double outqty) {
 		super();
 		this.code = code;
 		this.type = type;
 		this.prod_code = prodCode;
 		this.description = description;
-		this.initialqty = initialqty;
+		this.initialqty = 0.;
 		this.pcsperpck = pcsperpck;
 		this.minqty = minqty;
 		this.inqty = inqty;
@@ -172,12 +172,9 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.description = description;
 	}
 
+	@Deprecated
 	public double getInitialqty() {
 		return initialqty;
-	}
-
-	public void setInitialqty(double initialqty) {
-		this.initialqty = initialqty;
 	}
 
 	public double getInqty() {

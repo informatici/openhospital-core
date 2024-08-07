@@ -32,7 +32,7 @@ import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalInventory {
-	
+
 	private int id = 1;
 	private String status = "STATUS";
 	private LocalDateTime inventoryDate = LocalDateTime.now();
@@ -40,6 +40,10 @@ public class TestMedicalInventory {
 	private String inventoryReference = "REFERENCE";
 	private String inventoryType = "TYPE";
 	private String ward = "Z";
+	private int supplier = 3;
+	private String destination = "INV";
+	private String charge = "inventory+";
+	private String discharge = "inventory-";
 
 	public MedicalInventory setup(Ward ward, boolean usingSet) throws OHException {
 		MedicalInventory medInventory;
@@ -48,12 +52,13 @@ public class TestMedicalInventory {
 			medInventory = new MedicalInventory();
 			setParameters(medInventory);
 		} else {
-			// Create MedicalInventory with all parameters 
-			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode());
+			// Create MedicalInventory with all parameters
+			medInventory = new MedicalInventory(id, status, inventoryDate, user, inventoryReference, inventoryType, ward.getCode(), charge, discharge, supplier,
+							destination);
 		}
 		return medInventory;
 	}
-	
+
 	public void setParameters(MedicalInventory medInventory) {
 		medInventory.setId(id);
 		medInventory.setStatus(status);
@@ -62,8 +67,12 @@ public class TestMedicalInventory {
 		medInventory.setInventoryReference(inventoryReference);
 		medInventory.setInventoryType(inventoryType);
 		medInventory.setWard(ward);
+		medInventory.setChargeType(charge);
+		medInventory.setDischargeType(discharge);
+		medInventory.setSupplier(supplier);
+		medInventory.setDestination(destination);
 	}
-	
+
 	public void check(MedicalInventory medInventory, int id) {
 		assertThat(medInventory.getId()).isEqualTo(id);
 		assertThat(medInventory.getStatus()).isEqualTo(status);
@@ -72,5 +81,9 @@ public class TestMedicalInventory {
 		assertThat(medInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medInventory.getInventoryType()).isEqualTo(inventoryType);
 		assertThat(medInventory.getWard()).isEqualTo(ward);
+		assertThat(medInventory.getChargeType()).isEqualTo(charge);
+		assertThat(medInventory.getDischargeType()).isEqualTo(discharge);
+		assertThat(medInventory.getSupplier()).isEqualTo(supplier);
+		assertThat(medInventory.getDestination()).isEqualTo(destination);
 	}
 }

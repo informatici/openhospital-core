@@ -31,6 +31,7 @@ public class TestMovementType {
 	private String code = "ZZABCD";
 	private String description = "TestDescription";
 	private String type = "+";
+	private String category = "operational";
 
 	public MovementType setup(boolean usingSet) throws OHException {
 		MovementType movementType;
@@ -39,8 +40,8 @@ public class TestMovementType {
 			movementType = new MovementType();
 			setParameters(movementType);
 		} else {
-			// Create MovementType with all parameters 
-			movementType = new MovementType(code, description, type);
+			// Create MovementType with all parameters
+			movementType = new MovementType(code, description, type, category);
 		}
 
 		return movementType;
@@ -50,11 +51,13 @@ public class TestMovementType {
 		movementType.setCode(code);
 		movementType.setDescription(description);
 		movementType.setType(type);
+		movementType.setCategory(category);
 	}
 
 	public void check(MovementType movementType) {
 		assertThat(movementType.getCode()).isEqualTo(code);
 		assertThat(movementType.getDescription()).isEqualTo(description);
 		assertThat(movementType.getType()).isEqualTo(type);
+		assertThat(movementType.getCategory()).isEqualTo(category);
 	}
 }
