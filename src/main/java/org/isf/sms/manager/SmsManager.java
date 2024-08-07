@@ -75,7 +75,7 @@ public class SmsManager {
 
 	/**
 	 * Save or Update a {@link Sms}. If the sms's text length is greater than
-	 * {@code MAX_LENGTH} it will throw a {@code testMaxLenghtError} error if
+	 * {@code MAX_LENGTH} it will throw a {@code testMaxLengthError} error if
 	 * {@code split} parameter is set to {@code false}
 	 *
 	 * @param smsToSend - the {@link Sms} to save or update
@@ -87,12 +87,12 @@ public class SmsManager {
 
 		List<Sms> smsList = new ArrayList<>();
 		String text = smsToSend.getSmsText();
-		int textLenght = text.length();
-		if (textLenght > MAX_LENGTH && !split) {
+		int textLength = text.length();
+		if (textLength > MAX_LENGTH && !split) {
 			throw new OHDataValidationException(
 					new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGTH)));
 		}
-		else if (textLenght > MAX_LENGTH && split) {
+		if (textLength > MAX_LENGTH) {
 
 			String[] parts = split(text);
 			String number = smsToSend.getSmsNumber();
