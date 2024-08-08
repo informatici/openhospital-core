@@ -209,7 +209,6 @@ public class MedicalInventoryIoOperation {
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
 	public void deleteInventory(int inventoryId) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<>();
 		try {
 			MedicalInventory inventory = getInventoryById(inventoryId);
 			if (inventory != null) {
@@ -218,16 +217,14 @@ public class MedicalInventoryIoOperation {
 					inventory.setStatus("canceled");
 					repository.save(inventory);
 				} else {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
+					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
 				}
 			} else {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notfound.msg")));
+				throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notfound.msg")));
 			}
 		} catch (Exception e) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
-		}
-		if (!errors.isEmpty()) {
-			throw new OHServiceException(errors);
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
 		}
 	}
+
 }
