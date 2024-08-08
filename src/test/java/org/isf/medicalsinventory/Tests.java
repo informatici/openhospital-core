@@ -531,4 +531,22 @@ class Tests extends OHCoreTestCase {
 		MedicalInventoryRow savedMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
 		return savedMedicalInventoryRow.getId();
 	}
+
+	@Test
+	void testDeleteInventory() throws Exception {
+
+		int id = setupTestMedicalInventory(false);
+		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(inventory).isNotNull();
+
+		inventory.setStatus("draft");
+		medIvnIoOperationRepository.saveAndFlush(inventory);
+
+		medicalInventoryManager.deleteInventory(id);
+
+		MedicalInventory deletedInventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(deletedInventory).isNotNull();
+		assertThat(deletedInventory.getStatus()).isEqualTo("canceled");
+	}
+
 }

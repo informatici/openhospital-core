@@ -30,7 +30,7 @@ import org.isf.generaldata.MessageBundle;
  *
  * @author akashytsa
  */
-public class OHExceptionMessage implements Serializable{
+public class OHExceptionMessage extends Throwable implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String title;

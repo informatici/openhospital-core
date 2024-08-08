@@ -211,4 +211,13 @@ public class MedicalInventoryManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
+	/**
+	 * Marks an inventory as deleted by changing its status.
+	 * @param inventoryId - the ID of the inventory to delete.
+	 * @throws OHServiceException if an error occurs during the operation.
+	 */
+	public void deleteInventory(int inventoryId) throws OHServiceException {
+		ioOperations.deleteInventory(inventoryId);
+	}
 }

@@ -22,12 +22,15 @@
 package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,13 +38,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
+
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalInventoryIoOperation {
 
 	private MedicalInventoryIoOperationRepository repository;
-
 	public MedicalInventoryIoOperation(MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository) {
 		this.repository = medicalInventoryIoOperationRepository;
 	}
@@ -197,5 +201,33 @@ public class MedicalInventoryIoOperation {
 			return inventory.get();
 		}
 		return null;
+	}
+
+	/**
+	 * Marks an inventory as deleted by changing its status.
+	 * @param inventoryId - the ID of the inventory to delete.
+	 * @throws OHServiceException if an error occurs during the operation.
+	 */
+	public void deleteInventory(int inventoryId) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		try {
+			MedicalInventory inventory = getInventoryById(inventoryId);
+			if (inventory != null) {
+				String currentStatus = inventory.getStatus().toLowerCase();
+				if ("draft".equals(currentStatus) || "validated".equals(currentStatus)) {
+					inventory.setStatus("canceled");
+					repository.save(inventory);
+				} else {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
+				}
+			} else {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notfound.msg")));
+			}
+		} catch (Exception e) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHServiceException(errors);
+		}
 	}
 }
