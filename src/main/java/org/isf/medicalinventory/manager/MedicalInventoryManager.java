@@ -241,24 +241,21 @@ public class MedicalInventoryManager {
 				Medical medical = medicalInventoryRow.getMedical();
 				List<Movement> movs = groupedByMedical.get(medical);
 				if (movs != null) {
-					for (Movement mov: movs) {
-						String lotCodeOfMovement = mov.getLot().getCode();
-						Lot lot = movStockInsertingManager.getLot(lotCodeOfMovement);
-						double mainStoreQty = (double)lot.getMainStoreQuantity();
-						if (lotCodeOfMovement.equals(lotCode)) {
-							if (mainStoreQty != theoQty) {
-								medicalInventoryRow.setTheoreticQty(mainStoreQty);
-								medicalInventoryRow.setRealqty(mainStoreQty);
-								medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
-							}
-						} else {
-							Integer medicalCode = medical.getCode();							
-							MedicalInventoryRow inventoryRow = medicalInventoryRowManager.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCodeOfMovement);
-							if (inventoryRow == null) {
-								MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
-								medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
-							}
+					Movement mov = movs.get(0);
+					String lotCodeOfMovement = mov.getLot().getCode();
+					Lot lot = movStockInsertingManager.getLot(lotCodeOfMovement);
+					double mainStoreQty = (double)lot.getMainStoreQuantity();
+					Integer medicalCode = medical.getCode();
+					Integer movMedicalCode = mov.getMedical().getCode();
+					if (movMedicalCode.equals(medicalCode) && lotCodeOfMovement.equals(lotCode)) {
+						if (mainStoreQty != theoQty) { 
+							medicalInventoryRow.setTheoreticQty(mainStoreQty);
+							medicalInventoryRow.setRealqty(mainStoreQty);
+							medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
 						}
+					} else {
+						MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
+						medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
 					}
 				}
 			}
