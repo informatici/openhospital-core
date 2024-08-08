@@ -31,6 +31,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
+import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicalstock.model.Lot;
@@ -125,13 +126,22 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Movement> newAutomaticDischargingMovement(Movement movement) throws OHServiceException {
 		List<Movement> dischargingMovements = new ArrayList<>();
-		List<Lot> lots = getLotsByMedical(movement.getMedical());
+		List<Lot> lots = getLotsByMedical(movement.getMedical(), true);
 		Medical medical = movement.getMedical();
+		double medicalQty = medical.getTotalQuantity();
 		int qty = movement.getQuantity(); // movement initial quantity
 
+		if (qty > medicalQty) {
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(
+							"angal.medicalstock.multipledischarging.movementexceedstheavailablequantityformedical.fmt.msg", medicalQty,
+							medical.getDescription())));
+		}
 		if (lots.isEmpty()) {
-			LOGGER.warn("No lots with available quantity found for medical {}", medical.getDescription());
-			return dischargingMovements;
+			String message = MessageBundle.formatMessage(
+							"angal.medicalstock.multipledischarging.nolotswithavailablequantityfoundformedicalpleasereport.fmt.msg",
+							medical.getDescription());
+			LOGGER.error(message);
+			throw new OHServiceException(new OHExceptionMessage(message));
 		}
 		for (Lot lot : lots) {
 			String lotCode = lot.getCode();
@@ -311,6 +321,9 @@ public class MedicalStockIoOperations {
 	 */
 	// TODO: verify why lotCode and medical params are needed
 	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
+		if (lotCode == null || lotCode.equals("")) {
+			lotCode = this.generateLotCode();
+		}
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
 		return lotRepository.save(lot);
@@ -579,13 +592,14 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out if removeEmpty is set to true.
 	 * 
 	 * @param medical the medical.
+	 * @param removeEmpty
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
 	 */
-	public List<Lot> getLotsByMedical(Medical medical) throws OHServiceException {
+	public List<Lot> getLotsByMedical(Medical medical, boolean removeEmpty) throws OHServiceException {
 		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
 
 		if (lots.isEmpty()) {
@@ -624,7 +638,9 @@ public class MedicalStockIoOperations {
 		}
 
 		// Remove empty lots
-		lots.removeIf(lot -> lot.getMainStoreQuantity() <= 0);
+		if (removeEmpty) {
+			lots.removeIf(lot -> lot.getMainStoreQuantity() <= 0);
+		}
 
 		return lots;
 	}
@@ -738,6 +754,16 @@ public class MedicalStockIoOperations {
 	 */
 	public long countAllActiveMovements() {
 		return this.movRepository.countAllActiveMovements();
+	}
+
+	/**
+	 * Deletes the specified {@link lot}.
+	 *
+	 * @param lot the lot to delete.
+	 * @throws OHServiceException
+	 */
+	public void deleteLot(Lot lot) throws OHServiceException {
+		lotRepository.delete(lot);
 	}
 
 }

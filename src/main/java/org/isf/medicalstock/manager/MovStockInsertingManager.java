@@ -235,19 +235,31 @@ public class MovStockInsertingManager {
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
-
+	
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
-	 *
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out.
+	 * 
 	 * @param medical the medical.
 	 * @return the list of retrieved {@link Lot}s.
 	 * @throws OHServiceException
 	 */
 	public List<Lot> getLotByMedical(Medical medical) throws OHServiceException {
+		return ioOperations.getLotsByMedical(medical, true);
+	}
+
+	/**
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if {@code removeEmtpy} is set to true.
+	 *
+	 * @param medical the medical.
+	 * @param removeEmpty.
+	 * @return the list of retrieved {@link Lot}s.
+	 * @throws OHServiceException
+	 */
+	public List<Lot> getLotByMedical(Medical medical, boolean removeEmpty) throws OHServiceException {
 		if (medical == null) {
 			return new ArrayList<>();
 		}
-		return ioOperations.getLotsByMedical(medical);
+		return ioOperations.getLotsByMedical(medical, removeEmpty);
 	}
 
 	/**
@@ -417,5 +429,15 @@ public class MovStockInsertingManager {
 			dischargeMovement.add(ioOperations.prepareDischargingMovement(movement));
 			return dischargeMovement;
 		}
+	}
+
+	/**
+	 * Deletes the specified {@link lot}.
+	 *
+	 * @param lot the lot to delete.
+	 * @throws OHServiceException
+	 */
+	public void deleteLot(Lot lot) throws OHServiceException {
+		ioOperations.deleteLot(lot);
 	}
 }

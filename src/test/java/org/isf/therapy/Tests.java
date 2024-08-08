@@ -232,14 +232,14 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), TimeTools.getNow(),
-				TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
-				longText + ' ' + longText, true, true);
+						TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
+						longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		List<TherapyRow> therapyRows = new ArrayList<>(1);
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).hasSize(1);
-		assertThat(smsOperations.getList().get(0).getSmsText()).hasSize(SmsManager.MAX_LENGHT);
+		assertThat(smsOperations.getList().get(0).getSmsText()).hasSize(SmsManager.MAX_LENGTH);
 	}
 
 	@Test
@@ -322,7 +322,6 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetMedicalsOutOfStockDayActualGreaterThanNeed() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
-		medical.setInitialqty(10);
 		medical.setInqty(10);
 		medical.setOutqty(0);
 		Patient patient = testPatient.setup(false);
@@ -364,8 +363,8 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundTherapyRow)
-			.isNotNull()
-			.hasToString(Integer.toString(foundTherapyRow.getMedical()) + " - 10 9.9/11/12");
+						.isNotNull()
+						.hasToString(Integer.toString(foundTherapyRow.getMedical()) + " - 10 9.9/11/12");
 	}
 
 	@Test
@@ -373,8 +372,8 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestTherapyRow(true);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundTherapyRow)
-			.isNotNull()
-			.isNotEqualTo("someString");
+						.isNotNull()
+						.isNotEqualTo("someString");
 
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);

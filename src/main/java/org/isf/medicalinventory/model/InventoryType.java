@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,28 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms.providers.skebby;
+package org.isf.medicalinventory.model;
 
-import java.util.Collections;
 
-import org.isf.sms.model.Sms;
-
-import org.isf.sms.providers.skebby.model.MessageType;
-import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
-import org.springframework.stereotype.Component;
-
-@Component
-public class SkebbyGatewayConverter {
-
-	public SkebbySmsRequest toServiceDTO(Sms sms, MessageType messageType, String sender) {
-		SkebbySmsRequest result = new SkebbySmsRequest();
-		result.setMessage(sms.getSmsText());
-		result.setRecipient(Collections.singletonList(sms.getSmsNumber()));
-		if (messageType != null) {
-			result.setMessageType(messageType.name());
-		}
-		result.setSender(sender);
-		return result;
-	}
-
+public enum InventoryType {
+	main, ward
 }
