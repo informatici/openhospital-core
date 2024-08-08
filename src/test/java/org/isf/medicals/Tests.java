@@ -496,7 +496,7 @@ class Tests extends OHCoreTestCase {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setMinqty(-1);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
@@ -507,7 +507,7 @@ class Tests extends OHCoreTestCase {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setPcsperpck(-1);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
@@ -518,7 +518,7 @@ class Tests extends OHCoreTestCase {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setDescription("");
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
@@ -529,7 +529,7 @@ class Tests extends OHCoreTestCase {
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
@@ -541,7 +541,7 @@ class Tests extends OHCoreTestCase {
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
 			medical.setProdCode("");
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
@@ -556,7 +556,7 @@ class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType("code", "description");
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 			medical.setType(medicalType);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
 						.isInstanceOf(OHDataValidationException.class);
 	}
