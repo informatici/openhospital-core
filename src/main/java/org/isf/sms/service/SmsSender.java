@@ -50,18 +50,18 @@ public class SmsSender implements Runnable {
 
 	@Override
 	public void run() {
+		SmsOperations smsOp = Context.getApplicationContext().getBean(SmsOperations.class);
+		SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 		while (running) {
 			LOGGER.info("SMS Sender running...");
-			SmsOperations smsOp = Context.getApplicationContext().getBean(SmsOperations.class);
 			List<Sms> smsList = null;
 			try {
 				smsList = smsOp.getList();
 			} catch (OHServiceException e1) {
 				LOGGER.error("Error list loading");
 			}
-			if (!smsList.isEmpty()) {
+			if (smsList != null && !smsList.isEmpty()) {
 				LOGGER.info("Found {} SMS to send", smsList.size());
-				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {
 						if (sms.getSmsDateSched().isBefore(TimeTools.getNow())) {

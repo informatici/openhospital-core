@@ -53,16 +53,14 @@ public class SmsSenderOperations {
 	}
 
 	public boolean initialize() {
+		SmsParameters.initialize();
 		String gateway = this.smsProperties.getProperty(KEY_SMS_GATEWAY);
 		if (gateway == null || gateway.isEmpty()) {
 			LOGGER.error("No HTTP Gateway has been set. Please check sms.properties file (v.2 - init)");
 			return false;
 		}
 		Optional<SmsSenderInterface> smsGatewayOpt = findSmsGatewayService(gateway);
-		if (smsGatewayOpt.isPresent()) {
-			return smsGatewayOpt.get().initialize();
-		}
-		return false;
+		return smsGatewayOpt.map(SmsSenderInterface::initialize).orElse(false);
 	}
 
 	public void preSMSSending(Sms sms) {
@@ -95,10 +93,7 @@ public class SmsSenderOperations {
 			return false;
 		}
 		Optional<SmsSenderInterface> smsGatewayOpt = findSmsGatewayService(gateway);
-		if (smsGatewayOpt.isPresent()) {
-			return smsGatewayOpt.get().terminate();
-		}
-		return false;
+		return smsGatewayOpt.map(SmsSenderInterface::terminate).orElse(false);
 	}
 
 	private Optional<SmsSenderInterface> findSmsGatewayService(String gateway) {
