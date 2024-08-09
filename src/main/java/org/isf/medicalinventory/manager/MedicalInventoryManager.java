@@ -214,10 +214,10 @@ public class MedicalInventoryManager {
 
 	/**
 	 * Marks an inventory as deleted by changing its status.
-	 * @param inventoryId - the ID of the inventory to delete.
+	 * @param medicalInventory - the medicalInventory of the inventory to delete.
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
-	public void deleteInventory(int inventoryId) throws OHServiceException {
-		ioOperations.deleteInventory(inventoryId);
+	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		ioOperations.deleteInventory(medicalInventory);
 	}
 }

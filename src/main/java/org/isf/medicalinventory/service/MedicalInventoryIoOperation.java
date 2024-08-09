@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -37,8 +38,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.swing.*;
 
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -205,26 +204,10 @@ public class MedicalInventoryIoOperation {
 
 	/**
 	 * Marks an inventory as deleted by changing its status.
-	 * @param inventoryId - the ID of the inventory to delete.
+	 * @param medicalInventory - the medicalInventory of the inventory to delete.
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
-	public void deleteInventory(int inventoryId) throws OHServiceException {
-		try {
-			MedicalInventory inventory = getInventoryById(inventoryId);
-			if (inventory != null) {
-				String currentStatus = inventory.getStatus().toLowerCase();
-				if ("draft".equals(currentStatus) || "validated".equals(currentStatus)) {
-					inventory.setStatus("canceled");
-					repository.save(inventory);
-				} else {
-					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
-				}
-			} else {
-				throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notfound.msg")));
-			}
-		} catch (Exception e) {
-			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.deletion.error.msg")));
-		}
+	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		medicalInventory.setStatus(InventoryStatus.canceled.toString());
 	}
-
 }
