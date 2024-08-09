@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionManager {
 
-	private PermissionIoOperations operations;
+	private final PermissionIoOperations operations;
 
 	public PermissionManager(PermissionIoOperations permissionIoOperations) {
 		this.operations = permissionIoOperations;
@@ -51,18 +51,6 @@ public class PermissionManager {
 
 	public Permission retrievePermissionByName(String name) throws OHServiceException {
 		return operations.retrievePermissionByName(name);
-	}
-
-	public Permission insertPermission(Permission permission) throws OHServiceException {
-		return operations.insertPermission(permission);
-	}
-
-	public Permission updatePermission(Permission model) throws OHServiceException {
-		return operations.updatePermission(model);
-	}
-
-	public void deletePermission(Integer id) throws OHServiceException {
-		operations.deletePermission(id);
 	}
 
 	public List<Permission> retrieveAllPermissions() throws OHServiceException {
