@@ -243,19 +243,23 @@ public class MedicalInventoryManager {
 				if (movs != null) {
 					Movement mov = movs.get(0);
 					String lotCodeOfMovement = mov.getLot().getCode();
-					Lot lot = movStockInsertingManager.getLot(lotCodeOfMovement);
-					double mainStoreQty = (double)lot.getMainStoreQuantity();
-					Integer medicalCode = medical.getCode();
-					Integer movMedicalCode = mov.getMedical().getCode();
-					if (movMedicalCode.equals(medicalCode) && lotCodeOfMovement.equals(lotCode)) {
-						if (mainStoreQty != theoQty) { 
-							medicalInventoryRow.setTheoreticQty(mainStoreQty);
-							medicalInventoryRow.setRealqty(mainStoreQty);
-							medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+					Lot lot = null;
+					List<Lot> lots = movStockInsertingManager.getLotByMedical(medical).stream().filter(l -> l.getCode().equals(lotCodeOfMovement)).collect(Collectors.toList());
+					if (lots != null) {
+						lot = lots.get(0);
+						double mainStoreQty = (double)lot.getMainStoreQuantity();
+						Integer medicalCode = medical.getCode();
+						Integer movMedicalCode = mov.getMedical().getCode();
+						if (movMedicalCode.equals(medicalCode) && lotCodeOfMovement.equals(lotCode)) {
+							if (mainStoreQty != theoQty) { 
+								medicalInventoryRow.setTheoreticQty(mainStoreQty);
+								medicalInventoryRow.setRealqty(mainStoreQty);
+								medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+							}
+						} else {
+							MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
+							medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
 						}
-					} else {
-						MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
-						medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
 					}
 				}
 			}

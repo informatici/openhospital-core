@@ -296,34 +296,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
-		Lot lot = lotRepository.findById(String.valueOf(lotCode)).orElse(null);
-		// Retrieve quantities in batch
-		if (lot != null) {
-			List<String> lotCodes = new ArrayList<>();
-			lotCodes.add(lotCode);
-			List<Object[]> mainStoreQuantities = lotRepository.getMainStoreQuantities(lotCodes);
-			List<Object[]> wardsTotalQuantities = lotRepository.getWardsTotalQuantities(lotCodes);
-
-			// Process mainStoreQuantities and update lots
-			for (Object[] result : mainStoreQuantities) {
-				lotCode = (String) result[0];
-				Integer mainStoreQuantity = ((Long) result[1]).intValue();
-
-				// Update the lot
-				lot.setMainStoreQuantity(mainStoreQuantity);
-			}
-
-			// Process wardsTotalQuantities and update lots
-			for (Object[] result : wardsTotalQuantities) {
-				lotCode = (String) result[0];
-				Double wardsTotalQuantity = (Double) result[1];
-
-				// Update the lot if found
-				lot.setWardsTotalQuantity(wardsTotalQuantity);
-			}
-			return lot;
-		}
-		return null;
+		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
 	}
 
 	/**
