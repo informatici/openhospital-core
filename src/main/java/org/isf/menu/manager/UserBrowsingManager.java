@@ -43,7 +43,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserBrowsingManager {
 
-	private static final String VALID_USERID_PATTERN = "^[A-Za-z0-9.]{1,255}$";
+	private static final String VALID_USERID_PATTERN = "^[a-z0-9-._]+$";
 
 	private MenuIoOperations ioOperations;
 
