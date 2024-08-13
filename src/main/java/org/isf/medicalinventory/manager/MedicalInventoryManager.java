@@ -228,7 +228,9 @@ public class MedicalInventoryManager {
 	}
 	
 	@Transactional(rollbackFor = OHServiceException.class)
-	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
+	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHDataValidationException, OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		boolean updated = false;
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		List<Movement> movements = movBrowserManager.getMovements(null, null, null, null, movFrom, movTo, null, null, null, null); 
@@ -244,25 +246,36 @@ public class MedicalInventoryManager {
 					Movement mov = movs.get(0);
 					String lotCodeOfMovement = mov.getLot().getCode();
 					Lot lot = null;
+					Integer medicalCode = medical.getCode();
 					List<Lot> lots = movStockInsertingManager.getLotByMedical(medical).stream().filter(l -> l.getCode().equals(lotCodeOfMovement)).collect(Collectors.toList());
 					if (lots != null) {
 						lot = lots.get(0);
 						double mainStoreQty = (double)lot.getMainStoreQuantity();
-						Integer medicalCode = medical.getCode();
 						Integer movMedicalCode = mov.getMedical().getCode();
 						if (movMedicalCode.equals(medicalCode) && lotCodeOfMovement.equals(lotCode)) {
 							if (mainStoreQty != theoQty) { 
 								medicalInventoryRow.setTheoreticQty(mainStoreQty);
-								medicalInventoryRow.setRealqty(mainStoreQty);
 								medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
 							}
 						} else {
-							MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
-							medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
+							MedicalInventoryRow invRow = medicalInventoryRowManager.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
+							if (invRow != null) {
+								invRow.setTheoreticQty(mainStoreQty);
+								medicalInventoryRowManager.updateMedicalInventoryRow(invRow);
+							} else {
+								MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
+								medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
+							}
 						}
 					}
 				}
 			}
 		}
+		/*if (updated) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.msg")));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}*/
 	}
 }
