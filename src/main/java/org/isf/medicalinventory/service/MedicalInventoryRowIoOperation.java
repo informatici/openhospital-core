@@ -22,6 +22,7 @@
 package org.isf.medicalinventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -36,7 +37,8 @@ public class MedicalInventoryRowIoOperation {
 
 	private MedicalInventoryRowIoOperationRepository repository;
 
-	public MedicalInventoryRowIoOperation(MedicalInventoryRowIoOperationRepository medicalInventoryRowIoOperationRepository) {
+	public MedicalInventoryRowIoOperation(
+			MedicalInventoryRowIoOperationRepository medicalInventoryRowIoOperationRepository) {
 		this.repository = medicalInventoryRowIoOperationRepository;
 	}
 
@@ -47,10 +49,11 @@ public class MedicalInventoryRowIoOperation {
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow)
+			throws OHServiceException {
 		return repository.save(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Update an existing {@link MedicalInventoryRow}.
 	 *
@@ -58,19 +61,21 @@ public class MedicalInventoryRowIoOperation {
 	 * @return the updated {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+	public MedicalInventoryRow updateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow)
+			throws OHServiceException {
 		return repository.save(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Delete the specified {@link MedicalInventoryRow}.
+	 * 
 	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
 		repository.delete(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 * 
@@ -83,7 +88,20 @@ public class MedicalInventoryRowIoOperation {
 	}
 
 	/**
-	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
+	 * Return {@link MedicalInventoryRow} for passed param.
+	 * 
+	 * @param id - the Invetoryrow Id.
+	 * @return {@link MedicalInventoryRow} with the specified id, {@code null}
+	 *         otherwise.
+	 * @throws OHServiceException
+	 */
+	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(Integer id) throws OHServiceException {
+		return repository.findById(id);
+	}
+
+	/**
+	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and
+	 * {@link Medical} code.
 	 * 
 	 * @param inventoryId - the Inventory Id.
 	 * @param medicalCode - the medical code.

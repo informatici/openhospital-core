@@ -93,15 +93,15 @@ public class DiseaseTypeIoOperation {
 	}
 	
 	/**
-	 * Returns {@link DiseaseType}s.
+	 * Returns {@link DiseaseType} given the type code.
 	 * 
 	 * @Param code
-	 * @return a disease type.
+	 * @return object {@link DiseaseType}, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the diseases type.
 	 */
-	public DiseaseType getDiseaseTypes(String code) throws OHServiceException {
+	public DiseaseType getDiseaseType(String code) throws OHServiceException {
 		Optional<DiseaseType> diseaseType = repository.findById(code);
-		if ( diseaseType.isPresent()) {
+		if (diseaseType.isPresent()) {
 			return diseaseType.get();
 		}
 		return null;

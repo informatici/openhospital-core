@@ -28,13 +28,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Properties;
+import java.util.Vector;
 
 import org.aspectj.util.FileUtil;
 import org.isf.OHCoreTestCase;
 import org.isf.dicom.manager.DicomManagerFactory;
 import org.isf.dicom.manager.DicomManagerInterface;
 import org.isf.dicom.manager.FileSystemDicomManager;
+import org.isf.dicom.manager.FileSystemDicomManager.DicomDateComparator;
+import org.isf.dicom.manager.FileSystemDicomManager.DicomTypeDateComparator;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperationRepository;
 import org.isf.dicom.service.DicomIoOperations;
@@ -45,6 +49,7 @@ import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -175,6 +180,30 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
+	void testSaveFileNoSeriesNumber() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+		dicomFile.setDicomSeriesNumber(null);
+		fileSystemDicomManager.saveFile(dicomFile);
+
+		FileDicom[] fileDicoms = fileSystemDicomManager.loadPatientFiles(0);
+		assertThat(fileDicoms).hasSize(1);
+		cleanupDicomFiles(dicomFile.getPatId());
+	}
+
+	@Test
+	void testSaveFileNoInstanceUID() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+		dicomFile.setDicomInstanceUID(null);
+		fileSystemDicomManager.saveFile(dicomFile);
+
+		FileDicom[] fileDicoms = fileSystemDicomManager.loadPatientFiles(0);
+		assertThat(fileDicoms).hasSize(1);
+		cleanupDicomFiles(dicomFile.getPatId());
+	}
+
+	@Test
 	void testLoadPatientFiles() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -289,6 +318,171 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 		assertThatThrownBy(() ->
 			fileSystemDicomManager.deleteSeries(1, "nuLL"))
 			.isInstanceOf(OHDicomException.class);
+	}
+
+	@Test
+	void testDateComparator() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+
+		FileDicom dicomFile2 = testFileDicom.setup(dicomType, false);
+		FileDicom dicomFile3 = testFileDicom.setup(dicomType, false);
+
+		LocalDateTime thirtyDays = TimeTools.getNow().plusDays(30);
+		LocalDateTime sixtyDays = TimeTools.getNow().plusDays(60);
+		LocalDateTime now = TimeTools.getNow();
+
+		dicomFile.setDicomStudyDate(thirtyDays);
+		dicomFile2.setDicomStudyDate(sixtyDays);
+		dicomFile3.setDicomStudyDate(now);
+
+		Vector<FileDicom> fileDicomVector = new Vector<>(3);
+		fileDicomVector.addElement(dicomFile);
+		fileDicomVector.addElement(dicomFile2);
+		fileDicomVector.addElement(dicomFile3);
+
+		FileDicom[] dicomArray = new FileDicom[fileDicomVector.size()];
+
+		fileDicomVector.sort(new DicomDateComparator());
+		FileDicom[] fileDicomSorted = new FileDicom[3];
+		fileDicomVector.copyInto(fileDicomSorted);
+
+		assertThat(fileDicomSorted[0].getDicomStudyDate()).isEqualTo(now);
+		assertThat(fileDicomSorted[1].getDicomStudyDate()).isEqualTo(thirtyDays);
+		assertThat(fileDicomSorted[2].getDicomStudyDate()).isEqualTo(sixtyDays);
+	}
+
+	@Test
+	void testDateComparatorMissingStudyDate() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+
+		FileDicom dicomFile2 = testFileDicom.setup(dicomType, false);
+		FileDicom dicomFile3 = testFileDicom.setup(dicomType, false);
+
+		LocalDateTime thirtyDays = TimeTools.getNow().plusDays(30);
+		LocalDateTime now = TimeTools.getNow();
+
+		dicomFile.setDicomStudyDate(thirtyDays);
+		dicomFile2.setDicomStudyDate(null);
+		dicomFile3.setDicomStudyDate(now);
+
+		Vector<FileDicom> fileDicomVector = new Vector<>(3);
+		fileDicomVector.addElement(dicomFile);
+		fileDicomVector.addElement(dicomFile2);
+		fileDicomVector.addElement(dicomFile3);
+
+		FileDicom[] dicomArray = new FileDicom[fileDicomVector.size()];
+
+		fileDicomVector.sort(new DicomDateComparator());
+		FileDicom[] fileDicomSorted = new FileDicom[3];
+		fileDicomVector.copyInto(fileDicomSorted);
+
+		assertThat(fileDicomSorted[0].getDicomStudyDate()).isNull();
+		assertThat(fileDicomSorted[1].getDicomStudyDate()).isEqualTo(now);
+		assertThat(fileDicomSorted[2].getDicomStudyDate()).isEqualTo(thirtyDays);
+	}
+
+	@Test
+	void testTypeDateComparator() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+
+		FileDicom dicomFile2 = testFileDicom.setup(dicomType, false);
+		FileDicom dicomFile3 = testFileDicom.setup(dicomType, false);
+
+		LocalDateTime thirtyDays = TimeTools.getNow().plusDays(30);
+		LocalDateTime sixtyDays = TimeTools.getNow().plusDays(60);
+		LocalDateTime now = TimeTools.getNow();
+
+		dicomFile.setDicomStudyDate(thirtyDays);
+		dicomFile2.setDicomStudyDate(sixtyDays);
+		dicomFile3.setDicomStudyDate(now);
+
+		Vector<FileDicom> fileDicomVector = new Vector<>(3);
+		fileDicomVector.addElement(dicomFile);
+		fileDicomVector.addElement(dicomFile2);
+		fileDicomVector.addElement(dicomFile3);
+
+		FileDicom[] dicomArray = new FileDicom[fileDicomVector.size()];
+
+		fileDicomVector.sort(new DicomTypeDateComparator());
+		FileDicom[] fileDicomSorted = new FileDicom[3];
+		fileDicomVector.copyInto(fileDicomSorted);
+
+		assertThat(fileDicomSorted[0].getDicomStudyDate()).isEqualTo(now);
+		assertThat(fileDicomSorted[1].getDicomStudyDate()).isEqualTo(thirtyDays);
+		assertThat(fileDicomSorted[2].getDicomStudyDate()).isEqualTo(sixtyDays);
+	}
+
+	@Test
+	void testTypeDateComparatorDicomTypeNull() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+
+		FileDicom dicomFile2 = testFileDicom.setup(dicomType, false);
+		FileDicom dicomFile3 = testFileDicom.setup(dicomType, false);
+
+		LocalDateTime thirtyDays = TimeTools.getNow().plusDays(30);
+		LocalDateTime sixtyDays = TimeTools.getNow().plusDays(60);
+		LocalDateTime now = TimeTools.getNow();
+
+		dicomFile.setDicomStudyDate(thirtyDays);
+		dicomFile2.setDicomStudyDate(sixtyDays);
+		dicomFile3.setDicomStudyDate(now);
+
+		dicomFile2.setDicomType(null);
+
+		Vector<FileDicom> fileDicomVector = new Vector<>(3);
+		fileDicomVector.addElement(dicomFile);
+		fileDicomVector.addElement(dicomFile2);
+		fileDicomVector.addElement(dicomFile3);
+
+		FileDicom[] dicomArray = new FileDicom[fileDicomVector.size()];
+
+		fileDicomVector.sort(new DicomTypeDateComparator());
+		FileDicom[] fileDicomSorted = new FileDicom[3];
+		fileDicomVector.copyInto(fileDicomSorted);
+
+		assertThat(fileDicomSorted[0].getDicomStudyDate()).isEqualTo(now);
+		assertThat(fileDicomSorted[1].getDicomStudyDate()).isEqualTo(thirtyDays);
+		assertThat(fileDicomSorted[2].getDicomStudyDate()).isEqualTo(sixtyDays);
+	}
+
+	@Test
+	void testTypeDateComparatorDicomTypeDescriptionDifferent() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+
+		DicomType dicomType2 = testDicomType.setup(false);
+		FileDicom dicomFile2 = testFileDicom.setup(dicomType2, false);
+		DicomType dicomType3 = testDicomType.setup(false);
+		FileDicom dicomFile3 = testFileDicom.setup(dicomType3, false);
+
+		LocalDateTime thirtyDays = TimeTools.getNow().plusDays(30);
+		LocalDateTime sixtyDays = TimeTools.getNow().plusDays(60);
+		LocalDateTime now = TimeTools.getNow();
+
+		dicomFile.setDicomStudyDate(thirtyDays);
+		dicomFile2.setDicomStudyDate(sixtyDays);
+		dicomFile3.setDicomStudyDate(now);
+
+		dicomFile3.getDicomType().setDicomTypeDescription("someDifferentDescription");
+
+		Vector<FileDicom> fileDicomVector = new Vector<>(3);
+		fileDicomVector.addElement(dicomFile);
+		fileDicomVector.addElement(dicomFile2);
+		fileDicomVector.addElement(dicomFile3);
+
+		FileDicom[] dicomArray = new FileDicom[fileDicomVector.size()];
+
+		fileDicomVector.sort(new DicomTypeDateComparator());
+		FileDicom[] fileDicomSorted = new FileDicom[3];
+		fileDicomVector.copyInto(fileDicomSorted);
+
+		assertThat(fileDicomSorted[0].getDicomStudyDate()).isEqualTo(thirtyDays);
+		assertThat(fileDicomSorted[1].getDicomStudyDate()).isEqualTo(sixtyDays);
+		assertThat(fileDicomSorted[2].getDicomStudyDate()).isEqualTo(now);
 	}
 
 	private static void cleanupDicomFiles(int patientId) {

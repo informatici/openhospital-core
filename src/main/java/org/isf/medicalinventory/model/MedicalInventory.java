@@ -74,28 +74,29 @@ public class MedicalInventory extends Auditable<String> {
 
 	@Column(name = "MINVT_WRD_ID_A")
 	private String ward;
-	
+
 	@Column(name = "MINVT_CHARGE_TYPE")
-	private String changeType;
-	
+	private String chargeType;
+
 	@Column(name = "MINVT_DISCHARGE_TYPE")
-	private String dischangeType;
-	
+	private String dischargeType;
+
 	@Column(name = "MINVT_SUPPLIER")
-	private int supplier;
+	private Integer supplier;
 
 	@Column(name = "MINVT_DESTINATION")
 	private String destination;
-	
+
 	@Version
-	@Column(name="MINVT_LOCK")
+	@Column(name = "MINVT_LOCK")
 	private int lock;
-	
+
 	public MedicalInventory() {
 		super();
 	}
 
-	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user, String reference, String type, String ward) {
+	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user, String reference,
+			String type, String ward) {
 		this.id = id;
 		this.status = status;
 		this.inventoryDate = inventoryDate;
@@ -103,6 +104,23 @@ public class MedicalInventory extends Auditable<String> {
 		this.inventoryReference = reference;
 		this.inventoryType = type;
 		this.ward = ward;
+	}
+
+	public MedicalInventory(Integer id, String status, LocalDateTime inventoryDate, String user,
+			String inventoryReference,
+			String inventoryType, String ward, String chargeType, String dischargeType, int supplier,
+			String destination) {
+		this.id = id;
+		this.status = status;
+		this.inventoryDate = inventoryDate;
+		this.user = user;
+		this.inventoryReference = inventoryReference;
+		this.inventoryType = inventoryType;
+		this.ward = ward;
+		this.chargeType = chargeType;
+		this.dischargeType = dischargeType;
+		this.supplier = supplier;
+		this.destination = destination;
 	}
 
 	public Integer getId() {
@@ -160,51 +178,43 @@ public class MedicalInventory extends Auditable<String> {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	
+
 	public int getLock() {
 		return lock;
 	}
-	
+
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
 
-	
-	public String getChangeType() {
-		return changeType;
+	public String getChargeType() {
+		return chargeType;
 	}
 
-	
-	public void setChangeType(String changeType) {
-		this.changeType = changeType;
+	public void setChargeType(String chargeType) {
+		this.chargeType = chargeType;
 	}
 
-	
-	public String getDischangeType() {
-		return dischangeType;
+	public String getDischargeType() {
+		return dischargeType;
 	}
 
-	
-	public void setDischangeType(String dischangeType) {
-		this.dischangeType = dischangeType;
+	public void setDischargeType(String dischargeType) {
+		this.dischargeType = dischargeType;
 	}
 
-	
-	public int getSupplier() {
+	public Integer getSupplier() {
 		return supplier;
 	}
 
-	
-	public void setSupplier(int supplier) {
+	public void setSupplier(Integer supplier) {
 		this.supplier = supplier;
 	}
 
-	
 	public String getDestination() {
 		return destination;
 	}
 
-	
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
