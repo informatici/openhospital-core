@@ -28,6 +28,7 @@ import java.util.Optional;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
+import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -137,7 +138,7 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param medInventoryRow
+	 * @param medicalInventoryRow
 	 * @throws OHDataValidationException
 	 */
 	private void validateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
@@ -156,7 +157,7 @@ public class MedicalInventoryRowManager {
 	}
 
 	/**
-	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
+	 * Return a list of {@link MedicalInventoryRow}s by {@link MedicalInventoryRow} Id and {@link Medical} code.
 	 * 
 	 * @param inventoryId - the Inventory Id.
 	 * @param medicalCode - the medical code.
@@ -165,57 +166,6 @@ public class MedicalInventoryRowManager {
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId,
 			String medicalCode) throws OHServiceException {
-		return iOoperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
-	}
-
-	/**
-	 * Delete a list of inventory rows {@link MedicalInventoryRow}s
-	 *
-	 * @param inventoryRowsToDelete - the list of {@link MedicalInventoryRow}s
-	 * 
-	 * @throws OHServiceException
-	 */
-	@Transactional(rollbackOn = OHServiceException.class)
-	public void deleteMedicalInventoryRows(List<MedicalInventoryRow> inventoryRowsToDelete) throws OHServiceException {
-		for (MedicalInventoryRow invRow : inventoryRowsToDelete) {
-			if (invRow.isNewLot()) {
-				this.deleteMedicalInventoryRow(invRow);
-				movStockInsertingManager.deleteLot(invRow.getLot());		
-			} else {
-				this.deleteMedicalInventoryRow(invRow);
-			}	
-		}
-	}
-
-	/**
-	 * Return a list of {@link MedicalInventoryRow}s by {@link Inventory} Id and {@link Medical} code.
-	 * 
-	 * @param inventoryId - the Inventory Id.
-	 * @param medicalCode - the medical code.
-	 * @return the list of {@link MedicalInventoryRow}s.
-	 * @throws OHServiceException
-	 */
-	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryIdAndMedicalCode(int inventoryId,
-			String medicalCode) throws OHServiceException {
-		return iOoperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
-	}
-
-	/**
-	 * Delete a list of inventory rows {@link MedicalInventoryRow}s
-	 *
-	 * @param inventoryRowsToDelete - the list of {@link MedicalInventoryRow}s
-	 * 
-	 * @throws OHServiceException
-	 */
-	@Transactional(rollbackOn = OHServiceException.class)
-	public void deleteMedicalInventoryRows(List<MedicalInventoryRow> inventoryRowsToDelete) throws OHServiceException {
-		for (MedicalInventoryRow invRow : inventoryRowsToDelete) {
-			if (invRow.isNewLot()) {
-				this.deleteMedicalInventoryRow(invRow);
-				movStockInsertingManager.deleteLot(invRow.getLot());		
-			} else {
-				this.deleteMedicalInventoryRow(invRow);
-			}	
-		}
+		return ioOperation.getMedicalInventoryRowByInventoryIdAndMedicalCode(inventoryId, medicalCode);
 	}
 }
