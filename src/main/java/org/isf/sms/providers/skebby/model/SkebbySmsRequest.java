@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class SckebbySmsRequest implements Serializable {
+public class SkebbySmsRequest implements Serializable {
 
 	private static final long serialVersionUID = -1860994148316130286L;
 
@@ -99,7 +99,7 @@ public class SckebbySmsRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SckebbySmsRequest [messageType=" + messageType + ", message=***" + ", recipient=***" + ", sender=***" + ", scheduledDeliveryTime="
+		return "SkebbySmsRequest [messageType=" + messageType + ", message=***" + ", recipient=***" + ", sender=***" + ", scheduledDeliveryTime="
 						+ scheduledDeliveryTime + ", orderId=" + orderId + ", returnCredits=" + returnCredits + ']';
 	}
 

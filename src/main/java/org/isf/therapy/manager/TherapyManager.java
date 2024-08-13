@@ -209,7 +209,7 @@ public class TherapyManager {
 
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Therapy}
-	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
+	 * If length exceed {@code SmsManager.MAX_LENGTH} the message will be cropped
 	 * (example:
 	 * "REMINDER: {@link Medical} 3pcs - 2pd - {@link Therapy#getNote()}")
 	 *
@@ -226,8 +226,8 @@ public class TherapyManager {
 		if (note != null && !note.isEmpty()) {
 			sb.append(" - ").append(note);
 		}
-		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
-			return sb.substring(0, SmsManager.MAX_LENGHT);
+		if (sb.toString().length() > SmsManager.MAX_LENGTH) {
+			return sb.substring(0, SmsManager.MAX_LENGTH);
 		}
 		return sb.toString();
 	}
