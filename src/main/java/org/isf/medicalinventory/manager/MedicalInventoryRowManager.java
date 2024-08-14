@@ -124,14 +124,11 @@ public class MedicalInventoryRowManager {
 	 * @return the {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow getMedicalInventoryRowById(Integer invRowId) throws OHServiceException {
-		if (invRowId != null) {
-			Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRowId);
-			if (medInvRow.isPresent()) {
-				return medInvRow.get();
-			}
+	public MedicalInventoryRow getMedicalInventoryRowById(int invRowId) throws OHServiceException {
+		Optional<MedicalInventoryRow> medInvRow = ioOperation.getMedicalInventoryRowById(invRowId);
+		if (medInvRow.isPresent()) {
+			return medInvRow.get();
 		}
-		
 		return null;
 	}
 	
@@ -164,7 +161,7 @@ public class MedicalInventoryRowManager {
 	 * @return the {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventoryRow getMedicalInventoryRowByMedicalCodeAndLotCode(Integer medicalCode, String lotCode) throws OHServiceException {
+	public MedicalInventoryRow getMedicalInventoryRowByMedicalCodeAndLotCode(int medicalCode, String lotCode) throws OHServiceException {
 		return ioOperation.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
 	}
 }

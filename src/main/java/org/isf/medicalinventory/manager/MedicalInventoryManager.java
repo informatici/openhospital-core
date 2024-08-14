@@ -188,7 +188,7 @@ public class MedicalInventoryManager {
 	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {
+	public MedicalInventory getInventoryById(int inventoryId) throws OHServiceException {
 		return ioOperations.getInventoryById(inventoryId);
 	}
 	
@@ -229,8 +229,6 @@ public class MedicalInventoryManager {
 	
 	@Transactional(rollbackFor = OHServiceException.class)
 	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHDataValidationException, OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<>();
-		boolean updated = false;
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		List<Movement> movements = movBrowserManager.getMovements(null, null, null, null, movFrom, movTo, null, null, null, null); 
@@ -271,11 +269,5 @@ public class MedicalInventoryManager {
 				}
 			}
 		}
-		/*if (updated) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.msg")));
-		}
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}*/
 	}
 }

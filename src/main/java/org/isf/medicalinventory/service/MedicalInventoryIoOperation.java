@@ -169,7 +169,7 @@ public class MedicalInventoryIoOperation {
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(Integer id) throws OHServiceException {
+	public boolean isCodePresent(int id) throws OHServiceException {
 		return repository.existsById(id);
 	}
 	
@@ -191,7 +191,7 @@ public class MedicalInventoryIoOperation {
 	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory getInventoryById(Integer inventoryId) throws OHServiceException {
+	public MedicalInventory getInventoryById(int inventoryId) throws OHServiceException {
 		Optional<MedicalInventory> inventory = repository.findById(inventoryId);
 		if (inventory.isPresent()) {
 			return inventory.get();
