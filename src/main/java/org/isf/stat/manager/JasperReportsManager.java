@@ -1101,7 +1101,7 @@ public class JasperReportsManager {
 
 	public JasperReportResultDto getInventoryReportPdf(MedicalInventory inventory, String jasperFileName, int printQtyReal) throws OHServiceException {
 		try {
-			HashMap<String, Object> parameters = new HashMap<>();
+			Map<String, Object> parameters = new HashMap<>();
 			Hospital hosp = hospitalManager.getHospital();
 			String status = MessageBundle.getMessage(inventory.getStatus());
 			parameters.put("Hospital", hosp.getDescription());
@@ -1115,7 +1115,7 @@ public class JasperReportsManager {
 			parameters.put("printQtyReal", printQtyReal);
 
 			LocalDateTime inventoryDateTime = inventory.getInventoryDate();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DD_MM_YYYY);
 			String formattedDate = inventoryDateTime.format(formatter);
 			parameters.put("inventoryDate", formattedDate);
 
