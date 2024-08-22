@@ -23,11 +23,14 @@ package org.isf.permissions.manager;
 
 import java.util.List;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.GroupPermissionIoOperations;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,5 +52,35 @@ public class GroupPermissionManager {
 
 	public List<GroupPermission> findUserGroupPermissions(String groupCode) {
 		return operations.findUserGroupPermissions(groupCode);
+	}
+
+	public GroupPermission findById(int id) {
+		return operations.findById(id);
+	}
+
+	public GroupPermission create(UserGroup userGroup, Permission permission) throws OHDataValidationException {
+		if (operations.existsByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId())) {
+			throw new OHDataValidationException(
+					new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
+			);
+		}
+
+		GroupPermission groupPermission = new GroupPermission();
+		groupPermission.setPermission(permission);
+		groupPermission.setUserGroup(userGroup);
+
+		return operations.create(groupPermission);
+	}
+
+	public void delete(UserGroup userGroup, Permission permission) throws OHDataValidationException {
+		GroupPermission groupPermission = operations.findByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId());
+
+		if (groupPermission == null) {
+			throw new OHDataValidationException(
+					new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
+			);
+		}
+
+		operations.delete(groupPermission);
 	}
 }

@@ -41,4 +41,8 @@ public interface GroupPermissionIoOperationRepository extends JpaRepository<Grou
 	List<GroupPermission> findAllByUserGroup_Code(String groupCode);
 
 	void deleteAllByUserGroup_Code(String groupCode);
+
+	boolean existsByUserGroupCodeAndPermissionId(String groupCode, int permissionId);
+
+	GroupPermission findFirstByUserGroupCodeAndPermissionId(String groupCode, int permissionId);
 }

@@ -55,4 +55,24 @@ public class GroupPermissionIoOperations {
 	public List<GroupPermission> saveAll(List<GroupPermission> groupPermissions) {
 		return repository.saveAll(groupPermissions);
 	}
+
+	public GroupPermission create(GroupPermission groupPermission) {
+		return repository.save(groupPermission);
+	}
+
+	public void delete(GroupPermission groupPermission) {
+		repository.delete(groupPermission);
+	}
+
+	public boolean existsByUserGroupCodeAndPermissionId(String groupCode, int permissionId) {
+		return repository.existsByUserGroupCodeAndPermissionId(groupCode, permissionId);
+	}
+
+	public GroupPermission findByUserGroupCodeAndPermissionId(String groupCode, int permissionId) {
+		return repository.findFirstByUserGroupCodeAndPermissionId(groupCode, permissionId);
+	}
+
+	public GroupPermission findById(int id) {
+		return repository.findById(id).orElse(null);
+	}
 }
