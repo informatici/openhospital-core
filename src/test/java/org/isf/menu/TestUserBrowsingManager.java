@@ -22,6 +22,7 @@
 package org.isf.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ import org.isf.menu.service.MenuIoOperations;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
 import org.isf.menu.service.UserMenuItemIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
@@ -204,6 +206,17 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 
 		assertThat(userGroupList).isNotEmpty();
 		assertThat(userGroupList.get(0).getCode()).isEqualTo("Z");
+	}
+
+	@Test
+	void testInvalidUserName() throws Exception {
+		assertThatThrownBy(() -> {
+			UserGroup userGroup = testUserGroup.setup(true);
+			User user = testUser.setup(userGroup, true);
+			user.setUserName("A@!");
+			userBrowsingManager.newUser(user);
+		})
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	private String setupTestUser(boolean usingSet) throws OHException {

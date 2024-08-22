@@ -29,7 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestUser {
 
-	private String name = "TestName";
+	private String name = "testname";
 	private String passwd = "TestPaswd";
 	private String desc = "TestDesc";
 

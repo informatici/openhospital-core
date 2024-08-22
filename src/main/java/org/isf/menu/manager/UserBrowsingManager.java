@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 public class UserBrowsingManager {
 
 	private final MenuIoOperations ioOperations;
+	private static final String VALID_USERID_PATTERN = "^[a-z0-9-._]+$";
 
 	public UserBrowsingManager(MenuIoOperations menuIoOperations) {
 		this.ioOperations = menuIoOperations;
@@ -98,9 +99,13 @@ public class UserBrowsingManager {
 	 */
 	public User newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
+		if (!username.matches(VALID_USERID_PATTERN)) {
+			throw new OHDataValidationException(
+							new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theusernamecontainsinvalidcharacters.msg")));
+		}
 		if (ioOperations.isUserNamePresent(username)) {
 			throw new OHDataIntegrityViolationException(
-					new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
+							new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
 		}
 		return ioOperations.newUser(user);
 	}
