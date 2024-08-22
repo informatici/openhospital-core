@@ -32,6 +32,7 @@ import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
+import org.isf.permissions.model.Permission;
 import org.isf.sessionaudit.model.UserSession;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -43,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserBrowsingManager {
 
-	private MenuIoOperations ioOperations;
+	private final MenuIoOperations ioOperations;
 
 	public UserBrowsingManager(MenuIoOperations menuIoOperations) {
 		this.ioOperations = menuIoOperations;
@@ -60,7 +61,7 @@ public class UserBrowsingManager {
 	 * Returns the list of {@link User}s.
 	 *
 	 * @return the list of {@link User}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to retrieve users
 	 */
 	public List<User> getUser() throws OHServiceException {
 		return ioOperations.getUser();
@@ -71,7 +72,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to retrieve group users
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
 		return ioOperations.getUser(groupID);
@@ -80,9 +81,9 @@ public class UserBrowsingManager {
 	/**
 	 * Returns a {@link User} with the specified name.
 	 *
-	 * @param userName - user name
+	 * @param userName - username
 	 * @return {@link User}
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public User getUserByName(String userName) throws OHServiceException {
 		return ioOperations.getUserByName(userName);
@@ -93,7 +94,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user - the {@link User} to insert
 	 * @return the new {@link User}
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public User newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
@@ -109,7 +110,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user - the {@link User} to update
 	 * @return {@code true} if the user has been updated, {@code false} otherwise.
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to update user
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
 		return ioOperations.updateUser(user);
@@ -120,7 +121,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user - the {@link User} to update
 	 * @return {@code true} if the user has been updated, {@code false} otherwise.
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to update password
 	 */
 	public boolean updatePassword(User user) throws OHServiceException {
 		return ioOperations.updatePassword(user);
@@ -130,7 +131,7 @@ public class UserBrowsingManager {
 	 * Deletes an existing {@link User}.
 	 *
 	 * @param user - the {@link User} to delete
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin")) {
@@ -166,9 +167,8 @@ public class UserBrowsingManager {
 	 * Lock the {@link User} from logging into the system.
 	 *
 	 * @param user the {@link User}
-	 * @throws OHServiceException
 	 */
-	public void lockUser(User user) throws OHServiceException {
+	public void lockUser(User user) {
 		user.setAccountLocked(true);
 		user.setLockedTime(TimeTools.getNow());
 		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
@@ -178,9 +178,8 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} so they can log into the system.
 	 *
 	 * @param user the {@link User}
-	 * @throws OHServiceException
 	 */
-	public void setLastLogin(User user) throws OHServiceException {
+	public void setLastLogin(User user) {
 		ioOperations.setLastLogin(user.getUserName(), TimeTools.getNow());
 	}
 
@@ -188,9 +187,8 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} so they can log into the system.
 	 *
 	 * @param user the {@link User}
-	 * @throws OHServiceException
 	 */
-	public void unlockUser(User user) throws OHServiceException {
+	public void unlockUser(User user) {
 		user.setAccountLocked(false);
 		user.setLockedTime(null);
 		user.setFailedAttempts(0);
@@ -204,9 +202,8 @@ public class UserBrowsingManager {
 	 * Unlock the {@link User} after the required "lock time" has expired.
 	 *
 	 * @param user the {@link User}
-	 * @throws OHServiceException
 	 */
-	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
+	public boolean unlockWhenTimeExpired(User user) {
 		LocalDateTime lockedTime = user.getLockedTime();
 		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
 			user.setAccountLocked(false);
@@ -225,10 +222,19 @@ public class UserBrowsingManager {
 	 * Returns the list of {@link UserGroup}s.
 	 *
 	 * @return the list of {@link UserGroup}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to retrieve user groups
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return ioOperations.getUserGroup();
+	}
+
+	/**
+	 * Find user group by code
+	 * @param groupCode UserGroup code
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findUserGroupByCode(String groupCode) {
+		return ioOperations.findByCode(groupCode);
 	}
 
 	/**
@@ -236,7 +242,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to retrieve user menus
 	 */
 	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
 		return ioOperations.getMenu(aUser);
@@ -247,7 +253,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to retrieve group menus
 	 */
 	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		return ioOperations.getGroupMenu(aGroup);
@@ -259,7 +265,7 @@ public class UserBrowsingManager {
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
 	 * @return {@code true} if the menu has been replaced, {@code false} otherwise.
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
 		return ioOperations.setGroupMenu(aGroup, menu);
@@ -280,7 +286,7 @@ public class UserBrowsingManager {
 	 * Deletes a {@link UserGroup}.
 	 *
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
@@ -297,34 +303,63 @@ public class UserBrowsingManager {
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights.
 	 *
-	 * @param aGroup - the {@link UserGroup} to insert
+	 * @param userGroup - the {@link UserGroup} to insert
 	 * @return the new {@link UserGroup}
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to create user group
 	 */
-	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
-		String code = aGroup.getCode();
+	public UserGroup newUserGroup(UserGroup userGroup) throws OHServiceException {
+		String code = userGroup.getCode();
 		if (ioOperations.isGroupNamePresent(code)) {
 			throw new OHDataIntegrityViolationException(
 					new OHExceptionMessage(MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code)));
 		}
-		return ioOperations.newUserGroup(aGroup);
+		return ioOperations.newUserGroup(userGroup);
+	}
+
+	/**
+	 * Insert a new {@link UserGroup} with related {@link Permission}s.
+	 *
+	 * @param userGroup - the {@link UserGroup} to insert
+	 * @param permissions List of permissions to assign to the group
+	 * @return the new {@link UserGroup}
+	 * @throws OHServiceException When failed to create user group
+	 */
+	public UserGroup newUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		String code = userGroup.getCode();
+		if (ioOperations.isGroupNamePresent(code)) {
+			throw new OHDataIntegrityViolationException(
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code)));
+		}
+		return ioOperations.newUserGroup(userGroup, permissions);
 	}
 
 	/**
 	 * Updates an existing {@link UserGroup} in the DB.
 	 *
-	 * @param aGroup - the {@link UserGroup} to update
+	 * @param userGroup - the {@link UserGroup} to update
 	 * @return {@code true} if the group has been updated, {@code false} otherwise.
-	 * @throws OHServiceException
 	 */
-	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
-		return ioOperations.updateUserGroup(aGroup);
+	public boolean updateUserGroup(UserGroup userGroup) throws OHServiceException {
+		return ioOperations.updateUserGroup(userGroup);
+	}
+
+	/**
+	 * Updates an existing {@link UserGroup} and related permissions.
+	 * If permissions list is empty, the existing permissions are kept,
+	 * otherwise they're replaced with the provided ones.
+	 *
+	 * @param userGroup - the {@link UserGroup} to update
+	 * @param permissions Updated list of permissions to assign to the group
+	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 */
+	public boolean updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		return ioOperations.updateUserGroup(userGroup, permissions);
 	}
 
 	/**
 	 * Tests whether a password meets the requirement for various characters being present
 	 *
-	 * @param password
+	 * @param password The given password
 	 * @return {@code true} if password is meets the minimum requirements, {@code false} otherwise.
 	 */
 	public boolean isPasswordStrong(String password) {

@@ -22,6 +22,7 @@
 package org.isf.permissions.service;
 
 import java.util.List;
+import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -41,5 +42,17 @@ public class GroupPermissionIoOperations {
 
 	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
 		return repository.findByIdIn(ids);
+	}
+
+	public void deleteUserGroupPermissions(UserGroup userGroup) {
+		repository.deleteAllByUserGroup_Code(userGroup.getCode());
+	}
+
+	public List<GroupPermission> findUserGroupPermissions(String groupCode) {
+		return repository.findAllByUserGroup_Code(groupCode);
+	}
+
+	public List<GroupPermission> saveAll(List<GroupPermission> groupPermissions) {
+		return repository.saveAll(groupPermissions);
 	}
 }

@@ -42,4 +42,12 @@ public class GroupPermissionManager {
 	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
 		return operations.findByIdIn(ids);
 	}
+
+	public void deleteUserGroupPermissions(UserGroup userGroup) {
+		operations.deleteUserGroupPermissions(userGroup);
+	}
+
+	public List<GroupPermission> findUserGroupPermissions(String groupCode) {
+		return operations.findUserGroupPermissions(groupCode);
+	}
 }

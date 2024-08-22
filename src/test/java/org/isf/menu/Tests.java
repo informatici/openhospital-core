@@ -38,9 +38,14 @@ import org.isf.menu.service.MenuIoOperations;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
 import org.isf.menu.service.UserMenuItemIoOperationRepository;
+import org.isf.permissions.manager.GroupPermissionManager;
+import org.isf.permissions.model.GroupPermission;
+import org.isf.permissions.model.Permission;
+import org.isf.permissions.service.PermissionIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,6 +70,10 @@ class Tests extends OHCoreTestCase {
 	private UserIoOperationRepository userIoOperationRepository;
 	@Autowired
 	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
+	@Autowired
+	private PermissionIoOperationRepository permissionIoOperationRepository;
+	@Autowired
+	private GroupPermissionManager groupPermissionManager;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -279,6 +288,31 @@ class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(false);
 		UserGroup newUserGroup = menuIoOperation.newUserGroup(userGroup);
 		checkUserGroupIntoDb(newUserGroup.getCode());
+	}
+
+	@Test
+	void testIoNewUserGroupWithPermissions() throws Exception {
+		String code = setupTestUserGroupPermissions();
+		UserGroup userGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		List<GroupPermission> groupPermissions = groupPermissionManager.findUserGroupPermissions(userGroup.getCode());
+		List<Permission> permissions = groupPermissions.stream().map(GroupPermission::getPermission).toList();
+		checkUserGroupAndPermissionsIntoDb(userGroup, permissions);
+	}
+
+	@Test
+	void testIoUpdateUserGroupPermissions() throws Exception {
+		String code = setupTestUserGroupPermissions();
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundUserGroup).isNotNull();
+		List<GroupPermission> groupPermissions = groupPermissionManager.findUserGroupPermissions(foundUserGroup.getCode());
+		ArrayList<Permission> permissions = new ArrayList<>(groupPermissions.stream().map(GroupPermission::getPermission).toList().subList(0,2));
+		Permission permission = permissions.get(0);
+		permission.setName("updated.permission");
+		permission.setDescription("Updated permission");
+		permissions.set(0, permission);
+		foundUserGroup.setDesc("Update");
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions)).isTrue();
+		checkUserGroupAndPermissionsIntoDb(foundUserGroup, permissions);
 	}
 
 	@Test
@@ -704,6 +738,29 @@ class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(usingSet);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
 		return userGroup.getCode();
+	}
+
+	private String setupTestUserGroupPermissions() throws OHServiceException {
+		UserGroup userGroup = new UserGroup();
+		userGroup.setCode("contrib");
+		userGroup.setDesc("contributors group");
+		List<Permission> permissions = TestPermission.generatePermissions(4);
+		List<Permission> savedPermissions = permissionIoOperationRepository.saveAllAndFlush(permissions);
+		UserGroup newUserGroup = menuIoOperation.newUserGroup(userGroup, savedPermissions);
+		return userGroup.getCode();
+	}
+
+	private void checkUserGroupAndPermissionsIntoDb(UserGroup userGroup, List<Permission> permissions) {
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(userGroup.getCode()).orElse(null);
+		assertThat(foundUserGroup).isNotNull();
+		assertThat(foundUserGroup.getCode()).isEqualTo(userGroup.getCode());
+		assertThat(foundUserGroup.getDesc()).isEqualTo(userGroup.getDesc());
+
+		List<GroupPermission> groupPermissions = groupPermissionManager.findUserGroupPermissions(userGroup.getCode());
+		List<Permission> dbGroupPermissions = groupPermissions.stream().map(GroupPermission::getPermission).toList();
+
+		assertThat(permissions.size()).isEqualTo(dbGroupPermissions.size());
+		assertThat(permissions.get(0)).isEqualTo(dbGroupPermissions.get(0));
 	}
 
 	private void checkUserGroupIntoDb(String code) throws OHException {

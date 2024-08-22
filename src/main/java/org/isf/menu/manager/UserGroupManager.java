@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserGroupManager {
 
-	private UserGroupIoOperationRepository userGroupIoOperationRepository;
+	private final UserGroupIoOperationRepository userGroupIoOperationRepository;
 
 	public UserGroupManager(UserGroupIoOperationRepository userGroupIoOperationRepository) {
 		this.userGroupIoOperationRepository = userGroupIoOperationRepository;
@@ -39,5 +39,4 @@ public class UserGroupManager {
 	public List<UserGroup> findByIdIn(List<String> userGroupIds) {
 		return this.userGroupIoOperationRepository.findByCodeIn(userGroupIds);
 	}
-
 }
