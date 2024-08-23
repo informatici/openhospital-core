@@ -172,8 +172,9 @@ public class UserBrowsingManager {
 	 * Lock the {@link User} from logging into the system.
 	 *
 	 * @param user the {@link User}
+	 * @throws OHServiceException When failed to lock user
 	 */
-	public void lockUser(User user) {
+	public void lockUser(User user) throws OHServiceException {
 		user.setAccountLocked(true);
 		user.setLockedTime(TimeTools.getNow());
 		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
@@ -281,7 +282,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to get user info
 	 */
 	public String getUsrInfo(String userName) throws OHServiceException {
 		return ioOperations.getUsrInfo(userName);
