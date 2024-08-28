@@ -209,8 +209,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.3.1</version>
 				<configuration>
-					<redirectTestOutputToFile>true</redirectTestOutputToFile>
-					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+				        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+				        <reportsDirectory>${project.build.directory}/site</reportsDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -298,23 +298,23 @@
 						<licenseSet>
 							<header>.license-header/license-header.txt</header>
 							<excludes>
-								<exclude>./license-header/**</exclude>
-								<exclude>./ide-settings/eclipse/**</exclude>
-								<exclude>./ide-settings/idea/**</exclude>
+								<exclude>./license-header/</exclude>
+								<exclude>./ide-settings/eclipse/</exclude>
+								<exclude>./ide-settings/idea/</exclude>
 								<exclude>.editorconfig</exclude>
 								<exclude>.springBeans</exclude>
-								<exclude>**/README</exclude>
-								<exclude>doc/**/*.txt</exclude>
-								<exclude>lib/**</exclude>
-								<exclude>sql/**</exclude>
-								<exclude>rsc/**</exclude>
-								<exclude>rsc-test/**</exclude>
-								<exclude>src/test/resources/**</exclude>
-								<exclude>src/main/resources/**</exclude>
-								<exclude>**/*.properties</exclude>
-								<exclude>**/*.xml</exclude>
-								<exclude>**/*.yml</exclude>
-								<exclude>**/*.jfd</exclude>
+								<exclude>/README</exclude>
+								<exclude>doc//*.txt</exclude>
+								<exclude>lib/</exclude>
+								<exclude>sql/</exclude>
+								<exclude>rsc/</exclude>
+								<exclude>rsc-test/</exclude>
+								<exclude>src/test/resources/</exclude>
+								<exclude>src/main/resources/</exclude>
+								<exclude>/*.properties</exclude>
+								<exclude>/*.xml</exclude>
+								<exclude>/*.yml</exclude>
+								<exclude>/*.jfd</exclude>
 							</excludes>
 						</licenseSet>
 					</licenseSets>
@@ -335,6 +335,23 @@
 						<version>${license.maven.plugin.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+				        <reportsDirectory>${project.build.directory}/site</reportsDirectory>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
