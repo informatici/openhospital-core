@@ -40,10 +40,10 @@ jobs:
           java-version: ${{ matrix.java }}
           java-package: jdk
 
-      - name: Run Unit Tests with Surefire
+      - name: Run Unit Testing with Surefire
         run: mvn test
 
-      - name: Run Integration Tests with Failsafe
+      - name: Run Integration Testing with Failsafe
         run: mvn verify
 
       - name: Publish Surefire Test Reports as Artifact
