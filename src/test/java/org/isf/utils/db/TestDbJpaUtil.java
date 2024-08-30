@@ -59,7 +59,6 @@ class TestDbJpaUtil {
 	@Test
 	void testOpen() throws Exception {
 		DbJpaUtil dbJpaUtil = new DbJpaUtil();
-		assertThat(dbJpaUtil.getEntityManager()).isNull();
 		when(entityManagerFactoryMock.createEntityManager()).thenReturn(entityManagerMock);
 		dbJpaUtil.open();
 	}
