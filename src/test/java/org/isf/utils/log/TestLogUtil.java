@@ -19,11 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.utils.pagination;
+package org.isf.utils.log;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.utils.log.LogUtil;
 import org.junit.jupiter.api.Test;
 
 class TestLogUtil {
