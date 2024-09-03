@@ -1,6 +1,12 @@
 name: Java CI with Maven
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - kaixin-branch
+  pull_request:
+    branches:
+      - kaixin-branch
 
 jobs:
   build:
@@ -40,7 +46,7 @@ jobs:
           java-version: ${{ matrix.java }}
           java-package: jdk
 
-      - name: Run Unit Tests with Surefire
+      - name: Run Unit Testing with Surefire
         run: mvn test
 
       - name: Publish Surefire Test Reports as Artifact
