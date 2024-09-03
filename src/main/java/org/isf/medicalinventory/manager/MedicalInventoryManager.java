@@ -232,6 +232,7 @@ public class MedicalInventoryManager {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		List<Movement> movements = movBrowserManager.getMovements(null, null, null, null, movFrom, movTo, null, null, null, null); 
+		boolean updated = false;
 		if (!movements.isEmpty()) {
 			Map<Medical, List<Movement>> groupedByMedical = movements.stream().collect(Collectors.groupingBy(Movement::getMedical));
 			for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
@@ -254,6 +255,7 @@ public class MedicalInventoryManager {
 							if (mainStoreQty != theoQty) { 
 								medicalInventoryRow.setTheoreticQty(mainStoreQty);
 								medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+								updated = true;
 							}
 						} else {
 							MedicalInventoryRow invRow = medicalInventoryRowManager.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
@@ -268,6 +270,11 @@ public class MedicalInventoryManager {
 					}
 				}
 			}
+		}
+		if (updated) {
+			List<OHExceptionMessage> errors = new ArrayList<>();
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.sometheoriticqtyhavebeenupdatepleasecontrole.msg")));
+			throw new OHDataValidationException(errors);
 		}
 	}
 }
