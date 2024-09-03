@@ -1,6 +1,12 @@
 name: Java CI with Maven
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+    - kaixin-branch
+  pull_request:
+    branches:
+    - kaixin-branch
 
 jobs:
   build:
