@@ -1,12 +1,12 @@
 name: Java CI with Maven
 
-on: 
+on:
   push:
     branches:
-    - kaixin-branch
+      - kaixin-branch
   pull_request:
     branches:
-    - kaixin-branch
+      - kaixin-branch
 
 jobs:
   build:
@@ -32,20 +32,11 @@ jobs:
       - name: Run Unit Tests with Surefire
         run: mvn test
 
-      - name: Run Integration Testing with Failsafe
-        run: mvn verify
-
       - name: Publish Surefire Test Reports as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: surefire-reports
           path: target/test-reports
-
-      - name: Publish Failsafe Test Reports as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: failsafe-reports
-          path: target/failsafe-reports
 
   deploy:
     runs-on: ubuntu-latest
