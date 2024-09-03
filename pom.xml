@@ -213,14 +213,6 @@
 					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
 				</configuration>
 			</plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>3.0.0-M5</version>
-            <configuration>
-                <reportsDirectory>${project.build.directory}/failsafe-reports</reportsDirectory>
-            </configuration>
-        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
