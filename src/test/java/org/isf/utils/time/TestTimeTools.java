@@ -120,5 +120,14 @@ class TestTimeTools {
 				.isEqualTo(LocalDateTime.of(2021, 11, 3, 23, 59, 59));
 		assertThat(TimeTools.parseDate("2021-11-03", "yyyy-MM-dd", true))
 				.isEqualTo(LocalDateTime.of(2021, 11, 3, 0, 0, 0));
+		assertThat(TimeTools.parseDate("2021-11-03 23:12:12", null, false))
+						.isEqualTo(LocalDateTime.of(2021, 11, 3, 23, 12, 12));
+	}
+
+	@Test
+	void testGetDateException() throws Exception {
+		String date = "02/03/2024";
+		LocalDateTime localDateTime = TimeTools.getDate(date, "dd/MM/yyyy");
+		assertThat(localDateTime).isNull();
 	}
 }
