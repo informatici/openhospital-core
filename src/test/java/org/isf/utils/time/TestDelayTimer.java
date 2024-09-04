@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,27 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions.manager;
+package org.isf.utils.time;
 
-import java.util.List;
+import org.junit.jupiter.api.Test;
 
-import org.isf.menu.model.UserGroup;
-import org.isf.permissions.model.GroupPermission;
-import org.isf.permissions.model.Permission;
-import org.isf.permissions.service.GroupPermissionIoOperations;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Component;
+class TestDelayTimer {
 
-@Component
-public class GroupPermissionManager {
-
-	private final GroupPermissionIoOperations operations;
-
-	public GroupPermissionManager(GroupPermissionIoOperations groupPermissionIoOperations) {
-		this.operations = groupPermissionIoOperations;
+	@Test
+	void testDelayTimer() throws Exception {
+		// Nothing really to check; if the code doesn't error out then it is as good as it gets
+		DelayTimer delayTimer = new DelayTimer(new Callback(), 3L);
+		delayTimer.startTimer();
+		delayTimer.startTimer();
+		new Thread(delayTimer::run);
+		delayTimer.stopTimer();
+		delayTimer.quit();
 	}
 
-	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
-		return operations.findByIdIn(ids);
+	class Callback implements DelayTimerCallback {
+
+		@Override
+		public void trigger() {
+		}
 	}
 }

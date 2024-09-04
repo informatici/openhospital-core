@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,27 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions.manager;
+package org.isf.permissions;
 
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import org.isf.OHCoreTestCase;
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
-import org.isf.permissions.service.GroupPermissionIoOperations;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Component;
+import org.junit.jupiter.api.Test;
 
-@Component
-public class GroupPermissionManager {
+class TestGroupPermission extends OHCoreTestCase {
 
-	private final GroupPermissionIoOperations operations;
+	@Test
+	void testModel() throws Exception {
+		GroupPermission groupPermission = new GroupPermission();
 
-	public GroupPermissionManager(GroupPermissionIoOperations groupPermissionIoOperations) {
-		this.operations = groupPermissionIoOperations;
-	}
+		groupPermission.setId(-1);
+		assertThat(groupPermission.getId()).isEqualTo(-1);
 
-	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
-		return operations.findByIdIn(ids);
+		Permission permission = new Permission();
+		permission.setId(-1);
+		groupPermission.setPermission(permission);
+		assertThat(groupPermission.getPermission().getId()).isEqualTo(-1);
+
+		UserGroup userGroup = new UserGroup();
+		userGroup.setCode("code");
+		groupPermission.setUserGroup(userGroup);
+		assertThat(groupPermission.getUserGroup().getCode()).isEqualTo("code");
 	}
 }
