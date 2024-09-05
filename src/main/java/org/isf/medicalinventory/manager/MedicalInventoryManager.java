@@ -29,6 +29,8 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
+import org.isf.medicalstock.manager.MovStockInsertingManager;
+import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -44,10 +46,14 @@ public class MedicalInventoryManager {
 	private MedicalInventoryIoOperation ioOperations;
 
 	private MedicalInventoryRowManager medicalInventoryRowManager;
+	
+	private MovStockInsertingManager movStockInsertingManager;
 
-	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager) {
+	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager,
+					MovStockInsertingManager movStockInsertingManager) {
 		this.ioOperations = medicalInventoryIoOperation;
 		this.medicalInventoryRowManager = medicalInventoryRowManager;
+		this.movStockInsertingManager = movStockInsertingManager;
 	}
 
 	/**
@@ -218,6 +224,17 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
 	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		int invenotyId = medicalInventory.getId();
+		List<MedicalInventoryRow> inventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(invenotyId);
+		for (MedicalInventoryRow  invRow : inventoryRows) {
+			boolean isNewLot = invRow.isNewLot();
+			Lot lot = invRow.getLot();
+			if (isNewLot && lot != null) {
+				invRow.setLot(null);
+				medicalInventoryRowManager.updateMedicalInventoryRow(invRow);
+				movStockInsertingManager.deleteLot(lot);
+			}
+		}
 		ioOperations.deleteInventory(medicalInventory);
 	}
 }

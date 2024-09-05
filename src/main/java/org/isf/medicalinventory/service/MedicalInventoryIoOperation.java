@@ -209,5 +209,6 @@ public class MedicalInventoryIoOperation {
 	 */
 	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		medicalInventory.setStatus(InventoryStatus.canceled.toString());
+		repository.save(medicalInventory);
 	}
 }
