@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 class TestFileTools {
 
-	// The ultimate goal is to return a single Date object instead of an List of Dates.
+	// The ultimate goal is to return a single Date object instead of a List of Dates.
 	// Until that change is made and the corresponding changes in the GUI project
 	// this helper class means we don't have to modify the tests for the change
 	private Date getTimestampFromName(String fileName) {
@@ -563,6 +564,31 @@ class TestFileTools {
 	@Test
 	void testReadNonExistentFile() {
 		assertThrows(IllegalArgumentException.class, () -> FileTools.readFileToStringLineByLine("nonexistent.txt", true));
+	}
+
+	@Test
+	void testGetTimestampNullFile() {
+		assertThat(FileTools.getTimestamp(null)).isNull();
+	}
+
+	@Test
+	void testGetTimestamp() {
+		File file = getFile("testFile.txt");
+		LocalDateTime timeStamp = FileTools.getTimestamp(file);
+		assertThat(timeStamp).isNotNull();
+		assertThat(timeStamp.getYear()).isGreaterThanOrEqualTo(2024);
+	}
+
+	@Test
+	void testGetTimestampFromName() {
+		File file = getFile("testFile.txt");
+		List<Date> dates = FileTools.getTimestampFromName(file);
+		assertThat(dates).isEmpty();
+	}
+
+	@Test
+	void testGetFile() {
+		assertThat(FileTools.getFile("badTestFile.txt")).isNull();
 	}
 
 	private File getFile(String fileName) {

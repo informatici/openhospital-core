@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,27 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions.manager;
+package org.isf.utils.db;
 
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.menu.model.UserGroup;
-import org.isf.permissions.model.GroupPermission;
-import org.isf.permissions.model.Permission;
-import org.isf.permissions.service.GroupPermissionIoOperations;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Component;
+import org.isf.ward.TestWard;
+import org.isf.ward.model.Ward;
+import org.junit.jupiter.api.Test;
 
-@Component
-public class GroupPermissionManager {
+class TestRememberData {
 
-	private final GroupPermissionIoOperations operations;
+	private static TestWard testWard = new TestWard();
 
-	public GroupPermissionManager(GroupPermissionIoOperations groupPermissionIoOperations) {
-		this.operations = groupPermissionIoOperations;
+	@Test
+	void testSetGet() throws Exception {
+		Ward ward = testWard.setup(false);
+		RememberData.setLastOpdWard(ward);
+		assertThat(RememberData.getLastOpdWard()).isSameAs(ward);
 	}
 
-	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
-		return operations.findByIdIn(ids);
-	}
 }

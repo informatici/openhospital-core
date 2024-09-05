@@ -19,44 +19,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.menu;
+package org.isf.utils.pagination;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.menu.model.User;
-import org.isf.menu.model.UserGroup;
-import org.isf.utils.exception.OHException;
+import org.junit.jupiter.api.Test;
 
-public class TestUser {
+class TestPageInfo {
 
-	private String name = "testname";
-	private String passwd = "TestPaswd";
-	private String desc = "TestDesc";
-
-	public User setup(UserGroup userGroupName, boolean usingSet) throws OHException {
-		User user;
-
-		if (usingSet) {
-			user = new User();
-			setParameters(user, userGroupName);
-		} else {
-			// Create User with all parameters 
-			user = new User(name, userGroupName, passwd, desc);
-		}
-
-		return user;
+	@Test
+	void testConstructor() {
+		assertThat(setupPageInfo()).isNotNull();
 	}
 
-	public void setParameters(User user, UserGroup userGroupName) {
-		user.setUserName(name);
-		user.setDesc(desc);
-		user.setUserGroupName(userGroupName);
-		user.setPasswd(passwd);
+	@Test
+	void testSetGet() {
+		PageInfo pageInfo = new PageInfo();
+
+		pageInfo.setSize(-9);
+		assertThat(pageInfo.getSize()).isEqualTo(-9);
+
+		pageInfo.setPage(-8);
+		assertThat(pageInfo.getPage()).isEqualTo(-8);
+
+		pageInfo.setNbOfElements(-7);
+		assertThat(pageInfo.getNbOfElements()).isEqualTo(-7);
+
+		pageInfo.setHasPreviousPage(true);
+		assertThat(pageInfo.isHasPreviousPage()).isTrue();
+
+		pageInfo.setHasNextPage(false);
+		assertThat(pageInfo.isHasNextPage()).isFalse();
+
+		pageInfo.setTotalNbOfElements(0);
+		assertThat(pageInfo.getTotalNbOfElements()).isZero();
+
+		pageInfo.setTotalPages(1);
+		assertThat(pageInfo.getTotalPages()).isEqualTo(1);
 	}
 
-	public void check(User user) {
-		assertThat(user.getUserName()).isEqualTo(name);
-		assertThat(user.getDesc()).isEqualTo(desc);
-		assertThat(user.getPasswd()).isEqualTo(passwd);
+	protected static PageInfo setupPageInfo() {
+		PageInfo pageInfo = new PageInfo(1, 2, 3, 4, 5, false, true);
+		return pageInfo;
 	}
 }

@@ -19,44 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.menu;
+package org.isf.permissions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.menu.model.User;
-import org.isf.menu.model.UserGroup;
-import org.isf.utils.exception.OHException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TestUser {
+import org.isf.OHCoreTestCase;
+import org.isf.permissions.manager.GroupPermissionManager;
+import org.isf.permissions.model.GroupPermission;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-	private String name = "testname";
-	private String passwd = "TestPaswd";
-	private String desc = "TestDesc";
+class TestGroupPermissionManager extends OHCoreTestCase {
 
-	public User setup(UserGroup userGroupName, boolean usingSet) throws OHException {
-		User user;
+	@Autowired
+	GroupPermissionManager groupPermissionManager;
 
-		if (usingSet) {
-			user = new User();
-			setParameters(user, userGroupName);
-		} else {
-			// Create User with all parameters 
-			user = new User(name, userGroupName, passwd, desc);
-		}
-
-		return user;
+	@BeforeEach
+	void setUp() {
+		cleanH2InMemoryDb();
+		executeSQLScript("LoadPermissionTables.sql");
 	}
 
-	public void setParameters(User user, UserGroup userGroupName) {
-		user.setUserName(name);
-		user.setDesc(desc);
-		user.setUserGroupName(userGroupName);
-		user.setPasswd(passwd);
-	}
-
-	public void check(User user) {
-		assertThat(user.getUserName()).isEqualTo(name);
-		assertThat(user.getDesc()).isEqualTo(desc);
-		assertThat(user.getPasswd()).isEqualTo(passwd);
+	@Test
+	void testFindByIdIn() throws Exception {
+		List<Integer> listIds = new ArrayList<>();
+		listIds.add(1);
+		listIds.add(10);
+		List<GroupPermission> groupPermissionList = groupPermissionManager.findByIdIn(listIds);
+		assertThat(groupPermissionList).isNotEmpty();
+		assertThat(groupPermissionList).hasSize(2);
 	}
 }

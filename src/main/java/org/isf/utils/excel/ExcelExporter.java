@@ -160,7 +160,7 @@ public class ExcelExporter {
 			}
 			outFile.write("\n");
 
-			int rowCount = model.getColumnCount();
+			int rowCount = model.getRowCount();
 			for (int i = 0; i < rowCount; i++) {
 				for (int j = 0; j < colCount; j++) {
 					String strVal;
@@ -232,7 +232,7 @@ public class ExcelExporter {
 
 				int colCount = rsmd.getColumnCount();
 				for (int i = 1; i <= colCount; i++) {
-					if (i == colCount - 1) {
+					if (i == colCount) {
 						output.write(rsmd.getColumnName(i));
 					} else {
 						output.write(rsmd.getColumnName(i) + separator);
