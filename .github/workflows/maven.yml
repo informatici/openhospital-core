@@ -1,5 +1,6 @@
 name: Java CI with Maven
 
+#Run the script when Push or Pull request made
 on: [push, pull_request]
 
 jobs:
