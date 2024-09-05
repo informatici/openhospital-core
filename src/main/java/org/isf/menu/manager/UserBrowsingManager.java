@@ -185,7 +185,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user the {@link User}
 	 */
-	public void setLastLogin(User user) {
+	public void setLastLogin(User user) throws OHServiceException {
 		ioOperations.setLastLogin(user.getUserName(), TimeTools.getNow());
 	}
 
@@ -194,7 +194,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user the {@link User}
 	 */
-	public void unlockUser(User user) {
+	public void unlockUser(User user) throws OHServiceException {
 		user.setAccountLocked(false);
 		user.setLockedTime(null);
 		user.setFailedAttempts(0);
@@ -209,7 +209,7 @@ public class UserBrowsingManager {
 	 *
 	 * @param user the {@link User}
 	 */
-	public boolean unlockWhenTimeExpired(User user) {
+	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
 		LocalDateTime lockedTime = user.getLockedTime();
 		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
 			user.setAccountLocked(false);
