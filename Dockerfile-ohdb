@@ -26,6 +26,6 @@ COPY sql/step_7* /docker-entrypoint-initdb.d/
 COPY sql/step_8* /docker-entrypoint-initdb.d/
 COPY sql/step_9* /docker-entrypoint-initdb.d/
 COPY sql/step_a1* /docker-entrypoint-initdb.d/
-COPY sql/step_03_dump_vaccine_data_${OH_DB_LANG}.sql /docker-entrypoint-initdb.d/step_z100_dump_vaccine_data.sql
-COPY sql/step_03_dump_dicomtype_data_${OH_DB_LANG}.sql /docker-entrypoint-initdb.d/step_z101_dump_dicomtype_data.sql
+COPY sql/step_03_dump_vaccine_data_${OH_DB_LANG}.sql /docker-entrypoint-initdb.d/step_z100_dump_vaccine_data_${OH_DB_LANG}.sql
+COPY sql/step_03_dump_dicomtype_data_${OH_DB_LANG}.sql /docker-entrypoint-initdb.d/step_z101_dump_dicomtype_data_${OH_DB_LANG}.sql
 COPY sql/data_${OH_DB_LANG}/* data_${OH_DB_LANG}/
