@@ -82,7 +82,7 @@ public class Supplier extends Auditable<String> implements Serializable {
 	private String supNote;
 
 	@Column(name = "SUP_DELETED", columnDefinition = "char(1) default 'N'")
-	private char supDeleted;
+	private char supDeleted = 'N';
 
 	@Transient
 	private volatile int hashCode;
