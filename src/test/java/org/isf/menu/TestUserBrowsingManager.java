@@ -48,28 +48,20 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 
 	private static TestUser testUser;
 	private static TestUserGroup testUserGroup;
-	private static TestUserMenu testUserMenu;
-	private static TestGroupMenu testGroupMenu;
+	private static TestPermission testPermission;
 
 	@Autowired
-	private MenuIoOperations menuIoOperation;
-	@Autowired
 	private UserBrowsingManager userBrowsingManager;
-	@Autowired
-	private GroupMenuIoOperationRepository groupMenuIoOperationRepository;
 	@Autowired
 	private UserGroupIoOperationRepository userGroupIoOperationRepository;
 	@Autowired
 	private UserIoOperationRepository userIoOperationRepository;
-	@Autowired
-	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {
 		testUser = new TestUser();
 		testUserGroup = new TestUserGroup();
-		testUserMenu = new TestUserMenu();
-		testGroupMenu = new TestGroupMenu();
+		testPermission = new TestPermission();
 	}
 
 	@BeforeEach

@@ -19,24 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.menu.manager;
+package org.isf.menu;
 
-import java.util.List;
+import org.isf.permissions.model.Permission;
 
-import org.isf.menu.model.UserGroup;
-import org.isf.menu.service.UserGroupIoOperationRepository;
-import org.springframework.stereotype.Component;
+import java.util.ArrayList;
 
-@Component
-public class UserGroupManager {
+public class TestPermission {
+	public static ArrayList<Permission> generatePermissions(int nbPermissions) {
+		ArrayList<Permission> permissions = new ArrayList<>();
 
-	private final UserGroupIoOperationRepository userGroupIoOperationRepository;
+		for (int i = 1; i <= nbPermissions; i++) {
+			Permission permission = new Permission();
+			permission.setId(i);
+			permission.setName("permission" + i);
+			permission.setDescription("permission " + i + " description");
+			permissions.add(permission);
+		}
 
-	public UserGroupManager(UserGroupIoOperationRepository userGroupIoOperationRepository) {
-		this.userGroupIoOperationRepository = userGroupIoOperationRepository;
+		return permissions;
 	}
 
-	public List<UserGroup> findByIdIn(List<String> userGroupIds) {
-		return this.userGroupIoOperationRepository.findByCodeIn(userGroupIds);
+	public static Permission generatePermission() {
+		Permission permission = new Permission();
+		permission.setId(1);
+		permission.setName("permission.test");
+		permission.setDescription("Test permission");
+
+		return permission;
 	}
 }
