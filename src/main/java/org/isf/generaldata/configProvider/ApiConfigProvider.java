@@ -49,7 +49,7 @@ class ApiConfigProvider implements ConfigProvider {
 
 	private interface ParamsApi {
 
-		@feign.RequestLine("GET /")
+		@feign.RequestLine("GET")
 		@feign.Headers("Content-Type: application/json")
 		Map<String, Object> getData();
 	}

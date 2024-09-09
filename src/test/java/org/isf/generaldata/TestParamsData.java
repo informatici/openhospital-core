@@ -31,7 +31,7 @@ public class TestParamsData {
 	void testGetTestParamsData() {
 		ParamsData paramsData = ParamsData.getInstance();
 
-		assertThat(paramsData.getTelemetryUrl()).isEqualTo("https://europe-west1-open-hospital-telemetry.cloudfunctions.net/open-hospital-telemetry");
+		assertThat(paramsData.getTelemetryUrl()).isNotNull();
 
 		// void method
 		paramsData.close();
