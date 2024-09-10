@@ -21,19 +21,11 @@
  */
 package org.isf.generaldata;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-import org.junit.jupiter.api.Test;
+@Configuration
+@PropertySource("classpath:database.properties")
+public class DatabaseConfig {
 
-public class TestParamsData {
-
-	@Test
-	void testGetTestParamsData() {
-		ParamsData paramsData = ParamsData.getInstance();
-
-		assertThat(paramsData.getTelemetryUrl()).isNotNull();
-
-		// void method
-		paramsData.close();
-	}
 }
