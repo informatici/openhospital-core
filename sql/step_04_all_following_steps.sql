@@ -101,4 +101,4 @@ source step_a104_add_inventory_in_pharmacy.sql;
 source step_a105_medicaldsr_soft_deletion.sql;
 source step_a106_medicaldsrstock_control.sql;
 source step_a107_add_permission_admin_access.sql;
-source step_a108_alter_table_dicom_type_and_dicom_data.sql;
+source step_a108_audit_dicom_type_and_dicom_data.sql;
