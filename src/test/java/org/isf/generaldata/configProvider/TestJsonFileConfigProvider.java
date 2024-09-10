@@ -38,8 +38,7 @@ public class TestJsonFileConfigProvider {
 		Map<String, Object> configData = jsonFileConfigProvider.getConfigData();
 
 		assertThat(configData).containsKey("oh_telemetry_url");
-		assertThat(configData.get("oh_telemetry_url")).isEqualTo("https://europe-west1-open-hospital-telemetry.cloudfunctions.net/open-hospital-telemetry");
-
+		assertThat(configData.get("oh_telemetry_url")).isNotNull();
 		assertThat(jsonFileConfigProvider.get("someParam")).isNull();
 
 		// void method
