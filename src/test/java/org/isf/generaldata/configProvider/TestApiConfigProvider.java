@@ -34,7 +34,7 @@ public class TestApiConfigProvider {
 		GeneralData.initialize();
 		ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
 
-		assertThat(apiConfigProvider.getConfigData()).isNull();
+		assertThat(apiConfigProvider.getConfigData()).isNotNull();
 
 		assertThat(apiConfigProvider.get("someParam")).isNull();
 
