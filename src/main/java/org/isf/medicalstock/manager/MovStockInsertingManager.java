@@ -440,4 +440,16 @@ public class MovStockInsertingManager {
 	public void deleteLot(Lot lot) throws OHServiceException {
 		ioOperations.deleteLot(lot);
 	}
+	
+	/**
+	 * Retrieves all medicals referencing the specified code.
+	 * 
+	 * @param lotCode the lot code.
+	 * @return the ids of medicals referencing the specified lot.
+	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
+	 */
+	public List<Integer> getMedicalsFromLot(String lotCode) throws OHServiceException {
+		return ioOperations.getMedicalsFromLot(lotCode);
+	}
+	
 }
