@@ -110,7 +110,6 @@ public class Supplier extends Auditable<String> implements Serializable {
 		this.supFax = supFax;
 		this.supEmail = supEmail;
 		this.supNote = supNote;
-		this.supDeleted = 'N';
 	}
 
 	/**
