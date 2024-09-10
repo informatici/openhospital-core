@@ -63,4 +63,7 @@ public class PermissionIoOperations {
 		return repository.existsById(id);
 	}
 
+	public Permission save(Permission permission) {
+		return repository.save(permission);
+	}
 }
