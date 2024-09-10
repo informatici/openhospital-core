@@ -29,6 +29,9 @@ import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
+import org.isf.permissions.model.GroupPermission;
+import org.isf.permissions.model.Permission;
+import org.isf.permissions.service.GroupPermissionIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -40,28 +43,35 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class MenuIoOperations {
 
-	private UserIoOperationRepository repository;
+	private final UserIoOperationRepository repository;
 
-	private UserGroupIoOperationRepository groupRepository;
+	private final UserGroupIoOperationRepository groupRepository;
 
-	private UserMenuItemIoOperationRepository menuRepository;
+	private final UserMenuItemIoOperationRepository menuRepository;
 
-	private GroupMenuIoOperationRepository groupMenuRepository;
+	private final GroupMenuIoOperationRepository groupMenuRepository;
 
-	public MenuIoOperations(UserIoOperationRepository userIoOperationRepository, UserGroupIoOperationRepository userGroupIoOperationRepository,
-	                        UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
-	                        GroupMenuIoOperationRepository groupMenuIoOperationRepository) {
+	private final GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
+
+	public MenuIoOperations(
+			UserIoOperationRepository userIoOperationRepository,
+			UserGroupIoOperationRepository userGroupIoOperationRepository,
+			UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
+			GroupMenuIoOperationRepository groupMenuIoOperationRepository,
+			GroupPermissionIoOperationRepository groupPermissionIoOperationRepository
+	) {
 		this.repository = userIoOperationRepository;
 		this.groupRepository = userGroupIoOperationRepository;
 		this.menuRepository = userMenuItemIoOperationRepository;
 		this.groupMenuRepository = groupMenuIoOperationRepository;
+		this.groupPermissionIoOperationRepository = groupPermissionIoOperationRepository;
 	}
 
 	/**
 	 * Returns the list of {@link User}s
 	 * 
 	 * @return the list of {@link User}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser() throws OHServiceException {
 		return repository.findAllByOrderByUserNameAsc();
@@ -70,7 +80,7 @@ public class MenuIoOperations {
 	/**
 	 * Count all active {@link User}s
 	 * 
-	 * @return
+	 * @return The number of active users
 	 */
 	public long countAllActiveUsers() {
 		return repository.countAllActiveUsers();
@@ -79,7 +89,7 @@ public class MenuIoOperations {
 	/**
 	 * Count all active {@link UserGroup}s
 	 * 
-	 * @return
+	 * @return The number of active groups
 	 */
 	public long countAllActiveGroups() {
 		return repository.countAllActiveGroups();
@@ -90,7 +100,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
 		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
@@ -101,7 +111,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public User getUserByName(String userName) throws OHServiceException {
 		return repository.findByUserName(userName);
@@ -112,7 +122,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public String getUsrInfo(String userName) throws OHServiceException {
 		User user = repository.findById(userName).orElse(null);
@@ -126,10 +136,19 @@ public class MenuIoOperations {
 	 * Returns the list of {@link UserGroup}s
 	 * 
 	 * @return the list of {@link UserGroup}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return groupRepository.findAllByOrderByCodeAsc();
+	}
+
+	/**
+	 * Find user group by code
+	 * @param groupCode UserGroup code
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findByCode(String groupCode) {
+		return groupRepository.findById(groupCode).orElse(null);
 	}
 
 	/**
@@ -159,7 +178,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param user - the {@link User} to insert
 	 * @return the new {@link User} added to the DB
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to create user
 	 */
 	public User newUser(User user) throws OHServiceException {
 		return repository.save(user);
@@ -170,7 +189,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param user - the {@link User} to update
 	 * @return new {@link User}
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to update user
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
 		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
@@ -181,7 +200,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param user - the {@link User} to update
 	 * @return {@code true} if the user has been updated, {@code false} otherwise.
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to update the password
 	 */
 	public boolean updatePassword(User user) throws OHServiceException {
 		return repository.updatePassword(user.getPasswd(), user.getUserName()) > 0;
@@ -191,7 +210,7 @@ public class MenuIoOperations {
 	 * Deletes an existing {@link User}
 	 * 
 	 * @param user - the {@link User} to delete
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
 		repository.delete(user);
@@ -214,7 +233,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When error occurs
 	 */
 	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
 		List<Object[]> menuList = menuRepository.findAllWhereUserId(aUser.getUserName());
@@ -241,7 +260,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to get group menu
 	 */
 	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
@@ -270,7 +289,7 @@ public class MenuIoOperations {
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
 	 * @return {@code true}
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to set group menu
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
 		deleteGroupMenu(aGroup);
@@ -296,10 +315,11 @@ public class MenuIoOperations {
 	 * Deletes a {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
+		groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(aGroup.getCode());
 		groupRepository.delete(aGroup);
 	}
 
@@ -308,10 +328,36 @@ public class MenuIoOperations {
 	 * 
 	 * @param aGroup - the {@link UserGroup} to insert
 	 * @return the new {@link UserGroup}
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to create group
 	 */
 	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
 		return groupRepository.save(aGroup);
+	}
+
+	/**
+	 * Insert a new {@link UserGroup} with a minimum set of rights
+	 *
+	 * @param userGroup - the {@link UserGroup} to insert
+	 * @param permissions - list of permissions to assign to the group
+	 * @return the new {@link UserGroup}
+	 * @throws OHServiceException When failed to create user group
+	 */
+	public UserGroup newUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		UserGroup newUserGroup = groupRepository.save(userGroup);
+
+		if (permissions != null && permissions.size() > 0) {
+			List<GroupPermission> groupPermissions = permissions.stream().map(permission -> {
+				GroupPermission groupPermission = new GroupPermission();
+				groupPermission.setPermission(permission);
+				groupPermission.setUserGroup(newUserGroup);
+
+				return groupPermission;
+			}).toList();
+
+			groupPermissionIoOperationRepository.saveAll(groupPermissions);
+		}
+
+		return newUserGroup;
 	}
 
 	/**
@@ -319,10 +365,39 @@ public class MenuIoOperations {
 	 * 
 	 * @param aGroup - the {@link UserGroup} to update
 	 * @return {@code true} if the group has been updated, {@code false} otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to update the user group
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		return groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0;
 	}
 
+	/**
+	 * Updates an existing {@link UserGroup} and the related permissions
+	 * If permissions list is empty, the existing permissions are kept,
+	 * otherwise they're replaced with the provided ones.
+	 *
+	 * @param userGroup - the {@link UserGroup} to update
+	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @throws OHServiceException When failed to update user group
+	 */
+	public boolean updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
+
+		if (updated && permissions != null && !permissions.isEmpty()) {
+			groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(userGroup.getCode());
+			UserGroup updatedUserGroup = groupRepository.getReferenceById(userGroup.getCode());
+
+			List<GroupPermission> groupPermissions = permissions.stream().map(permission -> {
+				GroupPermission groupPermission = new GroupPermission();
+				groupPermission.setPermission(permission);
+				groupPermission.setUserGroup(updatedUserGroup);
+
+				return groupPermission;
+			}).toList();
+
+			groupPermissionIoOperationRepository.saveAll(groupPermissions);
+		}
+
+		return updated;
+	}
 }

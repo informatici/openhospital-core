@@ -61,4 +61,7 @@ public class PermissionManager {
 		return operations.exists(id);
 	}
 
+	public Permission save(Permission permission) {
+		return operations.save(permission);
+	}
 }
