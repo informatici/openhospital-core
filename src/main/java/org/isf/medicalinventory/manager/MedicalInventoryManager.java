@@ -232,9 +232,11 @@ public class MedicalInventoryManager {
 	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHDataValidationException, OHServiceException {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
-		String medDescription = "";
+		String medDescriptionForUpdate = "";
+		String medDescriptionForNew = "";
 		List<Movement> movements = movBrowserManager.getMovements(null, null, null, null, movFrom, movTo, null, null, null, null); 
 		boolean updated = false;
+		boolean added = false;
 		if (!movements.isEmpty()) {
 			Map<Medical, List<Movement>> groupedByMedical = movements.stream().collect(Collectors.groupingBy(Movement::getMedical));
 			for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
@@ -246,39 +248,37 @@ public class MedicalInventoryManager {
 				if (movs != null) {
 					Movement mov = movs.get(0);
 					String lotCodeOfMovement = mov.getLot().getCode();
-					Lot lot = null;
-					Integer medicalCode = medical.getCode();
 					List<Lot> lots = movStockInsertingManager.getLotByMedical(medical).stream().filter(l -> l.getCode().equals(lotCodeOfMovement)).collect(Collectors.toList());
 					if (lots != null) {
-						lot = lots.get(0);
-						double mainStoreQty = (double)lot.getMainStoreQuantity();
-						Integer movMedicalCode = mov.getMedical().getCode();
-						if (movMedicalCode.equals(medicalCode) && lotCodeOfMovement.equals(lotCode)) {
-							if (mainStoreQty != theoQty) { 
-								medicalInventoryRow.setTheoreticQty(mainStoreQty);
-								medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
-								updated = true;
-								medDescription = medDescription + " "+medical.getDescription();
-							}
-						} else {
-							MedicalInventoryRow invRow = medicalInventoryRowManager.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
-							if (invRow != null) {
-								invRow.setTheoreticQty(mainStoreQty);
-								medicalInventoryRowManager.updateMedicalInventoryRow(invRow);
-								updated = true;
-								medDescription = medDescription + " "+medical.getDescription();
+						for (Lot lot : lots) {
+							double mainStoreQty = (double)lot.getMainStoreQuantity();
+							if (lotCodeOfMovement.equals(lotCode)) {
+								if (mainStoreQty != theoQty) { 
+									medicalInventoryRow.setTheoreticQty(mainStoreQty);
+									medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+									updated = true;
+									medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+lotCodeOfMovement+" and qty :"+mainStoreQty+"/";
+								}
 							} else {
 								MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
 								medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
+								added = true;
+								medDescriptionForNew = medDescriptionForNew + " "+medical.getDescription()+" lot code "+lotCodeOfMovement+" and qty :"+mainStoreQty+"/";
 							}
 						}
 					}
 				}
 			}
 		}
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (updated) {
-			List<OHExceptionMessage> errors = new ArrayList<>();
-			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.sometheoriticqtyhavebeenupdatepleasecontrole.msg", medDescription)));
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.msg", medDescriptionForUpdate)));
+		}
+		
+		if (added) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.msg", medDescriptionForNew)));
+		}
+		if (errors.size() > 0) {
 			throw new OHDataValidationException(errors);
 		}
 	}
