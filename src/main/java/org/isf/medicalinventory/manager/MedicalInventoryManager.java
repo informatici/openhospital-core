@@ -23,7 +23,6 @@ package org.isf.medicalinventory.manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -228,6 +227,13 @@ public class MedicalInventoryManager {
 		}
 	}
 	
+	/**
+	 * Validate the Inventory rows of inventory.
+	 *
+	 * @param inventory - The  {@link MedicalInventory}
+	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
+	 * @throws OHDataValidationException
+	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHDataValidationException, OHServiceException {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
@@ -285,5 +291,26 @@ public class MedicalInventoryManager {
 		if (errors.size() > 0) {
 			throw new OHDataValidationException(errors);
 		}
+		
+	}
+		
+	/**
+	 * Marks an inventory as deleted by changing its status.
+	 * @param medicalInventory - the medicalInventory of the inventory to delete.
+	 * @throws OHServiceException if an error occurs during the operation.
+	 */
+	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		int invenotyId = medicalInventory.getId();
+		List<MedicalInventoryRow> inventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(invenotyId);
+		for (MedicalInventoryRow  invRow : inventoryRows) {
+			boolean isNewLot = invRow.isNewLot();
+			Lot lot = invRow.getLot();
+			if (isNewLot && lot != null) {
+				invRow.setLot(null);
+				medicalInventoryRowManager.updateMedicalInventoryRow(invRow);
+				movStockInsertingManager.deleteLot(lot);
+			}
+		}
+		ioOperations.deleteInventory(medicalInventory);
 	}
 }

@@ -29,6 +29,7 @@ import java.util.List;
 import org.isf.OHCoreTestCase;
 import org.isf.medicalinventory.manager.MedicalInventoryManager;
 import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -552,5 +553,18 @@ class Tests extends OHCoreTestCase {
 		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
 		MedicalInventoryRow savedMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
 		return savedMedicalInventoryRow.getId();
+	}
+
+	@Test
+	void testDeleteInventory() throws Exception {
+		int id = setupTestMedicalInventory(false);
+		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(inventory).isNotNull();
+		inventory.setStatus(InventoryStatus.draft.toString());
+		medIvnIoOperationRepository.saveAndFlush(inventory);
+		medicalInventoryManager.deleteInventory(inventory);
+		MedicalInventory deletedInventory = medIvnIoOperationRepository.findById(id).orElse(null);
+		assertThat(deletedInventory).isNotNull();
+		assertThat(deletedInventory.getStatus()).isEqualTo(InventoryStatus.canceled.toString());
 	}
 }
