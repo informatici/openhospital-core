@@ -109,9 +109,8 @@ public class MedicalInventoryRowManager {
 					if (invRowDelete.getLot() != null) {
 						movStockInsertingManager.deleteLot(invRowDelete.getLot());
 					}
-				} else {
-					this.deleteMedicalInventoryRow(invRowDelete);
 				}
+				ioOperation.deleteMedicalInventoryRow(invRow);
 			}	
 		}
 	}
