@@ -255,15 +255,19 @@ public class MedicalInventoryManager {
 							if (lotCodeOfMovement.equals(lotCode)) {
 								if (mainStoreQty != theoQty) { 
 									medicalInventoryRow.setTheoreticQty(mainStoreQty);
-									medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
-									updated = true;
-									medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+lotCodeOfMovement+" and qty :"+mainStoreQty+"/";
+									medicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+									if (medicalInventoryRow != null) {
+										updated = true;
+										medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+lot+" and qty :"+mainStoreQty+"/";
+									}
 								}
 							} else {
 								MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, lot);
-								medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
-								added = true;
-								medDescriptionForNew = medDescriptionForNew + " "+medical.getDescription()+" lot code "+lotCodeOfMovement+" and qty :"+mainStoreQty+"/";
+								medInvRow = medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
+								if (medInvRow != null) {
+									added = true;
+									medDescriptionForNew = medDescriptionForNew + " "+medical.getDescription()+" lot code "+lot+" and qty :"+mainStoreQty+"/";
+								}
 							}
 						}
 					}
