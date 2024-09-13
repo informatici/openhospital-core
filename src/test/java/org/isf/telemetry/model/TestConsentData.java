@@ -19,24 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.service.remote;
+package org.isf.telemetry.model;
 
-import java.lang.reflect.Type;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import feign.RequestTemplate;
-import feign.codec.EncodeException;
-import feign.codec.Encoder;
-import feign.gson.GsonEncoder;
+import org.isf.OHCoreTestCase;
+import org.junit.jupiter.api.Test;
 
-public class CustomCommonEncoder implements Encoder {
+class TestConsentData extends OHCoreTestCase {
 
-	public CustomCommonEncoder() {
-		super();
-	}
+	@Test
+	void testModel() {
+		ConsentData consentData = new ConsentData();
 
-	@Override
-	public void encode(Object object, Type bodyType, RequestTemplate template) throws EncodeException {
-		GsonEncoder gson = new GsonEncoder();
-		gson.encode(object, bodyType, template);
+		consentData.setApplication(false);
+		assertThat(consentData.getApplication()).isFalse();
+
+		consentData.setOss(true);
+		assertThat(consentData.getOss()).isTrue();
+
+		consentData.setDbms(false);
+		assertThat(consentData.getDbms()).isFalse();
+
+		consentData.setLocation(true);
+		assertThat(consentData.getLocation()).isTrue();
+
+		consentData.setHospital(false);
+		assertThat(consentData.getHospital()).isFalse();
+
+		consentData.setTime(true);
+		assertThat(consentData.getTime()).isTrue();
+
+		assertThat(consentData.toString()).isNotNull();
 	}
 }
