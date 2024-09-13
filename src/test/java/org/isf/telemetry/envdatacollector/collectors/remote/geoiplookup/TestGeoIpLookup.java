@@ -19,29 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.service;
+package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
 
-import org.isf.telemetry.model.Telemetry;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Service
-@Transactional(propagation = Propagation.REQUIRED)
-public class TelemetryOperations {
+import org.isf.OHCoreTestCase;
+import org.junit.jupiter.api.Test;
 
-	private TelemetryRepository telemetryRepository;
+class TestGeoIpLookup extends OHCoreTestCase {
 
-	public TelemetryOperations(TelemetryRepository telemetryRepository) {
-		this.telemetryRepository = telemetryRepository;
-	}
+	@Test
+	void testBean() {
+		GeoIpLookup geoIpLookup = new GeoIpLookup();
 
-	public boolean saveOrUpdate(Telemetry telemetry) throws OHServiceException {
-		return telemetryRepository.save(telemetry) != null;
-	}
-
-	public Telemetry retrieveFirst() {
-		return this.telemetryRepository.findFirstByOrderById_SoftwareUUIDAsc();
+		geoIpLookup.setCurrencyName("currencyName");
+		assertThat(geoIpLookup.getCurrencyName()).isEqualTo("currencyName");
 	}
 }
