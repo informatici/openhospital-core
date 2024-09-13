@@ -272,7 +272,7 @@ public class MedicalInventoryManager {
 								medInvRow = medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
 								if (medInvRow != null) {
 									added = true;
-									medDescriptionForNew = medDescriptionForNew + " "+medical.getDescription()+" lot code "+lot+" and qty :"+mainStoreQty+"/";
+									medDescriptionForNew = medDescriptionForNew + " " + medical.getDescription() + " lot code " + lot + " and qty : " + mainStoreQty + "/";
 								}
 							}
 						}
