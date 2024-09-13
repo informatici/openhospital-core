@@ -21,18 +21,31 @@
  */
 package org.isf.dicomtype.model;
 
+import java.io.Serializable;
+
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author Mwithi
  */
 @Entity
 @Table(name="OH_DICOMTYPE")
-public class DicomType {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DCMT_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DCMT_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DCMT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DCMT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DCMT_LAST_MODIFIED_DATE"))
+public class DicomType extends Auditable<String> implements Serializable {
 	
 	@Id 
 	@Column(name = "DCMT_ID")

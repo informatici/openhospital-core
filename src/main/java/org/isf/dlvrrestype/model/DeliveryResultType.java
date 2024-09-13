@@ -21,16 +21,29 @@
  */
 package org.isf.dlvrrestype.model;
 
+import java.io.Serializable;
+
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
 @Table(name="OH_DELIVERYRESULTTYPE")
-public class DeliveryResultType {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DRT_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DRT_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DRT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DRT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DRT_LAST_MODIFIED_DATE"))
+public class DeliveryResultType extends Auditable<String> implements Serializable {
 
 	@Id 
 	@Column(name="DRT_ID_A")	    

@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -41,7 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MedicalInventoryIoOperation {
 
 	private MedicalInventoryIoOperationRepository repository;
-
 	public MedicalInventoryIoOperation(MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository) {
 		this.repository = medicalInventoryIoOperationRepository;
 	}
@@ -197,5 +197,15 @@ public class MedicalInventoryIoOperation {
 			return inventory.get();
 		}
 		return null;
+	}
+
+	/**
+	 * Marks an inventory as deleted by changing its status.
+	 * @param medicalInventory - the medicalInventory of the inventory to delete.
+	 * @throws OHServiceException if an error occurs during the operation.
+	 */
+	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		medicalInventory.setStatus(InventoryStatus.canceled.toString());
+		repository.save(medicalInventory);
 	}
 }
