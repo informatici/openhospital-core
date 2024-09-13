@@ -264,7 +264,7 @@ public class MedicalInventoryManager {
 									medicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
 									if (medicalInventoryRow != null) {
 										updated = true;
-										medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+lot+" and qty :"+mainStoreQty+"/";
+										medDescriptionForUpdate = medDescriptionForUpdate + " " + medical.getDescription() + " lot code " + lot + " and qty : " + mainStoreQty + "/";
 									}
 								}
 							} else {
