@@ -108,11 +108,12 @@ public class MedicalInventoryIoOperation {
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
+	 * @param type - the {@link MedicalInventory} type.
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHServiceException {
-		return repository.findInventoryByStatus(status);
+	public List<MedicalInventory> getMedicalInventoryByStatusAndInventoryType(String status, String inventoryType) throws OHServiceException {
+		return repository.findInventoryByStatusAndInventoryType(status, inventoryType);
 	}
 	
 	/**

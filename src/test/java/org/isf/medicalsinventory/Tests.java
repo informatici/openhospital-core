@@ -30,6 +30,7 @@ import org.isf.OHCoreTestCase;
 import org.isf.medicalinventory.manager.MedicalInventoryManager;
 import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
 import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -257,11 +258,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = "STATUS";
+		String status = InventoryStatus.draft.toString();
+		String inventoryType = InventoryType.main.toString();
 		inventory.setStatus(status);
+		inventory.setInventoryType(inventoryType);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryManager.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
+		List<MedicalInventory> medicalInventories = medicalInventoryManager.getMedicalInventoryByStatusAndInventoryType(firstMedicalInventory.getStatus(), firstMedicalInventory.getInventoryType());
 		assertThat(medicalInventories).hasSize(1);
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
@@ -273,11 +276,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = "STATUS";
+		String status = InventoryStatus.draft.toString();
+		String inventoryType = InventoryType.main.toString();
 		inventory.setStatus(status);
+		inventory.setInventoryType(inventoryType);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
+		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventoryByStatusAndInventoryType(firstMedicalInventory.getStatus(), firstMedicalInventory.getInventoryType());
 		assertThat(medicalInventories).hasSize(1);
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
