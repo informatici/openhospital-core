@@ -1,7 +1,9 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
-
+--
+-- Instead of manipulating and resorting system global variables just
+-- drop and regenerate the offending Foreign Key constraint.
+-- This makes the script database version independent.
+-- See OP-1335  (https://openhospital.atlassian.net/browse/OP-1335)
+--
 ALTER TABLE OH_DICOM DROP FOREIGN KEY FK_DICOM_DICOMTYPE;
 
 ALTER TABLE OH_DICOM ENGINE = INNODB, CONVERT TO CHARACTER SET utf8;
@@ -13,7 +15,3 @@ ALTER TABLE OH_DICOM
             REFERENCES OH_DICOMTYPE (DCMT_ID)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
