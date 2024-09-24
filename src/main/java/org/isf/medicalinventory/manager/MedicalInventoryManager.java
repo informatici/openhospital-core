@@ -238,15 +238,17 @@ public class MedicalInventoryManager {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		String medDescriptionForUpdate = "";
-		String medDescriptionForNew = ""; 
 		boolean updated = false;
-		boolean added = false;
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			Medical medical = medicalInventoryRow.getMedical();
 			int medicalCode = medical.getCode();
+			if (medicalInventoryRow.isNewLot()) {
+				medicalInventoryRow.setNewLot(false);
+				medicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+			}
 			List<Movement> movs = movBrowserManager.getMovements(medicalCode, null, null, null, movFrom, movTo, null, null, null, null);
 			if (movs != null && movs.size() > 0) {
 				for (Movement mov: movs) {
@@ -258,7 +260,6 @@ public class MedicalInventoryManager {
 						if (lotCodeOfMovement.equals(lotCode)) {
 							if (mainStoreQty != theoQty) { 
 								medicalInventoryRow.setTheoreticQty(mainStoreQty);
-								medicalInventoryRow.setNewLot(false);
 								MedicalInventoryRow medInvRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
 								if (medInvRow != null) {
 									updated = true;
