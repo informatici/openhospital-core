@@ -245,10 +245,6 @@ public class MedicalInventoryManager {
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			Medical medical = medicalInventoryRow.getMedical();
 			int medicalCode = medical.getCode();
-			if (medicalInventoryRow.isNewLot()) {
-				medicalInventoryRow.setNewLot(false);
-				medicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
-			}
 			List<Movement> movs = movBrowserManager.getMovements(medicalCode, null, null, null, movFrom, movTo, null, null, null, null);
 			if (movs != null && movs.size() > 0) {
 				for (Movement mov: movs) {
