@@ -24,16 +24,11 @@ package org.isf.generaldata;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TestConfigurationProperties {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
-
 	@Test
 	void testConfigurationProperties() {
-
 		MockConfigClass mockConfigClass = new MockConfigClass("fileThatDoesNotExist");
 		assertThat(mockConfigClass.isInitialized()).isFalse();
 		assertThat(mockConfigClass.myGetProperty("someProperty", 0.0D)).isZero();
