@@ -251,7 +251,7 @@ public class MovStockInsertingManager {
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if {@code removeEmtpy} is set to true.
 	 *
 	 * @param medical the medical.
-	 * @param removeEmpty.
+	 * @param removeEmpty
 	 * @return the list of retrieved {@link Lot}s.
 	 * @throws OHServiceException
 	 */
@@ -432,7 +432,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Deletes the specified {@link lot}.
+	 * Deletes the specified {@link Lot}.
 	 *
 	 * @param lot the lot to delete.
 	 * @throws OHServiceException

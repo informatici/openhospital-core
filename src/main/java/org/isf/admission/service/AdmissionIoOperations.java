@@ -335,7 +335,6 @@ public class AdmissionIoOperations {
 	 *
 	 * @param dateFrom
 	 * @param dateTo
-	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
