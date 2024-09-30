@@ -31,6 +31,7 @@ import org.isf.OHCoreTestCase;
 import org.isf.telemetry.envdatacollector.DataCollectorProviderService;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.service.remote.TelemetryDataCollectorGatewayService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -47,10 +48,17 @@ class TestTelemetryUtil extends OHCoreTestCase {
 	@Mock
 	TelemetryManager telemetryManagerMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		telemetryUtils = new TelemetryUtils(dataCollectorProviderMock, telemetryGatewayServiceMock, telemetryManagerMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

@@ -34,6 +34,7 @@ import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoComm
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -54,15 +55,22 @@ class TestIpApiService extends OHCoreTestCase {
 	Telemetry telemetryMock;
 	IpApiService ipApiService;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setup() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		Context.setApplicationContext(applicationContextMock);
 		when(applicationContextMock.getBeansOfType(GeoIpInfoCommonService.class)).thenReturn(geoIpServicesMapMock);
 		when(applicationContextMock.getBean(TelemetryManager.class)).thenReturn(telemetryManagerMock);
 		when(telemetryManagerMock.retrieveSettings()).thenReturn(telemetryMock);
 		when(settings.retrieveBaseUrl(any(String.class))).thenReturn("http://someURL");
 		ipApiService = new IpApiService(settings);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test
