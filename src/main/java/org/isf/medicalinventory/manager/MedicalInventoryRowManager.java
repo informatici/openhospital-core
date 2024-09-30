@@ -136,7 +136,7 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param medInventoryRow
+	 * @param medicalInventoryRow
 	 * @throws OHDataValidationException
 	 */
 	private void validateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
