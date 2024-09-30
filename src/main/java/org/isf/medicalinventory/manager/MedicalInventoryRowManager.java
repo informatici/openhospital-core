@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
+
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
@@ -33,8 +35,6 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
 
 @Component
 public class MedicalInventoryRowManager {
