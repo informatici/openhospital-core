@@ -614,7 +614,7 @@ public class MedicalStockIoOperations {
 		// Process mainStoreQuantities and update lots
 		for (Object[] result : mainStoreQuantities) {
 			String lotCode = (String) result[0];
-			Integer mainStoreQuantity = ((Long) result[1]).intValue();
+			int mainStoreQuantity = ((Long) result[1]).intValue();
 
 			// Find the corresponding lot in the lots list
 			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
