@@ -36,6 +36,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.serviceprinting.manager.PrintLabels;
 import org.isf.utils.db.DbSingleJpaConn;
 import org.isf.utils.exception.OHException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,17 +53,19 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 class TestPrintLabels extends OHCoreTestCase {
 
-	private static TestPatient testPatient;
-
 	@Mock
-	JasperReport jasperReport;
+	private JasperReport jasperReport;
 	@Mock
-	JasperPrint jasperPrint;
+	private JasperPrint jasperPrint;
 	@Mock
-	Connection connection;
+	private Connection connection;
 
 	@Autowired
-	PatientIoOperationRepository patientIoOperationRepository;
+	private PatientIoOperationRepository patientIoOperationRepository;
+
+	private static TestPatient testPatient;
+
+	private AutoCloseable closeable;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -72,7 +75,12 @@ class TestPrintLabels extends OHCoreTestCase {
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

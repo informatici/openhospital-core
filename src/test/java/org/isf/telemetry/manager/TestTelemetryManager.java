@@ -29,6 +29,7 @@ import java.util.Map;
 import org.isf.OHCoreTestCase;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.service.TelemetryRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -43,11 +44,18 @@ class TestTelemetryManager extends OHCoreTestCase {
 
 	Map<String, Boolean> consentMap;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		telemetryManager = new TelemetryManager(telemetryRepository);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

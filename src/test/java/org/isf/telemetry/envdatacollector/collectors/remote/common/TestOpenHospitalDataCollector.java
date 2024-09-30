@@ -45,6 +45,7 @@ import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.vaccine.service.VaccineIoOperations;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.service.WardIoOperations;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -93,9 +94,11 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 	@Mock
 	private List<GeoIpInfoCommonService> geoIpServicesMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		Context.setApplicationContext(applicationContextMock);
 		when(applicationContextMock.getBean("entityManagerFactory", EntityManagerFactory.class)).thenReturn(entityManagerFactoryMock);
 
@@ -113,6 +116,11 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 						visitsIoOperations,
 						accountingIoOperations,
 						geoIpInfoSettingsMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

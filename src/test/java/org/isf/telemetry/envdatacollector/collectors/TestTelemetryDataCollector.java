@@ -33,6 +33,7 @@ import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.model.TelemetryId;
 import org.isf.utils.time.TimeTools;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -45,10 +46,17 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 	@Mock
 	TelemetryManager telemetryManagerMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		telemetryDataCollector = new TelemetryDataCollector(telemetryManagerMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

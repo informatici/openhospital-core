@@ -28,6 +28,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -41,11 +42,18 @@ class TestDbSingleJpaConn {
 	@Mock
 	ApplicationContext applicationContextMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		Context.setApplicationContext(applicationContextMock);
 		when(applicationContextMock.getBean("entityManagerFactory", EntityManagerFactory.class)).thenReturn(entityManagerFactoryMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

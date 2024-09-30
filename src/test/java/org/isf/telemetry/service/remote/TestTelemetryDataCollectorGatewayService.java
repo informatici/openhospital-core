@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.ParamsData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -44,10 +45,17 @@ class TestTelemetryDataCollectorGatewayService extends OHCoreTestCase {
 	@Mock
 	ParamsData paramsDataClient;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		telemetryDataCollectorGatewayService = new TelemetryDataCollectorGatewayService(propertiesMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

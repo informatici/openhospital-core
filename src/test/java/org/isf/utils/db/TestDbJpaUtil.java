@@ -28,6 +28,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import org.isf.menu.manager.Context;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -37,17 +38,24 @@ import org.springframework.context.ApplicationContext;
 class TestDbJpaUtil {
 
 	@Mock
-	EntityManagerFactory entityManagerFactoryMock;
+	private EntityManagerFactory entityManagerFactoryMock;
 	@Mock
-	EntityManager entityManagerMock;
+	private EntityManager entityManagerMock;
 	@Mock
-	ApplicationContext applicationContextMock;
+	private ApplicationContext applicationContextMock;
+
+	private AutoCloseable closeable;
 
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		Context.setApplicationContext(applicationContextMock);
 		when(applicationContextMock.getBean("entityManagerFactory", EntityManagerFactory.class)).thenReturn(entityManagerFactoryMock);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

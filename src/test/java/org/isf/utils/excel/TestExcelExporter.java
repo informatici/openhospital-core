@@ -37,6 +37,7 @@ import java.util.Map;
 
 import javax.swing.JTable;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -65,11 +66,18 @@ class TestExcelExporter {
 	@TempDir
 	File tempDir;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		table = new JTable(tableData, columns);
 		excelExporter = new ExcelExporter();
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test
