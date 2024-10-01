@@ -31,6 +31,7 @@ import java.util.Map;
 import jakarta.persistence.EntityManager;
 
 import org.isf.OHCoreTestCase;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -48,10 +49,17 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 	@Mock
 	DatabaseMetaData databaseMetaDataMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		softwareDataCollector = new SoftwareDataCollector();
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

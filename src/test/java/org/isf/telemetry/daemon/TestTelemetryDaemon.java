@@ -30,6 +30,7 @@ import java.util.Map;
 import org.isf.menu.manager.Context;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.manager.TelemetryManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -48,13 +49,20 @@ class TestTelemetryDaemon {
 
 	TelemetryDaemon telemetryDaemon;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		Context.setApplicationContext(applicationContextMock);
 		when(applicationContextMock.getBeansOfType(GeoIpInfoCommonService.class)).thenReturn(geoIpServicesMapMock);
 		when(applicationContextMock.getBean(TelemetryManager.class)).thenReturn(telemetryManagerMock);
 		telemetryDaemon = TelemetryDaemon.getTelemetryDaemon();
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

@@ -70,7 +70,7 @@ public class OHCoreTestCase {
 			}
 			lines.close();
 		} catch(Exception exception) {
-			LOGGER.error("Error trying to execute script: " + fileName, exception);
+			LOGGER.error("Error trying to execute script: {}", fileName, exception);
 		}
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 	}

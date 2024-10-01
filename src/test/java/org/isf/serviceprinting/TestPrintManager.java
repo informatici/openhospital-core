@@ -41,6 +41,7 @@ import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.serviceprinting.manager.PrintManager;
 import org.isf.serviceprinting.print.PriceForPrint;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -65,10 +66,17 @@ class TestPrintManager extends OHCoreTestCase {
 	@Mock
 	JasperPrint jasperPrint;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

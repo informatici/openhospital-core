@@ -41,7 +41,6 @@ import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medtype.model.MedicalType;
-import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -401,9 +400,8 @@ public class MedicalStockIoOperations {
 	 * 
 	 * If the date is present in the table, the balance is updated. If the date is not present, a new balance is inserted for the date and the previous one is
 	 * updated with the current date as 'next mov date' and calculated the days of stock for the previous balance
-	 * 
-	 * @param dbQuery the {@link DbQueryLogger} to use.
-	 * @param medicalCode the medical code.
+	 *
+	 * @param medical the medical
 	 * @param date the date of the new balance
 	 * @param incrementQuantity the quantity to add (remove if negative) to the current latest balance.
 	 */
@@ -511,9 +509,9 @@ public class MedicalStockIoOperations {
 	 * Retrieves all the stored {@link Movement} with the specified criteria.
 	 * 
 	 * @param medicalCode the {@link Medical} code (optional).
-	 * @param medicalTypeCode the {@link MedicalType} code (optional).
+	 * @param medicalType the {@link MedicalType} code (optional).
 	 * @param wardId the {@link Ward} id (optional).
-	 * @param movTypeCode the {@link MovementType} code or {@code "+"}/{@code "-"} for all charge/discharge types (optional).
+	 * @param movType the {@link MovementType} code or {@code "+"}/{@code "-"} for all charge/discharge types (optional).
 	 * @param movFrom the lower bound for the movement date range (optional).
 	 * @param movTo the upper bound for the movement date range (optional).
 	 * @param lotPrepFrom the lower bound for the lot preparation date range (optional).
@@ -616,7 +614,7 @@ public class MedicalStockIoOperations {
 		// Process mainStoreQuantities and update lots
 		for (Object[] result : mainStoreQuantities) {
 			String lotCode = (String) result[0];
-			Integer mainStoreQuantity = ((Long) result[1]).intValue();
+			int mainStoreQuantity = ((Long) result[1]).intValue();
 
 			// Find the corresponding lot in the lots list
 			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
@@ -757,7 +755,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Deletes the specified {@link lot}.
+	 * Deletes the specified {@link Lot}.
 	 *
 	 * @param lot the lot to delete.
 	 * @throws OHServiceException
