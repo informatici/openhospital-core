@@ -44,7 +44,6 @@ public class MockResultSet {
 
 	private MockResultSet(String[] columnNames, Object[][] data) {
 		// create a map of column name to column index
-		Object LinkedHashMap;
 		this.columnIndices = IntStream.range(0, columnNames.length)
 						.boxed()
 						.collect(Collectors.toMap(

@@ -65,6 +65,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 class Tests extends OHCoreTestCase {
 
+	private static final String DRAFT = LaboratoryStatus.draft.toString();
 	private static TestLaboratory testLaboratory;
 	private static TestLaboratoryRow testLaboratoryRow;
 	private static TestExam testExam;
@@ -842,7 +843,6 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("labExtended")
 	void testMgrUpdateExamRequest(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
-		String DRAFT = LaboratoryStatus.draft.toString();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
