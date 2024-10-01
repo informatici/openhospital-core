@@ -45,7 +45,6 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 
 	private static TestUser testUser;
 	private static TestUserGroup testUserGroup;
-	private static TestPermission testPermission;
 
 	@Autowired
 	private UserBrowsingManager userBrowsingManager;
@@ -58,7 +57,6 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	static void setUpClass() {
 		testUser = new TestUser();
 		testUserGroup = new TestUserGroup();
-		testPermission = new TestPermission();
 	}
 
 	@BeforeEach
@@ -224,4 +222,3 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		return user.getUserName();
 	}
 }
-
