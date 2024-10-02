@@ -40,6 +40,7 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.domain.Page;
@@ -239,7 +240,7 @@ public class MedicalInventoryManager {
 	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
 	 * @throws OHDataValidationException
 	 */
-	public void validateInventory(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList)
+	public void validateMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList)
 					throws OHDataValidationException, OHServiceException {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
@@ -332,16 +333,19 @@ public class MedicalInventoryManager {
 		}
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (lotUpdated) {
-			errors.add(new OHExceptionMessage(
-							MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.fmt.msg", medDescriptionForLotUpdated)));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+							MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.fmt.msg", medDescriptionForLotUpdated),
+							OHSeverityLevel.INFO));
 		}
 		if (lotAdded) {
-			errors.add(new OHExceptionMessage(
-							MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.fmt.msg", medDescriptionForNewLot)));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+							MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.fmt.msg", medDescriptionForNewLot),
+							OHSeverityLevel.INFO));
 		}
 		if (medicalAdded) {
-			errors.add(new OHExceptionMessage(
-							MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.fmt.msg", medDescriptionForNewMedical)));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+							MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.fmt.msg", medDescriptionForNewMedical),
+							OHSeverityLevel.INFO));
 		}
 
 		if (!errors.isEmpty()) {
