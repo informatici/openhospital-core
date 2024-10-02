@@ -31,11 +31,8 @@ import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
-import org.isf.menu.service.GroupMenuIoOperationRepository;
-import org.isf.menu.service.MenuIoOperations;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
-import org.isf.menu.service.UserMenuItemIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
@@ -48,7 +45,6 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 
 	private static TestUser testUser;
 	private static TestUserGroup testUserGroup;
-	private static TestPermission testPermission;
 
 	@Autowired
 	private UserBrowsingManager userBrowsingManager;
@@ -61,7 +57,6 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	static void setUpClass() {
 		testUser = new TestUser();
 		testUserGroup = new TestUserGroup();
-		testPermission = new TestPermission();
 	}
 
 	@BeforeEach
@@ -227,4 +222,3 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		return user.getUserName();
 	}
 }
-

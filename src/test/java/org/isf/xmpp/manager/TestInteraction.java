@@ -40,6 +40,7 @@ import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -64,14 +65,21 @@ class TestInteraction extends OHCoreTestCase {
 	@Mock
 	Connection connectionMock;
 
+	private AutoCloseable closeable;
+
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
 		try (MockedStatic<Server> mockedInteraction = mockStatic(Server.class)) {
 			when(Server.getInstance()).thenReturn(serverMock);
 			when(serverMock.getRoster()).thenReturn(rosterMock);
 			interaction = new Interaction();
 		}
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

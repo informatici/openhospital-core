@@ -37,6 +37,7 @@ import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.stat.manager.JasperReportsManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,6 +69,8 @@ class Tests extends OHCoreTestCase {
 	@Mock
 	Connection connection;
 
+	private AutoCloseable closeable;
+
 	@BeforeAll
 	static void setUpClass() {
 		testJasperReportResultDto = new TestJasperReportResultDto();
@@ -75,7 +78,12 @@ class Tests extends OHCoreTestCase {
 
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

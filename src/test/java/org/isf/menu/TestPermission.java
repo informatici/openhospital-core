@@ -21,9 +21,9 @@
  */
 package org.isf.menu;
 
-import org.isf.permissions.model.Permission;
-
 import java.util.ArrayList;
+
+import org.isf.permissions.model.Permission;
 
 public class TestPermission {
 	public static ArrayList<Permission> generatePermissions(int nbPermissions) {
