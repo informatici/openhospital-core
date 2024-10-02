@@ -55,7 +55,6 @@ public class TestJsonFileConfigProvider {
 		Map<String, Object> configData = jsonFileConfigProvider.getConfigData();
 
 		assertThat(configData).isEmpty();
-		assertThat(configData.get("oh_telemetry_url")).isNull();
 
 		assertThat(jsonFileConfigProvider.get("someParam")).isNull();
 
