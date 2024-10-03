@@ -305,9 +305,7 @@ public class MedicalInventoryManager {
 					}
 				}
 			} else {
-				// TODO: To decide if to put RealQty = 0 or mainStoreQty for new products/lots
-				double realQty = 0;
-				MedicalInventoryRow newMedicalInventoryRow = new MedicalInventoryRow(null, mainStoreQty, realQty, inventory, medical,
+				MedicalInventoryRow newMedicalInventoryRow = new MedicalInventoryRow(null, mainStoreQty, mainStoreQty, inventory, medical,
 								mov.getLot());
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 				inventoryRowSearchList.add(newMedicalInventoryRow);
