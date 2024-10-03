@@ -21,14 +21,14 @@
  */
 package org.isf.permissions.service;
 
+import java.util.List;
+
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(rollbackFor = OHServiceException.class)

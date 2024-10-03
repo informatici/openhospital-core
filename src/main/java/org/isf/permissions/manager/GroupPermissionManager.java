@@ -21,6 +21,8 @@
  */
 package org.isf.permissions.manager;
 
+import java.util.List;
+
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
@@ -32,8 +34,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 public class GroupPermissionManager {
@@ -66,7 +66,7 @@ public class GroupPermissionManager {
 	public GroupPermission create(UserGroup userGroup, Permission permission) throws OHDataValidationException {
 		if (operations.existsByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId())) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
+							new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
 			);
 		}
 
@@ -80,15 +80,16 @@ public class GroupPermissionManager {
 	@Transactional
 	public List<Permission> update(UserGroup userGroup, List<Integer> permissionIds) throws OHDataValidationException {
 
-
 		var permissions = permissionOperations.findByIdIn(permissionIds).stream().toList();
 
 		var groupPermissions = operations.findUserGroupPermissions(userGroup.getCode()).stream().toList();
 
-		var permissionsToRemove = groupPermissions.stream().filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
-		var permissionsToAssign = permissions.stream().filter(item -> groupPermissions.stream().noneMatch(groupPermission -> groupPermission.getPermission().getId() == item.getId())).map(
-			permission -> new GroupPermission(userGroup, permission)
-		).toList();
+		var permissionsToRemove = groupPermissions.stream()
+						.filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
+		var permissionsToAssign = permissions.stream()
+						.filter(item -> groupPermissions.stream().noneMatch(groupPermission -> groupPermission.getPermission().getId() == item.getId())).map(
+										permission -> new GroupPermission(userGroup, permission)
+						).toList();
 
 		operations.deleteAll(permissionsToRemove);
 		operations.createAll(permissionsToAssign);
@@ -101,7 +102,7 @@ public class GroupPermissionManager {
 
 		if (groupPermission == null) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
+							new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
 			);
 		}
 
