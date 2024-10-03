@@ -21,13 +21,14 @@
  */
 package org.isf.permissions.service;
 
-import java.util.List;
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -60,8 +61,16 @@ public class GroupPermissionIoOperations {
 		return repository.save(groupPermission);
 	}
 
+	public List<GroupPermission> createAll(List<GroupPermission> groupPermissions) {
+		return repository.saveAll(groupPermissions);
+	}
+
 	public void delete(GroupPermission groupPermission) {
 		repository.delete(groupPermission);
+	}
+
+	public void deleteAll(List<GroupPermission> groupPermissions) {
+		repository.deleteAll(groupPermissions);
 	}
 
 	public boolean existsByUserGroupCodeAndPermissionId(String groupCode, int permissionId) {

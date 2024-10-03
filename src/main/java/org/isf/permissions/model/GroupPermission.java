@@ -21,17 +21,8 @@
  */
 package org.isf.permissions.model;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import org.isf.menu.model.UserGroup;
 import org.isf.utils.db.Auditable;
 
@@ -56,8 +47,16 @@ public class GroupPermission extends Auditable<String> {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "GP_P_ID_A", referencedColumnName="P_ID_A")
+	@JoinColumn(name = "GP_P_ID_A", referencedColumnName = "P_ID_A")
 	private Permission permission;
+
+	public GroupPermission() {
+	}
+
+	public GroupPermission(UserGroup userGroup, Permission permission) {
+		this.userGroup = userGroup;
+		this.permission = permission;
+	}
 
 	public int getId() {
 		return id;
@@ -82,7 +81,5 @@ public class GroupPermission extends Auditable<String> {
 	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
 	}
-	
-	
 
 }
