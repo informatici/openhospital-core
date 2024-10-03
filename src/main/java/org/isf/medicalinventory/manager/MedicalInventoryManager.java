@@ -238,7 +238,7 @@ public class MedicalInventoryManager {
 		LocalDateTime movFrom = inventory.getLastModifiedDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		String medDescriptionForUpdate = "";
-		boolean updated = false;
+		String medDescriptionForNew = "";
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
 			String lotCode = medicalInventoryRow.getLot().getCode();
@@ -250,29 +250,41 @@ public class MedicalInventoryManager {
 				for (Movement mov: movs) {
 					String lotCodeOfMovement = mov.getLot().getCode();
 					Optional<Lot> lot = movStockInsertingManager.getLotByMedical(medical).stream().filter(l -> l.getCode().equals(lotCodeOfMovement)).findFirst();
-					if (lot.isPresent()) {
-						Lot l = lot.get();
-						double mainStoreQty = (double)l.getMainStoreQuantity();
-						if (lotCodeOfMovement.equals(lotCode)) {
-							if (mainStoreQty != theoQty) { 
-								medicalInventoryRow.setTheoreticQty(mainStoreQty);
-								MedicalInventoryRow medInvRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
-								if (medInvRow != null) {
-									updated = true;
-									medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+l.getCode()+" and qty :"+mainStoreQty+"\n";
+					if (mov.getType().getType().equals("-")) {
+						if (lot.isPresent()) {
+							Lot l = lot.get();
+							double mainStoreQty = (double)l.getMainStoreQuantity();
+							if (lotCodeOfMovement.equals(lotCode)) {
+								if (mainStoreQty != theoQty) { 
+									medicalInventoryRow.setTheoreticQty(mainStoreQty);
+									MedicalInventoryRow medInvRow = medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+									if (medInvRow != null) {
+										medDescriptionForUpdate = medDescriptionForUpdate + " "+medical.getDescription()+" lot code "+l.getCode()+" and qty :"+mainStoreQty+"\n";
+									}
 								}
 							}
-						}	 
-					}
+						}
+					}  else {
+						if (lot.isPresent()) {
+							Lot l = lot.get();
+							double mainStoreQty = l.getMainStoreQuantity();
+							MedicalInventoryRow medInvRow = new MedicalInventoryRow(0, mainStoreQty, mainStoreQty, inventory, medical, l);
+							medInvRow = medicalInventoryRowManager.newMedicalInventoryRow(medInvRow);
+							if (medInvRow != null) {
+								medDescriptionForNew = medDescriptionForNew + " "+medical.getDescription()+" lot code "+l.getCode()+" and qty :"+mainStoreQty+"\n";
+							}
+						}
+					} 
 				}
-
 			}
 		}
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (updated) {
+		if (!medDescriptionForNew.equals("")) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.newinventoryrowaddedformedical.fmt.msg", medDescriptionForNew)));
+		}
+		if (!medDescriptionForUpdate.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.fmt.msg", medDescriptionForUpdate)));
 		}
-		
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
