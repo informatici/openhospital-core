@@ -56,6 +56,12 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+		    <groupId>org.mock-server</groupId>
+		    <artifactId>mockserver-junit-jupiter</artifactId>
+		    <version>5.15.0</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
