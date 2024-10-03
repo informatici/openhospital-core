@@ -66,7 +66,7 @@ public class GroupPermissionManager {
 	public GroupPermission create(UserGroup userGroup, Permission permission) throws OHDataValidationException {
 		if (operations.existsByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId())) {
 			throw new OHDataValidationException(
-							new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
 			);
 		}
 
@@ -85,11 +85,11 @@ public class GroupPermissionManager {
 		var groupPermissions = operations.findUserGroupPermissions(userGroup.getCode()).stream().toList();
 
 		var permissionsToRemove = groupPermissions.stream()
-						.filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
+			.filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
 		var permissionsToAssign = permissions.stream()
-						.filter(item -> groupPermissions.stream().noneMatch(groupPermission -> groupPermission.getPermission().getId() == item.getId())).map(
-										permission -> new GroupPermission(userGroup, permission)
-						).toList();
+			.filter(item -> groupPermissions.stream().noneMatch(groupPermission -> groupPermission.getPermission().getId() == item.getId())).map(
+				permission -> new GroupPermission(userGroup, permission)
+			).toList();
 
 		operations.deleteAll(permissionsToRemove);
 		operations.createAll(permissionsToAssign);
@@ -102,7 +102,7 @@ public class GroupPermissionManager {
 
 		if (groupPermission == null) {
 			throw new OHDataValidationException(
-							new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
 			);
 		}
 
