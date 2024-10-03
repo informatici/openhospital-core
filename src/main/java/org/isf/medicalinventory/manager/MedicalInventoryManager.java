@@ -347,7 +347,6 @@ public class MedicalInventoryManager {
 							MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.fmt.msg", medDescriptionForNewMedical),
 							OHSeverityLevel.INFO));
 		}
-
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
