@@ -78,21 +78,23 @@ public class GroupPermissionManager {
 	}
 
 	@Transactional
-	public List<Permission> update(UserGroup userGroup, List<Integer> permissionIds) throws OHDataValidationException {
+	public List<Permission> update(UserGroup userGroup, List<Integer> permissionIds, Boolean replace) throws OHDataValidationException {
 
 		var permissions = permissionOperations.findByIdIn(permissionIds).stream().toList();
 
 		var groupPermissions = operations.findUserGroupPermissions(userGroup.getCode()).stream().toList();
 
-		var permissionsToRemove = groupPermissions.stream()
-			.filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
 		var permissionsToAssign = permissions.stream()
 			.filter(item -> groupPermissions.stream().noneMatch(groupPermission -> groupPermission.getPermission().getId() == item.getId())).map(
 				permission -> new GroupPermission(userGroup, permission)
 			).toList();
-
-		operations.deleteAll(permissionsToRemove);
 		operations.createAll(permissionsToAssign);
+
+		if (replace) {
+			var permissionsToRemove = groupPermissions.stream()
+				.filter(item -> permissions.stream().noneMatch(permission -> permission.getId() == item.getPermission().getId())).toList();
+			operations.deleteAll(permissionsToRemove);
+		}
 
 		return operations.findUserGroupPermissions(userGroup.getCode()).stream().map(GroupPermission::getPermission).toList();
 	}
