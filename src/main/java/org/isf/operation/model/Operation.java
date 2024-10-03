@@ -33,6 +33,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
+import org.isf.operation.enums.OperationTarget;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -64,14 +65,8 @@ public class Operation extends Auditable<String> {
 	@Column(name="OPE_STAT")
     private Integer major;
 
-	/*
-	 * //TODO: replace "integers" values with mnemonic ones, CHAR(1) -> VARCHAR(10)
-	 * "1" = OPD / ADMISSION
-	 * "2" = ADMISSION
-	 * "3" = OPD
-	 */
 	@Column(name="OPE_FOR")
-    private String operFor;
+    private OperationTarget opeFor;
 	
 	
 	@Version
@@ -104,11 +99,11 @@ public class Operation extends Auditable<String> {
     public void setCode(String aCode) {
         this.code = aCode;
     }
-    public void setOpeFor(String operFor) {
-        this.operFor = operFor;
+    public void setOpeFor(OperationTarget opeFor) {
+        this.opeFor = opeFor;
     }
-    public String getOpeFor() {
-        return this.operFor;
+    public OperationTarget getOpeFor() {
+        return this.opeFor;
     }
     
   
@@ -158,6 +153,7 @@ public class Operation extends Auditable<String> {
 		return (this.getCode().equals(operation.getCode()) &&
 				this.getDescription().equalsIgnoreCase(operation.getDescription()) &&
 				this.getType().equals(operation.getType()) &&
+				this.getOpeFor().equals(operation.getOpeFor()) &&
 				this.getMajor().equals(operation.getMajor()));
     }
     
@@ -170,6 +166,7 @@ public class Operation extends Auditable<String> {
 	        c = m * c + ((code == null) ? 0 : code.hashCode());
 	        c = m * c + ((description == null) ? 0 : description.hashCode());
 	        c = m * c + ((type == null) ? 0 : type.hashCode());
+	        c = m * c + ((opeFor == null) ? 0 : opeFor.hashCode());
 	        c = m * c + ((major == null) ? 0 : major);
 	        c = m * c + ((lock == null) ? 0 : lock);
 	        
