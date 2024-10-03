@@ -100,7 +100,11 @@ public class MovBrowserManager {
 	}
 
 	/**
-	 * Retrieves all the {@link Movement}s with the specified criteria.
+	 * Retrieves all the {@link Movement}s with the specified criteria.<br>
+	 * <br>
+	 * Note: {@link Lot Lot's} <code>@Transient</code> properties {@link Lot#mainStoreQuantity mainStoreQuantity}, {@link Lot#wardsTotalQuantity
+	 * wardsTotalQuantity} and {@link Lot#overallQuantity overallQuantity} are not calculated at this step, use
+	 * {@link MovStockInsertingManager#getLotByMedical(Medical) getLotByMedical} for that.
 	 *
 	 * @param medicalCode the medical code.
 	 * @param medicalType the medical type.
