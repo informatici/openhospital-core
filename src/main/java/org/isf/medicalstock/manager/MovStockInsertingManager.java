@@ -24,10 +24,12 @@ package org.isf.medicalstock.manager;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
@@ -439,5 +441,16 @@ public class MovStockInsertingManager {
 	 */
 	public void deleteLot(Lot lot) throws OHServiceException {
 		ioOperations.deleteLot(lot);
+	}
+
+	/**
+	 * Retrieves all medicals referencing the specified code.
+	 * 
+	 * @param lotCode the lot code.
+	 * @return the ids of medicals referencing the specified lot.
+	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
+	 */
+	public List<Integer> getMedicalsFromLot(String code) throws OHServiceException {
+		return ioOperations.getMedicalsFromLot(code);
 	}
 }

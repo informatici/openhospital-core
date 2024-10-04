@@ -90,7 +90,19 @@ public class MedicalInventoryRowIoOperation {
 	 * @return {@link MedicalInventoryRow} with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
-	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(Integer id) throws OHServiceException {
+	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(int id) throws OHServiceException {
 		return repository.findById(id);
+	}
+
+	/**
+	 * Return {@link MedicalInventoryRow} for passed param.
+	 *
+	 * @param medicalCode - the medical code.
+	 * @param lotCode - the lot code.
+	 * @return the {@link MedicalInventoryRow} object.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventoryRow getMedicalInventoryRowByMedicalCodeAndLotCode(int medicalCode, String lotCode) throws OHServiceException {
+		return repository.findByMedicalCodeAndLotCode(medicalCode, lotCode);
 	}
 }

@@ -46,7 +46,7 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSRSTOCKMOV")
+@Table(name = "OH_MEDICALDSRSTOCKMOV")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MMV_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MMV_CREATED_DATE", updatable = false))
@@ -56,48 +56,49 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Movement extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="MMV_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MMV_ID")
 	private int code;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMV_MDSR_ID")
+	@JoinColumn(name = "MMV_MDSR_ID")
 	private Medical medical;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMV_MMVT_ID_A")
+	@JoinColumn(name = "MMV_MMVT_ID_A")
 	private MovementType type;
 
 	@ManyToOne
-	@JoinColumn(name="MMV_WRD_ID_A")
+	@JoinColumn(name = "MMV_WRD_ID_A")
 	private Ward ward;
 
 	@ManyToOne
-	@JoinColumn(name="MMV_LT_ID_A")
+	@JoinColumn(name = "MMV_LT_ID_A")
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMV_DATE")		// SQL type: datetime
+	@Column(name = "MMV_DATE") // SQL type: datetime
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="MMV_QTY")
+	@Column(name = "MMV_QTY")
 	private int quantity;
 
-	@ManyToOne(optional = true, targetEntity=Supplier.class)
-	@JoinColumn(name="MMV_FROM")
+	@ManyToOne(optional = true, targetEntity = Supplier.class)
+	@JoinColumn(name = "MMV_FROM")
 	private Supplier supplier;
 
 	@NotNull
-	@Column(name="MMV_REFNO")
+	@Column(name = "MMV_REFNO")
 	private String refNo;
 
 	@Transient
 	private volatile int hashCode;
-	
-	public Movement() { }
+
+	public Movement() {
+	}
 
 	public Movement(Medical aMedical, MovementType aType, Ward aWard, Lot aLot, LocalDateTime aDate, int aQuantity, Supplier aSupplier, String aRefNo) {
 		medical = aMedical;
@@ -189,9 +190,10 @@ public class Movement extends Auditable<String> {
 	@Override
 	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
-				medical != null ? medical.toString() : "NULL",
-				type != null ? type.toString() : "NULL",
-				quantity);
+						medical != null ? medical.toString() : "NULL",
+						lot != null ? lot.getCode() : "NULL",
+						type != null ? type.toString() : "NULL",
+						quantity);
 	}
 
 	@Override
@@ -203,22 +205,22 @@ public class Movement extends Auditable<String> {
 		if (!(obj instanceof Movement)) {
 			return false;
 		}
-		
-		Movement movement = (Movement)obj;
+
+		Movement movement = (Movement) obj;
 		return (this.getCode() == movement.getCode());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code;
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code;
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }
