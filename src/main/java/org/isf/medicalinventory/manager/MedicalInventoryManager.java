@@ -387,6 +387,13 @@ public class MedicalInventoryManager {
 		ioOperations.deleteInventory(medicalInventory);
 	}
 
+	/**
+	 * Confirm the Inventory rows of inventory.
+	 *
+	 * @param inventory - The {@link MedicalInventory}
+	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
+	 * @throws OHDataValidationException
+	 */
 	public void confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
 		// validate the inventory
 		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
