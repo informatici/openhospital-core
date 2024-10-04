@@ -25,6 +25,8 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -39,7 +41,7 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_OPERATION")
+@Table(name = "OH_OPERATION")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "OPE_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "OPE_CREATED_DATE", updatable = false))
@@ -49,33 +51,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Operation extends Auditable<String> {
 
 	@Id
-	@Column(name="OPE_ID_A")	    
-    private String code;
+	@Column(name = "OPE_ID_A")
+	private String code;
 
 	@NotNull
-	@Column(name="OPE_DESC")
-    private String description;
+	@Column(name = "OPE_DESC")
+	private String description;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="OPE_OCL_ID_A")
-    private OperationType type;
+	@JoinColumn(name = "OPE_OCL_ID_A")
+	private OperationType type;
 
 	@NotNull
-	@Column(name="OPE_STAT")
-    private Integer major;
+	@Column(name = "OPE_STAT")
+	private Integer major;
 
-	@Column(name="OPE_FOR")
-    private OperationTarget opeFor;
-	
-	
+	@Column(name = "OPE_FOR", columnDefinition = "VARCHAR(20)")
+	@Enumerated(EnumType.STRING)
+	private OperationTarget opeFor;
+
 	@Version
-	@Column(name="OPE_LOCK")
-    private Integer lock;
+	@Column(name = "OPE_LOCK")
+	private Integer lock;
 
 	@Transient
-    private volatile int hashCode;
-    
+	private volatile int hashCode;
+
 	public Operation() {
 		super();
 	}
@@ -86,97 +88,96 @@ public class Operation extends Auditable<String> {
 	 * @param aType
 	 */
 	public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
+		this(aCode, aDescription, aType, major, OperationTarget.OPD_ADMISSION);
+	}
+
+	public Operation(String aCode, String aDescription, OperationType aType, Integer major, OperationTarget opeFor) {
 		super();
 		this.code = aCode;
 		this.description = aDescription;
 		this.type = aType;
 		this.major = major;
+		this.opeFor = opeFor;
 	}
-    
-    public String getCode() {
-        return this.code;
-    }
-    public void setCode(String aCode) {
-        this.code = aCode;
-    }
-    public void setOpeFor(OperationTarget opeFor) {
-        this.opeFor = opeFor;
-    }
-    public OperationTarget getOpeFor() {
-        return this.opeFor;
-    }
-    
-  
-    public String getDescription() {
-        return this.description;
-    }
-    
-    public void setDescription(String aDescription) {
-        this.description = aDescription;
-    }
-    
-    public void setMajor(Integer major) {
-		this.major = major;
+
+	public String getCode() {
+		return this.code;
 	}
-    
+	public void setCode(String aCode) {
+		this.code = aCode;
+	}
+	public OperationTarget getOpeFor() {
+		return this.opeFor;
+	}
+	public void setOpeFor(OperationTarget opeFor) {
+		this.opeFor = opeFor;
+	}
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String aDescription) {
+		this.description = aDescription;
+	}
 	public Integer getMajor() {
 		return major;
 	}
-	
+	public void setMajor(Integer major) {
+		this.major = major;
+	}
 	public Integer getLock() {
-        return this.lock;
-    }
-	
-    public void setLock(Integer aLock) {
-        this.lock = aLock;
-    }
-    
-    public OperationType getType() {
-        return this.type;
-    }
-    
-    public void setType(OperationType aType) {
-        this.type = aType;
-    }
-
-    @Override
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
-			return true;
-		}
-		
-		if (!(anObject instanceof Operation)) {
-			return false;
-		}
-		
-		Operation operation = (Operation)anObject;
-		return (this.getCode().equals(operation.getCode()) &&
-				this.getDescription().equalsIgnoreCase(operation.getDescription()) &&
-				this.getType().equals(operation.getType()) &&
-				this.getOpeFor().equals(operation.getOpeFor()) &&
-				this.getMajor().equals(operation.getMajor()));
-    }
-    
-    @Override
-	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + ((code == null) ? 0 : code.hashCode());
-	        c = m * c + ((description == null) ? 0 : description.hashCode());
-	        c = m * c + ((type == null) ? 0 : type.hashCode());
-	        c = m * c + ((opeFor == null) ? 0 : opeFor.hashCode());
-	        c = m * c + ((major == null) ? 0 : major);
-	        c = m * c + ((lock == null) ? 0 : lock);
-	        
-	        this.hashCode = c;
-	    }
-	    return this.hashCode;
+		return this.lock;
 	}
 
-    @Override
-    public String toString() {
-        return this.description;
-    }
+	public void setLock(Integer aLock) {
+		this.lock = aLock;
+	}
+
+	public OperationType getType() {
+		return this.type;
+	}
+
+	public void setType(OperationType aType) {
+		this.type = aType;
+	}
+
+	@Override
+	public boolean equals(Object anObject) {
+		if (this == anObject) {
+			return true;
+		}
+
+		if (!(anObject instanceof Operation operation)) {
+			return false;
+		}
+
+		return (this.getCode().equals(operation.getCode()) &&
+			this.getDescription().equalsIgnoreCase(operation.getDescription()) &&
+			this.getType().equals(operation.getType()) &&
+			this.getOpeFor().equals(operation.getOpeFor()) &&
+			this.getMajor().equals(operation.getMajor()));
+	}
+
+	@Override
+	public int hashCode() {
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + ((code == null) ? 0 : code.hashCode());
+			c = m * c + ((description == null) ? 0 : description.hashCode());
+			c = m * c + ((type == null) ? 0 : type.hashCode());
+			c = m * c + ((opeFor == null) ? 0 : opeFor.hashCode());
+			c = m * c + ((major == null) ? 0 : major);
+			c = m * c + ((lock == null) ? 0 : lock);
+
+			this.hashCode = c;
+		}
+		return this.hashCode;
+	}
+
+	@Override
+	public String toString() {
+		return this.description;
+	}
 }
