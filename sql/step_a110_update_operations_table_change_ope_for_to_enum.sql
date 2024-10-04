@@ -8,4 +8,4 @@ UPDATE OH_OPERATION
     SET OPE_FOR='opd' WHERE OPE_FOR='3';
 
 ALTER TABLE OH_OPERATION
-    MODIFY COLUMN OPE_FOR ENUM('opd', 'admission', 'opd_admission') DEFAULT 'opd_admission';
+    MODIFY COLUMN OPE_FOR ENUM('opd_admission', 'admission', 'opd') DEFAULT 'opd_admission';

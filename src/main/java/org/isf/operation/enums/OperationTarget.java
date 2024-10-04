@@ -22,5 +22,5 @@
 package org.isf.operation.enums;
 
 public enum OperationTarget {
-	opd, admission, opd_admission;
+	opd_admission, admission, opd;
 }
