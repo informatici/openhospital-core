@@ -67,8 +67,8 @@ public class Operation extends Auditable<String> {
 	@Column(name = "OPE_STAT")
 	private Integer major;
 
+	@Column(name = "OPE_FOR")
 	@Enumerated(EnumType.STRING)
-	@Column(name = "OPE_FOR", columnDefinition = "ENUM('opd_admission', 'admission', 'opd')")
 	private OperationTarget opeFor;
 
 	@Version
