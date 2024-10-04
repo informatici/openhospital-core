@@ -23,10 +23,9 @@ package org.isf.operation.model;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -35,6 +34,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
+import org.isf.operation.converters.OperationTargetConverter;
 import org.isf.operation.enums.OperationTarget;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.Auditable;
@@ -67,8 +67,8 @@ public class Operation extends Auditable<String> {
 	@Column(name = "OPE_STAT")
 	private Integer major;
 
-	@Column(name = "OPE_FOR", columnDefinition = "ENUM('OPD', 'ADMISSION', 'OPD_ADMISSION')")
-	@Enumerated(EnumType.STRING)
+	@Convert(converter = OperationTargetConverter.class)
+	@Column(name = "OPE_FOR", columnDefinition = "ENUM('opd', 'admission', 'opd_admission')")
 	private OperationTarget opeFor;
 
 	@Version
@@ -154,7 +154,7 @@ public class Operation extends Auditable<String> {
 		return (this.getCode().equals(operation.getCode()) &&
 			this.getDescription().equalsIgnoreCase(operation.getDescription()) &&
 			this.getType().equals(operation.getType()) &&
-			this.getOpeFor().equals(operation.getOpeFor()) &&
+			this.getOpeFor() == operation.getOpeFor() &&
 			this.getMajor().equals(operation.getMajor()));
 	}
 

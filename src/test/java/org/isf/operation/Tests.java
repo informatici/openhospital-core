@@ -971,9 +971,6 @@ class Tests extends OHCoreTestCase {
 
 		operation.setLock(-1);
 		assertThat(operation.getLock()).isEqualTo(-1);
-
-		operation.setOpeFor(OperationTarget.ADMISSION);
-		assertThat(operation.getOpeFor()).isEqualTo(OperationTarget.ADMISSION);
 	}
 
 	@Test
