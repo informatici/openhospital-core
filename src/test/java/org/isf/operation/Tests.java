@@ -224,7 +224,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationOpdOpdAdmission() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD_ADMISSION);
+		operation.setOpeFor(OperationTarget.opd_admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationOpd()).isNotEmpty();
@@ -234,7 +234,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationOpdOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD);
+		operation.setOpeFor(OperationTarget.opd);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationOpd()).isNotEmpty();
@@ -244,7 +244,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationOpdNotOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.ADMISSION);
+		operation.setOpeFor(OperationTarget.admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationOpd()).isEmpty();
@@ -254,7 +254,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationAdmOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD_ADMISSION);
+		operation.setOpeFor(OperationTarget.opd_admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationAdm()).isNotEmpty();
@@ -264,7 +264,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationAdmAdmission() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.ADMISSION);
+		operation.setOpeFor(OperationTarget.admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationAdm()).isNotEmpty();
@@ -274,7 +274,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetOperationAdmNotOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD);
+		operation.setOpeFor(OperationTarget.opd);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationIoOperations.getOperationAdm()).isEmpty();
@@ -370,7 +370,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationOpdOpdAdmission() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD_ADMISSION);
+		operation.setOpeFor(OperationTarget.opd_admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationOpd()).isNotEmpty();
@@ -380,7 +380,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationOpdOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD);
+		operation.setOpeFor(OperationTarget.opd);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationOpd()).isNotEmpty();
@@ -390,7 +390,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationOpdNotOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.ADMISSION);
+		operation.setOpeFor(OperationTarget.admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationOpd()).isEmpty();
@@ -400,7 +400,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationAdmOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD_ADMISSION);
+		operation.setOpeFor(OperationTarget.opd_admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationAdm()).isNotEmpty();
@@ -410,7 +410,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationAdmAdmission() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.ADMISSION);
+		operation.setOpeFor(OperationTarget.admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationAdm()).isNotEmpty();
@@ -420,7 +420,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetOperationAdmNotOpd() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setOpeFor(OperationTarget.OPD);
+		operation.setOpeFor(OperationTarget.opd);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		assertThat(operationBrowserManager.getOperationAdm()).isEmpty();
@@ -971,6 +971,9 @@ class Tests extends OHCoreTestCase {
 
 		operation.setLock(-1);
 		assertThat(operation.getLock()).isEqualTo(-1);
+
+		operation.setOpeFor(OperationTarget.admission);
+		assertThat(operation.getOpeFor()).isEqualTo(OperationTarget.admission);
 	}
 
 	@Test
@@ -1106,7 +1109,7 @@ class Tests extends OHCoreTestCase {
 	private String setupTestOperation(boolean usingSet) throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, usingSet);
-		operation.setOpeFor(OperationTarget.OPD_ADMISSION);
+		operation.setOpeFor(OperationTarget.opd_admission);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		return operation.getCode();

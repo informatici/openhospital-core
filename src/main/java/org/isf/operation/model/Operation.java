@@ -23,7 +23,6 @@ package org.isf.operation.model;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
@@ -34,7 +33,6 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
-import org.isf.operation.converters.OperationTargetConverter;
 import org.isf.operation.enums.OperationTarget;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.Auditable;
@@ -67,7 +65,6 @@ public class Operation extends Auditable<String> {
 	@Column(name = "OPE_STAT")
 	private Integer major;
 
-	@Convert(converter = OperationTargetConverter.class)
 	@Column(name = "OPE_FOR", columnDefinition = "ENUM('opd', 'admission', 'opd_admission')")
 	private OperationTarget opeFor;
 
@@ -88,7 +85,7 @@ public class Operation extends Auditable<String> {
 	 * @param aType
 	 */
 	public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
-		this(aCode, aDescription, aType, major, OperationTarget.OPD_ADMISSION);
+		this(aCode, aDescription, aType, major, OperationTarget.opd_admission);
 	}
 
 	public Operation(String aCode, String aDescription, OperationType aType, Integer major, OperationTarget opeFor) {
