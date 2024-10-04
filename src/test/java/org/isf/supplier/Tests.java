@@ -25,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import org.isf.OHCoreTestCase;
 import org.isf.supplier.manager.SupplierBrowserManager;
@@ -186,6 +188,37 @@ class Tests extends OHCoreTestCase {
 		int hashCode = supplier.hashCode();
 		// use computed stored value
 		assertThat(supplier.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	void testSupplierDeletion() throws Exception {
+		loadSuppliers();
+
+		Supplier supplier = supplierBrowserManager.getByID(1);
+		supplierBrowserManager.delete(supplier);
+
+		assertThat(supplierBrowserManager.getByID(1)).isNull();
+	}
+
+	private void loadSuppliers() {
+		AtomicInteger i = new AtomicInteger();
+		List<Supplier> suppliers = Stream.of('N','N','Y').map(deleted -> {
+			i.getAndIncrement();
+
+			return new Supplier(
+							null,
+							"Supplier " + i,
+							"supAddress " + i,
+							"supTaxCode " + i,
+							"supPhone " + i,
+							"supFax " + i,
+							"supEmail " + i,
+							"supNote " + i,
+							deleted
+			);
+		}).toList();
+
+		supplierIoOperationRepository.saveAllAndFlush(suppliers);
 	}
 
 	private int setupTestSupplier(boolean usingSet) throws OHException {
