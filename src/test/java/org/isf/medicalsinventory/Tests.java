@@ -30,6 +30,7 @@ import org.isf.OHCoreTestCase;
 import org.isf.medicalinventory.manager.MedicalInventoryManager;
 import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
 import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -257,11 +258,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = "STATUS";
+		String status = InventoryStatus.draft.toString();
+		String inventoryType = InventoryType.main.toString();
 		inventory.setStatus(status);
+		inventory.setInventoryType(inventoryType);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryManager.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
+		List<MedicalInventory> medicalInventories = medicalInventoryManager.getMedicalInventoryByStatusAndInventoryType(firstMedicalInventory.getStatus(), firstMedicalInventory.getInventoryType());
 		assertThat(medicalInventories).hasSize(1);
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
@@ -273,11 +276,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(firstMedicalInventory).isNotNull();
 		Ward ward = testWard.setup(false);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = "STATUS";
+		String status = InventoryStatus.draft.toString();
+		String inventoryType = InventoryType.main.toString();
 		inventory.setStatus(status);
+		inventory.setInventoryType(inventoryType);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventoryByStatus(firstMedicalInventory.getStatus());
+		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventoryByStatusAndInventoryType(firstMedicalInventory.getStatus(), firstMedicalInventory.getInventoryType());
 		assertThat(medicalInventories).hasSize(1);
 		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 	}
@@ -495,6 +500,28 @@ class Tests extends OHCoreTestCase {
 		foundMedicalInventoryRow.setRealqty(realQty);
 		MedicalInventoryRow updatedMedicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(foundMedicalInventoryRow);
 		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualTo(realQty);
+	}
+	
+	@Test
+	void testMgrGetMedicalInventoryRowByInventoryId() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
+		lotIoOperationRepository.saveAndFlush(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		int inventoryId = medicalInventoryRow.getId();
+		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
+		assertThat(newMedicalInventoryRow).isNotNull();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows).hasSize(1);
+		
 	}
 
 	private int setupTestMedicalInventory(boolean usingSet) throws OHException, OHServiceException {
