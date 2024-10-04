@@ -25,6 +25,8 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -65,6 +67,7 @@ public class Operation extends Auditable<String> {
 	@Column(name = "OPE_STAT")
 	private Integer major;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "OPE_FOR", columnDefinition = "ENUM('opd', 'admission', 'opd_admission')")
 	private OperationTarget opeFor;
 
