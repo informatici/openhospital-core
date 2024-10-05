@@ -29,14 +29,14 @@ import org.isf.utils.exception.OHException;
 public class TestSupplier {
 
 	private Integer supId;
-	private String supName = "TestName";
-	private String supAddress = "TestAddress";
-	private String supTaxcode = "TestTax";
-	private String supPhone = "TestPhone";
-	private String supFax = "TestFax";
-	private String supEmail = "TestEmail";
-	private String supNote = "TestNote";
-	private Character supDeleted = 'N';
+	private final String supName = "TestName";
+	private final String supAddress = "TestAddress";
+	private final String supTaxcode = "TestTax";
+	private final String supPhone = "TestPhone";
+	private final String supFax = "TestFax";
+	private final String supEmail = "TestEmail";
+	private final String supNote = "TestNote";
+	private final Character supDeleted = 'N';
 
 	public Supplier setup(boolean usingSet) throws OHException {
 		Supplier supplier;
