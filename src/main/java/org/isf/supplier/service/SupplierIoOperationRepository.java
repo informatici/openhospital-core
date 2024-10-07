@@ -33,4 +33,6 @@ public interface SupplierIoOperationRepository extends JpaRepository<Supplier, I
     
     @Query(value = "select s from Supplier s where s.supDeleted = 'N'")
     List<Supplier> findAllWhereNotDeleted();
+
+    Supplier findFirstBySupIdAndSupDeleted(int id, char deleted);
 }
