@@ -22,6 +22,7 @@
 package org.isf.permissions.service;
 
 import java.util.List;
+
 import org.isf.permissions.model.Permission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -37,6 +38,10 @@ public class PermissionIoOperations {
 
 	public PermissionIoOperations(PermissionIoOperationRepository permissionIoOperationRepository) {
 		this.repository = permissionIoOperationRepository;
+	}
+
+	public List<Permission> findByIdIn(List<Integer> ids) {
+		return repository.findByIdIn(ids);
 	}
 
 	public List<Permission> retrivePermisionsByGroupCode(String userGropupCode) throws OHServiceException {
