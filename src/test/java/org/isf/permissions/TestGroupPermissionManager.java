@@ -27,13 +27,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.menu.manager.UserGroupManager;
+import org.isf.menu.model.UserGroup;
 import org.isf.permissions.manager.GroupPermissionManager;
 import org.isf.permissions.model.GroupPermission;
+import org.isf.permissions.model.Permission;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class TestGroupPermissionManager extends OHCoreTestCase {
+
+	@Autowired
+	UserGroupManager userGroupManager;
 
 	@Autowired
 	GroupPermissionManager groupPermissionManager;
@@ -41,6 +48,7 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
+		executeSQLScript("LoadGroupTable.sql");
 		executeSQLScript("LoadPermissionTables.sql");
 	}
 
@@ -52,5 +60,27 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 		List<GroupPermission> groupPermissionList = groupPermissionManager.findByIdIn(listIds);
 		assertThat(groupPermissionList).isNotEmpty();
 		assertThat(groupPermissionList).hasSize(2);
+	}
+
+	@Test
+	@DisplayName("Update group permissions")
+	void updateGroupPermissions() throws Exception {
+		UserGroup userGroup = userGroupManager.findByIdIn(List.of("admin")).stream().findFirst().orElseGet(() -> null);
+		List<Integer> permissionsIds = List.of(10, 11, 12);
+		assertThat(userGroup).isNotNull();
+		List<GroupPermission> groupPermissions = groupPermissionManager.findUserGroupPermissions(userGroup.getCode());
+		List<Permission> permissions = groupPermissionManager.update(userGroup, permissionsIds, false);
+		assertThat(permissions).isNotEmpty();
+		assertThat(permissions).hasSize(groupPermissions.size());
+
+		permissions = groupPermissionManager.update(userGroup, List.of(10), true);
+		assertThat(permissions).hasSize(1);
+
+		permissions = groupPermissionManager.update(userGroup, List.of(11, 12), true);
+		assertThat(permissions).hasSize(2);
+		assertThat(permissions.stream().allMatch(item -> List.of(11, 12).contains(item.getId()))).isTrue();
+
+		permissions = groupPermissionManager.update(userGroup, permissionsIds, false);
+		assertThat(permissions).hasSize(permissionsIds.size());
 	}
 }

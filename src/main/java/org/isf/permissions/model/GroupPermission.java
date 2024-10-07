@@ -56,8 +56,16 @@ public class GroupPermission extends Auditable<String> {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "GP_P_ID_A", referencedColumnName="P_ID_A")
+	@JoinColumn(name = "GP_P_ID_A", referencedColumnName = "P_ID_A")
 	private Permission permission;
+
+	public GroupPermission() {
+	}
+
+	public GroupPermission(UserGroup userGroup, Permission permission) {
+		this.userGroup = userGroup;
+		this.permission = permission;
+	}
 
 	public int getId() {
 		return id;
@@ -82,7 +90,5 @@ public class GroupPermission extends Auditable<String> {
 	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
 	}
-	
-	
 
 }
