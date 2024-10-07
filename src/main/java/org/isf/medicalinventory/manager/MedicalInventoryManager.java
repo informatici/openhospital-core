@@ -394,6 +394,7 @@ public class MedicalInventoryManager {
 	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
 	 * @throws OHDataValidationException
 	 */
+	@Transactional(rollbackFor = OHServiceException.class)
 	public void confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
 		// validate the inventory
 		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
