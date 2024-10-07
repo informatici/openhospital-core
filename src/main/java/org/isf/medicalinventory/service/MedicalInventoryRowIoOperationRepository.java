@@ -34,4 +34,7 @@ public interface MedicalInventoryRowIoOperationRepository extends JpaRepository<
 
 	@Query(value = "select medinvrow from MedicalInventoryRow medinvrow where medinvrow.inventory.id = :inventoryId")
 	List<MedicalInventoryRow> findByInventoryId(@Param("inventoryId") int inventoryId);
+
+	@Query(value = "select medinvrow from MedicalInventoryRow medinvrow where medinvrow.medical.code = :medicalCode and medinvrow.lot.code = :lotCode")
+	MedicalInventoryRow findByMedicalCodeAndLotCode(@Param("medicalCode") int medicalCode, @Param("lotCode") String lotCode);
 }

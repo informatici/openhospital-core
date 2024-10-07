@@ -49,6 +49,10 @@ public class TimeTools {
 
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
+	public static final String DD_MM_YYYY = "dd/MM/yyyy";
+
 	private TimeTools() {
 	}
 
@@ -187,6 +191,7 @@ public class TimeTools {
 
 	/**
 	 * Truncate date time to SECONDS only if value is non-null
+	 * 
 	 * @param dateTime
 	 * @return LocaleDateTime turncated to seconds
 	 */
@@ -238,8 +243,8 @@ public class TimeTools {
 		LocalDateTime dateTime;
 		if (noTime) {
 			/*
-			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime
-			 * Java does not accept a bare Date value as DateTime
+			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime Java
+			 * does not accept a bare Date value as DateTime
 			 */
 			LocalDate date = LocalDate.parse(string, format);
 			dateTime = date.atTime(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
