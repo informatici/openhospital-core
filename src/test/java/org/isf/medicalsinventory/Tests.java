@@ -520,8 +520,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(newMedicalInventoryRow).isNotNull();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
-		assertThat(medicalInventoryRows).hasSize(1);
-		
+		assertThat(medicalInventoryRows).hasSize(1);	
 	}
 
 	private int setupTestMedicalInventory(boolean usingSet) throws OHException, OHServiceException {
@@ -571,5 +570,61 @@ class Tests extends OHCoreTestCase {
 		MedicalInventory deletedInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(deletedInventory).isNotNull();
 		assertThat(deletedInventory.getStatus()).isEqualTo(InventoryStatus.canceled.toString());
+	}
+	
+	@Test
+	void testValidateMedicalInventory() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
+		lotIoOperationRepository.saveAndFlush(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		int inventoryId = medicalInventoryRow.getId();
+		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
+		assertThat(newMedicalInventoryRow).isNotNull();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows).hasSize(1);
+		medicalInventoryManager.validateMedicalInventoryRow(savedInventory, medicalInventoryRows);
+		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
+		String status = InventoryStatus.validated.toString();
+		inventory.setStatus(status);
+		inventory = medicalInventoryIoOperation.updateMedicalInventory(inventory);
+		assertThat(inventory).isNotNull();
+		assertThat(inventory.getStatus()).isEqualTo(status);		
+	}
+	
+	@Test
+	void testConfirmMedicalInventory() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
+		lotIoOperationRepository.saveAndFlush(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		int inventoryId = medicalInventoryRow.getId();
+		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
+		assertThat(newMedicalInventoryRow).isNotNull();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows).hasSize(1);
+		medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);
+		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
+		String status = InventoryStatus.done.toString();
+		inventory.setStatus(status);
+		inventory = medicalInventoryIoOperation.updateMedicalInventory(inventory);
+		assertThat(inventory).isNotNull();
+		assertThat(inventory.getStatus()).isEqualTo(status);		
 	}
 }

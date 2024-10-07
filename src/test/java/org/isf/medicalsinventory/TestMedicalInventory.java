@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.within;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
@@ -34,7 +35,7 @@ import org.isf.ward.model.Ward;
 public class TestMedicalInventory {
 
 	private int id = 1;
-	private String status = "STATUS";
+	private String status = InventoryStatus.draft.toString();
 	private LocalDateTime inventoryDate = LocalDateTime.now();
 	private String user = "USER";
 	private String inventoryReference = "REFERENCE";

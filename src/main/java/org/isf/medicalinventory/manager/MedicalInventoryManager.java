@@ -407,8 +407,8 @@ public class MedicalInventoryManager {
 		Supplier supplier = supplierManager.getByID(supplierId);
 		Ward ward = wardManager.findWard(wardCode);
 		LocalDateTime today = LocalDateTime.now();
+		String reference = inventory.getInventoryReference();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
-			String reference = "Ref-" + LocalDateTime.now();
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			double realQty = medicalInventoryRow.getRealQty();
