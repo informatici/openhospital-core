@@ -28,18 +28,20 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalInventory {
 
 	private int id = 1;
 	private String status = InventoryStatus.draft.toString();
-	private LocalDateTime inventoryDate = LocalDateTime.now();
-	private String user = "USER";
+	private LocalDateTime inventoryDate = TimeTools.getNow();
+	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
-	private String inventoryType = "TYPE";
+	private String inventoryType = InventoryType.main.toString();
 	private String ward = "Z";
 	private int supplier = 3;
 	private String destination = "INV";

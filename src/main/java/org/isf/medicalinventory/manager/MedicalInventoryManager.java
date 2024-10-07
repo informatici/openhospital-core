@@ -394,7 +394,6 @@ public class MedicalInventoryManager {
 	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
 	 * @throws OHDataValidationException
 	 */
-	@Transactional(rollbackFor = OHServiceException.class)
 	public void confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
 		// validate the inventory
 		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
@@ -407,7 +406,7 @@ public class MedicalInventoryManager {
 		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(dischargeCode);
 		Supplier supplier = supplierManager.getByID(supplierId);
 		Ward ward = wardManager.findWard(wardCode);
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getNow();
 		String reference = inventory.getInventoryReference();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
