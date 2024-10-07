@@ -416,24 +416,16 @@ public class MedicalInventoryManager {
 			Medical medical = medicalInventoryRow.getMedical();
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			Lot currentLot = movStockInsertingManager.getLot(lotCode);
-			boolean isNew = medicalInventoryRow.isNewLot();
-			if (realQty > theoQty && !isNew) { // charge movement when realQty > theoQty
+			if (realQty > theoQty) { // charge movement when realQty > theoQty
 				Movement movement = new Movement(medical, chargeType, null, currentLot, today, -(ajustQty.intValue()), supplier, reference);
 				List<Movement> chargeMovement = new ArrayList<>();
 				chargeMovement.add(movement);
 				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
-			} else if (realQty < theoQty && !isNew) { // discharge movement when realQty < theoQty
+			} else { // discharge movement when realQty < theoQty
 				Movement movement = new Movement(medical, dischargeType, ward, currentLot, today, ajustQty.intValue(), null, reference);
 				List<Movement> dischargeMovement = new ArrayList<>();
 				dischargeMovement.add(movement);
 				dischargeMovement = movStockInsertingManager.newMultipleDischargingMovements(dischargeMovement, reference);
-			}
-			// If new lot has been inserted, create charge movement with real qty
-			if (isNew) {
-				Movement movement = new Movement(medical, chargeType, null, currentLot, today, (int) realQty, supplier, reference);
-				List<Movement> chargeMovement = new ArrayList<>();
-				chargeMovement.add(movement);
-				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
 			}
 		}
 	}
