@@ -73,8 +73,14 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 		assertThat(permissions).isNotEmpty();
 		assertThat(permissions).hasSize(groupPermissions.size());
 
-		permissions = groupPermissionManager.update(userGroup, permissionsIds, true);
-		assertThat(permissions).isNotEmpty();
+		permissions = groupPermissionManager.update(userGroup, List.of(10), true);
+		assertThat(permissions).hasSize(1);
+
+		permissions = groupPermissionManager.update(userGroup, List.of(11, 12), true);
+		assertThat(permissions).hasSize(2);
+		assertThat(permissions.stream().allMatch(item -> List.of(11, 12).contains(item.getId()))).isTrue();
+
+		permissions = groupPermissionManager.update(userGroup, permissionsIds, false);
 		assertThat(permissions).hasSize(permissionsIds.size());
 	}
 }
