@@ -32,6 +32,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissionIoOperationRepository extends JpaRepository<Permission, Integer> {
 
+	List<Permission> findByIdIn(List<Integer> ids);
+
 	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
 	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
 
