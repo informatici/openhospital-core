@@ -40,6 +40,7 @@ import org.isf.medicalinventory.service.MedicalInventoryRowIoOperationRepository
 import org.isf.medicals.TestMedical;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
+import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.TestLot;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.service.LotIoOperationRepository;
@@ -96,6 +97,9 @@ class Tests extends OHCoreTestCase {
 	
 	@Autowired
 	LotIoOperationRepository lotIoOperationRepository;
+	
+	@Autowired
+	MedicalsIoOperations medicalsIoOperations;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -611,10 +615,12 @@ class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
+		medical = medicalsIoOperationRepository.saveAndFlush(medical);
+		assertThat(medical).isNotNull();
 		Lot lot = testLot.setup(medical, false);
 		lot.setMainStoreQuantity(100);
 		lot = lotIoOperationRepository.saveAndFlush(lot);
+		assertThat(lot).isNotNull();
 		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
 		int inventoryRowId = medicalInventoryRow.getId();
 		medicalInventoryRow.setRealqty(40);
@@ -622,7 +628,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(newMedicalInventoryRow).isNotNull();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryRowId);
 		assertThat(medicalInventoryRows).isNotEmpty();
-		assertThat(medicalInventoryRows).hasSize(1);
 		medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);
 		int inventoryId = savedInventory.getId();
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);

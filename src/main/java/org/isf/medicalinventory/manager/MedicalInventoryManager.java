@@ -394,6 +394,7 @@ public class MedicalInventoryManager {
 	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
 	 * @throws OHDataValidationException
 	 */
+	@Transactional(rollbackFor = OHServiceException.class)
 	public void confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
 		// validate the inventory
 		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
@@ -406,7 +407,7 @@ public class MedicalInventoryManager {
 		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(dischargeCode);
 		Supplier supplier = supplierManager.getByID(supplierId);
 		Ward ward = wardManager.findWard(wardCode);
-		LocalDateTime today = TimeTools.getNow();
+		LocalDateTime now = TimeTools.getNow();
 		String reference = inventory.getInventoryReference();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
@@ -417,12 +418,12 @@ public class MedicalInventoryManager {
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			Lot currentLot = movStockInsertingManager.getLot(lotCode);
 			if (realQty > theoQty) { // charge movement when realQty > theoQty
-				Movement movement = new Movement(medical, chargeType, null, currentLot, today, -(ajustQty.intValue()), supplier, reference);
+				Movement movement = new Movement(medical, chargeType, null, currentLot, now, -(ajustQty.intValue()), supplier, reference);
 				List<Movement> chargeMovement = new ArrayList<>();
 				chargeMovement.add(movement);
 				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
 			} else { // discharge movement when realQty < theoQty
-				Movement movement = new Movement(medical, dischargeType, ward, currentLot, today, ajustQty.intValue(), null, reference);
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, now, ajustQty.intValue(), null, reference);
 				List<Movement> dischargeMovement = new ArrayList<>();
 				dischargeMovement.add(movement);
 				dischargeMovement = movStockInsertingManager.newMultipleDischargingMovements(dischargeMovement, reference);
