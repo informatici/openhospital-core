@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,8 +21,6 @@
  */
 package org.isf.settings.service;
 
-import java.util.List;
-
 import org.isf.settings.model.Setting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -34,9 +32,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SettingIoOperationRepository extends JpaRepository<Setting, Integer> {
-	List<Setting> findAllByDeleted(boolean deleted);
 
-	Setting findFirstByCodeAndDeleted(String code, boolean deleted);
+	Setting findFirstByCode(String code);
 
-	Setting findFirstByIdAndDeleted(int id, boolean deleted);
+	Setting findFirstById(int id);
 }

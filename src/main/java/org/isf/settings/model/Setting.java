@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,8 +44,8 @@ import org.isf.utils.db.Auditable;
 @Table(name = "OH_SETTINGS")
 @AttributeOverride(name = "createdBy", column = @Column(name = "SETT_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "SETT_CREATED_DATE", updatable = false))
-@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SETT_MODIFIED_BY"))
-@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SETT_MODIFIED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SETT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SETT_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "SETT_ACTIVE"))
 public class Setting extends Auditable<String> {
 	@Id
@@ -71,9 +71,6 @@ public class Setting extends Auditable<String> {
 
 	@Column(name="SETT_DESCRIPTION", length = 500)
 	private String description;
-
-	@Column(name="SETT_DELETED", nullable = false)
-	private Boolean deleted = false;
 
 	@Column(name="SETT_EDITABLE", nullable = false)
 	private Boolean isEditable = true;
@@ -132,14 +129,6 @@ public class Setting extends Auditable<String> {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public Boolean getEditable() { return isEditable; }
