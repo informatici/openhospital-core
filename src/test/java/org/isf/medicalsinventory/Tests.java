@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicalinventory.manager.MedicalInventoryManager;
 import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
 import org.isf.medicalinventory.model.InventoryStatus;
@@ -40,7 +41,6 @@ import org.isf.medicalinventory.service.MedicalInventoryRowIoOperationRepository
 import org.isf.medicals.TestMedical;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
-import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.TestLot;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.service.LotIoOperationRepository;
@@ -99,7 +99,7 @@ class Tests extends OHCoreTestCase {
 	LotIoOperationRepository lotIoOperationRepository;
 	
 	@Autowired
-	MedicalsIoOperations medicalsIoOperations;
+	MedicalInventoryRowIoOperationRepository medicalInventoryRowIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -613,19 +613,15 @@ class Tests extends OHCoreTestCase {
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
 		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
 		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		Medical medical = testMedical.setup(medicalType, false);
-		medical = medicalsIoOperationRepository.saveAndFlush(medical);
-		assertThat(medical).isNotNull();
 		Lot lot = testLot.setup(medical, false);
-		lot.setMainStoreQuantity(100);
-		lot = lotIoOperationRepository.saveAndFlush(lot);
-		assertThat(lot).isNotNull();
 		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		medicalInventoryRow.setRealqty(60);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		lotIoOperationRepository.saveAndFlush(lot);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
 		int inventoryRowId = medicalInventoryRow.getId();
-		medicalInventoryRow.setRealqty(40);
-		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
-		assertThat(newMedicalInventoryRow).isNotNull();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryRowId);
 		assertThat(medicalInventoryRows).isNotEmpty();
 		medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);

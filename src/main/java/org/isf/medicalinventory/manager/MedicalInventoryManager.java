@@ -408,9 +408,12 @@ public class MedicalInventoryManager {
 		Supplier supplier = supplierManager.getByID(supplierId);
 		Ward ward = wardManager.findWard(wardCode);
 		LocalDateTime now = TimeTools.getNow();
-		String reference = inventory.getInventoryReference();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
+			StringBuilder referenceBuilder = new StringBuilder();
+			referenceBuilder.append(inventory.getInventoryReference())
+			                .append("-")
+			                .append(now);
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			double realQty = medicalInventoryRow.getRealQty();
 			Double ajustQty = theoQty - realQty;
@@ -418,11 +421,15 @@ public class MedicalInventoryManager {
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			Lot currentLot = movStockInsertingManager.getLot(lotCode);
 			if (realQty > theoQty) { // charge movement when realQty > theoQty
+				referenceBuilder.append("-charge");
+				String reference = referenceBuilder.toString();
 				Movement movement = new Movement(medical, chargeType, null, currentLot, now, -(ajustQty.intValue()), supplier, reference);
 				List<Movement> chargeMovement = new ArrayList<>();
 				chargeMovement.add(movement);
 				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
-			} else { // discharge movement when realQty < theoQty
+			} else if (realQty < theoQty) { // discharge movement when realQty < theoQty
+				referenceBuilder.append("-discharge");
+				String reference = referenceBuilder.toString();
 				Movement movement = new Movement(medical, dischargeType, ward, currentLot, now, ajustQty.intValue(), null, reference);
 				List<Movement> dischargeMovement = new ArrayList<>();
 				dischargeMovement.add(movement);
