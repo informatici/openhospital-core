@@ -142,9 +142,7 @@ public class Setting extends Auditable<String> {
 		this.deleted = deleted;
 	}
 
-	public Boolean getEditable() {
-		return isEditable;
-	}
+	public Boolean getEditable() { return isEditable; }
 
 	public void setEditable(Boolean editable) {
 		isEditable = editable;

@@ -56,11 +56,11 @@ public class SettingManager {
 		return operations.save(setting);
 	}
 
-	public Setting getByCode(String code) throws OHServiceException {
+	public Setting getByCode(String code) {
 		return operations.getByCode(code);
 	}
 
-	public Setting getById(int id) throws OHServiceException {
+	public Setting getById(int id) {
 		return operations.getById(id);
 	}
 

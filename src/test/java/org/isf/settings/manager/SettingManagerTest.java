@@ -27,23 +27,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
-import org.isf.menu.TestPermission;
-import org.isf.menu.TestUserGroup;
-import org.isf.menu.manager.UserBrowsingManager;
-import org.isf.menu.model.UserGroup;
-import org.isf.permissions.manager.GroupPermissionManager;
-import org.isf.permissions.manager.PermissionManager;
-import org.isf.permissions.model.GroupPermission;
-import org.isf.permissions.model.Permission;
 import org.isf.settings.model.Setting;
 import org.isf.utils.exception.OHDataValidationException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Setting Manager Tests
+ * @author Silevester D.
+ * @since v1.15
+ */
 public class SettingManagerTest extends OHCoreTestCase {
 
 	@Autowired
@@ -67,7 +63,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get setting by ID")
-	void testGetSettingById() throws OHServiceException {
+	void testGetSettingById() {
 		Setting setting = manager.getById(1);
 
 		assertThat(setting).isNotNull();
@@ -76,7 +72,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get deleted setting by ID")
-	void testGetDeletedSettingById() throws OHServiceException {
+	void testGetDeletedSettingById() {
 		Setting setting = manager.getById(56);
 
 		assertThat(setting).isNull();
@@ -84,7 +80,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get non existing setting by ID")
-	void testGetNonExistingSettingById() throws OHServiceException {
+	void testGetNonExistingSettingById() {
 		Setting setting = manager.getById(156);
 
 		assertThat(setting).isNull();
@@ -92,7 +88,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get setting by Code")
-	void testGetSettingByCode() throws OHServiceException {
+	void testGetSettingByCode() {
 		Setting setting = manager.getByCode("SINGLEUSER");
 
 		assertThat(setting).isNotNull();
@@ -101,7 +97,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get deleted setting by Code")
-	void testGetDeletedSettingByCode() throws OHServiceException {
+	void testGetDeletedSettingByCode() {
 		Setting setting = manager.getByCode("MODE");
 
 		assertThat(setting).isNull();
@@ -109,7 +105,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get non existing setting by Code")
-	void testGetNonExistingSettingByCode() throws OHServiceException {
+	void testGetNonExistingSettingByCode() {
 		Setting setting = manager.getByCode("MODEMODE");
 
 		assertThat(setting).isNull();
@@ -134,14 +130,12 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Update non editable setting")
-	void testUpdateNonEditableSetting() throws OHServiceException {
+	void testUpdateNonEditableSetting() {
 		Setting setting = manager.getById(1);
 
 		setting.setValue("TRUE");
 
-		assertThatThrownBy(() -> {
-			manager.update(setting);
-		}).isInstanceOf(OHDataValidationException.class);
+		assertThatThrownBy(() -> manager.update(setting)).isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -155,9 +149,10 @@ public class SettingManagerTest extends OHCoreTestCase {
 		setting = manager.update(setting);
 		String oldValue = setting.getValue();
 
-		manager.resetAll();
+		boolean reset = manager.resetAll();
 		Setting resetSetting = manager.getByCode("USERSLISTLOGIN");
 
+		assertThat(reset).isTrue();
 		assertThat(oldValue).isNotEqualTo(resetSetting.getValue());
 		assertThat(resetSetting.getDefaultValue()).isEqualTo(resetSetting.getValue());
 	}

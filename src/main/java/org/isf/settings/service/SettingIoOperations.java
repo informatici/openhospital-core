@@ -53,11 +53,11 @@ public class SettingIoOperations {
 		return repository.save(setting);
 	}
 
-	public Setting getByCode(String code) throws OHServiceException {
+	public Setting getByCode(String code) {
 		return repository.findFirstByCodeAndDeleted(code, false);
 	}
 
-	public Setting getById(int id) throws OHServiceException {
+	public Setting getById(int id) {
 		return repository.findFirstByIdAndDeleted(id, false);
 	}
 
