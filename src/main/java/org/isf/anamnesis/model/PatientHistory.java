@@ -29,6 +29,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.isf.utils.db.Auditable;
@@ -278,6 +279,10 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 
 	@Column(name = "PAH_PHY_PREG_ABORT")
 	private int phyPregnancyAbort;
+
+	@Version
+	@Column(name = "PAH_LOCK")
+	private int lock;
 
 	@Override
 	public int compareTo(PatientHistory obj) {
@@ -780,5 +785,7 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.patOpenNote = patOpenNote;
 	}
 
+	public int getLock() { return lock; }
 
+	public void setLock(int lock) { this.lock = lock; }
 }
