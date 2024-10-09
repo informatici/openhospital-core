@@ -22,32 +22,131 @@
 package org.isf.generaldata.configProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 import org.isf.generaldata.GeneralData;
+import org.isf.generaldata.Version;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.MediaType;
 
 public class TestApiConfigProvider {
 
+	private static final String CONFIG_JSON = "{\n" +
+					"  \"1.15.0\": {\n" +
+					"    \"parameter\": \"https://version-url.com\"\n" +
+					"  },\n" +
+					"  \"default\": {\n" +
+					"    \"parameter\": \"https://default-url.com\"\n" +
+					"  }\n" +
+					"}";
+
+	private ClientAndServer mockServer;
+
+	@BeforeEach
+	public void startServer() {
+		mockServer = startClientAndServer(1080); // Start the MockServer
+	}
+
+	@AfterEach
+	public void stopServer() {
+		mockServer.stop(); // Stop the MockServer
+	}
+
 	@Test
-	void testGetTestParamsData() {
-		// NOTE: this uses a remote json file so things are bound to fail
-		GeneralData.initialize();
-		ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
+	void testGetTestParamsDataDefaultVersion() throws Exception {
+		// Set up the mock server to respond with the desired JSON
+		mockServer.when(request().withMethod("GET").withPath("/test")).respond(response().withStatusCode(200)
+						.withContentType(MediaType.APPLICATION_JSON)
+						.withBody(CONFIG_JSON));
 
-		assertThat(apiConfigProvider.getConfigData()).isNotNull();
+		// Use MockedStatic to mock GeneralData
+		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class);
+						MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
 
-		assertThat(apiConfigProvider.get("someParam")).isNull();
+			// Mock the Version.getVersion() method to return a specific version
+			Version mockVersion = mock(Version.class);
+			mockedVersion.when(Version::getVersion).thenReturn(mockVersion);
+			when(mockVersion.toString()).thenReturn("");
 
-		// void method
-		apiConfigProvider.close();
+			// Mock the initialization to set PARAMSURL to the mock server URL
+			mockedGeneralData.when(GeneralData::initialize).thenAnswer(invocation -> {
+				GeneralData.PARAMSURL = "http://localhost:1080/test"; // Use the mock server's URL
+				return null;
+			});
+
+			// Initialize GeneralData with the mocked PARAMSURL
+			GeneralData.initialize();
+
+			ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
+
+			assertThat(apiConfigProvider.get("parameter")).isEqualTo("https://default-url.com");
+
+			apiConfigProvider.close();
+		}
+	}
+
+	@Test
+	void testGetTestParamsDataWithVersion() throws Exception {
+		// Set up the mock server to respond with the desired JSON
+		mockServer.when(request().withMethod("GET").withPath("/test")).respond(response().withStatusCode(200)
+						.withContentType(MediaType.APPLICATION_JSON)
+						.withBody(CONFIG_JSON));
+
+		// Use MockedStatic to mock GeneralData
+		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class);
+						MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
+
+			// Mock the Version.getVersion() method to return a specific version
+			Version mockVersion = mock(Version.class);
+			mockedVersion.when(Version::getVersion).thenReturn(mockVersion);
+			when(mockVersion.toString()).thenReturn("1.15.0");
+
+			// Mock the initialization to set PARAMSURL to the mock server URL
+			mockedGeneralData.when(GeneralData::initialize).thenAnswer(invocation -> {
+				GeneralData.PARAMSURL = "http://localhost:1080/test"; // Use the mock server's URL
+				return null;
+			});
+
+			// Initialize GeneralData with the mocked PARAMSURL
+			GeneralData.initialize();
+
+			ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
+
+			assertThat(apiConfigProvider.get("parameter")).isEqualTo("https://version-url.com");
+
+			apiConfigProvider.close();
+		}
 	}
 
 	@Test
 	void testGetTestParamsDataEmptyParmsUrl() {
-		GeneralData.initialize();
-		GeneralData.PARAMSURL = "";
-		ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
 
-		assertThat(apiConfigProvider.getConfigData()).isNull();
+		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class)) {
+
+			// Mock the initialization to set PARAMSURL to the mock server URL
+			mockedGeneralData.when(GeneralData::initialize).thenAnswer(invocation -> {
+				GeneralData.PARAMSURL = ""; // Use the mock server's URL
+				return null;
+			});
+
+			// Initialize GeneralData with the mocked PARAMSURL
+			GeneralData.initialize();
+
+			ApiConfigProvider apiConfigProvider = new ApiConfigProvider();
+
+			assertThat(apiConfigProvider.getConfigData()).isNull();
+
+			apiConfigProvider.close();
+		}
 	}
 }
