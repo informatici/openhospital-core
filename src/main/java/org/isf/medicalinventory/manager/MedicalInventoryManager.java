@@ -416,7 +416,7 @@ public class MedicalInventoryManager {
 			                .append(now);
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			double realQty = medicalInventoryRow.getRealQty();
-			Double ajustQty = theoQty - realQty;
+			Double ajustQty = realQty - theoQty;
 			Medical medical = medicalInventoryRow.getMedical();
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			Lot currentLot = movStockInsertingManager.getLot(lotCode);
