@@ -395,46 +395,46 @@ public class MedicalInventoryManager {
 	 * @throws OHDataValidationException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public void confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
+	public List<Movement> confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
 		// validate the inventory
 		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
-		// create Movements
-		String dischargeCode = inventory.getDischargeType();
-		String chargeCode = inventory.getChargeType();
-		Integer supplierId = inventory.getSupplier();
-		String wardCode = inventory.getDestination();
-		MovementType chargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(chargeCode);
-		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(dischargeCode);
-		Supplier supplier = supplierManager.getByID(supplierId);
-		Ward ward = wardManager.findWard(wardCode);
+		// get general info
+		String referenceNumber = inventory.getInventoryReference();
+		// TODO: make possibility to allow charges and discharges with same referenceNumber
+		String chargeReferenceNumber = referenceNumber + "-charge";
+		String dischargeReferenceNumber = referenceNumber + "-discharge";
+		MovementType chargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(inventory.getChargeType());
+		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(inventory.getDischargeType());
+		Supplier supplier = supplierManager.getByID(inventory.getSupplier());
+		Ward ward = wardManager.findWard(inventory.getDestination());
 		LocalDateTime now = TimeTools.getNow();
+		// prepare movements
+		List<Movement> chargeMovements = new ArrayList<>();
+		List<Movement> dischargeMovements = new ArrayList<>();
 		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
 			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
-			StringBuilder referenceBuilder = new StringBuilder();
-			referenceBuilder.append(inventory.getInventoryReference())
-			                .append("-")
-			                .append(now);
+
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			double realQty = medicalInventoryRow.getRealQty();
-			Double ajustQty = theoQty - realQty;
+			Double ajustQty = realQty - theoQty;
 			Medical medical = medicalInventoryRow.getMedical();
-			String lotCode = medicalInventoryRow.getLot().getCode();
-			Lot currentLot = movStockInsertingManager.getLot(lotCode);
-			if (realQty > theoQty) { // charge movement when realQty > theoQty
-				referenceBuilder.append("-charge");
-				String reference = referenceBuilder.toString();
-				Movement movement = new Movement(medical, chargeType, null, currentLot, now, -(ajustQty.intValue()), supplier, reference);
-				List<Movement> chargeMovement = new ArrayList<>();
-				chargeMovement.add(movement);
-				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
-			} else if (realQty < theoQty) { // discharge movement when realQty < theoQty
-				referenceBuilder.append("-discharge");
-				String reference = referenceBuilder.toString();
-				Movement movement = new Movement(medical, dischargeType, ward, currentLot, now, ajustQty.intValue(), null, reference);
-				List<Movement> dischargeMovement = new ArrayList<>();
-				dischargeMovement.add(movement);
-				dischargeMovement = movStockInsertingManager.newMultipleDischargingMovements(dischargeMovement, reference);
-			}
+			Lot currentLot = medicalInventoryRow.getLot();
+			if (ajustQty > 0) { // charge movement when realQty > theoQty
+				Movement movement = new Movement(medical, chargeType, null, currentLot, now, ajustQty.intValue(), supplier, chargeReferenceNumber);
+				chargeMovements.add(movement);
+			} else if (ajustQty < 0) { // discharge movement when realQty < theoQty
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, now, -(ajustQty.intValue()), null, dischargeReferenceNumber);
+				dischargeMovements.add(movement);
+			} // else ajustQty = 0, continue
 		}
+		// create movements
+		List<Movement> insertedMovements = new ArrayList<>();
+		if (!chargeMovements.isEmpty()) {
+			insertedMovements.addAll(movStockInsertingManager.newMultipleChargingMovements(chargeMovements, chargeReferenceNumber));
+		}
+		if (!dischargeMovements.isEmpty()) {
+			insertedMovements.addAll(movStockInsertingManager.newMultipleDischargingMovements(dischargeMovements, dischargeReferenceNumber));
+		}
+		return insertedMovements;
 	}
 }

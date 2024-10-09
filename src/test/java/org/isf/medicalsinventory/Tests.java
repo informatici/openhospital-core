@@ -43,10 +43,15 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicalstock.TestLot;
 import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
 import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
+import org.isf.supplier.model.Supplier;
+import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
@@ -100,6 +105,12 @@ class Tests extends OHCoreTestCase {
 	
 	@Autowired
 	MedicalInventoryRowIoOperationRepository medicalInventoryRowIoOperationRepository;
+	
+	@Autowired
+	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
+	
+	@Autowired
+	SupplierIoOperationRepository supplierIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -610,6 +621,14 @@ class Tests extends OHCoreTestCase {
 	void testConfirmMedicalInventory() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
+		MovementType chargeType = new MovementType("inventory+", "inventory +", "+", "non-operational");
+		MovementType dischargeType = new MovementType("inventory-", "inventory -", "-", "non-operational");
+		Supplier supplier = new Supplier(3, "INVEnTORY", null, null, null, null, null, null);
+		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeType);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(chargeType);
+		supplierIoOperationRepository.saveAndFlush(supplier);
+		wardIoOperationRepository.saveAndFlush(destination);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
 		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
 		MedicalType medicalType = testMedicalType.setup(false);
@@ -624,7 +643,8 @@ class Tests extends OHCoreTestCase {
 		int inventoryRowId = medicalInventoryRow.getId();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryRowId);
 		assertThat(medicalInventoryRows).isNotEmpty();
-		medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);
+		List<Movement> insertMovements = medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);
+		assertThat(insertMovements).isNotEmpty();
 		int inventoryId = savedInventory.getId();
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
