@@ -621,8 +621,8 @@ class Tests extends OHCoreTestCase {
 	void testConfirmMedicalInventory() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
-		MovementType chargeType = new MovementType("inventory+", "inventory +", "+", "non-operational");
-		MovementType dischargeType = new MovementType("inventory-", "inventory -", "-", "non-operational");
+		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
+		MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
 		Supplier supplier = new Supplier(3, "INVENTORY", null, null, null, null, null, null);
 		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false);
 		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeType);
