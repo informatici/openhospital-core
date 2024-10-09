@@ -43,7 +43,7 @@ public class TestMedicalInventory {
 	private String inventoryReference = "REFERENCE";
 	private String inventoryType = InventoryType.main.toString();
 	private String ward = "Z";
-	private int supplier = 3;
+	private int supplier = 1;
 	private String destination = "INV";
 	private String charge = "inventory+";
 	private String discharge = "inventory-";
