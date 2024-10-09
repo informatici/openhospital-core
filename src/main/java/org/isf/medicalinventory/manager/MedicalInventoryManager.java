@@ -420,7 +420,7 @@ public class MedicalInventoryManager {
 			Medical medical = medicalInventoryRow.getMedical();
 			String lotCode = medicalInventoryRow.getLot().getCode();
 			Lot currentLot = movStockInsertingManager.getLot(lotCode);
-			if (realQty > theoQty) { // charge movement when realQty > theoQty
+			if (ajustQty > 0) { // charge movement when realQty > theoQty
 				referenceBuilder.append("-charge");
 				String reference = referenceBuilder.toString();
 				Movement movement = new Movement(medical, chargeType, null, currentLot, now, ajustQty.intValue(), supplier, reference);
