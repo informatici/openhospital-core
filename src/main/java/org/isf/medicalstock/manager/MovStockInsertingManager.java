@@ -330,7 +330,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage(
 								mov.getMedical() != null ? mov.getMedical().getDescription()
 												: MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
-				throw new OHDataValidationException(errors.get(0));
+				throw new OHDataValidationException(errors);
 			}
 		}
 		return insertedMovements;
