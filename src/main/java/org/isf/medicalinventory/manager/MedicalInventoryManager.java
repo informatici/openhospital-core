@@ -423,7 +423,7 @@ public class MedicalInventoryManager {
 			if (realQty > theoQty) { // charge movement when realQty > theoQty
 				referenceBuilder.append("-charge");
 				String reference = referenceBuilder.toString();
-				Movement movement = new Movement(medical, chargeType, null, currentLot, now, -(ajustQty.intValue()), supplier, reference);
+				Movement movement = new Movement(medical, chargeType, null, currentLot, now, ajustQty.intValue(), supplier, reference);
 				List<Movement> chargeMovement = new ArrayList<>();
 				chargeMovement.add(movement);
 				chargeMovement = movStockInsertingManager.newMultipleChargingMovements(chargeMovement, reference);
