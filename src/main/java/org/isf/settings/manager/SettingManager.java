@@ -23,12 +23,9 @@ package org.isf.settings.manager;
 
 import java.util.List;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.settings.model.Setting;
 import org.isf.settings.service.SettingIoOperations;
-import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,12 +43,7 @@ public class SettingManager {
 
 	public Setting update(Setting setting) throws OHServiceException {
 		Setting existingSetting = operations.getByCode(setting.getCode());
-
-		if (!existingSetting.getEditable()) {
-			throw new OHDataValidationException(
-							new OHExceptionMessage(MessageBundle.getMessage("settings.settingnoteditable"))
-			);
-		}
+		existingSetting.setValue(setting.getValue());
 
 		return operations.save(setting);
 	}

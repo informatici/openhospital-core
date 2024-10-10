@@ -22,13 +22,11 @@
 package org.isf.settings.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.settings.model.Setting;
-import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +56,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 		assertThat(settings).isNotNull();
 		assertThat(settings).isNotEmpty();
-		assertThat(settings.size()).isEqualTo(55);
+		assertThat(settings.size()).isEqualTo(56);
 	}
 
 	@Test
@@ -68,14 +66,6 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 		assertThat(setting).isNotNull();
 		assertThat(setting.getCode()).isEqualTo("SINGLEUSER");
-	}
-
-	@Test
-	@DisplayName("Get deleted setting by ID")
-	void testGetDeletedSettingById() {
-		Setting setting = manager.getById(56);
-
-		assertThat(setting).isNull();
 	}
 
 	@Test
@@ -93,14 +83,6 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 		assertThat(setting).isNotNull();
 		assertThat(setting.getId()).isEqualTo(1);
-	}
-
-	@Test
-	@DisplayName("Get deleted setting by Code")
-	void testGetDeletedSettingByCode() {
-		Setting setting = manager.getByCode("MODE");
-
-		assertThat(setting).isNull();
 	}
 
 	@Test
@@ -126,16 +108,6 @@ public class SettingManagerTest extends OHCoreTestCase {
 		setting = manager.getById(10);
 
 		assertThat(savedSetting.getValue()).isEqualTo(setting.getValue());
-	}
-
-	@Test
-	@DisplayName("Update non editable setting")
-	void testUpdateNonEditableSetting() {
-		Setting setting = manager.getById(1);
-
-		setting.setValue("TRUE");
-
-		assertThatThrownBy(() -> manager.update(setting)).isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test

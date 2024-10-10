@@ -31,7 +31,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import org.isf.settings.enums.SettingValueType;
 import org.isf.utils.db.Auditable;
 
 /**
@@ -56,6 +55,10 @@ public class Setting extends Auditable<String> {
 	@Column(name="SETT_CODE", length = 50, nullable = false)
 	private String code;
 
+	@Column(name = "SETT_CATEGORY", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private SettingCategory category;
+
 	@Column(name = "SETT_VALUE_TYPE", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private SettingValueType type;
@@ -72,8 +75,8 @@ public class Setting extends Auditable<String> {
 	@Column(name="SETT_DESCRIPTION", length = 500)
 	private String description;
 
-	@Column(name="SETT_EDITABLE", nullable = false)
-	private Boolean isEditable = true;
+	@Column(name="SETT_NEED_RESTART", nullable = false)
+	private Boolean needRestart = true;
 
 	public int getId() {
 		return id;
@@ -131,9 +134,19 @@ public class Setting extends Auditable<String> {
 		this.description = description;
 	}
 
-	public Boolean getEditable() { return isEditable; }
+	public Boolean getNeedRestart() {
+		return needRestart;
+	}
 
-	public void setEditable(Boolean editable) {
-		isEditable = editable;
+	public void setNeedRestart(Boolean needRestart) {
+		this.needRestart = needRestart;
+	}
+
+	public SettingCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(SettingCategory category) {
+		this.category = category;
 	}
 }

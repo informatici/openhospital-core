@@ -20,13 +20,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.isf.settings.enums;
+package org.isf.settings.model;
 
 /**
  * Setting Value Type Enum
  * @author Silevester D.
  * @since v1.15
  */
-public enum SettingValueType {
-	bool, number, text, select
+public enum SettingCategory {
+	general, telemetry, printer, dicom, examination, sms, report
 }
