@@ -23,10 +23,13 @@ package org.isf.medicalsinventory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicalinventory.manager.MedicalInventoryManager;
 import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
 import org.isf.medicalinventory.model.InventoryStatus;
@@ -60,6 +63,9 @@ import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
@@ -111,6 +117,24 @@ class Tests extends OHCoreTestCase {
 	@Autowired
 	SupplierIoOperationRepository supplierIoOperationRepository;
 
+	static Stream<Arguments> automaticlot() {
+		return Stream.of(
+						Arguments.of(false, false, false),
+						Arguments.of(false, false, true),
+						Arguments.of(false, true, false),
+						Arguments.of(false, true, true),
+						Arguments.of(true, false, false),
+						Arguments.of(true, false, true),
+						Arguments.of(true, true, false),
+						Arguments.of(true, true, true));
+	}
+
+	private static void setGeneralData(boolean in, boolean out, boolean toward) {
+		GeneralData.AUTOMATICLOT_IN = in;
+		GeneralData.AUTOMATICLOT_OUT = out;
+		GeneralData.AUTOMATICLOTWARD_TOWARD = toward;
+	}
+	
 	@BeforeAll
 	static void setUpClass() {
 		testMedicalInventory = new TestMedicalInventory();
@@ -241,16 +265,6 @@ class Tests extends OHCoreTestCase {
 		foundMedicalInventory.setStatus(status);
 		MedicalInventory updatedMedicalInventory = medicalInventoryIoOperation.updateMedicalInventory(foundMedicalInventory);
 		assertThat(updatedMedicalInventory.getStatus()).isEqualTo(status);
-	}
-
-	@Test
-	void testMgrDeleteMedicalInventory() throws Exception {
-		Integer id = setupTestMedicalInventory(false);
-		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventory).isNotNull();
-		String reference = foundMedicalInventory.getInventoryReference();
-		medicalInventoryManager.deleteMedicalInventory(foundMedicalInventory);
-		assertThat(medicalInventoryManager.referenceExists(reference)).isFalse();
 	}
 
 	@Test
@@ -609,17 +623,16 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalInventoryRows).hasSize(1);
 		medicalInventoryManager.validateMedicalInventoryRow(savedInventory, medicalInventoryRows);
 		int inventoryId = inventory.getId();
-		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
-		assertThat(inventory).isNotNull();
 		String status = InventoryStatus.validated.toString();
-		inventory.setStatus(status);
-		inventory = medicalInventoryIoOperation.updateMedicalInventory(inventory);
+		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
 		assertThat(inventory.getStatus()).isEqualTo(status);
 	}
 
-	@Test
-	void testConfirmMedicalInventory() throws Exception {
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testConfirmMedicalInventory(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
@@ -634,24 +647,35 @@ class Tests extends OHCoreTestCase {
 		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
-		Lot lot = testLot.setup(medical, false);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		medicalInventoryRow.setRealqty(60);
+		Lot lotOne = testLot.setup(medical, false);
+		LocalDateTime preparationDate = LocalDateTime.of(2024, 8, 1, 0, 0);
+		LocalDateTime dueDate = LocalDateTime.of(2024, 10, 1, 0, 0);
+		BigDecimal cost = new BigDecimal(25);
+		Lot lotTwo = new Lot(medical, "LOT-001", preparationDate, dueDate, cost);
+		Lot lotThree = new Lot(medical, "LOT-002", preparationDate, dueDate, cost);
+		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(savedInventory, medical, lotOne, false);
+		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(savedInventory, medical, lotTwo, false); 
+		medicalInventoryRowTwo.setId(2);
+		medicalInventoryRowTwo.setRealqty(30);
+		MedicalInventoryRow medicalInventoryRowThree = testMedicalInventoryRow.setup(savedInventory, medical, lotThree, false);
+		medicalInventoryRowThree.setId(3);
+		medicalInventoryRowThree.setRealqty(60);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
-		lotIoOperationRepository.saveAndFlush(lot);
-		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
-		int inventoryRowId = medicalInventoryRow.getId();
-		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryRowId);
+		lotIoOperationRepository.saveAndFlush(lotOne);
+		lotIoOperationRepository.saveAndFlush(lotTwo);
+		lotIoOperationRepository.saveAndFlush(lotThree);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowTwo);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowThree);
+		int inventoryId = savedInventory.getId();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows.size()).isEqualTo(3);
 		List<Movement> insertMovements = medicalInventoryManager.confirmMedicalInventoryRow(savedInventory, medicalInventoryRows);
 		assertThat(insertMovements).isNotEmpty();
-		int inventoryId = savedInventory.getId();
-		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
-		assertThat(inventory).isNotNull();
 		String status = InventoryStatus.done.toString();
-		inventory.setStatus(status);
-		inventory = medicalInventoryIoOperation.updateMedicalInventory(inventory);
+		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
 		assertThat(inventory.getStatus()).isEqualTo(status);
 	}

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -103,21 +104,6 @@ public class MedicalInventoryManager {
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		validateMedicalInventory(medicalInventory);
 		return ioOperations.updateMedicalInventory(medicalInventory);
-	}
-
-	/**
-	 * Delete the specified {@link MedicalInventory}.
-	 * 
-	 * @param medicalInventory - the {@link MedicalInventory} to delete.
-	 * @throws OHServiceException
-	 */
-	@Transactional(rollbackFor = OHServiceException.class)
-	public void deleteMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		List<MedicalInventoryRow> inventoryRowList = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(medicalInventory.getId());
-		for (MedicalInventoryRow invRow : inventoryRowList) {
-			medicalInventoryRowManager.deleteMedicalInventoryRow(invRow);
-		}
-		ioOperations.deleteMedicalInventory(medicalInventory);
 	}
 
 	/**
@@ -364,6 +350,9 @@ public class MedicalInventoryManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+		String status = InventoryStatus.validated.toString();
+		inventory.setStatus(status);
+		this.updateMedicalInventory(inventory);
 	}
 
 	/**
@@ -435,6 +424,9 @@ public class MedicalInventoryManager {
 		if (!dischargeMovements.isEmpty()) {
 			insertedMovements.addAll(movStockInsertingManager.newMultipleDischargingMovements(dischargeMovements, dischargeReferenceNumber));
 		}
+		String status = InventoryStatus.done.toString();
+		inventory.setStatus(status);
+		this.updateMedicalInventory(inventory);
 		return insertedMovements;
 	}
 }
