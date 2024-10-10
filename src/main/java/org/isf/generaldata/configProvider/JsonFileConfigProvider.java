@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 class JsonFileConfigProvider implements ConfigProvider {
 
@@ -65,17 +66,23 @@ class JsonFileConfigProvider implements ConfigProvider {
 
 					// Parse the JSON string into a Map<String, String> using Gson
 					Gson gson = new Gson();
-					Map<String, Object> resultMap = gson.fromJson(response.toString(), Map.class);
+					Map<String, Object> resultMap;
+					try {
+						resultMap = gson.fromJson(response.toString(), Map.class);
+						LOGGER.info("Configuration fetched.");
 
-					// Check if 'version' is present, otherwise use "default"
-					return resultMap.containsKey(VERSION) ? (Map<String, Object>) resultMap.get(VERSION)
-									: (Map<String, Object>) resultMap.get("default");
+						// Check if 'version' is present, otherwise use "default"
+						return resultMap.containsKey(VERSION) ? (Map<String, Object>) resultMap.get(VERSION)
+										: (Map<String, Object>) resultMap.get("default");
+					} catch (JsonSyntaxException e) {
+						LOGGER.error("Failed to parse the configuration json.");
+					}
 				}
 			} else {
 				LOGGER.error("Failed to fetch configuration URL. HTTP response code: {}", responseCode);
 			}
 		} catch (IOException e) {
-			LOGGER.error("Error during HTTP request: {}", e.getMessage());
+			LOGGER.error("Error during configuration HTTP request: {}", e.getMessage());
 		}
 
 		return Collections.emptyMap();
