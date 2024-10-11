@@ -756,4 +756,61 @@ class Tests extends OHCoreTestCase {
 		assertThat(found).isNotNull();
 		assertThat(found.getInventoryReference()).isEqualTo(inventory.getInventoryReference());
 	}
+	
+	@Test
+	void testValidateMedicalInventory() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
+		MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
+		Supplier supplier = new Supplier(1, "INVENTORY", null, null, null, null, null, null);
+		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false);
+		dischargeType = medicalDsrStockMovementTypeIoOperationRepository.save(dischargeType);
+		chargeType = medicalDsrStockMovementTypeIoOperationRepository.save(chargeType);
+		supplier = supplierIoOperationRepository.save(supplier);
+		destination = wardIoOperationRepository.save(destination);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		inventory.setChargeType(chargeType.getCode());
+		inventory.setDestination(destination.getCode());
+		inventory.setSupplier(supplier.getSupId());
+		inventory.setDischargeType(dischargeType.getCode());
+		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lotOne = testLot.setup(medical, false);
+		Movement firstMovement = testMovement.setup(medical, chargeType, ward, lotOne, supplier, false);
+		firstMovement.setQuantity(100);
+		MedicalStock firstmedicalStock = testMedicalStock.setup(firstMovement);
+		Lot lotTwo = testLot.setup(medical, false);
+		lotTwo.setCode("LOT-001");
+		Movement secondMovement = testMovement.setup(medical, chargeType, ward, lotTwo, supplier, false);
+		secondMovement.setQuantity(100);
+		MedicalStock secondmedicalStock = testMedicalStock.setup(firstMovement);
+		Lot lotThree = testLot.setup(medical, false);
+		lotTwo.setCode("LOT-003");
+		medicalType = medicalTypeIoOperationRepository.save(medicalType);
+		medical = medicalsIoOperationRepository.save(medical);
+		lotOne = lotIoOperationRepository.save(lotOne);
+		lotTwo = lotIoOperationRepository.save(lotTwo);
+		lotThree = lotIoOperationRepository.save(lotThree);
+		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
+		medicalInventoryRowOne.setRealqty(60);
+		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false); 
+		medicalInventoryRowTwo.setId(2);
+		medicalInventoryRowTwo.setRealqty(30);
+		MedicalInventoryRow medicalInventoryRowThree = testMedicalInventoryRow.setup(inventory, medical, lotThree, false);
+		medicalInventoryRowThree.setId(3);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowTwo);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowThree);
+		firstMovement = medicalStockIoOperation.newMovement(firstMovement);
+		secondMovement = medicalStockIoOperation.newMovement(secondMovement);
+		medicalStockIoOperationRepository.saveAndFlush(firstmedicalStock);
+		medicalStockIoOperationRepository.saveAndFlush(secondmedicalStock);
+		int inventoryId = inventory.getId();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows.size()).isEqualTo(3);
+		medicalInventoryManager.validateMedicalInventoryRow(inventory, medicalInventoryRows);
+	}
 }
