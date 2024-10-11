@@ -56,7 +56,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 		assertThat(settings).isNotNull();
 		assertThat(settings).isNotEmpty();
-		assertThat(settings.size()).isEqualTo(56);
+		assertThat(settings.size()).isEqualTo(55);
 	}
 
 	@Test
