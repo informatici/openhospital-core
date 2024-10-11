@@ -28,5 +28,5 @@ package org.isf.settings.model;
  * @since v1.15
  */
 public enum SettingCategory {
-	general, telemetry, printer, dicom, examination, sms, report
+	general, telemetry, security, dicom, accounting, reports, pharmacy, gui, experimental, application
 }
