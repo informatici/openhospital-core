@@ -43,18 +43,18 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "P_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "P_ACTIVE"))
 public class Permission extends Auditable<String> {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "P_ID_A")
 	private int id;
 
-	@Column(name="P_NAME")
-	private String name;	
+	@Column(name = "P_NAME")
+	private String name;
 
-	@Column(name="P_DESCRIPTION")
+	@Column(name = "P_DESCRIPTION")
 	private String description;
-	
+
 	@OneToMany(mappedBy = "permission", cascade = CascadeType.REMOVE)
 	private List<GroupPermission> groupPermission;
 
@@ -88,8 +88,6 @@ public class Permission extends Auditable<String> {
 
 	public void setGroupPermission(List<GroupPermission> groupPermission) {
 		this.groupPermission = groupPermission;
-	}	
-	
-	
+	}
 
 }

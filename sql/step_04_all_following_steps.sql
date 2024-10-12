@@ -102,3 +102,5 @@ source step_a105_medicaldsr_soft_deletion.sql;
 source step_a106_medicaldsrstock_control.sql;
 source step_a107_add_permission_admin_access.sql;
 source step_a108_audit_dicom_type_and_dicom_data.sql;
+source step_a109_update_user_settings_table_constraints_and_add_usergroups_permissions.sql;
+source step_a110_update_operations_table_change_ope_for_to_enum.sql;
