@@ -27,7 +27,7 @@
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>6.21.3</jasperreports.version>
-		<license.maven.plugin.version>4.5</license.maven.plugin.version>
+		<license.maven.plugin.version>4.6</license.maven.plugin.version>
 	</properties>
 
 	<dependencies>
