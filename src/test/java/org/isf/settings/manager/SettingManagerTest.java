@@ -61,7 +61,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get setting by ID")
-	void testGetSettingById() {
+	void testGetSettingById() throws OHServiceException {
 		Setting setting = manager.getById(1);
 
 		assertThat(setting).isNotNull();
@@ -70,7 +70,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get non existing setting by ID")
-	void testGetNonExistingSettingById() {
+	void testGetNonExistingSettingById() throws OHServiceException {
 		Setting setting = manager.getById(156);
 
 		assertThat(setting).isNull();
@@ -78,7 +78,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get setting by Code")
-	void testGetSettingByCode() {
+	void testGetSettingByCode() throws OHServiceException {
 		Setting setting = manager.getByCode("SINGLEUSER");
 
 		assertThat(setting).isNotNull();
@@ -87,7 +87,7 @@ public class SettingManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Get non existing setting by Code")
-	void testGetNonExistingSettingByCode() {
+	void testGetNonExistingSettingByCode() throws OHServiceException {
 		Setting setting = manager.getByCode("MODEMODE");
 
 		assertThat(setting).isNull();

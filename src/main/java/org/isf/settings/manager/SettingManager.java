@@ -48,11 +48,11 @@ public class SettingManager {
 		return operations.save(setting);
 	}
 
-	public Setting getByCode(String code) {
+	public Setting getByCode(String code) throws OHServiceException {
 		return operations.getByCode(code);
 	}
 
-	public Setting getById(int id) {
+	public Setting getById(int id) throws OHServiceException {
 		return operations.getById(id);
 	}
 
