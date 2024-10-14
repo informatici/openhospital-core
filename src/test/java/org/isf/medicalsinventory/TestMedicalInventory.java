@@ -27,20 +27,23 @@ import static org.assertj.core.api.Assertions.within;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalInventory {
 
 	private int id = 1;
-	private String status = "STATUS";
-	private LocalDateTime inventoryDate = LocalDateTime.now();
-	private String user = "USER";
+	private String status = InventoryStatus.draft.toString();
+	private LocalDateTime inventoryDate = TimeTools.getNow();
+	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
-	private String inventoryType = "TYPE";
+	private String inventoryType = InventoryType.main.toString();
 	private String ward = "Z";
-	private int supplier = 3;
+	private int supplier = 1;
 	private String destination = "INV";
 	private String charge = "inventory+";
 	private String discharge = "inventory-";
