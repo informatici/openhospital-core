@@ -35,8 +35,11 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
 /**
- * Class that provides gui separation from database operations and gives some useful logic manipulations of the dinamic data (memory)
- * @author bob 19-dec-2005 14-jan-2006
+ * Class that provides gui separation from database operations and gives some useful logic
+ * manipulations of the dynamic data (memory)
+ * @author bob
+ * 19-dec-2005
+ * 14-jan-2006
  */
 @Component
 public class ExamBrowsingManager {
@@ -120,7 +123,7 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Insert a new {@link Exam} in the DB with exam rows.
+	 * Insert a new {@link Exam} with exam rows.
 	 * @param payload - the {@link Exam} to insert
 	 * @param rows - the {@link List<String>} to associate as exam rows
 	 * @return the newly persisted {@link Exam}.
@@ -131,7 +134,7 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Update an existing {@link Exam} in the DB with exam rows.
+	 * Update an existing {@link Exam}with exam rows.
 	 * @param payload - the {@link Exam} to insert
 	 * @param rows - the {@link List<String>} to associate as exam rows
 	 * @return the newly persisted {@link Exam}.
@@ -142,7 +145,7 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Insert a new {@link Exam} in the DB.
+	 * Insert a new {@link Exam}.
 	 * @param exam - the {@link Exam} to insert
 	 * @return the newly persisted {@link Exam}.
 	 * @throws OHServiceException
@@ -153,7 +156,7 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Updates an existing {@link Exam} in the db
+	 * Updates an existing {@link Exam}.
 	 * @param exam -  the {@link Exam} to update
 	 * @return {@code true} if the existing {@link Exam} has been updated, {@code false} otherwise
 	 * @throws OHServiceException
