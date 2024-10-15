@@ -370,7 +370,7 @@ public class MovStockInsertingManager {
 	public List<Lot> updateLot(List<Lot> lots) throws OHServiceException {
 		List<Lot> updatedLots = new ArrayList<>();
 		for (Lot lot : lots) {
-			Lot updatedLot = ioOperations.updateLot(lot);
+			Lot updatedLot = updateLot(lot);
 			updatedLots.add(updatedLot);
 		}
 		return updatedLots;
