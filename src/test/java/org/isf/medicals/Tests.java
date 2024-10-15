@@ -468,8 +468,7 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrDeleteMedicalInStockMovement() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
@@ -488,74 +487,68 @@ class Tests extends OHCoreTestCase {
 			movementIoOperationRepository.saveAndFlush(movement);
 			medicalBrowsingManager.deleteMedical(medical);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+						.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalCommonBadMinQty() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setMinqty(-1);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalCommonBadPcsperpck() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setPcsperpck(-1);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalCommonMissingDescription() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			medical.setDescription("");
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalProductCodeExists() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalMedicalExists() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
 			medical.setProdCode("");
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	void testMgrCheckMedicalNotIgnoreSimilarNotSimilarMedicalsEmpty() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 			assertThat(medical).isNotNull();
@@ -563,9 +556,9 @@ class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType("code", "description");
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 			medical.setType(medicalType);
-			medicalBrowsingManager.checkMedical(medical, false, false);
+			medicalBrowsingManager.validateMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -580,10 +573,9 @@ class Tests extends OHCoreTestCase {
 		int medicalCode = setupTestMedical(false);
 		Medical medical = medicalsIoOperationRepository.findById(medicalCode).orElse(null);
 		assertThat(medical).isNotNull();
-		medical.setInitialqty(100);
-		medical.setOutqty(50);
-		medical.setInqty(25);
-		assertThat(medical.getTotalQuantity()).isEqualTo(100 + 25 - 50);
+		medical.setInqty(50);
+		medical.setOutqty(25);
+		assertThat(medical.getTotalQuantity()).isEqualTo(50 - 25);
 
 		medical.setCode(-1);
 		assertThat(medical.getCode()).isEqualTo(-1);
@@ -595,18 +587,18 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMedicalEquals() throws Exception {
 		MedicalType medicalType = new MedicalType("code", "description");
-		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 2, 3, 4, 5);
+		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 3, 5, 4);
 
 		MedicalType medicalType2 = new MedicalType("code2", "description2");
-		Medical medical2 = new Medical(2, medicalType2, "TP2", "TestDescription2", 1, 2, 3, 4, 5);
+		Medical medical2 = new Medical(2, medicalType2, "TP2", "TestDescription2", 1, 3, 5, 4);
 
 		MedicalType medicalType3 = new MedicalType("code3", "description3");
-		Medical medical3 = new Medical(3, medicalType3, "TP3", "TestDescription2", 1, 2, 3, 4, 5);
+		Medical medical3 = new Medical(3, medicalType3, "TP3", "TestDescription2", 1, 3, 5, 4);
 
 		assertThat(medical)
-				.isEqualTo(medical)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(medical2);
+						.isEqualTo(medical)
+						.isNotEqualTo("someString")
+						.isNotEqualTo(medical2);
 
 		medical2.setProdCode(null);
 		medical3.setProdCode(null);
@@ -617,10 +609,10 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMedicalCompareTo() throws Exception {
 		MedicalType medicalType = new MedicalType("code", "description");
-		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 2, 3, 4, 5);
+		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 3, 5, 4);
 
 		MedicalType medicalType2 = new MedicalType("code2", "description2");
-		Medical medical2 = new Medical(2, medicalType2, "TP2", "TestDescription2", 1, 2, 3, 4, 5);
+		Medical medical2 = new Medical(2, medicalType2, "TP2", "TestDescription2", 1, 3, 5, 4);
 
 		assertThat(medical.compareTo(medical)).isZero();
 		assertThat(medical.compareTo(medical2)).isEqualTo(-1);
@@ -629,7 +621,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMedicalHashCode() throws Exception {
 		MedicalType medicalType = new MedicalType("code", "description");
-		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 2, 3, 4, 5);
+		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 3, 5, 4);
 
 		// compute hashCode
 		int hashCode = medical.hashCode();
@@ -641,7 +633,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMedicalClone() throws Exception {
 		MedicalType medicalType = new MedicalType("code", "description");
-		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 1, 2, 3, 4, 5);
+		Medical medical = new Medical(1, medicalType, "TP1", "TestDescription1", 2, 3, 4, 5);
 
 		assertThat(medical.clone()).isEqualTo(medical);
 	}

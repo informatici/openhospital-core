@@ -23,7 +23,9 @@ package org.isf.medicalinventory.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -40,7 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MedicalInventoryIoOperation {
 
 	private MedicalInventoryIoOperationRepository repository;
-
 	public MedicalInventoryIoOperation(MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository) {
 		this.repository = medicalInventoryIoOperationRepository;
 	}
@@ -83,7 +84,7 @@ public class MedicalInventoryIoOperation {
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean referenceExists(String reference) {
+	public boolean referenceExists(String reference) throws OHServiceException {
 		MedicalInventory medInv = repository.findByReference(reference);
 		if (medInv != null)  {
 			return true;
@@ -107,11 +108,12 @@ public class MedicalInventoryIoOperation {
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
+	 * @param type - the {@link MedicalInventory} type.
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByStatus(String status) throws OHServiceException {
-		return repository.findInventoryByStatus(status);
+	public List<MedicalInventory> getMedicalInventoryByStatusAndInventoryType(String status, String inventoryType) throws OHServiceException {
+		return repository.findInventoryByStatusAndInventoryType(status, inventoryType);
 	}
 	
 	/**
@@ -168,7 +170,43 @@ public class MedicalInventoryIoOperation {
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(Integer id) throws OHServiceException {
+	public boolean isCodePresent(int id) throws OHServiceException {
 		return repository.existsById(id);
+	}
+	
+	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
+	 * @param reference - the {@link MedicalInventory} reference.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryByReference(String  reference) throws OHServiceException {
+		return repository.findByReference(reference);
+	}
+
+	/**
+	 * Fetch {@link MedicalInventory} with param.
+	 * 
+	 * @param inventoryId - the {@link MedicalInventory} id.
+	 * @return {@link MedicalInventory}. It could be {@code null}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory getInventoryById(int inventoryId) throws OHServiceException {
+		Optional<MedicalInventory> inventory = repository.findById(inventoryId);
+		if (inventory.isPresent()) {
+			return inventory.get();
+		}
+		return null;
+	}
+
+	/**
+	 * Marks an inventory as deleted by changing its status.
+	 * @param medicalInventory - the medicalInventory of the inventory to delete.
+	 * @throws OHServiceException if an error occurs during the operation.
+	 */
+	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
+		medicalInventory.setStatus(InventoryStatus.canceled.toString());
+		repository.save(medicalInventory);
 	}
 }

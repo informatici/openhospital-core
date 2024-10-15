@@ -282,6 +282,13 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testCountAllActivePatients() throws Exception {
+		assertThat(patientIoOperation.countAllActivePatients()).isZero();
+		setupTestPatient(true);
+		assertThat(patientIoOperation.countAllActivePatients()).isOne();
+	}
+
+	@Test
 	void testMergePatientHistory() throws Exception {
 		// given:
 		Patient mergedPatient = testPatient.setup(false);
@@ -310,13 +317,24 @@ class Tests extends OHCoreTestCase {
 		}
 
 		// First page of 10
-		List<Patient> patients = patientBrowserManager.getPatient(0, 10);
-		assertThat(patients).hasSize(10);
-		testPatient.check(patients.get(patients.size() - 1));
+		PagedResponse<Patient> patients = patientBrowserManager.getPatientsPageable(0, 10);
+		assertThat(patients.getData()).hasSize(10);
+		testPatient.check(patients.getData().get(patients.getData().size() - 1));
 
 		// Go get the next page or 10
-		patients = patientBrowserManager.getPatient(1, 10);
-		assertThat(patients).hasSize(5);
+		patients = patientBrowserManager.getPatientsPageable(1, 10);
+		assertThat(patients.getData()).hasSize(5);
+	}
+
+	@Test
+	void testMgrGetPatientsByParams() throws Exception {
+		setupTestPatient(false);
+		Map<String, Object> params = new HashMap<>();
+		params.put("firstName", "TestFirstName");
+		params.put("birthDate", LocalDateTime.of(1984, Calendar.AUGUST, 14, 0, 0, 0));
+		params.put("address", "TestAddress");
+		List<Patient> patients = patientBrowserManager.getPatients(params);
+		assertThat(patients).isNotEmpty();
 	}
 
 	@Test
@@ -377,6 +395,15 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrRetrievePatientProfilePhoto() throws Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		PatientProfilePhoto patientProfilePhoto = patientBrowserManager.retrievePatientProfilePhoto(foundPatient);
+		assertThat(patientProfilePhoto).isNotNull();
+		assertThat(patientProfilePhoto.getPhoto()).isNull();
+	}
+
+	@Test
 	void testMgrGetPatientById() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
@@ -385,7 +412,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetPatienByIdDoesNotExist() throws Exception {
+	void testMgrGetPatientByIdDoesNotExist() throws Exception {
 		assertThat(patientBrowserManager.getPatientById(-987654321)).isNull();
 	}
 
@@ -423,6 +450,15 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrDeletePatientNotFound() throws Exception {
+		Integer code = setupTestPatient(false);
+		Patient patient = patientIoOperation.getPatient(code);
+		patientBrowserManager.deletePatient(patient);
+		Patient deletedPatient = patientIoOperation.getPatient(patient.getName());
+		assertThat(deletedPatient).isNull();
+	}
+
+	@Test
 	void testMgrIsNamePresent() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
@@ -439,6 +475,21 @@ class Tests extends OHCoreTestCase {
 		Integer code = setupTestPatient(false);
 		Integer max = patientBrowserManager.getNextPatientCode();
 		assertThat((code + 1)).isEqualTo(max);
+	}
+
+	@Test
+	void testGetCities() throws  Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		List<String> cities = patientBrowserManager.getCities();
+		assertThat(cities).isNotEmpty();
+		assertThat(cities.get(0)).isEqualTo(foundPatient.getCity());
+	}
+
+	@Test
+	void testGetCitiesNoneFound() throws  Exception {
+		List<String> cities = patientBrowserManager.getCities();
+		assertThat(cities).isEmpty();
 	}
 
 	@Test

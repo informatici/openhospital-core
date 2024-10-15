@@ -22,6 +22,7 @@
 package org.isf.medicalinventory.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -80,5 +81,28 @@ public class MedicalInventoryRowIoOperation {
 	 */
 	public List<MedicalInventoryRow> getMedicalInventoryRowByInventoryId(int inventoryId) throws OHServiceException {
 		return repository.findByInventoryId(inventoryId);
+	}
+
+	/**
+	 * Return {@link MedicalInventoryRow} for passed param.
+	 
+	 * @param id - the Invetoryrow Id.
+	 * @return {@link MedicalInventoryRow} with the specified id, {@code null} otherwise.
+	 * @throws OHServiceException
+	 */
+	public Optional<MedicalInventoryRow> getMedicalInventoryRowById(int id) throws OHServiceException {
+		return repository.findById(id);
+	}
+
+	/**
+	 * Return {@link MedicalInventoryRow} for passed param.
+	 *
+	 * @param medicalCode - the medical code.
+	 * @param lotCode - the lot code.
+	 * @return the {@link MedicalInventoryRow} object.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventoryRow getMedicalInventoryRowByMedicalCodeAndLotCode(int medicalCode, String lotCode) throws OHServiceException {
+		return repository.findByMedicalCodeAndLotCode(medicalCode, lotCode);
 	}
 }

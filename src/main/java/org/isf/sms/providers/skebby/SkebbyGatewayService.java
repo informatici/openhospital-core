@@ -21,14 +21,13 @@
  */
 package org.isf.sms.providers.skebby;
 
-import java.awt.TrayIcon.MessageType;
-
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.isf.sms.providers.common.CustomCommonDecoder;
 import org.isf.sms.providers.common.CustomCommonEncoder;
-import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
-import org.isf.sms.providers.skebby.model.SckebbySmsResponse;
+import org.isf.sms.providers.skebby.model.MessageType;
+import org.isf.sms.providers.skebby.model.SkebbySmsRequest;
+import org.isf.sms.providers.skebby.model.SkebbySmsResponse;
 import org.isf.sms.providers.skebby.remote.SkebbyGatewayRemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +46,12 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 	private static final String SERVICE_NAME = "skebby-gateway-service";
 	private static final String RESPONSE_SUCCESS = "OK";
-	private static final String KEY_PASSWORD = "skebby-gateway-service.password";
-	private static final String KEY_USERNAME = "skebby-gateway-service.username";
-	private static final String KEY_MESSAGE_TYPE = "skebby-gateway-service.message-type";
+	protected static final String KEY_PASSWORD = "skebby-gateway-service.password";
+	protected static final String KEY_USERNAME = "skebby-gateway-service.username";
+	protected static final String KEY_MESSAGE_TYPE = "skebby-gateway-service.message-type";
 
-	private static final String KEY_USER_KEY = "skebby-gateway-service.userKey";
-	private static final String KEY_ACCESS_TOKEN = "skebby-gateway-service.accessToken";
+	protected static final String KEY_USER_KEY = "skebby-gateway-service.userKey";
+	protected static final String KEY_ACCESS_TOKEN = "skebby-gateway-service.accessToken";
 
 	private static final String KEY_SENDER = "skebby-gateway-service.sender";
 
@@ -81,11 +80,11 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 		final String sender = this.smsProperties.getProperty(KEY_SENDER);
 
-		SckebbySmsRequest smsSendingRequest = this.skebbyGatewayConverter.toServiceDTO(sms, messageType, sender);
+		SkebbySmsRequest smsSendingRequest = this.skebbyGatewayConverter.toServiceDTO(sms, messageType, sender);
 
-		SkebbyGatewayRemoteService httpClient = buildHttlClient();
-		System.out.println("Sending...");
-		SckebbySmsResponse result;
+		SkebbyGatewayRemoteService httpClient = buildHttpClient();
+		LOGGER.info("Sending...");
+		SkebbySmsResponse result;
 		try {
 			if (this.isAccessTokenAuthentication()) {
 				result = httpClient.sendSmsWithAccessToken(userKey, sessionKeyOrAccessToken, smsSendingRequest).getBody();
@@ -101,7 +100,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		return result != null && RESPONSE_SUCCESS.equals(result.getResult());
 	}
 
-	private SkebbyGatewayRemoteService buildHttlClient() {
+	private SkebbyGatewayRemoteService buildHttpClient() {
 		String baseUrl = this.smsProperties.getProperty(this.getRootKey() + ".ribbon.base-url");
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(SkebbyGatewayRemoteService.class))
@@ -118,7 +117,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 		final String username = this.smsProperties.getProperty(KEY_USERNAME);
 		final String password = this.smsProperties.getProperty(KEY_PASSWORD);
-		SkebbyGatewayRemoteService httpClient = buildHttlClient();
+		SkebbyGatewayRemoteService httpClient = buildHttpClient();
 		return httpClient.loginUserKeySessionKey(username, password).getBody();
 	}
 
@@ -126,7 +125,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		// if user defined these properties, then it means that we will retrieve data with ACCESS_TOKEN (which does not expire -> SESSION_KEY instead expires)
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
-		return (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty());
+		return userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty();
 	}
 
 	@Override

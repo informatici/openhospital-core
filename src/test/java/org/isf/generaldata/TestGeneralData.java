@@ -29,11 +29,40 @@ class TestGeneralData {
 
 	@Test
 	void testGetGeneralData() {
-		GeneralData generalData =  GeneralData.getGeneralData();
+		GeneralData generalData = GeneralData.getGeneralData();
 		
 		assertThat(generalData).isNotNull();
 		
 		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
 	}
 
+	@Test
+	void testGetSingleUser() {
+		GeneralData generalData = GeneralData.getGeneralData();
+
+		assertThat(generalData).isNotNull();
+
+		assertThat(generalData.getSINGLEUSER()).isFalse();
+	}
+
+	@Test
+	void testGetUsersListLogin() {
+		GeneralData generalData = GeneralData.getGeneralData();
+
+		assertThat(generalData).isNotNull();
+
+		assertThat(generalData.getUSERSLISTLOGIN()).isTrue();
+	}
+
+	@Test
+	void testReset() {
+		// get them one time
+		GeneralData generalData = GeneralData.getGeneralData();
+		// throw them away
+		GeneralData.reset();
+
+		// get it a second time
+		generalData = GeneralData.getGeneralData();
+		assertThat(generalData).isNotNull();
+	}
 }

@@ -33,10 +33,9 @@ public class TestMedical {
 	private Integer code;
 	private String prod_code = "TP1";
 	private String description = "TestDescription";
-	private double initialqty = 10.10;
 	private Integer pcsperpck = 11;
-	private double inqty = 20.20;
-	private double outqty = 30.30;
+	private double inqty = 30.30;
+	private double outqty = 20.20;
 	private double minqty = 40.40;
 
 	public Medical setup(MedicalType medicalType, boolean usingSet) throws OHException {
@@ -46,8 +45,8 @@ public class TestMedical {
 			medical = new Medical();
 			setParameters(medical, medicalType);
 		} else {
-			// Create Medical with all parameters 
-			medical = new Medical(code, medicalType, prod_code, description, initialqty, pcsperpck, minqty, inqty, outqty);
+			// Create Medical with all parameters
+			medical = new Medical(code, medicalType, prod_code, description, pcsperpck, minqty, inqty, outqty);
 		}
 
 		return medical;
@@ -55,7 +54,6 @@ public class TestMedical {
 
 	public void setParameters(Medical medical, MedicalType medicalType) {
 		medical.setDescription(description);
-		medical.setInitialqty(initialqty);
 		medical.setInqty(inqty);
 		medical.setMinqty(minqty);
 		medical.setOutqty(outqty);
@@ -66,7 +64,6 @@ public class TestMedical {
 
 	public void check(Medical medical) {
 		assertThat(medical.getDescription()).isEqualTo(description);
-		assertThat(medical.getInitialqty()).isCloseTo(initialqty, offset(0.1));
 		assertThat(medical.getInqty()).isCloseTo(inqty, offset(0.1));
 		assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
 		assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));

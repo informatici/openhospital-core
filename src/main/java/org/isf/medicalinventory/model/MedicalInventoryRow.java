@@ -54,11 +54,9 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@Column(name = "MINVTR_ID")
 	private Integer id;
 
-	@NotNull
 	@Column(name = "MINVTR_THEORETIC_QTY")
 	private double theoreticQty;
 
-	@NotNull
 	@Column(name = "MINVTR_REAL_QTY")
 	private double realQty;
 
@@ -75,10 +73,16 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name="MINVTR_LT_ID_A")
 	private Lot lot;
+	
+	@Column(name="MINVTR_IS_NEW_LOT")
+	private boolean isNewLot;
 
 	@Version
 	@Column(name="MINVTR_LOCK")
 	private int lock;
+	
+	private transient double total;
+
 
 	public MedicalInventoryRow() {
 	}
@@ -144,12 +148,28 @@ public class MedicalInventoryRow extends Auditable<String> {
 		this.realQty = realQty;
 	}
 	
+	public boolean isNewLot() {
+		return isNewLot;
+	}
+
+	public void setNewLot(boolean isNewLot) {
+		this.isNewLot = isNewLot;
+	}
+
 	public int getLock() {
 		return lock;
 	}
 	
 	public void setLock(int lock) {
 		this.lock = lock;
+	}
+	
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
 	public String getSearchString() {

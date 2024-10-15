@@ -21,7 +21,11 @@
  */
 package org.isf;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -56,4 +60,18 @@ public class OHCoreTestCase {
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 	}
 
+	public void executeSQLScript(String fileName) {
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+		try {
+			Path path = Paths.get(getClass().getResource(fileName).toURI());
+			Stream<String> lines = Files.lines(path);
+			for (String line : (Iterable<String>) lines::iterator) {
+				entityManager.createNativeQuery(line).executeUpdate();
+			}
+			lines.close();
+		} catch(Exception exception) {
+			LOGGER.error("Error trying to execute script: {}", fileName, exception);
+		}
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+	}
 }

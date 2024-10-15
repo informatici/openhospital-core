@@ -35,10 +35,9 @@ import feign.gson.GsonDecoder;
 
 class ApiConfigProvider implements ConfigProvider {
 
-	private static final String VERSION = Version.getVersion().toString();
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiConfigProvider.class);
 
+	private final String version = Version.getVersion().toString();
 	private final ParamsApi api;
 	private final Map<String, Object> configData;
 
@@ -49,7 +48,7 @@ class ApiConfigProvider implements ConfigProvider {
 
 	private interface ParamsApi {
 
-		@feign.RequestLine("GET /")
+		@feign.RequestLine("GET")
 		@feign.Headers("Content-Type: application/json")
 		Map<String, Object> getData();
 	}
@@ -97,7 +96,7 @@ class ApiConfigProvider implements ConfigProvider {
 			try {
 				Map<String, Object> response = api.getData();
 				if (response != null) {
-					Object versionData = response.getOrDefault(VERSION, response.get("default"));
+					Object versionData = response.getOrDefault(version, response.get("default"));
 					if (versionData instanceof Map) {
 						return (Map<String, Object>) versionData;
 					}

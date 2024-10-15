@@ -19,44 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms.providers.skebby.model;
+package org.isf.menu;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 
-import com.google.gson.annotations.SerializedName;
+import org.isf.permissions.model.Permission;
 
-public class SckebbySmsResponse implements Serializable {
+public class TestPermission {
+	public static ArrayList<Permission> generatePermissions(int nbPermissions) {
+		ArrayList<Permission> permissions = new ArrayList<>();
 
-	private static final long serialVersionUID = -4382262278493341625L;
+		for (int i = 1; i <= nbPermissions; i++) {
+			Permission permission = new Permission();
+			permission.setId(i);
+			permission.setName("permission" + i);
+			permission.setDescription("permission " + i + " description");
+			permissions.add(permission);
+		}
 
-	private String result;
-	@SerializedName(value = "order_id")
-	private String orderId;
-	@SerializedName(value = "total_sent")
-	private String totalSent;
-
-	public String getResult() {
-		return result;
+		return permissions;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+	public static Permission generatePermission() {
+		Permission permission = new Permission();
+		permission.setId(1);
+		permission.setName("permission.test");
+		permission.setDescription("Test permission");
 
-	public String getOrderId() {
-		return orderId;
+		return permission;
 	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getTotalSent() {
-		return totalSent;
-	}
-
-	public void setTotalSent(String totalSent) {
-		this.totalSent = totalSent;
-	}
-
 }

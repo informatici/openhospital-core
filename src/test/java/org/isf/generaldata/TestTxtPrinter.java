@@ -19,24 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.service.remote;
+package org.isf.generaldata;
 
-import java.lang.reflect.Type;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import feign.RequestTemplate;
-import feign.codec.EncodeException;
-import feign.codec.Encoder;
-import feign.gson.GsonEncoder;
+import org.junit.jupiter.api.Test;
 
-public class CustomCommonEncoder implements Encoder {
+class TestTxtPrinter {
 
-	public CustomCommonEncoder() {
-		super();
-	}
+	@Test
+	void testGetTxtPrinter() {
+		TxtPrinter txtPrinter = TxtPrinter.getTxtPrinter();
 
-	@Override
-	public void encode(Object object, Type bodyType, RequestTemplate template) throws EncodeException {
-		GsonEncoder gson = new GsonEncoder();
-		gson.encode(object, bodyType, template);
+		assertThat(txtPrinter).isNotNull();
+
+		assertThat(TxtPrinter.ZPL_FONT_TYPE).isEqualTo("0");
+		assertThat(TxtPrinter.ZPL_ROW_HEIGHT).isEqualTo(25);
 	}
 }

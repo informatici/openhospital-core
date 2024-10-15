@@ -22,9 +22,7 @@
 package org.isf.permissions.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -36,13 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PermissionIoOperations {
 
-	private PermissionIoOperationRepository repository;
+	private final PermissionIoOperationRepository repository;
 
-	private GroupPermissionIoOperationRepository groupPermissionRepository;
-
-	public PermissionIoOperations(PermissionIoOperationRepository permissionIoOperationRepository, GroupPermissionIoOperationRepository groupPermissionIoOperationRepository) {
+	public PermissionIoOperations(PermissionIoOperationRepository permissionIoOperationRepository) {
 		this.repository = permissionIoOperationRepository;
-		this.groupPermissionRepository = groupPermissionIoOperationRepository;
+	}
+
+	public List<Permission> findByIdIn(List<Integer> ids) {
+		return repository.findByIdIn(ids);
 	}
 
 	public List<Permission> retrivePermisionsByGroupCode(String userGropupCode) throws OHServiceException {
@@ -61,48 +60,6 @@ public class PermissionIoOperations {
 		return repository.findByName(name);
 	}
 
-	public Permission insertPermission(Permission permission) throws OHServiceException {
-		Permission permissionResult = repository.save(permission);
-		permission.getGroupPermission().forEach(gp -> {
-			gp.setPermission(permissionResult);
-			groupPermissionRepository.save(gp);
-		});
-		return permissionResult;
-	}
-
-	public Permission updatePermission(Permission permission) throws OHServiceException {
-		// All group permissions (could exist already in the DB)
-		List<GroupPermission> gp = permission.getGroupPermission();
-
-		Permission permissionUpdated = repository.save(permission);
-		// retrieve groupPermission stored in DB
-		List<GroupPermission> groupPermissionInDB = groupPermissionRepository.findByPermission_id(permission.getId());
-
-		// calculate GroupPermission to delete
-		List<String> allUserGroupCodesToStore = gp.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
-		List<String> allUserGroupCodesOnDB = groupPermissionInDB.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
-
-		List<String> allUserGroupCodesToDelete = allUserGroupCodesOnDB.stream().filter(onDB -> !allUserGroupCodesToStore.contains(onDB)).collect(Collectors.toList());
-		List<String> allUserGroupCodesToInsert = allUserGroupCodesToStore.stream().filter(item -> !allUserGroupCodesOnDB.contains(item)).collect(Collectors.toList());
-
-		// delete obsolete relations
-		List<GroupPermission> groupPermissionToDelete = groupPermissionRepository.findByUserGroup_codeInAndPermission_id(allUserGroupCodesToDelete, permission.getId());
-		groupPermissionRepository.deleteAll(groupPermissionToDelete);
-
-		// store new relations
-		gp.forEach(item -> {
-			if (allUserGroupCodesToInsert.contains(item.getUserGroup().getCode())) {
-				item.setPermission(permissionUpdated);
-				groupPermissionRepository.save(item);
-			}
-		});
-		return repository.getReferenceById(permissionUpdated.getId());
-	}
-
-	public void deletePermission(Integer id) throws OHServiceException {
-		repository.deleteById(id);
-	}
-
 	public List<Permission> retrieveAllPermissions() throws OHServiceException {
 		return repository.findAll();
 	}
@@ -111,4 +68,7 @@ public class PermissionIoOperations {
 		return repository.existsById(id);
 	}
 
+	public Permission save(Permission permission) {
+		return repository.save(permission);
+	}
 }

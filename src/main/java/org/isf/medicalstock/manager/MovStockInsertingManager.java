@@ -24,10 +24,12 @@ package org.isf.medicalstock.manager;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
@@ -235,19 +237,31 @@ public class MovStockInsertingManager {
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
-
+	
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
-	 *
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out.
+	 * 
 	 * @param medical the medical.
 	 * @return the list of retrieved {@link Lot}s.
 	 * @throws OHServiceException
 	 */
 	public List<Lot> getLotByMedical(Medical medical) throws OHServiceException {
+		return ioOperations.getLotsByMedical(medical, true);
+	}
+
+	/**
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if {@code removeEmtpy} is set to true.
+	 *
+	 * @param medical the medical.
+	 * @param removeEmpty
+	 * @return the list of retrieved {@link Lot}s.
+	 * @throws OHServiceException
+	 */
+	public List<Lot> getLotByMedical(Medical medical, boolean removeEmpty) throws OHServiceException {
 		if (medical == null) {
 			return new ArrayList<>();
 		}
-		return ioOperations.getLotsByMedical(medical);
+		return ioOperations.getLotsByMedical(medical, removeEmpty);
 	}
 
 	/**
@@ -417,5 +431,26 @@ public class MovStockInsertingManager {
 			dischargeMovement.add(ioOperations.prepareDischargingMovement(movement));
 			return dischargeMovement;
 		}
+	}
+
+	/**
+	 * Deletes the specified {@link Lot}.
+	 *
+	 * @param lot the lot to delete.
+	 * @throws OHServiceException
+	 */
+	public void deleteLot(Lot lot) throws OHServiceException {
+		ioOperations.deleteLot(lot);
+	}
+
+	/**
+	 * Retrieves all medicals referencing the specified code.
+	 * 
+	 * @param lotCode the lot code.
+	 * @return the ids of medicals referencing the specified lot.
+	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
+	 */
+	public List<Integer> getMedicalsFromLot(String code) throws OHServiceException {
+		return ioOperations.getMedicalsFromLot(code);
 	}
 }

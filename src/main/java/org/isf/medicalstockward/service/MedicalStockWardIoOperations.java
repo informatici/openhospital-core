@@ -243,11 +243,11 @@ public class MedicalStockWardIoOperations {
 	}
 
 	/**
-	 * Get the list of {@link Medical} associated to the specified {@link Ward} and
-	 * the specified {@code id}, divided by {@link id}.
+	 * Get the list of {@link Medical}s associated to the specified {@link Ward} and
+	 * the specified {@code id}.
 	 *
-	 * @param wardId the ward id.
-	 * @param medId the medical id.
+	 * @param wardId the {@link Ward} id.
+	 * @param medId the {@link Medical} id.
 	 * @param stripeEmpty if {@code true}, stripes the empty lots
 	 * @return the requested medical, divided by lots
 	 * @throws OHServiceException if an error occurs during the medical retrieving.

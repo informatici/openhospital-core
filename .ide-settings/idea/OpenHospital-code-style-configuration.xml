@@ -73,7 +73,7 @@
     <option name="ASSERT_STATEMENT_COLON_ON_NEXT_LINE" value="true" />
     <option name="VARIABLE_ANNOTATION_WRAP" value="2" />
     <indentOptions>
-      <option name="CONTINUATION_INDENT_SIZE" value="16" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
       <option name="USE_TAB_CHARACTER" value="true" />
     </indentOptions>
   </codeStyleSettings>

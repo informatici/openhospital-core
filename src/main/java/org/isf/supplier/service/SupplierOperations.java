@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class SupplierOperations {
 
-	private SupplierIoOperationRepository repository;
-	
+	private final SupplierIoOperationRepository repository;
+
 	public SupplierOperations(SupplierIoOperationRepository supplierIoOperationRepository) {
 		this.repository = supplierIoOperationRepository;
 		ExaminationParameters.initialize();
@@ -49,26 +49,37 @@ public class SupplierOperations {
 	 * Save or update a {@link Supplier}.
 	 * @param supplier - the {@link Supplier} to save or update
 	 * return the recently saved or updated {@link Supplier} object.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to save the supplier
 	 */
 	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
 		return repository.save(supplier);
 	}
 
 	/**
+	 * Delete a supplier
+	 * <p>This is a soft deletion, we're just setting <code>supDeleted</code> to <code>true</code></p>
+	 * @param supplier The Supplier to be deleted
+	 * @throws OHServiceException When failed to delete supplier
+	 */
+	public void delete(Supplier supplier) throws OHServiceException {
+		supplier.setSupDeleted('Y');
+		repository.save(supplier);
+	}
+
+	/**
 	 * Returns a {@link Supplier} with specified ID
 	 * @param id - supplier ID
 	 * @return supplier - the {@link Supplier} object with specified ID or {@code null} if not found
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to retrieve the supplier
 	 */
 	public Supplier getByID(int id) throws OHServiceException {
-		return repository.findById(id).orElse(null);
+		return repository.findFirstBySupIdAndSupDeleted(id, 'N');
 	}
-	
+
 	/**
 	 * Returns the list of all {@link Supplier}s, active and inactive
 	 * @return supList - the list of {@link Supplier}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to retrieve all suppliers
 	 */
 	public List<Supplier> getAll() throws OHServiceException {
 		return repository.findAll();
@@ -77,7 +88,7 @@ public class SupplierOperations {
 	/**
 	 * Returns the list of active {@link Supplier}s
 	 * @return supList - the list of {@link Supplier}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException When failed to retrieve
 	 */
 	public List<Supplier> getList() throws OHServiceException {
 		return repository.findAllWhereNotDeleted();
