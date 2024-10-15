@@ -92,7 +92,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * Insert a new {@link Exam} in the DB with exam rows.
+	 * Insert a new {@link Exam} with exam rows.
 	 * @param payload - the {@link Exam} to insert
 	 * @param rows - the {@link List<String>} to associate as exam rows
 	 * @return the newly persisted {@link Exam}.
@@ -111,7 +111,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * Update an existing {@link Exam} in the DB with exam rows.
+	 * Update an existing {@link Exam} with exam rows.
 	 * @param payload - the {@link Exam} to insert
 	 * @param rows - the {@link List<String>} to associate as exam rows
 	 * @return the newly persisted {@link Exam}.
@@ -138,7 +138,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * Insert a new {@link Exam} in the DB.
+	 * Insert a new {@link Exam}.
 	 * @param exam - the {@link Exam} to insert
 	 * @return the newly persisted {@link Exam}.
 	 * @throws OHServiceException
@@ -148,7 +148,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * Insert a new {@link ExamRow} in the DB.
+	 * Insert a new {@link ExamRow}.
 	 * @param examRow - the {@link ExamRow} to insert
 	 * @return the newly persisted {@link ExamRow}.
 	 * @throws OHServiceException
