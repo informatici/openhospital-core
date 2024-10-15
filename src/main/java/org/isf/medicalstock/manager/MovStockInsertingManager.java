@@ -368,10 +368,12 @@ public class MovStockInsertingManager {
 	 */
 	@Transactional
 	public List<Lot> updateLot(List<Lot> lots) throws OHServiceException {
+		List<Lot> updatedLots = new ArrayList<>();
 		for (Lot lot : lots) {
-			lot = ioOperations.updateLot(lot);
+			Lot updatedLot = ioOperations.updateLot(lot);
+			updatedLots.add(updatedLot);
 		}
-		return lots;
+		return updatedLots;
 	}
 
 	/**
