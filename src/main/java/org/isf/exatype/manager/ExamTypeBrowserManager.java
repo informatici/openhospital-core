@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExamTypeBrowserManager {
 
-	private ExamTypeIoOperation ioOperations;
+	private final ExamTypeIoOperation ioOperations;
 
 	public ExamTypeBrowserManager(ExamTypeIoOperation examTypeIoOperation) {
 		this.ioOperations = examTypeIoOperation;
@@ -44,7 +44,6 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 *
 	 * @param examType
 	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
@@ -72,7 +71,6 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Return the list of {@link ExamType}s.
-	 *
 	 * @return the list of {@link ExamType}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -82,7 +80,6 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Insert a new {@link ExamType} into the DB.
-	 *
 	 * @param examType - the {@link ExamType} to insert.
 	 * @return the newly inserted {@link ExamType}.
 	 * @throws OHServiceException
@@ -94,7 +91,6 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Update an already existing {@link ExamType}.
-	 *
 	 * @param examType - the {@link ExamType} to update
 	 * @return the updated {@link ExamType}.
 	 * @throws OHServiceException
@@ -105,9 +101,7 @@ public class ExamTypeBrowserManager {
 	}
 
 	/**
-	 * This checks for the presence of a record with the same code as in
-	 * the parameter.
-	 *
+	 * This checks for the presence of a record with the same code as in the parameter.
 	 * @param code - the code
 	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
@@ -118,11 +112,20 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Delete the passed {@link ExamType}.
-	 *
 	 * @param examType - the {@link ExamType} to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteExamType(ExamType examType) throws OHServiceException {
 		ioOperations.deleteExamType(examType);
+	}
+
+	/**
+	 * Find exam type by code
+	 * @param code - the code
+	 * @return The exam type if found, {@code null} otherwise.
+	 * @throws OHServiceException
+	 */
+	public ExamType findByCode(String code) throws OHServiceException {
+		return ioOperations.findByCode(code);
 	}
 }

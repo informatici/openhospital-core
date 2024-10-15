@@ -30,11 +30,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class ExamTypeIoOperation {
 
-	private ExamTypeIoOperationRepository repository;
+	private final ExamTypeIoOperationRepository repository;
 
 	public ExamTypeIoOperation(ExamTypeIoOperationRepository examTypeIoOperationRepository) {
 		this.repository = examTypeIoOperationRepository;
@@ -48,7 +48,7 @@ public class ExamTypeIoOperation {
 	public List<ExamType> getExamType() throws OHServiceException {
 		return repository.findAllByOrderByDescriptionAsc();
 	}
-	
+
 	/**
 	 * Update an already existing {@link ExamType}.
 	 * @param examType - the {@link ExamType} to update
@@ -58,7 +58,7 @@ public class ExamTypeIoOperation {
 	public ExamType updateExamType(ExamType examType) throws OHServiceException {
 		return repository.save(examType);
 	}
-	
+
 	/**
 	 * Insert a new {@link ExamType} in the DB.
 	 * @param examType - the {@link ExamType} to insert.
@@ -68,7 +68,7 @@ public class ExamTypeIoOperation {
 	public ExamType newExamType(ExamType examType) throws OHServiceException {
 		return repository.save(examType);
 	}
-	
+
 	/**
 	 * Delete the passed {@link ExamType}.
 	 * @param examType - the {@link ExamType} to delete.
@@ -77,15 +77,24 @@ public class ExamTypeIoOperation {
 	public void deleteExamType(ExamType examType) throws OHServiceException {
 		repository.delete(examType);
 	}
-	
+
 	/**
-	 * This function controls the presence of a record with the same code as in
-	 * the parameter.
+	 * This function controls the presence of a record with the same code as in the parameter.
 	 * @param code - the code
 	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
+	}
+
+	/**
+	 * Find exam type by code
+	 * @param code - the code
+	 * @return The exam type if found, {@code null} otherwise.
+	 * @throws OHServiceException
+	 */
+	public ExamType findByCode(String code) throws OHServiceException {
+		return repository.findById(code).orElse(null);
 	}
 }
