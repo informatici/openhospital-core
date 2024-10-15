@@ -37,9 +37,6 @@ import org.springframework.stereotype.Component;
 /**
  * Class that provides gui separation from database operations and gives some useful logic
  * manipulations of the dynamic data (memory)
- * @author bob
- * 19-dec-2005
- * 14-jan-2006
  */
 @Component
 public class ExamBrowsingManager {
