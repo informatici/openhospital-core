@@ -24,12 +24,10 @@ package org.isf.medicalstock.manager;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
-import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
@@ -152,7 +150,7 @@ public class MovStockInsertingManager {
 			 */
 			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
 			if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
-							.getMedical().getCode().intValue())) {
+				.getMedical().getCode().intValue())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
 			}
 
@@ -237,7 +235,7 @@ public class MovStockInsertingManager {
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
-	
+
 	/**
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out.
 	 * 
@@ -250,7 +248,8 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if {@code removeEmtpy} is set to true.
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if
+	 * {@code removeEmtpy} is set to true.
 	 *
 	 * @param medical the medical.
 	 * @param removeEmpty
@@ -303,8 +302,7 @@ public class MovStockInsertingManager {
 	 * Insert a list of charging {@link Movement}s and related {@link Lot}s
 	 *
 	 * @param movements - the list of {@link Movement}s
-	 * @param referenceNumber - the reference number to be set for all movements
-	 * if {@link null}, each movements must have a different referenceNumber
+	 * @param referenceNumber - the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
 	 * @return a list of inserted {@link Movement}s.
 	 * @throws OHServiceException
 	 */
@@ -328,8 +326,8 @@ public class MovStockInsertingManager {
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(
-								mov.getMedical() != null ? mov.getMedical().getDescription()
-												: MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
+					mov.getMedical() != null ? mov.getMedical().getDescription()
+						: MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
 				throw new OHDataValidationException(errors);
 			}
 		}
@@ -352,6 +350,7 @@ public class MovStockInsertingManager {
 
 	/**
 	 * Retrieves the {@link Lot}.
+	 * 
 	 * @param lotCode - the lot code.
 	 * @return the retrieved {@link Lot}.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -359,9 +358,27 @@ public class MovStockInsertingManager {
 	public Lot getLot(String lotCode) throws OHServiceException {
 		return ioOperations.getLot(lotCode);
 	}
-	
+
+	/**
+	 * Update the list of {@link Lot}s.
+	 * 
+	 * @param lots - the list of lots.
+	 * @return the list of {@link Lot}s updated.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	@Transactional
+	public List<Lot> updateLot(List<Lot> lots) throws OHServiceException {
+		List<Lot> updatedLots = new ArrayList<>();
+		for (Lot lot : lots) {
+			Lot updatedLot = updateLot(lot);
+			updatedLots.add(updatedLot);
+		}
+		return updatedLots;
+	}
+
 	/**
 	 * Update the {@link Lot}.
+	 * 
 	 * @param lot - the lot.
 	 * @return the {@link Lot} updated.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -374,8 +391,7 @@ public class MovStockInsertingManager {
 	 * Insert a list of discharging {@link Movement}s
 	 *
 	 * @param movements - the list of {@link Movement}s
-	 * @param referenceNumber - the reference number to be set for all movements
-	 * if {@link null}, each movements must have a different referenceNumber
+	 * @param referenceNumber - the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
 	 * @return a list of {@Link Movement}s.
 	 * @throws OHServiceException
 	 */
@@ -402,9 +418,10 @@ public class MovStockInsertingManager {
 		}
 		return dischargingMovements;
 	}
-	
+
 	/**
 	 * Stores the specified {@link Lot}.
+	 * 
 	 * @param lotCode the {@link Lot} code.
 	 * @param lot the lot to store.
 	 * @param medical
