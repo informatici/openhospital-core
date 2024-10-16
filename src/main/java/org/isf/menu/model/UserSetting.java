@@ -29,6 +29,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
@@ -60,6 +61,10 @@ public class UserSetting extends Auditable<String> {
 	@NotNull
 	@Column(name = "USS_CONFIG_VALUE")
 	private String configValue;
+
+	@Version
+	@Column(name = "USS_LOCK")
+	private int lock;
 
 	public UserSetting() {
 	}
@@ -102,4 +107,7 @@ public class UserSetting extends Auditable<String> {
 		this.configValue = configValue;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
 }
