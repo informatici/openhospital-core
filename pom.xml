@@ -314,23 +314,23 @@
 						<licenseSet>
 							<header>.license-header/license-header.txt</header>
 							<excludes>
-								<exclude>./license-header/**</exclude>
-								<exclude>./ide-settings/eclipse/**</exclude>
-								<exclude>./ide-settings/idea/**</exclude>
+								<exclude>./license-header/</exclude>
+								<exclude>./ide-settings/eclipse/</exclude>
+								<exclude>./ide-settings/idea/</exclude>
 								<exclude>.editorconfig</exclude>
 								<exclude>.springBeans</exclude>
-								<exclude>**/README</exclude>
-								<exclude>doc/**/*.txt</exclude>
-								<exclude>lib/**</exclude>
-								<exclude>sql/**</exclude>
-								<exclude>rsc/**</exclude>
-								<exclude>rsc-test/**</exclude>
-								<exclude>src/test/resources/**</exclude>
-								<exclude>src/main/resources/**</exclude>
-								<exclude>**/*.properties</exclude>
-								<exclude>**/*.xml</exclude>
-								<exclude>**/*.yml</exclude>
-								<exclude>**/*.jfd</exclude>
+								<exclude>/README</exclude>
+								<exclude>doc//*.txt</exclude>
+								<exclude>lib/</exclude>
+								<exclude>sql/</exclude>
+								<exclude>rsc/</exclude>
+								<exclude>rsc-test/</exclude>
+								<exclude>src/test/resources/</exclude>
+								<exclude>src/main/resources/</exclude>
+								<exclude>/*.properties</exclude>
+								<exclude>/*.xml</exclude>
+								<exclude>/*.yml</exclude>
+								<exclude>/*.jfd</exclude>
 							</excludes>
 						</licenseSet>
 					</licenseSets>
