@@ -122,21 +122,19 @@ public class ExamIoOperations {
 		Exam oldExam = findByCode(payload.getCode());
 		Exam exam = repository.save(payload);
 		List<ExamRow> examRows = rowRepository.findAllByExam_CodeOrderByDescription(exam.getCode());
-		if (exam.getProcedure() == 3) {
-			if (oldExam.getProcedure() != 3) {
-				rowRepository.deleteAll(examRows);
-			}
-			return exam;
-		}
-		List<ExamRow> rowsToRemove = examRows.stream().filter(examRow -> !rows.contains(examRow.getDescription())).toList();
-		List<ExamRow> rowsToAdd = rows.stream().filter(row -> examRows.stream().noneMatch(examRow -> Objects.equals(row, examRow.getDescription())))
-			.map(description -> new ExamRow(exam, description)).toList();
+		if (exam.getProcedure() == 3 && oldExam.getProcedure() != 3) {
+			rowRepository.deleteAll(examRows);
+		} else {
+			List<ExamRow> rowsToRemove = examRows.stream().filter(examRow -> !rows.contains(examRow.getDescription())).toList();
+			List<ExamRow> rowsToAdd = rows.stream().filter(row -> examRows.stream().noneMatch(examRow -> Objects.equals(row, examRow.getDescription())))
+				.map(description -> new ExamRow(exam, description)).toList();
 
-		if (!rowsToRemove.isEmpty()) {
-			rowRepository.deleteAll(rowsToRemove);
-		}
-		if (!rowsToAdd.isEmpty()) {
-			rowRepository.saveAll(rowsToAdd);
+			if (!rowsToRemove.isEmpty()) {
+				rowRepository.deleteAll(rowsToRemove);
+			}
+			if (!rowsToAdd.isEmpty()) {
+				rowRepository.saveAll(rowsToAdd);
+			}
 		}
 		return exam;
 	}
