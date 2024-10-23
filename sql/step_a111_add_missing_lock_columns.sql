@@ -31,8 +31,3 @@ ALTER TABLE `oh_pricesothers`
 
 ALTER TABLE `oh_visits`
     ADD COLUMN `VST_LOCK` INT(11) NOT NULL DEFAULT 0;
-
-
-
-
-
