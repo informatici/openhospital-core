@@ -108,7 +108,7 @@ public class MedicalInventoryIoOperation {
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
-	 * @param type - the {@link MedicalInventory} type.
+	 * @param inventoryType - the {@link MedicalInventory} type.
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */

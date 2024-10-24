@@ -463,7 +463,7 @@ public class MovStockInsertingManager {
 	/**
 	 * Retrieves all medicals referencing the specified code.
 	 * 
-	 * @param lotCode the lot code.
+	 * @param code the lot code.
 	 * @return the ids of medicals referencing the specified lot.
 	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
 	 */
