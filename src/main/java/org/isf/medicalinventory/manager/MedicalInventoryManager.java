@@ -23,12 +23,14 @@ package org.isf.medicalinventory.manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -37,11 +39,16 @@ import org.isf.medicalstock.manager.MovBrowserManager;
 import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.supplier.manager.SupplierBrowserManager;
+import org.isf.supplier.model.Supplier;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
+import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -58,12 +65,20 @@ public class MedicalInventoryManager {
 
 	private MovBrowserManager movBrowserManager;
 
-	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager,
-					MovStockInsertingManager movStockInsertingManager,
-					MovBrowserManager movBrowserManager) {
+	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager;
+
+	private SupplierBrowserManager supplierManager;
+
+	private WardBrowserManager wardManager;
+
+	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager, MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager,
+					SupplierBrowserManager supplierManager, MovStockInsertingManager movStockInsertingManager, WardBrowserManager wardManager, MovBrowserManager movBrowserManager) {
 		this.ioOperations = medicalInventoryIoOperation;
 		this.medicalInventoryRowManager = medicalInventoryRowManager;
+		this.medicalDsrStockMovementTypeBrowserManager = medicalDsrStockMovementTypeBrowserManager;
+		this.supplierManager = supplierManager;
 		this.movStockInsertingManager = movStockInsertingManager;
+		this.wardManager = wardManager;
 		this.movBrowserManager = movBrowserManager;
 	}
 
@@ -89,21 +104,6 @@ public class MedicalInventoryManager {
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		validateMedicalInventory(medicalInventory);
 		return ioOperations.updateMedicalInventory(medicalInventory);
-	}
-
-	/**
-	 * Delete the specified {@link MedicalInventory}.
-	 * 
-	 * @param medicalInventory - the {@link MedicalInventory} to delete.
-	 * @throws OHServiceException
-	 */
-	@Transactional(rollbackFor = OHServiceException.class)
-	public void deleteMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		List<MedicalInventoryRow> inventoryRowList = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(medicalInventory.getId());
-		for (MedicalInventoryRow invRow : inventoryRowList) {
-			medicalInventoryRowManager.deleteMedicalInventoryRow(invRow);
-		}
-		ioOperations.deleteMedicalInventory(medicalInventory);
 	}
 
 	/**
@@ -350,6 +350,9 @@ public class MedicalInventoryManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+		String status = InventoryStatus.validated.toString();
+		inventory.setStatus(status);
+		this.updateMedicalInventory(inventory);
 	}
 
 	/**
@@ -371,5 +374,62 @@ public class MedicalInventoryManager {
 			}
 		}
 		ioOperations.deleteInventory(medicalInventory);
+	}
+
+	/**
+	 * Confirm the Inventory rows of inventory.
+	 *
+	 * @param inventory - The {@link MedicalInventory}
+	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
+	 * @throws OHDataValidationException
+	 */
+	@Transactional(rollbackFor = OHServiceException.class)
+	public List<Movement> confirmMedicalInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
+		//check if invenotry exist
+		int id = inventory.getId();
+		inventory = this.getInventoryById(id);
+		// validate the inventory
+		this.validateMedicalInventoryRow(inventory, inventoryRowSearchList);
+		// get general info
+		String referenceNumber = inventory.getInventoryReference();
+		// TODO: make possibility to allow charges and discharges with same referenceNumber
+		String chargeReferenceNumber = referenceNumber + "-charge";
+		String dischargeReferenceNumber = referenceNumber + "-discharge";
+		MovementType chargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(inventory.getChargeType());
+		MovementType dischargeType = medicalDsrStockMovementTypeBrowserManager.getMovementType(inventory.getDischargeType());
+		Supplier supplier = supplierManager.getByID(inventory.getSupplier());
+		Ward ward = wardManager.findWard(inventory.getDestination());
+		LocalDateTime now = TimeTools.getNow();
+		// prepare movements
+		List<Movement> chargeMovements = new ArrayList<>();
+		List<Movement> dischargeMovements = new ArrayList<>();
+		for (Iterator<MedicalInventoryRow> iterator = inventoryRowSearchList.iterator(); iterator.hasNext();) {
+			MedicalInventoryRow medicalInventoryRow = (MedicalInventoryRow) iterator.next();
+
+			double theoQty = medicalInventoryRow.getTheoreticQty();
+			double realQty = medicalInventoryRow.getRealQty();
+			Double ajustQty = realQty - theoQty;
+			Medical medical = medicalInventoryRow.getMedical();
+			Lot currentLot = medicalInventoryRow.getLot();
+			if (ajustQty > 0) { // charge movement when realQty > theoQty
+				Movement movement = new Movement(medical, chargeType, null, currentLot, now, ajustQty.intValue(), supplier, chargeReferenceNumber);
+				chargeMovements.add(movement);
+			} else if (ajustQty < 0) { // discharge movement when realQty < theoQty
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, now, -(ajustQty.intValue()), null, dischargeReferenceNumber);
+				dischargeMovements.add(movement);
+			} // else ajustQty = 0, continue
+		}
+		// create movements
+		List<Movement> insertedMovements = new ArrayList<>();
+		if (!chargeMovements.isEmpty()) {
+			insertedMovements.addAll(movStockInsertingManager.newMultipleChargingMovements(chargeMovements, chargeReferenceNumber));
+		}
+		if (!dischargeMovements.isEmpty()) {
+			insertedMovements.addAll(movStockInsertingManager.newMultipleDischargingMovements(dischargeMovements, dischargeReferenceNumber));
+		}
+		String status = InventoryStatus.done.toString();
+		inventory.setStatus(status);
+		this.updateMedicalInventory(inventory);
+		return insertedMovements;
 	}
 }
