@@ -28,6 +28,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
@@ -43,39 +44,43 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "AT_LAST_MODIFIED_DATE"))
 public class AgeType extends Auditable<String> {
 
-	@Id 
-	@Column(name="AT_CODE") 
-    private String code;
+	@Id
+	@Column(name="AT_CODE")
+	private String code;
 
 	@NotNull
-	@Column(name="AT_DESC")	
-    private String description;
+	@Column(name="AT_DESC")
+	private String description;
 
 	@NotNull
-	@Column(name="AT_FROM")	
-    private int from;
+	@Column(name="AT_FROM")
+	private int from;
 
 	@NotNull
 	@Column(name="AT_TO")
-    private int to;
+	private int to;
+
+	@Version
+	@Column(name = "AT_LOCK")
+	private int lock;
 
 	@Transient
 	private volatile int hashCode;
-	
-	public AgeType() 
-    {
+
+	public AgeType()
+	{
 		super();
-    }
-    
-    /**
-     * @param aCode
-     * @param aDescription
-     */
-    public AgeType(String aCode, String aDescription) {
-	    super();
-	    this.code = aCode;
-	    this.description = aDescription;
-    }
+	}
+
+	/**
+	 * @param aCode Age type code
+	 * @param aDescription Age type description
+	 */
+	public AgeType(String aCode, String aDescription) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+	}
 
 	public AgeType(String aCode, int from, int to, String aDescription) {
 		super();
@@ -86,18 +91,18 @@ public class AgeType extends Auditable<String> {
 	}
 
 	public String getCode() {
-        return this.code;
-    }
-    public void setCode(String aCode) {
-        this.code = aCode;
-    }
-    public String getDescription() {
-        return this.description;
-    }
-    public void setDescription(String aDescription) {
-        this.description = aDescription;
-    }    
-    public void setFrom(int from) {
+		return this.code;
+	}
+	public void setCode(String aCode) {
+		this.code = aCode;
+	}
+	public String getDescription() {
+		return this.description;
+	}
+	public void setDescription(String aDescription) {
+		this.description = aDescription;
+	}
+	public void setFrom(int from) {
 		this.from = from;
 	}
 	public int getFrom() {
@@ -109,36 +114,40 @@ public class AgeType extends Auditable<String> {
 	public int getTo() {
 		return to;
 	}
+
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public String toString() {
-        return getDescription();
-    }
-	
+		return getDescription();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
-		if (!(obj instanceof AgeType)) {
+
+		if (!(obj instanceof AgeType ageType)) {
 			return false;
 		}
-		
-		AgeType ageType = (AgeType)obj;
+
 		return (this.getCode().equals(ageType.getCode()));
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
 }

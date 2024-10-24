@@ -34,6 +34,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
@@ -97,6 +98,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name = "BLL_BALANCE")
 	private Double balance;
 
+	@Version
+	@Column(name = "BLL_LOCK")
+	private int lock;
+
 	@NotNull
 	@Column(name = "BLL_USR_ID_A")
 	private String user;
@@ -124,8 +129,8 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	}
 
 	public Bill(int id, LocalDateTime date, LocalDateTime update,
-					boolean isList, PriceList list, String listName, boolean isPatient,
-					Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+		boolean isList, PriceList list, String listName, boolean isPatient,
+		Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -237,6 +242,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.admission = admission;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public int compareTo(Bill obj) {
 		return this.id - obj.getId();
@@ -248,11 +257,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 			return true;
 		}
 
-		if (!(obj instanceof Bill)) {
+		if (!(obj instanceof Bill bill)) {
 			return false;
 		}
 
-		Bill bill = (Bill) obj;
 		return (id == bill.getId());
 	}
 

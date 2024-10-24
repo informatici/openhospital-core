@@ -1,0 +1,33 @@
+--
+-- Add lock (version) column in tables where it's missing
+--
+
+ALTER TABLE `oh_bills`
+    ADD COLUMN `BLL_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_agetype`
+    ADD COLUMN `AT_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_patienthistory`
+    ADD COLUMN `PAH_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_patientexamination`
+    ADD COLUMN `PEX_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_user_settings`
+    ADD COLUMN `USS_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_prices`
+    ADD COLUMN `PRC_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_pricelists`
+    ADD COLUMN `LST_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_supplier`
+    ADD COLUMN `SUP_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_pricesothers`
+    ADD COLUMN `OTH_LOCK` INT(11) NOT NULL DEFAULT 0;
+
+ALTER TABLE `oh_visits`
+    ADD COLUMN `VST_LOCK` INT(11) NOT NULL DEFAULT 0;

@@ -30,6 +30,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
@@ -52,29 +53,33 @@ public class PriceList extends Auditable<String> {
 
 	@NotNull
 	@Column(name="LST_CODE")
-    private String code;
+	private String code;
 
 	@NotNull
 	@Column(name="LST_NAME")
-    private String name;
+	private String name;
 
 	@NotNull
 	@Column(name="LST_DESC")
-    private String description;
+	private String description;
 
 	@NotNull
 	@Column(name="LST_CURRENCY")
-    private String currency;
-	
+	private String currency;
+
+	@Version
+	@Column(name = "LST_LOCK")
+	private int lock;
+
 	@Transient
 	private volatile int hashCode;
-	
-	
+
+
 	public PriceList() {
 		super();
 	}
-	 
-    public PriceList(int id, String code, String name, String description, String currency) {
+
+	public PriceList(int id, String code, String name, String description, String currency) {
 		super();
 		this.id = id;
 		this.code = code;
@@ -86,32 +91,32 @@ public class PriceList extends Auditable<String> {
 	public int getId() {
 		return id;
 	}
-	
-    public void setId(int id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
-	
-    public String getCode() {
+
+	public String getCode() {
 		return code;
 	}
-	
-    public void setCode(String code) {
+
+	public void setCode(String code) {
 		this.code = code;
 	}
-	
-    public String getName() {
+
+	public String getName() {
 		return name;
 	}
-	
-    public void setName(String name) {
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-    public String getDescription() {
+
+	public String getDescription() {
 		return description;
 	}
-	
-    public void setDescription(String description) {
+
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -123,36 +128,39 @@ public class PriceList extends Auditable<String> {
 		this.currency = currency;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public String toString() {
 		return name;
-	}      
-	
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
-		if (!(obj instanceof PriceList)) {
+
+		if (!(obj instanceof PriceList priceList)) {
 			return false;
 		}
-		
-		PriceList priceList = (PriceList)obj;
+
 		return (id == priceList.getId());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + id;
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + id;
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
 }
