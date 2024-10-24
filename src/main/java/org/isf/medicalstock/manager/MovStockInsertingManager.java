@@ -133,7 +133,8 @@ public class MovStockInsertingManager {
 		 */
 		Lot lot = movement.getLot();
 		if (lot != null) {
-
+			String code = lot.getCode();
+			lot = this.getLot(code);
 			if (isCharge && !isAutomaticLotIn() || !isCharge && !isAutomaticLotOut()) {
 				// check everything
 				validateLot(errors, lot, true);
@@ -181,7 +182,7 @@ public class MovStockInsertingManager {
 			if (!isAutomaticLotOut()) {
 
 				if (movement.getType() != null && !isCharge && movement.getQuantity() > lot.getMainStoreQuantity()) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.fmt.msg", movement.getQuantity(), lot.getMainStoreQuantity())));
 				}
 			}
 

@@ -292,7 +292,28 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
-		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		Lot lot = lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		if (lot == null) {
+			return null;
+		}
+		List<String> lotCodes = new ArrayList<>();
+		lotCodes.add(lotCode);
+		// Retrieve quantities in batch
+		List<Object[]> mainStoreQuantities = lotRepository.getMainStoreQuantities(lotCodes);
+		List<Object[]> wardsTotalQuantities = lotRepository.getWardsTotalQuantities(lotCodes);
+
+		// Process mainStoreQuantities and update lots
+		for (Object[] result : mainStoreQuantities) {
+			int mainStoreQuantity = ((Long) result[1]).intValue();
+			lot.setMainStoreQuantity(mainStoreQuantity);
+		}
+
+		// Process wardsTotalQuantities and update lots
+		for (Object[] result : wardsTotalQuantities) {
+			Double wardsTotalQuantity = (Double) result[1];
+			lot.setWardsTotalQuantity(wardsTotalQuantity);
+		}
+		return lot;
 	}
 
 	/**
