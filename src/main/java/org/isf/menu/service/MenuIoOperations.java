@@ -145,16 +145,6 @@ public class MenuIoOperations {
 	}
 
 	/**
-	 * Find user group by code
-	 * @param deleted - Whether the group should be de soft deleted or not
-	 * @param groupCode UserGroup code
-	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
-	 */
-	public UserGroup findGroupByCode(String groupCode, boolean deleted) {
-		return groupRepository.findByCodeAndDeleted(groupCode, deleted);
-	}
-
-	/**
 	 * Checks if the specified {@link User} code is already present.
 	 * @param userName - the {@link User} code to check.
 	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
@@ -211,9 +201,6 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
-		if (user.isDeleted()) {
-			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
-		}
 		user.setDeleted(true);
 		repository.save(user);
 	}
@@ -316,13 +303,6 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
-		if (aGroup.isDeleted()) {
-			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
-		}
-		if (!(getUser(aGroup.getCode()).isEmpty())) {
-			throw new OHServiceException(new OHExceptionMessage("Groups contains users. Please, remove all users from this group before proceeding."));
-		}
-
 		aGroup.setDeleted(true);
 		groupRepository.save(aGroup);
 	}
