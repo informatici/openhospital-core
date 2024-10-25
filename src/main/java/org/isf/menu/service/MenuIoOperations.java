@@ -54,11 +54,11 @@ public class MenuIoOperations {
 	private final GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
 
 	public MenuIoOperations(
-			UserIoOperationRepository userIoOperationRepository,
-			UserGroupIoOperationRepository userGroupIoOperationRepository,
-			UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
-			GroupMenuIoOperationRepository groupMenuIoOperationRepository,
-			GroupPermissionIoOperationRepository groupPermissionIoOperationRepository
+		UserIoOperationRepository userIoOperationRepository,
+		UserGroupIoOperationRepository userGroupIoOperationRepository,
+		UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
+		GroupMenuIoOperationRepository groupMenuIoOperationRepository,
+		GroupPermissionIoOperationRepository groupPermissionIoOperationRepository
 	) {
 		this.repository = userIoOperationRepository;
 		this.groupRepository = userGroupIoOperationRepository;
@@ -69,7 +69,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns the list of {@link User}s
-	 * 
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException When error occurs
 	 */
@@ -78,8 +77,17 @@ public class MenuIoOperations {
 	}
 
 	/**
+	 * Returns the list of {@link User}s
+	 * @param deleted - Whether return list should be soft deleted user or not
+	 * @return the list of {@link User}s
+	 * @throws OHServiceException When error occurs
+	 */
+	public List<User> getUsers(boolean deleted) throws OHServiceException {
+		return repository.findAllByDeletedOrderByUserNameAsc(deleted);
+	}
+
+	/**
 	 * Count all active {@link User}s
-	 * 
 	 * @return The number of active users
 	 */
 	public long countAllActiveUsers() {
@@ -88,7 +96,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Count all active {@link UserGroup}s
-	 * 
 	 * @return The number of active groups
 	 */
 	public long countAllActiveGroups() {
@@ -97,7 +104,17 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns the list of {@link User}s in specified groupID
-	 * 
+	 * @param groupID - the group ID
+	 * @param deleted - Include only deleted users if true, include non-deleted otherwise
+	 * @return the list of {@link User}s
+	 * @throws OHServiceException When error occurs
+	 */
+	public List<User> getUsers(String groupID, boolean deleted) throws OHServiceException {
+		return repository.findByDeletedWhereUserGroupNameByOrderUserNameAsc(groupID, deleted);
+	}
+
+	/**
+	 * Returns the list of {@link User}s in specified groupID
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException When error occurs
@@ -108,7 +125,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns {@link User} from its username
-	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException When error occurs
@@ -118,14 +134,24 @@ public class MenuIoOperations {
 	}
 
 	/**
+	 * Returns {@link User} from its username
+	 * @param deleted - Whether user should be soft deleted or non-deleted
+	 * @param userName - the {@link User}'s username
+	 * @return {@link User}
+	 * @throws OHServiceException When error occurs
+	 */
+	public User getUserByName(String userName, boolean deleted) throws OHServiceException {
+		return repository.findByUserNameAndDeleted(userName, deleted);
+	}
+
+	/**
 	 * Returns {@link User} description from its username
-	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException When error occurs
 	 */
 	public String getUsrInfo(String userName) throws OHServiceException {
-		User user = repository.findById(userName).orElse(null);
+		User user = repository.findByUserNameAndDeleted(userName, false);
 		if (user == null) {
 			throw new OHServiceException(new OHExceptionMessage("User not found."));
 		}
@@ -134,12 +160,21 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns the list of {@link UserGroup}s
-	 * 
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return groupRepository.findAllByOrderByCodeAsc();
+	}
+
+	/**
+	 * Returns the list of {@link UserGroup}s
+	 * @param deleted - Include only soft deleted usergroups if true, Include non deleted otherwise
+	 * @return the list of {@link UserGroup}s
+	 * @throws OHServiceException When error occurs
+	 */
+	public List<UserGroup> getUserGroups(boolean deleted) throws OHServiceException {
+		return groupRepository.findAllByDeletedOrderByCodeAsc(deleted);
 	}
 
 	/**
@@ -152,8 +187,17 @@ public class MenuIoOperations {
 	}
 
 	/**
+	 * Find user group by code
+	 * @param deleted - Whether the group should be de soft deleted or not
+	 * @param groupCode UserGroup code
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findGroupByCode(String groupCode, boolean deleted) {
+		return groupRepository.findByCodeAndDeleted(groupCode, deleted);
+	}
+
+	/**
 	 * Checks if the specified {@link User} code is already present.
-	 * 
 	 * @param userName - the {@link User} code to check.
 	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -164,7 +208,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
-	 * 
 	 * @param groupName - the {@link UserGroup} code to check.
 	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -175,7 +218,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Inserts a new {@link User} in the DB
-	 * 
 	 * @param user - the {@link User} to insert
 	 * @return the new {@link User} added to the DB
 	 * @throws OHServiceException When failed to create user
@@ -186,7 +228,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Updates an existing {@link User} in the DB
-	 * 
 	 * @param user - the {@link User} to update
 	 * @return new {@link User}
 	 * @throws OHServiceException When failed to update user
@@ -197,7 +238,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Updates the password of an existing {@link User} in the DB
-	 * 
 	 * @param user - the {@link User} to update
 	 * @return {@code true} if the user has been updated, {@code false} otherwise.
 	 * @throws OHServiceException When failed to update the password
@@ -208,12 +248,15 @@ public class MenuIoOperations {
 
 	/**
 	 * Deletes an existing {@link User}
-	 * 
 	 * @param user - the {@link User} to delete
 	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
-		repository.delete(user);
+		if (user.isDeleted()) {
+			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+		}
+		user.setDeleted(true);
+		repository.save(user);
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -230,7 +273,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
-	 * 
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException When error occurs
@@ -257,7 +299,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
-	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException When failed to get group menu
@@ -285,7 +326,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Replaces the {@link UserGroup} rights
-	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
 	 * @return {@code true}
@@ -313,19 +353,23 @@ public class MenuIoOperations {
 
 	/**
 	 * Deletes a {@link UserGroup}
-	 * 
 	 * @param aGroup - the {@link UserGroup} to delete
 	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
-		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
-		groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(aGroup.getCode());
-		groupRepository.delete(aGroup);
+		if (aGroup.isDeleted()) {
+			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+		}
+		if (!(getUsers(aGroup.getCode(), false).isEmpty())) {
+			throw new OHServiceException(new OHExceptionMessage("Groups contains users. Please, remove all users from this group before proceeding."));
+		}
+
+		aGroup.setDeleted(true);
+		groupRepository.save(aGroup);
 	}
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights
-	 * 
 	 * @param aGroup - the {@link UserGroup} to insert
 	 * @return the new {@link UserGroup}
 	 * @throws OHServiceException When failed to create group
@@ -336,7 +380,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights
-	 *
 	 * @param userGroup - the {@link UserGroup} to insert
 	 * @param permissions - list of permissions to assign to the group
 	 * @return the new {@link UserGroup}
@@ -362,7 +405,6 @@ public class MenuIoOperations {
 
 	/**
 	 * Updates an existing {@link UserGroup} in the DB
-	 * 
 	 * @param aGroup - the {@link UserGroup} to update
 	 * @return {@code true} if the group has been updated, {@code false} otherwise.
 	 * @throws OHServiceException When failed to update the user group
@@ -372,10 +414,8 @@ public class MenuIoOperations {
 	}
 
 	/**
-	 * Updates an existing {@link UserGroup} and the related permissions
-	 * If permissions list is empty, the existing permissions are kept,
-	 * otherwise they're replaced with the provided ones.
-	 *
+	 * Updates an existing {@link UserGroup} and the related permissions If permissions list is empty, the existing permissions are kept, otherwise they're
+	 * replaced with the provided ones.
 	 * @param userGroup - the {@link UserGroup} to update
 	 * @return {@code true} if the group has been updated, {@code false} otherwise.
 	 * @throws OHServiceException When failed to update user group

@@ -33,11 +33,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
 
+	UserGroup findByCodeAndDeleted(String code, boolean deleted);
+
 	List<UserGroup> findAllByOrderByCodeAsc();
+
+	List<UserGroup> findAllByDeletedOrderByCodeAsc(boolean deleted);
 
 	@Modifying
 	@Query(value = "update UserGroup ug set ug.desc=:description where ug.code=:id")
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
 	List<UserGroup> findByCodeIn(List<String> userGroupIds);
+
+	List<UserGroup> findByDeletedAndCodeIn(boolean deleted, List<String> userGroupIds);
+
 }

@@ -37,10 +37,19 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 
 	List<User> findAllByOrderByUserNameAsc();
 
+	List<User> findAllByDeletedOrderByUserNameAsc(boolean deleted);
+
 	User findByUserName(String userName);
+
+	List<User> findAllByDeleted(boolean deleted);
+
+	User findByUserNameAndDeleted(String userName, boolean deleted);
 
 	@Query(value = "select user from User user where user.userGroupName.code=:groupId order by user.userName")
 	List<User> findAllWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId);
+
+	@Query(value = "select user from User user where user.userGroupName.code=:groupId and deleted=:deleted order by user.userName")
+	List<User> findByDeletedWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId, @Param("deleted") boolean deleted);
 
 	@Modifying
 	@Query(value = "update User user set user.desc=:description, user.userGroupName=:groupName where user.userName=:id")
@@ -62,10 +71,10 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Query(value = "update User set lastLogin=:lastLoggedIn where userName=:id")
 	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
 
-	@Query("select count(u) from User u where active=1")
+	@Query("select count(u) from User u where active=1 and deleted!=true")
 	long countAllActiveUsers();
 
-	@Query("select count(g) from UserGroup g where active=1")
+	@Query("select count(g) from UserGroup g where active=1 and deleted!=true")
 	long countAllActiveGroups();
 
 }
