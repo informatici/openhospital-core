@@ -133,7 +133,7 @@ public class MedicalInventoryManager {
 	 * Return a list {@link MedicalInventory}s for passed params.
 	 *
 	 * @param status - the {@link MedicalInventory} status.
-	 * @param type - the {@link MedicalInventory} type.
+	 * @param inventoryType - the {@link MedicalInventory} type.
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -253,7 +253,7 @@ public class MedicalInventoryManager {
 
 		// TODO: To decide if to make allMedicals parameter
 		boolean allMedicals = true;
-		List<Movement> movs = new ArrayList<Movement>();
+		List<Movement> movs = new ArrayList<>();
 		List<Medical> inventoryMedicalsList = inventoryRowSearchList.stream()
 						.map(MedicalInventoryRow::getMedical)
 						.distinct()
