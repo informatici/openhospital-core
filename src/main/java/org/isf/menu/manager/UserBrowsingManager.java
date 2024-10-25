@@ -68,16 +68,6 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Returns the list of {@link User}s
-	 * @param deleted - Where return list should be deleted user or not
-	 * @return the list of {@link User}s
-	 * @throws OHServiceException When error occurs
-	 */
-	public List<User> getUsers(boolean deleted) throws OHServiceException {
-		return ioOperations.getUsers(deleted);
-	}
-
-	/**
 	 * Returns the list of {@link User}s in specified groupID.
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
@@ -88,17 +78,6 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Returns the list of {@link User}s in specified groupID
-	 * @param groupID - the group ID
-	 * @param deleted - Include only deleted users if true, include non-deleted otherwise
-	 * @return the list of {@link User}s
-	 * @throws OHServiceException When error occurs
-	 */
-	public List<User> getUsers(String groupID, boolean deleted) throws OHServiceException {
-		return ioOperations.getUsers(groupID, deleted);
-	}
-
-	/**
 	 * Returns a {@link User} with the specified name.
 	 * @param userName - username
 	 * @return {@link User}
@@ -106,17 +85,6 @@ public class UserBrowsingManager {
 	 */
 	public User getUserByName(String userName) throws OHServiceException {
 		return ioOperations.getUserByName(userName);
-	}
-
-	/**
-	 * Returns {@link User} from its username
-	 * @param deleted - Where user should be soft deleted or non-deleted
-	 * @param userName - the {@link User}'s username
-	 * @return {@link User}
-	 * @throws OHServiceException When error occurs
-	 */
-	public User getUserByName(String userName, boolean deleted) throws OHServiceException {
-		return ioOperations.getUserByName(userName, deleted);
 	}
 
 	/**

@@ -74,7 +74,13 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Query("select count(u) from User u where active=1 and deleted!=true")
 	long countAllActiveUsers();
 
+	@Query("select count(u) from User u where active=1 and deleted=:deleted")
+	long countAllActiveUsersByDeleted(@Param("deleted") boolean deleted);
+
 	@Query("select count(g) from UserGroup g where active=1 and deleted!=true")
 	long countAllActiveGroups();
+
+	@Query("select count(g) from UserGroup g where active=1 and deleted=:deleted")
+	long countAllActiveGroupsByDeleted(@Param("deleted") boolean deleted);
 
 }

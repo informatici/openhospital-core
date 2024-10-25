@@ -73,17 +73,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser() throws OHServiceException {
-		return repository.findAllByOrderByUserNameAsc();
-	}
-
-	/**
-	 * Returns the list of {@link User}s
-	 * @param deleted - Whether return list should be soft deleted user or not
-	 * @return the list of {@link User}s
-	 * @throws OHServiceException When error occurs
-	 */
-	public List<User> getUsers(boolean deleted) throws OHServiceException {
-		return repository.findAllByDeletedOrderByUserNameAsc(deleted);
+		return repository.findAllByDeletedOrderByUserNameAsc(false);
 	}
 
 	/**
@@ -91,7 +81,7 @@ public class MenuIoOperations {
 	 * @return The number of active users
 	 */
 	public long countAllActiveUsers() {
-		return repository.countAllActiveUsers();
+		return repository.countAllActiveUsersByDeleted(false);
 	}
 
 	/**
@@ -99,18 +89,7 @@ public class MenuIoOperations {
 	 * @return The number of active groups
 	 */
 	public long countAllActiveGroups() {
-		return repository.countAllActiveGroups();
-	}
-
-	/**
-	 * Returns the list of {@link User}s in specified groupID
-	 * @param groupID - the group ID
-	 * @param deleted - Include only deleted users if true, include non-deleted otherwise
-	 * @return the list of {@link User}s
-	 * @throws OHServiceException When error occurs
-	 */
-	public List<User> getUsers(String groupID, boolean deleted) throws OHServiceException {
-		return repository.findByDeletedWhereUserGroupNameByOrderUserNameAsc(groupID, deleted);
+		return repository.countAllActiveGroupsByDeleted(false);
 	}
 
 	/**
@@ -120,7 +99,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
-		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
+		return repository.findByDeletedWhereUserGroupNameByOrderUserNameAsc(groupID, false);
 	}
 
 	/**
@@ -130,18 +109,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public User getUserByName(String userName) throws OHServiceException {
-		return repository.findByUserName(userName);
-	}
-
-	/**
-	 * Returns {@link User} from its username
-	 * @param deleted - Whether user should be soft deleted or non-deleted
-	 * @param userName - the {@link User}'s username
-	 * @return {@link User}
-	 * @throws OHServiceException When error occurs
-	 */
-	public User getUserByName(String userName, boolean deleted) throws OHServiceException {
-		return repository.findByUserNameAndDeleted(userName, deleted);
+		return repository.findByUserNameAndDeleted(userName, false);
 	}
 
 	/**
@@ -164,17 +132,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
-		return groupRepository.findAllByOrderByCodeAsc();
-	}
-
-	/**
-	 * Returns the list of {@link UserGroup}s
-	 * @param deleted - Include only soft deleted usergroups if true, Include non deleted otherwise
-	 * @return the list of {@link UserGroup}s
-	 * @throws OHServiceException When error occurs
-	 */
-	public List<UserGroup> getUserGroups(boolean deleted) throws OHServiceException {
-		return groupRepository.findAllByDeletedOrderByCodeAsc(deleted);
+		return groupRepository.findAllByDeletedOrderByCodeAsc(false);
 	}
 
 	/**
@@ -183,7 +141,7 @@ public class MenuIoOperations {
 	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
 	 */
 	public UserGroup findByCode(String groupCode) {
-		return groupRepository.findById(groupCode).orElse(null);
+		return groupRepository.findByCodeAndDeleted(groupCode, false);
 	}
 
 	/**
@@ -223,6 +181,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to create user
 	 */
 	public User newUser(User user) throws OHServiceException {
+		user.setDeleted(false);
 		return repository.save(user);
 	}
 
@@ -360,7 +319,7 @@ public class MenuIoOperations {
 		if (aGroup.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
 		}
-		if (!(getUsers(aGroup.getCode(), false).isEmpty())) {
+		if (!(getUser(aGroup.getCode()).isEmpty())) {
 			throw new OHServiceException(new OHExceptionMessage("Groups contains users. Please, remove all users from this group before proceeding."));
 		}
 
