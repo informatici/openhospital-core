@@ -289,12 +289,10 @@ public class MenuIoOperations {
 	}
 
 	private void deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
-		ensureUserGroupNotDeleted(aGroup.getCode());
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
 	}
 
 	private GroupMenu insertGroupMenu(UserGroup aGroup, UserMenuItem item) throws OHServiceException {
-		ensureUserGroupNotDeleted(aGroup.getCode());
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());

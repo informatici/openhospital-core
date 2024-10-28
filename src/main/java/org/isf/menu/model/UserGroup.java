@@ -47,7 +47,7 @@ public class UserGroup extends Auditable<String> {
 	private String desc;
 
 	@Column(name = "UG_DELETED")
-	private boolean deleted;
+	private boolean deleted = false;
 
 	@Transient
 	private volatile int hashCode;
