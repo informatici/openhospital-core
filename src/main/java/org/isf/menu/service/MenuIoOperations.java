@@ -182,6 +182,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update user
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
+		ensureUserNotDeleted(user.getUserName());
 		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
 	}
 
@@ -192,6 +193,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update the password
 	 */
 	public boolean updatePassword(User user) throws OHServiceException {
+		ensureUserNotDeleted(user.getUserName());
 		return repository.updatePassword(user.getPasswd(), user.getUserName()) > 0;
 	}
 
@@ -201,6 +203,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
+		ensureUserNotDeleted(user.getUserName());
 		user.setDeleted(true);
 		repository.save(user);
 	}
@@ -286,10 +289,12 @@ public class MenuIoOperations {
 	}
 
 	private void deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
+		ensureUserGroupNotDeleted(aGroup.getCode());
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
 	}
 
 	private GroupMenu insertGroupMenu(UserGroup aGroup, UserMenuItem item) throws OHServiceException {
+		ensureUserGroupNotDeleted(aGroup.getCode());
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
@@ -303,6 +308,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
+		ensureUserGroupNotDeleted(aGroup.getCode());
 		aGroup.setDeleted(true);
 		groupRepository.save(aGroup);
 	}
@@ -314,6 +320,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to create group
 	 */
 	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
+		aGroup.setDeleted(false);
 		return groupRepository.save(aGroup);
 	}
 
@@ -349,6 +356,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update the user group
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
+		ensureUserGroupNotDeleted(aGroup.getCode());
 		return groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0;
 	}
 
@@ -360,6 +368,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update user group
 	 */
 	public boolean updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		ensureUserGroupNotDeleted(userGroup.getCode());
 		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
 
 		if (updated && permissions != null && !permissions.isEmpty()) {
@@ -378,5 +387,19 @@ public class MenuIoOperations {
 		}
 
 		return updated;
+	}
+
+	public void ensureUserNotDeleted(String username) throws OHServiceException {
+		User entity = repository.findByUserName(username);
+		if (entity == null) {
+			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+		}
+	}
+
+	public void ensureUserGroupNotDeleted(String code) throws OHServiceException {
+		UserGroup entity = findByCode(code);
+		if (entity == null) {
+			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+		}
 	}
 }

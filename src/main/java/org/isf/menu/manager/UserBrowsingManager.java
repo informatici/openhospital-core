@@ -146,7 +146,7 @@ public class UserBrowsingManager {
 	 * Increase the number of failed login attempts for {@link User}.
 	 * @param user the {@link User}
 	 */
-	public void increaseFailedAttempts(User user) {
+	public void increaseFailedAttempts(User user) throws OHServiceException {
 		int newFailAttempts = user.getFailedAttempts() + 1;
 		ioOperations.updateFailedAttempts(user.getUserName(), newFailAttempts);
 	}
@@ -155,7 +155,7 @@ public class UserBrowsingManager {
 	 * Reset the number of failed login attempts to zero for {@link User}.
 	 * @param user the {@link User}
 	 */
-	public void resetFailedAttempts(User user) {
+	public void resetFailedAttempts(User user) throws OHServiceException {
 		ioOperations.updateFailedAttempts(user.getUserName(), 0);
 	}
 

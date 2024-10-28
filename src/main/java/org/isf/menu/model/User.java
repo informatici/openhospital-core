@@ -72,8 +72,8 @@ public class User extends Auditable<String> {
 	@Column(name = "US_LAST_LOGIN")
 	private LocalDateTime lastLogin;
 
-	@Column(name = "US_DELETED", columnDefinition = "BOOLEAN DEFAULT false")
-	private boolean deleted = false;
+	@Column(name = "US_DELETED")
+	private boolean deleted;
 
 	@Transient
 	private volatile int hashCode;
