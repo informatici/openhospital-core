@@ -35,6 +35,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
@@ -77,6 +78,10 @@ public class Visit extends Auditable<String> {
 
 	@Column(name = "VST_NOTE")
 	private String note;
+
+	@Version
+	@Column(name = "VST_LOCK")
+	private int lock;
 
 	/**
 	 * Duration of the visit in minutes
@@ -177,6 +182,10 @@ public class Visit extends Auditable<String> {
 		this.sms = sms;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	public String toStringSMS() {
 		return formatDateTimeSMS(this.date);
 	}
@@ -197,11 +206,10 @@ public class Visit extends Auditable<String> {
 			return true;
 		}
 
-		if (!(obj instanceof Visit)) {
+		if (!(obj instanceof Visit visit)) {
 			return false;
 		}
 
-		Visit visit = (Visit) obj;
 		return (visitID == visit.getVisitID());
 	}
 
@@ -233,5 +241,4 @@ public class Visit extends Auditable<String> {
 		}
 		return this.hashCode;
 	}
-
 }
