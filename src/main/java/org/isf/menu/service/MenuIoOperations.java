@@ -73,7 +73,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser() throws OHServiceException {
-		return repository.findAllByDeletedOrderByUserNameAsc(false);
+		return repository.findAllByOrderByUserNameAsc();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<UserGroup> getUserGroup() throws OHServiceException {
-		return groupRepository.findAllByDeletedOrderByCodeAsc(false);
+		return groupRepository.findAllByOrderByCodeAsc();
 	}
 
 	/**

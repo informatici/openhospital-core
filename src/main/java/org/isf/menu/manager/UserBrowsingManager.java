@@ -280,7 +280,7 @@ public class UserBrowsingManager {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
 		List<User> users = getUser(aGroup.getCode());
-		if (users != null && !users.isEmpty()) {
+		if (users != null && users.stream().anyMatch(user -> !user.isDeleted())) {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
