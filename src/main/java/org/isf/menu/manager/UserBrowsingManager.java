@@ -155,7 +155,7 @@ public class UserBrowsingManager {
 	 * Reset the number of failed login attempts to zero for {@link User}.
 	 * @param user the {@link User}
 	 */
-	public void resetFailedAttempts(User user) throws OHServiceException {
+	public void resetFailedAttempts(User user) {
 		ioOperations.updateFailedAttempts(user.getUserName(), 0);
 	}
 
