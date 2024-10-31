@@ -32,6 +32,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -48,9 +49,13 @@ public class MovStockInsertingManager {
 
 	private MedicalsIoOperations ioOperationsMedicals;
 
-	public MovStockInsertingManager(MedicalStockIoOperations medicalStockIoOperations, MedicalsIoOperations medicalsIoOperations) {
+	private LotIoOperationRepository ioOperationsLots;
+
+	public MovStockInsertingManager(MedicalStockIoOperations medicalStockIoOperations, MedicalsIoOperations medicalsIoOperations,
+		LotIoOperationRepository ioOperationsLots) {
 		this.ioOperations = medicalStockIoOperations;
 		this.ioOperationsMedicals = medicalsIoOperations;
+		this.ioOperationsLots = ioOperationsLots;
 	}
 
 	/**
@@ -207,6 +212,17 @@ public class MovStockInsertingManager {
 		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
 		}
+	}
+
+	/**
+	 * Checks if the specified {@link Lot} exists.
+	 * 
+	 * @param lotCode the lot code.
+	 * @return {@code true} if exists, {@code false} otherwise.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public boolean lotExists(String lotCode) throws OHServiceException {
+		return ioOperationsLots.findById(String.valueOf(lotCode)).orElse(null) != null;
 	}
 
 	/**
