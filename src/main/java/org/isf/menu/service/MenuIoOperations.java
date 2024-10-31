@@ -99,7 +99,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
-		return repository.findByDeletedWhereUserGroupNameByOrderUserNameAsc(groupID, false);
+		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
 	}
 
 	/**
@@ -204,8 +204,12 @@ public class MenuIoOperations {
 	 */
 	public void deleteUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		user.setDeleted(true);
-		repository.save(user);
+		try {
+			repository.delete(user);
+		} catch (Exception ex) {
+			user.setDeleted(true);
+			repository.save(user);
+		}
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -307,8 +311,12 @@ public class MenuIoOperations {
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
-		aGroup.setDeleted(true);
-		groupRepository.save(aGroup);
+		if (getUser(aGroup.getCode()).isEmpty()) {
+			groupRepository.delete(aGroup);
+		} else {
+			aGroup.setDeleted(true);
+			groupRepository.save(aGroup);
+		}
 	}
 
 	/**
