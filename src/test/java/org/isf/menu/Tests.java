@@ -282,8 +282,7 @@ class Tests extends OHCoreTestCase {
 		menuIoOperation.deleteGroup(foundUserGroup);
 		assertThat(menuIoOperation.findByCode(foundUserGroup.getCode())).isNull();
 		foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundUserGroup).isNotNull();
-		assertThat(foundUserGroup.isDeleted()).isTrue();
+		assertThat(foundUserGroup).isNull();
 	}
 
 	@Test
@@ -373,8 +372,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUserGroup).isNotNull();
 		userBrowsingManager.deleteGroup(foundUserGroup);
 		foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundUserGroup).isNotNull();
-		assertThat(foundUserGroup.isDeleted()).isTrue();
+		assertThat(foundUserGroup).isNull();
 	}
 
 	@Test
@@ -464,8 +462,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUser).isNotNull();
 		userBrowsingManager.deleteUser(foundUser);
 		foundUser = userIoOperationRepository.findById(userName).orElse(null);
-		assertThat(foundUser).isNotNull();
-		assertThat(foundUser.isDeleted()).isTrue();
+		assertThat(foundUser).isNull();
 	}
 
 	@Test
