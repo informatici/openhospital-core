@@ -205,7 +205,6 @@ public class MenuIoOperations {
 	public void deleteUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
 		if (user.isDeleted()) {
-			user.setDeleted(true);
 			repository.save(user);
 		} else {
 			repository.delete(user);
