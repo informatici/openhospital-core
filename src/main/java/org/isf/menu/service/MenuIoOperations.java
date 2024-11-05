@@ -183,7 +183,7 @@ public class MenuIoOperations {
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
+		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName()) > 0;
 	}
 
 	/**
@@ -204,11 +204,7 @@ public class MenuIoOperations {
 	 */
 	public void deleteUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		if (user.isDeleted()) {
-			repository.save(user);
-		} else {
-			repository.delete(user);
-		}
+		repository.delete(user);
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -310,12 +306,7 @@ public class MenuIoOperations {
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
-		if (getUser(aGroup.getCode()).isEmpty()) {
-			groupRepository.delete(aGroup);
-		} else {
-			aGroup.setDeleted(true);
-			groupRepository.save(aGroup);
-		}
+		groupRepository.delete(aGroup);
 	}
 
 	/**
@@ -362,7 +353,7 @@ public class MenuIoOperations {
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
-		return groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0;
+		return groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode()) > 0;
 	}
 
 	/**

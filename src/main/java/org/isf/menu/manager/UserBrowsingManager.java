@@ -281,7 +281,7 @@ public class UserBrowsingManager {
 		}
 		List<User> users = getUser(aGroup.getCode());
 		if (users != null && users.stream().anyMatch(user -> !user.isDeleted())) {
-			throw new OHDataIntegrityViolationException(
+			throw new OHDataValidationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
 		ioOperations.deleteGroup(aGroup);
