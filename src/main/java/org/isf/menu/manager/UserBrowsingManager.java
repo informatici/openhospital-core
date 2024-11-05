@@ -280,8 +280,8 @@ public class UserBrowsingManager {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
 		List<User> users = getUser(aGroup.getCode());
-		if (users != null && users.stream().anyMatch(user -> !user.isDeleted())) {
-			throw new OHDataValidationException(
+		if (users != null && !users.isEmpty()) {
+			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
 		ioOperations.deleteGroup(aGroup);
@@ -324,6 +324,13 @@ public class UserBrowsingManager {
 	 * @return {@code true} if the group has been updated, {@code false} otherwise.
 	 */
 	public boolean updateUserGroup(UserGroup userGroup) throws OHServiceException {
+		if (userGroup.isDeleted()) {
+			List<User> users = getUser(userGroup.getCode());
+			if (users != null && users.stream().anyMatch(User::isDeleted)) {
+				throw new OHDataValidationException(
+					new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
+			}
+		}
 		return ioOperations.updateUserGroup(userGroup);
 	}
 

@@ -353,6 +353,7 @@ public class MenuIoOperations {
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
+
 		return groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode()) > 0;
 	}
 
