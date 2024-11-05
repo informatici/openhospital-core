@@ -129,14 +129,13 @@ public class UserBrowsingManager {
 	/**
 	 * Deletes an existing {@link User}.
 	 * @param user - the {@link User} to delete
-	 * @return the {@link User} that has been deleted
 	 * @throws OHServiceException When failed to delete user
 	 */
-	public User deleteUser(User user) throws OHServiceException {
+	public void deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg")));
 		}
-		return ioOperations.deleteUser(user);
+		ioOperations.deleteUser(user);
 	}
 
 	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
@@ -274,10 +273,9 @@ public class UserBrowsingManager {
 	/**
 	 * Deletes a {@link UserGroup}.
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @return the {@link UserGroup} that has been deleted
 	 * @throws OHServiceException When failed to delete group
 	 */
-	public UserGroup deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
@@ -286,7 +284,7 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
-		return ioOperations.deleteGroup(aGroup);
+		ioOperations.deleteGroup(aGroup);
 	}
 
 	/**

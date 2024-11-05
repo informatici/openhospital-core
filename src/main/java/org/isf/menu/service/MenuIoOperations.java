@@ -202,13 +202,11 @@ public class MenuIoOperations {
 	/**
 	 * Deletes an existing {@link User}
 	 * @param user - the {@link User} to delete
-	 * @return the {@link User} that has been deleted
 	 * @throws OHServiceException When failed to delete user
 	 */
-	public User deleteUser(User user) throws OHServiceException {
+	public void deleteUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
 		repository.delete(user);
-		return user;
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -306,13 +304,11 @@ public class MenuIoOperations {
 	/**
 	 * Deletes a {@link UserGroup}
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @return the {@link UserGroup} that has been deleted
 	 * @throws OHServiceException When failed to delete group
 	 */
-	public UserGroup deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
 		groupRepository.delete(aGroup);
-		return aGroup;
 	}
 
 	/**
