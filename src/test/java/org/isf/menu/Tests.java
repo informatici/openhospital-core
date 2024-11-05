@@ -221,7 +221,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
-		assertThat(menuIoOperation.updatePassword(foundUser)).isTrue();
+		assertThat(menuIoOperation.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");
@@ -449,7 +449,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
-		assertThat(userBrowsingManager.updatePassword(foundUser)).isTrue();
+		assertThat(userBrowsingManager.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");

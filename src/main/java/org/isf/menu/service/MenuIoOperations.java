@@ -190,12 +190,13 @@ public class MenuIoOperations {
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * @param user - the {@link User} to update
-	 * @return {@code true} if the user has been updated, {@code false} otherwise.
+	 * @return the {@link User} that has been deleted
 	 * @throws OHServiceException When failed to update the password
 	 */
-	public boolean updatePassword(User user) throws OHServiceException {
+	public User updatePassword(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		return repository.updatePassword(user.getPasswd(), user.getUserName()) > 0;
+		repository.updatePassword(user.getPasswd(), user.getUserName());
+		return getUserByName(user.getUserName());
 	}
 
 	/**

@@ -119,10 +119,10 @@ public class UserBrowsingManager {
 	/**
 	 * Updates the password of an existing {@link User} in the DB.
 	 * @param user - the {@link User} to update
-	 * @return {@code true} if the user has been updated, {@code false} otherwise.
+	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update password
 	 */
-	public boolean updatePassword(User user) throws OHServiceException {
+	public User updatePassword(User user) throws OHServiceException {
 		return ioOperations.updatePassword(user);
 	}
 
