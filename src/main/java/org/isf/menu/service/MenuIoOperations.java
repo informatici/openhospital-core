@@ -368,10 +368,10 @@ public class MenuIoOperations {
 	 * Updates an existing {@link UserGroup} and the related permissions If permissions list is empty, the existing permissions are kept, otherwise they're
 	 * replaced with the provided ones.
 	 * @param userGroup - the {@link UserGroup} to update
-	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @return the {@link UserGroup} that has been updated
 	 * @throws OHServiceException When failed to update user group
 	 */
-	public boolean updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
 		ensureUserGroupNotDeleted(userGroup.getCode());
 		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
 
@@ -390,7 +390,7 @@ public class MenuIoOperations {
 			groupPermissionIoOperationRepository.saveAll(groupPermissions);
 		}
 
-		return updated;
+		return findByCode(userGroup.getCode());
 	}
 
 	public void ensureUserNotDeleted(String username) throws OHServiceException {

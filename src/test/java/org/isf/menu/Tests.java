@@ -313,7 +313,7 @@ class Tests extends OHCoreTestCase {
 		permission.setDescription("Updated permission");
 		permissions.set(0, permission);
 		foundUserGroup.setDesc("Update");
-		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions)).isTrue();
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions).getCode()).isEqualTo(foundUserGroup.getCode());
 		checkUserGroupAndPermissionsIntoDb(foundUserGroup, permissions);
 	}
 

@@ -342,9 +342,10 @@ public class UserBrowsingManager {
 	 * replaced with the provided ones.
 	 * @param userGroup - the {@link UserGroup} to update
 	 * @param permissions Updated list of permissions to assign to the group
-	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @return the {@link UserGroup} that has been updated
+	 * @throws OHServiceException If failed to update group
 	 */
-	public boolean updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
 		return ioOperations.updateUserGroup(userGroup, permissions);
 	}
 
