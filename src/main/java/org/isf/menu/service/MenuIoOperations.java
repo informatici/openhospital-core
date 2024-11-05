@@ -178,12 +178,13 @@ public class MenuIoOperations {
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * @param user - the {@link User} to update
-	 * @return new {@link User}
+	 * @return the updated {@link User}
 	 * @throws OHServiceException When failed to update user
 	 */
-	public boolean updateUser(User user) throws OHServiceException {
+	public User updateUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName()) > 0;
+		repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName());
+		return getUserByName(user.getUserName());
 	}
 
 	/**
@@ -200,11 +201,13 @@ public class MenuIoOperations {
 	/**
 	 * Deletes an existing {@link User}
 	 * @param user - the {@link User} to delete
+	 * @return the {@link User} that has been deleted
 	 * @throws OHServiceException When failed to delete user
 	 */
-	public void deleteUser(User user) throws OHServiceException {
+	public User deleteUser(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
 		repository.delete(user);
+		return user;
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -302,11 +305,13 @@ public class MenuIoOperations {
 	/**
 	 * Deletes a {@link UserGroup}
 	 * @param aGroup - the {@link UserGroup} to delete
+	 * @return the {@link UserGroup} that has been deleted
 	 * @throws OHServiceException When failed to delete group
 	 */
-	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public UserGroup deleteGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
 		groupRepository.delete(aGroup);
+		return aGroup;
 	}
 
 	/**
@@ -348,13 +353,14 @@ public class MenuIoOperations {
 	/**
 	 * Updates an existing {@link UserGroup} in the DB
 	 * @param aGroup - the {@link UserGroup} to update
-	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @return the {@link UserGroup} that has been updated
 	 * @throws OHServiceException When failed to update the user group
 	 */
-	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
+	public UserGroup updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		ensureUserGroupNotDeleted(aGroup.getCode());
 
-		return groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode()) > 0;
+		groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode());
+		return findByCode(aGroup.getCode());
 	}
 
 	/**

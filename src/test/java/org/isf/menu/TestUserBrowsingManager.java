@@ -117,7 +117,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 
 		int failedAttempts = user.getFailedAttempts();
 		userBrowsingManager.increaseFailedAttempts(user);
-		user.setFailedAttempts(failedAttempts+ 1);
+		user.setFailedAttempts(failedAttempts + 1);
 		assertThat(user.getFailedAttempts()).isEqualTo(failedAttempts + 1);
 	}
 
@@ -163,7 +163,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		user.setAccountLocked(true);
 		user.setLockedTime(TimeTools.getNow().minusDays(30));
 		user.setAccountLocked(true);
-		assertThat(userBrowsingManager.updateUser(user)).isTrue();
+		assertThat(userBrowsingManager.updateUser(user).getUserName()).isEqualTo(user.getUserName());
 
 		User updatedUser = userBrowsingManager.getUserByName(userName);
 
@@ -184,7 +184,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		user.setAccountLocked(true);
 		user.setLockedTime(TimeTools.getNow().plusDays(30));
 		user.setAccountLocked(true);
-		assertThat(userBrowsingManager.updateUser(user)).isTrue();
+		assertThat(userBrowsingManager.updateUser(user).getUserName()).isEqualTo(user.getUserName());
 
 		User updatedUser = userBrowsingManager.getUserByName(userName);
 
@@ -211,7 +211,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 			user.setUserName("A@!");
 			userBrowsingManager.newUser(user);
 		})
-						.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	private String setupTestUser(boolean usingSet) throws OHException {

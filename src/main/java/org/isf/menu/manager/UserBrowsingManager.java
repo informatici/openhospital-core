@@ -109,10 +109,10 @@ public class UserBrowsingManager {
 	/**
 	 * Updates an existing {@link User} in the DB.
 	 * @param user - the {@link User} to update
-	 * @return {@code true} if the user has been updated, {@code false} otherwise.
+	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update user
 	 */
-	public boolean updateUser(User user) throws OHServiceException {
+	public User updateUser(User user) throws OHServiceException {
 		return ioOperations.updateUser(user);
 	}
 
@@ -129,13 +129,14 @@ public class UserBrowsingManager {
 	/**
 	 * Deletes an existing {@link User}.
 	 * @param user - the {@link User} to delete
+	 * @return the {@link User} that has been deleted
 	 * @throws OHServiceException When failed to delete user
 	 */
-	public void deleteUser(User user) throws OHServiceException {
+	public User deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg")));
 		}
-		ioOperations.deleteUser(user);
+		return ioOperations.deleteUser(user);
 	}
 
 	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
@@ -273,9 +274,10 @@ public class UserBrowsingManager {
 	/**
 	 * Deletes a {@link UserGroup}.
 	 * @param aGroup - the {@link UserGroup} to delete
+	 * @return the {@link UserGroup} that has been deleted
 	 * @throws OHServiceException When failed to delete group
 	 */
-	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public UserGroup deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
@@ -284,7 +286,7 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
-		ioOperations.deleteGroup(aGroup);
+		return ioOperations.deleteGroup(aGroup);
 	}
 
 	/**
@@ -321,9 +323,10 @@ public class UserBrowsingManager {
 	/**
 	 * Updates an existing {@link UserGroup} in the DB.
 	 * @param userGroup - the {@link UserGroup} to update
-	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @return the {@link UserGroup} that has been updated
+	 * @throws OHServiceException If failed to update group
 	 */
-	public boolean updateUserGroup(UserGroup userGroup) throws OHServiceException {
+	public UserGroup updateUserGroup(UserGroup userGroup) throws OHServiceException {
 		if (userGroup.isDeleted()) {
 			List<User> users = getUser(userGroup.getCode());
 			if (users != null && users.stream().anyMatch(User::isDeleted)) {

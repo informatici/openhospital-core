@@ -209,7 +209,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setDesc("Update");
-		assertThat(menuIoOperation.updateUser(foundUser)).isTrue();
+		assertThat(menuIoOperation.updateUser(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getDesc()).isEqualTo("Update");
@@ -323,7 +323,7 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		foundUserGroup.setDesc("Update");
-		assertThat(menuIoOperation.updateUserGroup(foundUserGroup)).isTrue();
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup).getCode()).isEqualTo(foundUserGroup.getCode());
 		UserGroup updatedUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(updatedUserGroup).isNotNull();
 		assertThat(updatedUserGroup.getDesc()).isEqualTo("Update");
@@ -437,7 +437,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setDesc("Update");
-		assertThat(userBrowsingManager.updateUser(foundUser)).isTrue();
+		assertThat(userBrowsingManager.updateUser(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getDesc()).isEqualTo("Update");
@@ -542,7 +542,7 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		foundUserGroup.setDesc("Update");
-		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup)).isTrue();
+		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup).getCode()).isEqualTo(foundUserGroup.getCode());
 		UserGroup updatedUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(updatedUserGroup).isNotNull();
 		assertThat(updatedUserGroup.getDesc()).isEqualTo("Update");
