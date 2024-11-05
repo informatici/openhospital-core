@@ -68,12 +68,15 @@ public class UserGroup extends Auditable<String> {
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
 	public String getDesc() {
 		return desc;
 	}

@@ -153,12 +153,15 @@ public class User extends Auditable<String> {
 	public void setLastLogin(LocalDateTime lastLogin) {
 		this.lastLogin = lastLogin;
 	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
 	@Override
 	public String toString() {
 		return getUserName();

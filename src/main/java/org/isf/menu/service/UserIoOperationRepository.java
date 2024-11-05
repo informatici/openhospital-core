@@ -76,13 +76,13 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Query(value = "update User set lastLogin=:lastLoggedIn where userName=:id")
 	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
 
-	@Query("select count(u) from User u where active=1 and deleted!=true")
+	@Query("select count(u) from User u where active=1 and deleted=false")
 	long countAllActiveUsers();
 
 	@Query("select count(u) from User u where active=1 and deleted=:deleted")
 	long countAllActiveUsersByDeleted(@Param("deleted") boolean deleted);
 
-	@Query("select count(g) from UserGroup g where active=1 and deleted!=true")
+	@Query("select count(g) from UserGroup g where active=1 and deleted=false")
 	long countAllActiveGroups();
 
 	@Query("select count(g) from UserGroup g where active=1 and deleted=:deleted")
