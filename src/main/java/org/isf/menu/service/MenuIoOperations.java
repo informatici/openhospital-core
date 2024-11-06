@@ -113,6 +113,16 @@ public class MenuIoOperations {
 	}
 
 	/**
+	 * Returns {@link User} from its username
+	 * @param userName - the {@link User}'s username
+	 * @return {@link User}
+	 * @throws OHServiceException When error occurs
+	 */
+	public User getUserByNameAndIsDeleted(String userName) throws OHServiceException {
+		return repository.findByUserNameAndDeleted(userName, true);
+	}
+
+	/**
 	 * Returns {@link User} description from its username
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
@@ -142,6 +152,15 @@ public class MenuIoOperations {
 	 */
 	public UserGroup findByCode(String groupCode) {
 		return groupRepository.findByCodeAndDeleted(groupCode, false);
+	}
+
+	/**
+	 * Find user group by code
+	 * @param groupCode UserGroup code
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findByCodeAndIsDeleted(String groupCode) {
+		return groupRepository.findByCodeAndDeleted(groupCode, true);
 	}
 
 	/**
@@ -182,8 +201,8 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update user
 	 */
 	public User updateUser(User user) throws OHServiceException {
-		ensureUserNotDeleted(user.getUserName());
 		repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName());
+
 		return getUserByName(user.getUserName());
 	}
 
@@ -205,7 +224,9 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
-		ensureUserNotDeleted(user.getUserName());
+		if (!user.isDeleted()) {
+			ensureUserNotDeleted(user.getUserName());
+		}
 		repository.delete(user);
 	}
 
@@ -354,9 +375,8 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update the user group
 	 */
 	public UserGroup updateUserGroup(UserGroup aGroup) throws OHServiceException {
-		ensureUserGroupNotDeleted(aGroup.getCode());
-
 		groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode());
+
 		return findByCode(aGroup.getCode());
 	}
 
@@ -392,14 +412,14 @@ public class MenuIoOperations {
 	public void ensureUserNotDeleted(String username) throws OHServiceException {
 		User entity = repository.findByUserName(username);
 		if (entity == null) {
-			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
 	}
 
 	public void ensureUserGroupNotDeleted(String code) throws OHServiceException {
 		UserGroup entity = findByCode(code);
 		if (entity == null) {
-			throw new OHServiceException(new OHExceptionMessage("This operation is not allowed"));
+			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
 	}
 }

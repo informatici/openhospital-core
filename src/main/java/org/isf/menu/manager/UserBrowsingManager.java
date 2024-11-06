@@ -113,6 +113,12 @@ public class UserBrowsingManager {
 	 * @throws OHServiceException When failed to update user
 	 */
 	public User updateUser(User user) throws OHServiceException {
+		User oldUser = ioOperations.getUserByNameAndIsDeleted(user.getUserName());
+
+		if (oldUser.isDeleted() && user.isDeleted()) {
+			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+		}
+
 		return ioOperations.updateUser(user);
 	}
 
@@ -325,9 +331,10 @@ public class UserBrowsingManager {
 	 * @throws OHServiceException If failed to update group
 	 */
 	public UserGroup updateUserGroup(UserGroup userGroup) throws OHServiceException {
+
 		if (userGroup.isDeleted()) {
 			List<User> users = getUser(userGroup.getCode());
-			if (users != null && users.stream().anyMatch(User::isDeleted)) {
+			if (users != null && users.stream().anyMatch(user -> !user.isDeleted())) {
 				throw new OHDataValidationException(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 			}
@@ -344,6 +351,12 @@ public class UserBrowsingManager {
 	 * @throws OHServiceException If failed to update group
 	 */
 	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		UserGroup group = ioOperations.findByCodeAndIsDeleted(userGroup.getCode());
+
+		if (group.isDeleted() && userGroup.isDeleted()) {
+			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+		}
+
 		return ioOperations.updateUserGroup(userGroup, permissions);
 	}
 
