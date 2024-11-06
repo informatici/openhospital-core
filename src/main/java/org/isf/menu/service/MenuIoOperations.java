@@ -411,13 +411,13 @@ public class MenuIoOperations {
 
 	public void ensureUserNotDeleted(String username) throws OHServiceException {
 		User entity = repository.findByUserName(username);
-		if (entity == null) {
+		if (entity != null && entity.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
 	}
 
 	public void ensureUserGroupNotDeleted(String code) throws OHServiceException {
-		UserGroup entity = findByCode(code);
+		UserGroup entity = groupRepository.findByCodeAndDeleted(code, true);
 		if (entity == null) {
 			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
