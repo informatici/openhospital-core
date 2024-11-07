@@ -211,7 +211,6 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to create user
 	 */
 	public User newUser(User user) throws OHServiceException {
-		user.setDeleted(false);
 		return repository.save(user);
 	}
 
@@ -358,7 +357,6 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to create group
 	 */
 	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
-		aGroup.setDeleted(false);
 		return groupRepository.save(aGroup);
 	}
 
