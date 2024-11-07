@@ -114,6 +114,17 @@ public class MenuIoOperations {
 
 	/**
 	 * Returns {@link User} from its username
+	 * @param username - the {@link User}'s username
+	 * @param withTrashed - Included soft deleted if set to true
+	 * @return {@link User}
+	 * @throws OHServiceException When error occurs
+	 */
+	public User getUserByName(String username, boolean withTrashed) throws OHServiceException {
+		return withTrashed ? repository.findByUserName(username) : getUserByName(username);
+	}
+
+	/**
+	 * Returns {@link User} from its username
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException When error occurs
@@ -152,6 +163,16 @@ public class MenuIoOperations {
 	 */
 	public UserGroup findByCode(String groupCode) {
 		return groupRepository.findByCodeAndDeleted(groupCode, false);
+	}
+
+	/**
+	 * Find user group by code
+	 * @param groupCode UserGroup code
+	 * @param withThrashed Include soft deleted if set to true
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findByCode(String groupCode, boolean withThrashed) {
+		return withThrashed ? groupRepository.findByCode(groupCode) : findByCode(groupCode);
 	}
 
 	/**
@@ -386,7 +407,10 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update user group
 	 */
 	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
-		ensureUserGroupNotDeleted(userGroup.getCode());
+		UserGroup group = findByCode(userGroup.getCode(), true);
+		if (group.isDeleted() && userGroup.isDeleted()) {
+			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+		}
 		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
 
 		if (updated && permissions != null && !permissions.isEmpty()) {

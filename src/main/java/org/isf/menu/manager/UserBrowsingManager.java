@@ -88,6 +88,37 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * Returns {@link User} from its username
+	 * @param username - the {@link User}'s username
+	 * @param withTrashed - Included soft deleted if set to true
+	 * @return {@link User}
+	 * @throws OHServiceException When error occurs
+	 */
+	public User getUserByName(String username, boolean withTrashed) throws OHServiceException {
+		return ioOperations.getUserByName(username, withTrashed);
+	}
+
+	/**
+	 * Checks if the specified {@link User} code is already present.
+	 * @param userName - the {@link User} code to check.
+	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public boolean isUserNamePresent(String userName) throws OHServiceException {
+		return ioOperations.isUserNamePresent(userName);
+	}
+
+	/**
+	 * Checks if the specified {@link UserGroup} code is already present.
+	 * @param groupName - the {@link UserGroup} code to check.
+	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
+		return ioOperations.isGroupNamePresent(groupName);
+	}
+
+	/**
 	 * Inserts a new {@link User} into the DB.
 	 * @param user - the {@link User} to insert
 	 * @return the new {@link User}
@@ -99,7 +130,7 @@ public class UserBrowsingManager {
 			throw new OHDataValidationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theusernamecontainsinvalidcharacters.msg")));
 		}
-		if (ioOperations.isUserNamePresent(username)) {
+		if (isUserNamePresent(username)) {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
 		}
@@ -236,6 +267,16 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * Find user group by code
+	 * @param groupCode UserGroup code
+	 * @param withThrashed Include soft deleted if set to true
+	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
+	 */
+	public UserGroup findUserGroupByCode(String groupCode, boolean withThrashed) {
+		return ioOperations.findByCode(groupCode, withThrashed);
+	}
+
+	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for a specified {@link User}.
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
@@ -301,7 +342,7 @@ public class UserBrowsingManager {
 	 */
 	public UserGroup newUserGroup(UserGroup userGroup) throws OHServiceException {
 		String code = userGroup.getCode();
-		if (ioOperations.isGroupNamePresent(code)) {
+		if (isGroupNamePresent(code)) {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code)));
 		}
@@ -317,7 +358,7 @@ public class UserBrowsingManager {
 	 */
 	public UserGroup newUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
 		String code = userGroup.getCode();
-		if (ioOperations.isGroupNamePresent(code)) {
+		if (isGroupNamePresent(code)) {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code)));
 		}
