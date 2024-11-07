@@ -99,7 +99,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When error occurs
 	 */
 	public List<User> getUser(String groupID) throws OHServiceException {
-		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
+		return repository.findAllByUserGroupIdOrderByUserNameAsc(groupID);
 	}
 
 	/**

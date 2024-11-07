@@ -46,10 +46,10 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	User findByUserNameAndDeleted(String userName, boolean deleted);
 
 	@Query(value = "select user from User user where user.userGroupName.code=:groupId order by user.userName")
-	List<User> findAllWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId);
+	List<User> findAllByUserGroupIdOrderByUserNameAsc(@Param("groupId") String groupId);
 
 	@Query(value = "select user from User user where user.userGroupName.code=:groupId and deleted=:deleted order by user.userName")
-	List<User> findByDeletedWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId, @Param("deleted") boolean deleted);
+	List<User> findAllByUserGroupIdAndDeletedOrderByUserNameAsc(@Param("groupId") String groupId, @Param("deleted") boolean deleted);
 
 	@Modifying
 	@Query(value = "update User user set user.desc=:description, user.userGroupName=:groupName where user.userName=:id")

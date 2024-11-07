@@ -49,6 +49,6 @@ public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup,
 
 	List<UserGroup> findByCodeIn(List<String> userGroupIds);
 
-	List<UserGroup> findByDeletedAndCodeIn(boolean deleted, List<String> userGroupIds);
+	List<UserGroup> findByCodeInAndDeleted(List<String> userGroupIds, boolean deleted);
 
 }

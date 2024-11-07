@@ -115,7 +115,7 @@ public class UserBrowsingManager {
 	public User updateUser(User user) throws OHServiceException {
 		User oldUser = ioOperations.getUserByNameAndIsDeleted(user.getUserName());
 
-		if (oldUser != null && oldUser.isDeleted() && user.isDeleted()) {
+		if (oldUser != null && user.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
 
@@ -334,7 +334,7 @@ public class UserBrowsingManager {
 
 		UserGroup group = ioOperations.findByCodeAndIsDeleted(userGroup.getCode());
 
-		if (group != null && group.isDeleted() && userGroup.isDeleted()) {
+		if (group != null && userGroup.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
 		}
 
