@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -407,7 +408,7 @@ public class MenuIoOperations {
 	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
 		UserGroup group = findByCode(userGroup.getCode(), true);
 		if (group.isDeleted() && userGroup.isDeleted()) {
-			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.alreadysoftdeleted.msg")));
 		}
 		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
 
@@ -432,14 +433,14 @@ public class MenuIoOperations {
 	public void ensureUserNotDeleted(String username) throws OHServiceException {
 		User entity = repository.findByUserNameAndDeleted(username, true);
 		if (entity != null) {
-			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.alreadysoftdeleted.msg")));
 		}
 	}
 
 	public void ensureUserGroupNotDeleted(String code) throws OHServiceException {
 		UserGroup entity = groupRepository.findByCodeAndDeleted(code, true);
 		if (entity != null) {
-			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.alreadysoftdeleted.msg")));
 		}
 	}
 }

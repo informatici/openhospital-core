@@ -147,7 +147,7 @@ public class UserBrowsingManager {
 		User oldUser = ioOperations.getUserByNameAndIsDeleted(user.getUserName());
 
 		if (oldUser != null && user.isDeleted()) {
-			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.alreadysoftdeleted.msg")));
 		}
 
 		return ioOperations.updateUser(user);
@@ -376,7 +376,7 @@ public class UserBrowsingManager {
 		UserGroup group = ioOperations.findByCodeAndIsDeleted(userGroup.getCode());
 
 		if (group != null && userGroup.isDeleted()) {
-			throw new OHServiceException(new OHExceptionMessage("angal.common.denied.msg"));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.alreadysoftdeleted.msg")));
 		}
 
 		if (userGroup.isDeleted()) {
