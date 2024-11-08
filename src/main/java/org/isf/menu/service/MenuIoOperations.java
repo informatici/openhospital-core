@@ -224,7 +224,7 @@ public class MenuIoOperations {
 	public User updateUser(User user) throws OHServiceException {
 		repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName());
 
-		return getUserByName(user.getUserName());
+		return getUserByName(user.getUserName(), true);
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class MenuIoOperations {
 	public UserGroup updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode());
 
-		return findByCode(aGroup.getCode());
+		return findByCode(aGroup.getCode(), true);
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class MenuIoOperations {
 		if (group.isDeleted() && userGroup.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.alreadysoftdeleted.msg")));
 		}
-		boolean updated = groupRepository.updateDescription(userGroup.getDesc(), userGroup.getCode()) > 0;
+		boolean updated = groupRepository.update(userGroup.getDesc(), userGroup.isDeleted(), userGroup.getCode()) > 0;
 
 		if (updated && permissions != null && !permissions.isEmpty()) {
 			groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(userGroup.getCode());
@@ -427,7 +427,7 @@ public class MenuIoOperations {
 			groupPermissionIoOperationRepository.saveAll(groupPermissions);
 		}
 
-		return findByCode(userGroup.getCode());
+		return findByCode(userGroup.getCode(), true);
 	}
 
 	public void ensureUserNotDeleted(String username) throws OHServiceException {
