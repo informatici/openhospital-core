@@ -40,9 +40,9 @@ public class AdmissionPatientMergedEventListener {
 
 	@EventListener
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<Admission> admissions = admissionIoOperations.getAdmissions(patientMergedEvent.getObsoletePatient());
+		List<Admission> admissions = admissionIoOperations.getAdmissions(patientMergedEvent.obsoletePatient());
 		for (Admission admission : admissions) {
-			admission.setPatient(patientMergedEvent.getMergedPatient());
+			admission.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 

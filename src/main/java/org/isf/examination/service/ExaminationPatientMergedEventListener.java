@@ -42,9 +42,9 @@ public class ExaminationPatientMergedEventListener {
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<PatientExamination> patientExaminations = examinationOperations.getByPatID(patientMergedEvent.getObsoletePatient().getCode());
+		List<PatientExamination> patientExaminations = examinationOperations.getByPatID(patientMergedEvent.obsoletePatient().getCode());
 		for (PatientExamination examination : patientExaminations) {
-			examination.setPatient(patientMergedEvent.getMergedPatient());
+			examination.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 

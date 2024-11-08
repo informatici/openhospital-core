@@ -24,9 +24,7 @@ package org.isf.admission.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
-import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 
 public interface AdmissionIoOperationRepositoryCustom {
@@ -34,29 +32,12 @@ public interface AdmissionIoOperationRepositoryCustom {
 	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
 			throws OHServiceException;
 
-	class PatientAdmission {
-		/**
-		 * @see Patient#getCode()
-		 */
-		private final Integer patientId;
+	/**
+	 * @param patientId
+	 * @param admissionId
+	 */
+	record PatientAdmission(Integer patientId, Integer admissionId) {
 
-		/**
-		 * @see Admission#getId()
-		 */
-		private final Integer admissionId;
-
-		public PatientAdmission(Integer patientId, Integer admissionId) {
-			this.patientId = patientId;
-			this.admissionId = admissionId;
-		}
-
-		public Integer getPatientId() {
-			return patientId;
-		}
-
-		public Integer getAdmissionId() {
-			return admissionId;
-		}
 	}
 
 }

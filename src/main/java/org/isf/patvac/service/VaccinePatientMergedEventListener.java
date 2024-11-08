@@ -41,9 +41,9 @@ public class VaccinePatientMergedEventListener {
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) {
-		List<PatientVaccine> vaccines = patVacIoOperations.findForPatient(patientMergedEvent.getObsoletePatient().getCode());
+		List<PatientVaccine> vaccines = patVacIoOperations.findForPatient(patientMergedEvent.obsoletePatient().getCode());
 		for (PatientVaccine vaccine : vaccines) {
-			vaccine.setPatient(patientMergedEvent.getMergedPatient());
+			vaccine.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 
