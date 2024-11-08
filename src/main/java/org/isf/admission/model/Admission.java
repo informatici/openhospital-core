@@ -492,11 +492,10 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 			return true;
 		}
 
-		if (!(obj instanceof Admission)) {
+		if (!(obj instanceof Admission admission)) {
 			return false;
 		}
 
-		Admission admission = (Admission) obj;
 		return (this.getId() == admission.getId());
 	}
 

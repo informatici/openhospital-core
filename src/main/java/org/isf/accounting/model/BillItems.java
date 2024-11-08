@@ -172,11 +172,10 @@ public class BillItems extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof BillItems)) {
+		if (!(obj instanceof BillItems billItem)) {
 			return false;
 		}
-		
-		BillItems billItem = (BillItems)obj;
+
 		return (id == billItem.getId());
 	}
 

@@ -92,11 +92,10 @@ public class OperationType extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(anObject instanceof OperationType)) {
+		if (!(anObject instanceof OperationType operationType)) {
 			return false;
 		}
-		
-		OperationType operationType = (OperationType)anObject;
+
 		return (this.getCode().equals(operationType.getCode()) &&
 				this.getDescription().equalsIgnoreCase(operationType.getDescription()));
     }

@@ -95,11 +95,10 @@ public class DischargeType extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof DischargeType)) {
+		if (!(obj instanceof DischargeType dischargeType)) {
 			return false;
 		}
-		
-		DischargeType dischargeType = (DischargeType)obj;
+
 		return (this.getCode().equals(dischargeType.getCode()));
 	}
     

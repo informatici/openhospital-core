@@ -166,16 +166,13 @@ public class ExcelExporter {
 					String strVal;
 					Object objVal = model.getValueAt(i, j);
 					if (objVal != null) {
-						if (objVal instanceof Integer) {
-							Integer val = (Integer) objVal;
+						if (objVal instanceof Integer val) {
 							NumberFormat format = NumberFormat.getInstance(currentLocale);
 							strVal = format.format(val);
-						} else if (objVal instanceof Double) {
-							Double val = (Double) objVal;
+						} else if (objVal instanceof Double val) {
 							NumberFormat format = NumberFormat.getInstance(currentLocale);
 							strVal = format.format(val);
-						} else if (objVal instanceof Timestamp) {
-							Timestamp val = (Timestamp) objVal;
+						} else if (objVal instanceof Timestamp val) {
 							strVal = sdf.format(val);
 						} else {
 							strVal = objVal.toString();
@@ -246,13 +243,11 @@ public class ExcelExporter {
 					for (int i = 1; i <= colCount; i++) {
 						Object objVal = resultSet.getObject(i);
 						if (objVal != null) {
-							if (objVal instanceof Double) {
+							if (objVal instanceof Double val) {
 
-								Double val = (Double) objVal;
 								strVal = numFormat.format(val);
-							} else if (objVal instanceof Timestamp) {
+							} else if (objVal instanceof Timestamp val) {
 
-								Timestamp val = (Timestamp) objVal;
 								strVal = sdf.format(val);
 							} else {
 
@@ -315,19 +310,16 @@ public class ExcelExporter {
 		String strVal;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		if (value != null) {
-			if (value instanceof BigDecimal) {
+			if (value instanceof BigDecimal val) {
 
-				BigDecimal val = (BigDecimal) value;
 				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
-			} else if (value instanceof Double) {
+			} else if (value instanceof Double val) {
 
-				Double val = (Double) value;
 				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
-			} else if (value instanceof Timestamp) {
+			} else if (value instanceof Timestamp val) {
 
-				Timestamp val = (Timestamp) value;
 				strVal = sdf.format(val);
 			} else {
 
@@ -501,29 +493,24 @@ public class ExcelExporter {
 	private void setValueForExcel(Cell cell, Object value) {
 
 		if (value != null) {
-			if (value instanceof Integer) {
-				Integer val = (Integer) value;
+			if (value instanceof Integer val) {
 				cell.setCellValue(val);
-			} else if (value instanceof Double) {
-				Double val = (Double) value;
+			} else if (value instanceof Double val) {
 				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
-			} else if (value instanceof Timestamp) {
-				Timestamp val = (Timestamp) value;
+			} else if (value instanceof Timestamp val) {
 				cell.setCellStyle(dateTimeStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Date) {
 				Timestamp val = new Timestamp(((Date) value).getTime());
 				cell.setCellStyle(dateStyle);
 				cell.setCellValue(val);
-			} else if (value instanceof BigDecimal) {
-				BigDecimal val = (BigDecimal) value;
+			} else if (value instanceof BigDecimal val) {
 				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
-			} else if (value instanceof Long) {
-				Long val = (Long) value;
+			} else if (value instanceof Long val) {
 				cell.setCellValue(val);
 			} else {
 				RichTextString val = createHelper.createRichTextString(value.toString());
@@ -687,29 +674,24 @@ public class ExcelExporter {
 	private void setValueForExcelOLD(HSSFCell cell, Object value) {
 
 		if (value != null) {
-			if (value instanceof Integer) {
-				Integer val = (Integer) value;
+			if (value instanceof Integer val) {
 				cell.setCellValue(val);
-			} else if (value instanceof Double) {
-				Double val = (Double) value;
+			} else if (value instanceof Double val) {
 				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
-			} else if (value instanceof Timestamp) {
-				Timestamp val = (Timestamp) value;
+			} else if (value instanceof Timestamp val) {
 				cell.setCellStyle(dateTimeStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Date) {
 				Timestamp val = new Timestamp(((Date) value).getTime());
 				cell.setCellStyle(dateStyle);
 				cell.setCellValue(val);
-			} else if (value instanceof BigDecimal) {
-				BigDecimal val = (BigDecimal) value;
+			} else if (value instanceof BigDecimal val) {
 				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
-			} else if (value instanceof Long) {
-				Long val = (Long) value;
+			} else if (value instanceof Long val) {
 				cell.setCellValue(val);
 			} else {
 				HSSFRichTextString val = new HSSFRichTextString(value.toString());

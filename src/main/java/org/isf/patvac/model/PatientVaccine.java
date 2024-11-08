@@ -175,10 +175,9 @@ public class PatientVaccine extends Auditable<String> {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof PatientVaccine)) {
+		if (!(obj instanceof PatientVaccine other)) {
 			return false;
 		}
-		PatientVaccine other = (PatientVaccine) obj;
 		if (code != other.code) {
 			return false;
 		}

@@ -714,11 +714,10 @@ public class FileDicom extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof FileDicom)) {
+		if (!(obj instanceof FileDicom dicom)) {
 			return false;
 		}
-		
-		FileDicom dicom = (FileDicom)obj;
+
 		return (idFile == dicom.getIdFile());
 	}
 	

@@ -188,11 +188,10 @@ public class Sms {
 			return true;
 		}
 
-		if (!(obj instanceof Sms)) {
+		if (!(obj instanceof Sms sms)) {
 			return false;
 		}
 
-		Sms sms = (Sms) obj;
 		return (this.getSmsId() == sms.getSmsId());
 	}
 

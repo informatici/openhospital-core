@@ -104,11 +104,10 @@ public class LaboratoryRow extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof LaboratoryRow)) {
+		if (!(obj instanceof LaboratoryRow laboratoryRow)) {
 			return false;
 		}
-		
-		LaboratoryRow laboratoryRow = (LaboratoryRow)obj;
+
 		if (this.getCode() != null && laboratoryRow.getCode() != null) {
 			return (this.getCode().equals(laboratoryRow.getCode()) );
 		}

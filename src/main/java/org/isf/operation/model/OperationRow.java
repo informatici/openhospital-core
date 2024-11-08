@@ -226,12 +226,11 @@ public class OperationRow extends Auditable<String> {
             return true;
         }
 
-        if (!(anObject instanceof OperationRow)) {
+        if (!(anObject instanceof OperationRow operationRow)) {
             return false;
         }
 
-        OperationRow operationRow = (OperationRow) anObject;
-        return (this.getOperation().equals(operationRow.getOperation())
+		return (this.getOperation().equals(operationRow.getOperation())
                 && this.getPrescriber().equals(operationRow.getPrescriber()))
                 && operationRow.getTransUnit().equals(this.getTransUnit())
                 && this.getAdmission().equals(operationRow.getAdmission())
