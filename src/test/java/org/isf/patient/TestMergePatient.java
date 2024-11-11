@@ -463,8 +463,8 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	private void assertThatPatientMergedEventWasSent(Patient mergedPatient, Patient obsoletePatient) {
-		assertThat(testPatientMergedEventListener.getPatientMergedEvent().getMergedPatient().getCode()).isEqualTo(mergedPatient.getCode());
-		assertThat(testPatientMergedEventListener.getPatientMergedEvent().getObsoletePatient().getCode()).isEqualTo(obsoletePatient.getCode());
+		assertThat(testPatientMergedEventListener.getPatientMergedEvent().mergedPatient().getCode()).isEqualTo(mergedPatient.getCode());
+		assertThat(testPatientMergedEventListener.getPatientMergedEvent().obsoletePatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
 	private Visit setupVisitAndAssignPatient(Patient patient) throws OHException {

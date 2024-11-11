@@ -1576,8 +1576,8 @@ class Tests extends OHCoreTestCase {
 	void testIoAdmissionIoOperationRepositoryCustom(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		PatientAdmission patientAdmission = new PatientAdmission(1, 2);
-		assertThat(patientAdmission.getPatientId()).isEqualTo(1);
-		assertThat(patientAdmission.getAdmissionId()).isEqualTo(2);
+		assertThat(patientAdmission.patientId()).isEqualTo(1);
+		assertThat(patientAdmission.admissionId()).isEqualTo(2);
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")

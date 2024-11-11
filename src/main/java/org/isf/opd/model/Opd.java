@@ -380,11 +380,10 @@ public class Opd extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof Opd)) {
+		if (!(obj instanceof Opd opd)) {
 			return false;
 		}
-		
-		Opd opd = (Opd)obj;
+
 		return (code == opd.getCode());
 	}
 }

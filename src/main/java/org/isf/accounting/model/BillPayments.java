@@ -139,11 +139,10 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 			return true;
 		}
 		
-		if (!(obj instanceof BillPayments)) {
+		if (!(obj instanceof BillPayments billPayment)) {
 			return false;
 		}
-		
-		BillPayments billPayment = (BillPayments)obj;
+
 		return (id == billPayment.getId());
 	}
 	

@@ -121,11 +121,10 @@ public class MovementType extends Auditable<String> {
 			return true;
 		}
 
-		if (!(obj instanceof MovementType)) {
+		if (!(obj instanceof MovementType movementType)) {
 			return false;
 		}
 
-		MovementType movementType = (MovementType) obj;
 		return (this.getCode().equals(movementType.getCode()));
 	}
 

@@ -225,11 +225,10 @@ public class Laboratory extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Laboratory)) {
+		if (!(obj instanceof Laboratory laboratory)) {
 			return false;
 		}
 
-		Laboratory laboratory = (Laboratory) obj;
 		return (this.getCode().equals(laboratory.getCode()));
 
 	}

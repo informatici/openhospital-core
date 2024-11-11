@@ -99,10 +99,9 @@ public class MedicalWardId implements Serializable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof MedicalWardId)) {
+		if (!(obj instanceof MedicalWardId other)) {
 			return false;
 		}
-		MedicalWardId other = (MedicalWardId) obj;
 		if (medical != other.medical) {
 			return false;
 		}

@@ -321,10 +321,9 @@ public class MovementWard extends Auditable<String> {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof MovementWard)) {
+		if (!(obj instanceof MovementWard movement)) {
 			return false;
 		}
-		MovementWard movement = (MovementWard) obj;
 		return (this.getCode() == movement.getCode());
 	}
 

@@ -161,11 +161,10 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 			return true;
 		}
 		
-		if (!(obj instanceof MedicalWard)) {
+		if (!(obj instanceof MedicalWard ward)) {
 			return false;
 		}
-		
-		MedicalWard ward = (MedicalWard)obj;
+
 		return (this.id.getMedical() == ward.id.getMedical());
 	}
 	

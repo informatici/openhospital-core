@@ -561,11 +561,10 @@ public class Patient extends Auditable<String> {
 			return true;
 		}
 
-		if (!(obj instanceof Patient)) {
+		if (!(obj instanceof Patient patient)) {
 			return false;
 		}
 
-		Patient patient = (Patient)obj;
 		return (this.getCode().equals(patient.getCode()));
 	}
 

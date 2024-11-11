@@ -94,11 +94,10 @@ public class AdmissionType extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof AdmissionType)) {
+		if (!(obj instanceof AdmissionType admissionType)) {
 			return false;
 		}
-		
-		AdmissionType admissionType = (AdmissionType)obj;
+
 		return this.getCode().equals(admissionType.getCode());
 	}
 	

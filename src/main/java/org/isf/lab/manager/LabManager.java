@@ -218,19 +218,17 @@ public class LabManager {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			case 2:
+		return switch (procedure) {
+			case 1 -> ioOperations.newLabFirstProcedure(laboratory);
+			case 2 -> {
 				if (labRow == null || labRow.isEmpty()) {
 					throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
 				}
-				return ioOperations.newLabSecondProcedure(laboratory, labRow);
-			case 3:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
-		}
+				yield ioOperations.newLabSecondProcedure(laboratory, labRow);
+			}
+			case 3 -> ioOperations.newLabFirstProcedure(laboratory);
+			default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**
@@ -245,16 +243,12 @@ public class LabManager {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			case 2:
-				return ioOperations.newLabSecondProcedure2(laboratory, labRow);
-			case 3:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
-		}
+		return switch (procedure) {
+			case 1 -> ioOperations.newLabFirstProcedure(laboratory);
+			case 2 -> ioOperations.newLabSecondProcedure2(laboratory, labRow);
+			case 3 -> ioOperations.newLabFirstProcedure(laboratory);
+			default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**
@@ -298,20 +292,19 @@ public class LabManager {
 	public Laboratory updateLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		Integer procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.updateLabFirstProcedure(laboratory);
-			case 2:
+		return switch (procedure) {
+			case 1 -> ioOperations.updateLabFirstProcedure(laboratory);
+			case 2 -> {
 				if (labRow == null || labRow.isEmpty()) {
 					throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
 				}
-				return ioOperations.updateLabSecondProcedure(laboratory, labRow);
-			case 3:
+				yield ioOperations.updateLabSecondProcedure(laboratory, labRow);
+			}
+			case 3 ->
 				// TODO: is it enough to call FirstProcedure?
-				return ioOperations.updateLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
-		}
+				ioOperations.updateLabFirstProcedure(laboratory);
+			default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**

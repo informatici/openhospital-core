@@ -283,11 +283,10 @@ public class TherapyRow extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof TherapyRow)) {
+		if (!(obj instanceof TherapyRow therapy)) {
 			return false;
 		}
-		
-		TherapyRow therapy = (TherapyRow)obj;
+
 		return (therapyID == therapy.getTherapyID());
 	}
 	

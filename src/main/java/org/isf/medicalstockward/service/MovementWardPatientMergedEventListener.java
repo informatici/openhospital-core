@@ -41,9 +41,9 @@ public class MovementWardPatientMergedEventListener {
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) {
-		List<MovementWard> movementWards = medicalStockWardIoOperations.findAllForPatient(patientMergedEvent.getObsoletePatient());
+		List<MovementWard> movementWards = medicalStockWardIoOperations.findAllForPatient(patientMergedEvent.obsoletePatient());
 		for (MovementWard movementWard : movementWards) {
-			movementWard.setPatient(patientMergedEvent.getMergedPatient());
+			movementWard.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 

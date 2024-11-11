@@ -41,14 +41,15 @@ import org.mockserver.model.MediaType;
 
 public class TestApiConfigProvider {
 
-	private static final String CONFIG_JSON = "{\n" +
-					"  \"1.15.0\": {\n" +
-					"    \"parameter\": \"https://version-url.com\"\n" +
-					"  },\n" +
-					"  \"default\": {\n" +
-					"    \"parameter\": \"https://default-url.com\"\n" +
-					"  }\n" +
-					"}";
+	private static final String CONFIG_JSON = """
+		{
+		  "1.15.0": {
+		    "parameter": "https://version-url.com"
+		  },
+		  "default": {
+		    "parameter": "https://default-url.com"
+		  }
+		}""";
 
 	private ClientAndServer mockServer;
 

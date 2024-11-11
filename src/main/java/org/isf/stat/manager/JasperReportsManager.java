@@ -991,8 +991,7 @@ public class JasperReportsManager {
 			List<JRChild> elements = band.getChildren(); // Get all children
 			for (JRChild child : elements) {
 				int index = 1;
-				if (child instanceof JRBaseSubreport) { // This is a subreport
-					JRBaseSubreport subreport = (JRBaseSubreport) child;
+				if (child instanceof JRBaseSubreport subreport) { // This is a subreport
 					String expression = ""; // Lets find out the expression used
 					JRExpressionChunk[] chunks = subreport.getExpression().getChunks();
 					for (JRExpressionChunk c : chunks) {

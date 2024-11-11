@@ -43,9 +43,9 @@ public class LabPatientMergedEventListener {
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<Laboratory> laboratories = labIoOperations.getLaboratory(patientMergedEvent.getObsoletePatient());
+		List<Laboratory> laboratories = labIoOperations.getLaboratory(patientMergedEvent.obsoletePatient());
 		for (Laboratory laboratory : laboratories) {
-			Patient mergedPatient = patientMergedEvent.getMergedPatient();
+			Patient mergedPatient = patientMergedEvent.mergedPatient();
 			laboratory.setPatient(mergedPatient);
 			laboratory.setPatName(mergedPatient.getName());
 			laboratory.setAge(mergedPatient.getAge());
