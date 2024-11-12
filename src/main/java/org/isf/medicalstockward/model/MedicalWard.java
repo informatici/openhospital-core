@@ -59,8 +59,8 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	 * Lock control
 	 */
 	@Version
-	@Column(name = "MDSRWRD_LOCK")
-	private Integer lock;
+	@Column(name = "MDSRWRD_LOCK", columnDefinition = "INT(11) NOT NULL DEFAULT 0")
+	private int lock;
 	@Transient
 	private Double qty = 0.0;
 
@@ -118,11 +118,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.qty = qty;
 	}
 
-	public Integer getLock() {
+	public int getLock() {
 		return lock;
 	}
 
-	public void setLock(Integer lock) {
+	public void setLock(int lock) {
 		this.lock = lock;
 	}
 
