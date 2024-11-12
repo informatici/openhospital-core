@@ -398,6 +398,14 @@ public class UserBrowsingManager {
 	 * @throws OHServiceException If failed to update group
 	 */
 	public UserGroup updateUserGroup(UserGroup userGroup, List<Permission> permissions) throws OHServiceException {
+		if (userGroup.isDeleted()) {
+			List<User> users = getUser(userGroup.getCode());
+			if (users != null && users.stream().anyMatch(user -> !user.isDeleted())) {
+				throw new OHDataValidationException(
+					new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
+			}
+		}
+
 		return ioOperations.updateUserGroup(userGroup, permissions);
 	}
 
