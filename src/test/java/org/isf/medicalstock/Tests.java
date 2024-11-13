@@ -75,6 +75,7 @@ import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -1527,6 +1528,20 @@ class Tests extends OHCoreTestCase {
 			}
 		})
 			.isInstanceOf(OHServiceException.class);
+	}
+
+	@Test
+	void testMedicalWardLockGetterSetter() throws Exception {
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		MovementType movementType = movement.getType();
+		movementType.setType("-");
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+
+		assertThat(medicalWard.getLock()).isEqualTo(0);
+		medicalWard.setLock(8);
+		assertThat(medicalWard.getLock()).isEqualTo(8);
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {
