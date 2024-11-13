@@ -153,12 +153,6 @@ class Tests extends OHCoreTestCase {
 		testSupplier = new TestSupplier();
 		testMedicalStock = new TestMedicalStock();
 	}
-
-	@BeforeEach
-	void setUp() throws OHException {
-		cleanH2InMemoryDb();
-	}
-
 	@AfterAll
 	static void tearDownClass() {
 		testLot = null;
@@ -170,7 +164,10 @@ class Tests extends OHCoreTestCase {
 		testSupplier = null;
 		testMedicalStock = null;
 	}
-
+	@BeforeEach
+	void setUp() throws OHException {
+		cleanH2InMemoryDb();
+	}
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
 	void testLotGets(boolean in, boolean out, boolean toward) throws Exception {
@@ -1107,7 +1104,7 @@ class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 			assertThat(movement).isNotNull();
 			Lot lot = movement.getLot();
-			lot.setCost(new BigDecimal(0.0));
+			lot.setCost(new BigDecimal("0.0"));
 			lotIoOperationRepository.saveAndFlush(lot);
 			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
@@ -1521,7 +1518,7 @@ class Tests extends OHCoreTestCase {
 				method.invoke(medicalStockIoOperation, medical, newDate, quantity);
 			} catch (InvocationTargetException e) {
 				if (e.getCause() instanceof OHServiceException) {
-					throw (OHServiceException) e.getCause();
+					throw e.getCause();
 				} else {
 					throw e;
 				}
