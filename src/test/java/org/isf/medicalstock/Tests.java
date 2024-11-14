@@ -153,6 +153,7 @@ class Tests extends OHCoreTestCase {
 		testSupplier = new TestSupplier();
 		testMedicalStock = new TestMedicalStock();
 	}
+
 	@AfterAll
 	static void tearDownClass() {
 		testLot = null;
@@ -164,10 +165,12 @@ class Tests extends OHCoreTestCase {
 		testSupplier = null;
 		testMedicalStock = null;
 	}
+
 	@BeforeEach
 	void setUp() throws OHException {
 		cleanH2InMemoryDb();
 	}
+
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
 	void testLotGets(boolean in, boolean out, boolean toward) throws Exception {
@@ -1536,7 +1539,7 @@ class Tests extends OHCoreTestCase {
 		movementType.setType("-");
 		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
 
-		assertThat(medicalWard.getLock()).isEqualTo(0);
+		assertThat(medicalWard.getLock()).isZero();
 		medicalWard.setLock(8);
 		assertThat(medicalWard.getLock()).isEqualTo(8);
 	}
