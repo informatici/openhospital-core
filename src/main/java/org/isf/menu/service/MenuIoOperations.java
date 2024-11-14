@@ -116,12 +116,12 @@ public class MenuIoOperations {
 	/**
 	 * Returns {@link User} from its username
 	 * @param username - the {@link User}'s username
-	 * @param withTrashed - Included soft deleted if set to true
+	 * @param withSoftDeletion - Included soft deleted if set to true
 	 * @return {@link User}
 	 * @throws OHServiceException When error occurs
 	 */
-	public User getUserByName(String username, boolean withTrashed) throws OHServiceException {
-		return withTrashed ? repository.findByUserName(username) : getUserByName(username);
+	public User getUserByName(String username, boolean withSoftDeletion) throws OHServiceException {
+		return withSoftDeletion ? repository.findByUserName(username) : getUserByName(username);
 	}
 
 	/**
