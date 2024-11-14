@@ -39,4 +39,8 @@ public class UserGroupManager {
 	public List<UserGroup> findByIdIn(List<String> userGroupIds) {
 		return this.userGroupIoOperationRepository.findByCodeIn(userGroupIds);
 	}
+
+	public List<UserGroup> findByIdIn(List<String> userGroupIds, boolean deleted) {
+		return this.userGroupIoOperationRepository.findByCodeInAndDeleted(userGroupIds, deleted);
+	}
 }

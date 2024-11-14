@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -33,11 +33,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
 
+	UserGroup findByCodeAndDeleted(String code, boolean deleted);
+
+	UserGroup findByCode(String code);
+
 	List<UserGroup> findAllByOrderByCodeAsc();
+
+	List<UserGroup> findAllByDeletedOrderByCodeAsc(boolean deleted);
 
 	@Modifying
 	@Query(value = "update UserGroup ug set ug.desc=:description where ug.code=:id")
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
+	@Modifying
+	@Query(value = "update UserGroup ug set ug.desc=:description, ug.deleted=:deleted where ug.code=:id")
+	int update(@Param("description") String description, @Param("deleted") boolean deleted, @Param("id") String id);
+
 	List<UserGroup> findByCodeIn(List<String> userGroupIds);
+
+	List<UserGroup> findByCodeInAndDeleted(List<String> userGroupIds, boolean deleted);
+
 }

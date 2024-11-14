@@ -209,7 +209,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setDesc("Update");
-		assertThat(menuIoOperation.updateUser(foundUser)).isTrue();
+		assertThat(menuIoOperation.updateUser(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getDesc()).isEqualTo("Update");
@@ -221,7 +221,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
-		assertThat(menuIoOperation.updatePassword(foundUser)).isTrue();
+		assertThat(menuIoOperation.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");
@@ -280,7 +280,9 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		menuIoOperation.deleteGroup(foundUserGroup);
-		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
+		assertThat(menuIoOperation.findByCode(foundUserGroup.getCode())).isNull();
+		foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundUserGroup).isNull();
 	}
 
 	@Test
@@ -305,13 +307,13 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		List<GroupPermission> groupPermissions = groupPermissionManager.findUserGroupPermissions(foundUserGroup.getCode());
-		ArrayList<Permission> permissions = new ArrayList<>(groupPermissions.stream().map(GroupPermission::getPermission).toList().subList(0,2));
+		ArrayList<Permission> permissions = new ArrayList<>(groupPermissions.stream().map(GroupPermission::getPermission).toList().subList(0, 2));
 		Permission permission = permissions.get(0);
 		permission.setName("updated.permission");
 		permission.setDescription("Updated permission");
 		permissions.set(0, permission);
 		foundUserGroup.setDesc("Update");
-		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions)).isTrue();
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions).getCode()).isEqualTo(foundUserGroup.getCode());
 		checkUserGroupAndPermissionsIntoDb(foundUserGroup, permissions);
 	}
 
@@ -321,10 +323,50 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		foundUserGroup.setDesc("Update");
-		assertThat(menuIoOperation.updateUserGroup(foundUserGroup)).isTrue();
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup).getCode()).isEqualTo(foundUserGroup.getCode());
 		UserGroup updatedUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(updatedUserGroup).isNotNull();
 		assertThat(updatedUserGroup.getDesc()).isEqualTo("Update");
+	}
+
+	@Test
+	void testMgrSoftDeleteUser() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user).isNotNull();
+		assertThat(user.isDeleted()).isFalse();
+
+		user.setDeleted(true);
+		User foundUser = userIoOperationRepository.findByUserName(userName);
+		assertThat(foundUser).isNotNull();
+		assertThat(foundUser.isDeleted()).isTrue();
+		foundUser = userBrowsingManager.getUserByName(foundUser.getUserName());
+		assertThat(foundUser).isNull();
+	}
+
+	@Test
+	void testMgrSoftDeleteUserGroup() throws Exception {
+		String userName = setupTestUser(false);
+		User foundUser = userBrowsingManager.getUserByName(userName);
+
+		assertThat(foundUser).isNotNull();
+
+		UserGroup foundUserGroup = userBrowsingManager.findUserGroupByCode(foundUser.getUserGroupName().getCode());
+
+		assertThat(foundUserGroup).isNotNull();
+		UserGroup userGroup = new UserGroup(foundUserGroup.getCode(), foundUserGroup.getDesc());
+		assertThatThrownBy(() -> {
+			userBrowsingManager.deleteGroup(userGroup);
+		}).isInstanceOf(OHServiceException.class);
+
+		foundUser.setDeleted(true);
+
+		foundUserGroup.setDeleted(true);
+		foundUserGroup = userGroupIoOperationRepository.findByCodeAndDeleted(foundUserGroup.getCode(), true);
+		assertThat(foundUserGroup).isNotNull();
+		assertThat(foundUserGroup.isDeleted()).isTrue();
+		foundUserGroup = userBrowsingManager.findUserGroupByCode(foundUserGroup.getCode());
+		assertThat(foundUserGroup).isNull();
 	}
 
 	@Test
@@ -369,7 +411,8 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		userBrowsingManager.deleteGroup(foundUserGroup);
-		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
+		foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundUserGroup).isNull();
 	}
 
 	@Test
@@ -381,7 +424,7 @@ class Tests extends OHCoreTestCase {
 			userGroupIoOperationRepository.saveAndFlush(userGroup);
 			userBrowsingManager.deleteGroup(userGroup);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -393,7 +436,7 @@ class Tests extends OHCoreTestCase {
 			assertThat(user).isNotNull();
 			userBrowsingManager.deleteGroup(user.getUserGroupName());
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -425,7 +468,7 @@ class Tests extends OHCoreTestCase {
 			userIoOperationRepository.saveAndFlush(user);
 			userBrowsingManager.newUser(user);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -434,7 +477,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setDesc("Update");
-		assertThat(userBrowsingManager.updateUser(foundUser)).isTrue();
+		assertThat(userBrowsingManager.updateUser(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getDesc()).isEqualTo("Update");
@@ -446,7 +489,7 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
-		assertThat(userBrowsingManager.updatePassword(foundUser)).isTrue();
+		assertThat(userBrowsingManager.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");
@@ -458,8 +501,8 @@ class Tests extends OHCoreTestCase {
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(foundUser).isNotNull();
 		userBrowsingManager.deleteUser(foundUser);
-		List<User> users = userBrowsingManager.getUser(userName);
-		assertThat(users).isEmpty();
+		foundUser = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(foundUser).isNull();
 	}
 
 	@Test
@@ -472,7 +515,7 @@ class Tests extends OHCoreTestCase {
 			foundUser.setUserName("admin");
 			userBrowsingManager.deleteUser(foundUser);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -530,7 +573,7 @@ class Tests extends OHCoreTestCase {
 			assertThat(foundUserGroup).isNotNull();
 			userBrowsingManager.newUserGroup(foundUserGroup);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -539,7 +582,7 @@ class Tests extends OHCoreTestCase {
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundUserGroup).isNotNull();
 		foundUserGroup.setDesc("Update");
-		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup)).isTrue();
+		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup).getCode()).isEqualTo(foundUserGroup.getCode());
 		UserGroup updatedUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
 		assertThat(updatedUserGroup).isNotNull();
 		assertThat(updatedUserGroup.getDesc()).isEqualTo("Update");
@@ -566,8 +609,8 @@ class Tests extends OHCoreTestCase {
 		groupMenu.setCode(1);
 
 		assertThat(groupMenu)
-				.isNotNull()
-				.isNotEqualTo("aString");
+			.isNotNull()
+			.isNotEqualTo("aString");
 
 		GroupMenu groupMenu1 = testGroupMenu.setup(false);
 		groupMenu1.setCode(-1);
@@ -602,8 +645,8 @@ class Tests extends OHCoreTestCase {
 		User user = testUser.setup(userGroup, true);
 
 		assertThat(user)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		User user1 = testUser.setup(userGroup, false);
 		user1.setUserName("someOtherName");
@@ -639,8 +682,8 @@ class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(true);
 
 		assertThat(userGroup)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		UserGroup userGroup1 = testUserGroup.setup(false);
 
@@ -670,8 +713,8 @@ class Tests extends OHCoreTestCase {
 		UserMenuItem userMenuItem = testUserMenu.setup(true);
 
 		assertThat(userMenuItem)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		UserMenuItem userMenuItem1 = testUserMenu.setup(false);
 		userMenuItem.setCode("code1");
