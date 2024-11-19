@@ -61,6 +61,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	@Version
 	@Column(name = "MDSRWRD_LOCK", columnDefinition = "INT(11) NOT NULL DEFAULT 0")
 	private int lock;
+
 	@Transient
 	private Double qty = 0.0;
 
@@ -107,9 +108,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public Lot getLot() {
 		return id.getLot();
 	}
+
 	public void setLot(Lot lot) {
 		id.setLot(lot);
 	}
+
 	public Double getQty() {
 		return qty;
 	}
@@ -147,9 +150,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public Medical getMedical() {
 		return this.id.getMedical();
 	}
+
 	public void setMedical(Medical medical) {
 		this.id.setMedical(medical);
 	}
+
 	public float getIn_quantity() {
 		return this.in_quantity;
 	}
