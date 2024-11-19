@@ -49,6 +49,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
+import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
@@ -966,11 +967,11 @@ public class JasperReportsManager {
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those. The parent report must contain parameters like:
-		 * 
+		 *
 		 * SUBREPORT_RESOURCE_BUNDLE_1 SUBREPORT_RESOURCE_BUNDLE_2 SUBREPORT_RESOURCE_BUNDLE_...
-		 * 
+		 *
 		 * and pass them as REPORT_RESOURCE_BUNDLE to each related subreport.
-		 * 
+		 *
 		 * If nothing is passed, subreports still work, but REPORT_LOCALE will be used (if passed to the subreport) and corresponding bundle (UTF-8 decoding not
 		 * available)
 		 */
@@ -1084,7 +1085,7 @@ public class JasperReportsManager {
 
 	/**
 	 * Converts a {@link LocalDateTime} to a {@link Date}.
-	 * 
+	 *
 	 * @param localDateTime the localDateTime to convert.
 	 * @return the converted value or {@code null} if the passed value is {@code null}.
 	 */
@@ -1094,6 +1095,33 @@ public class JasperReportsManager {
 
 	private static Date toDate(LocalDate localDate) {
 		return Optional.ofNullable(localDate).map(t -> Date.from(t.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())).orElse(null);
+	}
+
+	public JasperReportResultDto getInventoryReportPdf(MedicalInventory inventory, String jasperFileName, int printRealQty) throws OHServiceException {
+		try {
+			String status = inventory.getStatus();
+			Map<String, Object> parameters = new HashMap<>(getHospitalParameters());
+			parameters.put("inventoryId", String.valueOf(inventory.getId()));
+			parameters.put("inventoryReference", inventory.getInventoryReference());
+			parameters.put("inventoryStatus", status != null ? status : inventory.getStatus());
+			parameters.put("printRealQty", printRealQty);
+
+			LocalDateTime inventoryDateTime = inventory.getInventoryDate();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DD_MM_YYYY);
+			String formattedDate = inventoryDateTime.format(formatter);
+			parameters.put("inventoryDate", formattedDate);
+
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(inventory.getId())), "pdf ");
+			LOGGER.info("Generated PDF File: {}", pdfFilename);
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
 	}
 
 }
