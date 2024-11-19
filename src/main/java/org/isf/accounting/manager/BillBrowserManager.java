@@ -60,8 +60,8 @@ public class BillBrowserManager {
 
 		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime upDate;
-		LocalDateTime firstPay = LocalDateTime.from(today);
-		LocalDateTime lastPay = LocalDateTime.from(today);
+		LocalDateTime firstPay = today;
+		LocalDateTime lastPay = today;
 
 		LocalDateTime billDate = bill.getDate();
 		if (!billPayments.isEmpty()) {
