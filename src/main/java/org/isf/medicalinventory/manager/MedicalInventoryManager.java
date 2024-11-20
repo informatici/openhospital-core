@@ -362,8 +362,8 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
 	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
-		int invenotyId = medicalInventory.getId();
-		List<MedicalInventoryRow> inventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(invenotyId);
+		int inventoryId = medicalInventory.getId();
+		List<MedicalInventoryRow> inventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		for (MedicalInventoryRow invRow : inventoryRows) {
 			boolean isNewLot = invRow.isNewLot();
 			Lot lot = invRow.getLot();

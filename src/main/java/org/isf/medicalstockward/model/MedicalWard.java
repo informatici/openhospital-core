@@ -88,13 +88,13 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 
 	}
 
-	public MedicalWard(Medical med, double qanty, Lot lot) {
+	public MedicalWard(Medical med, double quantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId();
 
 		this.id.setMedical(med);
 		this.id.setLot(lot);
-		this.qty = qanty;
+		this.qty = quantity;
 	}
 
 	public MedicalWardId getId() {

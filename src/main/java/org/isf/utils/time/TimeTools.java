@@ -182,7 +182,7 @@ public class TimeTools {
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
 	 *
 	 * @param date - a Date object
-	 * @return the String represetation of the Date
+	 * @return the String representation of the Date
 	 */
 	public static String formatDateTimeReport(LocalDate date) {
 		LocalDateTime time = date.atStartOfDay();
@@ -193,7 +193,7 @@ public class TimeTools {
 	 * Truncate date time to SECONDS only if value is non-null
 	 * 
 	 * @param dateTime
-	 * @return LocaleDateTime turncated to seconds
+	 * @return LocaleDateTime truncated to seconds
 	 */
 	public static LocalDateTime truncateToSeconds(LocalDateTime dateTime) {
 		return dateTime == null ? null : dateTime.truncatedTo(ChronoUnit.SECONDS);

@@ -75,7 +75,7 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 
-	 * @param inventoryId - the Invetory Id.
+	 * @param inventoryId - the Inventory Id.
 	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -86,7 +86,7 @@ public class MedicalInventoryRowIoOperation {
 	/**
 	 * Return {@link MedicalInventoryRow} for passed param.
 	 
-	 * @param id - the Invetoryrow Id.
+	 * @param id - the InventoryRow Id.
 	 * @return {@link MedicalInventoryRow} with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */

@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
+ * useful logic manipulations of the dynamic data (memory)
  *
  * @author Rick
  */

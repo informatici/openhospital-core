@@ -225,7 +225,7 @@ public class Patient extends Auditable<String> {
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatut, char parentTogether, String personalCode,
+			String bloodType, char economicStatus, char parentTogether, String personalCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -242,7 +242,7 @@ public class Patient extends Auditable<String> {
 		this.mother = mother;
 		this.fatherName = fatherName;
 		this.father = father;
-		this.hasInsurance = economicStatut;
+		this.hasInsurance = economicStatus;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = personalCode;
@@ -253,7 +253,7 @@ public class Patient extends Auditable<String> {
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatut, char parentTogether, String taxCode,
+			String bloodType, char economicStatus, char parentTogether, String taxCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
@@ -272,7 +272,7 @@ public class Patient extends Auditable<String> {
 		this.mother = mother;
 		this.fatherName = fatherName;
 		this.father = father;
-		this.hasInsurance = economicStatut;
+		this.hasInsurance = economicStatus;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = taxCode;
