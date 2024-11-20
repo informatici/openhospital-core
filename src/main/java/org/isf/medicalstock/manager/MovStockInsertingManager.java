@@ -138,7 +138,12 @@ public class MovStockInsertingManager {
 		 */
 		Lot lot = movement.getLot();
 		if (lot != null) {
-
+			// get the lot information
+			String lotCode = lot.getCode();
+			Lot lotExist = ioOperations.getLot(lotCode);
+			if (lotExist != null) {
+				lot = lotExist;
+			}
 			if (isCharge && !isAutomaticLotIn() || !isCharge && !isAutomaticLotOut()) {
 				// check everything
 				validateLot(errors, lot, true);
@@ -186,7 +191,7 @@ public class MovStockInsertingManager {
 			if (!isAutomaticLotOut()) {
 
 				if (movement.getType() != null && !isCharge && movement.getQuantity() > lot.getMainStoreQuantity()) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.fmt.msg", movement.getQuantity(), lot.getMainStoreQuantity())));
 				}
 			}
 
@@ -209,7 +214,7 @@ public class MovStockInsertingManager {
 		if (lot.getDueDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
 		}
-		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
+		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
 		}
 	}

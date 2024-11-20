@@ -108,6 +108,7 @@ public class Supplier extends Auditable<String> implements Serializable {
 	 * @param supEmail Email
 	 * @param supNote Extra note
 	 */
+	// TODO: to verify if it is really needed to have supID in the constructor
 	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote) {
 		this.supId = supID;
 		this.supName = supName;
@@ -130,6 +131,7 @@ public class Supplier extends Auditable<String> implements Serializable {
 	 * @param supNote Extra note
 	 * @param supDeleted Is deleted?
 	 */
+	// TODO: to remove, used only in tests
 	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote,
 		Character supDeleted) {
 		this.supId = supID;

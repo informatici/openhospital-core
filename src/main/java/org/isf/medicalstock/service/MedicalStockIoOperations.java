@@ -91,7 +91,7 @@ public class MedicalStockIoOperations {
 	 * 
 	 * @return {@code true} if automatic lot mode, {@code false} otherwise.
 	 */
-	private boolean isAutomaticLotMode() {
+	private boolean isAutomaticLotInMode() {
 		return GeneralData.AUTOMATICLOT_IN;
 	}
 
@@ -180,26 +180,23 @@ public class MedicalStockIoOperations {
 	 * Stores the specified {@link Movement}.
 	 * 
 	 * @param movement - the movement to store.
+	 * @return the stored {@link Movement}.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
 	public Movement newMovement(Movement movement) throws OHServiceException {
 		String lotCode = null;
+		Lot lot = movement.getLot();
 
-		if (movement.getLot() != null) {
-			lotCode = movement.getLot().getCode();
+		if (lot != null) {
+			lotCode = lot.getCode();
 		}
 
-		// we have to manage the Lot
-		if (movement.getType().getType().contains("+")) {
-			// if is in automatic lot mode then we have to generate a new lot code
-			if (isAutomaticLotMode() || "".equals(lotCode)) {
-				lotCode = generateLotCode();
-			}
-
-			boolean lotExists = lotExists(lotCode);
-			if (!lotExists) {
-				storeLot(lotCode, movement.getLot(), movement.getMedical());
-			}
+		// if charging we have to manage the Lot, if discharging the lot should be given
+		boolean chargeMovement = movement.getType().getType().contains("+");
+		boolean lotExists = lotExists(lotCode);
+		if (chargeMovement && !lotExists) {
+			lot = storeLot(lotCode, movement.getLot(), movement.getMedical());
+			lotCode = lot.getCode();
 		}
 
 		Movement movementStored = storeMovement(movement, lotCode);
@@ -295,7 +292,28 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
-		return lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		Lot lot = lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		if (lot == null) {
+			return null;
+		}
+		List<String> lotCodes = new ArrayList<>();
+		lotCodes.add(lotCode);
+		// Retrieve quantities in batch
+		List<Object[]> mainStoreQuantities = lotRepository.getMainStoreQuantities(lotCodes);
+		List<Object[]> wardsTotalQuantities = lotRepository.getWardsTotalQuantities(lotCodes);
+
+		// Process mainStoreQuantities and update lots
+		for (Object[] result : mainStoreQuantities) {
+			int mainStoreQuantity = ((Long) result[1]).intValue();
+			lot.setMainStoreQuantity(mainStoreQuantity);
+		}
+
+		// Process wardsTotalQuantities and update lots
+		for (Object[] result : wardsTotalQuantities) {
+			Double wardsTotalQuantity = (Double) result[1];
+			lot.setWardsTotalQuantity(wardsTotalQuantity);
+		}
+		return lot;
 	}
 
 	/**
@@ -312,7 +330,7 @@ public class MedicalStockIoOperations {
 	/**
 	 * Stores the specified {@link Lot}.
 	 * 
-	 * @param lotCode the {@link Lot} code.
+	 * @param lotCode the {@link Lot} code. If {@code null} or {@code empty} it will be generated.
 	 * @param lot the lot to store.
 	 * @param medical
 	 * @return the stored {@link Lot} object.
@@ -320,8 +338,11 @@ public class MedicalStockIoOperations {
 	 */
 	// TODO: verify why lotCode and medical params are needed
 	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
-		if (lotCode == null || lotCode.equals("")) {
+		if (lotCode == null || lotCode.isEmpty()) {
 			lotCode = this.generateLotCode();
+			if (!isAutomaticLotInMode()) {
+				LOGGER.warn("AUTOMATICLOT_IN mode set to 'false' but lot code not provided. Generating... {}.", lotCode);
+			}
 		}
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
@@ -590,7 +611,8 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out if removeEmpty is set to true.
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top Lots with zero quantities will be stripped out if removeEmpty is set to
+	 * true.
 	 * 
 	 * @param medical the medical.
 	 * @param removeEmpty

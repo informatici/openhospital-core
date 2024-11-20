@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.MedicalInventoryRow;
+import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
@@ -55,14 +57,17 @@ public class MovBrowserManager {
 	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
 
 	private MovWardBrowserManager movWardBrowserManager;
+	
+	private MedicalInventoryRowIoOperation medicalInventoryRowIoOperation;
 
 	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
-					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
+					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager, MedicalInventoryRowIoOperation medicalInventoryRowIoOperation) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
 		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
 		this.movWardBrowserManager = movWardBrowserManager;
+		this.medicalInventoryRowIoOperation = medicalInventoryRowIoOperation;
 	}
 
 	/**
@@ -184,7 +189,14 @@ public class MovBrowserManager {
 			List<Movement> movementWithSameLot = ioOperations.getMovementByLot(lot);
 			ioOperations.deleteMovement(lastMovement);
 			if (movementWithSameLot.size() == 1) {
-				lotRepository.deleteById(lot.getCode());
+				String lotCode = lot.getCode();
+				MedicalInventoryRow medicalInventoryRow = medicalInventoryRowIoOperation.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
+				if (medicalInventoryRow == null) {
+					lotRepository.deleteById(lotCode);
+				} else {
+					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
+												"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));
+				}
 			}
 		} else {
 			Ward ward = lastMovement.getWard();
