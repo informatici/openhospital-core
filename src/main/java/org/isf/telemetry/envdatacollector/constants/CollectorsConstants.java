@@ -39,7 +39,7 @@ public interface CollectorsConstants {
 	String HW_CPU_NUM_PHYSICAL_PROCESSES = "hw_cpu_number_physical_processes";
 	String HW_CPU_NUM_LOGICAL_PROCESSES = "hw_cpu_number_logical_processes";
 	String HW_CPU_NAME = "hw_cpu_name";
-	String HW_CPU_IDENTIFIER = "hw_cpu_identifier";
+	String HW_CPU_IDENTIFIER = "hw_cpu_idientifier";
 	String HW_CPU_MODEL = "hw_cpu_model";
 	String HW_CPU_ARCHITECTURE = "hw_cpu_microarchitecture";
 	String HW_CPU_VENDOR = "hw_cpu_vendor";
