@@ -40,6 +40,7 @@ public class GeoIpLookupService extends GeoIpInfoCommonService {
 		this.settings = geoIpInfoSettings;
 	}
 
+	@Override
 	public GeoIpLookup retrieveIpInfo() {
 		GeoIpLookupRemoteService httpClient = super.buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), GeoIpLookupRemoteService.class,
 						GeoIpLookupService.class);
@@ -50,6 +51,7 @@ public class GeoIpLookupService extends GeoIpInfoCommonService {
 		return result;
 	}
 
+	@Override
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}
