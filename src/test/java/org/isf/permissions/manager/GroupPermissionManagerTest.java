@@ -39,7 +39,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GroupPermissionManagerTest extends OHCoreTestCase {
+class GroupPermissionManagerTest extends OHCoreTestCase {
 
 	@Autowired
 	private GroupPermissionManager groupPermissionManager;
@@ -50,12 +50,11 @@ public class GroupPermissionManagerTest extends OHCoreTestCase {
 	@Autowired
 	private UserBrowsingManager userBrowsingManager;
 
-	private static GroupPermission groupPermission;
+	private GroupPermission groupPermission;
 
 	void setUpDependencies() throws OHException, OHServiceException {
 		Permission permission = permissionManager.save(TestPermission.generatePermission());
 		UserGroup userGroup = userBrowsingManager.newUserGroup(new TestUserGroup().setup(false));
-
 		groupPermission = new GroupPermission();
 		groupPermission.setPermission(permission);
 		groupPermission.setUserGroup(userGroup);
@@ -71,9 +70,7 @@ public class GroupPermissionManagerTest extends OHCoreTestCase {
 	@DisplayName("Assign a permission to a user group")
 	void assignPermissionToUserGroup() throws OHDataValidationException {
 		GroupPermission createdGroupPermission = groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
-
 		GroupPermission foundPermission = groupPermissionManager.findById(createdGroupPermission.getId());
-
 		assertThat(foundPermission).isNotNull();
 		assertThat(foundPermission.getPermission().getName()).isEqualTo(groupPermission.getPermission().getName());
 		assertThat(foundPermission.getUserGroup().getCode()).isEqualTo(groupPermission.getUserGroup().getCode());
@@ -83,7 +80,6 @@ public class GroupPermissionManagerTest extends OHCoreTestCase {
 	@DisplayName("Assign already assigned permission to a user group")
 	void assignAlreadyAssignedPermissionToUserGroup() throws OHDataValidationException {
 		groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
-
 		assertThatThrownBy(() -> {
 			groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
 		}).isInstanceOf(OHDataValidationException.class);
@@ -95,7 +91,6 @@ public class GroupPermissionManagerTest extends OHCoreTestCase {
 		GroupPermission createdGroupPermission = groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
 		groupPermissionManager.delete(groupPermission.getUserGroup(), groupPermission.getPermission());
 		GroupPermission foundPermission = groupPermissionManager.findById(createdGroupPermission.getId());
-
 		assertThat(foundPermission).isNull();
 	}
 
