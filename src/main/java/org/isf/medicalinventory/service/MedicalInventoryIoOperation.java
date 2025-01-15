@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -42,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MedicalInventoryIoOperation {
 
 	private MedicalInventoryIoOperationRepository repository;
+
 	public MedicalInventoryIoOperation(MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository) {
 		this.repository = medicalInventoryIoOperationRepository;
 	}
@@ -56,7 +58,7 @@ public class MedicalInventoryIoOperation {
 	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		return repository.save(medicalInventory);
 	}
-	
+
 	/**
 	 * Update an existing {@link MedicalInventory}.
 	 *
@@ -67,16 +69,17 @@ public class MedicalInventoryIoOperation {
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		return repository.save(medicalInventory);
 	}
-	
+
 	/**
 	 * Deletes the specified {@link MedicalInventory}.
+	 * 
 	 * @param medicalInventory - the {@link MedicalInventory} to delete.
 	 * @throws OHServiceException if an error occurs during the medicalInventory deletion.
 	 */
 	public void deleteMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		repository.delete(medicalInventory);
 	}
-	
+
 	/**
 	 * Check if the reference number is already used.
 	 * 
@@ -86,12 +89,12 @@ public class MedicalInventoryIoOperation {
 	 */
 	public boolean referenceExists(String reference) throws OHServiceException {
 		MedicalInventory medInv = repository.findByReference(reference);
-		if (medInv != null)  {
+		if (medInv != null) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
@@ -103,7 +106,7 @@ public class MedicalInventoryIoOperation {
 	public List<MedicalInventory> getMedicalInventoryByStatusAndWard(String status, String wardCode) throws OHServiceException {
 		return repository.findInventoryByStatusAndWardCode(status, wardCode);
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
@@ -115,7 +118,7 @@ public class MedicalInventoryIoOperation {
 	public List<MedicalInventory> getMedicalInventoryByStatusAndInventoryType(String status, String inventoryType) throws OHServiceException {
 		return repository.findInventoryByStatusAndInventoryType(status, inventoryType);
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 *
@@ -125,7 +128,7 @@ public class MedicalInventoryIoOperation {
 	public List<MedicalInventory> getMedicalInventory() throws OHServiceException {
 		return repository.findAll();
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
 	 * 
@@ -136,16 +139,17 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type) throws OHServiceException {
+	public List<MedicalInventory> getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type)
+		throws OHServiceException {
 		if (status == null) {
 			return repository.findInventoryBetweenDatesAndType(dateFrom, dateTo, type);
 		}
 		return repository.findInventoryBetweenDatesStatusAndType(dateFrom, dateTo, status, type);
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventory}s for passed params.
-	 
+	 * 
 	 * @param dateFrom - the lower date for the range.
 	 * @param dateTo - the highest date for the range.
 	 * @param status - the {@link MedicalInventory} status.
@@ -155,25 +159,26 @@ public class MedicalInventoryIoOperation {
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page, int size) throws OHServiceException {
+	public Page<MedicalInventory> getMedicalInventoryByParamsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type, int page,
+		int size) throws OHServiceException {
 		Pageable pageable = PageRequest.of(page, size);
 		if (status == null) {
 			return repository.findInventoryBetweenDatesAndTypePageable(dateFrom, dateTo, type, pageable);
 		}
 		return repository.findInventoryBetweenDatesStatusAndTypePageable(dateFrom, dateTo, status, type, pageable);
 	}
-	
+
 	/**
 	 * Checks if the code is already in use.
 	 *
 	 * @param id - the {@link MedicalInventory} code.
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(int id) throws OHServiceException {
 		return repository.existsById(id);
 	}
-	
+
 	/**
 	 * Fetch {@link MedicalInventory} with param.
 	 * 
@@ -181,7 +186,7 @@ public class MedicalInventoryIoOperation {
 	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory getInventoryByReference(String  reference) throws OHServiceException {
+	public MedicalInventory getInventoryByReference(String reference) throws OHServiceException {
 		return repository.findByReference(reference);
 	}
 
@@ -202,11 +207,22 @@ public class MedicalInventoryIoOperation {
 
 	/**
 	 * Marks an inventory as deleted by changing its status.
+	 * 
 	 * @param medicalInventory - the medicalInventory of the inventory to delete.
 	 * @throws OHServiceException if an error occurs during the operation.
 	 */
 	public void deleteInventory(MedicalInventory medicalInventory) throws OHServiceException {
 		medicalInventory.setStatus(InventoryStatus.canceled.toString());
 		repository.save(medicalInventory);
+	}
+
+	/**
+	 * Return the number of inventories by {@link InventoryType}.
+	 * 
+	 * @param type {@link InventoryType}
+	 * @return the number of records or zero.
+	 */
+	public int getInventoryCount(String type) {
+		return repository.countByInventoryType(type);
 	}
 }

@@ -21,6 +21,8 @@
  */
 package org.isf.medicalinventory.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,27 +64,26 @@ public class MedicalInventoryRow extends Auditable<String> {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MINVTR_INVT_ID")
+	@JoinColumn(name = "MINVTR_INVT_ID")
 	private MedicalInventory inventory;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MINVTR_MDSR_ID")
+	@JoinColumn(name = "MINVTR_MDSR_ID")
 	private Medical medical;
 
 	@ManyToOne
-	@JoinColumn(name="MINVTR_LT_ID_A")
+	@JoinColumn(name = "MINVTR_LT_ID_A")
 	private Lot lot;
-	
-	@Column(name="MINVTR_IS_NEW_LOT")
+
+	@Column(name = "MINVTR_IS_NEW_LOT")
 	private boolean isNewLot;
 
 	@Version
-	@Column(name="MINVTR_LOCK")
+	@Column(name = "MINVTR_LOCK")
 	private int lock;
-	
-	private transient double total;
 
+	private transient BigDecimal total;
 
 	public MedicalInventoryRow() {
 	}
@@ -147,7 +148,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public void setRealQty(double realQty) {
 		this.realQty = realQty;
 	}
-	
+
 	public boolean isNewLot() {
 		return isNewLot;
 	}
@@ -159,26 +160,26 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public int getLock() {
 		return lock;
 	}
-	
+
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
-	
-	public double getTotal() {
+
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 
 	public String getSearchString() {
-		 Medical medical = getMedical();
-		 StringBuilder sbNameCode = new StringBuilder();
-		 if (medical != null) {
-			 sbNameCode.append(medical.getDescription().toLowerCase())
-		       .append(medical.getProdCode().toLowerCase());
-		 }
-		 return sbNameCode.toString();
+		Medical medical = getMedical();
+		StringBuilder sbNameCode = new StringBuilder();
+		if (medical != null) {
+			sbNameCode.append(medical.getDescription().toLowerCase())
+				.append(medical.getProdCode().toLowerCase());
+		}
+		return sbNameCode.toString();
 	}
 }

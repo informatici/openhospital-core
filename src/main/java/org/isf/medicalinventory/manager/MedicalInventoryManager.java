@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicalinventory.service.MedicalInventoryIoOperation;
@@ -46,6 +47,9 @@ import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.supplier.manager.SupplierBrowserManager;
 import org.isf.supplier.model.Supplier;
+import org.isf.medicalstockward.manager.MovWardBrowserManager;
+import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.model.MovementWard;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -74,13 +78,15 @@ public class MedicalInventoryManager {
 	private final SupplierBrowserManager supplierManager;
 
 	private final WardBrowserManager wardManager;
-	
+
 	protected Map<String, String> statusHashMap;
 
+	private MovWardBrowserManager movWardBrowserManager;
+
 	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager,
-		MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager,
-		SupplierBrowserManager supplierManager, MovStockInsertingManager movStockInsertingManager, WardBrowserManager wardManager,
-		MovBrowserManager movBrowserManager) {
+			MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager,
+			SupplierBrowserManager supplierManager, MovStockInsertingManager movStockInsertingManager, WardBrowserManager wardManager,
+			MovBrowserManager movBrowserManager, MovWardBrowserManager movWardBrowserManager) {
 		this.ioOperations = medicalInventoryIoOperation;
 		this.medicalInventoryRowManager = medicalInventoryRowManager;
 		this.medicalDsrStockMovementTypeBrowserManager = medicalDsrStockMovementTypeBrowserManager;
@@ -88,6 +94,7 @@ public class MedicalInventoryManager {
 		this.movStockInsertingManager = movStockInsertingManager;
 		this.wardManager = wardManager;
 		this.movBrowserManager = movBrowserManager;
+		this.movWardBrowserManager = movWardBrowserManager;
 	}
 
 	/**
@@ -361,6 +368,101 @@ public class MedicalInventoryManager {
 	}
 
 	/**
+	 * Validate the Inventory rows of inventory ward.
+	 *
+	 * @param inventory the {@link MedicalInventory}
+	 * @param inventoryRowSearchList the list of {@link MedicalInventory}
+	 * @throws OHServiceException
+	 */
+	public void validateMedicalWardInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
+		LocalDateTime movFrom = inventory.getInventoryDate();
+		LocalDateTime movTo = TimeTools.getNow();
+		StringBuilder medDescriptionForLotUpdated = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewLot = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewMedical = new StringBuilder("\n"); // initial new line
+		boolean lotUpdated = false;
+		boolean lotAdded = false;
+		boolean medicalAdded = false;
+
+		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWard(), movFrom, movTo));
+		List<Movement> movementToWards = new ArrayList<>(movBrowserManager.getMovements(inventory.getWard(), movFrom, movTo));
+		List<Medical> inventoryMedicalsList = inventoryRowSearchList.stream().map(MedicalInventoryRow::getMedical).distinct().toList();
+
+		// Get all the lots from ward movements
+		List<Lot> lotOfMovements = new ArrayList<>(movementWards.stream().map(MovementWard::getLot).toList());
+		// Get all the lots from main store movements
+		lotOfMovements.addAll(movementToWards.stream().map(Movement::getLot).toList());
+		// Remove duplicates by converting the list to a set
+		Set<Lot> uniqueLots = new HashSet<>(lotOfMovements);
+		// Convert the set back to a list
+		List<Lot> uniqueLotList = new ArrayList<>(uniqueLots);
+		// Cycle fetched movements to see if they impact inventoryRowSearchList
+		for (Lot lot : uniqueLotList) {
+			String lotCode = lot.getCode();
+			String lotExpiringDate = TimeTools.formatDateTime(lot.getDueDate(), TimeTools.DD_MM_YYYY);
+			String lotInfo = GeneralData.AUTOMATICLOT_IN ? lotExpiringDate : lotCode;
+			Medical medical = lot.getMedical();
+			String medicalDesc = medical.getDescription();
+
+			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWard(), medical.getCode(), false).stream()
+					.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
+
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+
+			// Search for the specific Lot and Medical in inventoryRowSearchList
+			Optional<MedicalInventoryRow> matchingRow = inventoryRowSearchList.stream()
+				.filter(row -> row.getLot().getCode().equals(lotCode)).findFirst();
+
+			if (matchingRow.isPresent()) {
+				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
+				double theoQty = medicalInventoryRow.getTheoreticQty();
+				if (wardStoreQty != theoQty) {
+					lotUpdated = true;
+					medDescriptionForLotUpdated
+						.append("\n")
+						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
+							medicalDesc, lotInfo, theoQty, wardStoreQty, wardStoreQty - theoQty));
+				}
+			} else {
+				// TODO: to decide if to give control to the user about this
+				if (!inventoryMedicalsList.contains(medical)) {
+					// New medical
+					medicalAdded = true;
+					medDescriptionForNewMedical
+						.append("\n")
+						.append(MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
+							medicalDesc, lotInfo, wardStoreQty));
+				} else {
+					// New Lot
+					lotAdded = true;
+					medDescriptionForNewLot
+						.append("\n")
+						.append(MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
+							medicalDesc, lotInfo, wardStoreQty));
+				}
+			}
+		}
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (lotUpdated) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+				MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedicalward.fmt.msg", medDescriptionForLotUpdated),
+				OHSeverityLevel.INFO));
+		}
+		if (lotAdded) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+				MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedicalward.fmt.msg", medDescriptionForNewLot),
+				OHSeverityLevel.INFO));
+		}
+		if (medicalAdded) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.validate.btn"),
+				MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfoundward.fmt.msg", medDescriptionForNewMedical), OHSeverityLevel.INFO));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
+
+	/**
 	 * Marks an inventory as deleted by changing its status.
 	 * 
 	 * @param medicalInventory the medicalInventory of the inventory to delete.
@@ -519,7 +621,17 @@ public class MedicalInventoryManager {
 		}
 		return this.updateMedicalInventory(inventory, true);
 	}
-	
+
+	/**
+	 * Return the number of inventories by {@link InventoryType}.
+	 * 
+	 * @param type {@link InventoryType}
+	 * @return the number of records or zero.
+	 */
+	public int getInventoryCount(String type) {
+		return ioOperations.getInventoryCount(type);
+	}
+
 	private void buildStatusHashMap() {
 		statusHashMap = new HashMap<>(4);
 		statusHashMap.put("canceled", MessageBundle.getMessage("angal.inventory.status.canceled.txt"));
@@ -529,11 +641,7 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Return a list of status:
-	 * draft,
-	 * done,
-	 * canceled,
-	 * validated
+	 * Return a list of status: draft, done, canceled, validated
 	 *
 	 * @return
 	 */
@@ -545,9 +653,10 @@ public class MedicalInventoryManager {
 		statusList.sort(new DefaultSorter(MessageBundle.getMessage("angal.inventory.status.draft.txt")));
 		return statusList;
 	}
-	
+
 	/**
 	 * Return a value of the key on statusHashMap.
+	 * 
 	 * @param key - the key of status
 	 * @return the value of the key or empty string if key is not on statusHashMap.
 	 */
@@ -561,5 +670,62 @@ public class MedicalInventoryManager {
 			}
 		}
 		return "";
+	}
+
+	/**
+	 * Actualize the {@link MedicalInventory}'s ward.
+	 *
+	 * @param inventory the {@link MedicalInventory}
+	 * @return {@link MedicalInventory}. It could be {@code null}.
+	 * @throws OHServiceException
+	 */
+	public MedicalInventory actualizeMedicalWardInventoryRow(MedicalInventory inventory) throws OHServiceException {
+		LocalDateTime movFrom = inventory.getInventoryDate();
+		LocalDateTime movTo = TimeTools.getNow();
+
+		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWard(), movFrom, movTo));
+		List<Movement> movementToWards = new ArrayList<>(movBrowserManager.getMovements(inventory.getWard(), movFrom, movTo));
+		List<MedicalInventoryRow> inventoryRowList = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+
+		// Get all the lots from the ward movements
+		List<Lot> lotOfMovements = new ArrayList<>(movementWards.stream().map(MovementWard::getLot).toList());
+		// Get all the lots from the main store movements
+		lotOfMovements.addAll(movementToWards.stream().map(Movement::getLot).toList());
+		// Remove duplicates by converting the list to a set
+		Set<Lot> uniqueLots = new HashSet<>(lotOfMovements);
+		// Convert the set back to a list
+		List<Lot> uniqueLotList = new ArrayList<>(uniqueLots);
+		// Cycle fetched movements to see if they impact inventoryRowSearchList
+		for (Lot lot : uniqueLotList) {
+			String lotCode = lot.getCode();
+			Medical medical = lot.getMedical();
+			Integer medicalCode = medical.getCode();
+			// Fetch also empty lots because some movements may have discharged them completely
+			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWard(), medical.getCode(), false).stream()
+				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+
+			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
+			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()
+				.filter(row -> row.getLot().getCode().equals(lotCode) && row.getMedical().getCode().equals(medicalCode))
+				.findFirst();
+
+			if (matchingRow.isPresent()) {
+				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
+				double theoQty = medicalInventoryRow.getTheoreticQty();
+				if (wardStoreQty != theoQty) {
+					// Update Lot
+					medicalInventoryRow.setTheoreticQty(wardStoreQty);
+					medicalInventoryRow.setRealqty(wardStoreQty);
+					medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
+				}
+			} else {
+				// TODO: to decide if to give control to the user about this
+				double realQty = wardStoreQty;
+				MedicalInventoryRow newMedicalInventoryRow = new MedicalInventoryRow(null, wardStoreQty, realQty, inventory, medical, lot);
+				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
+			}
+		}
+		return this.updateMedicalInventory(inventory, true);
 	}
 }
