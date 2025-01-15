@@ -121,8 +121,8 @@ class Tests extends OHCoreTestCase {
 		assertThat(patientHistory.getPatNote()).isEqualTo("Patient Note");
 		assertThat(patientHistory.isPhyNutritionNormal()).isTrue();
 		assertThat(patientHistory.getPhyNutritionAbnormal()).isEqualTo("Nutrition Abnormal");
-		assertThat(patientHistory.isPhyAlvoNormal()).isFalse();
-		assertThat(patientHistory.getPhyAlvoAbnormal()).isEqualTo("Alvo Abnormal");
+		assertThat(patientHistory.isPhyBowelNormal()).isFalse();
+		assertThat(patientHistory.getPhyBowelAbnormal()).isEqualTo("Bowel Abnormal");
 		assertThat(patientHistory.isPhyDiuresisNormal()).isTrue();
 		assertThat(patientHistory.getPhyDiuresisAbnormal()).isEqualTo("Diuresis Abnormal");
 		assertThat(patientHistory.isPhyAlcohol()).isFalse();

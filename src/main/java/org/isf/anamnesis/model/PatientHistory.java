@@ -220,12 +220,12 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "PAH_PHY_NUTR_ABN")
 	private String phyNutritionAbnormal;
 
-	@Column(name = "PAH_PHY_ALVO_NOR")
+	@Column(name = "PAH_PHY_BOWEL_NOR")
 	@ColumnDefault("true")
-	private boolean phyAlvoNormal = true;
+	private boolean phyBowelNormal = true;
 
-	@Column(name = "PAH_PHY_ALVO_ABN")
-	private String phyAlvoAbnormal;
+	@Column(name = "PAH_PHY_BOWEL_ABN")
+	private String phyBowelAbnormal;
 
 	@Column(name = "PAH_PHY_DIURE_NOR")
 	@ColumnDefault("true")
@@ -553,20 +553,20 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.phyNutritionAbnormal = phyNutritionAbnormal;
 	}
 
-	public boolean isPhyAlvoNormal() {
-		return phyAlvoNormal;
+	public boolean isPhyBowelNormal() {
+		return phyBowelNormal;
 	}
 
-	public void setPhyAlvoNormal(boolean phyAlvoNormal) {
-		this.phyAlvoNormal = phyAlvoNormal;
+	public void setPhyBowelNormal(boolean phyBowelNormal) {
+		this.phyBowelNormal = phyBowelNormal;
 	}
 
-	public String getPhyAlvoAbnormal() {
-		return phyAlvoAbnormal;
+	public String getPhyBowelAbnormal() {
+		return phyBowelAbnormal;
 	}
 
-	public void setPhyAlvoAbnormal(String phyAlvoAbnormal) {
-		this.phyAlvoAbnormal = phyAlvoAbnormal;
+	public void setPhyBowelAbnormal(String phyBowelAbnormal) {
+		this.phyBowelAbnormal = phyBowelAbnormal;
 	}
 
 	public boolean isPhyDiuresisNormal() {
