@@ -108,4 +108,5 @@ source step_a111_add_missing_lock_columns.sql;
 source step_a112_users_and_groups_soft_deletion.sql;
 source step_a113_alter_table_medicalinventory.sql;
 source step_a114_medical_type_soft_deletion.sql;
-source step_a115_add_missing_foreign_key_for_auditable_entities.sql
+source step_a115_add_missing_foreign_key_for_auditable_entities.sql;
+source step_a116_fix_alcohol_and_bowel_column.sql;

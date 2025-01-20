@@ -220,12 +220,12 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "PAH_PHY_NUTR_ABN")
 	private String phyNutritionAbnormal;
 
-	@Column(name = "PAH_PHY_ALVO_NOR")
+	@Column(name = "PAH_PHY_BOWEL_NOR")
 	@ColumnDefault("true")
-	private boolean phyAlvoNormal = true;
+	private boolean phyBowelNormal = true;
 
-	@Column(name = "PAH_PHY_ALVO_ABN")
-	private String phyAlvoAbnormal;
+	@Column(name = "PAH_PHY_BOWEL_ABN")
+	private String phyBowelAbnormal;
 
 	@Column(name = "PAH_PHY_DIURE_NOR")
 	@ColumnDefault("true")
@@ -234,9 +234,9 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "PAH_PHY_DIURE_ABN")
 	private String phyDiuresisAbnormal;
 
-	@Column(name = "PAH_PHY_ALCOOL")
+	@Column(name = "PAH_PHY_ALCOHOL")
 	@ColumnDefault("false")
-	private boolean phyAlcool;
+	private boolean phyAlcohol;
 
 	@Column(name = "PAH_PHY_SMOKE")
 	@ColumnDefault("false")
@@ -553,20 +553,20 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.phyNutritionAbnormal = phyNutritionAbnormal;
 	}
 
-	public boolean isPhyAlvoNormal() {
-		return phyAlvoNormal;
+	public boolean isPhyBowelNormal() {
+		return phyBowelNormal;
 	}
 
-	public void setPhyAlvoNormal(boolean phyAlvoNormal) {
-		this.phyAlvoNormal = phyAlvoNormal;
+	public void setPhyBowelNormal(boolean phyBowelNormal) {
+		this.phyBowelNormal = phyBowelNormal;
 	}
 
-	public String getPhyAlvoAbnormal() {
-		return phyAlvoAbnormal;
+	public String getPhyBowelAbnormal() {
+		return phyBowelAbnormal;
 	}
 
-	public void setPhyAlvoAbnormal(String phyAlvoAbnormal) {
-		this.phyAlvoAbnormal = phyAlvoAbnormal;
+	public void setPhyBowelAbnormal(String phyBowelAbnormal) {
+		this.phyBowelAbnormal = phyBowelAbnormal;
 	}
 
 	public boolean isPhyDiuresisNormal() {
@@ -585,12 +585,12 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.phyDiuresisAbnormal = phyDiuresisAbnormal;
 	}
 
-	public boolean isPhyAlcool() {
-		return phyAlcool;
+	public boolean isPhyAlcohol() {
+		return phyAlcohol;
 	}
 
-	public void setPhyAlcool(boolean phyAlcool) {
-		this.phyAlcool = phyAlcool;
+	public void setPhyAlcohol(boolean phyAlcohol) {
+		this.phyAlcohol = phyAlcohol;
 	}
 
 	public boolean isPhySmoke() {
@@ -785,7 +785,11 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.patOpenNote = patOpenNote;
 	}
 
-	public int getLock() { return lock; }
+	public int getLock() {
+		return lock;
+	}
 
-	public void setLock(int lock) { this.lock = lock; }
+	public void setLock(int lock) {
+		this.lock = lock;
+	}
 }
