@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -535,6 +535,40 @@ public class MedicalInventoryManager {
 		inventory.setStatus(status);
 		this.updateMedicalInventory(inventory, false);
 		return insertedMovements;
+	}
+	
+	/**
+	 * Confirm the Inventory rows of ward inventory.
+	 *
+	 * @param inventory the {@link MedicalInventory}
+	 * @param inventoryRowSearchList- The list of {@link MedicalInventory}
+	 * @return List {@link Movement}. It could be {@code empty}.
+	 * @throws OHServiceException
+	 */
+	@Transactional(rollbackFor = OHServiceException.class)
+	public boolean confirmMedicalWardInventoryRow(MedicalInventory inventory, List<MedicalInventoryRow> inventoryRowSearchList) throws OHServiceException {
+		// validate the inventory
+		this.validateMedicalWardInventoryRow(inventory, inventoryRowSearchList);
+
+		// get general info
+		Ward selectedWard = wardManager.findWard(inventory.getWard());
+		LocalDateTime now = TimeTools.getNow();
+		String reason = MessageBundle.getMessage("angal.inventory.reason.msg").concat(inventory.getInventoryReference());
+		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
+			double theoQty = medicalInventoryRow.getTheoreticQty();
+			double realQty = medicalInventoryRow.getRealQty();
+			Double movQuantity = theoQty - realQty;
+			Medical medical = medicalInventoryRow.getMedical();
+			Lot currentLot = medicalInventoryRow.getLot();
+			if (movQuantity != 0) {
+				movWardBrowserManager.newMovementWard(new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, movQuantity,
+								MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot));
+			}
+		}
+		String status = InventoryStatus.done.toString();
+		inventory.setStatus(status);
+		this.updateMedicalInventory(inventory, false);
+		return true;
 	}
 
 	private void checkReference(MedicalInventory medicalInventory) throws OHServiceException {

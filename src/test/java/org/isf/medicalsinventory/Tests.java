@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -1032,5 +1032,41 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalInventoryRows.get(2).getLot()).isEqualTo(lotThree);
 		assertThat(medicalInventoryRows.get(2).getRealQty()).isEqualTo(30);
 		assertThat(medicalInventoryRows.get(2).getTheoreticQty()).isEqualTo(30);
+	}
+	
+	@Test
+	void testConfirmMedicalWardInventoryRow() throws Exception {
+		// Initialize data
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalWardInventory.setup(ward, false);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lotOne = testLot.setup(medical, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medical = medicalsIoOperationRepository.save(medical);
+		lotOne = lotIoOperationRepository.save(lotOne);
+
+		// Create inventory and inventory rows
+		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
+		medicalInventoryRowOne.setRealqty(10);
+		medicalInventoryRowOne.setTheoreticQty(20);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
+		Lot lotTwo = testLot.setup(medical, false);
+		lotTwo.setCode("LOT-TEST");
+		lotTwo = lotIoOperationRepository.save(lotTwo);
+		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
+		medicalInventoryRowTwo.setId(2);
+		medicalInventoryRowTwo.setRealqty(30);
+		medicalInventoryRowTwo.setTheoreticQty(20);
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowTwo);
+		int inventoryId = inventory.getId();
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
+		assertThat(medicalInventoryRows).isNotEmpty();
+		assertThat(medicalInventoryRows).hasSize(2);
+		assertThat(medicalInventoryManager.confirmMedicalWardInventoryRow(inventory, medicalInventoryRows)).isTrue();
+		List<MovementWard> movWard = movementWardIoOperationRepository.findByMedicalCode(medical.getCode());
+		assertThat(movWard).hasSize(2);
 	}
 }
