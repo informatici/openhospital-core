@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.sql.Blob;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.FileSystemPatientPhotoRepository;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -55,6 +56,7 @@ class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 
 	@BeforeEach
 	void setUp() {
+		GeneralData.initialize(); // needed for GeneralData.PATIENTPHOTSTORAGE
 		cleanH2InMemoryDb();
 	}
 
@@ -74,17 +76,16 @@ class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 	@Test
 	void testSaveAndDelete() throws Exception {
 		Blob blob = getBlob();
-		fileSystemPatientPhotoRepository.save("rsc-test/patient", 2, blob.getBytes(1, (int)blob.length()));
+		fileSystemPatientPhotoRepository.save("rsc-test/patient", 2, blob.getBytes(1, (int) blob.length()));
 		fileSystemPatientPhotoRepository.delete("rsc-test/patient", 2);
 	}
 
 	private Blob getBlob() throws Exception {
 		Method method = fileSystemPatientPhotoRepository.getClass().getDeclaredMethod("load", Integer.class, String.class);
 		method.setAccessible(true);
-		Blob blob = (Blob)method.invoke(fileSystemPatientPhotoRepository, 1, "rsc-test/patient");
+		Blob blob = (Blob) method.invoke(fileSystemPatientPhotoRepository, 1, "rsc-test/patient");
 		return blob;
 	}
-
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
