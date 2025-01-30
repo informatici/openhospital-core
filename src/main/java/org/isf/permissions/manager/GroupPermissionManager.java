@@ -66,7 +66,7 @@ public class GroupPermissionManager {
 	public GroupPermission create(UserGroup userGroup, Permission permission) throws OHDataValidationException {
 		if (operations.existsByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId())) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("angal.usergroup.permissionalreadyassigned.msg"))
 			);
 		}
 
