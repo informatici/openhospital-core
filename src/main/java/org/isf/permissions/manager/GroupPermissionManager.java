@@ -104,7 +104,7 @@ public class GroupPermissionManager {
 
 		if (groupPermission == null) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("angal.usergroup.permissionnotassigned"))
 			);
 		}
 
