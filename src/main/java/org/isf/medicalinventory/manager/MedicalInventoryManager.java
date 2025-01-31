@@ -43,13 +43,13 @@ import org.isf.medicalstock.manager.MovBrowserManager;
 import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstockward.manager.MovWardBrowserManager;
+import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.supplier.manager.SupplierBrowserManager;
 import org.isf.supplier.model.Supplier;
-import org.isf.medicalstockward.manager.MovWardBrowserManager;
-import org.isf.medicalstockward.model.MedicalWard;
-import org.isf.medicalstockward.model.MovementWard;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -84,9 +84,9 @@ public class MedicalInventoryManager {
 	private MovWardBrowserManager movWardBrowserManager;
 
 	public MedicalInventoryManager(MedicalInventoryIoOperation medicalInventoryIoOperation, MedicalInventoryRowManager medicalInventoryRowManager,
-			MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager,
-			SupplierBrowserManager supplierManager, MovStockInsertingManager movStockInsertingManager, WardBrowserManager wardManager,
-			MovBrowserManager movBrowserManager, MovWardBrowserManager movWardBrowserManager) {
+		MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovementTypeBrowserManager,
+		SupplierBrowserManager supplierManager, MovStockInsertingManager movStockInsertingManager, WardBrowserManager wardManager,
+		MovBrowserManager movBrowserManager, MovWardBrowserManager movWardBrowserManager) {
 		this.ioOperations = medicalInventoryIoOperation;
 		this.medicalInventoryRowManager = medicalInventoryRowManager;
 		this.medicalDsrStockMovementTypeBrowserManager = medicalDsrStockMovementTypeBrowserManager;
@@ -405,7 +405,7 @@ public class MedicalInventoryManager {
 			String medicalDesc = medical.getDescription();
 
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWard(), medical.getCode(), false).stream()
-					.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
+				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 
 			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
 
@@ -536,7 +536,7 @@ public class MedicalInventoryManager {
 		this.updateMedicalInventory(inventory, false);
 		return insertedMovements;
 	}
-	
+
 	/**
 	 * Confirm the Inventory rows of ward inventory.
 	 *
@@ -562,7 +562,7 @@ public class MedicalInventoryManager {
 			Lot currentLot = medicalInventoryRow.getLot();
 			if (movQuantity != 0) {
 				movWardBrowserManager.newMovementWard(new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, movQuantity,
-								MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot));
+					MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot));
 			}
 		}
 		String status = InventoryStatus.done.toString();
@@ -666,6 +666,9 @@ public class MedicalInventoryManager {
 		return ioOperations.getInventoryCount(type);
 	}
 
+	/**
+	 * Build a map of translated statuses
+	 */
 	private void buildStatusHashMap() {
 		statusHashMap = new HashMap<>(4);
 		statusHashMap.put("canceled", MessageBundle.getMessage("angal.inventory.status.canceled.txt"));
@@ -675,7 +678,7 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Return a list of status: draft, done, canceled, validated
+	 * Return a list of translated statuses for {@code draft, done, canceled, validated}
 	 *
 	 * @return
 	 */
@@ -689,21 +692,34 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Return a value of the key on statusHashMap.
+	 * Return a value associated with the key on statusHashMap.
 	 * 
 	 * @param key - the key of status
-	 * @return the value of the key or empty string if key is not on statusHashMap.
+	 * @return the value associated with the key or empty string if key is not on statusHashMap.
 	 */
 	public String getStatusByKey(String key) {
 		if (statusHashMap == null) {
 			buildStatusHashMap();
 		}
+		return statusHashMap.get(key);
+	}
+
+	/**
+	 * Return the key from the value on statusHashMap.
+	 * 
+	 * @param status - the description
+	 * @return the value of the key or null if description is not on statusHashMap.
+	 */
+	public String getKeyByStatus(String status) {
+		if (statusHashMap == null) {
+			buildStatusHashMap();
+		}
 		for (Map.Entry<String, String> entry : statusHashMap.entrySet()) {
-			if (entry.getKey().equals(key)) {
-				return entry.getValue();
+			if (entry.getValue().equals(status)) {
+				return entry.getKey();
 			}
 		}
-		return "";
+		return null;
 	}
 
 	/**
