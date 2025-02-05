@@ -1112,6 +1112,8 @@ public class JasperReportsManager {
 			if (inventory.getWard() != null) {
 				Ward ward = wardManager.findWard(inventory.getWard());
 				parameters.put("ward", ward.getDescription());
+			} else {
+				parameters.put("ward", "Main Store");
 			}
 			LocalDateTime inventoryDateTime = inventory.getInventoryDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DD_MM_YYYY);
