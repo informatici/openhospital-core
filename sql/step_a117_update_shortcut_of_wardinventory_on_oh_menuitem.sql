@@ -1,1 +1,0 @@
-UPDATE OH_MENUITEM SET MNI_SHORTCUT = "A" WHERE MNI_ID_A = "inventoryward";
