@@ -480,7 +480,7 @@ class Tests extends OHCoreTestCase {
 		Page<MedicalInventory> medicalinventories = medicalInventoryManager.getMedicalInventoryByParamsPageable(
 			secondMedicalInventory.getInventoryDate().minusDays(2), secondMedicalInventory.getInventoryDate().plusDays(2), status,
 			secondMedicalInventory.getInventoryType(), 0, 10);
-		assertThat(medicalinventories).hasSize(1); // including draft inventory (id=1)
+		assertThat(medicalinventories).hasSize(1);
 		assertThat(medicalinventories.getContent().get(0).getStatus()).isEqualTo(secondMedicalInventory.getStatus());
 		assertThat(medicalinventories.getContent().get(0).getWard()).isEqualTo(secondMedicalInventory.getWard());
 	}
