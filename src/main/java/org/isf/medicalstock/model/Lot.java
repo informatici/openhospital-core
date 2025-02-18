@@ -129,15 +129,8 @@ public class Lot extends Auditable<String> {
 		code = aCode;
 	}
 
-	/**
-	 * This method should not exist without a (@link Medical}, this method can lead to bad coding
-	 * @param aCode
-	 * @param aPreparationDate
-	 * @param aDueDate
-	 * @deprecated
-	 */
-	@Deprecated
-	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+		medical = aMedical;
 		code = aCode;
 		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 		dueDate = TimeTools.truncateToSeconds(aDueDate);
