@@ -1058,20 +1058,29 @@ public class JasperReportsManager {
 	}
 
 	private String compilePDFFilename(String folderName, String jasperFileName, List<String> params, String ext) {
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append(folderName);
-		sbFilename.append(File.separator);
-		sbFilename.append("PDF");
-		sbFilename.append(File.separator);
-		sbFilename.append(jasperFileName);
-		if (params != null) {
-			params.forEach(p -> {
-				sbFilename.append('_');
-				sbFilename.append(p);
-			});
-		}
-		sbFilename.append('.');
-		sbFilename.append(ext);
+		String pdfFolderPath = folderName + File.separator + "PDF";
+        File pdfFolder = new File(pdfFolderPath);
+
+        // Check if the "PDF" directory exists; if not, create it
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdirs();
+        }
+
+        StringBuilder sbFilename = new StringBuilder();
+        sbFilename.append(pdfFolderPath);
+        sbFilename.append(File.separator);
+        sbFilename.append(jasperFileName);
+        
+        if (params != null) {
+            params.forEach(p -> {
+                sbFilename.append('_');
+                sbFilename.append(p);
+            });
+        }
+        
+        sbFilename.append('.');
+        sbFilename.append(ext);
+       
 		return sbFilename.toString();
 	}
 
@@ -1121,6 +1130,34 @@ public class JasperReportsManager {
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
+	}
+
+	public JasperReportResultDto getPatientExaminationPdf(int patId, int examinationId) throws OHServiceException {
+		try {
+			final Map<String, Object> parameters = new HashMap<>();
+			Hospital hospital = hospitalManager.getHospital();
+			
+            String patientId = String.valueOf(patId);
+            
+			parameters.put("Hospital", hospital.getDescription());
+			parameters.put("Address", hospital.getAddress());
+			parameters.put("City", hospital.getCity());
+			parameters.put("Email", hospital.getEmail());
+			parameters.put("Telephone", hospital.getTelephone());
+			parameters.put("LOGO_PATH", getPatientPhotoFile(patientId));
+			parameters.put("patId", patId);
+			parameters.put("examinationId", examinationId);
+
+			String jasperFileName = "PatientExamination";
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, null, "pdf");
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
 	}
 
