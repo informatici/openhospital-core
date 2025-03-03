@@ -101,11 +101,17 @@ public class MedicalInventoryManager {
 	 * Insert a new {@link MedicalInventory}.
 	 *
 	 * @param medicalInventory the {@link MedicalInventory} to insert.
+	 * @param newMedicalInventoryRows the list of {@link MedicalInventoryRow}s to insert.
 	 * @return the newly persisted {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory) throws OHServiceException {
+	@Transactional
+	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory, List<MedicalInventoryRow> newMedicalInventoryRows)
+		throws OHServiceException {
 		validateMedicalInventory(medicalInventory);
+		for (MedicalInventoryRow inventoryRow : newMedicalInventoryRows) {
+			medicalInventoryRowManager.newMedicalInventoryRow(inventoryRow);
+		}
 		checkReference(medicalInventory);
 		return ioOperations.newMedicalInventory(medicalInventory);
 	}
@@ -572,6 +578,7 @@ public class MedicalInventoryManager {
 		return true;
 	}
 
+	// TODO: this should be inside the validation method?
 	private void checkReference(MedicalInventory medicalInventory) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String reference = medicalInventory.getInventoryReference();
@@ -579,7 +586,7 @@ public class MedicalInventoryManager {
 		String dischargeReferenceNumber = reference + "-discharge";
 		boolean existWithSuffixCharge = movStockInsertingManager.refNoExists(chargeReferenceNumber);
 		boolean existWithSuffixDischarge = movStockInsertingManager.refNoExists(dischargeReferenceNumber);
-		MedicalInventory inventory = this.getInventoryByReference(reference);
+		MedicalInventory inventory = this.getInventoryByReference(reference); //TODO: does it exclude the canceled inventories?
 		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && inventory.getId() != medicalInventory.getId()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}

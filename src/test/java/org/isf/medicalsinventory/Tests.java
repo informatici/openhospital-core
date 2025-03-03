@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -260,7 +261,8 @@ class Tests extends OHCoreTestCase {
 	void testMgrNewMedicalInventory() throws Exception {
 		Ward ward = testWard.setup(false);
 		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory newMedicalInventory = medicalInventoryManager.newMedicalInventory(medicalInventory);
+		List<MedicalInventoryRow> medicalInventoryRows = new ArrayList<MedicalInventoryRow>();
+		MedicalInventory newMedicalInventory = medicalInventoryManager.newMedicalInventory(medicalInventory, medicalInventoryRows);
 		checkMedicalInventoryIntoDb(newMedicalInventory.getId());
 	}
 
@@ -908,7 +910,7 @@ class Tests extends OHCoreTestCase {
 			medicalStockIoOperationRepository.saveAndFlush(secondMedicalStock);
 
 			// test case 3: Create movement from the main to the ward to add new medical
-			Medical secondMedical = testMedical.setup(medicalType,false);
+			Medical secondMedical = testMedical.setup(medicalType, false);
 			secondMedical.setProdCode("TP2");
 			secondMedical.setDescription("test description");
 			secondMedical = medicalsIoOperationRepository.save(secondMedical);
@@ -994,7 +996,7 @@ class Tests extends OHCoreTestCase {
 		MedicalStock secondMedicalStock = testMedicalStock.setup(secondMovement);
 		medicalStockIoOperation.newMovement(secondMovement);
 		medicalStockIoOperationRepository.saveAndFlush(secondMedicalStock);
-		Medical secondMedical = testMedical.setup(medicalType,false);
+		Medical secondMedical = testMedical.setup(medicalType, false);
 		secondMedical.setProdCode("TP2");
 		secondMedical.setDescription("test description");
 		secondMedical = medicalsIoOperationRepository.save(secondMedical);
@@ -1013,7 +1015,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperation.newMovement(thirdMovement);
 		medicalStockIoOperationRepository.saveAndFlush(thirdMedicalStock);
 
-		//Test actualize ward inventory row
+		// Test actualize ward inventory row
 		inventory = medicalInventoryManager.actualizeMedicalWardInventoryRow(inventory);
 
 		medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
@@ -1033,7 +1035,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalInventoryRows.get(2).getRealQty()).isEqualTo(30);
 		assertThat(medicalInventoryRows.get(2).getTheoreticQty()).isEqualTo(30);
 	}
-	
+
 	@Test
 	void testConfirmMedicalWardInventoryRow() throws Exception {
 		// Initialize data
