@@ -109,11 +109,12 @@ public class MedicalInventoryManager {
 	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory, List<MedicalInventoryRow> newMedicalInventoryRows)
 		throws OHServiceException {
 		validateMedicalInventory(medicalInventory);
+		checkReference(medicalInventory);
+		MedicalInventory inventory = ioOperations.newMedicalInventory(medicalInventory);
 		for (MedicalInventoryRow inventoryRow : newMedicalInventoryRows) {
 			medicalInventoryRowManager.newMedicalInventoryRow(inventoryRow);
 		}
-		checkReference(medicalInventory);
-		return ioOperations.newMedicalInventory(medicalInventory);
+		return inventory;
 	}
 
 	/**
@@ -586,7 +587,7 @@ public class MedicalInventoryManager {
 		String dischargeReferenceNumber = reference + "-discharge";
 		boolean existWithSuffixCharge = movStockInsertingManager.refNoExists(chargeReferenceNumber);
 		boolean existWithSuffixDischarge = movStockInsertingManager.refNoExists(dischargeReferenceNumber);
-		MedicalInventory inventory = this.getInventoryByReference(reference); //TODO: does it exclude the canceled inventories?
+		MedicalInventory inventory = this.getInventoryByReference(reference); // TODO: does it exclude the canceled inventories?
 		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && inventory.getId() != medicalInventory.getId()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
