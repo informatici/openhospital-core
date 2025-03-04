@@ -49,8 +49,9 @@ public class MessageBundle {
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
 			JComponent.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
 		} catch (MissingResourceException e) {
-			LOGGER.error(">> no resource bundle found.");
-			System.exit(1);
+			LOGGER.error(">> no resource bundle found. Defaulting to \"en\"");
+			resourceBundle = defaultResourceBundle;
+			JComponent.setDefaultLocale(new Locale("en"));
 		}
 	}
 
@@ -85,8 +86,8 @@ public class MessageBundle {
 	}
 
 	/**
-	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for
-	 * the setMemonic() method associated for example with a Button object.
+	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for the setMemonic() method associated for example with a Button
+	 * object.
 	 * <p>
 	 * This works because: VK_A through VK_Z are the same as ASCII 'A' through 'Z' (0x41 - 0x5A)
 	 *
@@ -98,17 +99,13 @@ public class MessageBundle {
 	}
 
 	/**
-	 * Given a key to an entry in the resource bundle and a series of objects to place into the
-	 * message, return the formatted or compound message.
+	 * Given a key to an entry in the resource bundle and a series of objects to place into the message, return the formatted or compound message.
 	 * <p>
-	 * For example, given the resource bundle strings:
-	 *    English:   User {0} added new item {1} to group {2}.
-	 *    Italian:   L'utente {0} ha aggiunto un nuovo elemento {1} al gruppo {2}.
-	 *    German:    Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
+	 * For example, given the resource bundle strings: English: User {0} added new item {1} to group {2}. Italian: L'utente {0} ha aggiunto un nuovo elemento
+	 * {1} al gruppo {2}. German: Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
 	 * <p>
-	 * Unlike concatenating the various components together which would work for English and Italian,
-	 * it would fail for German (note the ordering of the subsitutable strings).
-	 * Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
+	 * Unlike concatenating the various components together which would work for English and Italian, it would fail for German (note the ordering of the
+	 * subsitutable strings). Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
 	 *
 	 * @param key a MessageBundle key (that contains ".fmt." in the key name) for a string that contains n-substituables.
 	 * @param args a list of n-arguments that matches the substituables in the message string
