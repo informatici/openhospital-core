@@ -108,8 +108,7 @@ public class MedicalInventoryManager {
 	@Transactional
 	public MedicalInventory newMedicalInventory(MedicalInventory medicalInventory, List<MedicalInventoryRow> newMedicalInventoryRows)
 		throws OHServiceException {
-		validateMedicalInventory(medicalInventory);
-		checkReference(medicalInventory);
+		validateMedicalInventory(medicalInventory, true);
 		MedicalInventory inventory = ioOperations.newMedicalInventory(medicalInventory);
 		for (MedicalInventoryRow inventoryRow : newMedicalInventoryRows) {
 			medicalInventoryRowManager.newMedicalInventoryRow(inventoryRow);
@@ -125,10 +124,7 @@ public class MedicalInventoryManager {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory, boolean checkReference) throws OHServiceException {
-		validateMedicalInventory(medicalInventory);
-		if (checkReference) {
-			checkReference(medicalInventory);
-		}
+		validateMedicalInventory(medicalInventory, checkReference);
 		return ioOperations.updateMedicalInventory(medicalInventory);
 	}
 
@@ -239,9 +235,10 @@ public class MedicalInventoryManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param medInventory
+	 * @param checkReference
 	 * @throws OHDataValidationException
 	 */
-	private void validateMedicalInventory(MedicalInventory medInventory) throws OHDataValidationException {
+	private void validateMedicalInventory(MedicalInventory medInventory, boolean checkReference) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 		String reference = medInventory.getInventoryReference();
@@ -253,6 +250,13 @@ public class MedicalInventoryManager {
 		}
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
+		}
+		if (checkReference) {
+			try {
+				checkReference(medInventory);
+			} catch (OHServiceException e) {
+				throw new OHDataValidationException(e.getMessages());
+			}
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -579,7 +583,12 @@ public class MedicalInventoryManager {
 		return true;
 	}
 
-	// TODO: this should be inside the validation method?
+	/**
+	 * Check if the reference is present with suffixes also once the {@link MedicalInventory} is confirmed.
+	 * 
+	 * @param medicalInventory
+	 * @throws OHServiceException
+	 */
 	private void checkReference(MedicalInventory medicalInventory) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String reference = medicalInventory.getInventoryReference();
@@ -592,7 +601,7 @@ public class MedicalInventoryManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
 		if (!errors.isEmpty()) {
-			throw new OHServiceException(errors);
+			throw new OHDataValidationException(errors);
 		}
 	}
 
