@@ -1058,21 +1058,30 @@ public class JasperReportsManager {
 	}
 
 	private String compilePDFFilename(String folderName, String jasperFileName, List<String> params, String ext) {
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append(folderName);
-		sbFilename.append(File.separator);
-		sbFilename.append("PDF");
-		sbFilename.append(File.separator);
-		sbFilename.append(jasperFileName);
-		if (params != null) {
-			params.forEach(p -> {
-				sbFilename.append('_');
-				sbFilename.append(p);
-			});
-		}
-		sbFilename.append('.');
-		sbFilename.append(ext);
-		return sbFilename.toString();
+		String pdfFolderPath = folderName + File.separator + "PDF";
+        File pdfFolder = new File(pdfFolderPath);
+
+        // Check if the "PDF" directory exists; if not, create it
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdirs();
+        }
+
+        StringBuilder sbFilename = new StringBuilder();
+        sbFilename.append(pdfFolderPath);
+        sbFilename.append(File.separator);
+        sbFilename.append(jasperFileName);
+        
+        if (params != null) {
+            params.forEach(p -> {
+                sbFilename.append('_');
+                sbFilename.append(p);
+            });
+        }
+        
+        sbFilename.append('.');
+        sbFilename.append(ext);
+        
+        return sbFilename.toString();
 	}
 
 	public String compileDefaultFilename(String defaultFileName) {
@@ -1128,16 +1137,13 @@ public class JasperReportsManager {
 		try {
 			HashMap<String, Object> parameters = new HashMap<>(getHospitalParameters());
 			String jasperFileName = "PatientExamination";
-            String patientId = String.valueOf(patId);
-			parameters.put("LOGO_PATH", getPatientPhotoFile(patientId));
+			String path = "logo-color.png";
+			parameters.put("LOGO_PATH", path);
 			parameters.put("patId", patId);
 			parameters.put("examinationId", examinationId);
 			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
-			System.out.println("Compile to PDF ");
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, null, "pdf");
-			System.out.println("Hello "+pdfFilename);
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
-			System.out.println("report generated");
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
 			return result;
 		} catch (Exception e) {

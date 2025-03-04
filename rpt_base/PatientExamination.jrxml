@@ -26,7 +26,6 @@
 	<parameter name="LOGO_PATH" class="java.lang.String">
 		<defaultValueExpression><![CDATA["./images/"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="Title" class="java.lang.String"/>
 	<parameter name="examinationId" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT *
@@ -320,7 +319,7 @@ WHERE PEX_PAT_ID = $P{patId} AND PEX_ID = $P{examinationId}]]>
 				<textElement textAlignment="Center">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Title}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{TITLE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
