@@ -26,12 +26,12 @@
 	<parameter name="LOGO_PATH" class="java.lang.String">
 		<defaultValueExpression><![CDATA["./images/"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="Title" class="java.lang.String"/>
+	<parameter name="examinationId" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT *
 FROM OH_PATIENTEXAMINATION
 JOIN OH_PATIENT ON PEX_PAT_ID = PAT_ID
-WHERE PEX_PAT_ID = $P{patId}]]>
+WHERE PEX_PAT_ID = $P{patId} AND PEX_ID = $P{examinationId}]]>
 	</queryString>
 	<field name="PEX_HEIGHT" class="java.lang.Integer"/>
 	<field name="PEX_WEIGHT" class="java.lang.Double"/>
@@ -319,7 +319,7 @@ WHERE PEX_PAT_ID = $P{patId}]]>
 				<textElement textAlignment="Center">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Title}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{TITLE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
