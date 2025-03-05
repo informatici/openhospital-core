@@ -120,11 +120,12 @@ public class MedicalInventoryManager {
 	 * Update an existing {@link MedicalInventory}.
 	 *
 	 * @param medicalInventory the {@link MedicalInventory} to update.
+	 * @param checkReferenceExists if {@code true}, it verifies the reference uniqueness
 	 * @return the updated {@link MedicalInventory} object.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory, boolean checkReference) throws OHServiceException {
-		validateMedicalInventory(medicalInventory, checkReference);
+	public MedicalInventory updateMedicalInventory(MedicalInventory medicalInventory, boolean checkReferenceExists) throws OHServiceException {
+		validateMedicalInventory(medicalInventory, checkReferenceExists);
 		return ioOperations.updateMedicalInventory(medicalInventory);
 	}
 
@@ -234,26 +235,29 @@ public class MedicalInventoryManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param medInventory
-	 * @param checkReference
+	 * @param medicalInventory the {@link MedicalInventory} to validate
+	 * @param checkReferenceExists if {@code true}, it verifies the reference uniqueness
 	 * @throws OHDataValidationException
 	 */
-	private void validateMedicalInventory(MedicalInventory medInventory, boolean checkReference) throws OHDataValidationException {
+	private void validateMedicalInventory(MedicalInventory medicalInventory, boolean checkReferenceExists) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
-		String reference = medInventory.getInventoryReference();
-		if (medInventory.getInventoryDate() == null) {
+		String reference = medicalInventory.getInventoryReference();
+		if (medicalInventory.getInventoryDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertavalidinventorydate.msg")));
 		}
-		if (medInventory.getInventoryDate() != null && medInventory.getInventoryDate().isAfter(tomorrow)) {
+		if (medicalInventory.getInventoryDate() != null && medicalInventory.getInventoryDate().isAfter(tomorrow)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notdateinfuture.msg")));
 		}
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		}
-		if (checkReference) {
+		if (reference.length() > 40) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.thereferenceistoolongmaxchars.fmt.msg", 40)));
+		}
+		if (checkReferenceExists) {
 			try {
-				checkReference(medInventory);
+				checkReference(medicalInventory);
 			} catch (OHServiceException e) {
 				throw new OHDataValidationException(e.getMessages());
 			}
@@ -596,7 +600,7 @@ public class MedicalInventoryManager {
 		String dischargeReferenceNumber = reference + "-discharge";
 		boolean existWithSuffixCharge = movStockInsertingManager.refNoExists(chargeReferenceNumber);
 		boolean existWithSuffixDischarge = movStockInsertingManager.refNoExists(dischargeReferenceNumber);
-		MedicalInventory inventory = this.getInventoryByReference(reference); // TODO: does it exclude the canceled inventories?
+		MedicalInventory inventory = getInventoryByReference(reference); //TODO: differentiate canceled inventories
 		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && inventory.getId() != medicalInventory.getId()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
