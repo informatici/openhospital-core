@@ -129,7 +129,8 @@ public class Lot extends Auditable<String> {
 		code = aCode;
 	}
 
-	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+		medical = aMedical;
 		code = aCode;
 		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 		dueDate = TimeTools.truncateToSeconds(aDueDate);
