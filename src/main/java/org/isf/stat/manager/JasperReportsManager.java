@@ -1133,13 +1133,11 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getPatientExaminationPdf(int patId, int examinationId) throws OHServiceException {
+	public JasperReportResultDto getPatientExaminationPdf(int examinationId) throws OHServiceException {
 		try {
 			HashMap<String, Object> parameters = new HashMap<>(getHospitalParameters());
 			String jasperFileName = "PatientExamination";
-			String path = "logo-color.png";
-			parameters.put("LOGO_PATH", path);
-			parameters.put("patId", patId);
+			parameters.put("LOGO_PATH", "rpt_base/images/logo-color.png");
 			parameters.put("examinationId", examinationId);
 			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, null, "pdf");

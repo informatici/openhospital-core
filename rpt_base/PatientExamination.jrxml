@@ -17,7 +17,6 @@
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="patId" class="java.lang.Integer"/>
 	<parameter name="Hospital" class="java.lang.String"/>
 	<parameter name="Address" class="java.lang.String"/>
 	<parameter name="City" class="java.lang.String"/>
@@ -31,7 +30,7 @@
 		<![CDATA[SELECT *
 FROM OH_PATIENTEXAMINATION
 JOIN OH_PATIENT ON PEX_PAT_ID = PAT_ID
-WHERE PEX_PAT_ID = $P{patId} AND PEX_ID = $P{examinationId}]]>
+WHERE PEX_ID = $P{examinationId}]]>
 	</queryString>
 	<field name="PEX_HEIGHT" class="java.lang.Integer"/>
 	<field name="PEX_WEIGHT" class="java.lang.Double"/>
