@@ -252,6 +252,11 @@ public class MedicalInventoryManager {
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		}
+		/*
+		 * Despite MINVT_REFERENCE is VARCHAR(50), this field will be copied into MMV_REFNO and concatenate to either "-charge" or "-discharge" suffixes, hence
+		 * the limit to 40. For similarity, we keep the same validation method for "ward" type inventories, despite the field would be copied into MMVN_DESC
+		 * VARCHAR(100) in those cases.
+		 */
 		if (reference.length() > 40) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.thereferenceistoolongmaxchars.fmt.msg", 40)));
 		}
