@@ -1016,7 +1016,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperationRepository.saveAndFlush(thirdMedicalStock);
 
 		// Test actualize ward inventory row
-		inventory = medicalInventoryManager.actualizeMedicalWardInventoryRow(inventory);
+		medicalInventoryManager.actualizeMedicalWardInventoryRow(inventory);
 
 		medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
 

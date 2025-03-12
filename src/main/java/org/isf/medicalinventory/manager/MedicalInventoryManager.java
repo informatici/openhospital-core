@@ -600,7 +600,7 @@ public class MedicalInventoryManager {
 		String dischargeReferenceNumber = reference + "-discharge";
 		boolean existWithSuffixCharge = movStockInsertingManager.refNoExists(chargeReferenceNumber);
 		boolean existWithSuffixDischarge = movStockInsertingManager.refNoExists(dischargeReferenceNumber);
-		MedicalInventory inventory = getInventoryByReference(reference); //TODO: differentiate canceled inventories
+		MedicalInventory inventory = getInventoryByReference(reference); // TODO: differentiate canceled inventories
 		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && inventory.getId() != medicalInventory.getId()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
@@ -613,10 +613,9 @@ public class MedicalInventoryManager {
 	 * Actualize the {@link MedicalInventory}.
 	 *
 	 * @param inventory the {@link MedicalInventory}
-	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory actualizeMedicalInventoryRow(MedicalInventory inventory) throws OHServiceException {
+	public void actualizeMedicalInventoryRow(MedicalInventory inventory) throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		// Fetch all the inventory row of that inventory
@@ -675,7 +674,6 @@ public class MedicalInventoryManager {
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 			}
 		}
-		return this.updateMedicalInventory(inventory, true);
 	}
 
 	/**
@@ -748,10 +746,9 @@ public class MedicalInventoryManager {
 	 * Actualize the {@link MedicalInventory}'s ward.
 	 *
 	 * @param inventory the {@link MedicalInventory}
-	 * @return {@link MedicalInventory}. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
-	public MedicalInventory actualizeMedicalWardInventoryRow(MedicalInventory inventory) throws OHServiceException {
+	public void actualizeMedicalWardInventoryRow(MedicalInventory inventory) throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
 
@@ -798,6 +795,5 @@ public class MedicalInventoryManager {
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 			}
 		}
-		return this.updateMedicalInventory(inventory, true);
 	}
 }
