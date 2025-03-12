@@ -1262,8 +1262,12 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
-	void testLotHashCode() {
-		Lot lot = new Lot("aCode", TimeTools.getNow(), TimeTools.getNow());
+	void testLotHashCode() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, true);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = new Lot(medical, "aCode", TimeTools.getNow(), TimeTools.getNow(), new BigDecimal(10.10));
 		int hashCode = lot.hashCode();
 		assertThat(hashCode).isPositive();
 		// use computed value
