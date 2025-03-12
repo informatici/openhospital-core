@@ -61,6 +61,7 @@ import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
+import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,10 +96,13 @@ public class JasperReportsManager {
 	private HospitalBrowsingManager hospitalManager;
 
 	private DataSource dataSource;
+	
+	private WardBrowserManager wardManager;
 
-	public JasperReportsManager(HospitalBrowsingManager hospitalBrowsingManager, DataSource dataSource) {
+	public JasperReportsManager(HospitalBrowsingManager hospitalBrowsingManager, DataSource dataSource, WardBrowserManager wardManager) {
 		this.hospitalManager = hospitalBrowsingManager;
 		this.dataSource = dataSource;
+		this.wardManager = wardManager;
 	}
 
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
@@ -1101,11 +1105,16 @@ public class JasperReportsManager {
 		try {
 			String status = inventory.getStatus();
 			Map<String, Object> parameters = new HashMap<>(getHospitalParameters());
-			parameters.put("inventoryId", String.valueOf(inventory.getId()));
 			parameters.put("inventoryReference", inventory.getInventoryReference());
-			parameters.put("inventoryStatus", status != null ? status : inventory.getStatus());
+			parameters.put("inventoryStatus", status);
 			parameters.put("printRealQty", printRealQty);
-
+			parameters.put("inventoryId", inventory.getId());
+			if (inventory.getWard() != null) {
+				Ward ward = wardManager.findWard(inventory.getWard());
+				parameters.put("ward", ward.getDescription());
+			} else {
+				parameters.put("ward", "Main Store");
+			}
 			LocalDateTime inventoryDateTime = inventory.getInventoryDate();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DD_MM_YYYY);
 			String formattedDate = inventoryDateTime.format(formatter);
