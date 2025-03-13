@@ -615,12 +615,13 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Actualize the {@link MedicalInventory}.
+	 * Actualize the {@link MedicalInventoryRow}s.
 	 *
-	 * @param inventory the {@link MedicalInventory}
+	 * @param inventory the {@link MedicalInventory} whose rows need to be updated
+	 * @return the updated Medical inventory (it will change date, status and version)
 	 * @throws OHServiceException
 	 */
-	public void actualizeMedicalInventoryRow(MedicalInventory inventory) throws OHServiceException {
+	public MedicalInventory actualizeMedicalInventoryRow(MedicalInventory inventory) throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
 		// Fetch all the inventory row of that inventory
@@ -679,6 +680,10 @@ public class MedicalInventoryManager {
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 			}
 		}
+
+		// Update inventory date
+		inventory.setInventoryDate(TimeTools.getNow());
+		return this.updateMedicalInventory(inventory, false);
 	}
 
 	/**
@@ -748,12 +753,13 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Actualize the {@link MedicalInventory}'s ward.
+	 * Actualize the ward's {@link MedicalInventoryRow}s.
 	 *
-	 * @param inventory the {@link MedicalInventory}
+	 * @param inventory the {@link MedicalInventory} whose rows need to be updated
+	 * @return the updated Medical inventory (it will change date, status and version)
 	 * @throws OHServiceException
 	 */
-	public void actualizeMedicalWardInventoryRow(MedicalInventory inventory) throws OHServiceException {
+	public MedicalInventory actualizeMedicalWardInventoryRow(MedicalInventory inventory) throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
 
@@ -800,5 +806,9 @@ public class MedicalInventoryManager {
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 			}
 		}
+
+		// Update inventory date
+		inventory.setInventoryDate(TimeTools.getNow());
+		return this.updateMedicalInventory(inventory, false);
 	}
 }
