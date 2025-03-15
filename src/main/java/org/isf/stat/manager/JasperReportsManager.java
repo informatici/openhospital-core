@@ -1132,22 +1132,4 @@ public class JasperReportsManager {
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
 	}
-
-	public JasperReportResultDto getPatientExaminationPdf(int examinationId) throws OHServiceException {
-		try {
-			HashMap<String, Object> parameters = new HashMap<>(getHospitalParameters());
-			String jasperFileName = "PatientExamination";
-			parameters.put("LOGO_PATH", "rpt_base/images/logo-color.png");
-			parameters.put("examinationId", examinationId);
-			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
-			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, null, "pdf");
-			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
-			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
-			return result;
-		} catch (Exception e) {
-			LOGGER.error("", e);
-			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
-		}
-	}
-
 }
