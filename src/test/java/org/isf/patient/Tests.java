@@ -747,14 +747,17 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testIoGetPatientsByCodes() throws Exception {
 		// given:
-		Integer code = setupTestPatient(false);
-		List<Integer> codes = List.of(code);
+		Integer firstcode = setupTestPatient(false);
+		Integer secondcode = setupTestPatient(false);
+		List<Integer> codes = List.of(firstcode, secondcode);
 
 		// when:
 		List<Patient> patients = patientIoOperation.getPatientByCodes(codes);
 
 		// then:
-		assertThat(patients.size()).isEqualTo(1);
+		assertThat(patients).isNotNull();
+		assertThat(patients).isNotEmpty();
+		assertThat(patients.size()).isEqualTo(2);
 	}
 
 	private void resetHashMaps() throws Exception {
