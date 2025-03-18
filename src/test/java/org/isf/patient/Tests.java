@@ -743,6 +743,19 @@ class Tests extends OHCoreTestCase {
 		patientProfilePhoto.setPatient(patient);
 		assertThat(patientProfilePhoto.getPatient()).isEqualTo(patient);
 	}
+	
+	@Test
+	void testIoGetPatientsByCodes() throws Exception {
+		// given:
+		Integer code = setupTestPatient(false);
+		List<Integer> codes = List.of(code);
+
+		// when:
+		List<Patient> patients = patientIoOperation.getPatientByCodes(codes);
+
+		// then:
+		assertThat(patients.size()).isEqualTo(1);
+	}
 
 	private void resetHashMaps() throws Exception {
 		Field diuresisDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("maritalHashMap");
