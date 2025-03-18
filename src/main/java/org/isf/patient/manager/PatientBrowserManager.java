@@ -422,4 +422,15 @@ public class PatientBrowserManager {
 	public List<String> getCities() throws OHServiceException {
 		return ioOperations.getCities();
 	}
+	
+	/**
+	 * Method that returns the list of {@link Patient}s with specified codes.
+	 *
+	 * @param ids - the list of patient's code.
+	 * @return the list of {@link Patient}s.
+	 * @throws OHServiceException
+	 */
+	public List<Patient> getPatientByIds(List<Integer> ids) throws OHServiceException {
+		return ioOperations.getPatientByIds(ids);
+	}
 }
