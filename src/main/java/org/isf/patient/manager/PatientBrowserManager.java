@@ -426,11 +426,11 @@ public class PatientBrowserManager {
 	/**
 	 * Method that returns the list of {@link Patient}s with specified codes.
 	 *
-	 * @param ids - the list of patient's code.
+	 * @param codes - the list of patient's code.
 	 * @return the list of {@link Patient}s.
 	 * @throws OHServiceException
 	 */
-	public List<Patient> getPatientByIds(List<Integer> ids) throws OHServiceException {
-		return ioOperations.getPatientByIds(ids);
+	public List<Patient> getPatientByCodes(List<Integer> codes) throws OHServiceException {
+		return ioOperations.getPatientByCodes(codes);
 	}
 }

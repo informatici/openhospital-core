@@ -63,5 +63,5 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	@Query("select count(p) from Patient p where active=1 and deleted not like 'Y'")
 	long countAllActiveNotDeletedPatients();
 	
-	List<Patient> findAllByCodeIn(List<Integer> ids);
+	List<Patient> findAllByCodeIn(List<Integer> codes);
 }
