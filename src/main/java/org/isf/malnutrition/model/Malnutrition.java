@@ -38,7 +38,6 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
-import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -94,15 +93,6 @@ public class Malnutrition extends Auditable<String> {
 	public Malnutrition() { }
 
 	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, float aHeight, float aWeight) {
-		code = aCode;
-		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
-		dateConf = TimeTools.truncateToSeconds(aDateConf);
-		admission = anAdmission;
-		height = aHeight;
-		weight = aWeight;
-	}
-
-	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, Patient aPatient, float aHeight, float aWeight) {
 		code = aCode;
 		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
 		dateConf = TimeTools.truncateToSeconds(aDateConf);
