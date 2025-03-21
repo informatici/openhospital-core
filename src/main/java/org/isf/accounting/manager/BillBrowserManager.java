@@ -52,11 +52,10 @@ public class BillBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * 
 	 * @param bill
-	 * @param billItems
 	 * @param billPayments
 	 * @throws OHDataValidationException
 	 */
-	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
+	protected void validateBill(Bill bill, List<BillPayments> billPayments) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		LocalDateTime today = TimeTools.getNow();
@@ -160,7 +159,7 @@ public class BillBrowserManager {
 		Bill bill,
 		List<BillItems> billItems,
 		List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(bill, billItems, billPayments);
+		validateBill(bill, billPayments);
 		Bill newBill = newBill(bill);
 		int billId = newBill.getId();
 		if (!billItems.isEmpty()) {
@@ -219,7 +218,7 @@ public class BillBrowserManager {
 	public Bill updateBill(Bill updateBill,
 		List<BillItems> billItems,
 		List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(updateBill, billItems, billPayments);
+		validateBill(updateBill, billPayments);
 		Bill updatedBill = updateBill(updateBill);
 		newBillItems(updateBill.getId(), billItems);
 		newBillPayments(updateBill.getId(), billPayments);

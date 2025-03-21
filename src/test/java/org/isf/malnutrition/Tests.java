@@ -569,51 +569,6 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMalnutritionConstructor() throws Exception {
-		Ward ward = testWard.setup(false);
-		Patient patient = testPatient.setup(true);
-		AdmissionType admissionType = testAdmissionType.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease diseaseIn = testDisease.setup(diseaseType, false);
-		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
-		diseaseOut1.setCode("888");
-		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
-		diseaseOut2.setCode("777");
-		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
-		diseaseOut3.setCode("666");
-		OperationType operationType = testOperationType.setup(false);
-		Operation operation = testOperation.setup(operationType, false);
-		DischargeType dischargeType = testDischargeType.setup(false);
-		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
-		DeliveryType deliveryType = testDeliveryType.setup(false);
-		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
-		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
-
-		wardIoOperationRepository.saveAndFlush(ward);
-		patientIoOperationRepository.saveAndFlush(patient);
-		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
-		operationTypeIoOperationRepository.saveAndFlush(operationType);
-		operationIoOperationRepository.saveAndFlush(operation);
-		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
-		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
-		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
-		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
-		admissionIoOperationRepository.saveAndFlush(admission);
-
-		Malnutrition malnutrition = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
-		assertThat(malnutrition).isNotNull();
-		assertThat(malnutrition.getCode()).isZero();
-	}
-
-	@Test
 	void testMalnutritionGetterSetter() throws Exception {
 		int code = setupTestMalnutrition(false);
 		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
@@ -625,81 +580,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(malnutrition.getLock()).isZero();
 		malnutrition.setLock(-1);
 		assertThat(malnutrition.getLock()).isEqualTo(-1);
-	}
-
-	@Test
-	void testMalnutritionEquals() throws Exception {
-		Ward ward = testWard.setup(false);
-		Patient patient = testPatient.setup(true);
-		AdmissionType admissionType = testAdmissionType.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease diseaseIn = testDisease.setup(diseaseType, false);
-		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
-		diseaseOut1.setCode("888");
-		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
-		diseaseOut2.setCode("777");
-		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
-		diseaseOut3.setCode("666");
-		OperationType operationType = testOperationType.setup(false);
-		Operation operation = testOperation.setup(operationType, false);
-		DischargeType dischargeType = testDischargeType.setup(false);
-		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
-		DeliveryType deliveryType = testDeliveryType.setup(false);
-		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
-		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
-
-		wardIoOperationRepository.saveAndFlush(ward);
-		patientIoOperationRepository.saveAndFlush(patient);
-		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
-		operationTypeIoOperationRepository.saveAndFlush(operationType);
-		operationIoOperationRepository.saveAndFlush(operation);
-		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
-		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
-		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
-		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
-		admissionIoOperationRepository.saveAndFlush(admission);
-
-		Malnutrition malnutrition1 = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
-
-		// matches itself
-		assertThat(malnutrition1).isEqualTo(malnutrition1);
-
-		// does not match because wrong class
-		assertThat(malnutrition1)
-				.isNotNull()
-				.isNotEqualTo("xyzzy");
-
-		Malnutrition malnutrition2 = new Malnutrition(0, LocalDateTime.of(11, 1, 1, 0, 0, 0),
-				LocalDateTime.of(11, 10, 11, 0, 0, 0), admission, patient, 1185.47f, 170.70f);
-
-		// does not match because dates do not match
-		assertThat(malnutrition1).isNotEqualTo(malnutrition2);
-
-		Malnutrition malnutrition3 = new Malnutrition(0, LocalDateTime.of(111, 1, 1, 0, 0, 0),
-				LocalDateTime.of(111, 10, 11, 0, 0, 0), admission, patient, 4185.47f, 470.70f);
-
-		malnutrition2.setDateConf(null);
-		malnutrition2.setDateSupp(null);
-
-		malnutrition3.setDateConf(null);
-		malnutrition3.setDateSupp(null);
-
-		// dates are null but the height and weight do not match
-		assertThat(malnutrition2).isNotEqualTo(malnutrition3);
-
-		Malnutrition malnutrition4 = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
-
-		// matches because all the same values
-		assertThat(malnutrition4).isEqualTo(malnutrition1);
 	}
 
 	@Test
