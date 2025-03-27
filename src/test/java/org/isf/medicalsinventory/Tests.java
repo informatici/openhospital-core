@@ -676,7 +676,7 @@ class Tests extends OHCoreTestCase {
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryRowId);
 		assertThat(medicalInventoryRows).isNotEmpty();
 		assertThat(medicalInventoryRows).hasSize(1);
-		medicalInventoryManager.validateMedicalInventoryRow(savedInventory, medicalInventoryRows);
+		medicalInventoryManager.validateMedicalInventoryRow(savedInventory, medicalInventoryRows, true);
 		int inventoryId = inventory.getId();
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
@@ -738,7 +738,7 @@ class Tests extends OHCoreTestCase {
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
 		assertThat(medicalInventoryRows).hasSize(3);
-		List<Movement> insertMovements = medicalInventoryManager.confirmMedicalInventoryRow(inventory, medicalInventoryRows);
+		List<Movement> insertMovements = medicalInventoryManager.confirmMedicalInventoryRow(inventory, medicalInventoryRows, true);
 		assertThat(insertMovements).isNotEmpty();
 		String status = InventoryStatus.done.toString();
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
@@ -828,7 +828,7 @@ class Tests extends OHCoreTestCase {
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
 		assertThat(medicalInventoryRows).hasSize(3);
-		medicalInventoryManager.validateMedicalInventoryRow(inventory, medicalInventoryRows);
+		medicalInventoryManager.validateMedicalInventoryRow(inventory, medicalInventoryRows, true);
 	}
 
 	@Test
