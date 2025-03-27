@@ -617,7 +617,7 @@ public class MedicalInventoryManager {
 		boolean existWithSuffixCharge = movStockInsertingManager.refNoExists(chargeReferenceNumber);
 		boolean existWithSuffixDischarge = movStockInsertingManager.refNoExists(dischargeReferenceNumber);
 		MedicalInventory inventory = getInventoryByReference(reference); // TODO: differentiate canceled inventories
-		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && inventory.getId() != medicalInventory.getId()) {
+		if (existWithSuffixCharge || existWithSuffixDischarge || inventory != null && !inventory.getId().equals(medicalInventory.getId())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.referencealreadyused.msg")));
 		}
 		if (!errors.isEmpty()) {
