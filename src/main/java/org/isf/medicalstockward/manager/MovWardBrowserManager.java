@@ -154,11 +154,12 @@ public class MovWardBrowserManager {
 	 * Persists the specified movement.
 	 *
 	 * @param newMovement the movement to persist.
+	 * @return the stored movement.
 	 * @throws OHServiceException
 	 */
-	public void newMovementWard(MovementWard newMovement) throws OHServiceException {
+	public MovementWard newMovementWard(MovementWard newMovement) throws OHServiceException {
 		validateMovementWard(newMovement);
-		ioOperations.newMovementWard(newMovement);
+		return ioOperations.newMovementWard(newMovement);
 	}
 
 	/**

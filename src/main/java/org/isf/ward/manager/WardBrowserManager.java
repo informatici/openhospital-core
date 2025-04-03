@@ -104,7 +104,7 @@ public class WardBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Ward> getWards() throws OHServiceException {
-		return ioOperations.getWards(null);
+		return ioOperations.findAll();
 	}
 
 	/**
@@ -125,10 +125,6 @@ public class WardBrowserManager {
 		return ioOperations.getOpdWards();
 	}
 
-	// TODO: remove this method, findWard(String code) should be enough
-	public List<Ward> getWards(Ward ward) throws OHServiceException {
-		return ioOperations.getWards(ward.getCode());
-	}
 	/**
 	 * Returns all the stored {@link Ward}s with maternity flag equal to {@code false}. In case of error a message error is shown and a {@code null} value is
 	 * returned.
@@ -295,7 +291,7 @@ public class WardBrowserManager {
 	}
 
 	/**
-	 * Returns the {@link Ward} based on ward code,
+	 * Returns the {@link Ward} based on ward code.
 	 *
 	 * @param code the {@link Ward} code.
 	 * @return the {@link Ward} or {@code null} if not found

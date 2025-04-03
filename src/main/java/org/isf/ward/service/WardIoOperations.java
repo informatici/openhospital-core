@@ -33,8 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class offers the io operations for recovering and managing
- * ward records from the database
+ * This class offers the io operations for recovering and managing ward records from the database
  * 
  * @author Rick
  */
@@ -86,6 +85,7 @@ public class WardIoOperations {
 
 	/**
 	 * Retrieves all stored {@link Ward}s with flag maternity equals {@code false}.
+	 * 
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
@@ -94,22 +94,8 @@ public class WardIoOperations {
 	}
 
 	/**
-	 * Retrieves all stored {@link Ward}s with the specified ward ID.
-	 * @param wardID - the ward ID, can be {@code null}
-	 * @return the retrieved wards.
-	 * @throws OHServiceException if an error occurs retrieving the wards.
-	 * 
-	 * TODO: remove this method, findWard(String code) should be enough
-	 */
-	public List<Ward> getWards(String wardID) throws OHServiceException {
-		if (wardID != null && !wardID.trim().isEmpty()) {
-			return repository.findByCodeContains(wardID);
-		}
-		return repository.findAll();
-	}
-
-	/**
 	 * Retrieves all stored {@link Ward}s with beds > {@code 0}
+	 * 
 	 * @return
 	 */
 	public List<Ward> getIpdWards() {
@@ -118,6 +104,7 @@ public class WardIoOperations {
 
 	/**
 	 * Retrieves all stored {@link Ward}s with isOpd = {@code true}
+	 * 
 	 * @return
 	 */
 	public List<Ward> getOpdWards() {
@@ -125,7 +112,7 @@ public class WardIoOperations {
 	}
 
 	/**
-	 * Stores the specified {@link Ward}. 
+	 * Stores the specified {@link Ward}.
 	 * 
 	 * @param ward the ward to store.
 	 * @return ward that has been stored.
@@ -148,6 +135,7 @@ public class WardIoOperations {
 
 	/**
 	 * Mark as deleted the specified {@link Ward}.
+	 * 
 	 * @param ward - the ward to make delete.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
@@ -157,6 +145,7 @@ public class WardIoOperations {
 
 	/**
 	 * Check if the specified code is used by other {@link Ward}s.
+	 * 
 	 * @param code - the code to check.
 	 * @return {@code true} if it is already used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -167,6 +156,7 @@ public class WardIoOperations {
 
 	/**
 	 * Check if the maternity ward exists.
+	 * 
 	 * @return {@code true} if the word exists, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -176,6 +166,7 @@ public class WardIoOperations {
 
 	/**
 	 * Check if the OPD ward exists.
+	 * 
 	 * @return {@code true} if the OPD ward exists, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -192,6 +183,16 @@ public class WardIoOperations {
 	 */
 	public Ward findWard(String code) throws OHServiceException {
 		return repository.findById(code).orElse(null);
+	}
+
+	/**
+	 * Returns the full list of {@link Ward}s
+	 * 
+	 * @return the list of {@link Ward}s
+	 * @throws OHServiceException
+	 */
+	public List<Ward> findAll() throws OHServiceException {
+		return repository.findAll();
 	}
 
 }

@@ -35,7 +35,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicalInventoryIoOperationRepository extends JpaRepository<MedicalInventory, Integer> {
 
-	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryReference = :inventoryReference")
+	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryReference = :inventoryReference and medinv.status not in ('canceled')")
 	MedicalInventory findByReference(@Param("inventoryReference") String inventoryReference);
 
 	@Query(value = "select medinv from MedicalInventory medinv where (medinv.status = :status and medinv.ward = :wardCode)")

@@ -927,12 +927,12 @@ class Tests extends OHCoreTestCase {
 			medicalStockIoOperationRepository.saveAndFlush(thirdMedicalStock);
 
 			// test validate medical ward inventory row
-			medicalInventoryManager.validateMedicalWardInventoryRow(inventory, medicalInventoryRows);
+			medicalInventoryManager.validateMedicalWardInventoryRow(inventory, medicalInventoryRows, true); // TODO: to test also allMedicals=false
 		});
 		// Test if exception is OHDataValidationException instance
 		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
 		// Test if size of message list is equal to 3
-		assertThat(((OHDataValidationException) throwable).getMessages().size()).isEqualTo(3);
+		assertThat(((OHDataValidationException) throwable).getMessages().size()).isEqualTo(4);
 	}
 
 	@Test
@@ -1014,7 +1014,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperationRepository.saveAndFlush(thirdMedicalStock);
 
 		// Test actualize ward inventory row
-		medicalInventoryManager.actualizeMedicalWardInventoryRow(inventory);
+		medicalInventoryManager.actualizeMedicalWardInventoryRow(inventory, true); // TODO: to test also !allMedicals
 
 		medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
 
@@ -1065,7 +1065,8 @@ class Tests extends OHCoreTestCase {
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 		assertThat(medicalInventoryRows).isNotEmpty();
 		assertThat(medicalInventoryRows).hasSize(2);
-		assertThat(medicalInventoryManager.confirmMedicalWardInventoryRow(inventory, medicalInventoryRows)).isTrue();
+		// TODO: to test also !allMedicals
+		assertThat(medicalInventoryManager.confirmMedicalWardInventoryRow(inventory, medicalInventoryRows, true)).isNotEmpty();
 		List<MovementWard> movWard = movementWardIoOperationRepository.findByMedicalCode(medical.getCode());
 		assertThat(movWard).hasSize(2);
 	}

@@ -54,8 +54,8 @@ public class MedicalStockWardIoOperations {
 	private LotIoOperationRepository lotRepository;
 
 	public MedicalStockWardIoOperations(MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository,
-	                                    MovementWardIoOperationRepository movementWardIoOperationRepository,
-	                                    LotIoOperationRepository lotIoOperationRepository) {
+		MovementWardIoOperationRepository movementWardIoOperationRepository,
+		LotIoOperationRepository lotIoOperationRepository) {
 		this.repository = medicalStockWardIoOperationRepository;
 		this.movementRepository = movementWardIoOperationRepository;
 		this.lotRepository = lotIoOperationRepository;
@@ -63,6 +63,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
+	 * 
 	 * @param wardId the ward id.
 	 * @param dateFrom the lower bound for the movement date range.
 	 * @param dateTo the upper bound for the movement date range.
@@ -73,7 +74,7 @@ public class MedicalStockWardIoOperations {
 		List<MovementWard> pMovementWard = new ArrayList<>();
 
 		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, TimeTools.truncateToSeconds(dateFrom),
-						TimeTools.truncateToSeconds(dateTo)));
+			TimeTools.truncateToSeconds(dateTo)));
 		for (Integer code : pMovementWardCode) {
 			MovementWard movementWard = movementRepository.findById(code).orElse(null);
 			pMovementWard.add(movementWard);
@@ -83,6 +84,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
+	 * 
 	 * @param idwardTo the target ward id.
 	 * @param dateFrom the lower bound for the movement date range.
 	 * @param dateTo the upper bound for the movement date range.
@@ -95,6 +97,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
+	 * 
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
@@ -111,6 +114,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 * 
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
 	 * @param lot - the {@link Lot} to be counted
 	 * @return the total quantity.
@@ -130,9 +134,10 @@ public class MedicalStockWardIoOperations {
 	 * Stores the specified {@link Movement}.
 	 *
 	 * @param movement the movement to store.
+	 * @return the stored movement.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public void newMovementWard(MovementWard movement) throws OHServiceException {
+	public MovementWard newMovementWard(MovementWard movement) throws OHServiceException {
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -148,10 +153,12 @@ public class MedicalStockWardIoOperations {
 			movementRepository.save(destinationWardIncomeMovement);
 		}
 		updateStockWardQuantity(movement);
+		return savedMovement;
 	}
 
 	/**
 	 * Stores the specified {@link Movement} list.
+	 * 
 	 * @param movements the movement to store.
 	 * @throws OHServiceException if an error occurs.
 	 */
@@ -163,6 +170,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Updates the specified {@link MovementWard}.
+	 * 
 	 * @param movement the movement ward to update.
 	 * @return the updated {@link MovementWard} object.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -173,6 +181,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Deletes the specified {@link MovementWard}.
+	 * 
 	 * @param movement the movement ward to delete.
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
@@ -182,6 +191,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Updates the quantity for the specified movement ward.
+	 * 
 	 * @param movement the movement ward to update.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
@@ -233,6 +243,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
+	 * 
 	 * @param wardId the ward id.
 	 * @param stripeEmpty - if {@code true}, stripes the empty lots
 	 * @return the retrieved medicals.
@@ -243,8 +254,7 @@ public class MedicalStockWardIoOperations {
 	}
 
 	/**
-	 * Get the list of {@link Medical}s associated to the specified {@link Ward} and
-	 * the specified {@code id}.
+	 * Get the list of {@link Medical}s associated to the specified {@link Ward} and the specified {@code id}.
 	 *
 	 * @param wardId the {@link Ward} id.
 	 * @param medId the {@link Medical} id.
@@ -281,8 +291,8 @@ public class MedicalStockWardIoOperations {
 	}
 
 	/**
-	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
-	 * (total quantity, regardless the lot)
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot (total quantity, regardless the lot)
+	 * 
 	 * @param wardId
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
@@ -316,6 +326,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Get the {@link MedicalWard} associated to specified criteria.
+	 * 
 	 * @param wardCode the ward code
 	 * @param medical the medical code
 	 * @param lot the lot code
@@ -329,6 +340,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Updates the specified {@link MedicalWard}.
+	 * 
 	 * @param medWard the medical ward to update
 	 * @return the updated {@link MedicalWard} object.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -339,6 +351,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Deletes the specified {@link MedicalWard}.
+	 * 
 	 * @param medWard the medical ward to delete
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
@@ -348,6 +361,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Get {@link MovementWard}s with the specified criteria.
+	 * 
 	 * @param medID - medical id.
 	 * @return
 	 */
