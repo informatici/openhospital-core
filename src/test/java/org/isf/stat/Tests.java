@@ -37,6 +37,7 @@ import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.stat.manager.JasperReportsManager;
+import org.isf.ward.manager.WardBrowserManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +69,8 @@ class Tests extends OHCoreTestCase {
 	JasperPrint jasperPrint;
 	@Mock
 	Connection connection;
+	@Mock
+	WardBrowserManager wardBrowserManager;
 
 	private AutoCloseable closeable;
 
@@ -101,7 +104,7 @@ class Tests extends OHCoreTestCase {
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class);
 						MockedStatic<JasperFillManager> mockedJasperFillManager = mockStatic(JasperFillManager.class);
 						MockedStatic<JasperExportManager> mockedJasperExportManager = mockStatic(JasperExportManager.class)) {
-			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource);
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
 
 			when(hospitalBrowsingManager.getHospital()).thenReturn(hospital);
 			when(hospital.getDescription()).thenReturn("Description");
@@ -125,7 +128,7 @@ class Tests extends OHCoreTestCase {
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class);
 						MockedStatic<JasperFillManager> mockedJasperFillManager = mockStatic(JasperFillManager.class);
 						MockedStatic<JasperExportManager> mockedJasperExportManager = mockStatic(JasperExportManager.class)) {
-			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource);
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
 
 			when(hospitalBrowsingManager.getHospital()).thenReturn(hospital);
 			when(hospital.getDescription()).thenReturn("Description");
@@ -149,7 +152,7 @@ class Tests extends OHCoreTestCase {
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class);
 						MockedStatic<JasperFillManager> mockedJasperFillManager = mockStatic(JasperFillManager.class);
 						MockedStatic<JasperExportManager> mockedJasperExportManager = mockStatic(JasperExportManager.class)) {
-			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource);
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
 
 			when(hospitalBrowsingManager.getHospital()).thenReturn(hospital);
 			when(hospital.getDescription()).thenReturn("Description");

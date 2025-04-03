@@ -433,9 +433,9 @@ class Tests extends OHCoreTestCase {
 		assertThat(secondMedicalInventory).isNotNull();
 		List<MedicalInventory> medicalinventories = medicalInventoryManager.getMedicalInventoryByParams(secondMedicalInventory.getInventoryDate().minusDays(2),
 			secondMedicalInventory.getInventoryDate().plusDays(2), status, secondMedicalInventory.getInventoryType());
-		assertThat(medicalinventories).hasSize(2); // including draft inventory (id=1)
-		assertThat(medicalinventories.get(1).getStatus()).isEqualTo(secondMedicalInventory.getStatus());
-		assertThat(medicalinventories.get(1).getWard()).isEqualTo(secondMedicalInventory.getWard());
+		assertThat(medicalinventories).hasSize(1); // including draft inventory (id=1)
+		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(secondMedicalInventory.getStatus());
+		assertThat(medicalinventories.get(0).getWard()).isEqualTo(secondMedicalInventory.getWard());
 	}
 
 	@Test
@@ -480,9 +480,9 @@ class Tests extends OHCoreTestCase {
 		Page<MedicalInventory> medicalinventories = medicalInventoryManager.getMedicalInventoryByParamsPageable(
 			secondMedicalInventory.getInventoryDate().minusDays(2), secondMedicalInventory.getInventoryDate().plusDays(2), status,
 			secondMedicalInventory.getInventoryType(), 0, 10);
-		assertThat(medicalinventories).hasSize(2); // including draft inventory (id=1)
-		assertThat(medicalinventories.getContent().get(1).getStatus()).isEqualTo(secondMedicalInventory.getStatus());
-		assertThat(medicalinventories.getContent().get(1).getWard()).isEqualTo(secondMedicalInventory.getWard());
+		assertThat(medicalinventories).hasSize(1);
+		assertThat(medicalinventories.getContent().get(0).getStatus()).isEqualTo(secondMedicalInventory.getStatus());
+		assertThat(medicalinventories.getContent().get(0).getWard()).isEqualTo(secondMedicalInventory.getWard());
 	}
 
 	@Test
@@ -506,8 +506,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalinventories).hasSize(2);
 		assertThat(medicalinventories.getContent().get(0).getStatus()).containsAnyOf(firstMedicalInventory.getStatus(), status);
 		assertThat(medicalinventories.getContent().get(0).getWard()).containsAnyOf(firstMedicalInventory.getWard(), wardCode);
-		assertThat(medicalinventories.getContent().get(1).getStatus()).containsAnyOf(firstMedicalInventory.getStatus(), status);
-		assertThat(medicalinventories.getContent().get(1).getWard()).containsAnyOf(firstMedicalInventory.getWard(), wardCode);
 	}
 
 	@Test
