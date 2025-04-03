@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -891,7 +892,7 @@ class Tests extends OHCoreTestCase {
 
 			// test case 1: Create movement from the main to the ward to add quantity for existing lot in the ward
 			firstMovement.setQuantity(100);
-			firstMovement.setDate(LocalDateTime.now());
+			firstMovement.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 			firstmedicalStock = testMedicalStock.setup(firstMovement);
 			medicalStockIoOperation.newMovement(firstMovement);
 			medicalStockIoOperationRepository.saveAndFlush(firstmedicalStock);
@@ -902,7 +903,7 @@ class Tests extends OHCoreTestCase {
 			lotfour = lotIoOperationRepository.save(lotfour);
 			Movement secondMovement = testMovement.setup(medical, dischargeType, ward, lotfour, null, false);
 			secondMovement.setQuantity(50);
-			secondMovement.setDate(LocalDateTime.now());
+			secondMovement.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 			MedicalStock secondMedicalStock = testMedicalStock.setup(secondMovement);
 			medicalStockIoOperation.newMovement(secondMovement);
 			medicalStockIoOperationRepository.saveAndFlush(secondMedicalStock);
@@ -921,7 +922,7 @@ class Tests extends OHCoreTestCase {
 			medicalStockIoOperation.newMovement(initialMovement);
 			medicalStockIoOperationRepository.saveAndFlush(initialMedicalStock);
 			Movement thirdMovement = testMovement.setup(secondMedical, dischargeType, ward, lotFive, null, false);
-			thirdMovement.setDate(LocalDateTime.now());
+			thirdMovement.setDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 			MedicalStock thirdMedicalStock = testMedicalStock.setup(thirdMovement);
 			medicalStockIoOperation.newMovement(thirdMovement);
 			medicalStockIoOperationRepository.saveAndFlush(thirdMedicalStock);
@@ -932,7 +933,7 @@ class Tests extends OHCoreTestCase {
 		// Test if exception is OHDataValidationException instance
 		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
 		// Test if size of message list is equal to 3
-		assertThat(((OHDataValidationException) throwable).getMessages().size()).isEqualTo(4);
+		assertThat(((OHDataValidationException) throwable).getMessages().size()).isEqualTo(3);
 	}
 
 	@Test
