@@ -168,7 +168,8 @@ public class MedicalInventoryManager {
 	}
 
 	/**
-	 * Return a list of results {@link MedicalInventory}s for passed params.
+	 * Return all {@link MedicalInventory}s without params.<br>
+	 * For a detailed search use {@code getMedicalInventoryByParams(LocalDateTime dateFrom, LocalDateTime dateTo, String status, String type)}
 	 *
 	 * @return the list of {@link MedicalInventory}s. It could be {@code empty}.
 	 * @throws OHServiceException
