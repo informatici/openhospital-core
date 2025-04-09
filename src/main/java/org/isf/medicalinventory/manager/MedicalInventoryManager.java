@@ -255,20 +255,21 @@ public class MedicalInventoryManager {
 		}
 		if (reference == null || reference.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
-		}
-		/*
-		 * Despite MINVT_REFERENCE is VARCHAR(50), this field will be copied into MMV_REFNO and concatenate to either "-charge" or "-discharge" suffixes, hence
-		 * the limit to 40. For similarity, we keep the same validation method for "ward" type inventories, despite the field would be copied into MMVN_DESC
-		 * VARCHAR(100) in those cases.
-		 */
-		if (reference.length() > 40) {
-			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.thereferenceistoolongmaxchars.fmt.msg", 40)));
-		}
-		if (checkReferenceExists) {
-			try {
-				checkReference(medicalInventory);
-			} catch (OHServiceException e) {
-				throw new OHDataValidationException(e.getMessages());
+		} else {
+			/*
+			 * Despite MINVT_REFERENCE is VARCHAR(50), this field will be copied into MMV_REFNO and concatenate to either "-charge" or "-discharge" suffixes,
+			 * hence the limit to 40. For similarity, we keep the same validation method for "ward" type inventories, despite the field would be copied into
+			 * MMVN_DESC VARCHAR(100) in those cases.
+			 */
+			if (reference.length() > 40) {
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.thereferenceistoolongmaxchars.fmt.msg", 40)));
+			}
+			if (checkReferenceExists) {
+				try {
+					checkReference(medicalInventory);
+				} catch (OHServiceException e) {
+					throw new OHDataValidationException(e.getMessages());
+				}
 			}
 		}
 		if (!errors.isEmpty()) {
@@ -288,9 +289,9 @@ public class MedicalInventoryManager {
 		throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
-		StringBuilder medDescriptionForLotUpdated = new StringBuilder("\n"); // initial new line
-		StringBuilder medDescriptionForNewLot = new StringBuilder("\n"); // initial new line
-		StringBuilder medDescriptionForNewMedical = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForLotUpdated = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForNewLot = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForNewMedical = new StringBuilder('\n'); // initial new line
 		boolean lotUpdated = false;
 		boolean lotAdded = false;
 		boolean medicalAdded = false;
@@ -349,7 +350,7 @@ public class MedicalInventoryManager {
 					lotUpdated = true;
 					double difference = mainStoreQty - theoQty;
 					medDescriptionForLotUpdated
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, theoQty, mainStoreQty, difference > 0 ? "+" + difference : difference));
@@ -361,7 +362,7 @@ public class MedicalInventoryManager {
 					// New medical
 					medicalAdded = true;
 					medDescriptionForNewMedical
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
 							medicalDesc, lotInfo, mainStoreQty));
@@ -369,7 +370,7 @@ public class MedicalInventoryManager {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, mainStoreQty));
@@ -415,9 +416,9 @@ public class MedicalInventoryManager {
 		throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
-		StringBuilder medDescriptionForLotUpdated = new StringBuilder("\n"); // initial new line
-		StringBuilder medDescriptionForNewLot = new StringBuilder("\n"); // initial new line
-		StringBuilder medDescriptionForNewMedical = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForLotUpdated = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForNewLot = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForNewMedical = new StringBuilder('\n'); // initial new line
 		boolean lotUpdated = false;
 		boolean lotAdded = false;
 		boolean medicalAdded = false;
@@ -481,7 +482,7 @@ public class MedicalInventoryManager {
 				if (wardStoreQty != theoQty) {
 					lotUpdated = true;
 					medDescriptionForLotUpdated
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, theoQty, wardStoreQty, wardStoreQty - theoQty));
 				}
@@ -491,14 +492,14 @@ public class MedicalInventoryManager {
 					// New medical
 					medicalAdded = true;
 					medDescriptionForNewMedical
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
 							medicalDesc, lotInfo, wardStoreQty));
 				} else {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
-						.append("\n")
+						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, wardStoreQty));
 				}
@@ -636,7 +637,7 @@ public class MedicalInventoryManager {
 		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
 			double theoQty = medicalInventoryRow.getTheoreticQty();
 			double realQty = medicalInventoryRow.getRealQty();
-			Double movQuantity = theoQty - realQty;
+			double movQuantity = theoQty - realQty;
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
 			if (movQuantity != 0) {
@@ -722,7 +723,7 @@ public class MedicalInventoryManager {
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<Lot> optLot = movStockInsertingManager.getLotByMedical(medical, false).stream().filter(l -> l.getCode().equals(lotCode))
 				.findFirst();
-			double mainStoreQty = optLot.get().getMainStoreQuantity();
+			double mainStoreQty = optLot.isPresent() ? optLot.get().getMainStoreQuantity() : 0.;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()

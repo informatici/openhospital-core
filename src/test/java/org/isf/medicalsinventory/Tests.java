@@ -262,7 +262,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrNewMedicalInventory() throws Exception {
 		Ward ward = testWard.setup(false);
 		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
-		List<MedicalInventoryRow> medicalInventoryRows = new ArrayList<MedicalInventoryRow>();
+		List<MedicalInventoryRow> medicalInventoryRows = new ArrayList<>();
 		MedicalInventory newMedicalInventory = medicalInventoryManager.newMedicalInventory(medicalInventory, medicalInventoryRows);
 		checkMedicalInventoryIntoDb(newMedicalInventory.getId());
 	}
