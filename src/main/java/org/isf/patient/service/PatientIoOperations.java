@@ -21,12 +21,9 @@
  */
 package org.isf.patient.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import jakarta.persistence.EntityManager;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -46,6 +43,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
 
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
