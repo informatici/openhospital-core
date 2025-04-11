@@ -21,6 +21,7 @@
  */
 package org.isf.patient.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -325,6 +326,10 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatientByCodes(List<Integer> codes) throws OHServiceException {
-		return repository.findAllByCodeIn(codes);
+		List<Patient> patients = repository.findAllByCodeIn(codes);
+		for (Patient patient : patients) {
+			retrievePatientProfilePhoto(patient);
+		}
+		return patients;
 	}
 }

@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -747,7 +748,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testIoGetPatientsByCodes() throws Exception {
 		// given:
-		Integer firstcode = setupTestPatient(false);
+		Integer firstcode = setupTestPatientWithPhoto(false);
 		Integer secondcode = setupTestPatient(false);
 		List<Integer> codes = List.of(firstcode, secondcode);
 
@@ -781,6 +782,18 @@ class Tests extends OHCoreTestCase {
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
+		patientIoOperationRepository.saveAndFlush(patient);
+		return patient.getCode();
+	}
+	
+	private Integer setupTestPatientWithPhoto(boolean usingSet) throws OHException, IOException {
+		Patient patient = testPatient.setup(usingSet);
+		PatientProfilePhoto patientProfilePhoto = new PatientProfilePhoto();
+
+		File file = new File(getClass().getResource("patient.jpg").getFile());
+		byte[] bytes = Files.readAllBytes(file.toPath());
+		patientProfilePhoto.setPhoto(bytes);
+		patient.setPatientProfilePhoto(patientProfilePhoto);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient.getCode();
 	}
