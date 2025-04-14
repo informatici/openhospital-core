@@ -35,7 +35,7 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalWardInventory {
-	private int id = 1;
+	private Integer id = null;
 	private String status = InventoryStatus.draft.toString();
 	private LocalDateTime inventoryDate = TimeTools.getNow();
 	private String user = "admin";
