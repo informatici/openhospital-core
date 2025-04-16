@@ -481,10 +481,11 @@ public class MedicalInventoryManager {
 				double theoQty = medicalInventoryRow.getTheoreticQty();
 				if (wardStoreQty != theoQty) {
 					lotUpdated = true;
+					double difference = wardStoreQty - theoQty;
 					medDescriptionForLotUpdated
 						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, theoQty, wardStoreQty, wardStoreQty - theoQty));
+							medicalDesc, lotInfo, theoQty, wardStoreQty, difference > 0 ? "+" + difference : difference));
 				}
 			} else {
 				// TODO: to decide if to give control to the user about this
