@@ -365,7 +365,7 @@ public class MedicalInventoryManager {
 						.append('\n')
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
-							medicalDesc, lotInfo, mainStoreQty));
+							medicalDesc, lotInfo, "+" + mainStoreQty));
 				} else {
 					// New Lot
 					lotAdded = true;
@@ -373,7 +373,7 @@ public class MedicalInventoryManager {
 						.append('\n')
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, mainStoreQty));
+							medicalDesc, lotInfo, "+" + mainStoreQty));
 				}
 			}
 		}
@@ -495,14 +495,14 @@ public class MedicalInventoryManager {
 					medDescriptionForNewMedical
 						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
-							medicalDesc, lotInfo, wardStoreQty));
+							medicalDesc, lotInfo, "+" + wardStoreQty));
 				} else {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
 						.append('\n')
 						.append(MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, wardStoreQty));
+							medicalDesc, lotInfo, "+" + wardStoreQty));
 				}
 			}
 		}
