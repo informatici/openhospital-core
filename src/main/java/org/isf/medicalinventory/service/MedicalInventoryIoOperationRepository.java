@@ -48,7 +48,7 @@ public interface MedicalInventoryIoOperationRepository extends JpaRepository<Med
 	List<MedicalInventory> findInventoryBetweenDatesStatusAndType(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
 		@Param("status") String status, @Param("type") String type);
 
-	@Query(value = "select medinv from MedicalInventory medinv where (medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo and medinv.inventoryType = :type) and medinv.status != 'canceled'")
+	@Query(value = "select medinv from MedicalInventory medinv where (medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo and medinv.inventoryType = :type and medinv.status != 'canceled') or (medinv.inventoryType = :type and medinv.status in ('draft','validated'))")
 	List<MedicalInventory> findInventoryBetweenDatesAndType(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
 		@Param("type") String type);
 
@@ -56,7 +56,7 @@ public interface MedicalInventoryIoOperationRepository extends JpaRepository<Med
 	Page<MedicalInventory> findInventoryBetweenDatesStatusAndTypePageable(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
 		@Param("status") String status, @Param("type") String type, Pageable pageable);
 
-	@Query(value = "select medinv from MedicalInventory medinv where (medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo and medinv.inventoryType = :type) and medinv.status != 'canceled'")
+	@Query(value = "select medinv from MedicalInventory medinv where (medinv.inventoryDate >= :dateFrom and medinv.inventoryDate < :dateTo and medinv.inventoryType = :type and medinv.status != 'canceled') or (medinv.inventoryType = :type and medinv.status in ('draft','validated'))")
 	Page<MedicalInventory> findInventoryBetweenDatesAndTypePageable(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
 		@Param("type") String type, Pageable pageable);
 
