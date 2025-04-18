@@ -22,7 +22,9 @@
 package org.isf.ward.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
@@ -105,6 +107,21 @@ public class WardBrowserManager {
 	 */
 	public List<Ward> getWards() throws OHServiceException {
 		return ioOperations.findAll();
+	}
+
+	/**
+	 * Returns a map of all {@link Ward}s to their codes.
+	 * 
+	 * @return the hashmap
+	 * @throws OHServiceException
+	 */
+	public Map<String, Ward> getWardMap() throws OHServiceException {
+		Map<String, Ward> wardMap = new HashMap<>();
+		List<Ward> wards = getWards(); // presumo che questo metodo già esista
+		for (Ward ward : wards) {
+			wardMap.put(ward.getCode(), ward);
+		}
+		return wardMap;
 	}
 
 	/**

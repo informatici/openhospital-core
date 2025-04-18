@@ -42,7 +42,7 @@ public class TestMedicalInventory {
 	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
 	private String inventoryType = InventoryType.main.toString();
-	private String ward = "Z";
+	private String wardCode = "Z";
 	private int supplier = 1;
 	private String destination = "INV";
 	private String charge = "inventory+";
@@ -69,7 +69,7 @@ public class TestMedicalInventory {
 		medInventory.setUser(user);
 		medInventory.setInventoryReference(inventoryReference);
 		medInventory.setInventoryType(inventoryType);
-		medInventory.setWard(ward);
+		medInventory.setWardCode(wardCode);
 		medInventory.setChargeType(charge);
 		medInventory.setDischargeType(discharge);
 		medInventory.setSupplier(supplier);
@@ -83,7 +83,7 @@ public class TestMedicalInventory {
 		assertThat(medInventory.getUser()).isEqualTo(user);
 		assertThat(medInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medInventory.getInventoryType()).isEqualTo(inventoryType);
-		assertThat(medInventory.getWard()).isEqualTo(ward);
+		assertThat(medInventory.getWardCode()).isEqualTo(wardCode);
 		assertThat(medInventory.getChargeType()).isEqualTo(charge);
 		assertThat(medInventory.getDischargeType()).isEqualTo(discharge);
 		assertThat(medInventory.getSupplier()).isEqualTo(supplier);

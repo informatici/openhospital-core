@@ -38,7 +38,7 @@ public interface MedicalInventoryIoOperationRepository extends JpaRepository<Med
 	@Query(value = "select medinv from MedicalInventory medinv where medinv.inventoryReference = :inventoryReference and medinv.status not in ('canceled')")
 	MedicalInventory findByReference(@Param("inventoryReference") String inventoryReference);
 
-	@Query(value = "select medinv from MedicalInventory medinv where (medinv.status = :status and medinv.ward = :wardCode)")
+	@Query(value = "select medinv from MedicalInventory medinv where (medinv.status = :status and medinv.wardCode = :wardCode)")
 	List<MedicalInventory> findInventoryByStatusAndWardCode(@Param("status") String status, @Param("wardCode") String wardCode);
 
 	@Query(value = "select medinv from MedicalInventory medinv where (medinv.status = :status and medinv.inventoryType = :inventoryType)")

@@ -425,8 +425,8 @@ public class MedicalInventoryManager {
 		boolean dateUpdated = false;
 
 		List<Lot> lotsFromMovements = new ArrayList<>();
-		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWard(), movFrom, movTo));
-		List<Movement> movementFromMainStore = new ArrayList<>(movBrowserManager.getMovements(inventory.getWard(), movFrom, movTo));
+		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWardCode(), movFrom, movTo));
+		List<Movement> movementFromMainStore = new ArrayList<>(movBrowserManager.getMovements(inventory.getWardCode(), movFrom, movTo));
 		List<Medical> inventoryMedicalsList = inventoryRowSearchList.stream().map(MedicalInventoryRow::getMedical).distinct().toList();
 		if (allMedicals) {
 			// Use all movements without filtering by medical code
@@ -467,7 +467,7 @@ public class MedicalInventoryManager {
 			Medical medical = lot.getMedical();
 			String medicalDesc = medical.getDescription();
 
-			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWard(), medical.getCode(), false).stream()
+			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 
 			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
@@ -631,7 +631,7 @@ public class MedicalInventoryManager {
 		this.validateMedicalWardInventoryRow(inventory, inventoryRowSearchList, allMedicals);
 
 		// get general info
-		Ward selectedWard = wardManager.findWard(inventory.getWard());
+		Ward selectedWard = wardManager.findWard(inventory.getWardCode());
 		LocalDateTime now = TimeTools.getNow();
 		String reason = inventory.getInventoryReference();
 		List<MovementWard> insertedMovements = new ArrayList<>();
@@ -836,8 +836,8 @@ public class MedicalInventoryManager {
 		LocalDateTime movTo = TimeTools.getNow();
 
 		List<Lot> lotsFromMovements = new ArrayList<>();
-		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWard(), movFrom, movTo));
-		List<Movement> movementFromMainStore = new ArrayList<>(movBrowserManager.getMovements(inventory.getWard(), movFrom, movTo));
+		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWardCode(), movFrom, movTo));
+		List<Movement> movementFromMainStore = new ArrayList<>(movBrowserManager.getMovements(inventory.getWardCode(), movFrom, movTo));
 		List<MedicalInventoryRow> inventoryRowList = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
 		List<Medical> inventoryMedicalsList = inventoryRowList.stream().map(MedicalInventoryRow::getMedical).distinct().toList();
 		if (allMedicals) {
@@ -877,7 +877,7 @@ public class MedicalInventoryManager {
 			Medical medical = lot.getMedical();
 			Integer medicalCode = medical.getCode();
 			// Fetch also empty lots because some movements may have discharged them completely
-			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWard(), medical.getCode(), false).stream()
+			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
 

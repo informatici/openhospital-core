@@ -42,7 +42,7 @@ public class TestMedicalWardInventory {
 	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
 	private String inventoryType = InventoryType.ward.toString();
-	private String ward = "Z";
+	private String wardCode = "Z";
 
 	public MedicalInventory setup(Ward ward, boolean usingSet) throws OHException {
 		MedicalInventory medicalInventory;
@@ -64,7 +64,7 @@ public class TestMedicalWardInventory {
 		medicalInventory.setUser(user);
 		medicalInventory.setInventoryReference(inventoryReference);
 		medicalInventory.setInventoryType(inventoryType);
-		medicalInventory.setWard(ward);
+		medicalInventory.setWardCode(wardCode);
 	}
 
 	public void check(MedicalInventory medicalInventory, int id) {
@@ -74,6 +74,6 @@ public class TestMedicalWardInventory {
 		assertThat(medicalInventory.getUser()).isEqualTo(user);
 		assertThat(medicalInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medicalInventory.getInventoryType()).isEqualTo(inventoryType);
-		assertThat(medicalInventory.getWard()).isEqualTo(ward);
+		assertThat(medicalInventory.getWardCode()).isEqualTo(wardCode);
 	}
 }
