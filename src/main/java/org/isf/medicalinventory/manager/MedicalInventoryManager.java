@@ -253,7 +253,7 @@ public class MedicalInventoryManager {
 		if (medicalInventory.getInventoryDate() != null && medicalInventory.getInventoryDate().isAfter(tomorrow)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.notdateinfuture.msg")));
 		}
-		if (reference == null || reference.equals("")) {
+		if (reference == null || reference.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.mustenterareference.msg")));
 		} else {
 			/*
@@ -268,7 +268,7 @@ public class MedicalInventoryManager {
 				try {
 					checkReference(medicalInventory);
 				} catch (OHServiceException e) {
-					throw new OHDataValidationException(e.getMessages());
+					errors.addAll(e.getMessages());
 				}
 			}
 		}
@@ -289,9 +289,9 @@ public class MedicalInventoryManager {
 		throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
-		StringBuilder medDescriptionForLotUpdated = new StringBuilder('\n'); // initial new line
-		StringBuilder medDescriptionForNewLot = new StringBuilder('\n'); // initial new line
-		StringBuilder medDescriptionForNewMedical = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForLotUpdated = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewLot = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewMedical = new StringBuilder("\n"); // initial new line
 		boolean lotUpdated = false;
 		boolean lotAdded = false;
 		boolean medicalAdded = false;
@@ -350,7 +350,7 @@ public class MedicalInventoryManager {
 					lotUpdated = true;
 					double difference = mainStoreQty - theoQty;
 					medDescriptionForLotUpdated
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, theoQty, mainStoreQty, difference > 0 ? "+" + difference : difference));
@@ -362,7 +362,7 @@ public class MedicalInventoryManager {
 					// New medical
 					medicalAdded = true;
 					medDescriptionForNewMedical
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
 							medicalDesc, lotInfo, "+" + mainStoreQty));
@@ -370,7 +370,7 @@ public class MedicalInventoryManager {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, "+" + mainStoreQty));
@@ -416,13 +416,13 @@ public class MedicalInventoryManager {
 		throws OHServiceException {
 		LocalDateTime movFrom = inventory.getInventoryDate();
 		LocalDateTime movTo = TimeTools.getNow();
-		StringBuilder medDescriptionForLotUpdated = new StringBuilder('\n'); // initial new line
-		StringBuilder medDescriptionForNewLot = new StringBuilder('\n'); // initial new line
-		StringBuilder medDescriptionForNewMedical = new StringBuilder('\n'); // initial new line
+		StringBuilder medDescriptionForLotUpdated = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewLot = new StringBuilder("\n"); // initial new line
+		StringBuilder medDescriptionForNewMedical = new StringBuilder("\n"); // initial new line
 		boolean lotUpdated = false;
 		boolean lotAdded = false;
 		boolean medicalAdded = false;
-		boolean dateUpdated = false;
+		boolean dateUpdated;
 
 		List<Lot> lotsFromMovements = new ArrayList<>();
 		List<MovementWard> movementWards = new ArrayList<>(movWardBrowserManager.getMovementWard(inventory.getWardCode(), movFrom, movTo));
@@ -483,7 +483,7 @@ public class MedicalInventoryManager {
 					lotUpdated = true;
 					double difference = wardStoreQty - theoQty;
 					medDescriptionForLotUpdated
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, theoQty, wardStoreQty, difference > 0 ? "+" + difference : difference));
 				}
@@ -493,14 +493,14 @@ public class MedicalInventoryManager {
 					// New medical
 					medicalAdded = true;
 					medDescriptionForNewMedical
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
 							medicalDesc, lotInfo, "+" + wardStoreQty));
 				} else {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
-						.append('\n')
+						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
 							medicalDesc, lotInfo, "+" + wardStoreQty));
 				}
