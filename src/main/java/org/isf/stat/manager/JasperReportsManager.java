@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -1109,8 +1109,8 @@ public class JasperReportsManager {
 			parameters.put("inventoryStatus", status);
 			parameters.put("printRealQty", printRealQty);
 			parameters.put("inventoryId", inventory.getId());
-			if (inventory.getWard() != null) {
-				Ward ward = wardManager.findWard(inventory.getWard());
+			if (inventory.getWardCode() != null) {
+				Ward ward = wardManager.findWard(inventory.getWardCode());
 				parameters.put("ward", ward.getDescription());
 			} else {
 				parameters.put("ward", "Main Store");
