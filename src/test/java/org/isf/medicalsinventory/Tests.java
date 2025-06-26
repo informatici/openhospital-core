@@ -390,19 +390,11 @@ class Tests extends OHCoreTestCase {
 		inventory.setStatus(status);
 		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 		assertThat(secondMedicalInventory).isNotNull();
-<<<<<<< OP-1390-SpringBoot
-		List<MedicalInventory> medicalInventories = medicalInventoryManager.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(),
-			firstMedicalInventory.getWard());
-		assertThat(medicalInventories).hasSize(1);
-		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
-		assertThat(medicalInventories.get(0).getWard()).isEqualTo(firstMedicalInventory.getWard());
-=======
 		List<MedicalInventory> medicalinventories = medicalInventoryManager.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(),
 			firstMedicalInventory.getWardCode());
 		assertThat(medicalinventories).hasSize(1);
 		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
 		assertThat(medicalinventories.get(0).getWardCode()).isEqualTo(firstMedicalInventory.getWardCode());
->>>>>>> develop
 	}
 
 	@Test
