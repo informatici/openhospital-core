@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,13 +35,14 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalWardInventory {
+
 	private int id = 1;
 	private String status = InventoryStatus.draft.toString();
-	private LocalDateTime inventoryDate = TimeTools.getNow();
+	private LocalDateTime inventoryDate = TimeTools.getNow().truncatedTo(ChronoUnit.MINUTES);
 	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
 	private String inventoryType = InventoryType.ward.toString();
-	private String ward = "Z";
+	private String wardCode = "Z";
 
 	public MedicalInventory setup(Ward ward, boolean usingSet) throws OHException {
 		MedicalInventory medicalInventory;
@@ -63,7 +64,7 @@ public class TestMedicalWardInventory {
 		medicalInventory.setUser(user);
 		medicalInventory.setInventoryReference(inventoryReference);
 		medicalInventory.setInventoryType(inventoryType);
-		medicalInventory.setWard(ward);
+		medicalInventory.setWardCode(wardCode);
 	}
 
 	public void check(MedicalInventory medicalInventory, int id) {
@@ -73,6 +74,6 @@ public class TestMedicalWardInventory {
 		assertThat(medicalInventory.getUser()).isEqualTo(user);
 		assertThat(medicalInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medicalInventory.getInventoryType()).isEqualTo(inventoryType);
-		assertThat(medicalInventory.getWard()).isEqualTo(ward);
+		assertThat(medicalInventory.getWardCode()).isEqualTo(wardCode);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -325,6 +325,10 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatientByCodes(List<Integer> codes) throws OHServiceException {
-		return repository.findAllByCodeIn(codes);
+		List<Patient> patients = repository.findAllByCodeIn(codes);
+		for (Patient patient : patients) {
+			retrievePatientProfilePhoto(patient);
+		}
+		return patients;
 	}
 }

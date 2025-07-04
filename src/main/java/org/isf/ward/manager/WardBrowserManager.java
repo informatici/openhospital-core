@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,7 +22,9 @@
 package org.isf.ward.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
@@ -104,7 +106,22 @@ public class WardBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Ward> getWards() throws OHServiceException {
-		return ioOperations.getWards(null);
+		return ioOperations.findAll();
+	}
+
+	/**
+	 * Returns a map of all {@link Ward}s to their codes.
+	 * 
+	 * @return the hashmap
+	 * @throws OHServiceException
+	 */
+	public Map<String, Ward> getWardMap() throws OHServiceException {
+		Map<String, Ward> wardMap = new HashMap<>();
+		List<Ward> wards = getWards(); // presumo che questo metodo già esista
+		for (Ward ward : wards) {
+			wardMap.put(ward.getCode(), ward);
+		}
+		return wardMap;
 	}
 
 	/**
@@ -125,10 +142,6 @@ public class WardBrowserManager {
 		return ioOperations.getOpdWards();
 	}
 
-	// TODO: remove this method, findWard(String code) should be enough
-	public List<Ward> getWards(Ward ward) throws OHServiceException {
-		return ioOperations.getWards(ward.getCode());
-	}
 	/**
 	 * Returns all the stored {@link Ward}s with maternity flag equal to {@code false}. In case of error a message error is shown and a {@code null} value is
 	 * returned.
@@ -295,7 +308,7 @@ public class WardBrowserManager {
 	}
 
 	/**
-	 * Returns the {@link Ward} based on ward code,
+	 * Returns the {@link Ward} based on ward code.
 	 *
 	 * @param code the {@link Ward} code.
 	 * @return the {@link Ward} or {@code null} if not found
