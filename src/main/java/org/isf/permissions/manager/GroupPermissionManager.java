@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -66,7 +66,7 @@ public class GroupPermissionManager {
 	public GroupPermission create(UserGroup userGroup, Permission permission) throws OHDataValidationException {
 		if (operations.existsByUserGroupCodeAndPermissionId(userGroup.getCode(), permission.getId())) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionalreadyassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("angal.usergroup.thegrouppermissionalreadyexists.msg"))
 			);
 		}
 
@@ -104,7 +104,7 @@ public class GroupPermissionManager {
 
 		if (groupPermission == null) {
 			throw new OHDataValidationException(
-				new OHExceptionMessage(MessageBundle.getMessage("usergroup.permissionnotassigned"))
+				new OHExceptionMessage(MessageBundle.getMessage("angal.usergroup.cannotdeletegrouppermissionbecauseitdoesnotexist.msg"))
 			);
 		}
 
