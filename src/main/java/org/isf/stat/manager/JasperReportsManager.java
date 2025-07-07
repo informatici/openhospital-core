@@ -311,17 +311,17 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, String jasperFileName) throws OHServiceException {
+	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
-			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
 
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
 
+			String jasperFileName = "patient_examination";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
