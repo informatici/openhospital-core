@@ -311,17 +311,17 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, String jasperFileName) throws OHServiceException {
+	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
-			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
 
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
 
+			String jasperFileName = "patient_examination";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
@@ -1062,21 +1062,30 @@ public class JasperReportsManager {
 	}
 
 	private String compilePDFFilename(String folderName, String jasperFileName, List<String> params, String ext) {
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append(folderName);
-		sbFilename.append(File.separator);
-		sbFilename.append("PDF");
-		sbFilename.append(File.separator);
-		sbFilename.append(jasperFileName);
-		if (params != null) {
-			params.forEach(p -> {
-				sbFilename.append('_');
-				sbFilename.append(p);
-			});
-		}
-		sbFilename.append('.');
-		sbFilename.append(ext);
-		return sbFilename.toString();
+		String pdfFolderPath = folderName + File.separator + "PDF";
+        File pdfFolder = new File(pdfFolderPath);
+
+        // Check if the "PDF" directory exists; if not, create it
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdirs();
+        }
+
+        StringBuilder sbFilename = new StringBuilder();
+        sbFilename.append(pdfFolderPath);
+        sbFilename.append(File.separator);
+        sbFilename.append(jasperFileName);
+        
+        if (params != null) {
+            params.forEach(p -> {
+                sbFilename.append('_');
+                sbFilename.append(p);
+            });
+        }
+        
+        sbFilename.append('.');
+        sbFilename.append(ext);
+        
+        return sbFilename.toString();
 	}
 
 	public String compileDefaultFilename(String defaultFileName) {
@@ -1132,5 +1141,4 @@ public class JasperReportsManager {
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
 	}
-
 }
