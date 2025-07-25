@@ -6,5 +6,6 @@ source step_04_all_following_steps.sql;
 source step_03_dump_vaccine_data_en.sql;
 source step_03_dump_dicomtype_data_en.sql;
 source delete_all_data.sql;
+source step_x_update_patient_table.sql;
 -- load demo data
 source load_demo_data.sql;

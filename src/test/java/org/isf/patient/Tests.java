@@ -671,7 +671,8 @@ class Tests extends OHCoreTestCase {
 	void testPatientConstructor() {
 		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address",
 				"city", "nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ',
-				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession");
+				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession", "commune", "ethnic",
+				"fatherOccupation", 35, "fatherPhone", "motherOccupation", 33, "motherPhone");
 
 		assertThat(patient.getCode()).isEqualTo(99);
 		assertThat(patient.getSex()).isEqualTo('F');
