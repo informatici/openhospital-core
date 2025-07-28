@@ -113,3 +113,4 @@ source step_a116_fix_alcohol_and_bowel_column.sql;
 source step_a117_fix_ward_pharmacy.sql;
 source step_a118_add_radiology_permissions.sql;
 source step_a119_alter_table_examrow.sql;
+source step_a120_alter_table_laboratoryrow.sql;
