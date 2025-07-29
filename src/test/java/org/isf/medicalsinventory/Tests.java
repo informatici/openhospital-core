@@ -146,6 +146,8 @@ class Tests extends OHCoreTestCase {
 
 	@Autowired
 	MovementWardIoOperationRepository movementWardIoOperationRepository;
+	@Autowired
+	private MedicalInventoryIoOperationRepository medicalInventoryIoOperationRepository;
 
 	static Stream<Arguments> automaticlot() {
 		return Stream.of(Arguments.of(true, true, false),
@@ -785,10 +787,10 @@ class Tests extends OHCoreTestCase {
 		MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
 		Supplier supplier = new Supplier(null, "INVENTORY", null, null, null, null, null, null);
 		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false);
-		dischargeType = medicalDsrStockMovementTypeIoOperationRepository.save(dischargeType);
-		chargeType = medicalDsrStockMovementTypeIoOperationRepository.save(chargeType);
-		supplier = supplierIoOperationRepository.save(supplier);
-		destination = wardIoOperationRepository.save(destination);
+		dischargeType = medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeType);
+		chargeType = medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(chargeType);
+		supplier = supplierIoOperationRepository.saveAndFlush(supplier);
+		destination = wardIoOperationRepository.saveAndFlush(destination);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
 		inventory.setChargeType(chargeType.getCode());
 		inventory.setDestination(destination.getCode());
@@ -843,10 +845,12 @@ class Tests extends OHCoreTestCase {
 			MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
 			MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
 			Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false);
-			chargeType = medicalDsrStockMovementTypeIoOperationRepository.save(chargeType);
-			dischargeType = medicalDsrStockMovementTypeIoOperationRepository.save(dischargeType);
-			destination = wardIoOperationRepository.save(destination);
+			chargeType = medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(chargeType);
+			dischargeType = medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeType);
+			destination = wardIoOperationRepository.saveAndFlush(destination);
 			MedicalInventory inventory = testMedicalWardInventory.setup(ward, false);
+			inventory.setId(null);
+			inventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			Lot lotOne = testLot.setup(medical, false);
@@ -865,14 +869,14 @@ class Tests extends OHCoreTestCase {
 			Lot lotThree = testLot.setup(medical, false);
 			lotThree.setCode("LOT-003");
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-			medical = medicalsIoOperationRepository.save(medical);
-			lotOne = lotIoOperationRepository.save(lotOne);
-			lotTwo = lotIoOperationRepository.save(lotTwo);
-			lotThree = lotIoOperationRepository.save(lotThree);
-			medicalStockIoOperation.newMovement(initialMovement);
-			medicalStockIoOperationRepository.saveAndFlush(initialMedicalStock);
+			medical = medicalsIoOperationRepository.saveAndFlush(medical);
+			lotOne = lotIoOperationRepository.saveAndFlush(lotOne);
+			lotTwo = lotIoOperationRepository.saveAndFlush(lotTwo);
+			lotThree = lotIoOperationRepository.saveAndFlush(lotThree);
+			Movement movement = medicalStockIoOperation.newMovement(initialMovement);
+			movement = medicalStockIoOperation.newMovement(movement);
 			// Create inventory and inventory rows
-			inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+			inventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 			MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
 			medicalInventoryRowOne.setRealqty(60);
 			MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
@@ -944,6 +948,7 @@ class Tests extends OHCoreTestCase {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MedicalInventory inventory = testMedicalWardInventory.setup(ward, false);
+		inventory.setId(null);
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lotOne = testLot.setup(medical, false);
@@ -970,7 +975,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperationRepository.saveAndFlush(firstmedicalStock);
 
 		// Create inventory and inventory rows
-		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		inventory = medicalInventoryIoOperationRepository.saveAndFlush(inventory);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
 		medicalInventoryRowOne.setRealqty(10);
 		medicalInventoryRowOne.setTheoreticQty(10);
@@ -1043,15 +1048,16 @@ class Tests extends OHCoreTestCase {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MedicalInventory inventory = testMedicalWardInventory.setup(ward, false);
+		inventory.setId(null);
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lotOne = testLot.setup(medical, false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		medical = medicalsIoOperationRepository.save(medical);
-		lotOne = lotIoOperationRepository.save(lotOne);
+		medical = medicalsIoOperationRepository.saveAndFlush(medical);
+		lotOne = lotIoOperationRepository.saveAndFlush(lotOne);
 
 		// Create inventory and inventory rows
-		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		inventory = medicalInventoryIoOperationRepository.saveAndFlush(inventory);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
 		medicalInventoryRowOne.setRealqty(10);
 		medicalInventoryRowOne.setTheoreticQty(20);
