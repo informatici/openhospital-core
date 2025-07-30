@@ -311,7 +311,7 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId) throws OHServiceException {
+	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, Locale lang) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
@@ -320,7 +320,7 @@ public class JasperReportsManager {
 
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
-
+			parameters.put(JRParameter.REPORT_LOCALE, lang);
 			String jasperFileName = "patient_examination";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 
@@ -333,15 +333,14 @@ public class JasperReportsManager {
 		}
 	}
 	
-	public JasperReportResultDto getGenericReportPatientExamRequestPdf(int patientID) throws OHServiceException {
+	public JasperReportResultDto getGenericReportPatientExamRequestPdf(int patientID, Locale lang) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
-			parameters.put("patientId", patientID);
-
 			String jasperFileName = "patient_exam_request";
+			parameters.put(JRParameter.REPORT_LOCALE, lang);
+			parameters.put("patientId", patientID);
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
-
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
 			return result;
