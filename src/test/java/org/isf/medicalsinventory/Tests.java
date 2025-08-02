@@ -836,7 +836,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testValidateMedicalWardInventoryRow() {
+	void testValidateMedicalWardInventoryRow_shouldThrowFourErrors() {
 		Throwable throwable = catchThrowable(() -> {
 			// Initialize data and create movements
 			Ward ward = testWard.setup(false);
@@ -889,7 +889,7 @@ class Tests extends OHCoreTestCase {
 			medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowThree);
 			firstMovement = medicalStockIoOperation.newMovement(firstMovement);
 			medicalStockIoOperationRepository.saveAndFlush(firstmedicalStock);
-			wardMovement = movementWardIoOperationRepository.saveAndFlush(wardMovement);
+			movementWardIoOperationRepository.saveAndFlush(wardMovement);
 			int inventoryId = inventory.getId();
 			List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
 			assertThat(medicalInventoryRows).isNotEmpty();
