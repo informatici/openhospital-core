@@ -67,7 +67,9 @@ public class ExaminationOperations {
 		                              lastPatientExamination.getPex_bowel_desc(),
 		                              lastPatientExamination.getPex_rr(),
 		                              lastPatientExamination.getPex_auscultation(),
-		                              lastPatientExamination.getPex_note());
+		                              lastPatientExamination.getPex_note(),
+									  lastPatientExamination.getPex_body_mass_index(),
+									  lastPatientExamination.getPex_branchial_perimeter());
 	}
 
 	/**

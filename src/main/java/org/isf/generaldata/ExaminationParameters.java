@@ -124,7 +124,13 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	
 	public static int LIST_SIZE;
 	private static final int DEFAULT_LIST_SIZE = 4;
-	
+
+	public static int BODY_MASS_INDEX;
+	private static final int DEFAULT_BODY_MASS_INDEX = 0;
+
+	public static int BRANCHIAL_PERIMETER;
+	private static final int DEFAULT_BRANCHIAL_PERIMETER = 0;
+
 	private static ExaminationParameters mySingleData;
 
 	private ExaminationParameters(String fileProperties) {

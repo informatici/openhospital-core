@@ -119,6 +119,12 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	@Version
 	@Column(name = "PEX_LOCK")
 	private int lock;
+
+	@Column(name="PEX_BODY_MASS_INDEX")
+	private int pex_body_mass_index;
+
+	@Column(name = "PEX_BRANCHIAL_PERIMETER")
+	private int pex_branchial_perimeter;
 	
 	@Transient
 	private volatile int hashCode;
@@ -161,7 +167,9 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 			String pex_bowel_desc,
 			Integer pex_rr,
 			String pex_ausc,
-			String pex_note) {
+			String pex_note,
+			int pex_body_mass_index,
+			int pex_branchial_perimeter) {
 		super();
 		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 		this.patient = patient;
@@ -179,6 +187,8 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 		this.pex_rr= pex_rr;
 		this.pex_auscultation = pex_ausc;
 		this.pex_note = pex_note;
+		this.pex_body_mass_index = pex_body_mass_index;
+		this.pex_branchial_perimeter = pex_branchial_perimeter;
 	}
 
 	/**
@@ -422,6 +432,22 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	public int getLock() { return lock; }
 
 	public void setLock(int lock) { this.lock = lock; }
+
+	public int getPex_body_mass_index() {
+		return pex_body_mass_index;
+	}
+
+	public void setPex_body_mass_index(int pex_body_mass_index) {
+		this.pex_body_mass_index = pex_body_mass_index;
+	}
+
+	public int getPex_branchial_perimeter() {
+		return pex_branchial_perimeter;
+	}
+
+	public void setPex_branchial_perimeter(int pex_branchial_perimeter) {
+		this.pex_branchial_perimeter = pex_branchial_perimeter;
+	}
 
 	@Override
 	public int compareTo(PatientExamination o) {
