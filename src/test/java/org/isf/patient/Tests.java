@@ -671,8 +671,7 @@ class Tests extends OHCoreTestCase {
 	void testPatientConstructor() {
 		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address",
 				"city", "nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ',
-				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession", "commune", "ethnic",
-				"fatherOccupation", 35, "fatherPhone", "motherOccupation", 33, "motherPhone");
+				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession");
 
 		assertThat(patient.getCode()).isEqualTo(99);
 		assertThat(patient.getSex()).isEqualTo('F');
@@ -760,6 +759,54 @@ class Tests extends OHCoreTestCase {
 		assertThat(patients).isNotNull();
 		assertThat(patients).isNotEmpty();
 		assertThat(patients.size()).isEqualTo(2);
+	}
+
+	@Test
+	void testAddPatientWithNewFields() throws Exception {
+		Patient patient = patient = new Patient("firstName", "secondName", LocalDate.of(1984, Calendar.AUGUST, 14), 31, "agetype", 'F',
+			"address", "city", "nextKin", "telephone", "mother_name", 'A', "father_name", 'A',
+			"bloodType", 'Y', 'Y', "taxCode", "maritalStatus", "profession", "commune", "ethnic", "fatherOccupation",
+			61, "fatherPhone", "motherOccupation", 51, "motherPhone");
+		Patient savedPatient = patientIoOperation.savePatient(patient);
+
+		assertThat(savedPatient.getCommune()).isEqualTo(patient.getCommune());
+		assertThat(savedPatient.getEthnic()).isEqualTo(patient.getEthnic());
+		assertThat(savedPatient.getFatherOccupation()).isEqualTo(patient.getFatherOccupation());
+		assertThat(savedPatient.getFatherAge()).isEqualTo(patient.getFatherAge());
+		assertThat(savedPatient.getFatherPhone()).isEqualTo(patient.getFatherPhone());
+		assertThat(savedPatient.getMotherOccupation()).isEqualTo(patient.getMotherOccupation());
+		assertThat(savedPatient.getMotherAge()).isEqualTo(patient.getMotherAge());
+		assertThat(savedPatient.getMotherPhone()).isEqualTo(patient.getMotherPhone());
+	}
+
+	@Test
+	void testUpdatePatientWithNewFields() throws Exception {
+		Patient patient = patient = new Patient("firstName", "secondName", LocalDate.of(1984, Calendar.AUGUST, 14), 31, "agetype", 'F',
+			"address", "city", "nextKin", "telephone", "mother_name", 'A', "father_name", 'A',
+			"bloodType", 'Y', 'Y', "taxCode", "maritalStatus", "profession", "commune", "ethnic", "fatherOccupation",
+			61, "fatherPhone", "motherOccupation", 51, "motherPhone");
+
+		Patient savedPatient = patientIoOperation.savePatient(patient);
+
+		savedPatient.setCommune("commune 1");
+		savedPatient.setEthnic("ethnic 1");
+		savedPatient.setFatherOccupation("fatherOccupation 1");
+		savedPatient.setFatherAge(51);
+		savedPatient.setFatherPhone("fatherPhone 1");
+		savedPatient.setMotherOccupation("motherOccupation 1");
+		savedPatient.setMotherAge(41);
+		savedPatient.setMotherPhone("motherPhone 1");
+
+		Patient updatedPatient = patientIoOperation.updatePatient(patient);
+
+		assertThat(savedPatient.getCommune()).isEqualTo(updatedPatient.getCommune());
+		assertThat(savedPatient.getEthnic()).isEqualTo(updatedPatient.getEthnic());
+		assertThat(savedPatient.getFatherOccupation()).isEqualTo(updatedPatient.getFatherOccupation());
+		assertThat(savedPatient.getFatherAge()).isEqualTo(updatedPatient.getFatherAge());
+		assertThat(savedPatient.getFatherPhone()).isEqualTo(updatedPatient.getFatherPhone());
+		assertThat(savedPatient.getMotherOccupation()).isEqualTo(updatedPatient.getMotherOccupation());
+		assertThat(savedPatient.getMotherAge()).isEqualTo(updatedPatient.getMotherAge());
+		assertThat(savedPatient.getMotherPhone()).isEqualTo(updatedPatient.getMotherPhone());
 	}
 
 	private void resetHashMaps() throws Exception {

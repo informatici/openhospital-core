@@ -55,14 +55,6 @@ public class TestPatient {
 	private static String profession = "business";
 	private String anamnesis = "anamnesis";
 	private String allergies = "allergies";
-	private String commune = "";
-	private String ethnic = "";
-	private String fatherOccupation = "";
-	private int fatherAge = 45;
-	private String fatherPhone = "";
-	private String motherOccupation = "";
-	private int motherAge = 35;
-	private String motherPhone = "";
 	//private static Blob photo;
 	//private static Image photoImage;
 
@@ -78,9 +70,7 @@ public class TestPatient {
 			// Create Patient with all parameters
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
-					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession,
-					commune, ethnic, fatherOccupation, fatherAge, fatherPhone, motherOccupation,
-					motherAge, motherPhone);
+					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
@@ -115,14 +105,6 @@ public class TestPatient {
 		patient.setProfession(profession);
 		patient.setAllergies(allergies);
 		patient.setAnamnesis(anamnesis);
-		patient.setCommune(commune);
-		patient.setEthnic(ethnic);
-		patient.setFatherOccupation(fatherOccupation);
-		patient.setFatherAge(fatherAge);
-		patient.setFatherPhone(fatherPhone);
-		patient.setMotherOccupation(motherOccupation);
-		patient.setMotherAge(motherAge);
-		patient.setMotherPhone(motherPhone);
 	}
 
 	public void check(Patient patient) {
@@ -147,13 +129,5 @@ public class TestPatient {
 		assertThat(patient.getProfession()).isEqualTo(profession);
 		assertThat(patient.getAllergies()).isEqualTo(allergies);
 		assertThat(patient.getAnamnesis()).isEqualTo(anamnesis);
-		assertThat(patient.getCommune()).isEqualTo(commune);
-		assertThat(patient.getEthnic()).isEqualTo(ethnic);
-		assertThat(patient.getFatherOccupation()).isEqualTo(fatherOccupation);
-		assertThat(patient.getFatherAge()).isEqualTo(fatherAge);
-		assertThat(patient.getFatherPhone()).isEqualTo(fatherPhone);
-		assertThat(patient.getMotherOccupation()).isEqualTo(motherOccupation);
-		assertThat(patient.getMotherAge()).isEqualTo(motherAge);
-		assertThat(patient.getMotherPhone()).isEqualTo(motherPhone);
 	}
 }

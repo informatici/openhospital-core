@@ -247,6 +247,34 @@ public class Patient extends Auditable<String> {
 	}
 
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
+				   String address, String city, String nextKin, String telephone,
+				   String motherName, char mother, String fatherName, char father,
+				   String bloodType, char economicStatus, char parentTogether, String personalCode,
+				   String maritalStatus, String profession) { //Changed EduLev with bloodType
+		this.firstName = firstName;
+		this.secondName = secondName;
+		this.name = this.firstName + ' ' + this.secondName;
+		this.birthDate = birthDate;
+		this.age = age;
+		this.agetype = agetype;
+		this.sex = sex;
+		this.address = address;
+		this.city = city;
+		this.nextKin = nextKin;
+		this.telephone = telephone;
+		this.motherName = motherName;
+		this.mother = mother;
+		this.fatherName = fatherName;
+		this.father = father;
+		this.hasInsurance = economicStatus;
+		this.bloodType = bloodType;
+		this.parentTogether = parentTogether;
+		this.taxCode = personalCode;
+		this.maritalStatus = maritalStatus;
+		this.profession = profession;
+	}
+
+	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatus, char parentTogether, String personalCode,
@@ -281,6 +309,36 @@ public class Patient extends Auditable<String> {
 		this.motherOccupation = motherOccupation;
 		this.motherAge = motherAge;
 		this.motherPhone = motherPhone;
+	}
+
+	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
+				   String address, String city, String nextKin, String telephone, String note,
+				   String motherName, char mother, String fatherName, char father,
+				   String bloodType, char economicStatus, char parentTogether, String taxCode,
+				   String maritalStatus, String profession) { //Changed EduLev with bloodType
+		this.code = code;
+		this.firstName = firstName;
+		this.secondName = secondName;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.age = age;
+		this.agetype = agetype;
+		this.sex = sex;
+		this.address = address;
+		this.city = city;
+		this.nextKin = nextKin;
+		this.telephone = telephone;
+		this.note = note;
+		this.motherName = motherName;
+		this.mother = mother;
+		this.fatherName = fatherName;
+		this.father = father;
+		this.hasInsurance = economicStatus;
+		this.bloodType = bloodType;
+		this.parentTogether = parentTogether;
+		this.taxCode = taxCode;
+		this.maritalStatus = maritalStatus;
+		this.profession = profession;
 	}
 
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
