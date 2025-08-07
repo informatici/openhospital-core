@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -424,6 +425,19 @@ class Tests extends OHCoreTestCase {
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		genderPatientExamination.setPatex(patientExamination2);
 		assertThat(genderPatientExamination.getPatex()).isEqualTo(patientExamination2);
+	}
+
+	@Test
+	void testAddPatientExaminationWithNewFields() throws Exception {
+		Patient patient = this.setupTestPatient(false);
+		PatientExamination patientExamination = new PatientExamination(LocalDateTime.of(2020, 1, 10, 0, 0, 0), patient, 170, 60.0,
+			80, 120, 60, 36.0, 1.0,
+			85, 100, "pex_diuresis_desc", "pex_bowel_desc", 20, "pex_ausc", "pex_note", 34, 11);
+
+		PatientExamination patientExaminationSaved = examinationIoOperationRepository.save(patientExamination);
+
+		assertThat(patientExaminationSaved.getPex_body_mass_index()).isEqualTo(patientExamination.getPex_body_mass_index());
+		assertThat(patientExaminationSaved.getPex_branchial_perimeter()).isEqualTo(patientExamination.getPex_branchial_perimeter());
 	}
 
 	private Patient setupTestPatient(boolean usingSet) throws OHException {

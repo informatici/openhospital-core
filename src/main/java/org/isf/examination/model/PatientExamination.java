@@ -152,6 +152,62 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	 * @param pex_note Extra note
 	 */
 	public PatientExamination(
+		LocalDateTime pex_date,
+		Patient patient,
+		Integer pex_height,
+		Double pex_weight,
+		Integer pex_ap_min,
+		Integer pex_ap_max,
+		Integer pex_hr,
+		Double pex_temp,
+		Double pex_sat,
+		Integer pex_hgt,
+		Integer pex_diuresis,
+		String pex_diuresis_desc,
+		String pex_bowel_desc,
+		Integer pex_rr,
+		String pex_ausc,
+		String pex_note) {
+		super();
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
+		this.patient = patient;
+		this.pex_height = pex_height;
+		this.pex_weight = pex_weight;
+		this.pex_ap_min = pex_ap_min;
+		this.pex_ap_max = pex_ap_max;
+		this.pex_hr = pex_hr;
+		this.pex_temp = pex_temp;
+		this.pex_sat = pex_sat;
+		this.pex_hgt = pex_hgt;
+		this.pex_diuresis = pex_diuresis;
+		this.pex_diuresis_desc = pex_diuresis_desc;
+		this.pex_bowel_desc = pex_bowel_desc;
+		this.pex_rr= pex_rr;
+		this.pex_auscultation = pex_ausc;
+		this.pex_note = pex_note;
+	}
+
+	/**
+	 * @param pex_date Examination date
+	 * @param patient Patient
+	 * @param pex_height Patient Height
+	 * @param pex_weight Patient Weight
+	 * @param pex_ap_min Patient min arterial pression
+	 * @param pex_ap_max Patient max arterial pression
+	 * @param pex_hr Patient heart beat rate
+	 * @param pex_temp Patient temperature
+	 * @param pex_sat Patient's saturation
+	 * @param pex_hgt Patient HGT
+	 * @param pex_diuresis Patient diuresis
+	 * @param pex_diuresis_desc Patient diuresis description
+	 * @param pex_bowel_desc Patient bowel
+	 * @param pex_rr Patient RR
+	 * @param pex_ausc Patient auscultation
+	 * @param pex_note Extra note
+	 * @param pex_body_mass_index Body mass index
+	 * @param pex_branchial_perimeter Branchial perimeter
+	 */
+	public PatientExamination(
 			LocalDateTime pex_date, 
 			Patient patient, 
 			Integer pex_height, 
