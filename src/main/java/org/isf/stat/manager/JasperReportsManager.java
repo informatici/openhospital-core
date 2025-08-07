@@ -92,6 +92,8 @@ public class JasperReportsManager {
 	private static final String STAT_REPORTERROR_MSG = "angal.stat.reporterror.msg";
 
 	private static final String RPT_BASE = "rpt_base";
+	
+	private static final String logo = "./rsc/images/logo_report.png";
 
 	private HospitalBrowsingManager hospitalManager;
 
@@ -336,10 +338,11 @@ public class JasperReportsManager {
 	public JasperReportResultDto getGenericReportPatientExamRequestPdf(int patientID, Locale lang) throws OHServiceException {
 
 		try {
-			HashMap<String, Object> parameters = new HashMap<>();
+			HashMap<String, Object> parameters = new HashMap<>(getHospitalParameters());
 			String jasperFileName = "patient_exam_request";
 			parameters.put(JRParameter.REPORT_LOCALE, lang);
 			parameters.put("patientId", patientID);
+			parameters.put("LOGO_PATH", logo);
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
