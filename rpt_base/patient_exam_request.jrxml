@@ -71,13 +71,6 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{LAB_SEX}]]></textFieldExpression>
 				</textField>
-				<textField pattern="jj/MM/yyyy hh:mm">
-					<reportElement x="151" y="95" width="170" height="20" uuid="3fe73370-6dd5-4501-bbf9-fbf79bd35b74"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy hh:mm").format($F{LAB_DATE})]]></textFieldExpression>
-				</textField>
 				<textField>
 					<reportElement x="12" y="7" width="69" height="20" uuid="21893515-077e-41c0-b643-4d57bbafb8d1"/>
 					<textElement>
@@ -100,18 +93,18 @@
 					<textFieldExpression><![CDATA[$R{PatientId}+":"]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="12" y="95" width="118" height="20" uuid="29f0d150-549e-4bc3-ad95-b7236bd7a282"/>
-					<textElement>
-						<font size="12"/>
+					<reportElement x="396" y="130" width="144" height="20" uuid="29f0d150-549e-4bc3-ad95-b7236bd7a282"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{Date}+":"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$R{Date}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="11" y="127" width="169" height="20" uuid="f5418297-3749-4c2c-a2a4-8c64d8c00848"/>
 					<textElement>
 						<font size="14" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{PrescribeExams}+":"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$R{PrescribeExams}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="1" y="161" width="555" height="1" uuid="3cd258b7-4e7b-49bc-8177-525b0bc5e297"/>
@@ -205,11 +198,18 @@
 	<detail>
 		<band height="25" splitType="Stretch">
 			<textField>
-				<reportElement x="30" y="4" width="500" height="15" uuid="e9ea03b0-0128-4fc1-bdb6-cd40df5410b2"/>
+				<reportElement x="30" y="4" width="330" height="15" uuid="e9ea03b0-0128-4fc1-bdb6-cd40df5410b2"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["• " + $F{EXA_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="jj/MM/yyyy hh:mm">
+				<reportElement x="370" y="2" width="170" height="17" uuid="3fe73370-6dd5-4501-bbf9-fbf79bd35b74"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy hh:mm").format($F{LAB_DATE})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
