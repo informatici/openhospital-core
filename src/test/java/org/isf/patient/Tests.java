@@ -790,15 +790,6 @@ class Tests extends OHCoreTestCase {
 	void testUpdatePatientWithNewFields() throws Exception {
 		Patient patient = testPatient.setup(true);
 
-		patient.setCommune("commune");
-		patient.setEthnic("Ethnic");
-		patient.setFatherOccupation("fatherOccupation");
-		patient.setFatherAge(45);
-		patient.setFatherPhone("fatherPhone");
-		patient.setMotherOccupation("motherOccupation");
-		patient.setMotherAge(35);
-		patient.setMotherPhone("motherPhone");
-
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
 		savedPatient.setCommune("commune 1");
