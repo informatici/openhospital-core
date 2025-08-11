@@ -430,9 +430,10 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testAddPatientExaminationWithNewFields() throws Exception {
 		Patient patient = this.setupTestPatient(false);
-		PatientExamination patientExamination = new PatientExamination(LocalDateTime.of(2020, 1, 10, 0, 0, 0), patient, 170, 60.0,
-			80, 120, 60, 36.0, 1.0,
-			85, 100, "pex_diuresis_desc", "pex_bowel_desc", 20, "pex_ausc", "pex_note", 34, 11);
+		PatientExamination patientExamination =  testPatientExamination.setup(patient, true);
+
+		patientExamination.setPex_body_mass_index(54);
+		patientExamination.setPex_branchial_perimeter(167);
 
 		PatientExamination patientExaminationSaved = examinationIoOperationRepository.save(patientExamination);
 

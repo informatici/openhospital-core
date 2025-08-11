@@ -73,9 +73,7 @@ public class ExaminationBrowserManager {
 			ExaminationParameters.BOWEL_DESC_INIT,
 			ExaminationParameters.RR_INIT,
 			ExaminationParameters.AUSCULTATION_INIT,
-			"",
-			ExaminationParameters.BODY_MASS_INDEX,
-			ExaminationParameters.BRANCHIAL_PERIMETER);
+			"");
 	}
 
 	/**
@@ -97,9 +95,7 @@ public class ExaminationBrowserManager {
 			lastPatientExamination.getPex_bowel_desc(),
 			lastPatientExamination.getPex_rr(),
 			lastPatientExamination.getPex_auscultation(),
-			formatLastNote(lastPatientExamination),
-			lastPatientExamination.getPex_body_mass_index(),
-			lastPatientExamination.getPex_branchial_perimeter());
+			formatLastNote(lastPatientExamination));
 	}
 
 	private String formatLastNote(PatientExamination lastPatientExamination) {
