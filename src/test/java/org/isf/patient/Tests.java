@@ -763,10 +763,17 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testAddPatientWithNewFields() throws Exception {
-		Patient patient = patient = new Patient("firstName", "secondName", LocalDate.of(1984, Calendar.AUGUST, 14), 31, "agetype", 'F',
-			"address", "city", "nextKin", "telephone", "mother_name", 'A', "father_name", 'A',
-			"bloodType", 'Y', 'Y', "taxCode", "maritalStatus", "profession", "commune", "ethnic", "fatherOccupation",
-			61, "fatherPhone", "motherOccupation", 51, "motherPhone");
+		Patient patient = testPatient.setup(true);
+
+		patient.setCommune("commune");
+		patient.setEthnic("Ethnic");
+		patient.setFatherOccupation("fatherOccupation");
+		patient.setFatherAge(45);
+		patient.setFatherPhone("fatherPhone");
+		patient.setMotherOccupation("motherOccupation");
+		patient.setMotherAge(35);
+		patient.setMotherPhone("motherPhone");
+
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
 		assertThat(savedPatient.getCommune()).isEqualTo(patient.getCommune());
@@ -781,10 +788,16 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testUpdatePatientWithNewFields() throws Exception {
-		Patient patient = patient = new Patient("firstName", "secondName", LocalDate.of(1984, Calendar.AUGUST, 14), 31, "agetype", 'F',
-			"address", "city", "nextKin", "telephone", "mother_name", 'A', "father_name", 'A',
-			"bloodType", 'Y', 'Y', "taxCode", "maritalStatus", "profession", "commune", "ethnic", "fatherOccupation",
-			61, "fatherPhone", "motherOccupation", 51, "motherPhone");
+		Patient patient = testPatient.setup(true);
+
+		patient.setCommune("commune");
+		patient.setEthnic("Ethnic");
+		patient.setFatherOccupation("fatherOccupation");
+		patient.setFatherAge(45);
+		patient.setFatherPhone("fatherPhone");
+		patient.setMotherOccupation("motherOccupation");
+		patient.setMotherAge(35);
+		patient.setMotherPhone("motherPhone");
 
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
