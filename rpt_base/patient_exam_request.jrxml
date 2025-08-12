@@ -204,21 +204,22 @@
 				</textElement>
 				<textFieldExpression><![CDATA["• " + $F{EXA_NAME}]]></textFieldExpression>
 			</textField>
-			<textField pattern="jj/MM/yyyy hh:mm">
+			<textField pattern="jj/MM/yyyy HH:mm">
 				<reportElement x="370" y="2" width="170" height="17" uuid="3fe73370-6dd5-4501-bbf9-fbf79bd35b74"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy hh:mm").format($F{LAB_DATE})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format($F{LAB_DATE})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
 		<band height="20">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField pattern="MMM d, yyyy h:mm:ss a">
-				<reportElement x="350" y="0" width="195" height="16" uuid="d596b8d6-cce9-4c8d-9df9-925d6c73a627"/>
+				<reportElement x="360" y="0" width="185" height="16" uuid="d596b8d6-cce9-4c8d-9df9-925d6c73a627"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{PrintOn}+" "+new Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>
