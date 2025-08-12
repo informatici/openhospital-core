@@ -216,10 +216,10 @@
 	<lastPageFooter>
 		<band height="20">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField pattern="MMM d, yyyy h:mm:ss a">
+			<textField pattern="jj/MM/yyyy HH:mm">
 				<reportElement x="360" y="0" width="185" height="16" uuid="d596b8d6-cce9-4c8d-9df9-925d6c73a627"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$R{PrintOn}+" "+new Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{PrintOn}+" "+new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>
