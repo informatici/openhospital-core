@@ -93,7 +93,7 @@ public class JasperReportsManager {
 
 	private static final String RPT_BASE = "rpt_base";
 	
-	private static final String logo = "./rsc/images/logo_report.png";
+	private static final String LOGO = "./rsc/images/logo_report.png";
 
 	private HospitalBrowsingManager hospitalManager;
 
