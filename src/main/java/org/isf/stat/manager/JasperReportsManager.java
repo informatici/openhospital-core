@@ -342,7 +342,7 @@ public class JasperReportsManager {
 			String jasperFileName = "patient_exam_request";
 			parameters.put(JRParameter.REPORT_LOCALE, lang);
 			parameters.put("patientId", patientID);
-			parameters.put("LOGO_PATH", logo);
+			parameters.put("LOGO_PATH", LOGO);
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
