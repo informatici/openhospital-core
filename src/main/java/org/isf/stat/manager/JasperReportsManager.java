@@ -313,7 +313,7 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, Locale lang) throws OHServiceException {
+	public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, Locale locale) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
