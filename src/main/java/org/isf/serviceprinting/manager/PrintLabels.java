@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,10 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.utils.db.DbSingleJpaConn;
-import org.isf.utils.exception.OHServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.isf.utils.exception.OHException;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
@@ -38,30 +37,21 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 public class PrintLabels {
+	public PrintLabels(String filename, Integer patId) throws OHException, JRException {
+		Map<String, Object> parameters = new HashMap<>();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PrintLabels.class);
+		parameters.put("patientID", String.valueOf(patId == null ? "" : patId));
 
-	public PrintLabels(String filename, Integer patId) throws OHServiceException {
-		try {
-			Map<String, Object> parameters = new HashMap<>();
+		StringBuilder sbFilename = new StringBuilder();
+		sbFilename.append("rpt_base");
+		sbFilename.append(File.separator);
 
-			parameters.put("patientID", String.valueOf(patId == null ? "" : patId));
-
-			StringBuilder sbFilename = new StringBuilder();
-			sbFilename.append("rpt_base");
-			sbFilename.append(File.separator);
-
-			sbFilename.append(filename);
-			sbFilename.append(".jasper");
-			File jasperFile = new File(sbFilename.toString());
-			Connection conn = DbSingleJpaConn.getConnection();
-			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
-			JasperPrintManager.printReport(jasperPrint, true);
-
-		} catch (Exception exception) {
-			LOGGER.error(exception.getMessage(), exception);
-		}
-
+		sbFilename.append(filename);
+		sbFilename.append(".jasper");
+		File jasperFile = new File(sbFilename.toString());
+		Connection conn = DbSingleJpaConn.getConnection();
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+		JasperPrintManager.printReport(jasperPrint, true);
 	}
 }

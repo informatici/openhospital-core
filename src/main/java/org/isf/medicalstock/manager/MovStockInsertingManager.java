@@ -45,11 +45,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MovStockInsertingManager {
 
-	private MedicalStockIoOperations ioOperations;
+	private final MedicalStockIoOperations ioOperations;
 
-	private MedicalsIoOperations ioOperationsMedicals;
+	private final MedicalsIoOperations ioOperationsMedicals;
 
-	private LotIoOperationRepository ioOperationsLots;
+	private final LotIoOperationRepository ioOperationsLots;
 
 	public MovStockInsertingManager(MedicalStockIoOperations medicalStockIoOperations, MedicalsIoOperations medicalsIoOperations,
 		LotIoOperationRepository ioOperationsLots) {
@@ -63,8 +63,8 @@ public class MovStockInsertingManager {
 	 * 
 	 * TODO: verify the need of checkReference param
 	 *
-	 * @param movement - the movement to validate
-	 * @param checkReference - if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
+	 * @param movement the movement to validate
+	 * @param checkReference if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
 	 * @throws OHServiceException
 	 */
 	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
@@ -138,7 +138,12 @@ public class MovStockInsertingManager {
 		 */
 		Lot lot = movement.getLot();
 		if (lot != null) {
-
+			// get the lot information
+			String lotCode = lot.getCode();
+			Lot lotExist = ioOperations.getLot(lotCode);
+			if (lotExist != null) {
+				lot = lotExist;
+			}
 			if (isCharge && !isAutomaticLotIn() || !isCharge && !isAutomaticLotOut()) {
 				// check everything
 				validateLot(errors, lot, true);
@@ -186,7 +191,8 @@ public class MovStockInsertingManager {
 			if (!isAutomaticLotOut()) {
 
 				if (movement.getType() != null && !isCharge && movement.getQuantity() > lot.getMainStoreQuantity()) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.fmt.msg",
+						movement.getQuantity(), lot.getMainStoreQuantity())));
 				}
 			}
 
@@ -209,7 +215,7 @@ public class MovStockInsertingManager {
 		if (lot.getDueDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
 		}
-		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
+		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
 		}
 	}
@@ -228,7 +234,7 @@ public class MovStockInsertingManager {
 	/**
 	 * Verify if the referenceNumber is valid for CRUD and return a list of errors, if any
 	 *
-	 * @param referenceNumber - the lot to validate
+	 * @param referenceNumber the lot to validate
 	 * @return list of {@link OHExceptionMessage}s
 	 * @throws OHServiceException
 	 */
@@ -265,7 +271,7 @@ public class MovStockInsertingManager {
 
 	/**
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top, zero quantities will be stripped out if
-	 * {@code removeEmtpy} is set to true.
+	 * {@code removeEmpty} is set to true.
 	 *
 	 * @param medical the medical.
 	 * @param removeEmpty
@@ -317,8 +323,8 @@ public class MovStockInsertingManager {
 	/**
 	 * Insert a list of charging {@link Movement}s and related {@link Lot}s
 	 *
-	 * @param movements - the list of {@link Movement}s
-	 * @param referenceNumber - the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
+	 * @param movements the list of {@link Movement}s
+	 * @param referenceNumber the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
 	 * @return a list of inserted {@link Movement}s.
 	 * @throws OHServiceException
 	 */
@@ -353,8 +359,8 @@ public class MovStockInsertingManager {
 	/**
 	 * Prepare the insert of the specified charging {@link Movement}.
 	 *
-	 * @param movement - the movement to store.
-	 * @param checkReference - if {@code true} every movement must have unique reference number
+	 * @param movement the movement to store.
+	 * @param checkReference if {@code true} every movement must have unique reference number
 	 * @return the prepared {@link Movement}.
 	 * @throws OHServiceException
 	 */
@@ -367,7 +373,7 @@ public class MovStockInsertingManager {
 	/**
 	 * Retrieves the {@link Lot}.
 	 * 
-	 * @param lotCode - the lot code.
+	 * @param lotCode the lot code.
 	 * @return the retrieved {@link Lot}.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -378,7 +384,7 @@ public class MovStockInsertingManager {
 	/**
 	 * Update the list of {@link Lot}s.
 	 * 
-	 * @param lots - the list of lots.
+	 * @param lots the list of lots.
 	 * @return the list of {@link Lot}s updated.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -395,7 +401,7 @@ public class MovStockInsertingManager {
 	/**
 	 * Update the {@link Lot}.
 	 * 
-	 * @param lot - the lot.
+	 * @param lot the lot.
 	 * @return the {@link Lot} updated.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -406,8 +412,8 @@ public class MovStockInsertingManager {
 	/**
 	 * Insert a list of discharging {@link Movement}s
 	 *
-	 * @param movements - the list of {@link Movement}s
-	 * @param referenceNumber - the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
+	 * @param movements the list of {@link Movement}s
+	 * @param referenceNumber the reference number to be set for all movements if {@link null}, each movements must have a different referenceNumber
 	 * @return a list of {@Link Movement}s.
 	 * @throws OHServiceException
 	 */
@@ -425,7 +431,7 @@ public class MovStockInsertingManager {
 		List<Movement> dischargingMovements = new ArrayList<>();
 		for (Movement mov : movements) {
 			try {
-				dischargingMovements.addAll(prepareDishargingMovement(mov, checkReference));
+				dischargingMovements.addAll(prepareDischargingMovement(mov, checkReference));
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(mov.getMedical().getDescription()));
@@ -451,11 +457,11 @@ public class MovStockInsertingManager {
 	/**
 	 * Prepare the insert of the specified {@link Movement}
 	 *
-	 * @param movement - the movement to store.
-	 * @param checkReference - if {@code true} every movement must have unique reference number
+	 * @param movement the movement to store.
+	 * @param checkReference if {@code true} every movement must have unique reference number
 	 * @throws OHServiceException
 	 */
-	private List<Movement> prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	private List<Movement> prepareDischargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
 		if (isAutomaticLotOut()) {
 			return ioOperations.newAutomaticDischargingMovement(movement);

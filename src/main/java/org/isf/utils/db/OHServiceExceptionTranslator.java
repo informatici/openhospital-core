@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -56,7 +56,7 @@ public class OHServiceExceptionTranslator {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException | ValidationException e) {
 			throw new OHDataIntegrityViolationException(e,
-			                                            new OHExceptionMessage(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg")));
+				new OHExceptionMessage(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg")));
 		} catch (InvalidDataAccessResourceUsageException e) {
 			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg")));
 		} catch (CannotCreateTransactionException e) {
@@ -66,14 +66,14 @@ public class OHServiceExceptionTranslator {
 		} catch (OutOfMemoryError oome) {
 			LOGGER.error(oome.getMessage(), oome);
 			throw new OHServiceException(oome, new OHExceptionMessage(
-					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg")));
+				MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg")));
 		} catch (OHServiceException e) {
 			LOGGER.warn("Nested translation for {}", e.getMessage());
 			throw e; // for nested translators
 		} catch (Throwable throwable) {
 			LOGGER.error(throwable.getMessage(), throwable);
 			throw new OHServiceException(throwable,
-			                             new OHExceptionMessage(MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg")));
+				new OHExceptionMessage(MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg")));
 		}
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -62,7 +62,7 @@ public class SupplierBrowserManager {
 	/**
 	 * Returns the {@link HashMap} of all {@link Supplier}'s ids and names.
 	 *
-	 * @param all - if {@code true} it will return deleted ones also
+	 * @param all if {@code true} it will return deleted ones also
 	 * @return the {@link HashMap} of all {@link Supplier}'s ids and names.
 	 * @throws OHServiceException When failed to get suppliers
 	 */

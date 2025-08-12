@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -121,11 +121,11 @@ class Tests extends OHCoreTestCase {
 		assertThat(patientHistory.getPatNote()).isEqualTo("Patient Note");
 		assertThat(patientHistory.isPhyNutritionNormal()).isTrue();
 		assertThat(patientHistory.getPhyNutritionAbnormal()).isEqualTo("Nutrition Abnormal");
-		assertThat(patientHistory.isPhyAlvoNormal()).isFalse();
-		assertThat(patientHistory.getPhyAlvoAbnormal()).isEqualTo("Alvo Abnormal");
+		assertThat(patientHistory.isPhyBowelNormal()).isFalse();
+		assertThat(patientHistory.getPhyBowelAbnormal()).isEqualTo("Bowel Abnormal");
 		assertThat(patientHistory.isPhyDiuresisNormal()).isTrue();
 		assertThat(patientHistory.getPhyDiuresisAbnormal()).isEqualTo("Diuresis Abnormal");
-		assertThat(patientHistory.isPhyAlcool()).isFalse();
+		assertThat(patientHistory.isPhyAlcohol()).isFalse();
 		assertThat(patientHistory.isPhySmoke()).isTrue();
 		assertThat(patientHistory.isPhyDrug()).isFalse();
 		assertThat(patientHistory.isPhyPeriodNormal()).isTrue();

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -80,7 +80,7 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Insert a new {@link ExamType} into the DB.
-	 * @param examType - the {@link ExamType} to insert.
+	 * @param examType the {@link ExamType} to insert.
 	 * @return the newly inserted {@link ExamType}.
 	 * @throws OHServiceException
 	 */
@@ -91,7 +91,7 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Update an already existing {@link ExamType}.
-	 * @param examType - the {@link ExamType} to update
+	 * @param examType the {@link ExamType} to update
 	 * @return the updated {@link ExamType}.
 	 * @throws OHServiceException
 	 */
@@ -102,7 +102,7 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * This checks for the presence of a record with the same code as in the parameter.
-	 * @param code - the code
+	 * @param code the code
 	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -112,7 +112,7 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Delete the passed {@link ExamType}.
-	 * @param examType - the {@link ExamType} to delete.
+	 * @param examType the {@link ExamType} to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteExamType(ExamType examType) throws OHServiceException {
@@ -121,7 +121,7 @@ public class ExamTypeBrowserManager {
 
 	/**
 	 * Find exam type by code
-	 * @param code - the code
+	 * @param code the code
 	 * @return The exam type if found, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */

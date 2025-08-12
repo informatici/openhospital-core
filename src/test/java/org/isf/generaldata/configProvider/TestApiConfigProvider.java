@@ -29,6 +29,8 @@ import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
+import java.util.concurrent.TimeUnit;
+
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.Version;
 import org.junit.jupiter.api.AfterEach;
@@ -66,13 +68,15 @@ public class TestApiConfigProvider {
 	@Test
 	void testGetTestParamsDataDefaultVersion() throws Exception {
 		// Set up the mock server to respond with the desired JSON
-		mockServer.when(request().withMethod("GET").withPath("/test")).respond(response().withStatusCode(200)
-						.withContentType(MediaType.APPLICATION_JSON)
-						.withBody(CONFIG_JSON));
+		mockServer.when(request().withMethod("GET").withPath("/test"))
+			.respond(response().withStatusCode(200)
+				.withContentType(MediaType.APPLICATION_JSON)
+				.withBody(CONFIG_JSON)
+				.withDelay(TimeUnit.MILLISECONDS, 200)); // Adding fixed delay to ensure response stability
 
 		// Use MockedStatic to mock GeneralData
 		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class);
-						MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
+			MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
 
 			// Mock the Version.getVersion() method to return a specific version
 			Version mockVersion = mock(Version.class);
@@ -99,13 +103,15 @@ public class TestApiConfigProvider {
 	@Test
 	void testGetTestParamsDataWithVersion() throws Exception {
 		// Set up the mock server to respond with the desired JSON
-		mockServer.when(request().withMethod("GET").withPath("/test")).respond(response().withStatusCode(200)
-						.withContentType(MediaType.APPLICATION_JSON)
-						.withBody(CONFIG_JSON));
+		mockServer.when(request().withMethod("GET").withPath("/test"))
+			.respond(response().withStatusCode(200)
+				.withContentType(MediaType.APPLICATION_JSON)
+				.withBody(CONFIG_JSON)
+				.withDelay(TimeUnit.MILLISECONDS, 200)); // Adding fixed delay to ensure response stability
 
 		// Use MockedStatic to mock GeneralData
 		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class);
-						MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
+			MockedStatic<Version> mockedVersion = Mockito.mockStatic(Version.class)) {
 
 			// Mock the Version.getVersion() method to return a specific version
 			Version mockVersion = mock(Version.class);

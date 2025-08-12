@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalDsrStockMovementTypeBrowserManager {
 
-	private MedicalDsrStockMovementTypeIoOperation ioOperations;
+	private final MedicalDsrStockMovementTypeIoOperation ioOperations;
 
 	public MedicalDsrStockMovementTypeBrowserManager(MedicalDsrStockMovementTypeIoOperation medicalDsrStockMovementTypeIoOperation) {
 		this.ioOperations = medicalDsrStockMovementTypeIoOperation;
@@ -116,7 +116,7 @@ public class MedicalDsrStockMovementTypeBrowserManager {
 		if (!categoryHashMap.keySet().contains(category)) {
 			String messageParameter = String.join(", ", categoryHashMap.keySet());
 			errors.add(new OHExceptionMessage(
-							MessageBundle.formatMessage("angal.medstockmovtype.allowedcategoriesare.fmt.msg", messageParameter)));
+				MessageBundle.formatMessage("angal.medstockmovtype.allowedcategoriesare.fmt.msg", messageParameter)));
 		}
 		if (insert && isCodePresent(key)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));

@@ -47,9 +47,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdmissionBrowserManager {
 
-	private AdmissionIoOperations ioOperations;
+	private final AdmissionIoOperations ioOperations;
 
-	private DiseaseBrowserManager diseaseManager;
+	private final DiseaseBrowserManager diseaseManager;
 
 	public AdmissionBrowserManager(AdmissionIoOperations admissionIoOperations, DiseaseBrowserManager diseaseBrowserManager) {
 		this.ioOperations = admissionIoOperations;
@@ -87,7 +87,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange, String searchTerms)
-					throws OHServiceException {
+		throws OHServiceException {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
@@ -128,8 +128,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Method that returns the list of Admissions not logically deleted
-	 * within the specified date range, divided by pages
+	 * Method that returns the list of Admissions not logically deleted within the specified date range, divided by pages
 	 *
 	 * @param dateFrom
 	 * @param dateTo
@@ -143,8 +142,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Method that returns the list of Admissions not logically deleted
-	 * within the specified date range
+	 * Method that returns the list of Admissions not logically deleted within the specified date range
 	 *
 	 * @param dateFrom
 	 * @param dateTo
@@ -156,8 +154,8 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
-	 * within the specified date range, divided by pages
+	 * Method that returns the list of completed Admissions (Discharges) not logically deleted within the specified date range, divided by pages
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param page
@@ -183,7 +181,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link AdmissionType}s.
 	 *
-	 * @return the admission types  or {@code null} if the operation fails.
+	 * @return the admission types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AdmissionType> getAdmissionType() throws OHServiceException {
@@ -193,7 +191,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link DischargeType}s.
 	 *
-	 * @return the discharge types  or {@code null} if the operation fails.
+	 * @return the discharge types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<DischargeType> getDischargeType() throws OHServiceException {
@@ -322,7 +320,7 @@ public class AdmissionBrowserManager {
 					continue;
 				}
 				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().isEqual(dateIn))
-								&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
+					&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.ininserteddatepatientwasalreadyadmitted.msg")));
 				}
 			}
@@ -392,8 +390,8 @@ public class AdmissionBrowserManager {
 				}
 				if (invalidDate) {
 					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.invalidadmissionperiod.fmt.msg",
-									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
-									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
+						DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
+						DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
 				}
 			}
 		}
@@ -522,8 +520,8 @@ public class AdmissionBrowserManager {
 					limit = admission.getDisDate();
 				}
 				if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date)
-								|| abortDate.isBefore(visitDate)
-								|| abortDate.isAfter(limit)) {
+					|| abortDate.isBefore(visitDate)
+					|| abortDate.isAfter(limit)) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg")));
 				}
 			}
@@ -535,7 +533,7 @@ public class AdmissionBrowserManager {
 
 	private boolean checkDuplicatedDiseaseOut(Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3) {
 		return (diseaseOut2 != null && diseaseOut1.getCode().equals(diseaseOut2.getCode()))
-						|| (diseaseOut3 != null && diseaseOut1.getCode().equals(diseaseOut3.getCode()))
-						|| (diseaseOut2 != null && diseaseOut3 != null && diseaseOut2.getCode().equals(diseaseOut3.getCode()));
+			|| (diseaseOut3 != null && diseaseOut1.getCode().equals(diseaseOut3.getCode()))
+			|| (diseaseOut2 != null && diseaseOut3 != null && diseaseOut2.getCode().equals(diseaseOut3.getCode()));
 	}
 }

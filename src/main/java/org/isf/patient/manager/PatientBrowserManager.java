@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -257,7 +257,7 @@ public class PatientBrowserManager {
 	 * Method that logically deletes a {@link Patient} (not physically deleted).
 	 *
 	 * @param patient
-	 *            - the {@link Patient} to be deleted
+	 *            the {@link Patient} to be deleted
 	 * @throws OHServiceException
 	 */
 	public void deletePatient(Patient patient) throws OHServiceException {
@@ -421,5 +421,16 @@ public class PatientBrowserManager {
 	 */
 	public List<String> getCities() throws OHServiceException {
 		return ioOperations.getCities();
+	}
+	
+	/**
+	 * Method that returns the list of {@link Patient}s with specified codes.
+	 *
+	 * @param codes - the list of patient's code.
+	 * @return the list of {@link Patient}s.
+	 * @throws OHServiceException
+	 */
+	public List<Patient> getPatientByCodes(List<Integer> codes) throws OHServiceException {
+		return ioOperations.getPatientByCodes(codes);
 	}
 }

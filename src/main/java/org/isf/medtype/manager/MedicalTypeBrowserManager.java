@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalTypeBrowserManager {
 
-	private MedicalTypeIoOperation ioOperations;
+	private final MedicalTypeIoOperation ioOperations;
 
 	public MedicalTypeBrowserManager(MedicalTypeIoOperation medicalTypeIoOperation) {
 		this.ioOperations = medicalTypeIoOperation;
@@ -81,6 +81,16 @@ public class MedicalTypeBrowserManager {
 	 */
 	public List<MedicalType> getMedicalType() throws OHServiceException {
 		return ioOperations.getMedicalTypes();
+	}
+
+	/**
+	 * Retrieves all the non deleted {@link MedicalType}s.
+	 *
+	 * @return a list of all the {@link MedicalType}s.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalType> getAllActiveMedicalType() throws OHServiceException {
+		return ioOperations.getMedicalTypesNotDeleted();
 	}
 
 	/**

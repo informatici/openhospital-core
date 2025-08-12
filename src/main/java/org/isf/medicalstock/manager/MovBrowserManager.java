@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalinventory.model.MedicalInventoryRow;
+import org.isf.medicalinventory.service.MedicalInventoryRowIoOperation;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
@@ -46,23 +48,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class MovBrowserManager {
 
-	private MedicalStockIoOperations ioOperations;
+	private final MedicalStockIoOperations ioOperations;
 
-	private LotIoOperationRepository lotRepository;
+	private final LotIoOperationRepository lotRepository;
 
-	private MedicalsIoOperations medicalsIoOperation;
+	private final MedicalsIoOperations medicalsIoOperation;
 
-	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
+	private final MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
 
-	private MovWardBrowserManager movWardBrowserManager;
+	private final MovWardBrowserManager movWardBrowserManager;
+
+	private final MedicalInventoryRowIoOperation medicalInventoryRowIoOperation;
 
 	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
-					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
+		MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager,
+		MedicalInventoryRowIoOperation medicalInventoryRowIoOperation) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
 		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
 		this.movWardBrowserManager = movWardBrowserManager;
+		this.medicalInventoryRowIoOperation = medicalInventoryRowIoOperation;
 	}
 
 	/**
@@ -120,19 +126,19 @@ public class MovBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovements(Integer medicalCode, String medicalType,
-					String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
-					LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
-					LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
+		String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
+		LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
+		LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
 
 		if (medicalCode == null &&
-						medicalType == null &&
-						movType == null &&
-						movFrom == null &&
-						movTo == null &&
-						lotPrepFrom == null &&
-						lotPrepTo == null &&
-						lotDueFrom == null &&
-						lotDueTo == null) {
+			medicalType == null &&
+			movType == null &&
+			movFrom == null &&
+			movTo == null &&
+			lotPrepFrom == null &&
+			lotPrepTo == null &&
+			lotDueFrom == null &&
+			lotDueTo == null) {
 			return getMovements();
 		}
 
@@ -147,7 +153,7 @@ public class MovBrowserManager {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
+					new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
 		}
 	}
@@ -165,7 +171,7 @@ public class MovBrowserManager {
 	/**
 	 * Deletes the last Movement.
 	 *
-	 * @param lastMovement - the last movement to delete
+	 * @param lastMovement the last movement to delete
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
@@ -184,7 +190,14 @@ public class MovBrowserManager {
 			List<Movement> movementWithSameLot = ioOperations.getMovementByLot(lot);
 			ioOperations.deleteMovement(lastMovement);
 			if (movementWithSameLot.size() == 1) {
-				lotRepository.deleteById(lot.getCode());
+				String lotCode = lot.getCode();
+				MedicalInventoryRow medicalInventoryRow = medicalInventoryRowIoOperation.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
+				if (medicalInventoryRow == null) {
+					lotRepository.deleteById(lotCode);
+				} else {
+					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
+						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));
+				}
 			}
 		} else {
 			Ward ward = lastMovement.getWard();
@@ -193,9 +206,9 @@ public class MovBrowserManager {
 			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 			if (movWard.size() > 0) {
 				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.formatMessage(
-												"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
-												lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
+					new OHExceptionMessage(MessageBundle.formatMessage(
+						"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+						lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
 			}
 			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardMedicalAndLot(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);

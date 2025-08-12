@@ -401,7 +401,7 @@ class Tests extends OHCoreTestCase {
 	void testIoGetMedicalsWard() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
 		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
 	}
 
@@ -412,7 +412,7 @@ class Tests extends OHCoreTestCase {
 		medicalWard.setIn_quantity(10.0f);
 		medicalWard.setOut_quantity(10.0f);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
-		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode(), true);
 		assertThat(medicalWards).isEmpty();
 	}
 
@@ -465,7 +465,7 @@ class Tests extends OHCoreTestCase {
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
 
-		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWardTotalQuantity('X');
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWardTotalQuantity("X");
 		assertThat(medicalWards).hasSize(1);
 		assertThat(medicalWards.get(0).getWard().getCode()).isEqualTo("X");
 	}
@@ -491,7 +491,7 @@ class Tests extends OHCoreTestCase {
 	void testMgrGetMedicalsWard() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
 		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
 	}
 
@@ -689,7 +689,7 @@ class Tests extends OHCoreTestCase {
 
 		movWardBrowserManager.newMovementWard(movementWard);
 
-		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWardTotalQuantity('X');
+		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWardTotalQuantity("X");
 		assertThat(medicalWards).hasSize(1);
 		assertThat(medicalWards.get(0).getWard().getCode()).isEqualTo("X");
 	}

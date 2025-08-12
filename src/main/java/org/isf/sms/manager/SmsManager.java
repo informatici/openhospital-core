@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -74,12 +74,11 @@ public class SmsManager {
 	}
 
 	/**
-	 * Save or Update a {@link Sms}. If the sms's text length is greater than
-	 * {@code MAX_LENGTH} it will throw a {@code testMaxLengthError} error if
+	 * Save or Update a {@link Sms}. If the sms's text length is greater than {@code MAX_LENGTH} it will throw a {@code testMaxLengthError} error if
 	 * {@code split} parameter is set to {@code false}
 	 *
-	 * @param smsToSend - the {@link Sms} to save or update
-	 * @param split - specify if to split sms's text longer than {@code MAX_LENGTH}
+	 * @param smsToSend the {@link Sms} to save or update
+	 * @param split specifies if to split sms's text longer than {@code MAX_LENGTH}
 	 * @throws OHServiceException
 	 */
 	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
@@ -90,7 +89,7 @@ public class SmsManager {
 		int textLength = text.length();
 		if (textLength > MAX_LENGTH && !split) {
 			throw new OHDataValidationException(
-					new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGTH)));
+				new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGTH)));
 		}
 		if (textLength > MAX_LENGTH) {
 

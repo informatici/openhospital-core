@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MalnutritionManager {
 
-	private MalnutritionIoOperation ioOperation;
+	private final MalnutritionIoOperation ioOperation;
 
 	public MalnutritionManager(MalnutritionIoOperation malnutritionIoOperation) {
 		this.ioOperation = malnutritionIoOperation;
@@ -59,8 +59,8 @@ public class MalnutritionManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidcontroldate.msg")));
 		}
 		if (malnutrition.getDateSupp() != null &&
-				malnutrition.getDateConf() != null &&
-				malnutrition.getDateConf().isBefore(malnutrition.getDateSupp())) {
+			malnutrition.getDateConf() != null &&
+			malnutrition.getDateConf().isBefore(malnutrition.getDateSupp())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate.msg")));
 		}
 		if (malnutrition.getWeight() == 0) {
@@ -88,7 +88,7 @@ public class MalnutritionManager {
 	/**
 	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 *
-	 * @param patientID - the patient ID
+	 * @param patientID the patient ID
 	 * @return the last {@link Malnutrition} for specified patient ID. {@code null} if none.
 	 * @throws OHServiceException
 	 */
@@ -119,7 +119,7 @@ public class MalnutritionManager {
 		validateMalnutrition(malnutrition);
 		return ioOperation.updateMalnutrition(malnutrition);
 	}
-	
+
 	/**
 	 * Get the specified {@link Malnutrition}.
 	 *

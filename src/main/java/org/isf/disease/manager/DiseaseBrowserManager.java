@@ -35,15 +35,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiseaseBrowserManager {
 
-	private DiseaseIoOperations ioOperations;
+	private final DiseaseIoOperations ioOperations;
 
 	public DiseaseBrowserManager(DiseaseIoOperations diseaseIoOperations) {
 		this.ioOperations = diseaseIoOperations;
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with ODP flag {@code true}.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with ODP flag {@code true}. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases with ODP flag true.
 	 * @throws OHServiceException
@@ -53,8 +52,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all diseases, deleted ones also
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all diseases, deleted ones also In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases.
 	 * @throws OHServiceException
@@ -64,8 +62,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with the specified typecode and flag ODP true.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with the specified typecode and flag ODP true. In case of error a message error is shown and a {@code null} value
+	 * is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -76,8 +74,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with IPD_OUT flag {@code true}.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with IPD_OUT flag {@code true}. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored disease with IPD flag {@code true}.
 	 * @throws OHServiceException
@@ -87,8 +84,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_OUT {@code true}.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_OUT {@code true}. In case of error a message error is shown and a
+	 * {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -99,8 +96,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with IPD_IN flag {@code true}.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with IPD_IN flag {@code true}. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored disease with IPD flag {@code true}.
 	 * @throws OHServiceException
@@ -110,8 +106,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_IN {@code true}.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all the stored {@link Disease} with the specified typecode and the flag IPD_IN {@code true}. In case of error a message error is shown and a
+	 * {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return the retrieved diseases.
@@ -122,8 +118,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Returns both OPD and IPDs diseases.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns both OPD and IPDs diseases. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored diseases.
 	 * @throws OHServiceException
@@ -133,8 +128,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Retrieves all OPD and IPDs {@link Disease} with the specified typecode.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Retrieves all OPD and IPDs {@link Disease} with the specified typecode. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param typecode the filter typecode.
 	 * @return all the diseases with the specified typecode.
@@ -145,8 +139,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Gets a {@link Disease} with the specified code.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Gets a {@link Disease} with the specified code. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @param code the disease code.
 	 * @return the found disease, {@code null} if no disease has found.
@@ -157,8 +150,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Stores the specified {@link Disease}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Stores the specified {@link Disease}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to store.
 	 * @return the disease that has been stored.
@@ -170,9 +162,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Updates the specified {@link Disease}.
-	 * If the disease has been updated concurrently an overwrite confirmation message is shown.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Updates the specified {@link Disease}. If the disease has been updated concurrently an overwrite confirmation message is shown. In case of error a
+	 * message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to update.
 	 * @return the disease that has been updated.
@@ -184,8 +175,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Mark as deleted the specified {@link Disease}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Mark as deleted the specified {@link Disease}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param disease the disease to make delete.
 	 * @throws OHServiceException
@@ -195,8 +185,7 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Check if the specified code is used by other {@link Disease}s.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Check if the specified code is used by other {@link Disease}s. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param code the code to check.
 	 * @return {@code true} if it is already used, {@code false} otherwise.
@@ -207,8 +196,8 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
-	 * Checks if the specified description is used by a disease with the specified type code.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Checks if the specified description is used by a disease with the specified type code. In case of error a message error is shown and a {@code false}
+	 * value is returned.
 	 *
 	 * @param description the description to check.
 	 * @param typeCode the disease type code.

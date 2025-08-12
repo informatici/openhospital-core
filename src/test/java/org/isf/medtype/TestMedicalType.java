@@ -30,6 +30,7 @@ public class TestMedicalType {
 
 	private String code = "Z";
 	private String description = "TestDescription";
+	private char deleted = 'N';
 
 	public MedicalType setup(boolean usingSet) throws OHException {
 		MedicalType medicalType;
@@ -48,10 +49,12 @@ public class TestMedicalType {
 	public void setParameters(MedicalType medicalType) {
 		medicalType.setCode(code);
 		medicalType.setDescription(description);
+		medicalType.setDeleted(deleted);
 	}
 
 	public void check(MedicalType medicalType) {
 		assertThat(medicalType.getCode()).isEqualTo(code);
 		assertThat(medicalType.getDescription()).isEqualTo(description);
+		assertThat(medicalType.getDeleted()).isEqualTo(deleted);
 	}
 }

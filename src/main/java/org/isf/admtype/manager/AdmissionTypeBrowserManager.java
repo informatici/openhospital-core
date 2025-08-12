@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdmissionTypeBrowserManager {
 
-	private AdmissionTypeIoOperation ioOperations;
+	private final AdmissionTypeIoOperation ioOperations;
 
 	public AdmissionTypeBrowserManager(AdmissionTypeIoOperation admissionTypeIoOperation) {
 		this.ioOperations = admissionTypeIoOperation;
@@ -120,7 +120,7 @@ public class AdmissionTypeBrowserManager {
 		}
 		if (admissionType.getDescription().isEmpty()) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+				new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

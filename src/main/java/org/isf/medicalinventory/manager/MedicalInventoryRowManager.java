@@ -39,8 +39,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalInventoryRowManager {
 
-	private MedicalInventoryRowIoOperation ioOperation;
-	private MovStockInsertingManager movStockInsertingManager;
+	private final MedicalInventoryRowIoOperation ioOperation;
+
+	private final MovStockInsertingManager movStockInsertingManager;
 
 	public MedicalInventoryRowManager(MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovStockInsertingManager movStockInsertingManager) {
 		this.ioOperation = medicalInventoryRowIoOperation;
@@ -50,7 +51,7 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Insert a new {@link MedicalInventoryRow}.
 	 *
-	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to insert.
+	 * @param medicalInventoryRow the {@link MedicalInventoryRow} to insert.
 	 * @return the newly persisted {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
@@ -58,11 +59,11 @@ public class MedicalInventoryRowManager {
 		validateMedicalInventoryRow(medicalInventoryRow);
 		return ioOperation.newMedicalInventoryRow(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Update an existing {@link MedicalInventoryRow}.
 	 *
-	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to update.
+	 * @param medicalInventoryRow the {@link MedicalInventoryRow} to update.
 	 * @return the updated {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
@@ -70,20 +71,21 @@ public class MedicalInventoryRowManager {
 		validateMedicalInventoryRow(medicalInventoryRow);
 		return ioOperation.updateMedicalInventoryRow(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Delete the specified {@link MedicalInventoryRow}.
-	 * @param medicalInventoryRow - the {@link MedicalInventoryRow} to delete.
+	 * 
+	 * @param medicalInventoryRow the {@link MedicalInventoryRow} to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
 		ioOperation.deleteMedicalInventoryRow(medicalInventoryRow);
 	}
-	
+
 	/**
 	 * Return a list of {@link MedicalInventoryRow}s for passed params.
 	 *
-	 * @param inventoryId - the Invetory Id.
+	 * @param inventoryId the Inventory Id.
 	 * @return the list of {@link MedicalInventoryRow}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -94,7 +96,7 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Delete a list of inventory rows {@link MedicalInventoryRow}s
 	 *
-	 * @param inventoryRowsToDelete - the list of {@link MedicalInventoryRow}s
+	 * @param inventoryRowsToDelete the list of {@link MedicalInventoryRow}s
 	 * 
 	 * @throws OHServiceException
 	 */
@@ -105,20 +107,20 @@ public class MedicalInventoryRowManager {
 			if (medInvRow.isPresent()) {
 				MedicalInventoryRow invRowDelete = medInvRow.get();
 				if (invRowDelete.isNewLot()) {
-					this.deleteMedicalInventoryRow(invRowDelete);	
+					this.deleteMedicalInventoryRow(invRowDelete);
 					if (invRowDelete.getLot() != null) {
 						movStockInsertingManager.deleteLot(invRowDelete.getLot());
 					}
 				}
 				ioOperation.deleteMedicalInventoryRow(invRow);
-			}	
+			}
 		}
 	}
 
 	/**
 	 * Return {@link MedicalInventoryRow} for passed param.
 	 *
-	 * @param invRowId - the MedicalInventoryRow Id.
+	 * @param invRowId the MedicalInventoryRow Id.
 	 * @return the {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */
@@ -129,7 +131,7 @@ public class MedicalInventoryRowManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
@@ -138,14 +140,14 @@ public class MedicalInventoryRowManager {
 	 */
 	private void validateMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		
+
 		if (medicalInventoryRow.getInventory() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertinventory.msg")));
 		}
 		if (medicalInventoryRow.getMedical() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.inventory.pleaseinsertmedical.msg")));
 		}
-		
+
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
@@ -154,8 +156,8 @@ public class MedicalInventoryRowManager {
 	/**
 	 * Return {@link MedicalInventoryRow} for passed param.
 	 *
-	 * @param medicalCode - the medical code.
-	 * @param lotCode - the lot code.
+	 * @param medicalCode the medical code.
+	 * @param lotCode the lot code.
 	 * @return the {@link MedicalInventoryRow} object.
 	 * @throws OHServiceException
 	 */

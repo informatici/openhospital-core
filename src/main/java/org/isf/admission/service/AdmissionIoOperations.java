@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -253,8 +253,6 @@ public class AdmissionIoOperations {
 	 * The default path ({@code testing == false}) ensures that the code performs as it
 	 * always has in the past.
 	 * This code permits the unit testing of maternity wards with dates before and after June.
-	 * TODO: once the LocalDateTime object is replaced by Java 8+ date/time objects this can be revisited
-	 * as there is more flexibility in modifying the new objects in Java 8+.
 	 */
 	public static boolean testing;
 	public static boolean afterJune;

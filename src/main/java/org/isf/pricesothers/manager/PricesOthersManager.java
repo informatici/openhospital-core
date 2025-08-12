@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PricesOthersManager {
 
-	private PriceOthersIoOperations ioOperations;
+	private final PriceOthersIoOperations ioOperations;
 
 	public PricesOthersManager(PriceOthersIoOperations priceOthersIoOperations) {
 		this.ioOperations = priceOthersIoOperations;
@@ -55,7 +55,7 @@ public class PricesOthersManager {
 	/**
 	 * Insert a new {@link PricesOthers} object.
 	 *
-	 * @param other - the {@link PricesOthers} to insert
+	 * @param other the {@link PricesOthers} to insert
 	 * @return the newly inserted {@link PricesOthers} object.
 	 * @throws OHServiceException
 	 */
@@ -67,7 +67,7 @@ public class PricesOthersManager {
 	/**
 	 * Delete a {@link PricesOthers} object.
 	 *
-	 * @param other - the {@link PricesOthers} to delete
+	 * @param other the {@link PricesOthers} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteOther(PricesOthers other) throws OHServiceException {
@@ -77,7 +77,7 @@ public class PricesOthersManager {
 	/**
 	 * Update a {@link PricesOthers} object.
 	 *
-	 * @param other - the {@link PricesOthers} to update
+	 * @param other the {@link PricesOthers} to update
 	 * @return the newly updated {@link PricesOthers} object.
 	 * @throws OHServiceException
 	 */

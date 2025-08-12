@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,20 +27,23 @@ import static org.assertj.core.api.Assertions.within;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.isf.medicalinventory.model.InventoryStatus;
+import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMedicalInventory {
 
-	private int id = 1;
-	private String status = "STATUS";
-	private LocalDateTime inventoryDate = LocalDateTime.now();
-	private String user = "USER";
+	private Integer id = null;
+	private String status = InventoryStatus.draft.toString();
+	private LocalDateTime inventoryDate = TimeTools.getNow();
+	private String user = "admin";
 	private String inventoryReference = "REFERENCE";
-	private String inventoryType = "TYPE";
-	private String ward = "Z";
-	private int supplier = 3;
+	private String inventoryType = InventoryType.main.toString();
+	private String wardCode = "Z";
+	private int supplier = 1;
 	private String destination = "INV";
 	private String charge = "inventory+";
 	private String discharge = "inventory-";
@@ -66,7 +69,7 @@ public class TestMedicalInventory {
 		medInventory.setUser(user);
 		medInventory.setInventoryReference(inventoryReference);
 		medInventory.setInventoryType(inventoryType);
-		medInventory.setWard(ward);
+		medInventory.setWardCode(wardCode);
 		medInventory.setChargeType(charge);
 		medInventory.setDischargeType(discharge);
 		medInventory.setSupplier(supplier);
@@ -80,7 +83,7 @@ public class TestMedicalInventory {
 		assertThat(medInventory.getUser()).isEqualTo(user);
 		assertThat(medInventory.getInventoryReference()).isEqualTo(inventoryReference);
 		assertThat(medInventory.getInventoryType()).isEqualTo(inventoryType);
-		assertThat(medInventory.getWard()).isEqualTo(ward);
+		assertThat(medInventory.getWardCode()).isEqualTo(wardCode);
 		assertThat(medInventory.getChargeType()).isEqualTo(charge);
 		assertThat(medInventory.getDischargeType()).isEqualTo(discharge);
 		assertThat(medInventory.getSupplier()).isEqualTo(supplier);

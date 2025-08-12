@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -31,7 +31,7 @@ public class TestPermission {
 
 		for (int i = 1; i <= nbPermissions; i++) {
 			Permission permission = new Permission();
-			permission.setId(i);
+			permission.setId(0);
 			permission.setName("permission" + i);
 			permission.setDescription("permission " + i + " description");
 			permissions.add(permission);
@@ -42,7 +42,7 @@ public class TestPermission {
 
 	public static Permission generatePermission() {
 		Permission permission = new Permission();
-		permission.setId(1);
+		permission.setId(0);
 		permission.setName("permission.test");
 		permission.setDescription("Test permission");
 

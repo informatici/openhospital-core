@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -75,6 +75,7 @@ import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -153,11 +154,6 @@ class Tests extends OHCoreTestCase {
 		testMedicalStock = new TestMedicalStock();
 	}
 
-	@BeforeEach
-	void setUp() throws OHException {
-		cleanH2InMemoryDb();
-	}
-
 	@AfterAll
 	static void tearDownClass() {
 		testLot = null;
@@ -168,6 +164,11 @@ class Tests extends OHCoreTestCase {
 		testWard = null;
 		testSupplier = null;
 		testMedicalStock = null;
+	}
+
+	@BeforeEach
+	void setUp() throws OHException {
+		cleanH2InMemoryDb();
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1106,7 +1107,7 @@ class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 			assertThat(movement).isNotNull();
 			Lot lot = movement.getLot();
-			lot.setCost(new BigDecimal(0.0));
+			lot.setCost(BigDecimal.ZERO);
 			lotIoOperationRepository.saveAndFlush(lot);
 			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
@@ -1261,8 +1262,12 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
-	void testLotHashCode() {
-		Lot lot = new Lot("aCode", TimeTools.getNow(), TimeTools.getNow());
+	void testLotHashCode() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, true);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = new Lot(medical, "aCode", TimeTools.getNow(), TimeTools.getNow(), new BigDecimal(10.10));
 		int hashCode = lot.hashCode();
 		assertThat(hashCode).isPositive();
 		// use computed value
@@ -1520,13 +1525,27 @@ class Tests extends OHCoreTestCase {
 				method.invoke(medicalStockIoOperation, medical, newDate, quantity);
 			} catch (InvocationTargetException e) {
 				if (e.getCause() instanceof OHServiceException) {
-					throw (OHServiceException) e.getCause();
+					throw e.getCause();
 				} else {
 					throw e;
 				}
 			}
 		})
 			.isInstanceOf(OHServiceException.class);
+	}
+
+	@Test
+	void testMedicalWardLockGetterSetter() throws Exception {
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		MovementType movementType = movement.getType();
+		movementType.setType("-");
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+
+		assertThat(medicalWard.getLock()).isZero();
+		medicalWard.setLock(8);
+		assertThat(medicalWard.getLock()).isEqualTo(8);
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {

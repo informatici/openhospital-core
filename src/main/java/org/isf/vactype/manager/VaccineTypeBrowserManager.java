@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,9 +36,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class VaccineTypeBrowserManager {
 
-	private VacTypeIoOperation ioOperations;
+	private final VacTypeIoOperation ioOperations;
 
-	public VaccineTypeBrowserManager( VacTypeIoOperation vacTypeIoOperation) {
+	public VaccineTypeBrowserManager(VacTypeIoOperation vacTypeIoOperation) {
 		this.ioOperations = vacTypeIoOperation;
 	}
 
@@ -83,7 +83,7 @@ public class VaccineTypeBrowserManager {
 	/**
 	 * Inserts a new {@link VaccineType} into the DB.
 	 *
-	 * @param vaccineType - the {@link VaccineType} to insert
+	 * @param vaccineType the {@link VaccineType} to insert
 	 * @return the newly inserted {@link VaccineType} object.
 	 * @throws OHServiceException
 	 */
@@ -95,7 +95,7 @@ public class VaccineTypeBrowserManager {
 	/**
 	 * Update a {@link VaccineType} in the DB.
 	 *
-	 * @param vaccineType - the item to update
+	 * @param vaccineType the item to update
 	 * @return the updated {@link VaccineType} object.
 	 * @throws OHServiceException
 	 */
@@ -107,7 +107,7 @@ public class VaccineTypeBrowserManager {
 	/**
 	 * Deletes a {@link VaccineType} in the DB.
 	 *
-	 * @param vaccineType - the item to delete
+	 * @param vaccineType the item to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
@@ -117,7 +117,7 @@ public class VaccineTypeBrowserManager {
 	/**
 	 * Checks if the code is already in use.
 	 *
-	 * @param code - the {@link VaccineType} code
+	 * @param code the {@link VaccineType} code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -128,7 +128,7 @@ public class VaccineTypeBrowserManager {
 	/**
 	 * Returns the {@link VaccineType} based on vaccine type code.
 	 *
-	 * @param code - the  {@link VaccineType} code.
+	 * @param code the {@link VaccineType} code.
 	 * @return the {@link VaccineType} or {@literal null} if none found
 	 */
 	public VaccineType findVaccineType(String code) {

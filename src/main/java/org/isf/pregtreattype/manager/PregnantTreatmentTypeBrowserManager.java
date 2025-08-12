@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PregnantTreatmentTypeBrowserManager {
 
-	private PregnantTreatmentTypeIoOperation ioOperations;
+	private final PregnantTreatmentTypeIoOperation ioOperations;
 
 	public PregnantTreatmentTypeBrowserManager(PregnantTreatmentTypeIoOperation pregnantTreatmentTypeIoOperation) {
 		this.ioOperations = pregnantTreatmentTypeIoOperation;
@@ -55,7 +55,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	/**
 	 * Insert a {@link PregnantTreatmentType} into the DB.
 	 *
-	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to insert
+	 * @param pregnantTreatmentType the {@link PregnantTreatmentType} to insert
 	 * @return the newly inserted {@link PregnantTreatmentType} object.
 	 * @throws OHServiceException
 	 */
@@ -67,7 +67,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	/**
 	 * Update a {@link PregnantTreatmentType} in the DB
 	 *
-	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to update
+	 * @param pregnantTreatmentType the {@link PregnantTreatmentType} to update
 	 * @return the updated {@link PregnantTreatmentType} object.
 	 * @throws OHServiceException
 	 */
@@ -79,7 +79,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	/**
 	 * Delete a {@link PregnantTreatmentType} in the DB.
 	 *
-	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to delete
+	 * @param pregnantTreatmentType the {@link PregnantTreatmentType} to delete
 	 * @throws OHServiceException
 	 */
 	public void deletePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
@@ -89,7 +89,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	/**
 	 * Check if the code is already in use
 	 *
-	 * @param code - the code
+	 * @param code the code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */

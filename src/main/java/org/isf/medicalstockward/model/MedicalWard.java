@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,6 +28,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -36,7 +37,7 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSRWARD")
+@Table(name = "OH_MEDICALDSRWARD")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MDSRWRD_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MDSRWRD_CREATED_DATE", updatable = false))
@@ -45,80 +46,95 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSRWRD_LAST_MODIFIED_DATE"))
 public class MedicalWard extends Auditable<String> implements Comparable<Object> {
 
-	@EmbeddedId 
+	@EmbeddedId
 	MedicalWardId id;
-	
-	@Column(name="MDSRWRD_IN_QTI")
+
+	@Column(name = "MDSRWRD_IN_QTI")
 	private float in_quantity;
-	
-	@Column(name="MDSRWRD_OUT_QTI")
+
+	@Column(name = "MDSRWRD_OUT_QTI")
 	private float out_quantity;
-	
+
+	/**
+	 * Lock control
+	 */
+	@Version
+	@Column(name = "MDSRWRD_LOCK", columnDefinition = "INT(11) NOT NULL DEFAULT 0")
+	private int lock;
+
 	@Transient
 	private Double qty = 0.0;
-	
+
 	@Transient
 	private volatile int hashCode;
-	
+
 	public MedicalWard() {
 		super();
 		this.id = new MedicalWardId();
 	}
-	
+
 	public MedicalWard(Medical medical, Double qty) {
 		super();
-		this.id = new MedicalWardId(); 
+		this.id = new MedicalWardId();
 		this.id.setMedical(medical);
 		this.qty = qty;
 	}
-	
+
 	public MedicalWard(Ward ward, Medical medical, float inQuantity, float outQuantity, Lot lot) {
 		super();
-		this.id = new MedicalWardId(ward, medical, lot);  
+		this.id = new MedicalWardId(ward, medical, lot);
 		this.in_quantity = inQuantity;
 		this.out_quantity = outQuantity;
-		
+
 	}
-	
-	public MedicalWard(Medical med, double qanty, Lot lot) {
+
+	public MedicalWard(Medical med, double quantity, Lot lot) {
 		super();
-		this.id = new MedicalWardId(); 
-		
+		this.id = new MedicalWardId();
+
 		this.id.setMedical(med);
 		this.id.setLot(lot);
-		this.qty = qanty;
+		this.qty = quantity;
 	}
 
 	public MedicalWardId getId() {
 		return id;
 	}
-	
+
 	public void setId(Ward ward, Medical medical, Lot lot) {
-		this.id = new MedicalWardId(ward, medical, lot); 
+		this.id = new MedicalWardId(ward, medical, lot);
 	}
-	
+
 	public Lot getLot() {
 		return id.getLot();
 	}
-	
-	public void setMedical(Medical medical) {
-		this.id.setMedical(medical);
+
+	public void setLot(Lot lot) {
+		id.setLot(lot);
 	}
-	
+
 	public Double getQty() {
 		return qty;
 	}
-	
+
 	public void setQty(Double qty) {
 		this.qty = qty;
 	}
-	
+
+	public int getLock() {
+		return lock;
+	}
+
+	public void setLock(int lock) {
+		this.lock = lock;
+	}
+
 	@Override
 	public int compareTo(Object anObject) {
 		Medical medical = id.getMedical();
 		if (anObject instanceof MedicalWard) {
 			return (medical.getDescription().toUpperCase().compareTo(
-					((MedicalWard) anObject).getMedical().getDescription().toUpperCase()));
+				((MedicalWard) anObject).getMedical().getDescription().toUpperCase()));
 		}
 		return 0;
 	}
@@ -126,7 +142,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public Ward getWard() {
 		return this.id.getWard();
 	}
-	
+
 	public void setWard(Ward ward) {
 		this.id.setWard(ward);
 	}
@@ -134,51 +150,51 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public Medical getMedical() {
 		return this.id.getMedical();
 	}
-	
-	public void setLot(Lot lot) {
-		id.setLot(lot);
+
+	public void setMedical(Medical medical) {
+		this.id.setMedical(medical);
 	}
-	
+
 	public float getIn_quantity() {
 		return this.in_quantity;
 	}
-	
+
 	public void setIn_quantity(float inQuantity) {
 		this.in_quantity = inQuantity;
 	}
-	
+
 	public float getOut_quantity() {
 		return this.out_quantity;
 	}
-	
+
 	public void setOut_quantity(float outQuantity) {
 		this.out_quantity = outQuantity;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof MedicalWard ward)) {
 			return false;
 		}
 
 		return (this.id.getMedical() == ward.id.getMedical());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + this.id.getMedical().getCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + this.id.getMedical().getCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }

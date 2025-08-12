@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,6 +28,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,6 +49,10 @@ public class MedicalType extends Auditable<String> {
 
 	@Column(name="MDSRT_DESC")	
 	private String description;
+	
+	@NotNull
+	@Column(name = "MDSRT_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N'; // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
 	private volatile int hashCode;
@@ -77,6 +82,15 @@ public class MedicalType extends Auditable<String> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+
+	public char getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(char deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override

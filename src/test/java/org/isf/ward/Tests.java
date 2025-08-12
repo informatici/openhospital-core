@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -109,11 +109,11 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime admDate = TimeTools.getNow();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
-				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+			"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+			"TestUserId", 'N');
 		Admission admission2 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
-				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+			"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+			"TestUserId", 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
@@ -135,39 +135,25 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoGetWards() throws Exception {
-		// given:
-		String code = setupTestWard(false);
-		Ward foundWard = wardIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundWard).isNotNull();
-
-		// when:
-		List<Ward> wards = wardIoOperation.getWards(code);
-
-		// then:
-		assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
-	}
-	
-	@Test
 	void testIoGetIpdWards() throws Exception {
 		// given:
 		String code = setupTestWard(false);
 		Ward foundWard = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundWard).isNotNull();
-		
+
 		// when:
 		List<Ward> wards = wardIoOperation.getIpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
-		
+
 		// given:
 		foundWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(foundWard);
-		
+
 		// when:
 		wards = wardIoOperation.getIpdWards();
-		
+
 		// then:
 		assertThat(wards).isEmpty();
 	}
@@ -178,30 +164,30 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestWard(false);
 		Ward foundWard = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundWard).isNotNull();
-		
+
 		// when:
 		List<Ward> wards = wardIoOperation.getOpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
-		
+
 		// given:
 		foundWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(foundWard);
-		
+
 		// when:
 		wards = wardIoOperation.getOpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
 	}
-	
+
 	@Test
 	void testIoGetWardsGetAll() throws Exception {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(ward).isNotNull();
-		List<Ward> wards = wardIoOperation.getWards(null);
+		List<Ward> wards = wardIoOperation.findAll();
 		assertThat(wards).hasSize(1);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
@@ -291,7 +277,7 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(result).isTrue();
 	}
-	
+
 	@Test
 	void testIoFindWard() throws Exception {
 		String code = setupTestWard(false);
@@ -323,10 +309,10 @@ class Tests extends OHCoreTestCase {
 		patient.setBirthDate(LocalDate.now().minusYears(45));
 		patientIoOperationRepository.save(patient);
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
-		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
+		Admission admission1 = new Admission(0, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, 'N');
-		Admission admission2 = new Admission(2, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
+		Admission admission2 = new Admission(0, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
@@ -345,32 +331,23 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetWards() throws Exception {
-		String code = setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findById(code).orElse(null);
-		assertThat(ward).isNotNull();
-		List<Ward> wards = wardBrowserManager.getWards(ward);
-		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
-	}
-	
-	@Test
 	void testMgrGetIpdWards() throws Exception {
 		String code = setupTestWard(false);
 		Ward opdWard = wardBrowserManager.findWard(code);
 		opdWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(opdWard);
-		
+
 		List<Ward> wards = wardBrowserManager.getIpdWards();
 		assertThat(wards).isEmpty();
 	}
-	
+
 	@Test
 	void testMgrGetOpdWards() throws Exception {
 		String code = setupTestWard(false);
 		Ward opdWard = wardBrowserManager.findWard(code);
 		opdWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(opdWard);
-		
+
 		List<Ward> wards = wardBrowserManager.getOpdWards();
 		assertThat(wards).hasSize(1);
 	}
@@ -437,10 +414,10 @@ class Tests extends OHCoreTestCase {
 		patient.setBirthDate(LocalDate.now().minusYears(45));
 		patientIoOperationRepository.save(patient);
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
-		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
+		Admission admission1 = new Admission(0, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 			null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, 'N');
-		Admission admission2 = new Admission(2, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
+		Admission admission2 = new Admission(0, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
 			null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
@@ -521,8 +498,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -533,8 +509,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -545,8 +520,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -557,8 +531,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -569,8 +542,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -581,8 +553,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -593,8 +564,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataValidationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -605,8 +575,7 @@ class Tests extends OHCoreTestCase {
 			.isInstanceOf(OHDataIntegrityViolationException.class)
 			.has(
 				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-			);
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -670,7 +639,7 @@ class Tests extends OHCoreTestCase {
 	void testWardDebug() throws Exception {
 		Ward ward = testWard.setup(true);
 		assertThat(ward.debug()).isEqualTo(
-				"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=false, isFemale=true, lock=null, hashCode=0]");
+			"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=false, isFemale=true, lock=null, hashCode=0]");
 	}
 
 	@Test

@@ -40,6 +40,7 @@ public class IpApiService extends GeoIpInfoCommonService {
 		this.settings = geoIpInfoSettings;
 	}
 
+	@Override
 	public IpApi retrieveIpInfo() {
 		IpApiRemoteservice httpClient = buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), IpApiRemoteservice.class, IpApiService.class);
 		LOGGER.debug("IpApi request start");
@@ -49,6 +50,7 @@ public class IpApiService extends GeoIpInfoCommonService {
 		return result;
 	}
 
+	@Override
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}

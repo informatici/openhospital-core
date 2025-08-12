@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 public class UserBrowsingManager {
 
 	private static final String VALID_USERID_PATTERN = "^[a-z0-9-._]+$";
+
 	private final MenuIoOperations ioOperations;
 
 	public UserBrowsingManager(MenuIoOperations menuIoOperations) {
@@ -60,6 +61,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the list of {@link User}s.
+	 * 
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException When failed to retrieve users
 	 */
@@ -69,7 +71,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the list of {@link User}s in specified groupID.
-	 * @param groupID - the group ID
+	 * 
+	 * @param groupID the group ID
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException When failed to retrieve group users
 	 */
@@ -79,7 +82,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns a {@link User} with the specified name.
-	 * @param userName - username
+	 * 
+	 * @param userName the username
 	 * @return {@link User}
 	 * @throws OHServiceException When error occurs
 	 */
@@ -89,8 +93,9 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns {@link User} from its username
-	 * @param username - the {@link User}'s username
-	 * @param withSoftDeletion - Included soft deleted if set to true
+	 * 
+	 * @param username the {@link User}'s username
+	 * @param withSoftDeletion includes soft deleted if set to true
 	 * @return {@link User}
 	 * @throws OHServiceException When error occurs
 	 */
@@ -100,7 +105,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Checks if the specified {@link User} code is already present.
-	 * @param userName - the {@link User} code to check.
+	 * 
+	 * @param userName the {@link User} code to check.
 	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -110,7 +116,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
-	 * @param groupName - the {@link UserGroup} code to check.
+	 * 
+	 * @param groupName the {@link UserGroup} code to check.
 	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -120,7 +127,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Inserts a new {@link User} into the DB.
-	 * @param user - the {@link User} to insert
+	 * 
+	 * @param user the {@link User} to insert
 	 * @return the new {@link User}
 	 * @throws OHServiceException When error occurs
 	 */
@@ -139,7 +147,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Updates an existing {@link User} in the DB.
-	 * @param user - the {@link User} to update
+	 * 
+	 * @param user the {@link User} to update
 	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update user
 	 */
@@ -155,7 +164,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Updates the password of an existing {@link User} in the DB.
-	 * @param user - the {@link User} to update
+	 * 
+	 * @param user the {@link User} to update
 	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update password
 	 */
@@ -165,7 +175,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Deletes an existing {@link User}.
-	 * @param user - the {@link User} to delete
+	 * 
+	 * @param user the {@link User} to delete
 	 * @throws OHServiceException When failed to delete user
 	 */
 	public void deleteUser(User user) throws OHServiceException {
@@ -175,12 +186,13 @@ public class UserBrowsingManager {
 		ioOperations.deleteUser(user);
 	}
 
-	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
+	// TODO: revisit the individual methods for failed attempts, locking, last login time, etc.
 	// The original idea is that last login in time gets called frequently, and number of failed attempts less often, and locking/unlocking users
-	// even more infrequently, etc. and only one or two columns changed value.  The thought was that rewriting the entire object everytime for each
+	// even more infrequently, etc. and only one or two columns changed value. The thought was that rewriting the entire object everytime for each
 	// operation was too heavy handed.
 	/**
 	 * Increase the number of failed login attempts for {@link User}.
+	 * 
 	 * @param user the {@link User}
 	 */
 	public void increaseFailedAttempts(User user) throws OHServiceException {
@@ -190,6 +202,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Reset the number of failed login attempts to zero for {@link User}.
+	 * 
 	 * @param user the {@link User}
 	 */
 	public void resetFailedAttempts(User user) {
@@ -198,6 +211,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Lock the {@link User} from logging into the system.
+	 * 
 	 * @param user the {@link User}
 	 * @throws OHServiceException When failed to lock user
 	 */
@@ -209,6 +223,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Unlock the {@link User} so they can log into the system.
+	 * 
 	 * @param user the {@link User}
 	 */
 	public void setLastLogin(User user) throws OHServiceException {
@@ -217,6 +232,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Unlock the {@link User} so they can log into the system.
+	 * 
 	 * @param user the {@link User}
 	 */
 	public void unlockUser(User user) throws OHServiceException {
@@ -231,6 +247,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Unlock the {@link User} after the required "lock time" has expired.
+	 * 
 	 * @param user the {@link User}
 	 */
 	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
@@ -250,6 +267,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the list of {@link UserGroup}s.
+	 * 
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException When failed to retrieve user groups
 	 */
@@ -259,6 +277,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Find user group by code
+	 * 
 	 * @param groupCode UserGroup code
 	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
 	 */
@@ -268,6 +287,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Find user group by code
+	 * 
 	 * @param groupCode UserGroup code
 	 * @param withThrashed Include soft deleted if set to true
 	 * @return The corresponding {@link UserGroup} if found, {@code null} otherwise
@@ -278,7 +298,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for a specified {@link User}.
-	 * @param aUser - the {@link User}
+	 * 
+	 * @param aUser the {@link User}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException When failed to retrieve user menus
 	 */
@@ -288,7 +309,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for the specified {@link UserGroup}.
-	 * @param aGroup - the {@link UserGroup}
+	 * 
+	 * @param aGroup the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException When failed to retrieve group menus
 	 */
@@ -298,8 +320,9 @@ public class UserBrowsingManager {
 
 	/**
 	 * Replaces the {@link UserGroup} rights.
-	 * @param aGroup - the {@link UserGroup}
-	 * @param menu - the list of {@link UserMenuItem}s
+	 * 
+	 * @param aGroup the {@link UserGroup}
+	 * @param menu the list of {@link UserMenuItem}s
 	 * @return {@code true} if the menu has been replaced, {@code false} otherwise.
 	 * @throws OHServiceException When error occurs
 	 */
@@ -309,7 +332,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Returns the {@link User} description given the username.
-	 * @param userName - the {@link User}'s username
+	 * 
+	 * @param userName the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException When failed to get user info
 	 */
@@ -319,7 +343,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Deletes a {@link UserGroup}.
-	 * @param aGroup - the {@link UserGroup} to delete
+	 * 
+	 * @param aGroup the {@link UserGroup} to delete
 	 * @throws OHServiceException When failed to delete group
 	 */
 	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
@@ -336,7 +361,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights.
-	 * @param userGroup - the {@link UserGroup} to insert
+	 * 
+	 * @param userGroup the {@link UserGroup} to insert
 	 * @return the new {@link UserGroup}
 	 * @throws OHServiceException When failed to create user group
 	 */
@@ -351,7 +377,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Insert a new {@link UserGroup} with related {@link Permission}s.
-	 * @param userGroup - the {@link UserGroup} to insert
+	 * 
+	 * @param userGroup the {@link UserGroup} to insert
 	 * @param permissions List of permissions to assign to the group
 	 * @return the new {@link UserGroup}
 	 * @throws OHServiceException When failed to create user group
@@ -367,7 +394,8 @@ public class UserBrowsingManager {
 
 	/**
 	 * Updates an existing {@link UserGroup} in the DB.
-	 * @param userGroup - the {@link UserGroup} to update
+	 * 
+	 * @param userGroup the {@link UserGroup} to update
 	 * @return the {@link UserGroup} that has been updated
 	 * @throws OHServiceException If failed to update group
 	 */
@@ -392,7 +420,8 @@ public class UserBrowsingManager {
 	/**
 	 * Updates an existing {@link UserGroup} and related permissions. If permissions list is empty, the existing permissions are kept, otherwise they're
 	 * replaced with the provided ones.
-	 * @param userGroup - the {@link UserGroup} to update
+	 * 
+	 * @param userGroup the {@link UserGroup} to update
 	 * @param permissions Updated list of permissions to assign to the group
 	 * @return the {@link UserGroup} that has been updated
 	 * @throws OHServiceException If failed to update group
@@ -411,6 +440,7 @@ public class UserBrowsingManager {
 
 	/**
 	 * Tests whether a password meets the requirement for various characters being present
+	 * 
 	 * @param password The given password
 	 * @return {@code true} if password is meets the minimum requirements, {@code false} otherwise.
 	 */
@@ -422,10 +452,10 @@ public class UserBrowsingManager {
 			return true;
 		}
 
-		String regex = "^(?=.*[0-9])"        // a digit must occur at least once
-			+ "(?=.*[a-zA-Z])"           // a lower case or upper case alphabetic must occur at least once
+		String regex = "^(?=.*[0-9])" // a digit must occur at least once
+			+ "(?=.*[a-zA-Z])" // a lower case or upper case alphabetic must occur at least once
 			+ "(?=.*[\\\\_$&+,:;=\\\\?@#|/'<>.^*()%!-])" // a special character that must occur at least once
-			+ "(?=\\S+$).+$";            // white spaces not allowed
+			+ "(?=\\S+$).+$"; // white spaces not allowed
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();

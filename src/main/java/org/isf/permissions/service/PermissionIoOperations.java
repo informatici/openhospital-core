@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,8 +44,8 @@ public class PermissionIoOperations {
 		return repository.findByIdIn(ids);
 	}
 
-	public List<Permission> retrivePermisionsByGroupCode(String userGropupCode) throws OHServiceException {
-		return repository.findAllByUserGroupCode(userGropupCode);
+	public List<Permission> retrivePermisionsByGroupCode(String userGroupCode) throws OHServiceException {
+		return repository.findAllByUserGroupCode(userGroupCode);
 	}
 
 	public List<Permission> retrievePermissionsByCurrentLoggedInUser(String currentUserName) throws OHServiceException {

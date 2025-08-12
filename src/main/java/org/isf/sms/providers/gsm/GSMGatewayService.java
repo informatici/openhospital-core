@@ -103,7 +103,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 					connected = true;
 
 				} else {
-					LOGGER.debug("A problem occured on output stream");
+					LOGGER.debug("A problem occurred on output stream");
 				}
 
 			} catch (PortInUseException e) {

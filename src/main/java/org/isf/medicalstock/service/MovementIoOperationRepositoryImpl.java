@@ -141,15 +141,13 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Medical> get(MEDICAL).<MedicalType> get(TYPE).<String> get(CODE), medicalType));
 		}
 		if ((movFrom != null) && (movTo != null)) {
-			predicates.add(builder.between(root.<LocalDateTime> get(DATE), TimeTools.getBeginningOfDay(movFrom), TimeTools.getBeginningOfNextDay(movTo)));
+			predicates.add(builder.between(root.<LocalDateTime> get(DATE), movFrom, movTo));
 		}
 		if ((lotPrepFrom != null) && (lotPrepTo != null)) {
-			predicates.add(builder.between(root.<Lot> get(LOT).<LocalDateTime> get("preparationDate"), TimeTools.getBeginningOfDay(lotPrepFrom),
-							TimeTools.getBeginningOfNextDay(lotPrepTo)));
+			predicates.add(builder.between(root.<Lot> get(LOT).<LocalDateTime> get("preparationDate"), lotPrepFrom, lotPrepTo));
 		}
 		if ((lotDueFrom != null) && (lotDueTo != null)) {
-			predicates.add(builder.between(root.<Lot> get(LOT).<LocalDateTime> get("dueDate"), TimeTools.getBeginningOfDay(lotDueFrom),
-							TimeTools.getBeginningOfNextDay(lotDueTo)));
+			predicates.add(builder.between(root.<Lot> get(LOT).<LocalDateTime> get("dueDate"), lotDueFrom, lotDueTo));
 		}
 		if ("+".equals(movType)) {
 			predicates.add(builder.equal(root.<MovementType> get(TYPE).<String> get(TYPE), movType));

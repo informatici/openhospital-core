@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -129,7 +129,8 @@ public class Lot extends Auditable<String> {
 		code = aCode;
 	}
 
-	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+		medical = aMedical;
 		code = aCode;
 		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 		dueDate = TimeTools.truncateToSeconds(aDueDate);

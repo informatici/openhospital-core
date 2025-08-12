@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientConsensusBrowserManager {
 
-	private PatientConsensusIoOperation ioOperations;
+	private final PatientConsensusIoOperation ioOperations;
 
 	public PatientConsensusBrowserManager(PatientConsensusIoOperation patientConsensusIoOperation) {
 		this.ioOperations = patientConsensusIoOperation;
@@ -52,11 +52,10 @@ public class PatientConsensusBrowserManager {
 		return ioOperations.getPatientConsensusByUserId(userId);
 	}
 
-
 	/**
 	 * Update a {@link PatientConsensus}.
 	 *
-	 * @param patientConsensus - the {@link PatientConsensus} to update
+	 * @param patientConsensus the {@link PatientConsensus} to update
 	 * @return the {@link PatientConsensus}.
 	 * @throws OHServiceException
 	 */
@@ -64,7 +63,6 @@ public class PatientConsensusBrowserManager {
 		validate(patientConsensus);
 		return ioOperations.updatePatientConsensus(patientConsensus);
 	}
-
 
 	private void validate(PatientConsensus patientConsensus) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
@@ -77,11 +75,10 @@ public class PatientConsensusBrowserManager {
 
 	}
 
-
 	/**
 	 * Checks if n user specified by its {@code code} has a {@link PatientConsensus}.
 	 *
-	 * @param code - the user's id code
+	 * @param code the user's id code
 	 * @return {@code true} if the username has a PatientConsensus, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
