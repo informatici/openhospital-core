@@ -322,7 +322,7 @@ public class JasperReportsManager {
 
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
-			parameters.put(JRParameter.REPORT_LOCALE, lang);
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			String jasperFileName = "patient_examination";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
 
