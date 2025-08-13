@@ -6872,7 +6872,12 @@ INSERT INTO `OH_SETTINGS` (`SETT_ID`, `SETT_CODE`, `SETT_VALUE_TYPE`, `SETT_VALU
 (NULL, 'DISCHART', 'text', NULL, 'patient_dis_chart', 'patient_dis_chart', 'File name for discharges chart report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
 (NULL, 'PATIENTBILL', 'text', NULL, 'PatientBill', 'PatientBill', 'File name for patient bill report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
 (NULL, 'BILLSREPORT', 'text', NULL, 'BillsReport', 'BillsReport', 'File name for bills report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
-(NULL, 'PARAMSURL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'general');
+(NULL, 'PARAMSURL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'general'),
+(NULL, 'ORTHANC_BASE_URL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_EXPLORER_URL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_USERNAME', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_PASSWORD', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_ENABLED', 'bool', NULL, 'FALSE', 'FALSE', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration');
 /*!40000 ALTER TABLE `oh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 

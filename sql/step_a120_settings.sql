@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS OH_SETTINGS;
 CREATE TABLE OH_SETTINGS (
   SETT_ID INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Default generated ID',
   SETT_CODE VARCHAR(50) NOT NULL,
-  SETT_CATEGORY ENUM('general', 'application', 'gui', 'accounting', 'pharmacy', 'imaging', 'reports', 'security', 'telemetry') NOT NULL DEFAULT 'general',
+  SETT_CATEGORY ENUM('general', 'application', 'gui', 'accounting', 'pharmacy', 'imaging', 'reports', 'security', 'telemetry', 'integration') NOT NULL DEFAULT 'general',
   SETT_VALUE_TYPE ENUM('bool', 'number', 'text', 'select') NOT NULL DEFAULT 'text',
   SETT_VALUE_OPTIONS VARCHAR(500) NULL DEFAULT NULL COMMENT "Comma-separated list of possible values, in case of type 'select'",
   SETT_DEFAULT_VALUE VARCHAR(255) NOT NULL,
@@ -22,12 +22,12 @@ CREATE TABLE OH_SETTINGS (
 ) ENGINE=InnoDB;
 
 -- Create permissions for settings
-INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (172,'settings.read','','1',NULL,NULL,NULL,NULL);
-INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (173,'settings.update','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (174,'settings.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (175,'settings.update','','1',NULL,NULL,NULL,NULL);
 
 -- Assign setting permissions to admin group
-INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (317,'admin',172,'1',NULL,NULL,NULL,NULL);
-INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (318,'admin',173,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (321,'admin',174,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (322,'admin',175,'1',NULL,NULL,NULL,NULL);
 
 -- Load settings into the database
 INSERT INTO `OH_SETTINGS` (`SETT_ID`, `SETT_CODE`, `SETT_VALUE_TYPE`, `SETT_VALUE_OPTIONS`, `SETT_DEFAULT_VALUE`, `SETT_VALUE`, `SETT_DESCRIPTION`, `SETT_CREATED_BY`, `SETT_LAST_MODIFIED_BY`, `SETT_CREATED_DATE`, `SETT_LAST_MODIFIED_DATE`, `SETT_ACTIVE`, `SETT_NEED_RESTART`, `SETT_CATEGORY`) VALUES
@@ -84,4 +84,9 @@ INSERT INTO `OH_SETTINGS` (`SETT_ID`, `SETT_CODE`, `SETT_VALUE_TYPE`, `SETT_VALU
 (NULL, 'DISCHART', 'text', NULL, 'patient_dis_chart', 'patient_dis_chart', 'File name for discharges chart report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
 (NULL, 'PATIENTBILL', 'text', NULL, 'PatientBill', 'PatientBill', 'File name for patient bill report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
 (NULL, 'BILLSREPORT', 'text', NULL, 'BillsReport', 'BillsReport', 'File name for bills report', 'admin', NULL, NOW(), NULL, 1, 1, 'reports'),
-(NULL, 'PARAMSURL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'general');
+(NULL, 'PARAMSURL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'general'),
+(NULL, 'ORTHANC_BASE_URL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_EXPLORER_URL', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_USERNAME', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_PASSWORD', 'text', NULL, '', '', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ORTHANC_ENABLED', 'bool', NULL, 'FALSE', 'FALSE', NULL, 'admin', NULL, NOW(), NULL, 1, 1, 'integration');

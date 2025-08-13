@@ -28,5 +28,5 @@ package org.isf.settings.model;
  * @since v1.15
  */
 public enum SettingCategory {
-	general, telemetry, security, imaging, accounting, reports, pharmacy, gui, application
+	general, telemetry, security, imaging, accounting, reports, pharmacy, gui, application, integration
 }
