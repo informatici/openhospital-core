@@ -34,6 +34,7 @@ public class Tests extends OHCoreTestCase {
 	@BeforeAll
 	static void setUpClass() {
 		testEncounter = new TestEncounter();
+		testPatient = new TestPatient();
 	}
 
 	@BeforeEach
