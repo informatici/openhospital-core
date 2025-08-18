@@ -115,3 +115,4 @@ source step_a118_add_radiology_permissions.sql;
 source step_a119_alter_table_examrow_and_laboratoryrow.sql
 source step_a120_settings.sql;
 source step_a121_update_patient_table.sql;
+source step_a122_add_encounter_settings.sql;
