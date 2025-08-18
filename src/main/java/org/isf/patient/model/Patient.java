@@ -143,6 +143,30 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
 	private char deleted = 'N';
 
+	@Column(name="PAT_COMMUNE")
+	private String commune;
+
+	@Column(name="PAT_ETHNIC")
+	private String ethnic;
+
+	@Column(name="PAT_FATHER_OCCUPATION")
+	private String fatherOccupation;
+
+	@Column(name="PAT_FATHER_AGE")
+	private int fatherAge;
+
+	@Column(name="PAT_FATHER_PHONE")
+	private String fatherPhone;
+
+	@Column(name="PAT_MOTHER_OCCUPATION")
+	private String motherOccupation;
+
+	@Column(name="PAT_MOTHER_AGE")
+	private int motherAge;
+
+	@Column(name="PAT_MOTHER_PHONE")
+	private String motherPhone;
+
 	/**
 	 * field for "ui"
 	 * NOTE: to be replaced with {@link PatientHistory}
@@ -223,10 +247,10 @@ public class Patient extends Auditable<String> {
 	}
 
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
-			String address, String city, String nextKin, String telephone,
-			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatus, char parentTogether, String personalCode,
-			String maritalStatus, String profession) { //Changed EduLev with bloodType
+				   String address, String city, String nextKin, String telephone,
+				   String motherName, char mother, String fatherName, char father,
+				   String bloodType, char economicStatus, char parentTogether, String personalCode,
+				   String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.name = this.firstName + ' ' + this.secondName;
@@ -251,10 +275,10 @@ public class Patient extends Auditable<String> {
 	}
 
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
-			String address, String city, String nextKin, String telephone, String note,
-			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatus, char parentTogether, String taxCode,
-			String maritalStatus, String profession) { //Changed EduLev with bloodType
+				   String address, String city, String nextKin, String telephone, String note,
+				   String motherName, char mother, String fatherName, char father,
+				   String bloodType, char economicStatus, char parentTogether, String taxCode,
+				   String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -283,7 +307,6 @@ public class Patient extends Auditable<String> {
 	public PatientConsensus getPatientConsensus() {
 		return patientConsensus;
 	}
-
 
 	public void setPatientConsensus(PatientConsensus patientConsensus) {
 		this.patientConsensus = patientConsensus;
@@ -498,6 +521,70 @@ public class Patient extends Auditable<String> {
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
+	}
+
+	public String getCommune() {
+		return commune;
+	}
+
+	public void setCommune(String commune) {
+		this.commune = commune;
+	}
+
+	public String getEthnic() {
+		return ethnic;
+	}
+
+	public void setEthnic(String ethnic) {
+		this.ethnic = ethnic;
+	}
+
+	public String getFatherOccupation() {
+		return fatherOccupation;
+	}
+
+	public void setFatherOccupation(String fatherOccupation) {
+		this.fatherOccupation = fatherOccupation;
+	}
+
+	public int getFatherAge() {
+		return fatherAge;
+	}
+
+	public void setFatherAge(int fatherAge) {
+		this.fatherAge = fatherAge;
+	}
+
+	public String getFatherPhone() {
+		return fatherPhone;
+	}
+
+	public void setFatherPhone(String fatherPhone) {
+		this.fatherPhone = fatherPhone;
+	}
+
+	public String getMotherOccupation() {
+		return motherOccupation;
+	}
+
+	public void setMotherOccupation(String motherOccupation) {
+		this.motherOccupation = motherOccupation;
+	}
+
+	public int getMotherAge() {
+		return motherAge;
+	}
+
+	public void setMotherAge(int motherAge) {
+		this.motherAge = motherAge;
+	}
+
+	public String getMotherPhone() {
+		return motherPhone;
+	}
+
+	public void setMotherPhone(String motherPhone) {
+		this.motherPhone = motherPhone;
 	}
 
 	/**
