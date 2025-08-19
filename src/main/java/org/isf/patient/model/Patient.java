@@ -547,11 +547,11 @@ public class Patient extends Auditable<String> {
 		this.fatherOccupation = fatherOccupation;
 	}
 
-	public int getFatherAge() {
+	public Integer getFatherAge() {
 		return fatherAge;
 	}
 
-	public void setFatherAge(int fatherAge) {
+	public void setFatherAge(Integer fatherAge) {
 		this.fatherAge = fatherAge;
 	}
 
@@ -571,11 +571,11 @@ public class Patient extends Auditable<String> {
 		this.motherOccupation = motherOccupation;
 	}
 
-	public int getMotherAge() {
+	public Integer getMotherAge() {
 		return motherAge;
 	}
 
-	public void setMotherAge(int motherAge) {
+	public void setMotherAge(Integer motherAge) {
 		this.motherAge = motherAge;
 	}
 
