@@ -153,7 +153,7 @@ public class Patient extends Auditable<String> {
 	private String fatherOccupation;
 
 	@Column(name="PAT_FATHER_AGE")
-	private int fatherAge;
+	private Integer fatherAge;
 
 	@Column(name="PAT_FATHER_PHONE")
 	private String fatherPhone;
@@ -162,7 +162,7 @@ public class Patient extends Auditable<String> {
 	private String motherOccupation;
 
 	@Column(name="PAT_MOTHER_AGE")
-	private int motherAge;
+	private Integer motherAge;
 
 	@Column(name="PAT_MOTHER_PHONE")
 	private String motherPhone;
