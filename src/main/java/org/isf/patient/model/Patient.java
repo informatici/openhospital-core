@@ -153,7 +153,7 @@ public class Patient extends Auditable<String> {
 	private String fatherOccupation;
 
 	@Column(name="PAT_FATHER_AGE")
-	private int fatherAge;
+	private Integer fatherAge;
 
 	@Column(name="PAT_FATHER_PHONE")
 	private String fatherPhone;
@@ -162,7 +162,7 @@ public class Patient extends Auditable<String> {
 	private String motherOccupation;
 
 	@Column(name="PAT_MOTHER_AGE")
-	private int motherAge;
+	private Integer motherAge;
 
 	@Column(name="PAT_MOTHER_PHONE")
 	private String motherPhone;
@@ -547,11 +547,11 @@ public class Patient extends Auditable<String> {
 		this.fatherOccupation = fatherOccupation;
 	}
 
-	public int getFatherAge() {
+	public Integer getFatherAge() {
 		return fatherAge;
 	}
 
-	public void setFatherAge(int fatherAge) {
+	public void setFatherAge(Integer fatherAge) {
 		this.fatherAge = fatherAge;
 	}
 
@@ -571,11 +571,11 @@ public class Patient extends Auditable<String> {
 		this.motherOccupation = motherOccupation;
 	}
 
-	public int getMotherAge() {
+	public Integer getMotherAge() {
 		return motherAge;
 	}
 
-	public void setMotherAge(int motherAge) {
+	public void setMotherAge(Integer motherAge) {
 		this.motherAge = motherAge;
 	}
 
