@@ -432,8 +432,8 @@ class Tests extends OHCoreTestCase {
 		Patient patient = this.setupTestPatient(false);
 		PatientExamination patientExamination =  testPatientExamination.setup(patient, true);
 
-		patientExamination.setPex_body_mass_index(54);
-		patientExamination.setPex_branchial_perimeter(167);
+		patientExamination.setPex_body_mass_index(54.0);
+		patientExamination.setPex_branchial_perimeter(167.0);
 
 		PatientExamination patientExaminationSaved = examinationIoOperationRepository.save(patientExamination);
 
