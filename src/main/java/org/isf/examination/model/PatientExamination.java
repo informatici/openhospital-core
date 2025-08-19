@@ -121,10 +121,10 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	private int lock;
 
 	@Column(name="PEX_BODY_MASS_INDEX")
-	private int pex_body_mass_index;
+	private Integer pex_body_mass_index;
 
 	@Column(name = "PEX_BRANCHIAL_PERIMETER")
-	private int pex_branchial_perimeter;
+	private Integer pex_branchial_perimeter;
 	
 	@Transient
 	private volatile int hashCode;
@@ -429,19 +429,19 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 
 	public void setLock(int lock) { this.lock = lock; }
 
-	public int getPex_body_mass_index() {
+	public Integer getPex_body_mass_index() {
 		return pex_body_mass_index;
 	}
 
-	public void setPex_body_mass_index(int pex_body_mass_index) {
+	public void setPex_body_mass_index(Integer pex_body_mass_index) {
 		this.pex_body_mass_index = pex_body_mass_index;
 	}
 
-	public int getPex_branchial_perimeter() {
+	public Integer getPex_branchial_perimeter() {
 		return pex_branchial_perimeter;
 	}
 
-	public void setPex_branchial_perimeter(int pex_branchial_perimeter) {
+	public void setPex_branchial_perimeter(Integer pex_branchial_perimeter) {
 		this.pex_branchial_perimeter = pex_branchial_perimeter;
 	}
 
