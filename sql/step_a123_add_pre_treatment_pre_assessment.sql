@@ -1,0 +1,4 @@
+-- Add pre admission treatment and assessment columns
+ALTER TABLE OH_ADMISSION
+    ADD COLUMN ADM_PRE_TREATMENT TEXT NULL,
+    ADD COLUMN ADM_PRE_ASSESSMENT TEXT NULL;
