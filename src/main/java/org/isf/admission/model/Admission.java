@@ -164,6 +164,28 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@Column(name = "ADM_PRG_DATE_ABORT")        // SQL type: datetime
 	private LocalDateTime abortDate;    // ADM_PRG_DATE_ABORT
 
+	/**
+	 * Treatment received by the patient before admission.
+	 * <p>
+	 * Example: medication, outpatient care, prior therapy.
+	 */
+	@Column(
+		name = "ADM_PRE_TREATMENT",
+		columnDefinition = "TEXT"
+	)
+	private String preTreatment;
+
+	/**
+	 * Assessment performed before the patient's admission.
+	 * <p>
+	 * Example: preliminary examinations, lab results, medical observations.
+	 */
+	@Column(
+		name = "ADM_PRE_ASSESSMENT",
+		columnDefinition = "TEXT"
+	)
+	private String preAssessment;
+
 	@Column(name = "ADM_USR_ID_A")
 	private String userID;                    // the user ID
 
@@ -247,6 +269,60 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.abortDate = TimeTools.truncateToSeconds(abortDate);
 		this.userID = userID;
 		this.deleted = deleted;
+	}
+
+	/**
+	 * Creates a new Admission with all attributes including pre-admission treatment and assessment.
+	 *
+	 * @param id               the unique identifier of the admission
+	 * @param admitted         flag indicating if the patient is admitted (1 = admitted, 0 = not admitted)
+	 * @param type             the type of admission (e.g., emergency, scheduled)
+	 * @param ward             the ward to which the patient is assigned
+	 * @param prog             the progressive number of the admission
+	 * @param patient          the patient associated with this admission
+	 * @param admDate          the admission date and time
+	 * @param admType          the admission type
+	 * @param fhu              the first health unit (if applicable)
+	 * @param diseaseIn        the disease at admission
+	 * @param diseaseOut1      the primary disease at discharge
+	 * @param diseaseOut2      the secondary disease at discharge
+	 * @param diseaseOut3      the tertiary disease at discharge
+	 * @param disDate          the discharge date and time
+	 * @param disType          the discharge type
+	 * @param note             free notes about the admission
+	 * @param transUnit        transfusion units administered
+	 * @param visitDate        date of the last visit during admission
+	 * @param pregTreatmentType pregnancy treatment type if applicable
+	 * @param deliveryDate     delivery date if applicable
+	 * @param deliveryType     delivery type if applicable
+	 * @param deliveryResult   delivery result if applicable
+	 * @param weight           newborn weight if applicable
+	 * @param ctrlDate1        first control date after admission
+	 * @param ctrlDate2        second control date after admission
+	 * @param abortDate        abortion date if applicable
+	 * @param userID           the identifier of the user who created the admission
+	 * @param deleted          deletion flag ('Y' or 'N')
+	 * @param preTreatment     treatment received by the patient before admission
+	 * @param preAssessment    assessment performed before the patient's admission
+	 */
+	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient,
+		LocalDateTime admDate, AdmissionType admType, String fhu,
+		Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
+		LocalDateTime disDate, DischargeType disType, String note, Float transUnit,
+		LocalDateTime visitDate, PregnantTreatmentType pregTreatmentType,
+		LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult,
+		Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
+		LocalDateTime abortDate, String userID, char deleted,
+		String preTreatment, String preAssessment) {
+
+		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
+			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
+			disDate, disType, note, transUnit, visitDate,
+			pregTreatmentType, deliveryDate, deliveryType, deliveryResult, weight,
+			ctrlDate1, ctrlDate2, abortDate, userID, deleted);
+
+		this.preTreatment = preTreatment;
+		this.preAssessment = preAssessment;
 	}
 
 	public Float getTransUnit() {
@@ -479,6 +555,22 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setYProg(int prog) {
 		this.yProg = prog;
+	}
+
+	public String getPreTreatment() {
+		return preTreatment;
+	}
+
+	public void setPreTreatment(String preTreatment) {
+		this.preTreatment = preTreatment;
+	}
+
+	public String getPreAssessment() {
+		return preAssessment;
+	}
+
+	public void setPreAssessment(String preAssessment) {
+		this.preAssessment = preAssessment;
 	}
 
 	@Override
