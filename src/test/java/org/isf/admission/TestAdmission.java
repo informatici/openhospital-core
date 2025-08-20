@@ -24,6 +24,7 @@ package org.isf.admission;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.admtype.model.AdmissionType;
@@ -60,6 +61,7 @@ public class TestAdmission {
 	private char deleted = 'N';
 	private String preTreatment = "medication, outpatient care, prior therapy";
 	private String preAssessment = "preliminary examinations, lab results, medical observations";
+	private List<String> conditionAtAdmission = List.of("shocked");
 
 	public Admission setup(
 			Ward ward,
@@ -86,7 +88,7 @@ public class TestAdmission {
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, conditionAtAdmission);
 		}
 
 		return admission;
@@ -135,6 +137,7 @@ public class TestAdmission {
 		admission.setYProg(yProg);
 		admission.setPreTreatment(preTreatment);
 		admission.setPreAssessment(preAssessment);
+		admission.setConditionAtAdmission(conditionAtAdmission);
 	}
 
 	public void check(Admission admission) {
@@ -157,6 +160,7 @@ public class TestAdmission {
 
 		assertThat(admission.getPreTreatment()).isEqualTo(preTreatment);
 		assertThat(admission.getPreAssessment()).isEqualTo(preAssessment);
+		assertThat(admission.getConditionAtAdmission()).isEqualTo(conditionAtAdmission);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();
