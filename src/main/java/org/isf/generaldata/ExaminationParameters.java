@@ -128,8 +128,11 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	public static int BODY_MASS_INDEX;
 	private static final int DEFAULT_BODY_MASS_INDEX = 0;
 
-	public static int BRANCHIAL_PERIMETER;
-	private static final int DEFAULT_BRANCHIAL_PERIMETER = 0;
+	public static int BRANCHIAL_PERIMETER_MIN;
+	private static final int DEFAULT_BRANCHIAL_PERIMETER_MIN = 5;
+	
+	public static int BRANCHIAL_PERIMETER_MAX;
+	private static final int DEFAULT_BRANCHIAL_PERIMETER_MAX = 60;
 
 	private static ExaminationParameters mySingleData;
 
@@ -174,6 +177,11 @@ public final class ExaminationParameters extends ConfigurationProperties {
 		RR_INIT = myGetProperty("RR_INIT", DEFAULT_RR_INIT);
 
 		LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
+		
+		BODY_MASS_INDEX = myGetProperty("BMI", DEFAULT_BODY_MASS_INDEX);
+		
+		BRANCHIAL_PERIMETER_MIN = myGetProperty("PB_MIN", DEFAULT_BRANCHIAL_PERIMETER_MIN);
+		BRANCHIAL_PERIMETER_MAX = myGetProperty("PB_MAX", DEFAULT_BRANCHIAL_PERIMETER_MAX);
 	}
 
 	public static ExaminationParameters getExaminationParameters() {
