@@ -114,4 +114,8 @@ source step_a117_fix_ward_pharmacy.sql;
 source step_a118_add_radiology_permissions.sql;
 source step_a119_alter_table_examrow_and_laboratoryrow.sql
 source step_a120_settings.sql;
+source step_a121_update_patient_table.sql;
+source step_a122_add_encounter_settings.sql;
+source step_a123_add_pre_treatment_pre_assessment.sql;
+source step_a124_add_condition_at_admission.sql;
 source step_a125_create_table_oh_antecedent.sql;
