@@ -359,4 +359,21 @@ public class MedicalHistory {
 	public void setOtherFamilyPathologies(String otherFamilyPathologies) {
 		this.otherFamilyPathologies = otherFamilyPathologies;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		MedicalHistory that = (MedicalHistory) obj;
+
+		if (id == null || that.id == null) return false;
+
+		return id.equals(that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
 }
