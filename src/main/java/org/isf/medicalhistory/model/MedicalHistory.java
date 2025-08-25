@@ -18,88 +18,88 @@ import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "OH_MEDICALHISTORY")
+@Table(name = "OH_ANTECEDENT")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "MH_CREATED_BY", updatable = false))
-@AttributeOverride(name = "createdDate", column = @Column(name = "MH_CREATED_DATE", updatable = false))
-@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MH_LAST_MODIFIED_BY"))
-@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MH_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "ANTE_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "ANTE_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ANTE_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ANTE_LAST_MODIFIED_DATE"))
 public class MedicalHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MH_PAT_ID", nullable = false)
+	@JoinColumn(name = "ANTE_PAT_ID", nullable = false)
 	private Patient patient;
 
-	@Column(name = "MH_SIBLI_RANK")
+	@Column(name = "ANTE_SIBLI_RANK")
 	private Integer siblingRank;
 
-	@Column(name = "MH_TERM_PREG")
+	@Column(name = "ANTE_TERM_PREG")
 	private String termPregnancy;
 
-	@Column(name = "MH_DLV_MODE")
+	@Column(name = "ANTE_DLV_MODE")
 	private String deliveryMode;
 
-	@Column(name = "MH_APGAR_SCORE")
+	@Column(name = "ANTE_APGAR_SCORE")
 	private  String apgarScore;
 
-	@Column(name = "MH_BIRTH_WGHT")
+	@Column(name = "ANTE_BIRTH_WGHT")
 	private Double birthWeight;
 
-	@Column(name = "MH_VACC_STATE")
+	@Column(name = "ANTE_VACC_STATE")
 	private String vaccinationState;
 
-	@Column(name = "MH_ANTI_MLRIAL_PROPHY")
+	@Column(name = "ANTE_ANTI_MLRIAL_PROPHY")
 	private String antiMalarialProphylaxis;
 
-	@Column(name = "MH_DIET")
+	@Column(name = "ANTE_DIET")
 	private String diet;
 
-	@Column(name = "MH_DEPARASITI")
+	@Column(name = "ANTE_DEPARASITI")
 	private String deParasitization;
 
-	@Column(name = "MH_PSYCHOMOTOR_DEV")
+	@Column(name = "ANTE_PSYCHOMOTOR_DEV")
 	private String psychomotorDev;
 
-	@Column(name = "MH_SOMATIC_GRWTH")
+	@Column(name = "ANTE_SOMATIC_GRWTH")
 	private String somaticGrowth;
 
-	@Column(name = "MH_IRON_SUPP")
+	@Column(name = "ANTE_IRON_SUPP")
 	private Boolean ironSupplement;
 
-	@Column(name = "MH_FOLIC_ACID_SUPP")
+	@Column(name = "ANTE_FOLIC_ACID_SUPP")
 	private Boolean folicAcidSupplement;
 
-	@Column(name = "MH_VIT_A_SUPP")
+	@Column(name = "ANTE_VIT_A_SUPP")
 	private Boolean vitASupplement;
 
-	@Column(name = "MH_OTHR_SUPP")
+	@Column(name = "ANTE_OTHR_SUPP")
 	private String otherSupplements;
 
-	@Column(name = "MH_TRANSFU")
+	@Column(name = "ANTE_TRANSFU")
 	private Boolean transfusion;
 
-	@Column(name = "MH_LAST_TRANSFU_DATE")
+	@Column(name = "ANTE_LAST_TRANSFU_DATE")
 	private LocalDateTime lastTransfusionDate;
 
-	@Column(name = "MH_SICLE_CELL")
+	@Column(name = "ANTE_SICLE_CELL")
 	private Boolean sickleCell;
 
-	@Column(name = "MH_DRG_ALRGY")
+	@Column(name = "ANTE_DRG_ALRGY")
 	private Boolean drugAllergy;
 
-	@Column(name = "MH_ALRGY_PREC")
+	@Column(name = "ANTE_ALRGY_PREC")
 	private String allergyPrecision;
 
-	@Column(name = "MH_HEMYLOSIS")
+	@Column(name = "ANTE_HEMYLOSIS")
 	private String hemylosis;
 
-	@Column(name = "MH_OTHR_PERSONAL_PATHO")
+	@Column(name = "ANTE_OTHR_PERSONAL_PATHO")
 	private String otherPersonalPathologies;
 
-	@Column(name = "MH_OTHR_FAM_PATHO")
+	@Column(name = "ANTE_OTHR_FAM_PATHO")
 	private String otherFamilyPathologies;
 
 	public MedicalHistory() {
