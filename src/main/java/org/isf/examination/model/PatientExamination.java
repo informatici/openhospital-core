@@ -119,6 +119,12 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	@Version
 	@Column(name = "PEX_LOCK")
 	private int lock;
+
+	@Column(name="PEX_BODY_MASS_INDEX")
+	private Double pex_body_mass_index;
+
+	@Column(name = "PEX_BRANCHIAL_PERIMETER")
+	private Double pex_branchial_perimeter;
 	
 	@Transient
 	private volatile int hashCode;
@@ -146,22 +152,22 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	 * @param pex_note Extra note
 	 */
 	public PatientExamination(
-			LocalDateTime pex_date, 
-			Patient patient, 
-			Integer pex_height, 
-			Double pex_weight, 
-			Integer pex_ap_min, 
-			Integer pex_ap_max, 
-			Integer pex_hr, 
-			Double pex_temp, 
-			Double pex_sat,
-			Integer pex_hgt,
-			Integer pex_diuresis,
-			String pex_diuresis_desc,
-			String pex_bowel_desc,
-			Integer pex_rr,
-			String pex_ausc,
-			String pex_note) {
+		LocalDateTime pex_date,
+		Patient patient,
+		Integer pex_height,
+		Double pex_weight,
+		Integer pex_ap_min,
+		Integer pex_ap_max,
+		Integer pex_hr,
+		Double pex_temp,
+		Double pex_sat,
+		Integer pex_hgt,
+		Integer pex_diuresis,
+		String pex_diuresis_desc,
+		String pex_bowel_desc,
+		Integer pex_rr,
+		String pex_ausc,
+		String pex_note) {
 		super();
 		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 		this.patient = patient;
@@ -422,6 +428,22 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	public int getLock() { return lock; }
 
 	public void setLock(int lock) { this.lock = lock; }
+
+	public Double getPex_body_mass_index() {
+		return pex_body_mass_index;
+	}
+
+	public void setPex_body_mass_index(Double pex_body_mass_index) {
+		this.pex_body_mass_index = pex_body_mass_index;
+	}
+
+	public Double getPex_branchial_perimeter() {
+		return pex_branchial_perimeter;
+	}
+
+	public void setPex_branchial_perimeter(Double pex_branchial_perimeter) {
+		this.pex_branchial_perimeter = pex_branchial_perimeter;
+	}
 
 	@Override
 	public int compareTo(PatientExamination o) {
