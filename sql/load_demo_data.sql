@@ -6877,7 +6877,8 @@ INSERT INTO `OH_SETTINGS` (`SETT_ID`, `SETT_CODE`, `SETT_VALUE_TYPE`, `SETT_VALU
 (NULL, 'ORTHANCEXPLORERURL', 'text', NULL, '', '', 'URL of ORTHANC explorer', 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
 (NULL, 'ORTHANCUSERNAME', 'text', NULL, '', '', 'Username of the user to use to authenticate ORTHANC API calls', 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
 (NULL, 'ORTHANCPASSWORD', 'text', NULL, '', '', 'Password of the user to use to authenticate ORTHANC API calls', 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
-(NULL, 'ORTHANCENABLED', 'bool', NULL, 'FALSE', 'FALSE', 'Whether to enable integration with ORTHANC or not', 'admin', NULL, NOW(), NULL, 1, 1, 'integration');
+(NULL, 'ORTHANCENABLED', 'bool', NULL, 'FALSE', 'FALSE', 'Whether to enable integration with ORTHANC or not', 'admin', NULL, NOW(), NULL, 1, 1, 'integration'),
+(NULL, 'ENCOUNTERS_ENABLED', 'bool', NULL, 'FALSE', 'FALSE', 'Whether to enable XMPP module or not', 'admin', NULL, NOW(), NULL, 1, 1, 'general');
 /*!40000 ALTER TABLE `oh_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
