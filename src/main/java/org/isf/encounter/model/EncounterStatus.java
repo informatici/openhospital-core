@@ -1,4 +1,4 @@
-package org.isf.encouter.model;
+package org.isf.encounter.model;
 
 
 public enum EncounterStatus {

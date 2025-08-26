@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.encouter.model;
+package org.isf.encounter.model;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -27,21 +27,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
-import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_ENCOUTER")
+@Table(name="OH_ENCOUNTER")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "ENC_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "ENC_CREATED_DATE", updatable = false))
@@ -53,7 +49,7 @@ public class Encounter extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ENC_ID", nullable = false, unique = true)
-    private int id;
+    private Integer id;
 
     @Column(name="ENC_CODE", nullable = false, unique = true)
     private String code;
@@ -62,59 +58,57 @@ public class Encounter extends Auditable<String> {
     @Column(name="ENC_STATUS", nullable = false)
     private EncounterStatus status = EncounterStatus.OPEN;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ENC_PAT_ID", nullable = false)
-    private Patient patient;
+    @Column(name = "ENC_PAT_ID", nullable = false)
+    private Integer patientCode;
     
     @Version
 	@Column(name="ENC_LOCK")
 	private int lock;
 
-	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getCode() {
 		return code;
 	}
 
-	
 	public void setCode(String code) {
 		this.code = code;
 	}
-
 	
 	public EncounterStatus getStatus() {
 		return status;
 	}
-
 	
 	public void setStatus(EncounterStatus status) {
 		this.status = status;
 	}
 
-	
-	public Patient getPatient() {
-		return patient;
+	public Integer getPatientCode() {
+		return patientCode;
 	}
 
-	
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setPatientCode(Integer patientId) {
+		this.patientCode = patientId;
 	}
 
-	
 	public int getLock() {
 		return lock;
 	}
 
-	
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
 
-
-	public Encounter(String code, EncounterStatus status, Patient patient) {
+	public Encounter(String code, EncounterStatus status, Integer patientCode) {
 		this.code = code;
 		this.status = status;
-		this.patient = patient;
+		this.patientCode = patientCode;
 	}
 
 	public Encounter(String code, EncounterStatus status) {

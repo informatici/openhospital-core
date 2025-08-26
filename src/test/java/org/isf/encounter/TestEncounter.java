@@ -23,8 +23,8 @@ package org.isf.encounter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.encouter.model.Encounter;
-import org.isf.encouter.model.EncounterStatus;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.utils.exception.OHException;
 
 public class TestEncounter {

@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
+import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
-import org.isf.encouter.manager.EncounterBrowserManager;
-import org.isf.encouter.model.Encounter;
-import org.isf.encouter.model.EncounterStatus;
+import org.isf.encounter.manager.EncounterBrowserManager;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -55,8 +56,8 @@ public class Tests extends OHCoreTestCase {
     void getEncountersByPatient_shouldReturnEncounters() throws OHServiceException, OHException {
         String code = setupEncounter(true);
         Encounter firstEncounter = encounterBrowserManager.getEncountersByCode(code);
-        Integer patientCode = firstEncounter.getPatient().getCode();
-        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatient());
+        Integer patientCode = firstEncounter.getPatientCode();
+        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatientCode());
         secondEncounter = encounterBrowserManager.saveEncounter(secondEncounter);
         List<Encounter> patientEncounters = encounterBrowserManager.getEncountersByPatient(patientCode);  
 
@@ -76,15 +77,23 @@ public class Tests extends OHCoreTestCase {
          assertEquals(code, encounterSave.getCode());
     }
 
-	
+	@Test
+	void getCurrentEncounter_shouldReturnEncounter() throws OHServiceException, OHException {
+		String code = setupEncounter(false);
+		Encounter encounterSaved = encounterBrowserManager.getEncountersByCode(code);
+		Encounter currentEncounter = encounterBrowserManager.getCurrentEncounter(encounterSaved.getPatientCode());
+		// Assert
+		assertNotNull(currentEncounter);
+		assertEquals(code, currentEncounter.getCode());
+	}
+
 	private String setupEncounter(boolean usingSet) throws OHException, OHServiceException {
 		Patient patient = testPatient.setup(false);
+		Patient patientSaved = patientIoOperationRepository.saveAndFlush(patient);
 		Encounter encounter = testEncounter.setup(false);
-		encounter.setPatient(patient);
-		
-		patientIoOperationRepository.saveAndFlush(patient);
+		encounter.setPatientCode(patientSaved.getCode());
 		encounter = encounterBrowserManager.saveEncounter(encounter);
-		
+		Assert.isNonEmpty(encounter);
 		return encounter.getCode();
 	}
 }

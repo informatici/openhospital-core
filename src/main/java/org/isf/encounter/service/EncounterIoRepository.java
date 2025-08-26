@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.encouter.service;
+package org.isf.encounter.service;
 
 import java.util.List;
 
-import org.isf.encouter.model.Encounter;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,8 +33,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterIoRepository extends JpaRepository<Encounter, Integer> {
 	
-	@Query(value = "select e from Encounter e where e.patient.id = :patientId")
+	@Query(value = "select e from Encounter e where e.patientCode = :patientId")
     List<Encounter> findByPatient(@Param("patientId") Integer patientId);
 
 	Encounter findByCode(String code);
+
+	Encounter findByPatientCodeAndStatus(Integer patientCode, EncounterStatus encounterStatus);
 }

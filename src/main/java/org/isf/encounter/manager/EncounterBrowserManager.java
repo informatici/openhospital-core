@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.encouter.manager;
+package org.isf.encounter.manager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.isf.encouter.model.Encounter;
-import org.isf.encouter.service.EncounterIoRepository;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
+import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
@@ -70,23 +70,49 @@ public class EncounterBrowserManager {
 	 * Method that returns the {@link Encounter} with specified codes.
 	 *
 	 * @param code - the encounter code.
-	 * @return the {@link Patient}.
+	 * @return the {@link Encounter}.
 	 * @throws OHServiceException
 	 */
     public Encounter getEncountersByCode(String code) throws OHServiceException {
-        return encounterIoRepository.findByCode(code);
+		return encounterIoRepository.findByCode(code);
     }
+
+	/**
+	 * Method that returns the open {@link Encounter} with patient code.
+	 *
+	 * @param patientCode - the patient code.
+	 * @return the {@link Encounter}.
+	 * @throws OHServiceException
+	 */
+	public Encounter getCurrentEncounter(Integer patientCode) throws OHServiceException {
+		return encounterIoRepository.findByPatientCodeAndStatus(patientCode, EncounterStatus.OPEN);
+	}
+
+	/**
+	 * Method that returns the {@link Encounter} with id.
+	 *
+	 * @param encounterId - the encounter id.
+	 * @return the {@link Encounter}.
+	 * @throws OHServiceException
+	 */
+	public Encounter getEncounterById(int encounterId) throws OHServiceException {
+		return encounterIoRepository.findById(encounterId).orElse(null);
+	}
     
     /**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param Encounter
+	 * @param encounter
 	 * @throws OHDataValidationException
 	 */
-	protected void validateEncounter(Encounter encounter) throws OHDataValidationException {
+	protected void validateEncounter(Encounter encounter) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (StringUtils.isEmpty(encounter.getCode())) {
+		if (encounter.getPatientCode() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertpatientcode.msg")));
+		}
+
+		if (encounter.getCode() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertcode.msg")));
 		}
 		
