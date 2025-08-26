@@ -1,4 +1,4 @@
-package org.isf.MedicalHistory;
+package org.isf.medicalhistory;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

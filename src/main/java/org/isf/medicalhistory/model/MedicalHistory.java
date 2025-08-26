@@ -18,7 +18,7 @@ import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "OH_MEDICALHISTORY")
+@Table(name = "OH_MEDICAL_HISTORY")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MH_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MH_CREATED_DATE", updatable = false))
@@ -60,7 +60,7 @@ public class MedicalHistory {
 	@Column(name = "MH_DEPARASITI")
 	private String deParasitization;
 
-	@Column(name = "MH_PSYCHOMOTOR_DEV")
+	@Column(name = "ANTE_PSYCHOMOTOR_DEV")
 	private String psychomotorDev;
 
 	@Column(name = "MH_SOMATIC_GRWTH")

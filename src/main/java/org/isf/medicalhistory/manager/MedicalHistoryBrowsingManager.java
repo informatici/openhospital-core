@@ -2,8 +2,6 @@ package org.isf.medicalhistory.manager;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-
 import org.isf.medicalhistory.model.MedicalHistory;
 import org.isf.medicalhistory.service.MedicalHistoryIoOperations;
 import org.isf.utils.exception.OHServiceException;
