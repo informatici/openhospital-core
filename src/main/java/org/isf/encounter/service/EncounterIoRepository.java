@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterIoRepository extends JpaRepository<Encounter, Integer> {
 	
-	@Query(value = "select e from Encounter e where e.patientCode = :patientId")
+	@Query(value = "select e from Encounter e where e.patient.code = :patientId")
     List<Encounter> findByPatient(@Param("patientId") Integer patientId);
 
 	Encounter findByCode(String code);

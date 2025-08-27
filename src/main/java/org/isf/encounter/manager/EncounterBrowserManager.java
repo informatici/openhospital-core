@@ -28,7 +28,6 @@ import org.isf.encounter.model.Encounter;
 import org.isf.encounter.model.EncounterStatus;
 import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.generaldata.MessageBundle;
-import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -108,8 +107,8 @@ public class EncounterBrowserManager {
 	protected void validateEncounter(Encounter encounter) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (encounter.getPatientCode() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertpatientcode.msg")));
+		if (encounter.getPatient() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertpatient.msg")));
 		}
 
 		if (encounter.getCode() == null) {

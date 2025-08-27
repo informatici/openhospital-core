@@ -21,18 +21,9 @@
  */
 package org.isf.encounter.model;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -58,8 +49,9 @@ public class Encounter extends Auditable<String> {
     @Column(name="ENC_STATUS", nullable = false)
     private EncounterStatus status = EncounterStatus.OPEN;
 
-    @Column(name = "ENC_PAT_ID", nullable = false)
-    private Integer patientCode;
+	@ManyToOne
+    @JoinColumn(name = "ENC_PAT_ID", nullable = false)
+    private Patient patient;
     
     @Version
 	@Column(name="ENC_LOCK")
@@ -89,12 +81,12 @@ public class Encounter extends Auditable<String> {
 		this.status = status;
 	}
 
-	public Integer getPatientCode() {
-		return patientCode;
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public void setPatientCode(Integer patientId) {
-		this.patientCode = patientId;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	public int getLock() {
@@ -105,10 +97,10 @@ public class Encounter extends Auditable<String> {
 		this.lock = lock;
 	}
 
-	public Encounter(String code, EncounterStatus status, Integer patientCode) {
+	public Encounter(String code, EncounterStatus status, Patient patient) {
 		this.code = code;
 		this.status = status;
-		this.patientCode = patientCode;
+		this.patient = patient;
 	}
 
 	public Encounter(String code, EncounterStatus status) {

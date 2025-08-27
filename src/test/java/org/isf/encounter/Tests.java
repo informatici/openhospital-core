@@ -56,10 +56,10 @@ public class Tests extends OHCoreTestCase {
     void getEncountersByPatient_shouldReturnEncounters() throws OHServiceException, OHException {
         String code = setupEncounter(true);
         Encounter firstEncounter = encounterBrowserManager.getEncountersByCode(code);
-        Integer patientCode = firstEncounter.getPatientCode();
-        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatientCode());
+        Patient patient = firstEncounter.getPatient();
+        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatient());
         secondEncounter = encounterBrowserManager.saveEncounter(secondEncounter);
-        List<Encounter> patientEncounters = encounterBrowserManager.getEncountersByPatient(patientCode);  
+        List<Encounter> patientEncounters = encounterBrowserManager.getEncountersByPatient(patient.getCode());
 
         // Assert
         assertNotNull(patientEncounters);
@@ -81,7 +81,7 @@ public class Tests extends OHCoreTestCase {
 	void getCurrentEncounter_shouldReturnEncounter() throws OHServiceException, OHException {
 		String code = setupEncounter(false);
 		Encounter encounterSaved = encounterBrowserManager.getEncountersByCode(code);
-		Encounter currentEncounter = encounterBrowserManager.getCurrentEncounter(encounterSaved.getPatientCode());
+		Encounter currentEncounter = encounterBrowserManager.getCurrentEncounter(encounterSaved.getPatient().getCode());
 		// Assert
 		assertNotNull(currentEncounter);
 		assertEquals(code, currentEncounter.getCode());
@@ -91,7 +91,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		Patient patientSaved = patientIoOperationRepository.saveAndFlush(patient);
 		Encounter encounter = testEncounter.setup(false);
-		encounter.setPatientCode(patientSaved.getCode());
+		encounter.setPatient(patientSaved);
 		encounter = encounterBrowserManager.saveEncounter(encounter);
 		Assert.isNonEmpty(encounter);
 		return encounter.getCode();
