@@ -43,11 +43,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 @Entity
-@Table(name = "OH_MEDICAL_HISTORY")
+@Table(name = "OH_MEDICALHISTORY")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MH_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MH_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MH_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MH_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MH_LAST_MODIFIED_DATE"))
 public class MedicalHistory extends Auditable<String> implements Comparable<PatientExamination> {
 	
