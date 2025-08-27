@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalHistoryIoOperations {
+	
 	private final MedicalHistoryIoOperationRepository repository;
 
 	public MedicalHistoryIoOperations(MedicalHistoryIoOperationRepository repository) {
