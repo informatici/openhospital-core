@@ -83,7 +83,7 @@ public class MedicalHistoryBrowsingManager {
 	 * @return the fetched {@link MedicalHistory}
 	 * @throws OHServiceException when fails to fetch the {@link MedicalHistory}
 	 */
-	public MedicalHistory getMedicalHistoryById(Integer id) throws OHServiceException {
+	public MedicalHistory getMedicalHistoryById(int id) throws OHServiceException {
 		return ioOperations.getMedicalHistoryById(id);
 	}
 }

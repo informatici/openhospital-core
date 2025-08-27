@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor = OHServiceException.class)
+@Transactional(readOnly = true)
 @TranslateOHServiceException
 public class MedicalHistoryIoOperations {
 	
@@ -64,7 +64,7 @@ public class MedicalHistoryIoOperations {
 	 * @return the fetched {@link MedicalHistory}
 	 * @throws OHServiceException when fails to fetch the {@link MedicalHistory}
 	 */
-	public MedicalHistory getMedicalHistoryById(Integer id) throws OHServiceException {
-		return repository.getReferenceById(id);
+	public MedicalHistory getMedicalHistoryById(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 }
