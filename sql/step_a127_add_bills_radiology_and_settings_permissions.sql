@@ -1,26 +1,21 @@
-INSERT INTO oh_permissions(P_NAME, P_ACTIVE)
-VALUES
-    ('bills.create', 1),('bills.read', 1),('bills.update', 1),('bills.delete', 1),('radiology.read', 1),('settings.read', 1),('settings.update', 1);
-
-INSERT INTO oh_grouppermission (GP_UG_ID_A, GP_P_ID_A, GP_ACTIVE)
-VALUES
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'bills.create'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'bills.read'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'bills.update'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'bills.delete'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'radiology.read'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'settings.read'), '1'),
-('admin', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'settings.update'), '1');
 
 
-INSERT INTO oh_grouppermission (GP_UG_ID_A, GP_P_ID_A, GP_ACTIVE)
-VALUES
-('doctor', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'bills.read'), '1'),
-('doctor', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'radiology.read'), '1');
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (176,'bills.create','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (177,'bills.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (178,'bills.update','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (179,'bills.delete','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (180,'radiology.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (181,'settings.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (182,'settings.update','','1',NULL,NULL,NULL,NULL);
 
-
-INSERT INTO oh_grouppermission (GP_UG_ID_A, GP_P_ID_A, GP_ACTIVE)
-VALUES
-('laboratorist', (SELECT P_ID_A FROM oh_permissions WHERE P_NAME = 'radiology.read'), '1');
-
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (323,'admin',173,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (324,'admin',174,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (325,'admin',175,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (326,'admin',176,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (327,'admin',177,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (328,'admin',178,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (329,'admin',179,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (330,'doctor',174,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (331,'doctor',177,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` (`GP_ID`, `GP_UG_ID_A`, `GP_P_ID_A`, `GP_ACTIVE`, `GP_CREATED_BY`, `GP_CREATED_DATE`, `GP_LAST_MODIFIED_BY`, `GP_LAST_MODIFIED_DATE`) VALUES (332,'laboratorist',177,'1',NULL,NULL,NULL,NULL);
 
