@@ -65,9 +65,10 @@ public class ConditioningBrowserManager {
 
 
 	/**
-	 * Valide un objet Conditioning avant enregistrement.
-	 * @param conditioning l'objet à valider
-	 * @throws OHServiceException si une règle n'est pas respectée
+	 * Validate a {@link Conditioning} object before saving.
+	 *
+	 * @param conditioning the object to validate
+	 * @throws OHServiceException if any validation rule is violated
 	 */
 	public void validateConditioning(Conditioning conditioning) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
