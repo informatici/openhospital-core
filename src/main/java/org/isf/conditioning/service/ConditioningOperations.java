@@ -22,7 +22,6 @@
 package org.isf.conditioning.service;
 
 import org.isf.conditioning.model.Conditioning;
-import org.isf.menu.model.User;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
@@ -85,14 +84,4 @@ public class ConditioningOperations {
 		return operationRepository.findByPatientCode(patientCode);
 	}
 
-	/**
-	 * Returns all the stored {@link Conditioning} with the specified username.
-	 *
-	 * @param userName - the username.
-	 * @return the retrieved conditionings.
-	 * @throws OHServiceException
-	 */
-	public List<Conditioning> getConditioningByUserName(String userName) {
-		return operationRepository.findByUserName(userName);
-	}
 }

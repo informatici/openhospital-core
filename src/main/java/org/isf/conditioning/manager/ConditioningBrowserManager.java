@@ -44,7 +44,7 @@ public class ConditioningBrowserManager {
 	/**
 	 * Inserts a new conditioning.
 	 *
-	 * @param conditioning the conditioning to insert.
+	 * @param conditioning - the conditioning to insert.
 	 * @return {@code true} if the conditioning has been successfully inserted, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -65,19 +65,9 @@ public class ConditioningBrowserManager {
 	}
 
 	/**
-	 * Retrieve an existing {@link Conditioning} by its userName.
+	 * Retrieve all existing {@link Conditioning} by patient code.
 	 *
-	 * @param userName - The conditioning userName
-	 * @return found {@link Conditioning} if present, or {@code null} if not found
-	 * @throws OHServiceException When the retrieval operation fails
-	 */
-	public List<Conditioning> getConditioningByUserName(String userName) throws OHServiceException {
-		return conditioningOperations.getConditioningByUserName(userName);
-	}
-
-	/**
-	 * Retrieve all existing {@link Conditioning} records.
-	 *
+	 * @param patientCode - the patient code.
 	 * @return a list of {@link Conditioning} objects, empty if none found
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
@@ -89,7 +79,7 @@ public class ConditioningBrowserManager {
 	/**
 	 * Validate and update an existing {@link Conditioning}.
 	 *
-	 * @param conditioning Conditioning entity to validate and update
+	 * @param conditioning - Conditioning entity to validate and update
 	 * @return updated {@link Conditioning} if successful
 	 * @throws OHServiceException When validation or update operation fails
 	 */
@@ -105,7 +95,7 @@ public class ConditioningBrowserManager {
 	 * @param conditioning the object to validate
 	 * @throws OHServiceException if any validation rule is violated
 	 */
-	public void validateConditioning(Conditioning conditioning) throws OHServiceException {
+	private void validateConditioning(Conditioning conditioning) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (conditioning == null) {

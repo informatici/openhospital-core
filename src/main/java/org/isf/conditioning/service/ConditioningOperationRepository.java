@@ -33,7 +33,4 @@ import java.util.List;
 public interface ConditioningOperationRepository extends JpaRepository<Conditioning, Integer> {
 	@Query("select co from Conditioning co where co.patient.code =:patientCode")
 	List<Conditioning> findByPatientCode( @Param("patientCode") int patientCode);
-
-	@Query("select co from Conditioning co where co.performBy.userName =:userName")
-	List<Conditioning> findByUserName(@Param("userName") String userName);
 }
