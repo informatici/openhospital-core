@@ -23,8 +23,17 @@ package org.isf.conditioning.service;
 
 import org.isf.conditioning.model.Conditioning;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ConditioningOperationRepository extends JpaRepository<Conditioning, Integer> {
+	@Query("select co from Conditioning co where co.patient.code =:patientCode")
+	List<Conditioning> findByPatientCode( @Param("patientCode") int patientCode);
+
+	@Query("select co from Conditioning co where co.performBy.userName =:userName")
+	List<Conditioning> findByUserName(@Param("userName") String userName);
 }

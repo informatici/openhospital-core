@@ -24,6 +24,7 @@ package org.isf.conditioning.model;
 import com.drew.lang.annotations.NotNull;
 import jakarta.persistence.*;
 import org.isf.menu.model.User;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -72,14 +73,19 @@ public class Conditioning extends Auditable<String> {
 	private String others;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "COND_US_ID")
 	private User performBy;
 
 	@Column(name = "COND_PERFORM_AT")
 	private LocalDateTime performAt;
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, User performBy, LocalDateTime performAt) {
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "COND_PAT_ID")
+	private Patient patient;
+
+	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, User performBy, LocalDateTime performAt, Patient patient) {
 		this.id = id;
 		this.aspiration = aspiration;
 		this.mceDuree = mceDuree;
@@ -92,6 +98,7 @@ public class Conditioning extends Auditable<String> {
 		this.others = others;
 		this.performBy = performBy;
 		this.performAt = performAt;
+		this.patient = patient;
 	}
 
 	public Conditioning() {
@@ -191,5 +198,13 @@ public class Conditioning extends Auditable<String> {
 
 	public void setPerformAt(LocalDateTime performAt) {
 		this.performAt = performAt;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 }

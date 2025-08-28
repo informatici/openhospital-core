@@ -21,17 +21,13 @@
  */
 package org.isf.conditioning.service;
 
-import org.isf.admission.model.Admission;
 import org.isf.conditioning.model.Conditioning;
-import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.User;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,13 +41,24 @@ public class ConditioningOperations {
 	}
 
 	/**
+	 * Inserts a new conditioning.
+	 *
+	 * @param conditioning the conditioning to insert.
+	 * @return the new/saved Conditioning object.
+	 * @throws OHServiceException if an error occurs during the insertion.
+	 */
+	public Conditioning newConditioning(Conditioning conditioning) throws OHServiceException {
+		return operationRepository.save(conditioning);
+	}
+
+	/**
 	 * Retrieve an existing {@link Conditioning} by its ID.
 	 *
 	 * @param id - The conditioning id
 	 * @return found {@link Conditioning} if present, or {@code null} if not found
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
-	public Conditioning getConditioning(int id) throws OHServiceException {
+	public Conditioning getConditioningById(int id) throws OHServiceException {
 		return operationRepository.findById(id).orElse(null);
 	}
 
@@ -67,4 +74,25 @@ public class ConditioningOperations {
 	}
 
 
+	/**
+	 * Returns all the stored {@link Conditioning} with the specified patient code.
+	 *
+	 * @param patientCode - the patient code.
+	 * @return the retrieved conditionings.
+	 * @throws OHServiceException
+	 */
+	public List<Conditioning> getConditioningByPatientCode(int patientCode) throws OHServiceException {
+		return operationRepository.findByPatientCode(patientCode);
+	}
+
+	/**
+	 * Returns all the stored {@link Conditioning} with the specified username.
+	 *
+	 * @param userName - the username.
+	 * @return the retrieved conditionings.
+	 * @throws OHServiceException
+	 */
+	public List<Conditioning> getConditioningByUserName(String userName) {
+		return operationRepository.findByUserName(userName);
+	}
 }

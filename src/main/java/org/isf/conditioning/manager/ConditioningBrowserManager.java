@@ -25,6 +25,7 @@ import org.isf.conditioning.model.Conditioning;
 import org.isf.conditioning.service.ConditioningOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.User;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
@@ -41,15 +42,49 @@ public class ConditioningBrowserManager {
 	}
 
 	/**
+	 * Inserts a new conditioning.
+	 *
+	 * @param conditioning the conditioning to insert.
+	 * @return {@code true} if the conditioning has been successfully inserted, {@code false} otherwise.
+	 * @throws OHServiceException
+	 */
+	public Conditioning newConditioning(Conditioning conditioning) throws OHServiceException {
+		validateConditioning(conditioning);
+		return conditioningOperations.newConditioning(conditioning);
+	}
+
+	/**
 	 * Retrieve an existing {@link Conditioning} by its ID.
 	 *
 	 * @param id - The conditioning id
 	 * @return found {@link Conditioning} if present, or {@code null} if not found
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
-	public Conditioning getConditioning(int id) throws OHServiceException {
-		return conditioningOperations.getConditioning(id);
+	public Conditioning getConditioningById(int id) throws OHServiceException {
+		return conditioningOperations.getConditioningById(id);
 	}
+
+	/**
+	 * Retrieve an existing {@link Conditioning} by its userName.
+	 *
+	 * @param userName - The conditioning userName
+	 * @return found {@link Conditioning} if present, or {@code null} if not found
+	 * @throws OHServiceException When the retrieval operation fails
+	 */
+	public List<Conditioning> getConditioningByUserName(String userName) throws OHServiceException {
+		return conditioningOperations.getConditioningByUserName(userName);
+	}
+
+	/**
+	 * Retrieve all existing {@link Conditioning} records.
+	 *
+	 * @return a list of {@link Conditioning} objects, empty if none found
+	 * @throws OHServiceException When the retrieval operation fails
+	 */
+	public List<Conditioning> getConditioningByPatientCode(int patientCode) throws OHServiceException {
+		return conditioningOperations.getConditioningByPatientCode(patientCode);
+	}
+
 
 	/**
 	 * Validate and update an existing {@link Conditioning}.
@@ -74,46 +109,44 @@ public class ConditioningBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (conditioning == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Conditioning ne peut pas être null.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Conditioning most not be null.")));
 		}
 
 		User performer = conditioning.getPerformBy();
 		if (performer == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Le champ performBy est obligatoire.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("User is mandatory.")));
 		}
 
 		if (conditioning.getMceDuree() != null && conditioning.getMceDuree() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("mceDuree ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("mceDuree should be positif.")));
 		}
 		if (conditioning.getVentilationDuree() != null && conditioning.getVentilationDuree() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("ventilationDuree ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("ventilationDuree should be positif.")));
 		}
 
 		if (conditioning.getOxygeneDebit() != null && conditioning.getOxygeneDebit() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("oxygeneDebit ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("oxygeneDebit should be positif.")));
 		}
 		if (conditioning.getSgVolume() != null && conditioning.getSgVolume() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sgVolume ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sgVolume should be positif.")));
 		}
 		if (conditioning.getDiazepamDose() != null && conditioning.getDiazepamDose() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("diazepamDose ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("diazepamDose should be positif.")));
 		}
 		if (conditioning.getBolusSsVolume() != null && conditioning.getBolusSsVolume() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("bolusSsVolume ne peut pas être négatif.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("bolusSsVolume should be positif.")));
 		}
 
 		if (conditioning.getPerformAt() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt est obligatoire.")));
-		}
-		if (conditioning.getPerformAt().isAfter(java.time.LocalDateTime.now())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt ne peut pas être dans le futur.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt is required.")));
 		}
 
 		if (conditioning.getSngNumero() != null && conditioning.getSngNumero().length() > 50) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sngNumero trop long (max 50 caractères).")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sngNumero should have 50 caraters max.")));
 		}
-		if (conditioning.getOthers() != null && conditioning.getOthers().length() > 255) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("others trop long (max 255 caractères).")));
+
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
 		}
 	}
 }
