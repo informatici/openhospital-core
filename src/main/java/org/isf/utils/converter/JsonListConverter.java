@@ -43,7 +43,7 @@ public class JsonListConverter implements AttributeConverter<List<String>, Strin
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
         try {
-            return mapper.writeValueAsString(attribute);
+            return mapper.writeValueAsString(attribute == null ? List.of() : attribute);
         } catch (Exception e) {
             LOGGER.error("Error converting list to JSON", e);
             return null;
@@ -53,7 +53,7 @@ public class JsonListConverter implements AttributeConverter<List<String>, Strin
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
         try {
-            return mapper.readValue(dbData, new TypeReference<>() {});
+            return dbData == null ? List.of() : mapper.readValue(dbData, new TypeReference<>() {});
         } catch (Exception e) {
             LOGGER.error("Error reading JSON", e);
             return null;
