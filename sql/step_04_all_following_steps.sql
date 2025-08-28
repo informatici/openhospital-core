@@ -120,3 +120,4 @@ source step_a123_add_pre_treatment_pre_assessment.sql;
 source step_a124_add_condition_at_admission.sql;
 source step_a125_create_table_oh_antecedent.sql;
 source step_a126_update_patientexamination_table.sql;
+source step_a127_create_conditioning_table.sql;
