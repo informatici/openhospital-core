@@ -47,7 +47,7 @@ public class ConditioningOperations {
 	/**
 	 * Retrieve an existing {@link Conditioning} by its ID.
 	 *
-	 * @param id Conditioning ID
+	 * @param id - The conditioning id
 	 * @return found {@link Conditioning} if present, or {@code null} if not found
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
@@ -58,7 +58,7 @@ public class ConditioningOperations {
 	/**
 	 * Update an existing {@link Conditioning}.
 	 *
-	 * @param conditioning Conditioning entity to update
+	 * @param conditioning - The Conditioning entity to update
 	 * @return updated {@link Conditioning} if successful
 	 * @throws OHServiceException When the update operation fails
 	 */

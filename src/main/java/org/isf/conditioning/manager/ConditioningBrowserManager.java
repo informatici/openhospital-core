@@ -43,7 +43,7 @@ public class ConditioningBrowserManager {
 	/**
 	 * Retrieve an existing {@link Conditioning} by its ID.
 	 *
-	 * @param id Conditioning ID
+	 * @param id - The conditioning id
 	 * @return found {@link Conditioning} if present, or {@code null} if not found
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
