@@ -40,6 +40,13 @@ public class ConditioningBrowserManager {
 		this.conditioningOperations = conditioningOperations;
 	}
 
+	/**
+	 * Retrieve an existing {@link Conditioning} by its ID.
+	 *
+	 * @param id Conditioning ID
+	 * @return found {@link Conditioning} if present, or {@code null} if not found
+	 * @throws OHServiceException When the retrieval operation fails
+	 */
 	public Conditioning getConditioning(int id) throws OHServiceException {
 		return conditioningOperations.getConditioning(id);
 	}
