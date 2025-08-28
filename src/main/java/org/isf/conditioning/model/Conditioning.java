@@ -3,12 +3,20 @@ package org.isf.conditioning.model;
 import com.drew.lang.annotations.NotNull;
 import jakarta.persistence.*;
 import org.isf.menu.model.User;
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "OH_CONDITIONING")
-public class Conditioning {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name="createdBy", column=@Column(name="COND_CREATED_BY", updatable = false))
+@AttributeOverride(name="createdDate", column=@Column(name="COND_CREATED_DATE", updatable = false))
+@AttributeOverride(name="lastModifiedBy", column=@Column(name="COND_LAST_MODIFIED_BY"))
+@AttributeOverride(name="active", column=@Column(name="COND_ACTIVE"))
+@AttributeOverride(name="lastModifiedDate", column=@Column(name="COND_LAST_MODIFIED_DATE"))
+public class Conditioning extends Auditable<String> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,38 +26,31 @@ public class Conditioning {
 	@Column(name = "COND_ASPIRATION")
 	private Boolean aspiration;
 
-	@NotNull
 	@Column(name = "COND_DUREE_MCE")
 	private Integer mceDuree;
 
-	@NotNull
 	@Column(name = "COND_DUREE_VENTILATION")
 	private Integer ventilationDuree;
 
-	@NotNull
 	@Column(name = "COND_DEBIT_OXYGENE")
 	private Double oxygeneDebit;
 
-	@NotNull
 	@Column(name = "COND_SG_VOLUME")
 	private Double sgVolume;
 
-	@NotNull
 	@Column(name = "COND_DIAZEPAM_DOSE")
 	private Double diazepamDose;
 
-	@NotNull
 	@Column(name = "COND_BOLUS_SS_VOLUME")
 	private Double bolusSsVolume;
 
-	@NotNull
 	@Column(name = "COND_SNG_NUMERO")
 	private String sngNumero;
 
-	@NotNull
 	@Column(name = "COND_OTHERS")
 	private String others;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "COND_US_ID")
 	private User performBy;
