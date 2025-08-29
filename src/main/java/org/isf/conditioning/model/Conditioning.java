@@ -84,6 +84,10 @@ public class Conditioning extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name = "COND_PAT_ID")
 	private Patient patient;
+	
+	@Version
+	@Column(name="COND_LOCK")
+	private int lock;
 
 	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, User performBy, LocalDateTime performAt, Patient patient) {
 		this.id = id;
@@ -206,5 +210,13 @@ public class Conditioning extends Auditable<String> {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+	
+	public int getLock() {
+		return lock;
+	}
+	
+	public void setLock(int lock) {
+		this.lock = lock;
 	}
 }
