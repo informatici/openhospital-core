@@ -2,17 +2,7 @@ package org.isf.medicalhistory.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,6 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class MedicalHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MH_ID")
 	private Integer id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -84,7 +75,7 @@ public class MedicalHistory {
 	@Column(name = "MH_LAST_TRANSFU_DATE")
 	private LocalDateTime lastTransfusionDate;
 
-	@Column(name = "MH_SICLE_CELL")
+	@Column(name = "MH_SICKLE_CELL")
 	private Boolean sickleCell;
 
 	@Column(name = "MH_DRG_ALRGY")
@@ -101,6 +92,10 @@ public class MedicalHistory {
 
 	@Column(name = "MH_OTHR_FAM_PATHO")
 	private String otherFamilyPathologies;
+
+	@Version
+	@Column(name = "MH_LOCK")
+	private int lock;
 
 	public MedicalHistory() {
 
@@ -358,5 +353,12 @@ public class MedicalHistory {
 
 	public void setOtherFamilyPathologies(String otherFamilyPathologies) {
 		this.otherFamilyPathologies = otherFamilyPathologies;
+	}
+	public int getLock() {
+		return lock;
+	}
+
+	public void setLock(int lock) {
+		this.lock = lock;
 	}
 }
