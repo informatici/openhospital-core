@@ -1,11 +1,46 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalhistory.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
+import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.drew.lang.annotations.NotNull;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "OH_MEDICALHISTORY")
@@ -13,15 +48,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "createdBy", column = @Column(name = "MH_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MH_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MH_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MH_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MH_LAST_MODIFIED_DATE"))
-public class MedicalHistory {
+public class MedicalHistory extends Auditable<String> implements Comparable<PatientExamination> {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MH_ID")
 	private Integer id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MH_PAT_ID", nullable = false)
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "MH_PAT_ID")
 	private Patient patient;
 
 	@Column(name = "MH_SIBLI_RANK")
@@ -75,7 +113,7 @@ public class MedicalHistory {
 	@Column(name = "MH_LAST_TRANSFU_DATE")
 	private LocalDateTime lastTransfusionDate;
 
-	@Column(name = "MH_SICKLE_CELL")
+	@Column(name = "MH_SICLE_CELL")
 	private Boolean sickleCell;
 
 	@Column(name = "MH_DRG_ALRGY")
@@ -96,6 +134,9 @@ public class MedicalHistory {
 	@Version
 	@Column(name = "MH_LOCK")
 	private int lock;
+	
+	@Transient
+	private volatile int hashCode;
 
 	public MedicalHistory() {
 
@@ -360,5 +401,38 @@ public class MedicalHistory {
 
 	public void setLock(int lock) {
 		this.lock = lock;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		
+		if (!(obj instanceof MedicalHistory mh)) {
+			return false;
+		}
+
+		return (id == mh.getId());
+	}
+	
+	@Override
+	public int hashCode() {
+	    if (this.hashCode == 0) {
+	        final int m = 23;
+	        int c = 133;
+	        
+	        c = m * c + id;
+	        
+	        this.hashCode = c;
+	    }
+	  
+	    return this.hashCode;
+	}
+
+	@Override
+	public int compareTo(PatientExamination o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
