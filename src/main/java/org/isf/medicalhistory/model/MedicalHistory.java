@@ -403,6 +403,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.lock = lock;
 	}
 
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
