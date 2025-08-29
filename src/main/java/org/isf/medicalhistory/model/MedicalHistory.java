@@ -113,7 +113,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_LAST_TRANSFU_DATE")
 	private LocalDateTime lastTransfusionDate;
 
-	@Column(name = "MH_SICLE_CELL")
+	@Column(name = "MH_SIKCLE_CELL")
 	private Boolean sickleCell;
 
 	@Column(name = "MH_DRG_ALRGY")
