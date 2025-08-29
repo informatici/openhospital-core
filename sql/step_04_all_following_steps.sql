@@ -121,3 +121,4 @@ source step_a124_add_condition_at_admission.sql;
 source step_a125_create_table_oh_medical_history.sql;
 source step_a126_update_patient_examination_table.sql;
 source step_a127_create_table_oh_encounter.sql;
+source step_a128_create_conditioning_table.sql;
