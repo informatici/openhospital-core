@@ -30,7 +30,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ConditioningOperationRepository extends JpaRepository<Conditioning, Integer> {
+public interface ConditioningIoOperationRepository extends JpaRepository<Conditioning, Integer> {
 	@Query("select co from Conditioning co where co.patient.code =:patientCode")
 	List<Conditioning> findByPatientCode( @Param("patientCode") int patientCode);
 }

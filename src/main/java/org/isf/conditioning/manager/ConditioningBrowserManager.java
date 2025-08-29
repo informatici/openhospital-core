@@ -22,7 +22,7 @@
 package org.isf.conditioning.manager;
 
 import org.isf.conditioning.model.Conditioning;
-import org.isf.conditioning.service.ConditioningOperations;
+import org.isf.conditioning.service.ConditioningIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.User;
 import org.isf.utils.exception.OHDataValidationException;
@@ -35,10 +35,10 @@ import java.util.List;
 
 @Component
 public class ConditioningBrowserManager {
-	private final ConditioningOperations conditioningOperations;
+	private final ConditioningIoOperations conditioningIoOperations;
 
-	public ConditioningBrowserManager(ConditioningOperations conditioningOperations) {
-		this.conditioningOperations = conditioningOperations;
+	public ConditioningBrowserManager(ConditioningIoOperations conditioningOperations) {
+		this.conditioningIoOperations = conditioningOperations;
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class ConditioningBrowserManager {
 	 */
 	public Conditioning newConditioning(Conditioning conditioning) throws OHServiceException {
 		validateConditioning(conditioning);
-		return conditioningOperations.newConditioning(conditioning);
+		return conditioningIoOperations.newConditioning(conditioning);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ConditioningBrowserManager {
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
 	public Conditioning getConditioningById(int id) throws OHServiceException {
-		return conditioningOperations.getConditioningById(id);
+		return conditioningIoOperations.getConditioningById(id);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class ConditioningBrowserManager {
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
 	public List<Conditioning> getConditioningByPatientCode(int patientCode) throws OHServiceException {
-		return conditioningOperations.getConditioningByPatientCode(patientCode);
+		return conditioningIoOperations.getConditioningByPatientCode(patientCode);
 	}
 
 
@@ -85,7 +85,7 @@ public class ConditioningBrowserManager {
 	 */
 	public Conditioning updateConditioning(Conditioning conditioning) throws OHServiceException {
 		validateConditioning(conditioning);
-		return conditioningOperations.updateConditioning(conditioning);
+		return conditioningIoOperations.updateConditioning(conditioning);
 	}
 
 

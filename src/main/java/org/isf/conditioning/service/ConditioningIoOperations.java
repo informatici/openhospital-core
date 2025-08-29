@@ -32,11 +32,12 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class ConditioningOperations {
-	private final ConditioningOperationRepository operationRepository;
+public class ConditioningIoOperations {
+	
+	private final ConditioningIoOperationRepository conditioningIoOperationRepository;
 
-	public ConditioningOperations(ConditioningOperationRepository operationRepository) {
-		this.operationRepository = operationRepository;
+	public ConditioningIoOperations(ConditioningIoOperationRepository operationRepository) {
+		this.conditioningIoOperationRepository = operationRepository;
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class ConditioningOperations {
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
 	public Conditioning newConditioning(Conditioning conditioning) throws OHServiceException {
-		return operationRepository.save(conditioning);
+		return conditioningIoOperationRepository.save(conditioning);
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class ConditioningOperations {
 	 * @throws OHServiceException When the retrieval operation fails
 	 */
 	public Conditioning getConditioningById(int id) throws OHServiceException {
-		return operationRepository.findById(id).orElse(null);
+		return conditioningIoOperationRepository.findById(id).orElse(null);
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class ConditioningOperations {
 	 * @throws OHServiceException When the update operation fails
 	 */
 	public Conditioning updateConditioning(Conditioning conditioning) throws OHServiceException {
-		return operationRepository.save(conditioning);
+		return conditioningIoOperationRepository.save(conditioning);
 	}
 
 
@@ -81,7 +82,7 @@ public class ConditioningOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Conditioning> getConditioningByPatientCode(int patientCode) throws OHServiceException {
-		return operationRepository.findByPatientCode(patientCode);
+		return conditioningIoOperationRepository.findByPatientCode(patientCode);
 	}
 
 }
