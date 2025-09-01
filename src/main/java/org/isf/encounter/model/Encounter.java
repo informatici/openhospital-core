@@ -27,6 +27,8 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="OH_ENCOUNTER")
 @EntityListeners(AuditingEntityListener.class)
@@ -56,6 +58,9 @@ public class Encounter extends Auditable<String> {
     @Version
 	@Column(name="ENC_LOCK")
 	private int lock;
+
+	@Column(name = "ENC_DATE")
+	private LocalDateTime date;
 
 	public Integer getId() {
 		return id;
@@ -97,6 +102,14 @@ public class Encounter extends Auditable<String> {
 		this.lock = lock;
 	}
 
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
+
 	public Encounter(String code, EncounterStatus status, Patient patient) {
 		this.code = code;
 		this.status = status;
@@ -109,5 +122,5 @@ public class Encounter extends Auditable<String> {
 	}
 
 	public Encounter() {}
-	
+
 }
