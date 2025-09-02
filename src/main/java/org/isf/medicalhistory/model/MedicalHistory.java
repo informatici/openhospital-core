@@ -41,6 +41,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "OH_MEDICALHISTORY")
@@ -130,6 +131,10 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 
 	@Column(name = "MH_OTHR_FAM_PATHO")
 	private String otherFamilyPathologies;
+
+	@Version
+	@Column(name = "MH_LOCK")
+	private int lock;
 	
 	@Transient
 	private volatile int hashCode;
@@ -391,7 +396,15 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	public void setOtherFamilyPathologies(String otherFamilyPathologies) {
 		this.otherFamilyPathologies = otherFamilyPathologies;
 	}
+	public int getLock() {
+		return lock;
+	}
 
+	public void setLock(int lock) {
+		this.lock = lock;
+	}
+
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
