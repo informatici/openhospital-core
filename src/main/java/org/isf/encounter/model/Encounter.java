@@ -59,8 +59,8 @@ public class Encounter extends Auditable<String> {
 	@Column(name="ENC_LOCK")
 	private int lock;
 
-	@Column(name = "ENC_DATE")
-	private LocalDateTime date;
+	@Column(name = "ENC_PERFORM_AT")
+	private LocalDateTime performAt;
 
 	public Integer getId() {
 		return id;
@@ -102,12 +102,12 @@ public class Encounter extends Auditable<String> {
 		this.lock = lock;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getPerformAt() {
+		return performAt;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setPerformAt(LocalDateTime performAt) {
+		this.performAt = performAt;
 	}
 
 	public Encounter(String code, EncounterStatus status, Patient patient) {
