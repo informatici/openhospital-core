@@ -73,7 +73,7 @@ public class MedicalHistoryBrowsingManager {
 	 * @return all the {@link MedicalHistory}s for the given patient
 	 * @throws OHServiceException when fails to update the given {@link MedicalHistory}
 	 */
-	public List<MedicalHistory> getMedicalHistoriesByPatientCode(Integer patientCode) throws OHServiceException {
+	public MedicalHistory getMedicalHistoriesByPatientCode(Integer patientCode) throws OHServiceException {
 		return ioOperations.getMedicalHistoriesByPatientCode(patientCode);
 	}
 
