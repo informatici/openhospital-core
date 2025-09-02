@@ -100,6 +100,27 @@ public class Conditioning extends Auditable<String> {
 		this.patient = patient;
 	}
 
+	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose,
+					Double bolusSsVolume, String sngNumero, String others, LocalDateTime date, Patient patient, Boolean cpap, int lock) {
+		super();
+		this.id = id;
+		this.aspiration = aspiration;
+		this.mceDuree = mceDuree;
+		this.ventilationDuree = ventilationDuree;
+		this.oxygeneDebit = oxygeneDebit;
+		this.sgVolume = sgVolume;
+		this.diazepamDose = diazepamDose;
+		this.bolusSsVolume = bolusSsVolume;
+		this.sngNumero = sngNumero;
+		this.others = others;
+		this.date = date;
+		this.patient = patient;
+		this.cpap = cpap;
+		this.lock = lock;
+	}
+
+
+
 	public Conditioning() {
 	}
 
