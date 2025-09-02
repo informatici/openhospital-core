@@ -71,7 +71,7 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_OTHERS")
 	private String others;
 
-	@Column(name = "COND_DATA")
+	@Column(name = "COND_DATE")
 	private LocalDateTime date;
 
 	@NotNull
