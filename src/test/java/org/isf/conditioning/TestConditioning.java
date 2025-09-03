@@ -22,7 +22,6 @@
 package org.isf.conditioning;
 
 import org.isf.conditioning.model.Conditioning;
-import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
@@ -33,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestConditioning {
 
 	private static final Boolean ASPIRATION = true;
+	private static final Boolean CPAP = true;
 	private static final Integer MCE_DUREE = 4;
 	private static final Integer VENTILATION_DUREE = 2;
 	private static final Double OXYGENE_DEBIT = 3.0;
@@ -41,38 +41,24 @@ public class TestConditioning {
 	private static final Double BOLUS_SS_VOLUME = 3.0;
 	private static final String SNG_NUMERO = "SNG-123";
 	private static final String OTHERS = "others note";
-	private static final LocalDateTime PERFORM_AT = LocalDateTime.of(2025, 1, 1, 10, 0);
+	private static final LocalDateTime DATE = LocalDateTime.of(2025, 1, 1, 10, 0);
 	private static final int LOCK = 0;
 
-	public Conditioning setup(Patient patient, User user, boolean usingSet) throws OHException {
+	public Conditioning setup(Patient patient, boolean usingSet) throws OHException {
 		Conditioning conditioning;
 
 		if (usingSet) {
 			conditioning = new Conditioning();
-			setParameters(conditioning, patient, user);
+			setParameters(conditioning, patient);
 		} else {
-			conditioning = new Conditioning(
-				null,
-				ASPIRATION,
-				MCE_DUREE,
-				VENTILATION_DUREE,
-				OXYGENE_DEBIT,
-				SG_VOLUME,
-				DIAZEPAM_DOSE,
-				BOLUS_SS_VOLUME,
-				SNG_NUMERO,
-				OTHERS,
-				user,
-				PERFORM_AT,
-				patient
-			);
+			conditioning = new Conditioning(null, ASPIRATION, MCE_DUREE, VENTILATION_DUREE, OXYGENE_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMERO, OTHERS, DATE, patient, CPAP, LOCK);
 			conditioning.setLock(LOCK);
 		}
 
 		return conditioning;
 	}
 
-	public void setParameters(Conditioning conditioning, Patient patient, User user) {
+	public void setParameters(Conditioning conditioning, Patient patient) {
 		conditioning.setAspiration(ASPIRATION);
 		conditioning.setMceDuree(MCE_DUREE);
 		conditioning.setVentilationDuree(VENTILATION_DUREE);
@@ -82,9 +68,8 @@ public class TestConditioning {
 		conditioning.setBolusSsVolume(BOLUS_SS_VOLUME);
 		conditioning.setSngNumero(SNG_NUMERO);
 		conditioning.setOthers(OTHERS);
-		conditioning.setPerformAt(PERFORM_AT);
+		conditioning.setDate(DATE);
 		conditioning.setPatient(patient);
-		conditioning.setPerformBy(user);
 		conditioning.setLock(LOCK);
 	}
 
@@ -98,9 +83,8 @@ public class TestConditioning {
 		assertThat(conditioning.getBolusSsVolume()).isEqualTo(BOLUS_SS_VOLUME);
 		assertThat(conditioning.getSngNumero()).isEqualTo(SNG_NUMERO);
 		assertThat(conditioning.getOthers()).isEqualTo(OTHERS);
-		assertThat(conditioning.getPerformAt()).isEqualTo(PERFORM_AT);
+		assertThat(conditioning.getDate()).isEqualTo(DATE);
 		assertThat(conditioning.getLock()).isEqualTo(LOCK);
 		assertThat(conditioning.getPatient()).isNotNull();
-		assertThat(conditioning.getPerformBy()).isNotNull();
 	}
 }
