@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface MedicalHistoryIoOperationRepository extends JpaRepository<MedicalHistory, Integer> {
 	
 	@Query(value = "select mh from MedicalHistory mh where mh.patient.code = :patientCode")
-	List<MedicalHistory> findByPatientCode(@Param("patientCode") int patientCode);
+	MedicalHistory findByPatientCode(@Param("patientCode") int patientCode);
 }
