@@ -25,10 +25,6 @@ import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
 import org.isf.conditioning.manager.ConditioningBrowserManager;
 import org.isf.conditioning.model.Conditioning;
-import org.isf.menu.TestUser;
-import org.isf.menu.TestUserGroup;
-import org.isf.menu.model.User;
-import org.isf.menu.model.UserGroup;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
 import org.isf.patient.TestPatient;
@@ -50,10 +46,6 @@ public class Tests extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 
-	private static TestUser testUser;
-
-	private static TestUserGroup testUserGroup;
-
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 
@@ -70,8 +62,6 @@ public class Tests extends OHCoreTestCase {
 	static void setUpClass() {
 		testConditioning = new TestConditioning();
 		testPatient = new TestPatient();
-		testUser = new TestUser();
-		testUserGroup = new TestUserGroup();
 	}
 
 	@BeforeEach
@@ -92,7 +82,7 @@ public class Tests extends OHCoreTestCase {
 		Conditioning first = setupConditioning(false);
 		Conditioning saved = conditioningBrowserManager.newConditioning(first);
 		Patient patient = saved.getPatient();
-		Conditioning second = testConditioning.setup(patient, first.getPerformBy(), true);
+		Conditioning second = testConditioning.setup(patient, true);
 		conditioningBrowserManager.newConditioning(second);
 		List<Conditioning> list = conditioningBrowserManager.getConditioningByPatientCode(patient.getCode());
 		assertThat(list).isNotNull();
@@ -122,11 +112,7 @@ public class Tests extends OHCoreTestCase {
 	private Conditioning setupConditioning(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		Patient patientSaved = patientIoOperationRepository.saveAndFlush(patient);
-		UserGroup userGroup = testUserGroup.setup(false);
-		UserGroup userGroupSaved = userGroupIoOperationRepository.saveAndFlush(userGroup);
-		User user = testUser.setup(userGroupSaved, false);
-		User userSave = userIoOperationRepository.saveAndFlush(user);
-		Conditioning conditioning = testConditioning.setup(patientSaved, userSave, usingSet);
+		Conditioning conditioning = testConditioning.setup(patientSaved, usingSet);
 		Assert.isNonEmpty(conditioning);
 		return conditioning;
 	}

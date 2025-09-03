@@ -24,7 +24,6 @@ package org.isf.conditioning.manager;
 import org.isf.conditioning.model.Conditioning;
 import org.isf.conditioning.service.ConditioningIoOperations;
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.model.User;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -102,11 +101,6 @@ public class ConditioningBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Conditioning most not be null.")));
 		}
 
-		User performer = conditioning.getPerformBy();
-		if (performer == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("User is mandatory.")));
-		}
-
 		if (conditioning.getMceDuree() != null && conditioning.getMceDuree() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("mceDuree should be positif.")));
 		}
@@ -127,7 +121,7 @@ public class ConditioningBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("bolusSsVolume should be positif.")));
 		}
 
-		if (conditioning.getPerformAt() == null) {
+		if (conditioning.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt is required.")));
 		}
 

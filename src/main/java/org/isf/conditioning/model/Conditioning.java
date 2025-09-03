@@ -23,7 +23,6 @@ package org.isf.conditioning.model;
 
 import com.drew.lang.annotations.NotNull;
 import jakarta.persistence.*;
-import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -72,24 +71,22 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_OTHERS")
 	private String others;
 
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "COND_US_ID")
-	private User performBy;
-
-	@Column(name = "COND_PERFORM_AT")
-	private LocalDateTime performAt;
+	@Column(name = "COND_DATE")
+	private LocalDateTime date;
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "COND_PAT_ID")
 	private Patient patient;
 	
+	@Column(name = "COND_CPAP")
+	private Boolean cpap;
+	
 	@Version
 	@Column(name="COND_LOCK")
 	private int lock;
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, User performBy, LocalDateTime performAt, Patient patient) {
+	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, LocalDateTime date, Patient patient) {
 		this.id = id;
 		this.aspiration = aspiration;
 		this.mceDuree = mceDuree;
@@ -100,10 +97,29 @@ public class Conditioning extends Auditable<String> {
 		this.bolusSsVolume = bolusSsVolume;
 		this.sngNumero = sngNumero;
 		this.others = others;
-		this.performBy = performBy;
-		this.performAt = performAt;
 		this.patient = patient;
 	}
+
+	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose,
+					Double bolusSsVolume, String sngNumero, String others, LocalDateTime date, Patient patient, Boolean cpap, int lock) {
+		super();
+		this.id = id;
+		this.aspiration = aspiration;
+		this.mceDuree = mceDuree;
+		this.ventilationDuree = ventilationDuree;
+		this.oxygeneDebit = oxygeneDebit;
+		this.sgVolume = sgVolume;
+		this.diazepamDose = diazepamDose;
+		this.bolusSsVolume = bolusSsVolume;
+		this.sngNumero = sngNumero;
+		this.others = others;
+		this.date = date;
+		this.patient = patient;
+		this.cpap = cpap;
+		this.lock = lock;
+	}
+
+
 
 	public Conditioning() {
 	}
@@ -187,21 +203,21 @@ public class Conditioning extends Auditable<String> {
 	public void setOthers(String others) {
 		this.others = others;
 	}
-
-	public User getPerformBy() {
-		return performBy;
+	
+	public LocalDateTime getDate() {
+		return date;
 	}
 
-	public void setPerformBy(User performBy) {
-		this.performBy = performBy;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
-
-	public LocalDateTime getPerformAt() {
-		return performAt;
+	
+	public Boolean getCpap() {
+		return cpap;
 	}
-
-	public void setPerformAt(LocalDateTime performAt) {
-		this.performAt = performAt;
+	
+	public void setCpap(Boolean cpap) {
+		this.cpap = cpap;
 	}
 
 	public Patient getPatient() {
