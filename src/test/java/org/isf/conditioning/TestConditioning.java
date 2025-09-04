@@ -33,15 +33,15 @@ public class TestConditioning {
 
 	private static final Boolean ASPIRATION = true;
 	private static final Boolean CPAP = true;
-	private static final Integer MCE_DUREE = 4;
-	private static final Integer VENTILATION_DUREE = 2;
-	private static final Double OXYGENE_DEBIT = 3.0;
+	private static final Integer MCE = 4;
+	private static final Integer VENTILATION = 2;
+	private static final Double OXYGEN_DEBIT = 3.0;
 	private static final Double SG_VOLUME = 10.0;
 	private static final Double DIAZEPAM_DOSE = 12.0;
 	private static final Double BOLUS_SS_VOLUME = 3.0;
-	private static final String SNG_NUMERO = "SNG-123";
+	private static final String SNG_NUMBER = "SNG-123";
 	private static final String OTHERS = "others note";
-	private static final LocalDateTime DATE = LocalDateTime.of(2025, 1, 1, 10, 0);
+	private static final LocalDateTime PERFORMED_AT = LocalDateTime.of(2025, 1, 1, 10, 0);
 	private static final int LOCK = 0;
 
 	public Conditioning setup(Patient patient, boolean usingSet) throws OHException {
@@ -51,7 +51,7 @@ public class TestConditioning {
 			conditioning = new Conditioning();
 			setParameters(conditioning, patient);
 		} else {
-			conditioning = new Conditioning(null, ASPIRATION, MCE_DUREE, VENTILATION_DUREE, OXYGENE_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMERO, OTHERS, DATE, patient, CPAP, LOCK);
+			conditioning = new Conditioning(null, ASPIRATION, MCE, VENTILATION, OXYGEN_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMBER, OTHERS, PERFORMED_AT, patient, CPAP, LOCK);
 			conditioning.setLock(LOCK);
 		}
 
@@ -60,30 +60,30 @@ public class TestConditioning {
 
 	public void setParameters(Conditioning conditioning, Patient patient) {
 		conditioning.setAspiration(ASPIRATION);
-		conditioning.setMceDuree(MCE_DUREE);
-		conditioning.setVentilationDuree(VENTILATION_DUREE);
-		conditioning.setOxygeneDebit(OXYGENE_DEBIT);
+		conditioning.setMce(MCE);
+		conditioning.setVentilation(VENTILATION);
+		conditioning.setOxygenDebit(OXYGEN_DEBIT);
 		conditioning.setSgVolume(SG_VOLUME);
 		conditioning.setDiazepamDose(DIAZEPAM_DOSE);
 		conditioning.setBolusSsVolume(BOLUS_SS_VOLUME);
-		conditioning.setSngNumero(SNG_NUMERO);
+		conditioning.setSngNumber(SNG_NUMBER);
 		conditioning.setOthers(OTHERS);
-		conditioning.setDate(DATE);
+		conditioning.setPerformedAt(PERFORMED_AT);
 		conditioning.setPatient(patient);
 		conditioning.setLock(LOCK);
 	}
 
 	public void check(Conditioning conditioning) {
 		assertThat(conditioning.getAspiration()).isEqualTo(ASPIRATION);
-		assertThat(conditioning.getMceDuree()).isEqualTo(MCE_DUREE);
-		assertThat(conditioning.getVentilationDuree()).isEqualTo(VENTILATION_DUREE);
-		assertThat(conditioning.getOxygeneDebit()).isEqualTo(OXYGENE_DEBIT);
+		assertThat(conditioning.getMce()).isEqualTo(MCE);
+		assertThat(conditioning.getVentilation()).isEqualTo(VENTILATION);
+		assertThat(conditioning.getOxygenDebit()).isEqualTo(OXYGEN_DEBIT);
 		assertThat(conditioning.getSgVolume()).isEqualTo(SG_VOLUME);
 		assertThat(conditioning.getDiazepamDose()).isEqualTo(DIAZEPAM_DOSE);
 		assertThat(conditioning.getBolusSsVolume()).isEqualTo(BOLUS_SS_VOLUME);
-		assertThat(conditioning.getSngNumero()).isEqualTo(SNG_NUMERO);
+		assertThat(conditioning.getSngNumber()).isEqualTo(SNG_NUMBER);
 		assertThat(conditioning.getOthers()).isEqualTo(OTHERS);
-		assertThat(conditioning.getDate()).isEqualTo(DATE);
+		assertThat(conditioning.getPerformedAt()).isEqualTo(PERFORMED_AT);
 		assertThat(conditioning.getLock()).isEqualTo(LOCK);
 		assertThat(conditioning.getPatient()).isNotNull();
 	}

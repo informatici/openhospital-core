@@ -102,11 +102,11 @@ public class Tests extends OHCoreTestCase {
 	void updateConditioning_shouldUpdateFields() throws Exception {
 		Conditioning conditioning = setupConditioning(false);
 		Conditioning saved = conditioningBrowserManager.newConditioning(conditioning);
-		saved.setMceDuree(99);
-		saved.setSngNumero("SN-02");
+		saved.setMce(99);
+		saved.setSngNumber("SN-02");
 		Conditioning updated = conditioningBrowserManager.updateConditioning(saved);
-		assertThat(99).isEqualTo(updated.getMceDuree());
-		assertThat("SN-02").isEqualTo(updated.getSngNumero());
+		assertThat(99).isEqualTo(updated.getMce());
+		assertThat("SN-02").isEqualTo(updated.getSngNumber());
 	}
 
 	private Conditioning setupConditioning(boolean usingSet) throws OHException {
