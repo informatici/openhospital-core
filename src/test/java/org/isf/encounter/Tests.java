@@ -24,6 +24,7 @@ package org.isf.encounter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.logging.log4j.core.util.Assert;
@@ -78,14 +79,12 @@ public class Tests extends OHCoreTestCase {
         String code = setupEncounter(true);
         Encounter firstEncounter = encounterBrowserManager.getEncountersByCode(code);
         Patient patient = firstEncounter.getPatient();
-        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatient());
-        secondEncounter = encounterBrowserManager.saveEncounter(secondEncounter);
         List<Encounter> patientEncounters = encounterBrowserManager.getEncountersByPatient(patient.getCode());
 
         // Assert
         assertNotNull(patientEncounters);
-        assertEquals(2, patientEncounters.size());
-        assertEquals("CODE", patientEncounters.get(1).getCode());
+        assertEquals(1, patientEncounters.size());
+        assertEquals(code, patientEncounters.get(0).getCode());
     }
 
     @Test

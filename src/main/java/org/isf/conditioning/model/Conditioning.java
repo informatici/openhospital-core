@@ -47,14 +47,14 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_ASPIRATION")
 	private Boolean aspiration;
 
-	@Column(name = "COND_DUREE_MCE")
-	private Integer mceDuree;
+	@Column(name = "COND_MCE")
+	private Integer mce;
 
-	@Column(name = "COND_DUREE_VENTILATION")
-	private Integer ventilationDuree;
+	@Column(name = "COND_VENTILATION")
+	private Integer ventilation;
 
-	@Column(name = "COND_DEBIT_OXYGENE")
-	private Double oxygeneDebit;
+	@Column(name = "COND_OXYGEN_DEBIT")
+	private Double oxygenDebit;
 
 	@Column(name = "COND_SG_VOLUME")
 	private Double sgVolume;
@@ -65,14 +65,14 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_BOLUS_SS_VOLUME")
 	private Double bolusSsVolume;
 
-	@Column(name = "COND_SNG_NUMERO")
-	private String sngNumero;
+	@Column(name = "COND_SNG_NUMBER")
+	private String sngNumber;
 
 	@Column(name = "COND_OTHERS")
 	private String others;
 
-	@Column(name = "COND_DATE")
-	private LocalDateTime date;
+	@Column(name = "COND_PERFORMED_AT")
+	private LocalDateTime performedAt;
 
 	@NotNull
 	@ManyToOne
@@ -86,34 +86,34 @@ public class Conditioning extends Auditable<String> {
 	@Column(name="COND_LOCK")
 	private int lock;
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumero, String others, LocalDateTime date, Patient patient) {
+	public Conditioning(Integer id, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient) {
 		this.id = id;
 		this.aspiration = aspiration;
-		this.mceDuree = mceDuree;
-		this.ventilationDuree = ventilationDuree;
-		this.oxygeneDebit = oxygeneDebit;
+		this.mce = mce;
+		this.ventilation = ventilation;
+		this.oxygenDebit = oxygenDebit;
 		this.sgVolume = sgVolume;
 		this.diazepamDose = diazepamDose;
 		this.bolusSsVolume = bolusSsVolume;
-		this.sngNumero = sngNumero;
+		this.sngNumber = sngNumber;
 		this.others = others;
 		this.patient = patient;
 	}
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mceDuree, Integer ventilationDuree, Double oxygeneDebit, Double sgVolume, Double diazepamDose,
-					Double bolusSsVolume, String sngNumero, String others, LocalDateTime date, Patient patient, Boolean cpap, int lock) {
+	public Conditioning(Integer id, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
+						Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock) {
 		super();
 		this.id = id;
 		this.aspiration = aspiration;
-		this.mceDuree = mceDuree;
-		this.ventilationDuree = ventilationDuree;
-		this.oxygeneDebit = oxygeneDebit;
+		this.mce = mce;
+		this.ventilation = ventilation;
+		this.oxygenDebit = oxygenDebit;
 		this.sgVolume = sgVolume;
 		this.diazepamDose = diazepamDose;
 		this.bolusSsVolume = bolusSsVolume;
-		this.sngNumero = sngNumero;
+		this.sngNumber = sngNumber;
 		this.others = others;
-		this.date = date;
+		this.performedAt = performedAt;
 		this.patient = patient;
 		this.cpap = cpap;
 		this.lock = lock;
@@ -140,28 +140,28 @@ public class Conditioning extends Auditable<String> {
 		this.aspiration = aspiration;
 	}
 
-	public Integer getMceDuree() {
-		return mceDuree;
+	public Integer getMce() {
+		return mce;
 	}
 
-	public void setMceDuree(Integer mceDuree) {
-		this.mceDuree = mceDuree;
+	public void setMce(Integer mce) {
+		this.mce = mce;
 	}
 
-	public Integer getVentilationDuree() {
-		return ventilationDuree;
+	public Integer getVentilation() {
+		return ventilation;
 	}
 
-	public void setVentilationDuree(Integer ventilationDuree) {
-		this.ventilationDuree = ventilationDuree;
+	public void setVentilation(Integer ventilation) {
+		this.ventilation = ventilation;
 	}
 
-	public Double getOxygeneDebit() {
-		return oxygeneDebit;
+	public Double getOxygenDebit() {
+		return oxygenDebit;
 	}
 
-	public void setOxygeneDebit(Double oxygeneDebit) {
-		this.oxygeneDebit = oxygeneDebit;
+	public void setOxygenDebit(Double oxygenDebit) {
+		this.oxygenDebit = oxygenDebit;
 	}
 
 	public Double getSgVolume() {
@@ -188,12 +188,12 @@ public class Conditioning extends Auditable<String> {
 		this.bolusSsVolume = bolusSsVolume;
 	}
 
-	public String getSngNumero() {
-		return sngNumero;
+	public String getSngNumber() {
+		return sngNumber;
 	}
 
-	public void setSngNumero(String sngNumero) {
-		this.sngNumero = sngNumero;
+	public void setSngNumber(String sngNumber) {
+		this.sngNumber = sngNumber;
 	}
 
 	public String getOthers() {
@@ -204,12 +204,12 @@ public class Conditioning extends Auditable<String> {
 		this.others = others;
 	}
 	
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getPerformedAt() {
+		return performedAt;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setPerformedAt(LocalDateTime performedAt) {
+		this.performedAt = performedAt;
 	}
 	
 	public Boolean getCpap() {

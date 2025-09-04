@@ -101,14 +101,14 @@ public class ConditioningBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Conditioning most not be null.")));
 		}
 
-		if (conditioning.getMceDuree() != null && conditioning.getMceDuree() < 0) {
+		if (conditioning.getMce() != null && conditioning.getMce() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("mceDuree should be positif.")));
 		}
-		if (conditioning.getVentilationDuree() != null && conditioning.getVentilationDuree() < 0) {
+		if (conditioning.getVentilation() != null && conditioning.getVentilation() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("ventilationDuree should be positif.")));
 		}
 
-		if (conditioning.getOxygeneDebit() != null && conditioning.getOxygeneDebit() < 0) {
+		if (conditioning.getOxygenDebit() != null && conditioning.getOxygenDebit() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("oxygeneDebit should be positif.")));
 		}
 		if (conditioning.getSgVolume() != null && conditioning.getSgVolume() < 0) {
@@ -121,11 +121,11 @@ public class ConditioningBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("bolusSsVolume should be positif.")));
 		}
 
-		if (conditioning.getDate() == null) {
+		if (conditioning.getPerformedAt() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt is required.")));
 		}
 
-		if (conditioning.getSngNumero() != null && conditioning.getSngNumero().length() > 50) {
+		if (conditioning.getSngNumber() != null && conditioning.getSngNumber().length() > 50) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sngNumero should have 50 caraters max.")));
 		}
 
