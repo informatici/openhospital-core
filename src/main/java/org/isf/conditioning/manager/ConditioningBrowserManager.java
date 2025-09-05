@@ -142,7 +142,7 @@ public class ConditioningBrowserManager {
 	 * @return the list of {@link Conditioning}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public  List<Conditioning> getConditioningByPatientEncounter(Encounter encounter) throws OHServiceException {
-		return  conditioningIoOperations.getConditioningByPatientEncounter(encounter);
+	public List<Conditioning> getConditioningByPatientEncounter(Encounter encounter) throws OHServiceException {
+		return conditioningIoOperations.getConditioningByPatientEncounter(encounter);
 	}
 }
