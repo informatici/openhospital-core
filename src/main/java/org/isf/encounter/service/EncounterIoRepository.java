@@ -41,10 +41,32 @@ public interface EncounterIoRepository extends JpaRepository<Encounter, Integer>
 
 	Encounter findByPatientCodeAndStatus(Integer patientCode, EncounterStatus encounterStatus);
 
+	/**
+	 * Checks if there exists an active encounter for a given patient at a specific date.
+	 * <p>
+	 * An encounter is considered <b>active</b> at a given date if:
+	 * <ul>
+	 *   <li>{@code performedAt <= date}</li>
+	 *   <li>and ({@code closedAt IS NULL} or {@code closedAt >= date})</li>
+	 * </ul>
+	 * <p>
+	 * This ensures that the encounter started before or at the given date,
+	 * and has not yet been closed at that date (or is still ongoing).
+	 *
+	 * @param patientId the unique identifier of the patient
+	 * @param date the date to check against
+	 * @return {@code true} if there is at least one active encounter for the patient at the given date,
+	 *         {@code false} otherwise
+	 */
 	@Query("""
-    select case when count(e) > 0 then true else false end from Encounter e where e.patient.code = :patientId
-     AND e.performedAt < coalesce(:closedAt, current_timestamp) and :performedAt < coalesce(e.closedAt, current_timestamp)
+        SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END
+        FROM Encounter e
+        WHERE e.patient.id = :patientId
+          AND e.performedAt <= :date
+          AND (e.closedAt IS NULL OR e.closedAt >= :date)
     """)
-	boolean existsActiveEncounterAt(@Param("patientId") Integer patientId, @Param("performedAt") LocalDateTime performedAt, @Param("closedAt") LocalDateTime closedAt);
-
+	boolean existsActiveEncounterAt(
+		@Param("patientId") Integer patientId,
+		@Param("date") LocalDateTime date
+	);
 }

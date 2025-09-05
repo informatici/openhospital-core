@@ -123,7 +123,7 @@ public class EncounterBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt must be before closedAt")));
 		}
 
-		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt(), encounter.getClosedAt())) {
+		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("This encounter overlaps with another encounter with the same patient.")));
 		}
 		
@@ -132,8 +132,18 @@ public class EncounterBrowserManager {
 		}
 	}
 
-	private Boolean checkEncounterExisting(Integer patientCode, LocalDateTime performedAt, LocalDateTime closedAt) {
-		return encounterIoRepository.existsActiveEncounterAt(patientCode, performedAt, closedAt);
+	/**
+	 * Method that checks if there is already an active {@link Encounter}
+	 * for the given patient at the specified performed date.
+	 *
+	 * @param patientCode - the patient code.
+	 * @param performedAt - the date and time when the encounter is performed.
+	 * @return {@code true} if another active {@link Encounter} exists at the given date and time,
+	 *         {@code false} otherwise.
+	 * @throws OHServiceException if the check fails due to a repository error.
+	 */
+	private Boolean checkEncounterExisting(Integer patientCode, LocalDateTime performedAt) {
+		return encounterIoRepository.existsActiveEncounterAt(patientCode, performedAt);
 	}
 
 }
