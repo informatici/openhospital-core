@@ -49,7 +49,7 @@ public class Encounter extends Auditable<String> {
 
     @Enumerated(EnumType.STRING)
     @Column(name="ENC_STATUS")
-    private EncounterStatus status = EncounterStatus.OPEN;
+    private EncounterStatus status = EncounterStatus.ACTIVE;
 
 	@ManyToOne
     @JoinColumn(name = "ENC_PAT_ID", nullable = false)

@@ -31,6 +31,8 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -84,7 +86,7 @@ public class EncounterBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Encounter getCurrentEncounter(Integer patientCode) throws OHServiceException {
-		return encounterIoRepository.findByPatientCodeAndStatus(patientCode, EncounterStatus.OPEN);
+		return encounterIoRepository.findByPatientCodeAndStatus(patientCode, EncounterStatus.ACTIVE);
 	}
 
 	/**
@@ -96,6 +98,19 @@ public class EncounterBrowserManager {
 	 */
 	public Encounter getEncounterById(int encounterId) throws OHServiceException {
 		return encounterIoRepository.findById(encounterId).orElse(null);
+	}
+
+	/**
+	 * Finds all {@link Encounter} entities for a given patient code and encounter status.
+	 *
+	 * @param code   the unique code identifying the patient (must not be {@code null})
+	 * @param status the {@link EncounterStatus} of the encounter to filter by (must not be {@code null})
+	 * @return a list of {@link Encounter} entities matching the patient code and status,
+	 *         or an empty list if none are found
+	 * @throws OHServiceException - If an error occurs
+	 */
+	List<Encounter> findAllByPatientCodeAndStatus(Integer code,  EncounterStatus status) {
+		return  encounterIoRepository.findAllByPatientCodeAndStatus(code, status);
 	}
     
     /**
