@@ -24,10 +24,16 @@ package org.isf.medicalhistory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.manager.EncounterBrowserManager;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.medicalhistory.manager.MedicalHistoryBrowsingManager;
 import org.isf.medicalhistory.model.MedicalHistory;
 import org.isf.medicalhistory.service.MedicalHistoryIoOperationRepository;
@@ -35,6 +41,8 @@ import org.isf.medicalhistory.service.MedicalHistoryIoOperations;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +51,7 @@ public class Tests extends OHCoreTestCase {
 
 	private static TestMedicalHistory testMedicalHistory;
 	private static TestPatient testPatient = new TestPatient();
+	private static TestEncounter testEncounter = new TestEncounter();
 
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
@@ -56,6 +65,9 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	MedicalHistoryIoOperationRepository repository;
 
+	@Autowired
+	EncounterBrowserManager encounterBrowserManager;
+
 	@BeforeAll
 	static void setUpClass() {
 		testPatient = new TestPatient();
@@ -64,7 +76,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	void testServiceAddMedicalHistory() throws Exception {
-		MedicalHistory medicalHistory = setupTestMedicalHistory();
+		MedicalHistory medicalHistory = setupTestMedicalHistory(null);
 		assertThat(medicalHistory).isNotNull();
 
 		MedicalHistory medHist = ioOperations.add(medicalHistory);
@@ -75,7 +87,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	void testManagerAddMedicalHistory() throws Exception {
-		MedicalHistory medicalHistory = setupTestMedicalHistory();
+		MedicalHistory medicalHistory = setupTestMedicalHistory(null);
 		assertThat(medicalHistory).isNotNull();
 
 		MedicalHistory medHist = manager.add(medicalHistory);
@@ -86,7 +98,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	void testServiceUpdateMedicalHistory() throws Exception {
-		MedicalHistory medicalHistory = setupTestMedicalHistory();
+		MedicalHistory medicalHistory = setupTestMedicalHistory(null);
 		assertThat(medicalHistory).isNotNull();
 
 		MedicalHistory medHist = ioOperations.add(medicalHistory);
@@ -104,7 +116,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	void testManagerUpdateMedicalHistory() throws Exception {
-		MedicalHistory medicalHistory = setupTestMedicalHistory();
+		MedicalHistory medicalHistory = setupTestMedicalHistory(null);
 		assertThat(medicalHistory).isNotNull();
 
 		MedicalHistory medHist = manager.add(medicalHistory);
@@ -176,14 +188,26 @@ public class Tests extends OHCoreTestCase {
 		assertThat(medHistories).hasSize(8);
 	}
 
-	private MedicalHistory setupTestMedicalHistory() throws Exception {
-		Patient patient = testPatient.setup(false);
+	@Test
+	void testMgrGetMedicalHistoriesByEncounter() throws Exception {
+		String code = setupEncounter(false);
+		Encounter encounter = encounterBrowserManager.getEncountersByCode(code);
+		assertThat(encounter).isNotNull();
+		encounter.setClosedAt(LocalDateTime.now().plusDays(1));
+		encounterBrowserManager.saveEncounter(encounter);
+		MedicalHistory medicalHistory = setupTestMedicalHistory(encounter.getPatient());
+		List<MedicalHistory> medicalHistories = manager.getMedicalHistoriesForEncounter(encounter);
+		assertThat(medicalHistories).isNotNull();
+		assertThat(medicalHistories.size()).isEqualTo(1);
+	}
 
-		patientIoOperationRepository.saveAndFlush(patient);
+	private MedicalHistory setupTestMedicalHistory(Patient patient) throws Exception {
+		if (patient == null) {
+			Patient patientToSave = testPatient.setup(false);
+			patient = patientIoOperationRepository.saveAndFlush(patientToSave);
+		}
 		MedicalHistory medicalHistory = testMedicalHistory.createMedicalHistory(patient);
-
-		repository.saveAndFlush(medicalHistory);
-		return medicalHistory;
+		return repository.saveAndFlush(medicalHistory);
 	}
 
 	private List<MedicalHistory> setupTestMedicalHistories(int length) throws Exception {
@@ -199,5 +223,16 @@ public class Tests extends OHCoreTestCase {
 
 		return histories;
 	}
+
+	private String setupEncounter(boolean usingSet) throws OHException, OHServiceException {
+		Patient patient = testPatient.setup(false);
+		Patient patientSaved = patientIoOperationRepository.saveAndFlush(patient);
+		Encounter encounter = testEncounter.setup(false);
+		encounter.setPatient(patientSaved);
+		encounter = encounterBrowserManager.saveEncounter(encounter);
+		Assert.isNonEmpty(encounter);
+		return encounter.getCode();
+	}
+
 
 }
