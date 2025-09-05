@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.isf.encounter.model.Encounter;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.generaldata.ExaminationParameters;
@@ -319,5 +320,16 @@ public class ExaminationBrowserManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+
+	/**
+	 * Retrieves the list of {@link PatientExamination} records associated with a given {@link Encounter}.
+	 *
+	 * @param encounter the {@link Encounter} for which patient examinations should be retrieved. Must not be {@code null}.
+	 * @return a {@link List} of {@link PatientExamination} objects related to the given encounter. The list may be empty if no examinations are found.
+	 * @throws OHServiceException if an error occurs while retrieving the patient examinations from the data source.
+	 */
+	public List<PatientExamination> getPatientExaminationsForEncounter(Encounter encounter) throws OHServiceException {
+		return  ioOperations.getPatientExaminationsDateBetweenAndPatientCode(encounter);
 	}
 }

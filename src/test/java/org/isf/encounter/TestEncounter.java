@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.encounter.model.Encounter;
 import org.isf.encounter.model.EncounterStatus;
-import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
 import java.time.LocalDateTime;
