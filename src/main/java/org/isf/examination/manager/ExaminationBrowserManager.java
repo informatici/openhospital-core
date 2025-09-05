@@ -330,6 +330,6 @@ public class ExaminationBrowserManager {
 	 * @throws OHServiceException if an error occurs while retrieving the patient examinations from the data source.
 	 */
 	public List<PatientExamination> getPatientExaminationsForEncounter(Encounter encounter) throws OHServiceException {
-		return  ioOperations.getPatientExaminationsDateBetweenAndPatientCode(encounter);
+		return  ioOperations.findtExaminationsByEncounter(encounter);
 	}
 }
