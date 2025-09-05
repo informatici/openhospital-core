@@ -276,10 +276,10 @@ public class OpdIoOperations {
 		return data;
 	}
 
-    public List<Opd> getOpdByDateBetweenAndPatientCode(Encounter encounter) {
+    public List<Opd> getOpdForEncounter(Encounter encounter) {
 		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
-			return repository.findByDateBetween(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+			return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
 		}
-		return repository.findByDateBetween(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+		return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
     }
 }

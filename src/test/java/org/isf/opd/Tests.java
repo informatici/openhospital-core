@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -37,6 +38,9 @@ import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.opd.manager.OpdBrowserManager;
 import org.isf.opd.model.Opd;
@@ -58,6 +62,7 @@ import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -72,6 +77,7 @@ class Tests extends OHCoreTestCase {
 	private static TestDisease testDisease;
 	private static TestWard testWard;
 	private static TestVisit testVisit;
+	private static TestEncounter testEncounter;
 
 	@Autowired
 	OpdIoOperations opdIoOperation;
@@ -91,6 +97,8 @@ class Tests extends OHCoreTestCase {
 	DiseaseIoOperationRepository diseaseIoOperationRepository;
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
+	@Autowired
+	EncounterIoRepository encounterIoRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -100,6 +108,7 @@ class Tests extends OHCoreTestCase {
 		testDiseaseType = new TestDiseaseType();
 		testWard = new TestWard();
 		testVisit = new TestVisit();
+		testEncounter = new TestEncounter();
 	}
 
 	static Stream<Arguments> opdExtended() {
@@ -760,6 +769,29 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundOpd).isNotNull();
 		Opd lastOpd = opdBrowserManager.getLastOpd(foundOpd.getPatient().getCode());
 		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
+	}
+
+	@Test
+	void testMgrGetAdmissionsByEncounter() throws Exception {
+		int id = setupTestOpd(false);
+		Opd foundOpd = opdBrowserManager.getOpdById(id).orElse(null);
+		assertThat(foundOpd).isNotNull();
+
+		Encounter encounter = testEncounter.setup(false);
+		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
+		encounter.setPatient(foundOpd.getPatient());
+		Encounter encounterSaved = encounterIoRepository.save(encounter);
+
+		foundOpd.setDate(LocalDateTime.of(2025, 9, 2, 11, 10, 20));
+		Opd updatedAdmission = opdIoOperation.updateOpd(foundOpd);
+
+		List<Opd> opdList = opdBrowserManager.getOpdForEncounter(encounterSaved);
+
+		assertThat(opdList).isNotNull();
+		assertThat(opdList).isNotEmpty();
+		assertThat(opdList.size()).isEqualTo(1);
+		assertThat(opdList.get(0).getCode()).isEqualTo(updatedAdmission.getCode());
+		assertThat(opdList.get(0).getDate()).isEqualTo(updatedAdmission.getDate());
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")

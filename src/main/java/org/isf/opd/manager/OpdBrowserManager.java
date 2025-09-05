@@ -306,7 +306,14 @@ public class OpdBrowserManager {
 		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null, page, size);
 	}
 
-	public  List<Opd> getOpdByDateBetweenAndPatientCode(Encounter encounter) {
-		return  ioOperations.getOpdByDateBetweenAndPatientCode(encounter);
+	/**
+	 * Returns the list of Opd with encounter
+	 *
+	 * @param encounter encounter during which opds were created.
+	 * @return the list of {@link Opd}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public  List<Opd> getOpdForEncounter(Encounter encounter) throws OHServiceException {
+		return  ioOperations.getOpdForEncounter(encounter);
 	}
 }
