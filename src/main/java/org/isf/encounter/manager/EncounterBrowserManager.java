@@ -120,11 +120,11 @@ public class EncounterBrowserManager {
 		}
 
 		if (encounter.getClosedAt() != null && encounter.getPerformedAt().isAfter(encounter.getClosedAt())){
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt doit être avant closedAt")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt must be before closedAt")));
 		}
 
 		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt(), encounter.getClosedAt())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Cette rencontre chevauche une autre rencontre du même patient.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("This encounter overlaps with another encounter with the same patient.")));
 		}
 		
 		if (!errors.isEmpty()) {
