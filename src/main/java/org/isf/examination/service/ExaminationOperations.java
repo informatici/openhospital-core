@@ -126,7 +126,7 @@ public class ExaminationOperations {
 	 * @return a {@link List} of {@link PatientExamination} objects related to the given encounter. The list may be empty if no examinations are found.
 	 * @throws OHServiceException if an error occurs while retrieving the patient examinations from the data source.
 	 */
-	public List<PatientExamination> getPatientExaminationsDateBetweenAndPatientCode(Encounter encounter) throws OHServiceException {
+	public List<PatientExamination> findExaminationsByEncounter(Encounter encounter) throws OHServiceException {
 		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
 			return repository.findByDateBetween(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
 		}
