@@ -21,6 +21,7 @@
  */
 package org.isf.encounter.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +32,13 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncounterBrowserManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(EncounterBrowserManager.class);
 
 	private final EncounterIoRepository encounterIoRepository;
 
@@ -114,9 +118,22 @@ public class EncounterBrowserManager {
 		if (encounter.getCode() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertcode.msg")));
 		}
+
+		if (encounter.getClosedAt() != null && encounter.getPerformedAt().isAfter(encounter.getClosedAt())){
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt doit être avant closedAt")));
+		}
+
+		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt(), encounter.getClosedAt())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Cette rencontre chevauche une autre rencontre du même patient.")));
+		}
 		
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
+	private Boolean checkEncounterExisting(Integer patientCode, LocalDateTime performedAt, LocalDateTime closedAt) {
+		return encounterIoRepository.existsActiveEncounterAt(patientCode, performedAt, closedAt);
+	}
+
 }
