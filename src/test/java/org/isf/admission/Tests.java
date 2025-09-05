@@ -56,6 +56,9 @@ import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
 import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.operation.TestOperation;
 import org.isf.operation.model.Operation;
@@ -80,6 +83,7 @@ import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +104,7 @@ class Tests extends OHCoreTestCase {
 	private static TestPregnantTreatmentType testPregnantTreatmentType;
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
+	private static TestEncounter testEncounter;
 
 	@Autowired
 	AdmissionIoOperations admissionIoOperation;
@@ -131,6 +136,8 @@ class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	EncounterIoRepository encounterIoRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -147,6 +154,7 @@ class Tests extends OHCoreTestCase {
 		testPregnantTreatmentType = new TestPregnantTreatmentType();
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
+		testEncounter = new TestEncounter();
 	}
 
 	static Collection<Object[]> maternityRestartInJune() {
@@ -728,6 +736,28 @@ class Tests extends OHCoreTestCase {
 		List<AdmittedPatient> searchResult = admissionBrowserManager.getAdmittedPatients(null);
 		assertThat(searchResult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+	}
+
+	@Test
+	void testMgrGetAdmissionsByEncounter() throws Exception {
+		int id = setupTestAdmission(false);
+		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
+
+		Encounter encounter = testEncounter.setup(false);
+		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
+		encounter.setPatient(foundAdmission.getPatient());
+		Encounter encounterSaved = encounterIoRepository.save(encounter);
+
+		foundAdmission.setAdmDate(LocalDateTime.of(2025, 9, 2, 11, 10, 20));
+		Admission updatedAdmission = admissionIoOperation.updateAdmission(foundAdmission);
+
+		List<Admission> admissionList = admissionBrowserManager.getAdmissionsByEncounter(encounterSaved);
+
+		assertThat(admissionList).isNotNull();
+		assertThat(admissionList).isNotEmpty();
+		assertThat(admissionList.size()).isEqualTo(1);
+		assertThat(admissionList.get(0).getId()).isEqualTo(updatedAdmission.getId());
+		assertThat(admissionList.get(0).getAdmDate()).isEqualTo(updatedAdmission.getAdmDate());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
