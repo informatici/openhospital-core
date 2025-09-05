@@ -83,4 +83,8 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 
 	@Query("select count(o) from Opd o where active=1")
 	long countAllActiveOpds();
+
+	@Query(value = "select op from Opd op where op.patient.code = :patientCode and (op.date >= :performedAt and op.date < :closedAt)")
+	List<Opd> findByDateBetween(@Param("performedAt") LocalDateTime performedAt, @Param("closedAt") LocalDateTime closedAt,
+								@Param("patientCode") Integer patientCode);
 }

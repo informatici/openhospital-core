@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -303,5 +304,9 @@ public class OpdBrowserManager {
 	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom,
 		int ageTo, char sex, char newPatient, int page, int size) throws OHServiceException {
 		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null, page, size);
+	}
+
+	public  List<Opd> getOpdByDateBetweenAndPatientCode(Encounter encounter) {
+		return  ioOperations.getOpdByDateBetweenAndPatientCode(encounter);
 	}
 }
