@@ -21,16 +21,17 @@
  */
 package org.isf.conditioning.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.conditioning.model.Conditioning;
 import org.isf.conditioning.service.ConditioningIoOperations;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ConditioningBrowserManager {
@@ -132,5 +133,16 @@ public class ConditioningBrowserManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+
+	/**
+	 * Returns the list of Conditioning for a given patient's encounter
+	 *
+	 * @param encounter encounter during which Conditioning were created.
+	 * @return the list of {@link Conditioning}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public  List<Conditioning> getConditioningByPatientEncounter(Encounter encounter) throws OHServiceException {
+		return  conditioningIoOperations.getConditioningByPatientEncounter(encounter);
 	}
 }
