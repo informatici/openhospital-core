@@ -127,9 +127,10 @@ public class ExaminationOperations {
 	 * @throws OHServiceException if an error occurs while retrieving the patient examinations from the data source.
 	 */
 	public List<PatientExamination> findExaminationsByEncounter(Encounter encounter) throws OHServiceException {
+		Integer patientCode = encounter.getPatient() != null ? encounter.getPatient().getCode(): null;
 		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
-			return repository.findByDateBetween(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+			return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), encounter.getClosedAt());
 		}
-		return repository.findByDateBetween(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+		return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), LocalDateTime.now());
 	}
 }
