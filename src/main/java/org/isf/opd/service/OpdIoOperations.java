@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -273,4 +275,11 @@ public class OpdIoOperations {
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+
+    public List<Opd> getOpdForEncounter(Encounter encounter) {
+		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
+			return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+		}
+		return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+    }
 }
