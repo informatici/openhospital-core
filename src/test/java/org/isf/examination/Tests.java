@@ -23,6 +23,8 @@ package org.isf.examination;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -34,6 +36,9 @@ import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.manager.EncounterBrowserManager;
+import org.isf.encounter.model.Encounter;
 import org.isf.examination.manager.ExaminationBrowserManager;
 import org.isf.examination.model.GenderPatientExamination;
 import org.isf.examination.model.PatientExamination;
@@ -56,6 +61,7 @@ class Tests extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
+	private static TestEncounter testEncounter;
 
 	@Autowired
 	ExaminationOperations examinationOperations;
@@ -67,11 +73,14 @@ class Tests extends OHCoreTestCase {
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
+	@Autowired
+	EncounterBrowserManager encounterBrowserManager;
 
 	@BeforeAll
 	static void setUpClass() {
 		testPatient = new TestPatient();
 		testPatientExamination = new TestPatientExamination();
+		testEncounter = new TestEncounter();
 	}
 
 	@BeforeEach
@@ -439,6 +448,22 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(patientExaminationSaved.getPex_body_mass_index()).isEqualTo(patientExamination.getPex_body_mass_index());
 		assertThat(patientExaminationSaved.getPex_branchial_perimeter()).isEqualTo(patientExamination.getPex_branchial_perimeter());
+	}
+	
+	@Test
+	void getPatientExaminationsForEncounter_WhenEncounterExists_ReturnsExaminations() throws OHServiceException, OHException {
+		Encounter encounter = testEncounter.setup(false);
+		Patient patient = this.setupTestPatient(false);
+		patient = patientIoOperationRepository.saveAndFlush(patient);
+		encounter.setPatient(patient);
+		encounter = encounterBrowserManager.saveEncounter(encounter);
+		PatientExamination patientExamination =  testPatientExamination.setup(patient, true);
+		patientExamination.setPex_date(LocalDateTime.now());
+		examinationIoOperationRepository.saveAndFlush(patientExamination);
+		List<PatientExamination> patientExamiList = examinationBrowserManager.getPatientExaminationsForEncounter(encounter);
+		// Assert
+		assertNotNull(patientExamiList);
+		assertEquals(patientExamiList.size(), 1);
 	}
 
 	private Patient setupTestPatient(boolean usingSet) throws OHException {
