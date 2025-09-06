@@ -24,14 +24,12 @@ package org.isf.encounter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
 import org.isf.encounter.manager.EncounterBrowserManager;
 import org.isf.encounter.model.Encounter;
-import org.isf.encounter.model.EncounterStatus;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
