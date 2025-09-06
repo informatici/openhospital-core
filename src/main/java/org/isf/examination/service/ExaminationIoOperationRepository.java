@@ -21,6 +21,7 @@
  */
 package org.isf.examination.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.examination.model.PatientExamination;
@@ -42,4 +43,7 @@ public interface ExaminationIoOperationRepository extends JpaRepository<PatientE
 	
 	@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode order by p.pex_date desc")
 	Page<PatientExamination> findByPatient_CodeOrderByPexDateDesc_Paginated(@Param("patientCode") int patientCode, Pageable pageable);
+
+	@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode and (p.pex_date >= :from and p.pex_date < :to)")
+	List<PatientExamination> findByPatientCodeAndDateBetween(@Param("patientCode") Integer patientCode, @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 }
