@@ -68,4 +68,8 @@ public interface LabIoOperationRepository extends JpaRepository<Laboratory, Inte
 	@Query("select count(l) from Laboratory l where active=1")
 	long countAllActiveLabs();
 
+	@Query(value = "select lab from Laboratory lab where lab.patient.code = :patientCode and (lab.labDate >= :performedAt and lab.labDate < :closedAt)")
+	List<Laboratory> getLaboratoryByDateBetweenAndPatientCode(@Param("performedAt") LocalDateTime performedAt, @Param("closedAt") LocalDateTime closedAt,
+															@Param("patientCode") Integer patientCode);
+
 }
