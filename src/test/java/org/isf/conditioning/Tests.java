@@ -21,10 +21,18 @@
  */
 package org.isf.conditioning;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
 import org.isf.conditioning.manager.ConditioningBrowserManager;
 import org.isf.conditioning.model.Conditioning;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
 import org.isf.patient.TestPatient;
@@ -36,15 +44,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class Tests extends OHCoreTestCase {
 
 	private static TestConditioning testConditioning;
 
 	private static TestPatient testPatient;
+
+	private static TestEncounter testEncounter;
 
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
@@ -58,10 +64,14 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	ConditioningBrowserManager conditioningBrowserManager;
 
+	@Autowired
+	EncounterIoRepository encounterIoRepository;
+
 	@BeforeAll
 	static void setUpClass() {
 		testConditioning = new TestConditioning();
 		testPatient = new TestPatient();
+		testEncounter = new TestEncounter();
 	}
 
 	@BeforeEach
@@ -107,6 +117,26 @@ public class Tests extends OHCoreTestCase {
 		Conditioning updated = conditioningBrowserManager.updateConditioning(saved);
 		assertThat(99).isEqualTo(updated.getMce());
 		assertThat("SN-02").isEqualTo(updated.getSngNumber());
+	}
+
+	@Test
+	void testMgrGetConditioningByEncounter() throws Exception {
+		Conditioning conditioning = setupConditioning(false);
+		conditioning.setPerformedAt(LocalDateTime.of(2025, 9, 2, 11, 10, 20));
+		Conditioning savedConditioning = conditioningBrowserManager.newConditioning(conditioning);
+
+		Encounter encounter = testEncounter.setup(false);
+		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
+		encounter.setPatient(savedConditioning.getPatient());
+		Encounter encounterSaved = encounterIoRepository.save(encounter);
+
+		List<Conditioning> conditionings = conditioningBrowserManager.getConditioningByPatientEncounter(encounterSaved);
+
+		assertThat(conditionings).isNotNull();
+		assertThat(conditionings).isNotEmpty();
+		assertThat(conditionings.size()).isEqualTo(1);
+		assertThat(conditionings.get(0).getId()).isEqualTo(conditioning.getId());
+		assertThat(conditionings.get(0).getPerformedAt()).isEqualTo(conditioning.getPerformedAt());
 	}
 
 	private Conditioning setupConditioning(boolean usingSet) throws OHException {

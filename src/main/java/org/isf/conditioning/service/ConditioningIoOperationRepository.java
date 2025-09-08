@@ -21,16 +21,24 @@
  */
 package org.isf.conditioning.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.isf.conditioning.model.Conditioning;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ConditioningIoOperationRepository extends JpaRepository<Conditioning, Integer> {
 	@Query("select co from Conditioning co where co.patient.code =:patientCode")
 	List<Conditioning> findByPatientCode( @Param("patientCode") int patientCode);
+
+	@Query("SELECT c FROM Conditioning c WHERE c.patient.code = :patientCode " + "AND c.performedAt BETWEEN :performedAt AND :closedAt")
+	List<Conditioning> findByDateBetweenAndPatientCode(
+		@Param("performedAt") LocalDateTime performedAt,
+		@Param("closedAt") LocalDateTime closedAt,
+		@Param("patientCode") Integer patientCode
+	);
 }
