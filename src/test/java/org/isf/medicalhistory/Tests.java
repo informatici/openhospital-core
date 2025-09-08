@@ -46,6 +46,7 @@ import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class Tests extends OHCoreTestCase {
 
@@ -187,16 +188,32 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(medHistories).hasSize(8);
 	}
-
 	@Test
+	@Transactional
 	void testMgrGetMedicalHistoriesByEncounter() throws Exception {
+		repository.deleteAll();
+		repository.flush();
+
 		String code = setupEncounter(false);
+
 		Encounter encounter = encounterBrowserManager.getEncountersByCode(code);
 		assertThat(encounter).isNotNull();
+		assertThat(encounter.getPatient()).isNotNull();
+
 		encounter.setClosedAt(LocalDateTime.now().plusDays(1));
-		encounterBrowserManager.saveEncounter(encounter);
+		encounter = encounterBrowserManager.saveEncounter(encounter);
+
+		entityManager.flush();
+		entityManager.clear();
+
 		MedicalHistory medicalHistory = setupTestMedicalHistory(encounter.getPatient());
+		assertThat(medicalHistory).isNotNull();
+		assertThat(medicalHistory.getPatient()).isNotNull();
+
+		repository.flush();
+
 		List<MedicalHistory> medicalHistories = manager.getMedicalHistoriesForEncounter(encounter);
+
 		assertThat(medicalHistories).isNotNull();
 		assertThat(medicalHistories).hasSize(1);
 		assertThat(medicalHistories.get(0).getPatient()).isEqualTo(encounter.getPatient());
@@ -228,12 +245,18 @@ public class Tests extends OHCoreTestCase {
 	private String setupEncounter(boolean usingSet) throws OHException, OHServiceException {
 		Patient patient = testPatient.setup(false);
 		Patient patientSaved = patientIoOperationRepository.saveAndFlush(patient);
+		assertThat(patientSaved).isNotNull();
+		assertThat(patientSaved.getCode()).isNotNull();
+
 		Encounter encounter = testEncounter.setup(false);
 		encounter.setPatient(patientSaved);
+		if (encounter.getStatus() == null) {
+			encounter.setStatus(EncounterStatus.ACTIVE);
+		}
 		encounter = encounterBrowserManager.saveEncounter(encounter);
-		Assert.isNonEmpty(encounter);
+		assertThat(encounter).isNotNull();
+		assertThat(encounter.getCode()).isNotNull();
+
 		return encounter.getCode();
 	}
-
-
 }
