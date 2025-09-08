@@ -245,9 +245,6 @@ public class Tests extends OHCoreTestCase {
 
 		Encounter encounter = testEncounter.setup(false);
 		encounter.setPatient(patientSaved);
-		if (encounter.getStatus() == null) {
-			encounter.setStatus(EncounterStatus.ACTIVE);
-		}
 		encounter = encounterBrowserManager.saveEncounter(encounter);
 		assertThat(encounter).isNotNull();
 		assertThat(encounter.getCode()).isNotNull();
