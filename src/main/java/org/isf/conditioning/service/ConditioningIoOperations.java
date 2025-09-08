@@ -21,13 +21,16 @@
  */
 package org.isf.conditioning.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.isf.conditioning.model.Conditioning;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -85,4 +88,17 @@ public class ConditioningIoOperations {
 		return conditioningIoOperationRepository.findByPatientCode(patientCode);
 	}
 
+	/**
+	 * Returns the list of Conditioning for a given patient's encounter
+	 *
+	 * @param encounter encounter during which Conditioning were created.
+	 * @return the list of {@link Conditioning}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Conditioning> getConditioningByPatientEncounter(Encounter encounter) throws OHServiceException {
+		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
+			return conditioningIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+		}
+		return conditioningIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+	}
 }
