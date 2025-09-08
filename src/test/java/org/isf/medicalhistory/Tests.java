@@ -144,10 +144,11 @@ public class Tests extends OHCoreTestCase {
 	void testManagerGetAllMedicalHistoryByPatientCode() throws Exception {
 		List<MedicalHistory> medicalHistories = setupTestMedicalHistories(1);
 		repository.saveAllAndFlush(medicalHistories);
-		MedicalHistory medHistory = manager.getMedicalHistoriesByPatientCode(medicalHistories.get(0).getPatient().getCode());
+		List<MedicalHistory> medHistoryList = manager.getMedicalHistoriesByPatientCode(medicalHistories.get(0).getPatient().getCode());
 
-		assertThat(medHistory).isNotNull();
-		assertThat(medHistory.getPatient().getCode()).isEqualTo(medicalHistories.get(0).getPatient().getCode());
+		assertThat(medHistoryList).isNotNull();
+		assertThat(medHistoryList).isNotEmpty();
+		assertThat(medHistoryList.get(0).getPatient().getCode()).isEqualTo(medicalHistories.get(0).getPatient().getCode());
 	}
 
 	@Test
