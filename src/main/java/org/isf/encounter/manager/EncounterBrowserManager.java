@@ -124,7 +124,7 @@ public class EncounterBrowserManager {
 		}
 
 		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("This encounter overlaps with another encounter with the same patient.")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Another encounter with the same patient overlaps with this one..")));
 		}
 		
 		if (!errors.isEmpty()) {
