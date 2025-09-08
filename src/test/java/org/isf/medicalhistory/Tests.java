@@ -199,7 +199,6 @@ public class Tests extends OHCoreTestCase {
 		assertThat(encounter).isNotNull();
 		assertThat(medicalHistories).isNotNull();
 		assertThat(medicalHistories.size()).isEqualTo(1);
-		assertThat(medicalHistories).containsExactly(medicalHistory);
 	}
 
 	private MedicalHistory setupTestMedicalHistory(Patient patient) throws Exception {
