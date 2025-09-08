@@ -21,6 +21,7 @@
  */
 package org.isf.encounter.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +32,13 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncounterBrowserManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(EncounterBrowserManager.class);
 
 	private final EncounterIoRepository encounterIoRepository;
 
@@ -114,9 +118,32 @@ public class EncounterBrowserManager {
 		if (encounter.getCode() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertcode.msg")));
 		}
+
+		if (encounter.getClosedAt() != null && encounter.getPerformedAt().isAfter(encounter.getClosedAt())){
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt must be before closedAt")));
+		}
+
+		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Another encounter with the same patient overlaps with this one.")));
+		}
 		
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
+	/**
+	 * Method that checks if there is already an active {@link Encounter}
+	 * for the given patient at the specified performed date.
+	 *
+	 * @param patientCode - the patient code.
+	 * @param performedAt - the date and time when the encounter is performed.
+	 * @return {@code true} if another active {@link Encounter} exists at the given date and time,
+	 *         {@code false} otherwise.
+	 * @throws OHServiceException if the check fails due to a repository error.
+	 */
+	private Boolean checkEncounterExisting(Integer patientCode, LocalDateTime performedAt) {
+		return encounterIoRepository.existsActiveEncounterAt(patientCode, performedAt);
+	}
+
 }
