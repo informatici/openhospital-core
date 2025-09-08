@@ -33,6 +33,7 @@ import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
@@ -265,6 +266,17 @@ public class AdmissionBrowserManager {
 	 */
 	public Patient deletePatientPhoto(int id) throws OHServiceException {
 		return ioOperations.deletePatientPhoto(id);
+	}
+
+	/**
+	 * Returns the list of Admissions with encounter
+	 *
+	 * @param encounter encounter during which admissions were created.
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByEncounter(Encounter encounter) throws OHServiceException {
+		return  ioOperations.getAdmissionsByEncounter(encounter);
 	}
 
 	/**
