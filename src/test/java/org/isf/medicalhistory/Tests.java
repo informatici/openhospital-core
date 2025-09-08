@@ -192,13 +192,14 @@ public class Tests extends OHCoreTestCase {
 	void testMgrGetMedicalHistoriesByEncounter() throws Exception {
 		String code = setupEncounter(false);
 		Encounter encounter = encounterBrowserManager.getEncountersByCode(code);
-		assertThat(encounter).isNotNull();
 		encounter.setClosedAt(LocalDateTime.now().plusDays(1));
 		encounterBrowserManager.saveEncounter(encounter);
 		MedicalHistory medicalHistory = setupTestMedicalHistory(encounter.getPatient());
 		List<MedicalHistory> medicalHistories = manager.getMedicalHistoriesForEncounter(encounter);
+		assertThat(encounter).isNotNull();
 		assertThat(medicalHistories).isNotNull();
 		assertThat(medicalHistories.size()).isEqualTo(1);
+		assertThat(medicalHistories).containsExactly(medicalHistory);
 	}
 
 	private MedicalHistory setupTestMedicalHistory(Patient patient) throws Exception {
