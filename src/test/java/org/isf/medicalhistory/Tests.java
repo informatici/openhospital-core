@@ -188,32 +188,24 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(medHistories).hasSize(8);
 	}
-	@Test
-	@Transactional
-	void testMgrGetMedicalHistoriesByEncounter() throws Exception {
-		repository.deleteAll();
-		repository.flush();
 
+	@Test
+	void testMgrGetMedicalHistoriesByEncounter() throws Exception {
 		String code = setupEncounter(false);
 
 		Encounter encounter = encounterBrowserManager.getEncountersByCode(code);
 		assertThat(encounter).isNotNull();
-		assertThat(encounter.getPatient()).isNotNull();
 
 		encounter.setClosedAt(LocalDateTime.now().plusDays(1));
-		encounter = encounterBrowserManager.saveEncounter(encounter);
+		encounterBrowserManager.saveEncounter(encounter);
 
-		entityManager.flush();
-		entityManager.clear();
+		repository.flush();
 
 		MedicalHistory medicalHistory = setupTestMedicalHistory(encounter.getPatient());
-		assertThat(medicalHistory).isNotNull();
-		assertThat(medicalHistory.getPatient()).isNotNull();
 
 		repository.flush();
 
 		List<MedicalHistory> medicalHistories = manager.getMedicalHistoriesForEncounter(encounter);
-
 		assertThat(medicalHistories).isNotNull();
 		assertThat(medicalHistories).hasSize(1);
 		assertThat(medicalHistories.get(0).getPatient()).isEqualTo(encounter.getPatient());
@@ -223,9 +215,16 @@ public class Tests extends OHCoreTestCase {
 		if (patient == null) {
 			Patient patientToSave = testPatient.setup(false);
 			patient = patientIoOperationRepository.saveAndFlush(patientToSave);
+
+			patientIoOperationRepository.flush();
 		}
+
 		MedicalHistory medicalHistory = testMedicalHistory.createMedicalHistory(patient);
-		return repository.saveAndFlush(medicalHistory);
+		MedicalHistory savedHistory = repository.saveAndFlush(medicalHistory);
+
+		repository.flush();
+
+		return savedHistory;
 	}
 
 	private List<MedicalHistory> setupTestMedicalHistories(int length) throws Exception {
