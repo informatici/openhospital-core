@@ -72,12 +72,7 @@ public class MedicalHistoryIoOperations {
 	}
 
 	public List<MedicalHistory> getMedicalHistoriesForEncounter(Encounter encounter) {
-		Integer patientCode = encounter.getPatient() != null ? encounter.getPatient().getCode(): null;
-		if (encounter.getStatus() == EncounterStatus.CLOSE) {
-			return repository.findByPatientCodeCreatedDateBetween(patientCode, encounter.getPerformedAt(),
-				encounter.getClosedAt());
-		}
-		return repository.findByPatientCodeCreatedDateBetween(patientCode, encounter.getPerformedAt(),
-			LocalDateTime.now());
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.findByPatientCodeCreatedDateBetween(encounter.getPatient().getCode(), encounter.getPerformedAt(), closedAt);
 	}
 }
