@@ -24,6 +24,7 @@ package org.isf.medicalhistory.manager;
 
 import java.util.List;
 
+import org.isf.encounter.model.Encounter;
 import org.isf.medicalhistory.model.MedicalHistory;
 import org.isf.medicalhistory.service.MedicalHistoryIoOperations;
 import org.isf.utils.exception.OHServiceException;
@@ -85,5 +86,15 @@ public class MedicalHistoryBrowsingManager {
 	 */
 	public MedicalHistory getMedicalHistoryById(int id) throws OHServiceException {
 		return ioOperations.getMedicalHistoryById(id);
+	}
+
+	/**
+	 * get all {@link MedicalHistory}s for a given encounter
+	 * @param encounter the {@link Encounter} whose {@link MedicalHistory}s are to be fetched
+	 * @return all {@link MedicalHistory}s for the given encounter
+	 * @throws OHServiceException if fails to fetch
+	 */
+	public List<MedicalHistory> getMedicalHistoriesForEncounter(Encounter encounter) throws OHServiceException {
+		return ioOperations.getMedicalHistoriesForEncounter(encounter);
 	}
 }
