@@ -34,9 +34,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterIoRepository extends JpaRepository<Encounter, Integer> {
 	
-	@Query(value = "select e from Encounter e where e.patient.code = :patientId")
+	@Query(value = "select e from Encounter e where e.patient.code = :patientId and e.status = 'ACTIVE'")
     List<Encounter> findByPatient(@Param("patientId") Integer patientId);
 
+	@Query(value = "select e from Encounter e where e.code = :code and e.status = 'ACTIVE'")
 	Encounter findByCode(String code);
 
 	Encounter findByPatientCodeAndStatusAndClosedAt(@Param("code") Integer code, @Param("status") EncounterStatus status, @Param("closedAt") LocalDateTime closedAt);
@@ -62,6 +63,7 @@ public interface EncounterIoRepository extends JpaRepository<Encounter, Integer>
         SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END
         FROM Encounter e
         WHERE e.patient.code = :code
+          AND e.status = 'ACTIVE'
           AND e.performedAt <= :date
           AND (e.closedAt IS NULL OR e.closedAt >= :date)
     """)
