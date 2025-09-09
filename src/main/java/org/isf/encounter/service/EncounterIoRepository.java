@@ -39,7 +39,7 @@ public interface EncounterIoRepository extends JpaRepository<Encounter, Integer>
 
 	Encounter findByCode(String code);
 
-	Encounter findByPatientCodeAndStatus(@Param("code") Integer code, @Param("status") EncounterStatus status);
+	Encounter findByPatientCodeAndStatusAndClosedAt(@Param("code") Integer code, @Param("status") EncounterStatus status, @Param("closedAt") LocalDateTime closedAt);
 
 	/**
 	 * Checks if there exists an active encounter for a given patient at a specific date.
