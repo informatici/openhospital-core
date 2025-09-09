@@ -277,9 +277,7 @@ public class OpdIoOperations {
 	}
 
     public List<Opd> getOpdForEncounter(Encounter encounter) {
-		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
-			return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
-		}
-		return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), closedAt, encounter.getPatient().getCode());
     }
 }
