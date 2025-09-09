@@ -3,5 +3,7 @@ package org.isf.encounter.model;
 
 public enum EncounterStatus {
     OPEN,
-	CLOSE
+	CLOSE,
+    ACTIVE,
+    CANCELLED
 }
