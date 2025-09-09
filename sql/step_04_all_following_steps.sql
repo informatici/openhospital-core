@@ -124,3 +124,4 @@ source step_a127_add_lock_to_medicalhistory.sql;
 source step_a128_create_table_oh_encounter.sql;
 source step_a129_create_conditioning_table.sql;
 source step_a130_update_oh_encounter_and_oh_conditioning_tables.sql;
+source step_a131_update_oh_encounter_status.sql;

@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 public class TestEncounter {
 
 	private String code = "Z";
-	private EncounterStatus  status = EncounterStatus.OPEN;
+	private EncounterStatus  status = EncounterStatus.ACTIVE;
 	private LocalDateTime performedAt = LocalDateTime.of(2025, 1, 1, 10, 0);
 
 	public Encounter setup(boolean usingSet) throws OHException {
