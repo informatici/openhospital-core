@@ -128,9 +128,7 @@ public class ExaminationOperations {
 	 */
 	public List<PatientExamination> findExaminationsByEncounter(Encounter encounter) throws OHServiceException {
 		Integer patientCode = encounter.getPatient() != null ? encounter.getPatient().getCode(): null;
-		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
-			return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), encounter.getClosedAt());
-		}
-		return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), LocalDateTime.now());
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), closedAt);
 	}
 }

@@ -96,7 +96,7 @@ public class ConditioningIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<Conditioning> getConditioningByPatientEncounter(Encounter encounter) throws OHServiceException {
-		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
+		if (encounter.getClosedAt() != null) {
 			return conditioningIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
 		}
 		return conditioningIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());

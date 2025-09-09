@@ -401,9 +401,7 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<Admission> getAdmissionsByEncounter(Encounter encounter) throws OHServiceException{
-		if (encounter.getStatus().toString().equals(EncounterStatus.CLOSE.toString())) {
-			return repository.getAdmissionByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
-		}
-		return repository.getAdmissionByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.getAdmissionByDateBetweenAndPatientCode(encounter.getPerformedAt(), closedAt, encounter.getPatient().getCode());
 	}
 }
