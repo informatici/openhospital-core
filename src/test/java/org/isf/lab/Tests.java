@@ -180,7 +180,7 @@ class Tests extends OHCoreTestCase {
 		Encounter encounter = new Encounter();
 		encounter.setCode("ENC123");
 		encounter.setPatient(patient);
-		encounter.setStatus(EncounterStatus.valueOf("OPEN"));
+		encounter.setStatus(EncounterStatus.valueOf("ACTIVE"));
 		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
 		encounter = encounterBrowserManager.saveEncounter(encounter);
 
