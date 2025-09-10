@@ -85,7 +85,7 @@ public class EncounterBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Encounter getCurrentEncounter(Integer patientCode) throws OHServiceException {
-		return encounterIoRepository.findByPatientCodeAndStatus(patientCode, EncounterStatus.ACTIVE);
+		return encounterIoRepository.findByPatientCodeAndStatusAndClosedAt(patientCode, EncounterStatus.ACTIVE, null);
 	}
 
 	/**
@@ -129,9 +129,7 @@ public class EncounterBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt must be before closedAt")));
 		}
 
-		if (checkEncounterExisting(encounter.getPatient().getCode(), encounter.getPerformedAt())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("Another encounter with the same patient overlaps with this one.")));
-		}
+		//TO DO: Add the check to know if the encounter is on the range of another encounter for the same patient
 
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
