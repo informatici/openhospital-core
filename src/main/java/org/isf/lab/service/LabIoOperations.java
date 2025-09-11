@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
@@ -116,6 +118,20 @@ public class LabIoOperations {
 						exam)
 						: repository.findByLabDateBetweenOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN)),
 										TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX)));
+	}
+
+	/**
+	 * Returns the list of Laboratory with encounter
+	 *
+	 * @param encounter encounter during which Laboratory exams were created.
+	 * @return the list of {@link Laboratory}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Laboratory> getLaboratoryByEncounter(Encounter encounter) throws OHServiceException{
+		if (encounter.getClosedAt() != null) {
+			return repository.getLaboratoryByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+		}
+		return repository.getLaboratoryByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
 	}
 
 	/**

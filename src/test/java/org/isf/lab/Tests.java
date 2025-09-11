@@ -26,11 +26,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.isf.OHCoreTestCase;
+import org.isf.encounter.manager.EncounterBrowserManager;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.exa.TestExam;
 import org.isf.exa.model.Exam;
 import org.isf.exa.service.ExamIoOperationRepository;
@@ -90,6 +94,8 @@ class Tests extends OHCoreTestCase {
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
+	@Autowired
+	private EncounterBrowserManager encounterBrowserManager;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -161,6 +167,37 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labIoOperation.getLaboratory();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
+	}
+
+	@ParameterizedTest(name = "Test getLaboratoryByEncounter with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testIoGetLaboratoryByEncounter(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+
+		Patient patient = testPatient.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+
+		Encounter encounter = new Encounter();
+		encounter.setCode("ENC123");
+		encounter.setPatient(patient);
+		encounter.setStatus(EncounterStatus.valueOf("ACTIVE"));
+		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
+		encounter = encounterBrowserManager.saveEncounter(encounter);
+
+		ExamType examType = testExamType.setup(false);
+		examTypeIoOperationRepository.saveAndFlush(examType);
+
+		Exam exam = testExam.setup(examType, 0, false);
+		examIoOperationRepository.saveAndFlush(exam);
+
+		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
+		laboratory.setLabDate(LocalDateTime.of(2025, 9, 2, 11, 10, 20));
+		laboratory = labIoOperationRepository.save(laboratory);
+
+		List<Laboratory> laboratories = labIoOperation.getLaboratoryByEncounter(encounter);
+		assertThat(laboratories).isNotEmpty();
+		assertThat(laboratories).isNotNull();
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")

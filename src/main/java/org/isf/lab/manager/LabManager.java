@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
@@ -171,6 +172,17 @@ public class LabManager {
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo, patient);
+	}
+
+	/**
+	 * Returns the list of Laboratory exams with encounter
+	 *
+	 * @param encounter encounter during which Laboratory exams were created.
+	 * @return the list of {@link Laboratory}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Laboratory> getLaboratoryByEncounter(Encounter encounter) throws OHServiceException {
+		return  ioOperations.getLaboratoryByEncounter(encounter);
 	}
 
 	/**
