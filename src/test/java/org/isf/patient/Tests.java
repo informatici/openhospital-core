@@ -339,6 +339,20 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetPatientsByParamsAndPaginationParam() throws Exception {
+		setupTestPatient(false);
+		Map<String, Object> params = new HashMap<>();
+		params.put("firstName", "TestFirstName");
+		params.put("birthDate", LocalDateTime.of(1984, Calendar.AUGUST, 14, 0, 0, 0));
+		params.put("address", "TestAddress");
+		PagedResponse<Patient> patients = patientBrowserManager.getPatients(params, 0, 3);
+		assertThat(patients.getData()).isNotEmpty();
+		assertThat(patients.getPageInfo().getTotalPages()).isEqualTo(1);
+		assertThat(patients.getPageInfo().getSize()).isEqualTo(3);
+		assertThat(patients.getPageInfo().getNbOfElements()).isEqualTo(1);
+	}
+
+	@Test
 	void testMgrGetPatientsByOneOfFieldsLike() throws Exception {
 		setupTestPatient(false);
 		// Pay attention that query return with PAT_ID descendant

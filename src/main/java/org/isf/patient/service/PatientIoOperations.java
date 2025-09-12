@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,6 +106,18 @@ public class PatientIoOperations {
 	 */
 	public List<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
 		return repository.getPatientsByParams(parameters);
+	}
+
+	/**
+	 * Method that returns the full list of {@link Patient}s with specified parameters.
+	 *
+	 * @param parameters
+	 * @return the list of {@link Patient}s.
+	 * @throws OHServiceException
+	 */
+	public PagedResponse<Patient> getPatients(Map<String, Object> parameters, Pageable pageable) throws OHServiceException {
+		Page<Patient> patientPageResult = repository.getPatientsByParams(parameters, pageable);
+		return setPaginationData(patientPageResult);
 	}
 
 	/**

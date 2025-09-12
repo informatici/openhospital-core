@@ -28,6 +28,7 @@ import java.util.Map;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Path;
@@ -35,6 +36,9 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 import org.isf.patient.model.Patient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -135,6 +139,75 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		query.select(patient).where(cb.and(predicates.toArray(new Predicate[0])));
 
 		return entityManager.createQuery(query).getResultList();
+	}
+
+	public Page<Patient> getPatientsByParams(Map<String, Object> params, Pageable pageable) {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
+		Root<Patient> patient = query.from(Patient.class);
+
+		// Only not deleted patient
+		Predicate deletedN = cb.equal(patient.get("deleted"), 'N');
+		Predicate deletedNull = cb.isNull(patient.get("deleted"));
+		Predicate notDeleted = cb.or(deletedN, deletedNull);
+
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(notDeleted);
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			Path<String> keyPath = patient.get(entry.getKey());
+
+			if (entry.getKey().equals("birthDate")) {
+				LocalDateTime birthDateFrom = (LocalDateTime) entry.getValue();
+				LocalDateTime birthDateTo = birthDateFrom.plusDays(1);
+				predicates.add(cb.between(keyPath.as(LocalDateTime.class), birthDateFrom, birthDateTo));
+			} else {
+				if (entry.getValue() instanceof String) {
+					predicates.add(cb.like(cb.lower(keyPath), like(((String) entry.getValue()).toLowerCase())));
+				}
+			}
+		}
+		query.select(patient).where(cb.and(predicates.toArray(new Predicate[0])));
+
+		TypedQuery<Patient> typedQuery = entityManager.createQuery(query);
+		typedQuery.setFirstResult((int) pageable.getOffset());
+		typedQuery.setMaxResults(pageable.getPageSize());
+		List<Patient> patients = typedQuery.getResultList();
+
+		Long total = countPatients(params);
+
+		return new PageImpl<>(patients, pageable, total);
+	}
+
+	private Long countPatients(Map<String, Object> params) {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+		Root<Patient> countRoot = countQuery.from(Patient.class);
+
+		Predicate deletedN = cb.equal(countRoot.get("deleted"), 'N');
+		Predicate deletedNull = cb.isNull(countRoot.get("deleted"));
+		Predicate notDeleted = cb.or(deletedN, deletedNull);
+
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(notDeleted);
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			Path<String> keyPath = countRoot.get(entry.getKey());
+
+			if (entry.getKey().equals("birthDate")) {
+				LocalDateTime birthDateFrom = (LocalDateTime) entry.getValue();
+				LocalDateTime birthDateTo = birthDateFrom.plusDays(1);
+				predicates.add(cb.between(keyPath.as(LocalDateTime.class), birthDateFrom, birthDateTo));
+			} else {
+				if (entry.getValue() instanceof String) {
+					predicates.add(cb.like(cb.lower(keyPath), like(((String) entry.getValue()).toLowerCase())));
+				}
+			}
+		}
+		countQuery.select(cb.count(countRoot))
+			.where(cb.and(predicates.toArray(new Predicate[0])));
+
+		return entityManager.createQuery(countQuery).getSingleResult();
 	}
 
 }
