@@ -60,6 +60,8 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);
 
+	Page<Patient> getPatientsByParams(Map<String, Object> params, Pageable pageable);
+
 	@Query("select count(p) from Patient p where active=1 and deleted not like 'Y'")
 	long countAllActiveNotDeletedPatients();
 	
