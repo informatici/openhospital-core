@@ -63,7 +63,6 @@ public class Disease extends Auditable<String> {
 	@JoinColumn(name="DIS_DCL_ID_A")
 	private DiseaseType diseaseType; 
 
-	@Version
 	@Column(name="DIS_LOCK")
 	private Integer lock;
 
