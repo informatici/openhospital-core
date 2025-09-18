@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -76,7 +76,7 @@ public class Setting extends Auditable<String> {
 	private String description;
 
 	@Column(name="SETT_NEED_RESTART", nullable = false)
-	private Boolean needRestart = true;
+	private boolean needRestart = true;
 
 	public int getId() {
 		return id;
