@@ -61,7 +61,7 @@ public class Vaccine extends Auditable<String> {
 
 	@Version
 	@Column(name="VAC_LOCK")
-    private Integer lock;
+    private Integer lock = 0;
 
 	 public Vaccine() {
 	        super();
