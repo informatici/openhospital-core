@@ -71,9 +71,8 @@ public class Operation extends Auditable<String> {
 	@Enumerated(EnumType.STRING)
 	private OperationTarget opeFor;
 
-	@Version
 	@Column(name = "OPE_LOCK")
-	private Integer lock;
+	private Integer lock = 0;
 
 	@Transient
 	private volatile int hashCode;

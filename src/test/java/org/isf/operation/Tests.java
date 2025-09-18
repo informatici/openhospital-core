@@ -299,7 +299,7 @@ class Tests extends OHCoreTestCase {
 		Operation updateOperation = operationIoOperations.findByCode(code);
 		assertThat(updateOperation).isNotNull();
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
-		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
+		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock);
 	}
 
 	@Test
@@ -445,7 +445,7 @@ class Tests extends OHCoreTestCase {
 		Operation updateOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(updateOperation).isNotNull();
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
-		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
+		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock);
 	}
 
 	@Test
