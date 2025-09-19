@@ -49,7 +49,7 @@ public class MessageBundle {
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
 			JComponent.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
 		} catch (MissingResourceException e) {
-			LOGGER.error(">> no resource bundle found. Defaulting to \"en\"");
+			LOGGER.error(">> no resource bundle found for \"{}\". Defaulting to \"en\"", GeneralData.LANGUAGE);
 			resourceBundle = defaultResourceBundle;
 			JComponent.setDefaultLocale(new Locale("en"));
 		}
