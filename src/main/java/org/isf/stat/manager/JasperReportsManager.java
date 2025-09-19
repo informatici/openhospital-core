@@ -1170,8 +1170,8 @@ public class JasperReportsManager {
 			HashMap<String, Object> parameters = new HashMap<>();
 
 			parameters.put("patID", encounter.getPatient().getCode());
-			parameters.put("performedAt", encounter.getPerformedAt());
-			parameters.put("closedAt", encounter.getClosedAt());
+			parameters.put("performedAt", toDate(encounter.getPerformedAt()));
+			parameters.put("closedAt", toDate(encounter.getClosedAt()));
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			String jasperFileName = "encounter_report";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(String.valueOf(encounter.getPatient().getCode()))), "pdf");
