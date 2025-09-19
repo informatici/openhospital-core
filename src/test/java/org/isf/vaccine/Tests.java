@@ -105,9 +105,11 @@ class Tests extends OHCoreTestCase {
 	void testIoUpdateVaccine() throws Exception {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
+		int lock = foundVaccine.getLock();
 		foundVaccine.setDescription("Update");
 		Vaccine updatedVaccine = vaccineIoOperation.updateVaccine(foundVaccine);
 		assertThat(updatedVaccine.getDescription()).isEqualTo("Update");
+		assertThat(updatedVaccine.getLock().intValue()).isEqualTo(lock);
 	}
 
 	@Test
@@ -168,9 +170,11 @@ class Tests extends OHCoreTestCase {
 	void testMgrUpdateVaccine() throws Exception {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
+		int lock = foundVaccine.getLock();
 		foundVaccine.setDescription("Update");
 		Vaccine updatedVaccine = vaccineBrowserManager.updateVaccine(foundVaccine);
 		assertThat(updatedVaccine.getDescription()).isEqualTo("Update");
+		assertThat(updatedVaccine.getLock().intValue()).isEqualTo(lock);
 	}
 
 	@Test

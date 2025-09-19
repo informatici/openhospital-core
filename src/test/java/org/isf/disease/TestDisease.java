@@ -29,6 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestDisease {
 
+	private Integer lock = 0;
 	private String code = "999";
 	private String description = "TestDescription";
 
@@ -42,10 +43,12 @@ public class TestDisease {
 		if (usingSet) {
 			disease = new Disease();
 			setParameters(disease, diseaseType);
+			disease.setLock(lock);
 
 		} else {
 			// Create Disease with all parameters
 			disease = new Disease(code, description, diseaseType);
+			disease.setLock(lock);
 		}
 
 		disease.setIpdInInclude(includeIpdIn);
