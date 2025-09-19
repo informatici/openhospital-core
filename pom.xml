@@ -370,8 +370,8 @@
 			</snapshots>
 		</repository>
         <repository>
-            <id>nroduit-mvn-repo-master</id>
+            <id>nroduit-mvn-repo</id>
             <url>https://raw.githubusercontent.com/nroduit/mvn-repo/master/</url>
         </repository>
-	</repositories>
+    </repositories>
 </project>

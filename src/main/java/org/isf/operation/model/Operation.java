@@ -32,7 +32,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.operation.enums.OperationTarget;
@@ -71,9 +70,8 @@ public class Operation extends Auditable<String> {
 	@Enumerated(EnumType.STRING)
 	private OperationTarget opeFor;
 
-	@Version
 	@Column(name = "OPE_LOCK")
-	private Integer lock;
+	private Integer lock = 0;
 
 	@Transient
 	private volatile int hashCode;
