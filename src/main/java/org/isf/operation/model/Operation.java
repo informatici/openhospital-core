@@ -71,7 +71,7 @@ public class Operation extends Auditable<String> {
 	private OperationTarget opeFor;
 
 	@Column(name = "OPE_LOCK")
-	private Integer lock = 0;
+	private Integer lock;
 
 	@Transient
 	private volatile int hashCode;
