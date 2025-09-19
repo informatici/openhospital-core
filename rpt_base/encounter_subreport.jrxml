@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="enocunter_subreport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="encounter_report" uuid="98f99aa4-9059-4aef-bf14-57da053142cd">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="patID" class="java.lang.Integer"/>
+	<parameter name="performedAt" class="java.sql.Timestamp"/>
+	<parameter name="closedAt" class="java.sql.Timestamp"/>
+	<queryString>
+		<![CDATA[SELECT * FROM oh_encounter enc
+LEFT JOIN oh_medicalhistory mh 
+    ON enc.ENC_PAT_ID = mh.MH_PAT_ID
+   AND (mh.MH_CREATED_DATE >= enc.ENC_PERFORMED_AT AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT >=mh.MH_CREATED_DATE))
+LEFT JOIN oh_admission adm 
+    ON enc.ENC_PAT_ID = adm.ADM_PAT_ID
+   AND adm.ADM_DATE_ADM BETWEEN enc.ENC_PERFORMED_AT AND enc.ENC_CLOSED_AT
+LEFT JOIN oh_disease dis
+	ON adm.ADM_IN_DIS_ID_A = dis.DIS_ID_A
+WHERE enc.ENC_PAT_ID = $P{patID}
+AND enc.ENC_STATUS <> "CANCELLED"
+AND enc.ENC_PERFORMED_AT >= $P{performedAt}
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
+	</queryString>
+	<field name="MH_SIBLI_RANK" class="java.lang.Integer"/>
+	<field name="MH_TERM_PREG" class="java.lang.String"/>
+	<field name="MH_DLV_MODE" class="java.lang.String"/>
+	<field name="MH_APGAR_SCORE" class="java.lang.String"/>
+	<field name="MH_BIRTH_WGHT" class="java.lang.Double"/>
+	<field name="MH_VACC_STATE" class="java.lang.String"/>
+	<field name="MH_ANTI_MLRIAL_PROPHY" class="java.lang.String"/>
+	<field name="MH_DIET" class="java.lang.String"/>
+	<field name="MH_DEPARASITI" class="java.lang.String"/>
+	<field name="MH_PSYCHOMOTOR_DEV" class="java.lang.String"/>
+	<field name="MH_IRON_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_FOLIC_ACID_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_VIT_A_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_OTHR_SUPP" class="java.lang.String"/>
+	<field name="MH_TRANSFU" class="java.lang.Boolean"/>
+	<field name="MH_LAST_TRANSFU_DATE" class="java.sql.Timestamp"/>
+	<field name="MH_SIKCLE_CELL" class="java.lang.Boolean"/>
+	<field name="MH_DRG_ALRGY" class="java.lang.Boolean"/>
+	<field name="MH_ALRGY_PREC" class="java.lang.String"/>
+	<field name="MH_HEMYLOSIS" class="java.lang.String"/>
+	<field name="MH_OTHR_PERSONAL_PATHO" class="java.lang.String"/>
+	<field name="MH_OTHR_FAM_PATHO" class="java.lang.String"/>
+	<field name="ADM_PRE_ASSESSMENT" class="java.lang.String"/>
+	<field name="ADM_PRE_TREATMENT" class="java.lang.String"/>
+	<field name="ADM_NOTE" class="java.lang.String"/>
+	<field name="DIS_DESC" class="java.lang.String"/>
+	<field name="ADM_CONDITION_AT_ADMISSION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="715" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="594" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="e494f4d9-ed60-4808-b63d-262c5445f20e"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{ReasonEntry}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="3c9d1155-7af2-44f2-9e29-13241e6470cd"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DIS_DESC}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="20" width="594" height="20" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="7d8ca27f-6ad2-4a55-8191-96f0c5a088bf"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Anamnesis}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="73942592-7e1d-440e-904f-9a89887af957"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_NOTE}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="40" width="594" height="20" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="f173c907-cea1-4b77-95fd-4a041eb44cac"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PreadmissionAssessment}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="0bd52362-591c-4578-abff-f2e7d80b4b30"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_PRE_ASSESSMENT}]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement x="0" y="40" width="590" height="20" uuid="0360ea87-c526-41d9-a251-985ad9604268">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<textField>
+						<reportElement x="0" y="0" width="170" height="20" uuid="af87295a-d085-40b4-b516-c69d9a166146"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{PhysiologicalAntecedents}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="-1" y="20" width="594" height="20" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<textField>
+						<reportElement x="0" y="0" width="170" height="20" uuid="377a7a11-246f-4356-bc33-4276d8c958bd"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{TreatmentPriorAdmission}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="170" y="0" width="420" height="20" uuid="f542a445-f574-4737-bbd2-b9ced94837a3"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{ADM_PRE_TREATMENT}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+			<frame>
+				<reportElement x="0" y="100" width="594" height="20" uuid="f1b14296-1bdb-4f6d-8c6a-d3de62632402">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="1fa74c1a-6e40-461c-9f53-46f591684820"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{BirthOrder}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="f7590099-8386-43b9-ba26-5bc7ed55938f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_SIBLI_RANK}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="120" width="594" height="20" uuid="0e825d6f-2426-40f9-b357-7270f97bb0b3">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="140" height="20" uuid="e19330f4-ac29-48ac-80d3-e214e662aa56"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Pregnancy}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="140" y="0" width="60" height="20" uuid="897b3f5a-cb8c-47b5-9ff5-fade1631c608"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Term}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="200" y="0" width="50" height="20" uuid="4fb0a3ab-73a9-4180-848f-2c831e0f41a9"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_TERM_PREG}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="250" y="0" width="60" height="20" uuid="c21e759b-3ed6-4ff1-849f-ccd8bf924c9c"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Style}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="310" y="1" width="50" height="19" uuid="5c641d4f-7f59-4e6f-820a-90184d5d5e73"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_DLV_MODE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="360" y="1" width="60" height="19" uuid="c0549a2a-177d-4380-81ef-ee11d4b45b9e"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{APGAR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="420" y="0" width="50" height="20" uuid="1ec6dca1-af3d-40a7-b821-b8fccc2c21f6"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_APGAR_SCORE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="540" y="0" width="50" height="20" uuid="b1bc9548-909a-4f19-884e-84d2d9c88a7a"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_BIRTH_WGHT}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="470" y="0" width="70" height="20" uuid="00f278ab-00ea-4ca0-8110-ac0939459659"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Weight}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="140" width="594" height="20" uuid="284b2a5f-38b2-477f-8e8b-8e9c15d454bf">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="90f51240-78ea-4763-9a61-e7e56066cb65"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{VaccinationStatus}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="def956ad-24ce-4ea6-bc68-0337b8637082"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_VACC_STATE}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="160" width="594" height="20" uuid="4fb1e7bb-5dcc-487a-b19c-0e58e70d088e">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="15cacb80-e436-43bd-9fb8-7c512be6e2b5"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{MalariaProphylaxis}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="6df6a892-9521-4038-b59e-90e50b1f953f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_ANTI_MLRIAL_PROPHY}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="180" width="594" height="20" uuid="8aa1fffc-0559-468c-80ad-8a0f72bdaec2">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="d3e1f528-8fab-4887-8a45-6279ec511610"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Diet}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="c32b8d6a-122c-4c87-afd3-fa660aa51354"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_DIET}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="200" width="594" height="20" uuid="a032e490-c931-4b9e-9d63-8561c85485c5">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="4e08e9a9-6ec2-4e59-aa11-ba77952b9ca5"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Deworming}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="31e40f14-04f0-4c71-862f-18a35985ac4e"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_DEPARASITI}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="220" width="594" height="20" uuid="776446b0-b191-4540-8ed9-9ea616201b5b">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="49c69f2f-98ec-442f-a875-56b66b1af97e"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PsychomotorDevelopment}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="0772afc1-cfe1-4307-888f-9c1ebfb7537b"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_PSYCHOMOTOR_DEV}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="240" width="594" height="20" uuid="0e2deb15-c66e-4066-a363-04045f424b4e">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="220" height="20" uuid="0c5c39a4-7a28-4c07-8fbb-5f4519a74cb8"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Supplementation}+$R{YesOrNo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="220" y="0" width="50" height="20" uuid="9db139e0-36ce-495e-a898-2aeed5d5b03d"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Iron}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="270" y="1" width="60" height="19" uuid="b5afc271-e2ce-49b7-a511-da3b1aab954e"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_IRON_SUPP} ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="330" y="1" width="80" height="19" uuid="884499b7-66ab-488e-a93a-589e6d9da6fc"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{FolicAcid}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="410" y="0" width="60" height="20" uuid="febe07fe-e428-4904-b08e-240c5f2367f9"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_FOLIC_ACID_SUPP} ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="530" y="0" width="60" height="20" uuid="f916c4da-9b02-4166-97b5-b99ca5399b91"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_VIT_A_SUPP} ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="470" y="0" width="60" height="20" uuid="408e99d9-1dfd-4d8e-aba8-d3e763a2e00d"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{VitA}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="260" width="594" height="20" uuid="4e4a7ea6-8960-40e4-aa12-f29a08ded4e6">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="78186d13-57a8-43a1-9148-0c907c82772c"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Others}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="170" y="0" width="420" height="20" uuid="261742b2-f202-4b9f-9039-513c280ad5e6"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_OTHR_SUPP}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="1" y="280" width="594" height="20" uuid="41e5adaf-aae2-4bfd-a846-8ae351fc12d4">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="220" height="20" uuid="710c909b-a203-4863-939e-4e9503a903ec"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PastMedicalHistory}+$R{Personal}+$R{YesOrNo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="220" y="0" width="89" height="20" uuid="3ed75c53-3bad-4700-b2e6-178e1c106039"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Transfusion}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="309" y="0" width="61" height="19" uuid="9096a453-557f-4c17-9445-593c55845622"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_TRANSFU}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="510" y="0" width="80" height="20" uuid="d0e3b0e4-2301-416a-96c3-743f64b8eda0"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_LAST_TRANSFU_DATE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="370" y="0" width="140" height="20" uuid="44bdc611-5d14-4281-a516-b68e6857587f"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{DateLastTransfusion}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="300" width="594" height="20" uuid="10f44b3e-7f21-4145-91da-07b20e676c32">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" uuid="2ed697ba-cb06-4a80-8fa3-2cdf08bb9131"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{SickleCell}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="161" y="0" width="139" height="20" uuid="be967ed5-823f-4cb9-9014-0195a346c2f2"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{DrugAllergy}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="300" y="1" width="61" height="19" uuid="e1f70ba2-52ba-49f7-a299-e29b3ae62d51"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_DRG_ALRGY} ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="430" y="0" width="160" height="20" uuid="0b84473c-ba36-4191-a254-b3c89f725066"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_ALRGY_PREC}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="361" y="0" width="69" height="20" uuid="3087d778-8aa9-49d4-8759-d01ba3e08351"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Specify}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="1" width="61" height="19" uuid="d0b72d31-f501-4ccc-9dc1-484247a03217"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_SIKCLE_CELL} ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="320" width="594" height="20" uuid="1801976e-78cb-4cd7-8246-3403b582ddb5">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" uuid="039f314f-1e4e-40ab-a4cf-99c186accebb"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Hemolysis}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="161" y="0" width="69" height="20" uuid="3ac862b2-1d95-4a6d-90a3-2a95ef18abab"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Others}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="230" y="1" width="361" height="19" uuid="54e96442-ec06-4674-ac0f-bc1b0f05121f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_OTHR_PERSONAL_PATHO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="1" width="61" height="19" uuid="49931f77-d500-43bc-a0b9-8282dc96f95d"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_HEMYLOSIS}.equals("true") ? $R{Yes} : $R{No}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="340" width="594" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="220" height="20" uuid="15d787a8-96f6-4eff-b5b7-dde4d881f25e"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PastMedicalHistory}+$R{Family}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="221" y="0" width="369" height="20" uuid="dbe05c86-0d3e-4b32-bab3-c8e0c8150c47"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_OTHR_FAM_PATHO}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement x="0" y="410" width="299" height="27" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="-1" y="470" width="299" height="23" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement x="0" y="360" width="591" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
+				<textField>
+					<reportElement x="171" y="0" width="418" height="21" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_CONDITION_AT_ADMISSION}.replace("[", "").replace("]", "").replace("\"", " ")]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{StatusUponAdmission}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement x="1" y="515" width="298" height="25" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_tdrresult_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

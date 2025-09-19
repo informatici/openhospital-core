@@ -45,6 +45,8 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
+import org.isf.encounter.manager.EncounterBrowserManager;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
@@ -1159,6 +1161,27 @@ public class JasperReportsManager {
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
+	}
+
+	public JasperReportResultDto getGenericReportForEncounterPdf(Encounter encounter, Locale locale) throws OHServiceException {
+
+		try {
+			HashMap<String, Object> parameters = new HashMap<>();
+
+			parameters.put("patID", encounter.getPatient().getCode());
+			parameters.put("performedAt", encounter.getPerformedAt());
+			parameters.put("closedAt", encounter.getClosedAt());
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
+			String jasperFileName = "encounter_report";
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(String.valueOf(encounter.getPatient().getCode()))), "pdf");
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
 	}
 }
