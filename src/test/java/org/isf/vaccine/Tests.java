@@ -308,7 +308,7 @@ class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(true);
 		Vaccine vaccine = new Vaccine("aCode", "aDescription", vaccineType);
 
-		assertThat(vaccine.getLock()).isEqualTo(0);
+		assertThat(vaccine.getLock()).isNull();
 		vaccine.setLock(-1);
 		assertThat(vaccine.getLock()).isEqualTo(-1);
 	}

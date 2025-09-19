@@ -41,6 +41,7 @@ public class TestVaccine {
 		} else {
 			// Create Vaccine with all parameters 
 			vaccine = new Vaccine(code, description, vaccineType);
+			vaccine.setLock(0);
 		}
 
 		return vaccine;
@@ -50,6 +51,7 @@ public class TestVaccine {
 		vaccine.setCode(code);
 		vaccine.setDescription(description);
 		vaccine.setVaccineType(vaccineType);
+		vaccine.setLock(0);
 	}
 
 	public void check(Vaccine vaccine) {
