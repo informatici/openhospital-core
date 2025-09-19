@@ -112,7 +112,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{IPT}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="140" y="21" width="50" height="20" uuid="99a7b48b-c22b-4390-b066-49be0b0de842"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -125,7 +125,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_WEIGHT}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="190" y="21" width="40" height="20" uuid="453e657b-6d38-4e74-82e0-a1eb6bb9be4a"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -138,7 +138,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_HEIGHT}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="230" y="21" width="40" height="20" uuid="16ea920d-9e43-4735-a364-8276302b1909"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -151,7 +151,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_BRANCHIAL_PERIMETER}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="270" y="21" width="40" height="20" uuid="dee402d0-6212-4728-a110-e773f3cbf9d1"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -177,7 +177,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Date}]]></textFieldExpression>
 				</textField>
-				<textField pattern="M/d/yy h:mm a">
+				<textField pattern="M/d/yy h:mm a" isBlankWhenNull="true">
 					<reportElement x="70" y="21" width="70" height="20" uuid="8056c67b-23ee-41a7-a040-93ea316a286c"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -242,7 +242,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{FC}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="460" y="21" width="50" height="20" uuid="d824db5c-49ba-4f3d-bec5-a218f76e6bd9"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -255,7 +255,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_AP_MIN} + "/" + $F{PEX_AP_MAX}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="310" y="21" width="50" height="20" uuid="7ad24651-a49b-4bc5-b7ce-1ab569c10613"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -268,7 +268,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_TEMP}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="360" y="21" width="50" height="20" uuid="512fa6ac-9060-4538-a3da-c979822735fa"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -294,7 +294,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Temp}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="410" y="21" width="50" height="20" uuid="a3d2a584-2194-4181-9b46-213ef87e31f2"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -307,7 +307,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_HR}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="510" y="21" width="50" height="20" uuid="611cc540-0e87-402d-ac2b-08a50d8e4cd5"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>

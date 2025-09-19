@@ -34,7 +34,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{TDR}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="150" y="0" width="440" height="20" uuid="718a518a-1768-4ae4-99cc-3820e4936080"/>
 					<textElement>
 						<font size="12"/>
