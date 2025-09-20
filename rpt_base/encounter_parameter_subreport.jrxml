@@ -188,7 +188,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_DATE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format($F{PEX_DATE})]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="360" y="0" width="50" height="21" uuid="f3f0617c-27f5-4148-8b04-f35409a54486"/>

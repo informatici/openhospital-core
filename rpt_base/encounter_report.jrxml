@@ -6,6 +6,8 @@
 	<parameter name="patID" class="java.lang.Integer"/>
 	<parameter name="performedAt" class="java.sql.Timestamp"/>
 	<parameter name="closedAt" class="java.sql.Timestamp"/>
+	<parameter name="LOGO-BENIN-PATH" class="java.lang.String"/>
+	<parameter name="LOGO-PATH" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select * from oh_patient p
 RIGHT JOIN oh_encounter e
@@ -41,24 +43,10 @@ ON p.PAT_ID = e.ENC_PAT_ID
 	<pageHeader>
 		<band height="231" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="-1" width="550" height="111" forecolor="#000000" uuid="f54a9b38-dd41-4352-be2a-c1e8ec687b06"/>
+				<reportElement x="0" y="-1" width="550" height="121" forecolor="#000000" uuid="f54a9b38-dd41-4352-be2a-c1e8ec687b06"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="172" y="10" width="210" height="21" backcolor="#614317" uuid="d81b481b-6ec9-41f6-9315-9a51883d992f"/>
-				<box>
-					<pen lineColor="#000000"/>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font fontName="Serif" size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[REPUBLIQUE DU BENIN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="250" y="40" width="57" height="14" uuid="08585358-20d6-4c6e-8f9f-74e6241f6ca0"/>
+				<reportElement x="249" y="21" width="57" height="14" uuid="08585358-20d6-4c6e-8f9f-74e6241f6ca0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Serif" size="11"/>
 				</textElement>
@@ -91,40 +79,101 @@ ON p.PAT_ID = e.ENC_PAT_ID
 					<textFieldExpression><![CDATA[$R{Folder}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="77" y="0" width="78" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
+					<reportElement x="77" y="0" width="43" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
 					<textElement>
 						<font fontName="Serif" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ENC_ID}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="155" y="1" width="25" height="18" uuid="854d5880-f40a-4e3f-bb9d-e0b871f24be7"/>
+					<reportElement x="120" y="1" width="15" height="18" uuid="854d5880-f40a-4e3f-bb9d-e0b871f24be7"/>
 					<textElement textAlignment="Center" markup="none">
 						<font fontName="Serif" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[/]]></text>
 				</staticText>
-				<textField>
-					<reportElement x="180" y="0" width="77" height="19" uuid="0ba45d78-c06e-4d42-84ea-54ef3fed6e48"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="135" y="0" width="35" height="19" uuid="0ba45d78-c06e-4d42-84ea-54ef3fed6e48"/>
 					<textElement>
 						<font fontName="Serif" size="14"/>
 					</textElement>
 				</textField>
 				<textField isBlankWhenNull="false">
-					<reportElement x="257" y="0" width="63" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
+					<reportElement x="170" y="0" width="50" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
 					<textElement>
 						<font fontName="Serif" size="14" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{PED}]]></textFieldExpression>
 				</textField>
 				<textField pattern="yyyy" isBlankWhenNull="true">
-					<reportElement x="320" y="0" width="79" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
+					<reportElement x="220" y="0" width="40" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
 					<textElement>
 						<font fontName="Serif" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
 			</frame>
+			<frame>
+				<reportElement x="0" y="0" width="121" height="110" uuid="45890e5c-0302-4006-be8f-70ac6e1b58cb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<image>
+					<reportElement x="1" y="0" width="120" height="120" uuid="e0ac5b10-aa1f-4cee-a5c4-9a0ccff2acd0"/>
+					<imageExpression><![CDATA[$P{LOGO-BENIN-PATH}]]></imageExpression>
+				</image>
+			</frame>
+			<frame>
+				<reportElement x="430" y="0" width="120" height="120" uuid="a668c583-8059-45b7-928e-07ef03f600f0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<image>
+					<reportElement x="0" y="38" width="120" height="50" uuid="bebd5633-e2cd-4aa7-b61e-7d4554579b4f"/>
+					<imageExpression><![CDATA[$P{LOGO-PATH}]]></imageExpression>
+				</image>
+			</frame>
+			<textField>
+				<reportElement x="160" y="0" width="231" height="21" uuid="2069ef3e-5bbd-49f1-acb7-716ce7e57a9c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{BeninRepublic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="35" width="309" height="21" uuid="1dfde48f-328d-4d7a-9b4f-721def6cdc46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Department}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="247" y="56" width="57" height="14" uuid="543ef76e-c885-4e20-b4d3-b02ea94eae72"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="11"/>
+				</textElement>
+				<text><![CDATA[-----***-----]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="121" y="70" width="309" height="20" uuid="0faf32ea-e020-4bf7-94a3-2a96353cf3af"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Hospital}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="130" y="90" width="290" height="20" uuid="4f36369b-5cc2-4743-a8af-b3b2952757c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[69374707 / 69374700 / 69374703]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

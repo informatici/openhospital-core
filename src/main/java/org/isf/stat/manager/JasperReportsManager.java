@@ -98,6 +98,10 @@ public class JasperReportsManager {
 	
 	private static final String LOGO = "./rsc/images/logo_report.png";
 
+	private static final String LOGO_BENIN_PATH = "./rsc/images/logo-benin.png";
+
+	private static final String LOGO_ABBRACCIO_PATH = "./rsc/images/labbraccio-logopng.png";
+
 	private HospitalBrowsingManager hospitalManager;
 
 	private DataSource dataSource;
@@ -1173,6 +1177,8 @@ public class JasperReportsManager {
 			parameters.put("patID", encounter.getPatient().getCode());
 			parameters.put("performedAt", Timestamp.valueOf(encounter.getPerformedAt()));
 			parameters.put("closedAt", Timestamp.valueOf(encounter.getClosedAt()));
+			parameters.put("LOGO-BENIN-PATH", LOGO_BENIN_PATH);
+			parameters.put("LOGO-PATH", LOGO_ABBRACCIO_PATH);
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			String jasperFileName = "encounter_report";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(String.valueOf(encounter.getPatient().getCode()))), "pdf");
