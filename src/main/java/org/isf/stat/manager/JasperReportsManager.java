@@ -25,6 +25,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1170,8 +1171,8 @@ public class JasperReportsManager {
 			HashMap<String, Object> parameters = new HashMap<>();
 
 			parameters.put("patID", encounter.getPatient().getCode());
-			parameters.put("performedAt", toDate(encounter.getPerformedAt()));
-			parameters.put("closedAt", toDate(encounter.getClosedAt()));
+			parameters.put("performedAt", Timestamp.valueOf(encounter.getPerformedAt()));
+			parameters.put("closedAt", Timestamp.valueOf(encounter.getClosedAt()));
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			String jasperFileName = "encounter_report";
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(String.valueOf(encounter.getPatient().getCode()))), "pdf");
