@@ -28,14 +28,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 			<frame>
 				<reportElement x="0" y="0" width="590" height="20" uuid="58944e12-3561-4e1f-8af2-e1e5cca5196b"/>
 				<textField>
-					<reportElement x="-1" y="0" width="151" height="20" uuid="228db713-6c57-4e83-811f-acc89741df0d"/>
+					<reportElement x="-1" y="0" width="121" height="20" uuid="228db713-6c57-4e83-811f-acc89741df0d"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{TDR}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="150" y="0" width="440" height="20" uuid="718a518a-1768-4ae4-99cc-3820e4936080"/>
+					<reportElement x="120" y="0" width="470" height="20" uuid="718a518a-1768-4ae4-99cc-3820e4936080"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
