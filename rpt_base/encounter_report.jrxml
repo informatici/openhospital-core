@@ -433,9 +433,9 @@ ON p.PAT_ID = e.ENC_PAT_ID
 		</band>
 	</detail>
 	<summary>
-		<band height="50">
+		<band height="53">
 			<subreport>
-				<reportElement x="0" y="10" width="550" height="40" uuid="8d1ef752-5639-479a-b2ab-c0d09c582879"/>
+				<reportElement x="0" y="12" width="551" height="31" uuid="7a9231bb-561c-4cf3-a4a8-6a6ec9be80aa"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>

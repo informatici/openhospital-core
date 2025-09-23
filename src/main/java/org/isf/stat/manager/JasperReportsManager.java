@@ -46,7 +46,6 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import org.isf.encounter.manager.EncounterBrowserManager;
 import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;

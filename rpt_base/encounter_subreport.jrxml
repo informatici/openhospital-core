@@ -78,7 +78,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="90" width="585" height="50" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
+				<reportElement x="0" y="90" width="560" height="50" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -89,7 +89,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{Anamnesis}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="90" y="0" width="480" height="50" uuid="73942592-7e1d-440e-904f-9a89887af957"/>
+					<reportElement x="90" y="0" width="460" height="50" uuid="73942592-7e1d-440e-904f-9a89887af957"/>
 					<textElement textAlignment="Justified">
 						<font size="12"/>
 					</textElement>
@@ -97,7 +97,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="140" width="585" height="40" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
+				<reportElement x="0" y="140" width="560" height="40" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -108,7 +108,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{PreadmissionAssessment}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="409" height="40" uuid="0bd52362-591c-4578-abff-f2e7d80b4b30"/>
+					<reportElement x="170" y="0" width="380" height="40" uuid="0bd52362-591c-4578-abff-f2e7d80b4b30"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -491,12 +491,11 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 			<frame>
 				<reportElement x="-1" y="560" width="586" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="150" y="0" width="435" height="21" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
+					<reportElement x="150" y="0" width="435" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[String.join(", ", java.util.Arrays.asList($F{ADM_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*")))
-]]></textFieldExpression>
+					<textFieldExpression><![CDATA[org.isf.utils.report.ReportUtil.translateAdmissionState(String.join(", ", java.util.Arrays.asList($F{ADM_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*"))), ",", $P{REPORT_RESOURCE_BUNDLE})]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="0" width="150" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
@@ -595,7 +594,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="-1" y="180" width="586" height="40" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
+				<reportElement x="-1" y="180" width="561" height="40" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -606,7 +605,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{TreatmentPriorAdmission}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="410" height="40" uuid="f542a445-f574-4737-bbd2-b9ced94837a3"/>
+					<reportElement x="170" y="0" width="381" height="40" uuid="f542a445-f574-4737-bbd2-b9ced94837a3"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -636,7 +635,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{AdmissionDate}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement x="121" y="0" width="89" height="20" uuid="5834bca8-81e2-41cf-a720-7d276aeb087e"/>
 					<textElement>
 						<font size="12"/>
@@ -650,7 +649,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Hour}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" pattern="HH:mm" isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" pattern="HH:mm" isBlankWhenNull="true">
 					<reportElement x="270" y="0" width="50" height="20" uuid="2fe71d5c-16fd-4193-afcd-70cde7e3aad9"/>
 					<textElement>
 						<font size="12"/>
@@ -690,7 +689,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Ref}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
 					<reportElement x="340" y="0" width="30" height="20" uuid="d82c95c6-5bda-49da-b498-bcb58837265f"/>
 					<textElement>
 						<font size="12"/>
@@ -704,7 +703,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Of}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
 					<reportElement x="402" y="0" width="182" height="20" uuid="e12a9cf7-017e-4da3-b4ab-bbc9ee142b50"/>
 					<textElement>
 						<font size="12"/>
