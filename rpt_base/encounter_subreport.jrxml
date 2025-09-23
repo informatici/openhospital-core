@@ -16,6 +16,8 @@ LEFT JOIN oh_admission adm
    AND adm.ADM_DATE_ADM BETWEEN enc.ENC_PERFORMED_AT AND enc.ENC_CLOSED_AT
 LEFT JOIN oh_disease dis
 	ON adm.ADM_IN_DIS_ID_A = dis.DIS_ID_A
+LEFT JOIN oh_admissiontype admt
+	ON adm.ADM_ADMT_ID_A_ADM = admt.ADMT_ID_A
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT >= $P{performedAt}
@@ -48,51 +50,54 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 	<field name="ADM_NOTE" class="java.lang.String"/>
 	<field name="DIS_DESC" class="java.lang.String"/>
 	<field name="ADM_CONDITION_AT_ADMISSION" class="java.lang.String"/>
+	<field name="ADM_DATE_ADM" class="java.sql.Timestamp"/>
+	<field name="ADMT_DESC" class="java.lang.String"/>
+	<field name="ADM_FHU" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="715" splitType="Stretch">
+		<band height="710" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
+				<reportElement x="0" y="70" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="170" height="20" uuid="e494f4d9-ed60-4808-b63d-262c5445f20e"/>
+					<reportElement x="0" y="0" width="120" height="20" uuid="e494f4d9-ed60-4808-b63d-262c5445f20e"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{ReasonEntry}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="414" height="20" uuid="3c9d1155-7af2-44f2-9e29-13241e6470cd"/>
-					<textElement>
+					<reportElement x="120" y="0" width="464" height="20" uuid="3c9d1155-7af2-44f2-9e29-13241e6470cd"/>
+					<textElement textAlignment="Justified">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DIS_DESC}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="20" width="585" height="20" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
+				<reportElement x="0" y="90" width="585" height="50" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="170" height="20" uuid="7d8ca27f-6ad2-4a55-8191-96f0c5a088bf"/>
+					<reportElement x="0" y="0" width="90" height="20" uuid="7d8ca27f-6ad2-4a55-8191-96f0c5a088bf"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Anamnesis}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="414" height="20" uuid="73942592-7e1d-440e-904f-9a89887af957"/>
-					<textElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="90" y="0" width="480" height="50" uuid="73942592-7e1d-440e-904f-9a89887af957"/>
+					<textElement textAlignment="Justified">
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ADM_NOTE}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="40" width="585" height="20" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
+				<reportElement x="0" y="140" width="585" height="40" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -102,47 +107,16 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{PreadmissionAssessment}]]></textFieldExpression>
 				</textField>
-				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="414" height="20" uuid="0bd52362-591c-4578-abff-f2e7d80b4b30"/>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="170" y="0" width="409" height="40" uuid="0bd52362-591c-4578-abff-f2e7d80b4b30"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ADM_PRE_ASSESSMENT}]]></textFieldExpression>
 				</textField>
-				<frame>
-					<reportElement x="0" y="40" width="584" height="20" uuid="0360ea87-c526-41d9-a251-985ad9604268">
-						<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					</reportElement>
-					<textField>
-						<reportElement x="0" y="0" width="250" height="20" uuid="af87295a-d085-40b4-b516-c69d9a166146"/>
-						<textElement>
-							<font size="14" isBold="true"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$R{PhysiologicalAntecedents}]]></textFieldExpression>
-					</textField>
-				</frame>
-				<frame>
-					<reportElement x="-1" y="20" width="586" height="20" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
-						<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					</reportElement>
-					<textField>
-						<reportElement x="0" y="0" width="170" height="20" uuid="377a7a11-246f-4356-bc33-4276d8c958bd"/>
-						<textElement>
-							<font size="12" isBold="true"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$R{TreatmentPriorAdmission}]]></textFieldExpression>
-					</textField>
-					<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-						<reportElement x="170" y="0" width="415" height="20" uuid="f542a445-f574-4737-bbd2-b9ced94837a3"/>
-						<textElement>
-							<font size="12"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{ADM_PRE_TREATMENT}]]></textFieldExpression>
-					</textField>
-				</frame>
 			</frame>
 			<frame>
-				<reportElement x="0" y="100" width="585" height="20" uuid="f1b14296-1bdb-4f6d-8c6a-d3de62632402">
+				<reportElement x="0" y="240" width="585" height="20" uuid="f1b14296-1bdb-4f6d-8c6a-d3de62632402">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -161,7 +135,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="120" width="585" height="20" uuid="0e825d6f-2426-40f9-b357-7270f97bb0b3">
+				<reportElement x="0" y="260" width="585" height="20" uuid="0e825d6f-2426-40f9-b357-7270f97bb0b3">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -229,7 +203,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="140" width="585" height="20" uuid="284b2a5f-38b2-477f-8e8b-8e9c15d454bf">
+				<reportElement x="0" y="280" width="585" height="20" uuid="284b2a5f-38b2-477f-8e8b-8e9c15d454bf">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -248,7 +222,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="160" width="585" height="20" uuid="4fb1e7bb-5dcc-487a-b19c-0e58e70d088e">
+				<reportElement x="0" y="300" width="585" height="20" uuid="4fb1e7bb-5dcc-487a-b19c-0e58e70d088e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -267,7 +241,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="180" width="584" height="20" uuid="8aa1fffc-0559-468c-80ad-8a0f72bdaec2">
+				<reportElement x="1" y="320" width="584" height="20" uuid="8aa1fffc-0559-468c-80ad-8a0f72bdaec2">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -286,7 +260,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="200" width="584" height="20" uuid="a032e490-c931-4b9e-9d63-8561c85485c5">
+				<reportElement x="1" y="340" width="584" height="20" uuid="a032e490-c931-4b9e-9d63-8561c85485c5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -305,18 +279,18 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="220" width="584" height="20" uuid="776446b0-b191-4540-8ed9-9ea616201b5b">
+				<reportElement x="1" y="360" width="584" height="20" uuid="776446b0-b191-4540-8ed9-9ea616201b5b">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="170" height="20" uuid="49c69f2f-98ec-442f-a875-56b66b1af97e"/>
+					<reportElement x="0" y="0" width="189" height="20" uuid="49c69f2f-98ec-442f-a875-56b66b1af97e"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{PsychomotorDevelopment}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="413" height="20" uuid="0772afc1-cfe1-4307-888f-9c1ebfb7537b"/>
+					<reportElement x="189" y="0" width="394" height="20" uuid="0772afc1-cfe1-4307-888f-9c1ebfb7537b"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -324,7 +298,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="240" width="585" height="20" uuid="0e2deb15-c66e-4066-a363-04045f424b4e">
+				<reportElement x="0" y="380" width="585" height="20" uuid="0e2deb15-c66e-4066-a363-04045f424b4e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -378,7 +352,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="260" width="585" height="20" uuid="4e4a7ea6-8960-40e4-aa12-f29a08ded4e6">
+				<reportElement x="0" y="400" width="585" height="20" uuid="4e4a7ea6-8960-40e4-aa12-f29a08ded4e6">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -397,7 +371,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="280" width="583" height="20" uuid="41e5adaf-aae2-4bfd-a846-8ae351fc12d4">
+				<reportElement x="1" y="420" width="583" height="20" uuid="41e5adaf-aae2-4bfd-a846-8ae351fc12d4">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -409,32 +383,32 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="320" width="584" height="20" uuid="10f44b3e-7f21-4145-91da-07b20e676c32">
+				<reportElement x="0" y="460" width="584" height="20" uuid="10f44b3e-7f21-4145-91da-07b20e676c32">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="80" height="20" uuid="2ed697ba-cb06-4a80-8fa3-2cdf08bb9131"/>
+					<reportElement x="0" y="0" width="100" height="20" uuid="2ed697ba-cb06-4a80-8fa3-2cdf08bb9131"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{SickleCell}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="110" y="0" width="190" height="20" uuid="be967ed5-823f-4cb9-9014-0195a346c2f2"/>
+					<reportElement x="130" y="0" width="189" height="20" uuid="be967ed5-823f-4cb9-9014-0195a346c2f2"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{DrugAllergy}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="300" y="1" width="31" height="19" uuid="e1f70ba2-52ba-49f7-a299-e29b3ae62d51"/>
+					<reportElement x="319" y="1" width="31" height="19" uuid="e1f70ba2-52ba-49f7-a299-e29b3ae62d51"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_DRG_ALRGY} ? $R{Yes} : $R{No}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="80" y="1" width="30" height="19" uuid="d0b72d31-f501-4ccc-9dc1-484247a03217"/>
+					<reportElement x="100" y="1" width="30" height="19" uuid="d0b72d31-f501-4ccc-9dc1-484247a03217"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -442,7 +416,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="360" width="585" height="20" uuid="1801976e-78cb-4cd7-8246-3403b582ddb5">
+				<reportElement x="0" y="500" width="585" height="20" uuid="1801976e-78cb-4cd7-8246-3403b582ddb5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -459,7 +433,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Others}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
 					<reportElement x="171" y="1" width="413" height="19" uuid="54e96442-ec06-4674-ac0f-bc1b0f05121f"/>
 					<textElement>
 						<font size="12"/>
@@ -475,7 +449,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="380" width="584" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
+				<reportElement x="0" y="520" width="584" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -487,7 +461,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="460" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
+				<reportElement x="0" y="600" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -501,7 +475,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="510" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
+				<reportElement x="0" y="640" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -515,16 +489,17 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="-1" y="420" width="586" height="20" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
+				<reportElement x="-1" y="560" width="586" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="162" y="0" width="423" height="21" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
+					<reportElement x="150" y="0" width="435" height="21" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ADM_CONDITION_AT_ADMISSION}.replace("[", "").replace("]", "").replace("\"", " ")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[String.join(", ", java.util.Arrays.asList($F{ADM_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*")))
+]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="0" width="162" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
+					<reportElement x="0" y="0" width="150" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -532,7 +507,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="560" width="298" height="30" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
+				<reportElement x="0" y="680" width="298" height="30" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -546,7 +521,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_tdrresult_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="0" y="340" width="584" height="20" uuid="e3c6f456-62a0-414e-befd-4fdb7eb08ef6"/>
+				<reportElement x="0" y="480" width="584" height="20" uuid="e3c6f456-62a0-414e-befd-4fdb7eb08ef6"/>
 				<textField>
 					<reportElement x="1" y="0" width="160" height="20" uuid="3087d778-8aa9-49d4-8759-d01ba3e08351"/>
 					<textElement>
@@ -563,7 +538,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="300" width="584" height="20" uuid="b8ca6479-5230-47a5-9a2e-832adc81c842">
+				<reportElement x="0" y="440" width="584" height="20" uuid="b8ca6479-5230-47a5-9a2e-832adc81c842">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -596,7 +571,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="400" width="584" height="20" uuid="177ecd28-a924-420e-bfc3-5bfb0b2de4b6">
+				<reportElement x="1" y="540" width="584" height="20" uuid="177ecd28-a924-420e-bfc3-5bfb0b2de4b6">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
@@ -605,6 +580,136 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_OTHR_FAM_PATHO}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="220" width="584" height="20" uuid="0360ea87-c526-41d9-a251-985ad9604268">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="250" height="20" uuid="af87295a-d085-40b4-b516-c69d9a166146"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PhysiologicalAntecedents}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="-1" y="180" width="586" height="40" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="377a7a11-246f-4356-bc33-4276d8c958bd"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{TreatmentPriorAdmission}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="170" y="0" width="410" height="40" uuid="f542a445-f574-4737-bbd2-b9ced94837a3"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_PRE_TREATMENT}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="-1" y="0" width="585" height="30" uuid="4b07b7e0-2787-4cf4-a879-8feb691f9040">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="584" height="30" uuid="371c058c-9b91-47f2-ab6c-5465378a351b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Admission}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="-1" y="30" width="585" height="20" uuid="ce6341a2-c7a7-47e3-9a6c-f19958636065">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="121" height="20" uuid="efc1babf-1112-4967-b0a9-f7d8c3222695"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{AdmissionDate}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="121" y="0" width="89" height="20" uuid="5834bca8-81e2-41cf-a720-7d276aeb087e"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_DATE_ADM}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="210" y="0" width="60" height="20" uuid="882b0967-56cf-47bd-b4f5-0adc5468baf8"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Hour}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement x="270" y="0" width="50" height="20" uuid="2fe71d5c-16fd-4193-afcd-70cde7e3aad9"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_DATE_ADM}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="-1" y="50" width="584" height="20" uuid="c81e7037-70a2-4b29-8713-4a5b8329d69e">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="121" height="20" uuid="943d4dd3-1dd3-40af-ad73-071928cb1a34"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{AdmissionMode}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="121" y="0" width="59" height="20" uuid="b504b4ad-a613-4d97-bf22-a224c4f72ef5"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Direct}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="180" y="0" width="90" height="20" uuid="7d115c85-cda9-4fcb-ac24-a0b34f649e06"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADMT_DESC}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="270" y="0" width="70" height="20" uuid="4e45c27a-5fa1-4630-a7ce-cec24a6d846b"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Ref}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement x="340" y="0" width="30" height="20" uuid="d82c95c6-5bda-49da-b498-bcb58837265f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_FHU} == null || $F{ADM_FHU}.equals("") ? $R{No} : $R{Yes}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="370" y="0" width="32" height="20" uuid="efe1e47d-716d-4574-8122-85ef5d6b4c26"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Of}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement x="402" y="0" width="182" height="20" uuid="e12a9cf7-017e-4da3-b4ab-bbc9ee142b50"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_FHU}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
