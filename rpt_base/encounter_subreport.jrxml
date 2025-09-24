@@ -491,14 +491,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 			<frame>
 				<reportElement x="-1" y="560" width="561" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="150" y="0" width="401" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
+					<reportElement x="121" y="0" width="430" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[org.isf.utils.report.ReportUtil.translateAdmissionState(String.join(", ", java.util.Arrays.asList($F{ADM_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*"))), ",", $P{REPORT_RESOURCE_BUNDLE})]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="0" width="150" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
+					<reportElement x="0" y="0" width="121" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
