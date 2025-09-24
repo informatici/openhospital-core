@@ -13,8 +13,8 @@
 RIGHT JOIN oh_encounter e
 ON p.PAT_ID = e.ENC_PAT_ID
  where p.PAT_ID = $P{patID}
- AND e.ENC_PERFORMED_AT <= $P{performedAt} 
- AND e.ENC_CLOSED_AT >= $P{closedAt}]]>
+AND e.ENC_PERFORMED_AT >= $P{performedAt}
+AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 	</queryString>
 	<field name="PAT_NAME" class="java.lang.String"/>
 	<field name="PAT_AGE" class="java.lang.Integer"/>
