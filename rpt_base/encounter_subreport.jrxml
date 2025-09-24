@@ -489,9 +489,9 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="-1" y="560" width="586" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
+				<reportElement x="-1" y="560" width="561" height="21" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="150" y="0" width="435" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
+					<reportElement x="150" y="0" width="401" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
