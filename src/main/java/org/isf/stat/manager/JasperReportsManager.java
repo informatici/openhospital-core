@@ -1175,7 +1175,7 @@ public class JasperReportsManager {
 
 			parameters.put("patID", encounter.getPatient().getCode());
 			parameters.put("performedAt", Timestamp.valueOf(encounter.getPerformedAt()));
-			parameters.put("closedAt", Timestamp.valueOf(encounter.getClosedAt()));
+			parameters.put("closedAt", Timestamp.valueOf(encounter.getClosedAt() != null ? encounter.getClosedAt() : LocalDateTime.now()));
 			parameters.put("LOGO-BENIN-PATH", LOGO_BENIN_PATH);
 			parameters.put("LOGO-PATH", LOGO_ABBRACCIO_PATH);
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
