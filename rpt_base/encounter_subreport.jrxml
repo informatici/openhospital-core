@@ -57,7 +57,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="710" splitType="Stretch">
+		<band height="755" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="70" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -394,14 +394,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{SickleCell}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="130" y="0" width="189" height="20" uuid="be967ed5-823f-4cb9-9014-0195a346c2f2"/>
+					<reportElement x="130" y="0" width="160" height="20" uuid="be967ed5-823f-4cb9-9014-0195a346c2f2"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{DrugAllergy}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="319" y="1" width="31" height="19" uuid="e1f70ba2-52ba-49f7-a299-e29b3ae62d51"/>
+					<reportElement x="290" y="1" width="29" height="19" uuid="e1f70ba2-52ba-49f7-a299-e29b3ae62d51"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -461,7 +461,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="600" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
+				<reportElement x="0" y="610" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -475,7 +475,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="640" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
+				<reportElement x="0" y="670" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -506,7 +506,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="680" width="298" height="30" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
+				<reportElement x="1" y="720" width="298" height="30" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -711,6 +711,9 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{ADM_FHU}]]></textFieldExpression>
 				</textField>
 			</frame>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="650" width="301" height="10" uuid="c942606e-ea55-4150-b44e-4322259c51a6"/>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

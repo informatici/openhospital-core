@@ -253,7 +253,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_AP_MIN} + "/" + $F{PEX_AP_MAX}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PEX_AP_MIN} != null ? $F{PEX_AP_MIN} + "/" + $F{PEX_AP_MAX} : ""]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="310" y="21" width="50" height="20" uuid="7ad24651-a49b-4bc5-b7ce-1ab569c10613"/>
