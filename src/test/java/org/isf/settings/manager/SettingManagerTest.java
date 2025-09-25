@@ -26,8 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.patient.model.Patient;
 import org.isf.settings.model.Setting;
+import org.isf.settings.model.TestSetting;
+import org.isf.settings.service.SettingIoOperationRepository;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.visits.TestVisit;
+import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,14 +47,46 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SettingManagerTest extends OHCoreTestCase {
 
+	private static TestSetting testSetting;
+
 	@Autowired
 	private SettingManager manager;
+
+	@Autowired
+	private SettingIoOperationRepository repository;
 
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 		executeSQLScript("LoadSettingTable.sql");
+		testSetting = new TestSetting();
 	}
+
+	private int setupTestSetting(boolean usingSet) throws OHException {
+		Setting setting = testSetting.setup(usingSet);
+		repository.saveAndFlush(setting);
+		return setting.getId();
+	}
+
+	private void checkSettingIntoDb(int id) {
+		Setting foundSetting = repository.findFirstById(id);
+		testSetting.check(foundSetting);
+	}
+
+	@Test
+	@DisplayName("Test Setting Gets")
+	void testSettingGets() throws Exception {
+		int id = setupTestSetting(false);
+		checkSettingIntoDb(id);
+	}
+
+	@Test
+	@DisplayName("Test Setting Sets")
+	void testSettingSets() throws Exception {
+		int id = setupTestSetting(true);
+		checkSettingIntoDb(id);
+	}
+
 
 	@Test
 	@DisplayName("Get all settings")
