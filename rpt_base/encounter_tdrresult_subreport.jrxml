@@ -16,8 +16,8 @@ LEFT JOIN oh_exam exa
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND exa.EXA_DESC = "TDR"
 AND enc.ENC_STATUS <> "CANCELLED"
-AND enc.ENC_PERFORMED_AT >= $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
+AND enc.ENC_PERFORMED_AT = $P{performedAt}
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	</queryString>
 	<field name="LAB_RES" class="java.lang.String"/>
 	<background>

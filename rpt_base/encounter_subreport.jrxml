@@ -20,8 +20,8 @@ LEFT JOIN oh_admissiontype admt
 	ON adm.ADM_ADMT_ID_A_ADM = admt.ADMT_ID_A
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
-AND enc.ENC_PERFORMED_AT >= $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
+AND enc.ENC_PERFORMED_AT = $P{performedAt}
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	</queryString>
 	<field name="MH_SIBLI_RANK" class="java.lang.Integer"/>
 	<field name="MH_TERM_PREG" class="java.lang.String"/>
@@ -570,7 +570,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="11" y="0" width="169" height="20" uuid="377a7a11-246f-4356-bc33-4276d8c958bd"/>
+					<reportElement x="1" y="0" width="179" height="20" uuid="377a7a11-246f-4356-bc33-4276d8c958bd"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -666,7 +666,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ADM_FHU} == null || $F{ADM_FHU}.equals("") ? $R{No} : $R{Yes}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ADM_FHU}.equals("") ? $R{No} : $R{Yes}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="370" y="0" width="32" height="20" uuid="efe1e47d-716d-4574-8122-85ef5d6b4c26"/>
