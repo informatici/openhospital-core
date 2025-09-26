@@ -32,6 +32,7 @@ import org.isf.utils.exception.OHException;
 public class TestPatientExamination {
 
 	private LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 0, 0, 0);
+	private String examinationType = "Admission";
 	private Integer pex_height = 170;
 	private Double pex_weight = 60.0;
 	private Integer pex_ap_min = 80;
@@ -56,7 +57,7 @@ public class TestPatientExamination {
 			setParameters(patientExamination, patient);
 		} else {
 			// Create Patient Examination with all parameters 
-			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight,
+			patientExamination = new PatientExamination(pex_date, examinationType, patient, pex_height, pex_weight,
 					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat,
 					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note);
 			patientExamination.setPex_branchial_perimeter(pex_branchial_perimeter);
@@ -67,6 +68,7 @@ public class TestPatientExamination {
 
 	private void setParameters(PatientExamination patientExamination, Patient patient) {
 		patientExamination.setPatient(patient);
+		patientExamination.setPex_type(examinationType);
 		patientExamination.setPex_date(pex_date);
 		patientExamination.setPex_hr(pex_hr);
 		patientExamination.setPex_height(pex_height);

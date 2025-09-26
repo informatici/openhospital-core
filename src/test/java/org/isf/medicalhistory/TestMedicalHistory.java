@@ -49,7 +49,7 @@ public class TestMedicalHistory {
 	public MedicalHistory createMedicalHistory(Patient patient) {
 		MedicalHistory mh = new MedicalHistory();
 		mh.setPatient(patient);
-		mh.setSiblingRank(2);
+		mh.setSiblingRank("2");
 		mh.setTermPregnancy("Full term");
 		mh.setDeliveryMode("Cesarean");
 		mh.setApgarScore("8/10");
@@ -80,7 +80,7 @@ public class TestMedicalHistory {
 		MedicalHistory mh = createMedicalHistory(patient);
 
 		assertThat(mh.getPatient()).isEqualTo(patient);
-		assertThat(mh.getSiblingRank()).isEqualTo(2);
+		assertThat(mh.getSiblingRank()).isEqualTo("2");
 		assertThat(mh.getTermPregnancy()).isEqualTo("Full term");
 		assertThat(mh.getDeliveryMode()).isEqualTo("Cesarean");
 		assertThat(mh.getApgarScore()).isEqualTo("8/10");

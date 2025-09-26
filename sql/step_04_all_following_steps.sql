@@ -125,3 +125,4 @@ source step_a128_create_table_oh_encounter.sql;
 source step_a129_create_conditioning_table.sql;
 source step_a130_update_oh_encounter_and_oh_conditioning_tables.sql;
 source step_a131_update_oh_encounter_status.sql;
+source step_a132_add_examination_type_in_oh_patientexamination_table.sql
