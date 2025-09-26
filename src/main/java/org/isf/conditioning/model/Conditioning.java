@@ -24,10 +24,12 @@ package org.isf.conditioning.model;
 import com.drew.lang.annotations.NotNull;
 import jakarta.persistence.*;
 import org.isf.patient.model.Patient;
+import org.isf.utils.converter.JsonListConverter;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "OH_CONDITIONING")
@@ -68,8 +70,15 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_SNG_NUMBER")
 	private String sngNumber;
 
+	@Column(name = "COND_TDR")
+	private String tdr;
+
 	@Column(name = "COND_OTHERS")
 	private String others;
+
+	@Column(name = "COND_CONDITION_AT_ADMISSION", columnDefinition = "JSON")
+	@Convert(converter = JsonListConverter.class)
+	private List<String> conditionAtAdmission;
 
 	@Column(name = "COND_PERFORMED_AT")
 	private LocalDateTime performedAt;
@@ -188,6 +197,10 @@ public class Conditioning extends Auditable<String> {
 		this.bolusSsVolume = bolusSsVolume;
 	}
 
+	public String getTdr() {return tdr;}
+
+	public void setTdr(String tdr) {this.tdr = tdr;}
+
 	public String getSngNumber() {
 		return sngNumber;
 	}
@@ -207,6 +220,12 @@ public class Conditioning extends Auditable<String> {
 	public LocalDateTime getPerformedAt() {
 		return performedAt;
 	}
+
+	public List<String> getConditionAtAdmission() {
+		return conditionAtAdmission;
+	}
+
+	public void setConditionAtAdmission(List<String> conditionAtAdmission) {this.conditionAtAdmission = conditionAtAdmission;}
 
 	public void setPerformedAt(LocalDateTime performedAt) {
 		this.performedAt = performedAt;

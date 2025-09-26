@@ -189,16 +189,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	)
 	private String preAssessment;
 
-	/**
-	 * Represents the patient's condition at the time of admission.
-	 * <p>
-	 * This field is stored as a JSON array in the database to allow multiple values,
-	 * such as "stable", "critical", "conscious", "unconscious", etc.
-	 */
-	@Column(name = "ADM_CONDITION_AT_ADMISSION", columnDefinition = "JSON")
-	@Convert(converter = JsonListConverter.class)
-	private List<String> conditionAtAdmission;
-
 	@Column(name = "ADM_USR_ID_A")
 	private String userID;                    // the user ID
 
@@ -326,7 +316,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult,
 		Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
 		LocalDateTime abortDate, String userID, char deleted,
-		String preTreatment, String preAssessment, List<String> conditionAtAdmission) {
+		String preTreatment, String preAssessment) {
 
 		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
 			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
@@ -336,7 +326,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 		this.preTreatment = preTreatment;
 		this.preAssessment = preAssessment;
-		this.conditionAtAdmission = conditionAtAdmission;
 	}
 
 	public Float getTransUnit() {
@@ -585,14 +574,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setPreAssessment(String preAssessment) {
 		this.preAssessment = preAssessment;
-	}
-
-	public List<String> getConditionAtAdmission() {
-		return conditionAtAdmission;
-	}
-
-	public void setConditionAtAdmission(List<String> conditionAtAdmission) {
-		this.conditionAtAdmission = conditionAtAdmission;
 	}
 
 	@Override
