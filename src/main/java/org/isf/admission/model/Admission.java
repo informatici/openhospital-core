@@ -131,8 +131,8 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@JoinColumn(name = "ADM_DIST_ID_A")
 	private DischargeType disType;            // disChargeType key (null)
 
-	@Column(name = "ADM_NOTE")
-	private String note;                    // free notes (null)
+	@Column(name = "ADM_ANAMNESIS")
+	private String anamnesis;                    // anamnesis (null)
 
 	@Column(name = "ADM_TRANS")
 	private Float transUnit;                // transfusional unit
@@ -189,16 +189,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	)
 	private String preAssessment;
 
-	/**
-	 * Represents the patient's condition at the time of admission.
-	 * <p>
-	 * This field is stored as a JSON array in the database to allow multiple values,
-	 * such as "stable", "critical", "conscious", "unconscious", etc.
-	 */
-	@Column(name = "ADM_CONDITION_AT_ADMISSION", columnDefinition = "JSON")
-	@Convert(converter = JsonListConverter.class)
-	private List<String> conditionAtAdmission;
-
 	@Column(name = "ADM_USR_ID_A")
 	private String userID;                    // the user ID
 
@@ -212,6 +202,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@Transient
 	private volatile int hashCode;
+
+	@Column(
+		name = "ADM_ENTRY_REASON",
+		columnDefinition = "TEXT"
+	)
+	private String entryReason;
 
 	public Admission() {
 		super();
@@ -233,7 +229,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param diseaseOut3
 	 * @param disDate
 	 * @param disType
-	 * @param note
+	 * @param anamnesis
 	 * @param transUnit
 	 * @param visitDate
 	 * @param pregTreatmentType
@@ -248,11 +244,11 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param deleted
 	 */
 	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate, AdmissionType admType, String fhu,
-			Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
-			LocalDateTime disDate, DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
-			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
-			LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, char deleted) {
+					 Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
+					 LocalDateTime disDate, DischargeType disType, String anamnesis, Float transUnit, LocalDateTime visitDate,
+					 PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
+					 LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
+					 LocalDateTime abortDate, String userID, char deleted) {
 		super();
 		this.id = id;
 		this.admitted = admitted;
@@ -269,7 +265,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.diseaseOut3 = diseaseOut3;
 		this.disDate = TimeTools.truncateToSeconds(disDate);
 		this.disType = disType;
-		this.note = note;
+		this.anamnesis = anamnesis;
 		this.transUnit = transUnit;
 		this.visitDate = TimeTools.truncateToSeconds(visitDate);
 		this.pregTreatmentType = pregTreatmentType;
@@ -302,7 +298,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param diseaseOut3      the tertiary disease at discharge
 	 * @param disDate          the discharge date and time
 	 * @param disType          the discharge type
-	 * @param note             free notes about the admission
+	 * @param anamnesis        anamnesis about the admission
 	 * @param transUnit        transfusion units administered
 	 * @param visitDate        date of the last visit during admission
 	 * @param pregTreatmentType pregnancy treatment type if applicable
@@ -319,24 +315,24 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param preAssessment    assessment performed before the patient's admission
 	 */
 	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient,
-		LocalDateTime admDate, AdmissionType admType, String fhu,
-		Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
-		LocalDateTime disDate, DischargeType disType, String note, Float transUnit,
-		LocalDateTime visitDate, PregnantTreatmentType pregTreatmentType,
-		LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult,
-		Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-		LocalDateTime abortDate, String userID, char deleted,
-		String preTreatment, String preAssessment, List<String> conditionAtAdmission) {
+					 LocalDateTime admDate, AdmissionType admType, String fhu,
+					 Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
+					 LocalDateTime disDate, DischargeType disType, String anamnesis, Float transUnit,
+					 LocalDateTime visitDate, PregnantTreatmentType pregTreatmentType,
+					 LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult,
+					 Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
+					 LocalDateTime abortDate, String userID, char deleted,
+					 String preTreatment, String preAssessment, String entryReason) {
 
 		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
 			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
-			disDate, disType, note, transUnit, visitDate,
+			disDate, disType, anamnesis, transUnit, visitDate,
 			pregTreatmentType, deliveryDate, deliveryType, deliveryResult, weight,
 			ctrlDate1, ctrlDate2, abortDate, userID, deleted);
 
 		this.preTreatment = preTreatment;
 		this.preAssessment = preAssessment;
-		this.conditionAtAdmission = conditionAtAdmission;
+		this.entryReason = entryReason;
 	}
 
 	public Float getTransUnit() {
@@ -507,12 +503,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.lock = lock;
 	}
 
-	public String getNote() {
-		return note;
+	public String getAnamnesis() {
+		return anamnesis;
 	}
 
-	public void setNote(String note) {
-		this.note = note;
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
 	}
 
 	public Patient getPatient() {
@@ -587,12 +583,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.preAssessment = preAssessment;
 	}
 
-	public List<String> getConditionAtAdmission() {
-		return conditionAtAdmission;
+	public String getEntryReason() {
+		return entryReason;
 	}
 
-	public void setConditionAtAdmission(List<String> conditionAtAdmission) {
-		this.conditionAtAdmission = conditionAtAdmission;
+	public void setEntryReason(String entryReason) {
+		this.entryReason = entryReason;
 	}
 
 	@Override
