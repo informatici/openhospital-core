@@ -199,6 +199,9 @@ public class Patient extends Auditable<String> {
 	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
 	private PatientConsensus patientConsensus;
 
+	@Column(name="PAT_FOLDER_NUM")
+	private Integer folderNumber;
+
 	public Patient() {
 		this.firstName = "";
 		this.secondName = "";
@@ -585,6 +588,14 @@ public class Patient extends Auditable<String> {
 
 	public void setMotherPhone(String motherPhone) {
 		this.motherPhone = motherPhone;
+	}
+
+	public Integer getFolderNumber() {
+		return folderNumber;
+	}
+
+	public void setFolderNumber(Integer folderNumber) {
+		this.folderNumber = folderNumber;
 	}
 
 	/**
