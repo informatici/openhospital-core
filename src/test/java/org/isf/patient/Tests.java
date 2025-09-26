@@ -787,6 +787,8 @@ class Tests extends OHCoreTestCase {
 		patient.setMotherOccupation("motherOccupation");
 		patient.setMotherAge(35);
 		patient.setMotherPhone("motherPhone");
+		patient.setFolderNumber(12);
+
 
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
@@ -798,12 +800,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(savedPatient.getMotherOccupation()).isEqualTo(patient.getMotherOccupation());
 		assertThat(savedPatient.getMotherAge()).isEqualTo(patient.getMotherAge());
 		assertThat(savedPatient.getMotherPhone()).isEqualTo(patient.getMotherPhone());
+		assertThat(savedPatient.getFolderNumber()).isEqualTo(patient.getFolderNumber());
 	}
 
 	@Test
 	void testUpdatePatientWithNewFields() throws Exception {
 		Patient patient = testPatient.setup(true);
-
+		patient.setFolderNumber(30);
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
 		savedPatient.setCommune("commune 1");
@@ -814,6 +817,7 @@ class Tests extends OHCoreTestCase {
 		savedPatient.setMotherOccupation("motherOccupation 1");
 		savedPatient.setMotherAge(41);
 		savedPatient.setMotherPhone("motherPhone 1");
+		savedPatient.setFolderNumber(20);
 
 		Patient updatedPatient = patientIoOperation.updatePatient(patient);
 
@@ -825,6 +829,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(savedPatient.getMotherOccupation()).isEqualTo(updatedPatient.getMotherOccupation());
 		assertThat(savedPatient.getMotherAge()).isEqualTo(updatedPatient.getMotherAge());
 		assertThat(savedPatient.getMotherPhone()).isEqualTo(updatedPatient.getMotherPhone());
+		assertThat(savedPatient.getFolderNumber()).isEqualTo(updatedPatient.getFolderNumber());
 	}
 
 	private void resetHashMaps() throws Exception {
