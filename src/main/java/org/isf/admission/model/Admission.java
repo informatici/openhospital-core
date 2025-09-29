@@ -131,7 +131,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@JoinColumn(name = "ADM_DIST_ID_A")
 	private DischargeType disType;            // disChargeType key (null)
 
-	@Column(name = "ADM_ANAMNESIS")
+	@Column(name = "ADM_NOTE")
 	private String anamnesis;                    // anamnesis (null)
 
 	@Column(name = "ADM_TRANS")
@@ -203,10 +203,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@Transient
 	private volatile int hashCode;
 
-	@Column(
-		name = "ADM_ENTRY_REASON",
-		columnDefinition = "TEXT"
-	)
+	@Column(name = "ADM_ENTRY_REASON")
 	private String entryReason;
 
 	public Admission() {
