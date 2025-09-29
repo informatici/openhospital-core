@@ -22,11 +22,9 @@
 package org.isf.admission.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EntityResult;
@@ -48,7 +46,6 @@ import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
-import org.isf.utils.converter.JsonListConverter;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
