@@ -472,7 +472,7 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setDisDate(null);
 		Admission ioAdmission = admissionIoOperation.getCurrentAdmission(foundAdmission.getPatient());
-		assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
+		assertThat(ioAdmission.getAnamnesis()).isEqualTo(foundAdmission.getAnamnesis());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -523,12 +523,12 @@ class Tests extends OHCoreTestCase {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setNote("Update");
+		foundAdmission.setAnamnesis("Update");
 		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
 		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionIoOperation.getAdmission(id);
 		assertThat(updateAdmission).isNotNull();
-		assertThat(updateAdmission.getNote()).isEqualTo("Update");
+		assertThat(updateAdmission.getAnamnesis()).isEqualTo("Update");
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -983,7 +983,7 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setDisDate(null);
 		Admission ioAdmission = admissionBrowserManager.getCurrentAdmission(foundAdmission.getPatient());
-		assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
+		assertThat(ioAdmission.getAnamnesis()).isEqualTo(foundAdmission.getAnamnesis());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1129,12 +1129,12 @@ class Tests extends OHCoreTestCase {
 		Admission admission = buildNewAdmission();
 		Admission newAdmission = admissionBrowserManager.newAdmission(admission);
 		int id = newAdmission.getId();
-		newAdmission.setNote("Update");
+		newAdmission.setAnamnesis("Update");
 		Admission result = admissionBrowserManager.updateAdmission(admission);
 		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionBrowserManager.getAdmission(id);
 		assertThat(updateAdmission).isNotNull();
-		assertThat(updateAdmission.getNote()).isEqualTo("Update");
+		assertThat(updateAdmission.getAnamnesis()).isEqualTo("Update");
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1205,22 +1205,23 @@ class Tests extends OHCoreTestCase {
 								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionBrowserManager.getAdmission(id);
-		GeneralData.LANGUAGE = "en";
-
-		// DiseaseIn cannot be null
-		admission.setDiseaseIn(null);
-		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
-	}
+//	 Diseasis in is not longer mandatory
+//	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+//	@MethodSource("maternityRestartInJune")
+//	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
+//		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+//		int id = setupTestAdmission(false);
+//		Admission admission = admissionBrowserManager.getAdmission(id);
+//		GeneralData.LANGUAGE = "en";
+//
+//		// DiseaseIn cannot be null
+//		admission.setDiseaseIn(null);
+//		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+//				.isInstanceOf(OHDataValidationException.class)
+//				.has(
+//						new Condition<Throwable>(
+//								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+//	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
