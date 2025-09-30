@@ -14,8 +14,6 @@ LEFT JOIN oh_medicalhistory mh
 LEFT JOIN oh_admission adm 
     ON enc.ENC_PAT_ID = adm.ADM_PAT_ID
    AND (adm.ADM_DATE_ADM >= enc.ENC_PERFORMED_AT AND ( enc.ENC_CLOSED_AT IS NULL OR  enc.ENC_CLOSED_AT>=adm.ADM_DATE_ADM))
-LEFT JOIN oh_disease dis
-	ON adm.ADM_IN_DIS_ID_A = dis.DIS_ID_A
 LEFT JOIN oh_admissiontype admt
 	ON adm.ADM_ADMT_ID_A_ADM = admt.ADMT_ID_A
 WHERE enc.ENC_PAT_ID = $P{patID}
@@ -23,7 +21,7 @@ AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT = $P{performedAt}
 AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	</queryString>
-	<field name="MH_SIBLI_RANK" class="java.lang.Integer"/>
+	<field name="MH_SIBLI_RANK" class="java.lang.String"/>
 	<field name="MH_TERM_PREG" class="java.lang.String"/>
 	<field name="MH_DLV_MODE" class="java.lang.String"/>
 	<field name="MH_APGAR_SCORE" class="java.lang.String"/>
@@ -48,16 +46,15 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="ADM_PRE_ASSESSMENT" class="java.lang.String"/>
 	<field name="ADM_PRE_TREATMENT" class="java.lang.String"/>
 	<field name="ADM_NOTE" class="java.lang.String"/>
-	<field name="DIS_DESC" class="java.lang.String"/>
-	<field name="ADM_CONDITION_AT_ADMISSION" class="java.lang.String"/>
 	<field name="ADM_DATE_ADM" class="java.sql.Timestamp"/>
 	<field name="ADMT_DESC" class="java.lang.String"/>
 	<field name="ADM_FHU" class="java.lang.String"/>
+	<field name="ADM_ENTRY_REASON" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="773" splitType="Stretch">
+		<band height="666" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="70" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -74,7 +71,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Justified">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{DIS_DESC}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ADM_ENTRY_REASON}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -278,7 +275,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{Supplementation}+$R{YesOrNo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$R{Supplementation}+$R{YesOrNo} + " :"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="190" y="0" width="40" height="20" uuid="9db139e0-36ce-495e-a898-2aeed5d5b03d"/>
@@ -433,7 +430,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="630" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
+				<reportElement x="0" y="590" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -447,7 +444,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="690" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
+				<reportElement x="0" y="630" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -461,47 +458,16 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="-1" y="580" width="561" height="20" uuid="345c60bc-8c1d-477c-882d-f04da224dbbe"/>
-				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="121" y="0" width="430" height="20" uuid="e51e4a49-7c34-4a9c-b0a5-3f8900a59469"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA[org.isf.utils.report.ReportUtil.translateAdmissionState(String.join(", ", java.util.Arrays.asList($F{ADM_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*"))), ",", $P{REPORT_RESOURCE_BUNDLE})]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="0" y="0" width="121" height="20" uuid="dc178554-506c-418f-bf05-6d86fe6204e8"/>
-					<textElement>
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$R{StatusUponAdmission}]]></textFieldExpression>
-				</textField>
-			</frame>
-			<subreport>
-				<reportElement x="1" y="740" width="298" height="30" uuid="704cb2ea-8173-46f8-9c27-63e72f853d7f"/>
-				<subreportParameter name="patID">
-					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="performedAt">
-					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="closedAt">
-					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
-				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["encounter_tdrresult_subreport.jasper"]]></subreportExpression>
-			</subreport>
-			<frame>
 				<reportElement x="0" y="500" width="584" height="20" uuid="e3c6f456-62a0-414e-befd-4fdb7eb08ef6"/>
 				<textField>
-					<reportElement x="1" y="0" width="160" height="20" uuid="3087d778-8aa9-49d4-8759-d01ba3e08351"/>
+					<reportElement x="1" y="0" width="99" height="20" uuid="3087d778-8aa9-49d4-8759-d01ba3e08351"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Specify}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="161" y="0" width="399" height="20" uuid="0b84473c-ba36-4191-a254-b3c89f725066"/>
+					<reportElement x="100" y="0" width="460" height="20" uuid="0b84473c-ba36-4191-a254-b3c89f725066"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -683,9 +649,6 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{ADM_FHU}]]></textFieldExpression>
 				</textField>
 			</frame>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="670" width="301" height="10" uuid="c942606e-ea55-4150-b44e-4322259c51a6"/>
-			</textField>
 			<frame>
 				<reportElement x="-1" y="280" width="584" height="20" uuid="d426ba0f-46e1-48f3-b42d-3356130ad641">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -705,14 +668,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{MH_APGAR_SCORE}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="351" y="0" width="59" height="20" uuid="0f773f60-8152-4b3c-b498-3f20329d9da8"/>
+					<reportElement x="390" y="0" width="70" height="20" uuid="0f773f60-8152-4b3c-b498-3f20329d9da8"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_BIRTH_WGHT}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="302" y="0" width="49" height="20" uuid="6692a004-9695-4fd1-91d2-e55b71fe0861"/>
+					<reportElement x="302" y="0" width="88" height="20" uuid="6692a004-9695-4fd1-91d2-e55b71fe0861"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>

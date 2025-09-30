@@ -25,13 +25,15 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="COND_DIAZEPAM_DOSE" class="java.lang.Double"/>
 	<field name="COND_BOLUS_SS_VOLUME" class="java.lang.Double"/>
 	<field name="COND_SNG_NUMBER" class="java.lang.String"/>
+	<field name="COND_CONDITION_AT_ADMISSION" class="java.lang.String"/>
+	<field name="COND_TDR" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="40" splitType="Stretch">
+		<band height="128" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="560" height="40" uuid="fe2a9524-cc9a-4c1a-9c03-6232c4dc65fd"/>
+				<reportElement x="0" y="40" width="560" height="40" uuid="fe2a9524-cc9a-4c1a-9c03-6232c4dc65fd"/>
 				<textField>
 					<reportElement x="0" y="0" width="90" height="40" uuid="edc3c482-4447-41b8-a5d3-295bb600759a"/>
 					<box>
@@ -278,6 +280,40 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{COND_SNG_NUMBER}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="10" width="561" height="20" uuid="cca9334a-0989-4368-9edf-53ffe645b5fb"/>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="121" y="0" width="430" height="20" uuid="bbc0aecb-e41e-4cd1-bb5f-d406f928d0f9"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[org.isf.utils.report.ReportUtil.translateAdmissionState(String.join(", ", java.util.Arrays.asList($F{COND_CONDITION_AT_ADMISSION}.replace("[", "") .replace("]", "").replace("\"", " ").split("\\s*,\\s*"))), ",", $P{REPORT_RESOURCE_BUNDLE})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="121" height="20" uuid="3031d6a1-740b-41eb-a22c-f48de8e992bd"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{StatusUponAdmission}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="90" width="561" height="20" uuid="9ce26d7c-8be6-4285-8279-e0c09e5653db"/>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement x="121" y="0" width="430" height="20" uuid="20eb2158-6eda-4508-8745-b7167d40a8b1"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_TDR}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="121" height="20" uuid="5bf06d48-194d-4ec2-b5e2-76aaee1d2bd2"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{TDR}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

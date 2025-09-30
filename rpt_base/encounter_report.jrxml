@@ -34,6 +34,7 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 	<field name="ENC_ID" class="java.lang.Integer"/>
 	<field name="ENC_CODE" class="java.lang.String"/>
 	<field name="PAT_ID" class="java.lang.Integer"/>
+	<field name="PAT_FOLDER_NUM" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -79,35 +80,35 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{Folder}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="77" y="0" width="63" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
-					<textElement>
+					<reportElement x="77" y="0" width="53" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
+					<textElement textAlignment="Center">
 						<font fontName="Serif" size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PAT_ID}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PAT_FOLDER_NUM}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="140" y="1" width="10" height="18" uuid="854d5880-f40a-4e3f-bb9d-e0b871f24be7"/>
+					<reportElement x="130" y="1" width="10" height="18" uuid="854d5880-f40a-4e3f-bb9d-e0b871f24be7"/>
 					<textElement textAlignment="Center" markup="none">
 						<font fontName="Serif" size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[/]]></text>
 				</staticText>
 				<textField pattern="MM" isBlankWhenNull="true">
-					<reportElement x="150" y="0" width="30" height="19" uuid="0ba45d78-c06e-4d42-84ea-54ef3fed6e48"/>
-					<textElement>
+					<reportElement x="140" y="0" width="27" height="19" uuid="0ba45d78-c06e-4d42-84ea-54ef3fed6e48"/>
+					<textElement textAlignment="Center">
 						<font fontName="Serif" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
-					<reportElement x="180" y="0" width="46" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
-					<textElement>
+					<reportElement x="167" y="0" width="53" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
+					<textElement textAlignment="Left">
 						<font fontName="Serif" size="14" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{PED}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Column" pattern="yyyy" isBlankWhenNull="true">
-					<reportElement x="226" y="0" width="54" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
+					<reportElement x="220" y="0" width="60" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
 					<textElement>
 						<font fontName="Serif" size="14"/>
 					</textElement>
