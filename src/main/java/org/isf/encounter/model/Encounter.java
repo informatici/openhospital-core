@@ -27,6 +27,8 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="OH_ENCOUNTER")
 @EntityListeners(AuditingEntityListener.class)
@@ -46,8 +48,8 @@ public class Encounter extends Auditable<String> {
     private String code;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="ENC_STATUS", nullable = false)
-    private EncounterStatus status = EncounterStatus.OPEN;
+    @Column(name="ENC_STATUS")
+    private EncounterStatus status = EncounterStatus.ACTIVE;
 
 	@ManyToOne
     @JoinColumn(name = "ENC_PAT_ID", nullable = false)
@@ -56,6 +58,12 @@ public class Encounter extends Auditable<String> {
     @Version
 	@Column(name="ENC_LOCK")
 	private int lock;
+
+	@Column(name = "ENC_PERFORMED_AT")
+	private LocalDateTime performedAt;
+
+	@Column(name = "ENC_CLOSED_AT")
+	private LocalDateTime closedAt;
 
 	public Integer getId() {
 		return id;
@@ -97,10 +105,32 @@ public class Encounter extends Auditable<String> {
 		this.lock = lock;
 	}
 
+	public LocalDateTime getPerformedAt() {
+		return performedAt;
+	}
+
+	public void setPerformedAt(LocalDateTime performedAt) {
+		this.performedAt = performedAt;
+	}
+
+	public LocalDateTime getClosedAt() {
+		return closedAt;
+	}
+
+	public void setClosedAt(LocalDateTime closedAt) {
+		this.closedAt = closedAt;
+	}
+
 	public Encounter(String code, EncounterStatus status, Patient patient) {
 		this.code = code;
 		this.status = status;
 		this.patient = patient;
+	}
+
+	public Encounter(String code, EncounterStatus status, Patient patient, LocalDateTime performedAt, LocalDateTime closedAt) {
+		this(code, status, patient);
+		this.performedAt = performedAt;
+		this.closedAt = closedAt;
 	}
 
 	public Encounter(String code, EncounterStatus status) {
@@ -109,5 +139,5 @@ public class Encounter extends Auditable<String> {
 	}
 
 	public Encounter() {}
-	
+
 }

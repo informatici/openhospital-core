@@ -27,10 +27,13 @@ import org.isf.encounter.model.Encounter;
 import org.isf.encounter.model.EncounterStatus;
 import org.isf.utils.exception.OHException;
 
+import java.time.LocalDateTime;
+
 public class TestEncounter {
 
 	private String code = "Z";
-	private EncounterStatus  status = EncounterStatus.OPEN;
+	private EncounterStatus  status = EncounterStatus.ACTIVE;
+	private LocalDateTime performedAt = LocalDateTime.of(2025, 1, 1, 10, 0);
 
 	public Encounter setup(boolean usingSet) throws OHException {
 		Encounter encounter;
@@ -39,7 +42,7 @@ public class TestEncounter {
 			encounter = new Encounter();
 			setParameters(encounter);
 		} else {
-			encounter = new Encounter(code, status);
+			encounter = new Encounter(code, status, null, performedAt, null);
 		}
 
 		return encounter;
@@ -48,10 +51,12 @@ public class TestEncounter {
 	public void setParameters(Encounter encounter) {
 		encounter.setCode(code);
 		encounter.setStatus(status);
+		encounter.setPerformedAt(performedAt);
 	}
 
 	public void check(Encounter encounter) {
 		assertThat(encounter.getCode()).isEqualTo(code);
 		assertThat(encounter.getStatus()).isEqualTo(status);
+		assertThat(encounter.getPerformedAt()).isEqualTo(performedAt);
 	}
 }

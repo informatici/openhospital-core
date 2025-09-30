@@ -89,7 +89,7 @@ public class Supplier extends Auditable<String> implements Serializable {
 
 	@Version
 	@Column(name = "SUP_LOCK")
-	private int lock;
+	private Integer lock;
 
 	@Transient
 	private volatile int hashCode;
@@ -217,9 +217,9 @@ public class Supplier extends Auditable<String> implements Serializable {
 		this.supDeleted = supDeleted;
 	}
 
-	public int getLock() { return lock; }
+	public Integer getLock() { return lock; }
 
-	public void setLock(int lock) { this.lock = lock; }
+	public void setLock(Integer lock) { this.lock = lock; }
 
 	@Override
 	public String toString() {

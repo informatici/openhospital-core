@@ -33,6 +33,7 @@ import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
@@ -268,6 +269,17 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
+	 * Returns the list of Admissions with encounter
+	 *
+	 * @param encounter encounter during which admissions were created.
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByEncounter(Encounter encounter) throws OHServiceException {
+		return  ioOperations.getAdmissionsByEncounter(encounter);
+	}
+
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param admission
@@ -326,9 +338,7 @@ public class AdmissionBrowserManager {
 			}
 		}
 		Disease diseaseIn = admission.getDiseaseIn();
-		if (diseaseIn == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
-		} else {
+		if (diseaseIn != null) {
 			Disease disease = diseaseManager.getIpdInDiseaseByCode(diseaseIn.getCode());
 			if (disease == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));

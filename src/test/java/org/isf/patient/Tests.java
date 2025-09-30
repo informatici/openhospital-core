@@ -339,6 +339,20 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetPatientsByParamsAndPaginationParam() throws Exception {
+		setupTestPatient(false);
+		Map<String, Object> params = new HashMap<>();
+		params.put("firstName", "TestFirstName");
+		params.put("birthDate", LocalDateTime.of(1984, Calendar.AUGUST, 14, 0, 0, 0));
+		params.put("address", "TestAddress");
+		PagedResponse<Patient> patients = patientBrowserManager.getPatients(params, 0, 3);
+		assertThat(patients.getData()).isNotEmpty();
+		assertThat(patients.getPageInfo().getTotalPages()).isEqualTo(1);
+		assertThat(patients.getPageInfo().getSize()).isEqualTo(3);
+		assertThat(patients.getPageInfo().getNbOfElements()).isEqualTo(1);
+	}
+
+	@Test
 	void testMgrGetPatientsByOneOfFieldsLike() throws Exception {
 		setupTestPatient(false);
 		// Pay attention that query return with PAT_ID descendant
@@ -773,6 +787,8 @@ class Tests extends OHCoreTestCase {
 		patient.setMotherOccupation("motherOccupation");
 		patient.setMotherAge(35);
 		patient.setMotherPhone("motherPhone");
+		patient.setFolderNumber(12);
+
 
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
@@ -784,12 +800,13 @@ class Tests extends OHCoreTestCase {
 		assertThat(savedPatient.getMotherOccupation()).isEqualTo(patient.getMotherOccupation());
 		assertThat(savedPatient.getMotherAge()).isEqualTo(patient.getMotherAge());
 		assertThat(savedPatient.getMotherPhone()).isEqualTo(patient.getMotherPhone());
+		assertThat(savedPatient.getFolderNumber()).isEqualTo(patient.getFolderNumber());
 	}
 
 	@Test
 	void testUpdatePatientWithNewFields() throws Exception {
 		Patient patient = testPatient.setup(true);
-
+		patient.setFolderNumber(30);
 		Patient savedPatient = patientIoOperation.savePatient(patient);
 
 		savedPatient.setCommune("commune 1");
@@ -800,6 +817,7 @@ class Tests extends OHCoreTestCase {
 		savedPatient.setMotherOccupation("motherOccupation 1");
 		savedPatient.setMotherAge(41);
 		savedPatient.setMotherPhone("motherPhone 1");
+		savedPatient.setFolderNumber(20);
 
 		Patient updatedPatient = patientIoOperation.updatePatient(patient);
 
@@ -811,6 +829,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(savedPatient.getMotherOccupation()).isEqualTo(updatedPatient.getMotherOccupation());
 		assertThat(savedPatient.getMotherAge()).isEqualTo(updatedPatient.getMotherAge());
 		assertThat(savedPatient.getMotherPhone()).isEqualTo(updatedPatient.getMotherPhone());
+		assertThat(savedPatient.getFolderNumber()).isEqualTo(updatedPatient.getFolderNumber());
 	}
 
 	private void resetHashMaps() throws Exception {

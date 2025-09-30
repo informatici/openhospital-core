@@ -56,6 +56,9 @@ import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
 import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
+import org.isf.encounter.TestEncounter;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.service.EncounterIoRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.operation.TestOperation;
 import org.isf.operation.model.Operation;
@@ -80,6 +83,7 @@ import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +104,7 @@ class Tests extends OHCoreTestCase {
 	private static TestPregnantTreatmentType testPregnantTreatmentType;
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
+	private static TestEncounter testEncounter;
 
 	@Autowired
 	AdmissionIoOperations admissionIoOperation;
@@ -131,6 +136,8 @@ class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	EncounterIoRepository encounterIoRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -147,6 +154,7 @@ class Tests extends OHCoreTestCase {
 		testPregnantTreatmentType = new TestPregnantTreatmentType();
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
+		testEncounter = new TestEncounter();
 	}
 
 	static Collection<Object[]> maternityRestartInJune() {
@@ -464,7 +472,7 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setDisDate(null);
 		Admission ioAdmission = admissionIoOperation.getCurrentAdmission(foundAdmission.getPatient());
-		assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
+		assertThat(ioAdmission.getAnamnesis()).isEqualTo(foundAdmission.getAnamnesis());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -515,12 +523,12 @@ class Tests extends OHCoreTestCase {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setNote("Update");
+		foundAdmission.setAnamnesis("Update");
 		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
 		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionIoOperation.getAdmission(id);
 		assertThat(updateAdmission).isNotNull();
-		assertThat(updateAdmission.getNote()).isEqualTo("Update");
+		assertThat(updateAdmission.getAnamnesis()).isEqualTo("Update");
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -728,6 +736,28 @@ class Tests extends OHCoreTestCase {
 		List<AdmittedPatient> searchResult = admissionBrowserManager.getAdmittedPatients(null);
 		assertThat(searchResult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+	}
+
+	@Test
+	void testMgrGetAdmissionsByEncounter() throws Exception {
+		int id = setupTestAdmission(false);
+		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
+
+		Encounter encounter = testEncounter.setup(false);
+		encounter.setPerformedAt(LocalDateTime.of(2025, 9, 1, 15, 10, 20));
+		encounter.setPatient(foundAdmission.getPatient());
+		Encounter encounterSaved = encounterIoRepository.save(encounter);
+
+		foundAdmission.setAdmDate(LocalDateTime.of(2025, 9, 2, 11, 10, 20));
+		Admission updatedAdmission = admissionIoOperation.updateAdmission(foundAdmission);
+
+		List<Admission> admissionList = admissionBrowserManager.getAdmissionsByEncounter(encounterSaved);
+
+		assertThat(admissionList).isNotNull();
+		assertThat(admissionList).isNotEmpty();
+		assertThat(admissionList.size()).isEqualTo(1);
+		assertThat(admissionList.get(0).getId()).isEqualTo(updatedAdmission.getId());
+		assertThat(admissionList.get(0).getAdmDate()).isEqualTo(updatedAdmission.getAdmDate());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -953,7 +983,7 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setDisDate(null);
 		Admission ioAdmission = admissionBrowserManager.getCurrentAdmission(foundAdmission.getPatient());
-		assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
+		assertThat(ioAdmission.getAnamnesis()).isEqualTo(foundAdmission.getAnamnesis());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1099,12 +1129,12 @@ class Tests extends OHCoreTestCase {
 		Admission admission = buildNewAdmission();
 		Admission newAdmission = admissionBrowserManager.newAdmission(admission);
 		int id = newAdmission.getId();
-		newAdmission.setNote("Update");
+		newAdmission.setAnamnesis("Update");
 		Admission result = admissionBrowserManager.updateAdmission(admission);
 		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionBrowserManager.getAdmission(id);
 		assertThat(updateAdmission).isNotNull();
-		assertThat(updateAdmission.getNote()).isEqualTo("Update");
+		assertThat(updateAdmission.getAnamnesis()).isEqualTo("Update");
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1175,22 +1205,23 @@ class Tests extends OHCoreTestCase {
 								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionBrowserManager.getAdmission(id);
-		GeneralData.LANGUAGE = "en";
-
-		// DiseaseIn cannot be null
-		admission.setDiseaseIn(null);
-		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
-	}
+//	 Diseasis in is not longer mandatory
+//	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+//	@MethodSource("maternityRestartInJune")
+//	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
+//		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+//		int id = setupTestAdmission(false);
+//		Admission admission = admissionBrowserManager.getAdmission(id);
+//		GeneralData.LANGUAGE = "en";
+//
+//		// DiseaseIn cannot be null
+//		admission.setDiseaseIn(null);
+//		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+//				.isInstanceOf(OHDataValidationException.class)
+//				.has(
+//						new Condition<Throwable>(
+//								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+//	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")

@@ -117,6 +117,12 @@ source step_a120_settings.sql;
 source step_a121_update_patient_table.sql;
 source step_a122_add_encounter_settings.sql;
 source step_a123_add_pre_treatment_pre_assessment.sql;
+source step_a124_create_table_oh_medical_history.sql;
+source step_a125_update_patient_examination_table.sql;
+source step_a126_create_table_oh_encounter.sql;
+source step_a127_create_conditioning_table.sql;
+source step_a128_add_examination_type_in_oh_patientexamination_table.sql
+
 source step_a124_add_condition_at_admission.sql;
 source step_a125_create_table_oh_medical_history.sql;
 source step_a126_update_patient_examination_table.sql;

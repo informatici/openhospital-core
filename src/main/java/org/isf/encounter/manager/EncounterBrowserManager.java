@@ -21,6 +21,7 @@
  */
 package org.isf.encounter.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,65 +32,64 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncounterBrowserManager {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(EncounterBrowserManager.class);
+
 	private final EncounterIoRepository encounterIoRepository;
 
-    public EncounterBrowserManager(EncounterIoRepository encounterIoRepository) {
+	public EncounterBrowserManager(EncounterIoRepository encounterIoRepository) {
 		this.encounterIoRepository = encounterIoRepository;
 	}
 
-    /**
+	/**
 	 * Method that inserts a new {@link Encounter}.
-	 *
 	 * @param encounter
 	 * @return saved / updated {@link Encounter}
 	 * @throws OHServiceException when validation failed
 	 */
 	public Encounter saveEncounter(Encounter encounter) throws OHServiceException {
 		validateEncounter(encounter);
-        return encounterIoRepository.save(encounter);
-    }
+		return encounterIoRepository.save(encounter);
+	}
 
 	/**
 	 * Method that returns the list of {@link Encounter}s with patient id.
-	 *
 	 * @param patientId - the patient id.
 	 * @return the list of {@link Encounter}s.
 	 * @throws OHServiceException
 	 */
-    public List<Encounter> getEncountersByPatient(Integer patientId) throws OHServiceException {
-        return encounterIoRepository.findByPatient(patientId);
-    }
-    
-    /**
+	public List<Encounter> getEncountersByPatient(Integer patientId) throws OHServiceException {
+		return encounterIoRepository.findByPatient(patientId);
+	}
+
+	/**
 	 * Method that returns the {@link Encounter} with specified codes.
-	 *
 	 * @param code - the encounter code.
 	 * @return the {@link Encounter}.
 	 * @throws OHServiceException
 	 */
-    public Encounter getEncountersByCode(String code) throws OHServiceException {
+	public Encounter getEncountersByCode(String code) throws OHServiceException {
 		return encounterIoRepository.findByCode(code);
-    }
+	}
 
 	/**
 	 * Method that returns the open {@link Encounter} with patient code.
-	 *
 	 * @param patientCode - the patient code.
 	 * @return the {@link Encounter}.
 	 * @throws OHServiceException
 	 */
 	public Encounter getCurrentEncounter(Integer patientCode) throws OHServiceException {
-		return encounterIoRepository.findByPatientCodeAndStatus(patientCode, EncounterStatus.OPEN);
+		return encounterIoRepository.findByPatientCodeAndStatusAndClosedAt(patientCode, EncounterStatus.ACTIVE, null);
 	}
 
 	/**
 	 * Method that returns the {@link Encounter} with id.
-	 *
 	 * @param encounterId - the encounter id.
 	 * @return the {@link Encounter}.
 	 * @throws OHServiceException
@@ -97,10 +97,20 @@ public class EncounterBrowserManager {
 	public Encounter getEncounterById(int encounterId) throws OHServiceException {
 		return encounterIoRepository.findById(encounterId).orElse(null);
 	}
-    
-    /**
+
+	/**
+	 * Finds all {@link Encounter} entities for a given patient code and encounter status.
+	 * @param code the unique code identifying the patient (must not be {@code null})
+	 * @param status the {@link EncounterStatus} of the encounter to filter by (must not be {@code null})
+	 * @return a list of {@link Encounter} entities matching the patient code and status, or an empty list if none are found
+	 * @throws OHServiceException - If an error occurs
+	 */
+	List<Encounter> findAllByPatientCodeAndStatus(Integer code, EncounterStatus status) {
+		return encounterIoRepository.findAllByPatientCodeAndStatus(code, status);
+	}
+
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
-	 *
 	 * @param encounter
 	 * @throws OHDataValidationException
 	 */
@@ -114,9 +124,27 @@ public class EncounterBrowserManager {
 		if (encounter.getCode() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.encounter.insertcode.msg")));
 		}
-		
+
+		if (encounter.getClosedAt() != null && encounter.getPerformedAt().isAfter(encounter.getClosedAt())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performedAt must be before closedAt")));
+		}
+
+		//TO DO: Add the check to know if the encounter is on the range of another encounter for the same patient
+
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
+	/**
+	 * Method that checks if there is already an active {@link Encounter} for the given patient at the specified performed date.
+	 * @param patientCode - the patient code.
+	 * @param performedAt - the date and time when the encounter is performed.
+	 * @return {@code true} if another active {@link Encounter} exists at the given date and time, {@code false} otherwise.
+	 * @throws OHServiceException if the check fails due to a repository error.
+	 */
+	private Boolean checkEncounterExisting(Integer patientCode, LocalDateTime performedAt) {
+		return encounterIoRepository.existsActiveEncounterAt(patientCode, performedAt);
+	}
+
 }

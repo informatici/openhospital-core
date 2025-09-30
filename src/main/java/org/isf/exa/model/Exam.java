@@ -67,7 +67,7 @@ public class Exam extends Auditable<String> {
 	@JoinColumn(name="EXA_EXC_ID_A")
 	private ExamType examtype;
 
-	@Version
+	//@Version : TODO: Add Id on this class before managing lock with @Version
 	@Column(name="EXA_LOCK")
 	private Integer lock;
 

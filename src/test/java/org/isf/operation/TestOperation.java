@@ -29,6 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperation {
 
+	private Integer lock = 0;
 	private String code = "ZZ";
 	private String description = "TestDescription";
 	private Integer major = 99;
@@ -40,9 +41,11 @@ public class TestOperation {
 		if (usingSet) {
 			operation = new Operation();
 			setParameters(operation, operationType);
+			operation.setLock(lock);
 		} else {
 			// Create Operation with all parameters 
 			operation = new Operation(code, description, operationType, major);
+			operation.setLock(lock);
 		}
 
 		return operation;

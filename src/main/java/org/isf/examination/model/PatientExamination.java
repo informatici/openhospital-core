@@ -70,6 +70,10 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	private LocalDateTime pex_date;
 
 	@NotNull
+	@Column(name="PEX_TYPE", nullable = false, length = 50)
+	private String pex_type;
+
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="PEX_PAT_ID")
 	private Patient patient;
@@ -187,6 +191,44 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 		this.pex_note = pex_note;
 	}
 
+	public PatientExamination(
+		LocalDateTime pex_date,
+		String examinationType,
+		Patient patient,
+		Integer pex_height,
+		Double pex_weight,
+		Integer pex_ap_min,
+		Integer pex_ap_max,
+		Integer pex_hr,
+		Double pex_temp,
+		Double pex_sat,
+		Integer pex_hgt,
+		Integer pex_diuresis,
+		String pex_diuresis_desc,
+		String pex_bowel_desc,
+		Integer pex_rr,
+		String pex_ausc,
+		String pex_note) {
+		super();
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
+		this.pex_type = examinationType;
+		this.patient = patient;
+		this.pex_height = pex_height;
+		this.pex_weight = pex_weight;
+		this.pex_ap_min = pex_ap_min;
+		this.pex_ap_max = pex_ap_max;
+		this.pex_hr = pex_hr;
+		this.pex_temp = pex_temp;
+		this.pex_sat = pex_sat;
+		this.pex_hgt = pex_hgt;
+		this.pex_diuresis = pex_diuresis;
+		this.pex_diuresis_desc = pex_diuresis_desc;
+		this.pex_bowel_desc = pex_bowel_desc;
+		this.pex_rr= pex_rr;
+		this.pex_auscultation = pex_ausc;
+		this.pex_note = pex_note;
+	}
+
 	/**
 	 * @return the pex_ID
 	 */
@@ -227,6 +269,20 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	 */
 	public void setPex_date(LocalDateTime pex_date) {
 		this.pex_date = TimeTools.truncateToSeconds(pex_date);
+	}
+
+	/**
+	 * @return the examinationType
+	 */
+	public String getPex_type() {
+		return pex_type;
+	}
+
+	/**
+	 * @param pex_type the pex_date to set
+	 */
+	public void setPex_type(String pex_type) {
+		this.pex_type = pex_type;
 	}
 
 	/**

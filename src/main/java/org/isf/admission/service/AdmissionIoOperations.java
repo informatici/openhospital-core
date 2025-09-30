@@ -37,6 +37,8 @@ import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -391,4 +393,15 @@ public class AdmissionIoOperations {
 		return this.repository.countAllActiveNotDeletedAdmissions();
 	}
 
+	/**
+	 * Returns the list of Admissions with encounter
+	 *
+	 * @param encounter encounter during which admissions were created.
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByEncounter(Encounter encounter) throws OHServiceException{
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.getAdmissionByDateBetweenAndPatientCode(encounter.getPerformedAt(), closedAt, encounter.getPatient().getCode());
+	}
 }

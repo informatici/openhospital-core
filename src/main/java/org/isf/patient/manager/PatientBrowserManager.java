@@ -110,6 +110,19 @@ public class PatientBrowserManager {
 	}
 
 	/**
+	 * Method that gets a list of {@link Patient}s by his/her name.
+	 *
+	 * @param params
+	 * @param page
+	 * @param size
+	 * @return the list of {@link Patient}s that match specified name.
+	 * @throws OHServiceException
+	 */
+	public PagedResponse<Patient> getPatients(Map<String, Object> params, int page, int size) throws OHServiceException {
+		return ioOperations.getPatients(params, PageRequest.of(page, size));
+	}
+
+	/**
 	 * Method that gets a {@link Patient} by his/her ID.
 	 *
 	 * @param code

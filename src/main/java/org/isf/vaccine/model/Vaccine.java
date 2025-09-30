@@ -59,7 +59,6 @@ public class Vaccine extends Auditable<String> {
 	@JoinColumn(name="VAC_VACT_ID_A")
     private VaccineType vaccineType;
 
-	@Version
 	@Column(name="VAC_LOCK")
     private Integer lock;
 

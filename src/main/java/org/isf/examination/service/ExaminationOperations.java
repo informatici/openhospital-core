@@ -21,8 +21,11 @@
  */
 package org.isf.examination.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.isf.encounter.model.Encounter;
+import org.isf.encounter.model.EncounterStatus;
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -114,5 +117,18 @@ public class ExaminationOperations {
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
+	}
+
+	/**
+	 * Retrieves the list of {@link PatientExamination} records associated with a given {@link Encounter}.
+	 *
+	 * @param encounter the {@link Encounter} for which patient examinations should be retrieved. Must not be {@code null}.
+	 * @return a {@link List} of {@link PatientExamination} objects related to the given encounter. The list may be empty if no examinations are found.
+	 * @throws OHServiceException if an error occurs while retrieving the patient examinations from the data source.
+	 */
+	public List<PatientExamination> findExaminationsByEncounter(Encounter encounter) throws OHServiceException {
+		Integer patientCode = encounter.getPatient() != null ? encounter.getPatient().getCode(): null;
+		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
+		return repository.findByPatientCodeAndDateBetween(patientCode, encounter.getPerformedAt(), closedAt);
 	}
 }

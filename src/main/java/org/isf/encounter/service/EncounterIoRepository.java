@@ -21,6 +21,7 @@
  */
 package org.isf.encounter.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.encounter.model.Encounter;
@@ -33,10 +34,44 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterIoRepository extends JpaRepository<Encounter, Integer> {
 	
-	@Query(value = "select e from Encounter e where e.patient.code = :patientId")
+	@Query(value = "select e from Encounter e where e.patient.code = :patientId and e.status = 'ACTIVE'")
     List<Encounter> findByPatient(@Param("patientId") Integer patientId);
 
+	@Query(value = "select e from Encounter e where e.code = :code and e.status = 'ACTIVE'")
 	Encounter findByCode(String code);
 
-	Encounter findByPatientCodeAndStatus(Integer patientCode, EncounterStatus encounterStatus);
+	Encounter findByPatientCodeAndStatusAndClosedAt(@Param("code") Integer code, @Param("status") EncounterStatus status, @Param("closedAt") LocalDateTime closedAt);
+
+	/**
+	 * Checks if there exists an active encounter for a given patient at a specific date.
+	 * <p>
+	 * An encounter is considered <b>active</b> at a given date if:
+	 * <ul>
+	 *   <li>{@code performedAt <= date}</li>
+	 *   <li>and ({@code closedAt IS NULL} or {@code closedAt >= date})</li>
+	 * </ul>
+	 * <p>
+	 * This ensures that the encounter started before or at the given date,
+	 * and has not yet been closed at that date (or is still ongoing).
+	 *
+	 * @param code the unique identifier of the patient
+	 * @param date the date to check against
+	 * @return {@code true} if there is at least one active encounter for the patient at the given date,
+	 *         {@code false} otherwise
+	 */
+	@Query("""
+        SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END
+        FROM Encounter e
+        WHERE e.patient.code = :code
+          AND e.status = 'ACTIVE'
+          AND e.performedAt <= :date
+          AND (e.closedAt IS NULL OR e.closedAt >= :date)
+    """)
+	boolean existsActiveEncounterAt(
+		@Param("code") Integer code,
+		@Param("date") LocalDateTime date
+	);
+
+	@Query("select e from Encounter e where e.patient.code = :code and e.status = :status")
+	List<Encounter> findAllByPatientCodeAndStatus(@Param("code") Integer code, @Param("status") EncounterStatus status);
 }

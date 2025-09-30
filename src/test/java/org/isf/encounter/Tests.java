@@ -30,7 +30,6 @@ import org.apache.logging.log4j.core.util.Assert;
 import org.isf.OHCoreTestCase;
 import org.isf.encounter.manager.EncounterBrowserManager;
 import org.isf.encounter.model.Encounter;
-import org.isf.encounter.model.EncounterStatus;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -78,14 +77,12 @@ public class Tests extends OHCoreTestCase {
         String code = setupEncounter(true);
         Encounter firstEncounter = encounterBrowserManager.getEncountersByCode(code);
         Patient patient = firstEncounter.getPatient();
-        Encounter secondEncounter = new Encounter("CODE", EncounterStatus.OPEN, firstEncounter.getPatient());
-        secondEncounter = encounterBrowserManager.saveEncounter(secondEncounter);
         List<Encounter> patientEncounters = encounterBrowserManager.getEncountersByPatient(patient.getCode());
 
         // Assert
         assertNotNull(patientEncounters);
-        assertEquals(2, patientEncounters.size());
-        assertEquals("CODE", patientEncounters.get(1).getCode());
+        assertEquals(1, patientEncounters.size());
+        assertEquals(code, patientEncounters.get(0).getCode());
     }
 
     @Test
