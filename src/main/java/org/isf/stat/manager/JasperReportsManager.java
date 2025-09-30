@@ -25,6 +25,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
@@ -94,6 +96,10 @@ public class JasperReportsManager {
 	private static final String RPT_BASE = "rpt_base";
 	
 	private static final String LOGO = "./rsc/images/logo_report.png";
+
+	private static final String LOGO_BENIN_PATH = "./rsc/images/logo-benin.png";
+
+	private static final String LOGO_ABBRACCIO_PATH = "./rsc/images/labbraccio-logopng.png";
 
 	private HospitalBrowsingManager hospitalManager;
 
@@ -1159,6 +1165,29 @@ public class JasperReportsManager {
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
+	}
+
+	public JasperReportResultDto getGenericReportForEncounterPdf(Encounter encounter, Locale locale) throws OHServiceException {
+
+		try {
+			HashMap<String, Object> parameters = new HashMap<>();
+
+			parameters.put("patID", encounter.getPatient().getCode());
+			parameters.put("performedAt", Timestamp.valueOf(encounter.getPerformedAt()));
+			parameters.put("closedAt", Timestamp.valueOf(encounter.getClosedAt() != null ? encounter.getClosedAt() : LocalDateTime.now()));
+			parameters.put("LOGO-BENIN-PATH", LOGO_BENIN_PATH);
+			parameters.put("LOGO-PATH", LOGO_ABBRACCIO_PATH);
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
+			String jasperFileName = "encounter_report";
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(String.valueOf(encounter.getPatient().getCode()))), "pdf");
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
 	}
 }
