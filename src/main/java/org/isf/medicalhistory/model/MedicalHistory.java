@@ -63,8 +63,8 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@JoinColumn(name = "MH_PAT_ID")
 	private Patient patient;
 
-	@Column(name = "MH_SIBLI_RANK")
-	private Integer siblingRank;
+	@Column(name = "MH_SIBLI_RANK", length = 100)
+	private String siblingRank;
 
 	@Column(name = "MH_TERM_PREG")
 	private String termPregnancy;
@@ -146,7 +146,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	public MedicalHistory(
 		Integer id,
 		Patient patient,
-		Integer siblingRank,
+		String  siblingRank,
 		String termPregnancy,
 		String deliveryMode,
 		String apgarScore,
@@ -213,11 +213,11 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.patient = patient;
 	}
 
-	public Integer getSiblingRank() {
+	public String getSiblingRank() {
 		return siblingRank;
 	}
 
-	public void setSiblingRank(Integer siblingRank) {
+	public void setSiblingRank(String siblingRank) {
 		this.siblingRank = siblingRank;
 	}
 

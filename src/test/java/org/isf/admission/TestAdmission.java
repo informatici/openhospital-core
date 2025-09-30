@@ -24,7 +24,6 @@ package org.isf.admission;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.admtype.model.AdmissionType;
@@ -54,14 +53,14 @@ public class TestAdmission {
 	private String type = "T";
 	private int yProg;
 	private String FHU = "TestFHU";
-	private String note = "TestNote";
+	private String anamnesis = "TestAnamnesis";
 	private Float transUnit = 10.10f;
 	private Float weight = 20.20f;
 	private String userID = "TestUserId";
 	private char deleted = 'N';
 	private String preTreatment = "medication, outpatient care, prior therapy";
 	private String preAssessment = "preliminary examinations, lab results, medical observations";
-	private List<String> conditionAtAdmission = List.of("shocked");
+	private String entryReason = "EntryReason";
 
 	public Admission setup(
 			Ward ward,
@@ -86,9 +85,9 @@ public class TestAdmission {
 		} else {
 			// Create Admission with all parameters 
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
-					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
+					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, anamnesis,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, conditionAtAdmission);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason);
 		}
 
 		return admission;
@@ -125,7 +124,7 @@ public class TestAdmission {
 		admission.setDiseaseOut3(diseaseOut3);
 		admission.setDisType(dischargeType);
 		admission.setFHU(FHU);
-		admission.setNote(note);
+		admission.setAnamnesis(anamnesis);
 		admission.setPatient(patient);
 		admission.setPregTreatmentType(pregTreatmentType);
 		admission.setTransUnit(transUnit);
@@ -137,7 +136,7 @@ public class TestAdmission {
 		admission.setYProg(yProg);
 		admission.setPreTreatment(preTreatment);
 		admission.setPreAssessment(preAssessment);
-		admission.setConditionAtAdmission(conditionAtAdmission);
+		admission.setEntryReason(entryReason);
 	}
 
 	public void check(Admission admission) {
@@ -150,7 +149,7 @@ public class TestAdmission {
 		assertThat(admission.getDeliveryDate()).isEqualTo(DELIVERYDATE);
 		assertThat(admission.getDisDate()).isEqualTo(DISDATE);
 		assertThat(admission.getFHU()).isEqualTo(FHU);
-		assertThat(admission.getNote()).isEqualTo(note);
+		assertThat(admission.getAnamnesis()).isEqualTo(anamnesis);
 		assertThat(admission.getTransUnit()).isEqualTo(transUnit);
 		assertThat(admission.getType()).isEqualTo(type);
 		assertThat(admission.getUserID()).isEqualTo(userID);
@@ -160,7 +159,7 @@ public class TestAdmission {
 
 		assertThat(admission.getPreTreatment()).isEqualTo(preTreatment);
 		assertThat(admission.getPreAssessment()).isEqualTo(preAssessment);
-		assertThat(admission.getConditionAtAdmission()).isEqualTo(conditionAtAdmission);
+		assertThat(admission.getEntryReason()).isEqualTo(entryReason);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();

@@ -338,9 +338,7 @@ public class AdmissionBrowserManager {
 			}
 		}
 		Disease diseaseIn = admission.getDiseaseIn();
-		if (diseaseIn == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
-		} else {
+		if (diseaseIn != null) {
 			Disease disease = diseaseManager.getIpdInDiseaseByCode(diseaseIn.getCode());
 			if (disease == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
