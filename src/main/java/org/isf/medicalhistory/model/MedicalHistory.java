@@ -132,6 +132,9 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_OTHR_FAM_PATHO")
 	private String otherFamilyPathologies;
 
+	@Column(name = "MH_PERFORMED_AT")
+	private LocalDateTime performedAt;
+
 	@Version
 	@Column(name = "MH_LOCK")
 	private int lock;
@@ -168,7 +171,8 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		String allergyPrecisions,
 		String hemylosis,
 		String otherPersonalPathology,
-		String otherFamilyPathology
+		String otherFamilyPathology,
+		LocalDateTime performedAt
 	) {
 		this.id = id;
 		this.patient = patient;
@@ -195,6 +199,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.hemylosis = hemylosis;
 		this.otherPersonalPathologies = otherPersonalPathology;
 		this.otherFamilyPathologies = otherFamilyPathology;
+		this.performedAt = performedAt;
 	}
 
 	public Integer getId() {
@@ -396,6 +401,15 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	public void setOtherFamilyPathologies(String otherFamilyPathologies) {
 		this.otherFamilyPathologies = otherFamilyPathologies;
 	}
+
+	public LocalDateTime getPerformedAt() {
+		return performedAt;
+	}
+
+	public void setPerformedAt(LocalDateTime performedAt) {
+		this.performedAt = performedAt;
+	}
+
 	public int getLock() {
 		return lock;
 	}

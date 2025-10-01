@@ -17,7 +17,7 @@ public interface MedicalHistoryIoOperationRepository extends JpaRepository<Medic
 
 	@Query("select mh from MedicalHistory mh " +
 		"where mh.patient.code = :patientCode " +
-		"and (mh.createdDate >= :performedAt and mh.createdDate < :closedAt)")
-	List<MedicalHistory> findByPatientCodeCreatedDateBetween(@Param("patientCode") Integer patientCode, @Param("performedAt") LocalDateTime performedAt,
+		"and (mh.performedAt >= :performedAt and mh.performedAt < :closedAt)")
+	List<MedicalHistory> findByPatientCodeAndPerformedAtBetween(@Param("patientCode") Integer patientCode, @Param("performedAt") LocalDateTime performedAt,
 																@Param("closedAt") LocalDateTime closedAt);
 }
