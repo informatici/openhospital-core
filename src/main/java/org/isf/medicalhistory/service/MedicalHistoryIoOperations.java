@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.encounter.model.Encounter;
-import org.isf.encounter.model.EncounterStatus;
 import org.isf.medicalhistory.model.MedicalHistory;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -73,6 +72,6 @@ public class MedicalHistoryIoOperations {
 
 	public List<MedicalHistory> getMedicalHistoriesForEncounter(Encounter encounter) {
 		LocalDateTime closedAt = encounter.getClosedAt() == null ? LocalDateTime.now() : encounter.getClosedAt();
-		return repository.findByPatientCodeCreatedDateBetween(encounter.getPatient().getCode(), encounter.getPerformedAt(), closedAt);
+		return repository.findByPatientCodeAndPerformedAtBetween(encounter.getPatient().getCode(), encounter.getPerformedAt(), closedAt);
 	}
 }

@@ -36,6 +36,7 @@ public class TestMedicalHistory {
 	private final LocalDateTime testDate = LocalDateTime.of(2025, 8, 21, 10, 0, 0);
 	private Patient patient;
 	private TestPatient testPatient = new TestPatient();
+	private LocalDateTime testPerformedAt = LocalDateTime.of(2025, 1, 1, 10, 0);
 
 	public TestMedicalHistory() {
 
@@ -72,6 +73,7 @@ public class TestMedicalHistory {
 		mh.setHemylosis("None");
 		mh.setOtherPersonalPathologies("None");
 		mh.setOtherFamilyPathologies("None");
+		mh.setPerformedAt(testPerformedAt);
 		return mh;
 	}
 
@@ -103,5 +105,6 @@ public class TestMedicalHistory {
 		assertThat(mh.getHemylosis()).isEqualTo("None");
 		assertThat(mh.getOtherPersonalPathologies()).isEqualTo("None");
 		assertThat(mh.getOtherFamilyPathologies()).isEqualTo("None");
+		assertThat(mh.getPerformedAt()).isEqualTo(testPerformedAt);
 	}
 }
