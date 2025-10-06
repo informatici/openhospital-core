@@ -134,6 +134,17 @@ public class PatientBrowserManager {
 	}
 
 	/**
+	 * Method that gets a {@link Patient} by his/her Folder Number.
+	 *
+	 * @param folderNumber the patient folder number
+	 * @return the {@link Patient}
+	 * @throws OHServiceException
+	 */
+	public Patient getPatientByFolderNumber(Integer folderNumber) throws OHServiceException {
+		return ioOperations.getPatientByFolderNumber(folderNumber);
+	}
+
+	/**
 	 * Get a {@link Patient} by his/her ID, even if he/her has been logically deleted.
 	 *
 	 * @param code
