@@ -185,6 +185,21 @@ public class PatientIoOperations {
 		}
 		return patient;
 	}
+	/**
+	 * Get a {@link Patient} by his/her Folder Number, even if he/her has been logically deleted.
+	 *
+	 * @param folderNumber the patient folder number
+	 * @return  the {@link Patient} that matches the specified folder number.
+	 * @throws OHServiceException
+	 */
+
+	public Patient getPatientByFolderNumber(Integer folderNumber) throws OHServiceException {
+		Patient patient = repository.findByFolderNumberAndDeleted(folderNumber, NOT_DELETED_STATUS).orElse(null);
+		if (patient != null) {
+			retrievePatientProfilePhoto(patient);
+		}
+		return patient;
+	}
 
 	/**
 	 * Save / update a {@link Patient}.

@@ -23,6 +23,7 @@ package org.isf.patient.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.isf.patient.model.Patient;
 import org.springframework.data.domain.Page;
@@ -66,4 +67,6 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	long countAllActiveNotDeletedPatients();
 	
 	List<Patient> findAllByCodeIn(List<Integer> codes);
+
+	Optional<Patient> findByFolderNumberAndDeleted(Integer folderNumber, char deleted);
 }

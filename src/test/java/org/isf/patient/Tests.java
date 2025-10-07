@@ -427,6 +427,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetPatientByFolderNumber() throws Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientBrowserManager.getPatientByFolderNumber(foundPatient.getFolderNumber());
+		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
 	void testMgrGetPatientByIdDoesNotExist() throws Exception {
 		assertThat(patientBrowserManager.getPatientById(-987654321)).isNull();
 	}
