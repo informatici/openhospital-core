@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.anamnesis.model.PatientHistory;
 import org.isf.opd.model.Opd;
 import org.isf.patconsensus.model.PatientConsensus;
-import org.isf.utils.converter.JsonListConverter;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
