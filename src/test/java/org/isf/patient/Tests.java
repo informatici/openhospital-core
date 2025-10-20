@@ -796,6 +796,9 @@ class Tests extends OHCoreTestCase {
 		patient.setMotherAge(35);
 		patient.setMotherPhone("motherPhone");
 		patient.setFolderNumber(12);
+		patient.setSchoolingLevel("No schooling");
+		patient.setFatherSchoolingLevel("Secondary");
+		patient.setMotherSchoolingLevel("Primary");
 
 
 		Patient savedPatient = patientIoOperation.savePatient(patient);
@@ -809,6 +812,9 @@ class Tests extends OHCoreTestCase {
 		assertThat(savedPatient.getMotherAge()).isEqualTo(patient.getMotherAge());
 		assertThat(savedPatient.getMotherPhone()).isEqualTo(patient.getMotherPhone());
 		assertThat(savedPatient.getFolderNumber()).isEqualTo(patient.getFolderNumber());
+		assertThat(savedPatient.getSchoolingLevel()).isEqualTo(patient.getSchoolingLevel());
+		assertThat(savedPatient.getFatherSchoolingLevel()).isEqualTo(patient.getFatherSchoolingLevel());
+		assertThat(savedPatient.getMotherSchoolingLevel()).isEqualTo(patient.getMotherSchoolingLevel());
 	}
 
 	@Test
