@@ -516,6 +516,24 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testGetCommunes() throws  Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		List<String> communes = patientBrowserManager.getCommunes();
+		assertThat(communes).isNotEmpty();
+		assertThat(communes.get(0)).isEqualTo(foundPatient.getCommune());
+	}
+
+	@Test
+	void testGetEthnics() throws  Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		List<String> ethnics = patientBrowserManager.getEthnics();
+		assertThat(ethnics).isNotEmpty();
+		assertThat(ethnics.get(0)).isEqualTo(foundPatient.getEthnic());
+	}
+
+	@Test
 	void testMgrGetMaritalList() throws Exception {
 		resetHashMaps();
 		String[] maritalDescriptionList = patientBrowserManager.getMaritalList();
