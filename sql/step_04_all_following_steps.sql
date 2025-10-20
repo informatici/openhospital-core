@@ -123,3 +123,4 @@ source step_a126_create_table_oh_encounter.sql;
 source step_a127_create_conditioning_table.sql;
 source step_a128_add_examination_type_in_oh_patientexamination_table.sql;
 source step_a129_add_permissions.sql;
+source step_a130_update_medical_history_table.sql;
