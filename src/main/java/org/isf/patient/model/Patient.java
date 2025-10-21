@@ -24,20 +24,7 @@ package org.isf.patient.model;
 import java.time.LocalDate;
 import java.time.Period;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -180,6 +167,15 @@ public class Patient extends Auditable<String> {
 	 */
 	@Column(name="PAT_ALLERGIES")
 	private String allergies;
+
+	@Column(name="PAT_SCHOOLING_LEVEL")
+	private String schoolingLevel;
+
+	@Column(name="PAT_FATHER_SCHOOLING_LEVEL")
+	private String fatherSchoolingLevel;
+
+	@Column(name="PAT_MOTHER_SCHOOLING_LEVEL")
+	private String motherSchoolingLevel;
 
 	@Version
 	@Column(name="PAT_LOCK")
@@ -628,6 +624,30 @@ public class Patient extends Auditable<String> {
 	 */
 	public void setAllergies(String allergies) {
 		this.allergies = allergies;
+	}
+
+	public String getSchoolingLevel() {
+		return schoolingLevel;
+	}
+
+	public void setSchoolingLevel(String schoolingLevel) {
+		this.schoolingLevel = schoolingLevel;
+	}
+
+	public String getFatherSchoolingLevel() {
+		return fatherSchoolingLevel;
+	}
+
+	public void setFatherSchoolingLevel(String fatherSchoolingLevel) {
+		this.fatherSchoolingLevel = fatherSchoolingLevel;
+	}
+
+	public String getMotherSchoolingLevel() {
+		return motherSchoolingLevel;
+	}
+
+	public void setMotherSchoolingLevel(String motherSchoolingLevel) {
+		this.motherSchoolingLevel = motherSchoolingLevel;
 	}
 
 	/**
