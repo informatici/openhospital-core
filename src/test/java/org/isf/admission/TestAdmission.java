@@ -61,6 +61,9 @@ public class TestAdmission {
 	private String preTreatment = "medication, outpatient care, prior therapy";
 	private String preAssessment = "preliminary examinations, lab results, medical observations";
 	private String entryReason = "EntryReason";
+	private Boolean alertReceived = true;
+	private Boolean referenceSheet = false;
+	private Boolean qualifiedAgent = false;
 
 	public Admission setup(
 			Ward ward,
@@ -87,7 +90,8 @@ public class TestAdmission {
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, anamnesis,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason,
+					alertReceived, referenceSheet, qualifiedAgent);
 		}
 
 		return admission;
@@ -137,6 +141,9 @@ public class TestAdmission {
 		admission.setPreTreatment(preTreatment);
 		admission.setPreAssessment(preAssessment);
 		admission.setEntryReason(entryReason);
+		admission.setAlertReceived(alertReceived);
+		admission.setReferenceSheet(referenceSheet);
+		admission.setQualifiedAgent(qualifiedAgent);
 	}
 
 	public void check(Admission admission) {
@@ -160,6 +167,10 @@ public class TestAdmission {
 		assertThat(admission.getPreTreatment()).isEqualTo(preTreatment);
 		assertThat(admission.getPreAssessment()).isEqualTo(preAssessment);
 		assertThat(admission.getEntryReason()).isEqualTo(entryReason);
+
+		assertThat(admission.getAlertReceived()).isEqualTo(alertReceived);
+		assertThat(admission.getReferenceSheet()).isEqualTo(referenceSheet);
+		assertThat(admission.getQualifiedAgent()).isEqualTo(qualifiedAgent);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();
