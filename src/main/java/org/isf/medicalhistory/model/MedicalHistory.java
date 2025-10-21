@@ -124,7 +124,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	private String mother;
 
 	@Column(name = "MH_SIBLINGS")
-	private Integer siblings;
+	private String siblings;
 
 	@Column(name = "MH_OTHER_USEFUL_INFORMATION")
 	private String otherUsefulInformation;
@@ -191,7 +191,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 
 	}
 
-	public MedicalHistory(Integer id, Patient patient, String siblingRank, String termPregnancy, String deliveryMode, String reasonMode, String apgarScore, Double birthWeight, String vaccinationStatePev, String vaccinationStateNoPev, String antiMalarialProphylaxisMilda, String antiMalarialProphylaxisVap, String antiMalarialProphylaxisOthers, Boolean surgicalProcedure, String surgicalProcedureCondition, String surgicalProcedureType, LocalDateTime surgicalProcedureDate, String diversification, String neonatalPeriod, String previousHospitalization, String father, String mother, Integer siblings, String otherUsefulInformation, String diet, Boolean deParasitization, String psychomotorDev, String somaticGrowth, Boolean ironSupplement, Boolean folicAcidSupplement, Boolean vitASupplement, String otherSupplements, Boolean transfusion, LocalDateTime lastTransfusionDate, Boolean sickleCell, Boolean drugAllergy, String allergyPrecision, String hemylosis, String otherPersonalPathologies, String otherFamilyPathologies, LocalDateTime performedAt, int lock, int hashCode) {
+	public MedicalHistory(Integer id, Patient patient, String siblingRank, String termPregnancy, String deliveryMode, String reasonMode, String apgarScore, Double birthWeight, String vaccinationStatePev, String vaccinationStateNoPev, String antiMalarialProphylaxisMilda, String antiMalarialProphylaxisVap, String antiMalarialProphylaxisOthers, Boolean surgicalProcedure, String surgicalProcedureCondition, String surgicalProcedureType, LocalDateTime surgicalProcedureDate, String diversification, String neonatalPeriod, String previousHospitalization, String father, String mother, String siblings, String otherUsefulInformation, String diet, Boolean deParasitization, String psychomotorDev, String somaticGrowth, Boolean ironSupplement, Boolean folicAcidSupplement, Boolean vitASupplement, String otherSupplements, Boolean transfusion, LocalDateTime lastTransfusionDate, Boolean sickleCell, Boolean drugAllergy, String allergyPrecision, String hemylosis, String otherPersonalPathologies, String otherFamilyPathologies, LocalDateTime performedAt, int lock, int hashCode) {
 		this.id = id;
 		this.patient = patient;
 		this.siblingRank = siblingRank;
@@ -609,11 +609,11 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.mother = mother;
 	}
 
-	public Integer getSiblings() {
+	public String getSiblings() {
 		return siblings;
 	}
 
-	public void setSiblings(Integer siblings) {
+	public void setSiblings(String siblings) {
 		this.siblings = siblings;
 	}
 

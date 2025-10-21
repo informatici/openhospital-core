@@ -89,7 +89,7 @@ public class TestMedicalHistory {
 		mh.setPreviousHospitalization("None");
 		mh.setFather("Healthy");
 		mh.setMother("Healthy");
-		mh.setSiblings(2);
+		mh.setSiblings("Healthy");
 		mh.setOtherUsefulInformation("No significant issues");
 
 		mh.setPerformedAt(testPerformedAt);
@@ -142,7 +142,7 @@ public class TestMedicalHistory {
 		assertThat(mh.getPreviousHospitalization()).isEqualTo("None");
 		assertThat(mh.getFather()).isEqualTo("Healthy");
 		assertThat(mh.getMother()).isEqualTo("Healthy");
-		assertThat(mh.getSiblings()).isEqualTo(2);
+		assertThat(mh.getSiblings()).isEqualTo("Healthy");
 		assertThat(mh.getOtherUsefulInformation()).isEqualTo("No significant issues");
 
 		assertThat(mh.getPerformedAt()).isEqualTo(testPerformedAt);
