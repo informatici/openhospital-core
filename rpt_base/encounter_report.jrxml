@@ -35,6 +35,9 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 	<field name="ENC_CODE" class="java.lang.String"/>
 	<field name="PAT_ID" class="java.lang.Integer"/>
 	<field name="PAT_FOLDER_NUM" class="java.lang.Integer"/>
+	<field name="PAT_SCHOOLING_LEVEL" class="java.lang.String"/>
+	<field name="PAT_FATHER_SCHOOLING_LEVEL" class="java.lang.String"/>
+	<field name="PAT_MOTHER_SCHOOLING_LEVEL" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -80,35 +83,21 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{Folder}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="77" y="0" width="53" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
+					<reportElement x="77" y="0" width="92" height="20" uuid="48168ff4-81f4-49a3-9a92-85369acbdf13"/>
 					<textElement textAlignment="Center">
 						<font fontName="Serif" size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PAT_FOLDER_NUM}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="130" y="1" width="10" height="18" uuid="854d5880-f40a-4e3f-bb9d-e0b871f24be7"/>
-					<textElement textAlignment="Center" markup="none">
-						<font fontName="Serif" size="14" isBold="true"/>
-					</textElement>
-					<text><![CDATA[/]]></text>
-				</staticText>
-				<textField pattern="MM" isBlankWhenNull="true">
-					<reportElement x="140" y="0" width="27" height="19" uuid="0ba45d78-c06e-4d42-84ea-54ef3fed6e48"/>
-					<textElement textAlignment="Center">
-						<font fontName="Serif" size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-				</textField>
 				<textField isBlankWhenNull="false">
-					<reportElement x="167" y="0" width="53" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
+					<reportElement x="169" y="0" width="61" height="20" uuid="27766e10-dd49-472f-8d89-b6860926791d"/>
 					<textElement textAlignment="Left">
 						<font fontName="Serif" size="14" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{PED}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Column" pattern="yyyy" isBlankWhenNull="true">
-					<reportElement x="220" y="0" width="60" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
+					<reportElement x="230" y="0" width="59" height="19" uuid="89298f28-ca17-49af-a4dd-7e541c6431e8"/>
 					<textElement>
 						<font fontName="Serif" size="14"/>
 					</textElement>
@@ -182,10 +171,10 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="307" splitType="Stretch">
+		<band height="426" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<frame>
-				<reportElement x="80" y="0" width="401" height="80" uuid="6efcf01a-abf2-4745-ab4f-8179965841f0"/>
+				<reportElement x="80" y="0" width="401" height="140" uuid="6efcf01a-abf2-4745-ab4f-8179965841f0"/>
 				<frame>
 					<reportElement x="-1" y="0" width="401" height="20" uuid="de7ad4a2-ada2-41f5-947e-27453974e087"/>
 					<textField>
@@ -201,20 +190,6 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 							<font size="12"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{PAT_NAME}]]></textFieldExpression>
-					</textField>
-					<textField>
-						<reportElement x="320" y="0" width="40" height="20" uuid="6afa9d29-06ff-4357-8b9b-b22ae40b1042"/>
-						<textElement>
-							<font size="12" isBold="true"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$R{Sex}]]></textFieldExpression>
-					</textField>
-					<textField isBlankWhenNull="true">
-						<reportElement x="360" y="0" width="41" height="20" uuid="14dbfec5-21d0-4345-8f15-204e3944292e"/>
-						<textElement>
-							<font size="12"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{PAT_SEX}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -235,30 +210,16 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement x="0" y="40" width="401" height="20" uuid="05d1523e-e74a-4416-8d38-07a4b222ed20"/>
-					<textField>
-						<reportElement x="0" y="0" width="119" height="20" uuid="3a0ad2c3-db85-4157-b5eb-52625495ede6"/>
-						<textElement>
-							<font size="12" isBold="true"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$R{Address}]]></textFieldExpression>
-					</textField>
+					<reportElement x="0" y="80" width="401" height="20" uuid="05d1523e-e74a-4416-8d38-07a4b222ed20"/>
 					<textField isBlankWhenNull="true">
-						<reportElement x="119" y="0" width="91" height="20" uuid="7c8aa51f-e178-49a6-b169-7661b39c3c69"/>
-						<textElement>
-							<font size="12"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{PAT_ADDR}]]></textFieldExpression>
-					</textField>
-					<textField isBlankWhenNull="true">
-						<reportElement x="300" y="0" width="101" height="20" uuid="69cc0e22-5235-4540-8ffd-91b5c418e2a1"/>
+						<reportElement x="119" y="0" width="147" height="20" uuid="69cc0e22-5235-4540-8ffd-91b5c418e2a1"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{PAT_COMMUNE}]]></textFieldExpression>
 					</textField>
 					<textField>
-						<reportElement x="210" y="0" width="90" height="20" uuid="7896e526-8230-485e-b4a6-214152239d3f"/>
+						<reportElement x="1" y="0" width="117" height="20" uuid="7896e526-8230-485e-b4a6-214152239d3f"/>
 						<textElement>
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -266,7 +227,7 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement x="0" y="60" width="401" height="20" uuid="116e87fc-17af-4aed-baed-1f4f17cad6ab"/>
+					<reportElement x="0" y="100" width="401" height="20" uuid="116e87fc-17af-4aed-baed-1f4f17cad6ab"/>
 					<textField>
 						<reportElement x="0" y="0" width="119" height="20" uuid="23e5f759-4ed2-474b-9dc9-365b5a714747"/>
 						<textElement>
@@ -282,16 +243,67 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 						<textFieldExpression><![CDATA[$F{PAT_ETHNIC}]]></textFieldExpression>
 					</textField>
 				</frame>
+				<frame>
+					<reportElement x="0" y="40" width="401" height="20" uuid="ff454b7e-4e98-4d94-a637-3f54cbdc2b1b"/>
+					<textField>
+						<reportElement x="1" y="0" width="117" height="20" uuid="310d6eed-55c2-4892-8551-4704ca254292"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Sex}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="119" y="0" width="81" height="20" uuid="1b6bab7d-5de9-458c-8797-080c19c34e28"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_SEX}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="-1" y="60" width="401" height="20" uuid="b39f8c1e-fb85-43a3-b67a-490a48da539b"/>
+					<textField>
+						<reportElement x="2" y="0" width="117" height="20" uuid="e57b5c66-0b6c-40a6-ba76-2ec007ab6414"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Address}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="119" y="0" width="91" height="20" uuid="506e28e0-8051-4f01-a228-a6309ed312f8"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_ADDR}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="-1" y="120" width="401" height="20" uuid="668c9257-155b-4b76-b307-b5e3c74794e9"/>
+					<textField>
+						<reportElement x="0" y="0" width="130" height="20" uuid="cde6e73b-5bad-4594-9942-7c2d87e79e2b"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{SchoolingLevel}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="130" y="0" width="271" height="20" uuid="35b23274-2b61-416d-b581-16859a9c5aad"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_SCHOOLING_LEVEL}]]></textFieldExpression>
+					</textField>
+				</frame>
 			</frame>
 			<textField>
-				<reportElement x="215" y="90" width="131" height="21" uuid="f5ce91c3-fc9c-4a7f-99e5-58e4547110a4"/>
+				<reportElement x="220" y="150" width="131" height="20" uuid="f5ce91c3-fc9c-4a7f-99e5-58e4547110a4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$R{Father}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement x="80" y="120" width="401" height="60" uuid="b931a744-69ff-41af-87dc-95a9fe0ef726"/>
+				<reportElement x="80" y="180" width="401" height="100" uuid="b931a744-69ff-41af-87dc-95a9fe0ef726"/>
 				<frame>
 					<reportElement x="-1" y="0" width="401" height="20" uuid="2614618d-cc74-4ffa-8e38-4b42ec2da8f9"/>
 					<textField>
@@ -319,29 +331,15 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 						<textFieldExpression><![CDATA[$R{Age}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement x="120" y="0" width="70" height="20" uuid="57635908-c3aa-473e-9db7-5c537b82b74c"/>
+						<reportElement x="120" y="0" width="146" height="20" uuid="57635908-c3aa-473e-9db7-5c537b82b74c"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{PAT_FATHER_AGE}]]></textFieldExpression>
 					</textField>
-					<textField>
-						<reportElement x="190" y="0" width="90" height="20" uuid="bf98deee-9be5-495b-85bf-6d646d5c3369"/>
-						<textElement>
-							<font size="12" isBold="true"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$R{Occupation}]]></textFieldExpression>
-					</textField>
-					<textField isBlankWhenNull="true">
-						<reportElement x="280" y="0" width="121" height="20" uuid="4344a2da-f6c2-413a-b1cd-175dea2c78c7"/>
-						<textElement>
-							<font size="12"/>
-						</textElement>
-						<textFieldExpression><![CDATA[$F{PAT_FATHER_OCCUPATION}]]></textFieldExpression>
-					</textField>
 				</frame>
 				<frame>
-					<reportElement x="0" y="40" width="401" height="20" uuid="11fd82df-526e-4e4e-b311-90ad5f10b47e"/>
+					<reportElement x="0" y="60" width="401" height="20" uuid="11fd82df-526e-4e4e-b311-90ad5f10b47e"/>
 					<textField>
 						<reportElement x="0" y="0" width="119" height="20" uuid="76c93f06-14ba-4206-9a06-3369a415c1d6"/>
 						<textElement>
@@ -357,16 +355,50 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 						<textFieldExpression><![CDATA[$F{PAT_FATHER_PHONE}]]></textFieldExpression>
 					</textField>
 				</frame>
+				<frame>
+					<reportElement x="0" y="40" width="401" height="20" uuid="ee32b163-7f4d-4580-b79c-561c4920fa23"/>
+					<textField>
+						<reportElement x="1" y="0" width="119" height="20" uuid="4d762fd8-5774-4b92-8b37-3d32f84acb38"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Occupation}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="120" y="0" width="281" height="20" uuid="f32c3390-103b-4030-b403-2faa0f8b097a"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_FATHER_OCCUPATION}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<frame>
+					<reportElement x="0" y="80" width="401" height="20" uuid="77fcfc2a-6105-4566-8116-daec586542aa"/>
+					<textField>
+						<reportElement x="0" y="0" width="169" height="20" uuid="7f40c34f-425a-4d85-bdea-552e8c881fbd"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{FatherSchoolingLevel}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="169" y="0" width="231" height="20" uuid="10746405-19fa-4b6d-b17c-71d7e17295ba"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_FATHER_SCHOOLING_LEVEL}]]></textFieldExpression>
+					</textField>
+				</frame>
 			</frame>
 			<textField>
-				<reportElement x="215" y="190" width="131" height="21" uuid="16c9a4aa-cbbc-4db6-8df1-4d85eed30523"/>
+				<reportElement x="215" y="290" width="131" height="20" uuid="16c9a4aa-cbbc-4db6-8df1-4d85eed30523"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$R{Mother}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement x="79" y="220" width="401" height="60" uuid="2eed2c7e-8f29-4234-b9f8-c355ce7d18fc"/>
+				<reportElement x="79" y="320" width="401" height="101" uuid="2eed2c7e-8f29-4234-b9f8-c355ce7d18fc"/>
 				<frame>
 					<reportElement x="-1" y="0" width="401" height="20" uuid="f7e47de6-88cc-4e44-a381-ef9f74ac8e01"/>
 					<textField>
@@ -385,9 +417,9 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement x="0" y="40" width="401" height="20" uuid="86b004b4-0ea6-4735-9e25-89c3565f6158"/>
+					<reportElement x="0" y="60" width="401" height="20" uuid="86b004b4-0ea6-4735-9e25-89c3565f6158"/>
 					<textField>
-						<reportElement x="0" y="0" width="120" height="20" uuid="6700d8f4-4c3f-4c0a-9b0b-f9af36d627c9"/>
+						<reportElement x="2" y="0" width="118" height="20" uuid="6700d8f4-4c3f-4c0a-9b0b-f9af36d627c9"/>
 						<textElement>
 							<font size="12" isBold="true"/>
 						</textElement>
@@ -411,34 +443,54 @@ AND (e.ENC_CLOSED_AT IS NULL OR e.ENC_CLOSED_AT <= $P{closedAt})]]>
 						<textFieldExpression><![CDATA[$R{Age}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement x="120" y="0" width="71" height="20" uuid="9d9b5122-22ec-42dd-9ec6-4923d4570ab9"/>
+						<reportElement x="120" y="0" width="170" height="20" uuid="9d9b5122-22ec-42dd-9ec6-4923d4570ab9"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{PAT_MOTHER_AGE}]]></textFieldExpression>
 					</textField>
+				</frame>
+				<frame>
+					<reportElement x="0" y="40" width="401" height="20" uuid="c694e897-660d-41fe-a171-510d38a52741"/>
 					<textField>
-						<reportElement x="191" y="0" width="90" height="20" uuid="bc416086-221d-4789-9f57-d19d927810b4"/>
+						<reportElement x="1" y="0" width="119" height="20" uuid="60aa249f-f9d2-4c6d-b620-81fe9e186b90"/>
 						<textElement>
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$R{Occupation}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement x="281" y="0" width="120" height="20" uuid="fec32f3c-1f9d-427d-8771-59830856ff53"/>
+						<reportElement x="121" y="0" width="280" height="20" uuid="199d423a-6d3e-4cdd-a553-6d1db7fd28ec"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{PAT_MOTHER_OCCUPATION}]]></textFieldExpression>
 					</textField>
 				</frame>
+				<frame>
+					<reportElement x="2" y="81" width="399" height="20" uuid="0df99d02-cd39-400a-be81-e954082221a1"/>
+					<textField>
+						<reportElement x="0" y="0" width="168" height="20" uuid="54ea6744-3900-4c6e-9cc3-8cd52a3a4469"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{MotherSchoolingLevel}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="168" y="0" width="222" height="20" uuid="b3fc0095-234b-47fa-8040-00fa7cbddf13"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{PAT_MOTHER_SCHOOLING_LEVEL}]]></textFieldExpression>
+					</textField>
+				</frame>
 			</frame>
 		</band>
 	</detail>
 	<summary>
-		<band height="53">
+		<band height="41">
 			<subreport>
-				<reportElement x="0" y="12" width="551" height="31" uuid="7a9231bb-561c-4cf3-a4a8-6a6ec9be80aa"/>
+				<reportElement x="5" y="10" width="551" height="29" uuid="7a9231bb-561c-4cf3-a4a8-6a6ec9be80aa"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
