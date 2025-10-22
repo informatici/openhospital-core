@@ -317,6 +317,26 @@ public class PatientIoOperations {
 		return repository.findCities();
 	}
 
+	/**
+	 * Method that returns a list of communes to be used.
+	 *
+	 * @return list of Communes
+	 * @throws OHServiceException
+	 */
+	public List<String> getCommunes() throws OHServiceException {
+		return repository.findCommunes();
+	}
+
+	/**
+	 * Method that returns a list of ethnics to be used.
+	 *
+	 * @return list of Ethnics
+	 * @throws OHServiceException
+	 */
+	public List<String> getEthnics() throws OHServiceException {
+		return repository.findEthnics();
+	}
+
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
