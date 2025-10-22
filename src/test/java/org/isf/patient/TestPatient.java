@@ -55,6 +55,8 @@ public class TestPatient {
 	private static String profession = "business";
 	private String anamnesis = "anamnesis";
 	private String allergies = "allergies";
+	private String commune = "Commune";
+	private String ethnic = "Ethnicity";
 	//private static Blob photo;
 	//private static Image photoImage;
 
@@ -76,6 +78,8 @@ public class TestPatient {
 			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			patient.setAllergies(allergies);
 			patient.setAnamnesis(anamnesis);
+			patient.setEthnic(ethnic);
+			patient.setCommune(commune);
 
 		}
 
@@ -105,6 +109,8 @@ public class TestPatient {
 		patient.setProfession(profession);
 		patient.setAllergies(allergies);
 		patient.setAnamnesis(anamnesis);
+		patient.setCommune(commune);
+		patient.setEthnic(ethnic);
 	}
 
 	public void check(Patient patient) {
@@ -129,5 +135,7 @@ public class TestPatient {
 		assertThat(patient.getProfession()).isEqualTo(profession);
 		assertThat(patient.getAllergies()).isEqualTo(allergies);
 		assertThat(patient.getAnamnesis()).isEqualTo(anamnesis);
+		assertThat(patient.getCommune()).isEqualTo(commune);
+		assertThat(patient.getEthnic()).isEqualTo(ethnic);
 	}
 }

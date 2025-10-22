@@ -59,6 +59,12 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	@Query(value = "select distinct p.city from Patient p")
 	List<String> findCities();
 
+	@Query(value = "select distinct p.commune from Patient p WHERE p.commune IS NOT NULL")
+	List<String> findCommunes();
+
+	@Query(value = "select distinct p.ethnic from Patient p WHERE p.ethnic IS NOT NULL")
+	List<String> findEthnics();
+
 	List<Patient> getPatientsByParams(Map<String, Object> params);
 
 	Page<Patient> getPatientsByParams(Map<String, Object> params, Pageable pageable);
