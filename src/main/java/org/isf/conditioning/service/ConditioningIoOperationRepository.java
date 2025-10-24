@@ -35,6 +35,15 @@ public interface ConditioningIoOperationRepository extends JpaRepository<Conditi
 	@Query("select co from Conditioning co where co.patient.code =:patientCode")
 	List<Conditioning> findByPatientCode( @Param("patientCode") int patientCode);
 
+	@Query("select co from Conditioning co where co.performedBy.userName = :userName")
+	List<Conditioning> findByUserName(@Param("userName") String userName);
+
+	@Query("SELECT c FROM Conditioning c WHERE c.patient.code = :patientCode AND c.performedBy.userName = :userName")
+	List<Conditioning> findByPatientCodeAndUserName(
+		@Param("patientCode") Integer patientCode,
+		@Param("userName") String userName
+	);
+
 	@Query("SELECT c FROM Conditioning c WHERE c.patient.code = :patientCode " + "AND c.performedAt BETWEEN :performedAt AND :closedAt")
 	List<Conditioning> findByDateBetweenAndPatientCode(
 		@Param("performedAt") LocalDateTime performedAt,
