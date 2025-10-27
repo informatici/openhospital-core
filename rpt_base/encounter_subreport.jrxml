@@ -50,13 +50,17 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="ADMT_DESC" class="java.lang.String"/>
 	<field name="ADM_FHU" class="java.lang.String"/>
 	<field name="ADM_ENTRY_REASON" class="java.lang.String"/>
+	<field name="ADM_TRANSPORTATION" class="java.lang.String"/>
+	<field name="ADM_ALERT_RECEIVED" class="java.lang.Boolean"/>
+	<field name="ADM_REFERENCE_SHEET" class="java.lang.Boolean"/>
+	<field name="ADM_QUALIFIED_AGENT" class="java.lang.Boolean"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="666" splitType="Stretch">
+		<band height="726" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="70" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
+				<reportElement x="0" y="90" width="585" height="20" uuid="e5682b15-cbf1-4f93-830e-04c4df29d99e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -73,9 +77,110 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ADM_ENTRY_REASON}]]></textFieldExpression>
 				</textField>
+				<frame>
+					<reportElement x="-2" y="20" width="584" height="20" uuid="3aadfd48-efc8-4c68-8718-802ecfb9a47f">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<textField>
+						<reportElement x="0" y="0" width="121" height="20" uuid="775f24c0-d935-4104-8af9-27bfb97346c7"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{AdmissionMode}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="121" y="0" width="59" height="20" uuid="c899f22a-9282-462f-b342-b76c06513d49"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Direct}]]></textFieldExpression>
+					</textField>
+					<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+						<reportElement x="180" y="0" width="90" height="20" uuid="fc4c00a9-bdcb-46c5-9130-ddf83b7e1996"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{ADMT_DESC}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="270" y="0" width="70" height="20" uuid="4f5a3154-5fa7-4a6e-a97a-4ffd32bfe24b"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Ref}]]></textFieldExpression>
+					</textField>
+					<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+						<reportElement x="340" y="0" width="30" height="20" uuid="f774e54a-fa2d-4484-a2ab-9de7f0783a72"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{ADM_FHU}.equals("") ? $R{No} : $R{Yes}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="370" y="0" width="32" height="20" uuid="de0cb1c6-0409-4d4d-be81-40803edbcab1"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$R{Of}]]></textFieldExpression>
+					</textField>
+					<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+						<reportElement x="402" y="0" width="182" height="20" uuid="433beedb-5711-4625-9369-2fbfebb17b09"/>
+						<textElement>
+							<font size="12"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{ADM_FHU}]]></textFieldExpression>
+					</textField>
+					<frame>
+						<reportElement x="-1" y="20" width="584" height="20" uuid="60c5e815-fa61-44d3-b074-25e9b1fe5531">
+							<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						</reportElement>
+						<textField>
+							<reportElement x="4" y="0" width="89" height="20" uuid="ec2f6534-1479-4d04-b552-ca57fb4ffa07"/>
+							<textElement>
+								<font size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$R{AlertReceived}]]></textFieldExpression>
+						</textField>
+						<textField isBlankWhenNull="true">
+							<reportElement x="93" y="0" width="31" height="19" uuid="24e98c26-78bf-44a9-8231-adfd9487aea9"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{ADM_ALERT_RECEIVED} ? $R{Yes} : $R{No}]]></textFieldExpression>
+						</textField>
+						<textField isBlankWhenNull="true">
+							<reportElement x="242" y="0" width="30" height="20" uuid="20a9d0d9-873e-4209-aa5c-8ebf3aa60c59"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{ADM_REFERENCE_SHEET} ? $R{Yes} : $R{No}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="124" y="0" width="118" height="20" uuid="dc30cfb2-cc4d-43fb-833c-f2c5f354205f"/>
+							<textElement>
+								<font size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$R{ReferenceSheet}]]></textFieldExpression>
+						</textField>
+						<textField isBlankWhenNull="true">
+							<reportElement x="383" y="0" width="27" height="20" uuid="4b8cb1ec-c668-426e-a47c-1a990dff372f"/>
+							<textElement>
+								<font size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{ADM_QUALIFIED_AGENT} ? $R{Yes} : $R{No}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="272" y="0" width="111" height="20" uuid="3fa49cd2-f516-4edf-bd62-177ca6921b5a"/>
+							<textElement>
+								<font size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$R{QualifiedAgent}]]></textFieldExpression>
+						</textField>
+					</frame>
+				</frame>
 			</frame>
 			<frame>
-				<reportElement x="0" y="90" width="560" height="50" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
+				<reportElement x="0" y="150" width="560" height="50" uuid="2492c75d-4a94-4c02-892e-40a6a669eb7a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -94,7 +199,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="140" width="560" height="40" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
+				<reportElement x="0" y="200" width="560" height="40" uuid="2625382e-7621-4561-ae7c-e6373ca09f26">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -113,7 +218,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="240" width="585" height="20" uuid="f1b14296-1bdb-4f6d-8c6a-d3de62632402">
+				<reportElement x="0" y="300" width="585" height="20" uuid="f1b14296-1bdb-4f6d-8c6a-d3de62632402">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -132,7 +237,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="260" width="585" height="20" uuid="0e825d6f-2426-40f9-b357-7270f97bb0b3">
+				<reportElement x="0" y="320" width="585" height="20" uuid="0e825d6f-2426-40f9-b357-7270f97bb0b3">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -172,7 +277,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="300" width="585" height="20" uuid="284b2a5f-38b2-477f-8e8b-8e9c15d454bf">
+				<reportElement x="0" y="360" width="585" height="20" uuid="284b2a5f-38b2-477f-8e8b-8e9c15d454bf">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -191,7 +296,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="320" width="585" height="20" uuid="4fb1e7bb-5dcc-487a-b19c-0e58e70d088e">
+				<reportElement x="0" y="380" width="585" height="20" uuid="4fb1e7bb-5dcc-487a-b19c-0e58e70d088e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -210,7 +315,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="340" width="584" height="20" uuid="8aa1fffc-0559-468c-80ad-8a0f72bdaec2">
+				<reportElement x="1" y="400" width="584" height="20" uuid="8aa1fffc-0559-468c-80ad-8a0f72bdaec2">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -229,7 +334,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="360" width="584" height="20" uuid="a032e490-c931-4b9e-9d63-8561c85485c5">
+				<reportElement x="1" y="420" width="584" height="20" uuid="a032e490-c931-4b9e-9d63-8561c85485c5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -248,7 +353,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="380" width="584" height="20" uuid="776446b0-b191-4540-8ed9-9ea616201b5b">
+				<reportElement x="1" y="440" width="584" height="20" uuid="776446b0-b191-4540-8ed9-9ea616201b5b">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -267,7 +372,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="400" width="584" height="20" uuid="0e2deb15-c66e-4066-a363-04045f424b4e">
+				<reportElement x="0" y="460" width="584" height="20" uuid="0e2deb15-c66e-4066-a363-04045f424b4e">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -321,7 +426,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="420" width="585" height="20" uuid="4e4a7ea6-8960-40e4-aa12-f29a08ded4e6">
+				<reportElement x="0" y="480" width="585" height="20" uuid="4e4a7ea6-8960-40e4-aa12-f29a08ded4e6">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -340,7 +445,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="440" width="583" height="19" uuid="41e5adaf-aae2-4bfd-a846-8ae351fc12d4">
+				<reportElement x="1" y="500" width="583" height="20" uuid="41e5adaf-aae2-4bfd-a846-8ae351fc12d4">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -352,7 +457,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="480" width="584" height="20" uuid="10f44b3e-7f21-4145-91da-07b20e676c32">
+				<reportElement x="0" y="540" width="584" height="20" uuid="10f44b3e-7f21-4145-91da-07b20e676c32">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -385,7 +490,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="520" width="583" height="20" uuid="1801976e-78cb-4cd7-8246-3403b582ddb5">
+				<reportElement x="0" y="580" width="583" height="20" uuid="1801976e-78cb-4cd7-8246-3403b582ddb5">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -418,7 +523,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="540" width="584" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
+				<reportElement x="0" y="600" width="584" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -430,7 +535,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="590" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
+				<reportElement x="0" y="650" width="299" height="30" uuid="84ba5223-ca0a-4c7f-8250-c325168cf228"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -444,7 +549,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="630" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
+				<reportElement x="0" y="690" width="300" height="30" uuid="3e0f0993-6b78-4adc-a70f-a07d173f9b7f"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -458,7 +563,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="0" y="500" width="584" height="20" uuid="e3c6f456-62a0-414e-befd-4fdb7eb08ef6"/>
+				<reportElement x="0" y="560" width="584" height="20" uuid="e3c6f456-62a0-414e-befd-4fdb7eb08ef6"/>
 				<textField>
 					<reportElement x="1" y="0" width="99" height="20" uuid="3087d778-8aa9-49d4-8759-d01ba3e08351"/>
 					<textElement>
@@ -475,7 +580,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="459" width="584" height="21" uuid="b8ca6479-5230-47a5-9a2e-832adc81c842">
+				<reportElement x="0" y="520" width="584" height="20" uuid="b8ca6479-5230-47a5-9a2e-832adc81c842">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -508,7 +613,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="1" y="560" width="584" height="20" uuid="177ecd28-a924-420e-bfc3-5bfb0b2de4b6">
+				<reportElement x="1" y="620" width="584" height="20" uuid="177ecd28-a924-420e-bfc3-5bfb0b2de4b6">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
@@ -520,7 +625,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="220" width="584" height="20" uuid="0360ea87-c526-41d9-a251-985ad9604268">
+				<reportElement x="0" y="280" width="584" height="20" uuid="0360ea87-c526-41d9-a251-985ad9604268">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -532,7 +637,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="-1" y="180" width="561" height="40" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
+				<reportElement x="-1" y="240" width="561" height="40" uuid="2a51177d-2992-4c35-a2a3-39d069c3cf7a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -650,7 +755,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="-1" y="280" width="584" height="20" uuid="d426ba0f-46e1-48f3-b42d-3356130ad641">
+				<reportElement x="-1" y="340" width="584" height="20" uuid="d426ba0f-46e1-48f3-b42d-3356130ad641">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
@@ -680,6 +785,25 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{ADMWeight}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="70" width="584" height="20" uuid="f7b226be-7428-4b00-a918-69ec7301d4b7">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="121" height="20" uuid="266622f3-11ce-449e-8814-787660b90812"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Transportation}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="121" y="0" width="210" height="20" uuid="35311bd1-359e-487f-a64f-eeec0a0ff537"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADM_TRANSPORTATION}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
