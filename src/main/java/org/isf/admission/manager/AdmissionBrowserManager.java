@@ -258,6 +258,16 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
+	 * Method that returns the full list of Transportation of the {@link Admission}s.
+	 *
+	 * @return the list of Transportation (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<String> getTransportation() throws OHServiceException {
+		return ioOperations.getTransportation();
+	}
+
+	/**
 	 * Deletes the patient photo.
 	 *
 	 * @param id the patient id.

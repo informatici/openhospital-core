@@ -206,6 +206,16 @@ public class AdmissionIoOperations {
 	}
 
 	/**
+	 * Method that returns a list of transportation to be used.
+	 *
+	 * @return list of Transportation
+	 * @throws OHServiceException
+	 */
+	public List<String> getTransportation() throws OHServiceException {
+		return repository.findTransportations();
+	}
+
+	/**
 	 * Lists the {@link DischargeType}s.
 	 *
 	 * @return the discharge types.

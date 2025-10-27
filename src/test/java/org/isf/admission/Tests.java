@@ -353,6 +353,15 @@ class Tests extends OHCoreTestCase {
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
+	@Test
+	void testGetTransportation() throws  Exception {
+		int id = setupTestAdmission(false);
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		List<String> transportations = admissionBrowserManager.getTransportation();
+		assertThat(transportations).isNotEmpty();
+		assertThat(transportations.get(0)).isEqualTo(foundAdmission.getTransportation());
+	}
+
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
 	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote(boolean maternityRestartInJune) throws Exception {
@@ -1204,24 +1213,6 @@ class Tests extends OHCoreTestCase {
 						new Condition<Throwable>(
 								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
-
-//	 Diseasis in is not longer mandatory
-//	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-//	@MethodSource("maternityRestartInJune")
-//	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
-//		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-//		int id = setupTestAdmission(false);
-//		Admission admission = admissionBrowserManager.getAdmission(id);
-//		GeneralData.LANGUAGE = "en";
-//
-//		// DiseaseIn cannot be null
-//		admission.setDiseaseIn(null);
-//		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-//				.isInstanceOf(OHDataValidationException.class)
-//				.has(
-//						new Condition<Throwable>(
-//								e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
-//	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
