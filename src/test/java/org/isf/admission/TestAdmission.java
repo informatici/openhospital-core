@@ -64,6 +64,7 @@ public class TestAdmission {
 	private Boolean alertReceived = true;
 	private Boolean referenceSheet = false;
 	private Boolean qualifiedAgent = false;
+	private String transportation = "transportation";
 
 	public Admission setup(
 			Ward ward,
@@ -91,7 +92,7 @@ public class TestAdmission {
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, anamnesis,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
 					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason,
-					alertReceived, referenceSheet, qualifiedAgent);
+					alertReceived, referenceSheet, qualifiedAgent, transportation);
 		}
 
 		return admission;
@@ -144,6 +145,7 @@ public class TestAdmission {
 		admission.setAlertReceived(alertReceived);
 		admission.setReferenceSheet(referenceSheet);
 		admission.setQualifiedAgent(qualifiedAgent);
+		admission.setTransportation(transportation);
 	}
 
 	public void check(Admission admission) {
@@ -171,6 +173,7 @@ public class TestAdmission {
 		assertThat(admission.getAlertReceived()).isEqualTo(alertReceived);
 		assertThat(admission.getReferenceSheet()).isEqualTo(referenceSheet);
 		assertThat(admission.getQualifiedAgent()).isEqualTo(qualifiedAgent);
+		assertThat(admission.getTransportation()).isEqualTo(transportation);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();
