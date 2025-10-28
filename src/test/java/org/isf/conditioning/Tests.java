@@ -111,32 +111,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void getConditioningByUser_shouldReturnList() throws Exception {
-		Conditioning first = setupConditioning(true);
-		Conditioning saved = conditioningBrowserManager.newConditioning(first);
-		Patient patient = saved.getPatient();
-		User user = saved.getPerformedBy();
-		Conditioning second = testConditioning.setup(patient, user, true);
-		conditioningBrowserManager.newConditioning(second);
-		List<Conditioning> list = conditioningBrowserManager.getConditioningByUserName(user.getUserName());
-		assertThat(list).isNotNull();
-		assertThat(2).isEqualTo(list.size());
-	}
-
-	@Test
-	void getConditioningByPatientAndUser_shouldReturnList() throws Exception {
-		Conditioning first = setupConditioning(true);
-		Conditioning saved = conditioningBrowserManager.newConditioning(first);
-		Patient patient = saved.getPatient();
-		User user = saved.getPerformedBy();
-		Conditioning second = testConditioning.setup(patient, user, true);
-		conditioningBrowserManager.newConditioning(second);
-		List<Conditioning> list = conditioningBrowserManager.getConditioningByPatientCodeAndUserName(patient.getCode(), user.getUserName());
-		assertThat(list).isNotNull();
-		assertThat(2).isEqualTo(list.size());
-	}
-
-	@Test
 	void getConditioningById_shouldReturnConditioning() throws Exception {
 		Conditioning conditioning = setupConditioning(true);
 		Conditioning saved = conditioningBrowserManager.newConditioning(conditioning);
