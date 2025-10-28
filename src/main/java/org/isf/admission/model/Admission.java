@@ -186,6 +186,15 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	)
 	private String preAssessment;
 
+	@Column(name = "ADM_ALERT_RECEIVED")
+	private Boolean alertReceived;
+
+	@Column(name = "ADM_REFERENCE_SHEET")
+	private Boolean referenceSheet;
+
+	@Column(name = "ADM_QUALIFIED_AGENT")
+	private Boolean qualifiedAgent;
+
 	@Column(name = "ADM_USR_ID_A")
 	private String userID;                    // the user ID
 
@@ -202,6 +211,9 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@Column(name = "ADM_ENTRY_REASON")
 	private String entryReason;
+
+	@Column(name="ADM_TRANSPORTATION")
+	private String transportation;
 
 	public Admission() {
 		super();
@@ -307,6 +319,10 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param deleted          deletion flag ('Y' or 'N')
 	 * @param preTreatment     treatment received by the patient before admission
 	 * @param preAssessment    assessment performed before the patient's admission
+	 * @param entryReason	   reason for admission of a patient
+	 * @param alertReceived
+	 * @param referenceSheet
+	 * @param qualifiedAgent
 	 */
 	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient,
 					 LocalDateTime admDate, AdmissionType admType, String fhu,
@@ -316,7 +332,8 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 					 LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult,
 					 Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
 					 LocalDateTime abortDate, String userID, char deleted,
-					 String preTreatment, String preAssessment, String entryReason) {
+					 String preTreatment, String preAssessment, String entryReason,
+					 Boolean alertReceived, Boolean referenceSheet, Boolean qualifiedAgent, String transportation ) {
 
 		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
 			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
@@ -327,6 +344,10 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.preTreatment = preTreatment;
 		this.preAssessment = preAssessment;
 		this.entryReason = entryReason;
+		this.alertReceived = alertReceived;
+		this.referenceSheet = referenceSheet;
+		this.qualifiedAgent = qualifiedAgent;
+		this.transportation = transportation;
 	}
 
 	public Float getTransUnit() {
@@ -583,6 +604,38 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setEntryReason(String entryReason) {
 		this.entryReason = entryReason;
+	}
+
+	public String getTransportation() {
+		return transportation;
+	}
+
+	public void setTransportation(String transportation) {
+		this.transportation = transportation;
+	}
+
+	public Boolean getAlertReceived() {
+		return alertReceived;
+	}
+
+	public void setAlertReceived(Boolean alertReceived) {
+		this.alertReceived = alertReceived;
+	}
+
+	public Boolean getReferenceSheet() {
+		return referenceSheet;
+	}
+
+	public void setReferenceSheet(Boolean referenceSheet) {
+		this.referenceSheet = referenceSheet;
+	}
+
+	public Boolean getQualifiedAgent() {
+		return qualifiedAgent;
+	}
+
+	public void setQualifiedAgent(Boolean qualifiedAgent) {
+		this.qualifiedAgent = qualifiedAgent;
 	}
 
 	@Override

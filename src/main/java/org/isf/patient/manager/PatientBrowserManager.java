@@ -446,6 +446,26 @@ public class PatientBrowserManager {
 	public List<String> getCities() throws OHServiceException {
 		return ioOperations.getCities();
 	}
+
+	/**
+	 * Method that returns the full list of Communes of the {@link Patient}s not logically deleted.
+	 *
+	 * @return the list of Communes (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<String> getCommunes() throws OHServiceException {
+		return ioOperations.getCommunes();
+	}
+
+	/**
+	 * Method that returns the full list of Ethnics of the {@link Patient}s not logically deleted.
+	 *
+	 * @return the list of Ethnics (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<String> getEthnics() throws OHServiceException {
+		return ioOperations.getEthnics();
+	}
 	
 	/**
 	 * Method that returns the list of {@link Patient}s with specified codes.
