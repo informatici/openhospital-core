@@ -76,29 +76,6 @@ public class ConditioningBrowserManager {
 	}
 
 	/**
-	 * Retrieve all existing {@link Conditioning} by user's name.
-	 *
-	 * @param userName - the user's name.
-	 * @return a list of {@link Conditioning} objects, empty if none found
-	 * @throws OHServiceException When the retrieval operation fails
-	 */
-	public List<Conditioning> getConditioningByUserName(String userName) throws OHServiceException {
-		return conditioningIoOperations.getConditioningByUserName(userName);
-	}
-
-	/**
-	 * Returns all the stored {@link Conditioning} with the specified user's name and patient's code.
-	 *
-	 * @param userName - the user's name.
-	 * @param patientCode - the patient's code.
-	 * @return the retrieved conditionings.
-	 * @throws OHServiceException when fails to fetch list of {@link Conditioning}s
-	 */
-	public List<Conditioning> getConditioningByPatientCodeAndUserName( int patientCode,String userName) throws OHServiceException {
-		return conditioningIoOperations.getConditioningByPatientCodeAndUserName(patientCode, userName);
-	}
-
-	/**
 	 * Validate and update an existing {@link Conditioning}.
 	 *
 	 * @param conditioning - Conditioning entity to validate and update

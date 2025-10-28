@@ -89,29 +89,6 @@ public class ConditioningIoOperations {
 	}
 
 	/**
-	 * Returns all the stored {@link Conditioning} with the specified user's name.
-	 *
-	 * @param userName - the user's name.
-	 * @return the retrieved conditionings.
-	 * @throws OHServiceException when fails to fetch list of {@link Conditioning}s
-	 */
-	public List<Conditioning> getConditioningByUserName(String userName) throws OHServiceException {
-		return conditioningIoOperationRepository.findByUserName(userName);
-	}
-
-	/**
-	 * Returns all the stored {@link Conditioning} with the specified user's name and patient's code.
-	 *
-	 * @param userName - the user's name.
-	 * @param patientCode - the patient's code.
-	 * @return the retrieved conditionings.
-	 * @throws OHServiceException when fails to fetch list of {@link Conditioning}s
-	 */
-	public List<Conditioning> getConditioningByPatientCodeAndUserName(int patientCode,String userName) throws OHServiceException {
-		return conditioningIoOperationRepository.findByPatientCodeAndUserName(patientCode, userName);
-	}
-
-	/**
 	 * Returns the list of Conditioning for a given patient's encounter
 	 *
 	 * @param encounter encounter during which Conditioning were created.
