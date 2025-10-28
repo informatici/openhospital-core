@@ -126,3 +126,4 @@ source step_a129_add_permissions.sql;
 source step_a130_update_patient_table.sql;
 source step_a131_update_admission_table.sql;
 source step_a132_update_permissions_and_grouppermission.sql;
+source step_a133_update_medical_history_table.sql;
