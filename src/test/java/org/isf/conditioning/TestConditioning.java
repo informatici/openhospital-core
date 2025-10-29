@@ -22,6 +22,7 @@
 package org.isf.conditioning;
 
 import org.isf.conditioning.model.Conditioning;
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
@@ -43,22 +44,25 @@ public class TestConditioning {
 	private static final String OTHERS = "others note";
 	private static final LocalDateTime PERFORMED_AT = LocalDateTime.of(2025, 1, 1, 10, 0);
 	private static final int LOCK = 0;
+	private static final String HIV_TEST = "INDETERMINATE";
+	private static final String MALARIA = "undetermined";
+	private static final Double BLOOD_GLUCOSE_LEVEL = 5.6;
 
-	public Conditioning setup(Patient patient, boolean usingSet) throws OHException {
+	public Conditioning setup(Patient patient, User user, boolean usingSet) throws OHException {
 		Conditioning conditioning;
 
 		if (usingSet) {
 			conditioning = new Conditioning();
-			setParameters(conditioning, patient);
+			setParameters(conditioning, user, patient);
 		} else {
-			conditioning = new Conditioning(null, ASPIRATION, MCE, VENTILATION, OXYGEN_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMBER, OTHERS, PERFORMED_AT, patient, CPAP, LOCK);
+			conditioning = new Conditioning(null, user, ASPIRATION, MCE, VENTILATION, OXYGEN_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMBER, OTHERS, PERFORMED_AT, patient, CPAP, LOCK, MALARIA, BLOOD_GLUCOSE_LEVEL, HIV_TEST);
 			conditioning.setLock(LOCK);
 		}
 
 		return conditioning;
 	}
 
-	public void setParameters(Conditioning conditioning, Patient patient) {
+	public void setParameters(Conditioning conditioning, User user, Patient patient) {
 		conditioning.setAspiration(ASPIRATION);
 		conditioning.setMce(MCE);
 		conditioning.setVentilation(VENTILATION);
@@ -70,6 +74,10 @@ public class TestConditioning {
 		conditioning.setOthers(OTHERS);
 		conditioning.setPerformedAt(PERFORMED_AT);
 		conditioning.setPatient(patient);
+		conditioning.setPerformedBy(user);
+		conditioning.setMalaria(MALARIA);
+		conditioning.setBloodGlucoseLevel(BLOOD_GLUCOSE_LEVEL);
+		conditioning.setHivTest(HIV_TEST);
 		conditioning.setLock(LOCK);
 	}
 
@@ -84,7 +92,11 @@ public class TestConditioning {
 		assertThat(conditioning.getSngNumber()).isEqualTo(SNG_NUMBER);
 		assertThat(conditioning.getOthers()).isEqualTo(OTHERS);
 		assertThat(conditioning.getPerformedAt()).isEqualTo(PERFORMED_AT);
+		conditioning.setMalaria(MALARIA);
+		conditioning.setBloodGlucoseLevel(BLOOD_GLUCOSE_LEVEL);
+		conditioning.setHivTest(HIV_TEST);
 		assertThat(conditioning.getLock()).isEqualTo(LOCK);
 		assertThat(conditioning.getPatient()).isNotNull();
+		assertThat(conditioning.getPerformedBy()).isNotNull();
 	}
 }

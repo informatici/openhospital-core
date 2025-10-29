@@ -23,6 +23,8 @@ package org.isf.conditioning.model;
 
 import com.drew.lang.annotations.NotNull;
 import jakarta.persistence.*;
+
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.utils.converter.JsonListConverter;
 import org.isf.utils.db.Auditable;
@@ -45,6 +47,10 @@ public class Conditioning extends Auditable<String> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "COND_ID")
 	private Integer id;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "COND_PERFORMED_BY")
+	private User performedBy;
 
 	@Column(name = "COND_ASPIRATION")
 	private Boolean aspiration;
@@ -70,8 +76,14 @@ public class Conditioning extends Auditable<String> {
 	@Column(name = "COND_SNG_NUMBER")
 	private String sngNumber;
 
-	@Column(name = "COND_TDR")
-	private String tdr;
+	@Column(name = "COND_MALARIA")
+	private String malaria;
+
+	@Column(name = "COND_HIV_TEST")
+	private String hivTest;
+
+	@Column(name = "COND_BLOOD_GLUCOSE_LEVEL")
+	private Double bloodGlucoseLevel;
 
 	@Column(name = "COND_OTHERS")
 	private String others;
@@ -128,7 +140,30 @@ public class Conditioning extends Auditable<String> {
 		this.lock = lock;
 	}
 
-
+	public Conditioning(Integer id, User performedBy, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
+		Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock,
+		String malaria, Double bloodGlucoseLevel, String hivTest
+	) {
+		super();
+		this.id = id;
+		this.performedBy = performedBy;
+		this.aspiration = aspiration;
+		this.mce = mce;
+		this.ventilation = ventilation;
+		this.oxygenDebit = oxygenDebit;
+		this.sgVolume = sgVolume;
+		this.diazepamDose = diazepamDose;
+		this.bolusSsVolume = bolusSsVolume;
+		this.sngNumber = sngNumber;
+		this.others = others;
+		this.performedAt = performedAt;
+		this.patient = patient;
+		this.cpap = cpap;
+		this.lock = lock;
+		this.malaria = malaria;
+		this.bloodGlucoseLevel = bloodGlucoseLevel;
+		this.hivTest =  hivTest;
+	}
 
 	public Conditioning() {
 	}
@@ -139,6 +174,14 @@ public class Conditioning extends Auditable<String> {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public User getPerformedBy() {
+		return performedBy;
+	}
+
+	public void setPerformedBy(User performedBy) {
+		this.performedBy = performedBy;
 	}
 
 	public Boolean getAspiration() {
@@ -197,9 +240,17 @@ public class Conditioning extends Auditable<String> {
 		this.bolusSsVolume = bolusSsVolume;
 	}
 
-	public String getTdr() {return tdr;}
+	public String getMalaria() {return malaria;}
 
-	public void setTdr(String tdr) {this.tdr = tdr;}
+	public void setMalaria(String malaria) {this.malaria = malaria;}
+
+	public String getHivTest() {return hivTest;}
+
+	public void setHivTest(String hivTest) {this.hivTest = hivTest;}
+
+	public Double getBloodGlucoseLevel() {return bloodGlucoseLevel;}
+
+	public void setBloodGlucoseLevel(Double bloodGlucoseLevel) {this.bloodGlucoseLevel = bloodGlucoseLevel;}
 
 	public String getSngNumber() {
 		return sngNumber;
