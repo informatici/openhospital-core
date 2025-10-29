@@ -71,4 +71,7 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	@Query(value = "select ad from Admission ad where ad.patient.code = :patientCode and (ad.admDate >= :performedAt and ad.admDate < :closedAt)")
 	List<Admission> getAdmissionByDateBetweenAndPatientCode(@Param("performedAt") LocalDateTime performedAt, @Param("closedAt") LocalDateTime closedAt,
 															@Param("patientCode") Integer patientCode);
+
+	@Query(value = "select distinct ad.transportation from Admission ad WHERE ad.transportation IS NOT NULL")
+	List<String> findTransportations();
 }
