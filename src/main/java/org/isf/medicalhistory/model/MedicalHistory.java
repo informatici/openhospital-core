@@ -69,6 +69,9 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_TERM_PREG")
 	private String termPregnancy;
 
+	@Column(name = "MH_PREGNANCY")
+	private String pregnancy;
+
 	@Column(name = "MH_DLV_MODE")
 	private String deliveryMode;
 
@@ -196,6 +199,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.patient = patient;
 		this.siblingRank = siblingRank;
 		this.termPregnancy = termPregnancy;
+		this.pregnancy = pregnancy;
 		this.deliveryMode = deliveryMode;
 		this.reasonMode = reasonMode;
 		this.apgarScore = apgarScore;
@@ -242,6 +246,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		Patient patient,
 		String  siblingRank,
 		String termPregnancy,
+		String  pregnancy,
 		String deliveryMode,
 		String apgarScore,
 		Double birthWeight,
@@ -267,6 +272,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.patient = patient;
 		this.siblingRank = siblingRank;
 		this.termPregnancy = termPregnancy;
+		this.pregnancy = pregnancy;
 		this.deliveryMode = deliveryMode;
 		this.apgarScore = apgarScore;
 		this.birthWeight = birthWeight;
@@ -320,6 +326,10 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	public void setTermPregnancy(String termPregnancy) {
 		this.termPregnancy = termPregnancy;
 	}
+
+	public String getPregnancy() {return pregnancy;}
+
+	public void setPregnancy(String pregnancy) {this.pregnancy = pregnancy;}
 
 	public String getDeliveryMode() {
 		return deliveryMode;
