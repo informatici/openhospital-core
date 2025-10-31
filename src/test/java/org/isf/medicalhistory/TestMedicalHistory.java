@@ -51,6 +51,7 @@ public class TestMedicalHistory {
 		mh.setPatient(patient);
 		mh.setSiblingRank("2");
 		mh.setTermPregnancy("Full term");
+		mh.setPregnancy("Yes");
 		mh.setDeliveryMode("Cesarean");
 		mh.setReasonMode("Emergency delivery");
 		mh.setApgarScore("8/10");
@@ -104,6 +105,7 @@ public class TestMedicalHistory {
 		assertThat(mh.getPatient()).isEqualTo(patient);
 		assertThat(mh.getSiblingRank()).isEqualTo("2");
 		assertThat(mh.getTermPregnancy()).isEqualTo("Full term");
+		assertThat(mh.getPregnancy()).isEqualTo("Yes");
 		assertThat(mh.getDeliveryMode()).isEqualTo("Cesarean");
 		assertThat(mh.getReasonMode()).isEqualTo("Emergency delivery");
 		assertThat(mh.getApgarScore()).isEqualTo("8/10");
