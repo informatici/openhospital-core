@@ -35,11 +35,10 @@ public class TestMedicalHistory {
 
 	private final LocalDateTime testDate = LocalDateTime.of(2025, 8, 21, 10, 0, 0);
 	private Patient patient;
-	private TestPatient testPatient = new TestPatient();
-	private LocalDateTime testPerformedAt = LocalDateTime.of(2025, 1, 1, 10, 0);
+	private final TestPatient testPatient = new TestPatient();
+	private final LocalDateTime testPerformedAt = LocalDateTime.of(2025, 1, 1, 10, 0);
 
 	public TestMedicalHistory() {
-
 	}
 
 	@BeforeEach
@@ -52,28 +51,50 @@ public class TestMedicalHistory {
 		mh.setPatient(patient);
 		mh.setSiblingRank("2");
 		mh.setTermPregnancy("Full term");
+		mh.setPregnancy("Yes");
 		mh.setDeliveryMode("Cesarean");
+		mh.setReasonMode("Emergency delivery");
 		mh.setApgarScore("8/10");
 		mh.setBirthWeight(3.2);
-		mh.setVaccinationState("Up to date");
-		mh.setAntiMalarialProphylaxis("Yes");
+
+		mh.setVaccinationStatePev("Up to date");
+		mh.setVaccinationStateNoPev("Missing Hepatitis B");
+
+		mh.setAntiMalarialProphylaxisMilda("Yes");
+		mh.setAntiMalarialProphylaxisVap("No");
+		mh.setAntiMalarialProphylaxisOthers("None");
+
 		mh.setDiet("Balanced");
-		mh.setDeParasitization("Done");
+		mh.setDeParasitization(true);
 		mh.setPsychomotorDev("Normal");
 		mh.setSomaticGrowth("Normal");
+
 		mh.setIronSupplement(true);
 		mh.setFolicAcidSupplement(true);
 		mh.setVitASupplement(false);
 		mh.setOtherSupplements("None");
+
 		mh.setTransfusion(false);
 		mh.setLastTransfusionDate(testDate);
+
 		mh.setSickleCell(false);
 		mh.setDrugAllergy(false);
 		mh.setAllergyPrecision("None");
+
 		mh.setHemylosis("None");
 		mh.setOtherPersonalPathologies("None");
 		mh.setOtherFamilyPathologies("None");
+
+		mh.setDiversification("Adequate");
+		mh.setNeonatalPeriod("Stable");
+		mh.setPreviousHospitalization("None");
+		mh.setFather("Healthy");
+		mh.setMother("Healthy");
+		mh.setSiblings("Healthy");
+		mh.setOtherUsefulInformation("No significant issues");
+
 		mh.setPerformedAt(testPerformedAt);
+
 		return mh;
 	}
 
@@ -84,27 +105,48 @@ public class TestMedicalHistory {
 		assertThat(mh.getPatient()).isEqualTo(patient);
 		assertThat(mh.getSiblingRank()).isEqualTo("2");
 		assertThat(mh.getTermPregnancy()).isEqualTo("Full term");
+		assertThat(mh.getPregnancy()).isEqualTo("Yes");
 		assertThat(mh.getDeliveryMode()).isEqualTo("Cesarean");
+		assertThat(mh.getReasonMode()).isEqualTo("Emergency delivery");
 		assertThat(mh.getApgarScore()).isEqualTo("8/10");
 		assertThat(mh.getBirthWeight()).isEqualTo(3.2);
-		assertThat(mh.getVaccinationState()).isEqualTo("Up to date");
-		assertThat(mh.getAntiMalarialProphylaxis()).isEqualTo("Yes");
+
+		assertThat(mh.getVaccinationStatePev()).isEqualTo("Up to date");
+		assertThat(mh.getVaccinationStateNoPev()).isEqualTo("Missing Hepatitis B");
+
+		assertThat(mh.getAntiMalarialProphylaxisMilda()).isEqualTo("Yes");
+		assertThat(mh.getAntiMalarialProphylaxisVap()).isEqualTo("No");
+		assertThat(mh.getAntiMalarialProphylaxisOthers()).isEqualTo("None");
+
 		assertThat(mh.getDiet()).isEqualTo("Balanced");
-		assertThat(mh.getDeParasitization()).isEqualTo("Done");
+		assertThat(mh.getDeParasitization()).isTrue();
 		assertThat(mh.getPsychomotorDev()).isEqualTo("Normal");
 		assertThat(mh.getSomaticGrowth()).isEqualTo("Normal");
+
 		assertThat(mh.getIronSupplement()).isTrue();
 		assertThat(mh.getFolicAcidSupplement()).isTrue();
 		assertThat(mh.getVitASupplement()).isFalse();
 		assertThat(mh.getOtherSupplements()).isEqualTo("None");
+
 		assertThat(mh.getTransfusion()).isFalse();
 		assertThat(mh.getLastTransfusionDate()).isEqualTo(testDate);
+
 		assertThat(mh.getSickleCell()).isFalse();
 		assertThat(mh.getDrugAllergy()).isFalse();
 		assertThat(mh.getAllergyPrecision()).isEqualTo("None");
+
 		assertThat(mh.getHemylosis()).isEqualTo("None");
 		assertThat(mh.getOtherPersonalPathologies()).isEqualTo("None");
 		assertThat(mh.getOtherFamilyPathologies()).isEqualTo("None");
+
+		assertThat(mh.getDiversification()).isEqualTo("Adequate");
+		assertThat(mh.getNeonatalPeriod()).isEqualTo("Stable");
+		assertThat(mh.getPreviousHospitalization()).isEqualTo("None");
+		assertThat(mh.getFather()).isEqualTo("Healthy");
+		assertThat(mh.getMother()).isEqualTo("Healthy");
+		assertThat(mh.getSiblings()).isEqualTo("Healthy");
+		assertThat(mh.getOtherUsefulInformation()).isEqualTo("No significant issues");
+
 		assertThat(mh.getPerformedAt()).isEqualTo(testPerformedAt);
 	}
 }

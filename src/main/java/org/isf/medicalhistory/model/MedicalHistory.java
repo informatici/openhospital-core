@@ -69,8 +69,14 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_TERM_PREG")
 	private String termPregnancy;
 
+	@Column(name = "MH_PREGNANCY")
+	private String pregnancy;
+
 	@Column(name = "MH_DLV_MODE")
 	private String deliveryMode;
+
+	@Column(name = "MH_REASON_MODE")
+	private String reasonMode;
 
 	@Column(name = "MH_APGAR_SCORE")
 	private  String apgarScore;
@@ -78,17 +84,59 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_BIRTH_WGHT")
 	private Double birthWeight;
 
-	@Column(name = "MH_VACC_STATE")
-	private String vaccinationState;
+	@Column(name = "MH_VACC_STATE_PREV")
+	private String vaccinationStatePev;
 
-	@Column(name = "MH_ANTI_MLRIAL_PROPHY")
-	private String antiMalarialProphylaxis;
+	@Column(name = "MH_VACC_STATE_NO_PREV")
+	private String vaccinationStateNoPev;
+
+	@Column(name = "MH_ANTI_MLRIAL_PROPHY_MILDA")
+	private String antiMalarialProphylaxisMilda;
+
+	@Column(name = "MH_ANTI_MLRIAL_PROPHY_VAP")
+	private String antiMalarialProphylaxisVap;
+
+	@Column(name = "MH_ANTI_MLRIAL_PROPHY_OTHERS")
+	private String antiMalarialProphylaxisOthers;
+
+	@Column(name = "MH_SURGICAL_PROCEDURE")
+	private Boolean surgicalProcedure;
+
+	@Column(name = "MH_SURGICAL_PROCEDURE_CONDITION")
+	private String surgicalProcedureCondition;
+
+	@Column(name = "MH_SURGICAL_PROCEDURE_TYPE")
+	private String surgicalProcedureType ;
+
+	@Column(name = "MH_SURGICAL_PROCEDURE_DATE")
+	private LocalDateTime surgicalProcedureDate;
+
+	@Column(name = "MH_DIVERSIFICATION")
+	private String diversification;
+
+	@Column(name = "MH_NEONATAL_PERIOD")
+	private String neonatalPeriod;
+
+	@Column(name = "MH_PREVIOUS_HOSPITALIZATION")
+	private String previousHospitalization;
+
+	@Column(name = "MH_FATHER")
+	private String father;
+
+	@Column(name = "MH_MOTHER")
+	private String mother;
+
+	@Column(name = "MH_SIBLINGS")
+	private String siblings;
+
+	@Column(name = "MH_OTHER_USEFUL_INFORMATION")
+	private String otherUsefulInformation;
 
 	@Column(name = "MH_DIET")
 	private String diet;
 
 	@Column(name = "MH_DEPARASITI")
-	private String deParasitization;
+	private Boolean deParasitization;
 
 	@Column(name = "MH_PSYCHOMOTOR_DEV")
 	private String psychomotorDev;
@@ -146,18 +194,64 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 
 	}
 
+	public MedicalHistory(Integer id, Patient patient, String siblingRank, String termPregnancy, String deliveryMode, String reasonMode, String apgarScore, Double birthWeight, String vaccinationStatePev, String vaccinationStateNoPev, String antiMalarialProphylaxisMilda, String antiMalarialProphylaxisVap, String antiMalarialProphylaxisOthers, Boolean surgicalProcedure, String surgicalProcedureCondition, String surgicalProcedureType, LocalDateTime surgicalProcedureDate, String diversification, String neonatalPeriod, String previousHospitalization, String father, String mother, String siblings, String otherUsefulInformation, String diet, Boolean deParasitization, String psychomotorDev, String somaticGrowth, Boolean ironSupplement, Boolean folicAcidSupplement, Boolean vitASupplement, String otherSupplements, Boolean transfusion, LocalDateTime lastTransfusionDate, Boolean sickleCell, Boolean drugAllergy, String allergyPrecision, String hemylosis, String otherPersonalPathologies, String otherFamilyPathologies, LocalDateTime performedAt, int lock, int hashCode) {
+		this.id = id;
+		this.patient = patient;
+		this.siblingRank = siblingRank;
+		this.termPregnancy = termPregnancy;
+		this.pregnancy = pregnancy;
+		this.deliveryMode = deliveryMode;
+		this.reasonMode = reasonMode;
+		this.apgarScore = apgarScore;
+		this.birthWeight = birthWeight;
+		this.vaccinationStatePev = vaccinationStatePev;
+		this.vaccinationStateNoPev = vaccinationStateNoPev;
+		this.antiMalarialProphylaxisMilda = antiMalarialProphylaxisMilda;
+		this.antiMalarialProphylaxisVap = antiMalarialProphylaxisVap;
+		this.antiMalarialProphylaxisOthers = antiMalarialProphylaxisOthers;
+		this.surgicalProcedure = surgicalProcedure;
+		this.surgicalProcedureCondition = surgicalProcedureCondition;
+		this.surgicalProcedureType = surgicalProcedureType;
+		this.surgicalProcedureDate = surgicalProcedureDate;
+		this.diversification = diversification;
+		this.neonatalPeriod = neonatalPeriod;
+		this.previousHospitalization = previousHospitalization;
+		this.father = father;
+		this.mother = mother;
+		this.siblings = siblings;
+		this.otherUsefulInformation = otherUsefulInformation;
+		this.diet = diet;
+		this.deParasitization = deParasitization;
+		this.psychomotorDev = psychomotorDev;
+		this.somaticGrowth = somaticGrowth;
+		this.ironSupplement = ironSupplement;
+		this.folicAcidSupplement = folicAcidSupplement;
+		this.vitASupplement = vitASupplement;
+		this.otherSupplements = otherSupplements;
+		this.transfusion = transfusion;
+		this.lastTransfusionDate = lastTransfusionDate;
+		this.sickleCell = sickleCell;
+		this.drugAllergy = drugAllergy;
+		this.allergyPrecision = allergyPrecision;
+		this.hemylosis = hemylosis;
+		this.otherPersonalPathologies = otherPersonalPathologies;
+		this.otherFamilyPathologies = otherFamilyPathologies;
+		this.performedAt = performedAt;
+		this.lock = lock;
+		this.hashCode = hashCode;
+	}
+
 	public MedicalHistory(
 		Integer id,
 		Patient patient,
 		String  siblingRank,
 		String termPregnancy,
+		String  pregnancy,
 		String deliveryMode,
 		String apgarScore,
 		Double birthWeight,
-		String vaccinationState,
-		String antiMalarialProphylaxis,
 		String diet,
-		String deParasitization,
+		Boolean deParasitization,
 		String psychomotorDevelopment,
 		String somaticGrowth,
 		Boolean ironSupplement,
@@ -178,11 +272,10 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.patient = patient;
 		this.siblingRank = siblingRank;
 		this.termPregnancy = termPregnancy;
+		this.pregnancy = pregnancy;
 		this.deliveryMode = deliveryMode;
 		this.apgarScore = apgarScore;
 		this.birthWeight = birthWeight;
-		this.vaccinationState = vaccinationState;
-		this.antiMalarialProphylaxis = antiMalarialProphylaxis;
 		this.diet = diet;
 		this.deParasitization = deParasitization;
 		this.psychomotorDev = psychomotorDevelopment;
@@ -234,6 +327,10 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.termPregnancy = termPregnancy;
 	}
 
+	public String getPregnancy() {return pregnancy;}
+
+	public void setPregnancy(String pregnancy) {this.pregnancy = pregnancy;}
+
 	public String getDeliveryMode() {
 		return deliveryMode;
 	}
@@ -258,22 +355,6 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.birthWeight = birthWeight;
 	}
 
-	public String getVaccinationState() {
-		return vaccinationState;
-	}
-
-	public void setVaccinationState(String vaccinationState) {
-		this.vaccinationState = vaccinationState;
-	}
-
-	public String getAntiMalarialProphylaxis() {
-		return antiMalarialProphylaxis;
-	}
-
-	public void setAntiMalarialProphylaxis(String antiMalarialProphylaxis) {
-		this.antiMalarialProphylaxis = antiMalarialProphylaxis;
-	}
-
 	public String getDiet() {
 		return diet;
 	}
@@ -282,11 +363,11 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.diet = diet;
 	}
 
-	public String getDeParasitization() {
+	public Boolean getDeParasitization() {
 		return deParasitization;
 	}
 
-	public void setDeParasitization(String deParasitization) {
+	public void setDeParasitization(Boolean deParasitization) {
 		this.deParasitization = deParasitization;
 	}
 
@@ -418,7 +499,150 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.lock = lock;
 	}
 
-	
+	public String getReasonMode() {
+		return reasonMode;
+	}
+
+	public void setReasonMode(String reasonMode) {
+		this.reasonMode = reasonMode;
+	}
+
+	public String getVaccinationStatePev() {
+		return vaccinationStatePev;
+	}
+
+	public void setVaccinationStatePev(String vaccinationStatePev) {
+		this.vaccinationStatePev = vaccinationStatePev;
+	}
+
+	public String getVaccinationStateNoPev() {
+		return vaccinationStateNoPev;
+	}
+
+	public void setVaccinationStateNoPev(String vaccinationStateNoPev) {
+		this.vaccinationStateNoPev = vaccinationStateNoPev;
+	}
+
+	public String getAntiMalarialProphylaxisMilda() {
+		return antiMalarialProphylaxisMilda;
+	}
+
+	public void setAntiMalarialProphylaxisMilda(String antiMalarialProphylaxisMilda) {
+		this.antiMalarialProphylaxisMilda = antiMalarialProphylaxisMilda;
+	}
+
+	public String getAntiMalarialProphylaxisVap() {
+		return antiMalarialProphylaxisVap;
+	}
+
+	public void setAntiMalarialProphylaxisVap(String antiMalarialProphylaxisVap) {
+		this.antiMalarialProphylaxisVap = antiMalarialProphylaxisVap;
+	}
+
+	public String getAntiMalarialProphylaxisOthers() {
+		return antiMalarialProphylaxisOthers;
+	}
+
+	public void setAntiMalarialProphylaxisOthers(String antiMalarialProphylaxisOthers) {
+		this.antiMalarialProphylaxisOthers = antiMalarialProphylaxisOthers;
+	}
+
+	public Boolean getSurgicalProcedure() {
+		return surgicalProcedure;
+	}
+
+	public void setSurgicalProcedure(Boolean surgicalProcedure) {
+		this.surgicalProcedure = surgicalProcedure;
+	}
+
+	public String getSurgicalProcedureCondition() {
+		return surgicalProcedureCondition;
+	}
+
+	public void setSurgicalProcedureCondition(String surgicalProcedureCondition) {
+		this.surgicalProcedureCondition = surgicalProcedureCondition;
+	}
+
+	public String getSurgicalProcedureType() {
+		return surgicalProcedureType;
+	}
+
+	public void setSurgicalProcedureType(String surgicalProcedureType) {
+		this.surgicalProcedureType = surgicalProcedureType;
+	}
+
+	public LocalDateTime getSurgicalProcedureDate() {
+		return surgicalProcedureDate;
+	}
+
+	public void setSurgicalProcedureDate(LocalDateTime surgicalProcedureDate) {
+		this.surgicalProcedureDate = surgicalProcedureDate;
+	}
+
+	public String getDiversification() {
+		return diversification;
+	}
+
+	public void setDiversification(String diversification) {
+		this.diversification = diversification;
+	}
+
+	public String getNeonatalPeriod() {
+		return neonatalPeriod;
+	}
+
+	public void setNeonatalPeriod(String neonatalPeriod) {
+		this.neonatalPeriod = neonatalPeriod;
+	}
+
+	public String getPreviousHospitalization() {
+		return previousHospitalization;
+	}
+
+	public void setPreviousHospitalization(String previousHospitalization) {
+		this.previousHospitalization = previousHospitalization;
+	}
+
+	public String getFather() {
+		return father;
+	}
+
+	public void setFather(String father) {
+		this.father = father;
+	}
+
+	public String getMother() {
+		return mother;
+	}
+
+	public void setMother(String mother) {
+		this.mother = mother;
+	}
+
+	public String getSiblings() {
+		return siblings;
+	}
+
+	public void setSiblings(String siblings) {
+		this.siblings = siblings;
+	}
+
+	public String getOtherUsefulInformation() {
+		return otherUsefulInformation;
+	}
+
+	public void setOtherUsefulInformation(String otherUsefulInformation) {
+		this.otherUsefulInformation = otherUsefulInformation;
+	}
+
+	public int getHashCode() {
+		return hashCode;
+	}
+
+	public void setHashCode(int hashCode) {
+		this.hashCode = hashCode;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

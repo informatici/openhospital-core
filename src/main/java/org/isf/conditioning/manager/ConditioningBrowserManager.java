@@ -75,7 +75,6 @@ public class ConditioningBrowserManager {
 		return conditioningIoOperations.getConditioningByPatientCode(patientCode);
 	}
 
-
 	/**
 	 * Validate and update an existing {@link Conditioning}.
 	 *
