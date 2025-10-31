@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExamRequestReport" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="encounter_report" uuid="a1b2c3d4-e5f6-7890-abcd-1234567890ab">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter-zeb.jrdax"/>
+	<parameter name="patID" class="java.lang.Integer"/>
+	<parameter name="performedAt" class="java.sql.Timestamp"/>
+	<parameter name="closedAt" class="java.sql.Timestamp"/>
+	<queryString>
+		<![CDATA[SELECT * FROM oh_encounter enc
+LEFT JOIN oh_laboratory lab 
+    ON enc.ENC_PAT_ID = lab.LAB_PAT_ID
+   AND (lab.LAB_CREATED_DATE >= enc.ENC_PERFORMED_AT AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT >=lab.LAB_CREATED_DATE))
+LEFT JOIN oh_exam exa ON lab.LAB_EXA_ID_A = exa.EXA_ID_A
+        WHERE enc.ENC_PAT_ID = $P{patID}
+		AND enc.ENC_STATUS <> "CANCELLED"
+		AND enc.ENC_PERFORMED_AT = $P{performedAt}
+		AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+	</queryString>
+	<field name="LAB_DATE" class="java.sql.Timestamp"/>
+	<field name="LAB_PAT_ID" class="java.lang.Integer"/>
+	<field name="LAB_SEX" class="java.lang.String"/>
+	<field name="LAB_AGE" class="java.lang.Integer"/>
+	<field name="LAB_PAT_NAME" class="java.lang.String"/>
+	<field name="EXA_DESC" class="java.lang.String"/>
+	<field name="LAB_RES" class="java.lang.String"/>
+	<group name="PatientGroup">
+		<groupExpression><![CDATA[$F{LAB_PAT_ID}]]></groupExpression>
+		<groupHeader>
+			<band>
+				<textField>
+					<reportElement x="-20" y="-20" width="140" height="20" uuid="51b3c7f3-254c-4953-9b6f-ca6b63bb39c9"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{OtherExams}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="240" y="-20" width="80" height="20" uuid="1e7e5331-d63d-423f-9e52-540fb62a6863"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Results}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="-20" y="0" width="250" height="20" uuid="e9ea03b0-0128-4fc1-bdb6-cd40df5410b2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["• " + $F{EXA_DESC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="jj/MM/yyyy HH:mm">
+				<reportElement x="240" y="0" width="310" height="20" uuid="3fe73370-6dd5-4501-bbf9-fbf79bd35b74"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LAB_RES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

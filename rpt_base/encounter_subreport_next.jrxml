@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="enocunter_subreport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="encounter_report" uuid="98f99aa4-9059-4aef-bf14-57da053142cd">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="patID" class="java.lang.Integer"/>
+	<parameter name="performedAt" class="java.sql.Timestamp"/>
+	<parameter name="closedAt" class="java.sql.Timestamp"/>
+	<queryString>
+		<![CDATA[SELECT * FROM oh_encounter enc
+LEFT JOIN oh_medicalhistory mh 
+    ON enc.ENC_PAT_ID = mh.MH_PAT_ID
+   AND (mh.MH_CREATED_DATE >= enc.ENC_PERFORMED_AT AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT >=mh.MH_CREATED_DATE))
+LEFT JOIN oh_admission adm 
+    ON enc.ENC_PAT_ID = adm.ADM_PAT_ID
+   AND (adm.ADM_DATE_ADM >= enc.ENC_PERFORMED_AT AND ( enc.ENC_CLOSED_AT IS NULL OR  enc.ENC_CLOSED_AT>=adm.ADM_DATE_ADM))
+LEFT JOIN oh_admissiontype admt
+	ON adm.ADM_ADMT_ID_A_ADM = admt.ADMT_ID_A
+WHERE enc.ENC_PAT_ID = $P{patID}
+AND enc.ENC_STATUS <> "CANCELLED"
+AND enc.ENC_PERFORMED_AT = $P{performedAt}
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+	</queryString>
+	<field name="MH_SIBLI_RANK" class="java.lang.String"/>
+	<field name="MH_TERM_PREG" class="java.lang.String"/>
+	<field name="MH_DLV_MODE" class="java.lang.String"/>
+	<field name="MH_APGAR_SCORE" class="java.lang.String"/>
+	<field name="MH_BIRTH_WGHT" class="java.lang.Double"/>
+	<field name="MH_DIET" class="java.lang.String"/>
+	<field name="MH_DEPARASITI" class="java.lang.Boolean"/>
+	<field name="MH_PSYCHOMOTOR_DEV" class="java.lang.String"/>
+	<field name="MH_IRON_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_FOLIC_ACID_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_VIT_A_SUPP" class="java.lang.Boolean"/>
+	<field name="MH_TRANSFU" class="java.lang.Boolean"/>
+	<field name="MH_SOMATIC_GRWTH" class="java.lang.String"/>
+	<field name="MH_LAST_TRANSFU_DATE" class="java.sql.Timestamp"/>
+	<field name="MH_SIKCLE_CELL" class="java.lang.Boolean"/>
+	<field name="MH_DRG_ALRGY" class="java.lang.Boolean"/>
+	<field name="MH_ALRGY_PREC" class="java.lang.String"/>
+	<field name="MH_HEMYLOSIS" class="java.lang.String"/>
+	<field name="MH_OTHR_PERSONAL_PATHO" class="java.lang.String"/>
+	<field name="MH_OTHR_FAM_PATHO" class="java.lang.String"/>
+	<field name="ADM_PRE_ASSESSMENT" class="java.lang.String"/>
+	<field name="ADM_PRE_TREATMENT" class="java.lang.String"/>
+	<field name="ADM_NOTE" class="java.lang.String"/>
+	<field name="ADM_DATE_ADM" class="java.sql.Timestamp"/>
+	<field name="ADMT_DESC" class="java.lang.String"/>
+	<field name="ADM_FHU" class="java.lang.String"/>
+	<field name="ADM_ENTRY_REASON" class="java.lang.String"/>
+	<field name="ADM_TRANSPORTATION" class="java.lang.String"/>
+	<field name="ADM_ALERT_RECEIVED" class="java.lang.Boolean"/>
+	<field name="ADM_REFERENCE_SHEET" class="java.lang.Boolean"/>
+	<field name="ADM_QUALIFIED_AGENT" class="java.lang.Boolean"/>
+	<field name="MH_REASON_MODE" class="java.lang.String"/>
+	<field name="MH_VACC_STATE_PREV" class="java.lang.String"/>
+	<field name="MH_VACC_STATE_NO_PREV" class="java.lang.String"/>
+	<field name="MH_ANTI_MLRIAL_PROPHY_MILDA" class="java.lang.String"/>
+	<field name="MH_ANTI_MLRIAL_PROPHY_VAP" class="java.lang.String"/>
+	<field name="MH_ANTI_MLRIAL_PROPHY_OTHERS" class="java.lang.String"/>
+	<field name="MH_DIVERSIFICATION" class="java.lang.String"/>
+	<field name="MH_PREVIOUS_HOSPITALIZATION" class="java.lang.String"/>
+	<field name="MH_NEONATAL_PERIOD" class="java.lang.String"/>
+	<field name="MH_SURGICAL_PROCEDURE" class="java.lang.Boolean"/>
+	<field name="MH_SURGICAL_PROCEDURE_CONDITION" class="java.lang.String"/>
+	<field name="MH_SURGICAL_PROCEDURE_TYPE" class="java.lang.String"/>
+	<field name="MH_SURGICAL_PROCEDURE_DATE" class="java.sql.Timestamp"/>
+	<field name="MH_FATHER" class="java.lang.String"/>
+	<field name="MH_MOTHER" class="java.lang.String"/>
+	<field name="MH_SIBLINGS" class="java.lang.String"/>
+	<field name="MH_OTHER_USEFUL_INFORMATION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="203" splitType="Stretch">
+			<frame>
+				<reportElement x="-1" y="0" width="582" height="20" uuid="dbb3cc05-169d-4ce6-8ccb-7b32235a546c">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="2" y="0" width="298" height="20" uuid="15d787a8-96f6-4eff-b5b7-dde4d881f25e"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{PastMedicalHistory}+$R{Family}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="20" width="580" height="20" uuid="177ecd28-a924-420e-bfc3-5bfb0b2de4b6">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="93" y="0" width="466" height="20" uuid="e991ed5d-b197-4fe0-a92a-5e3d23afb808"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_FATHER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1" y="0" width="92" height="20" uuid="b1f6588a-0ce9-4e17-88f8-4beae6f7049d"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{FatherPathology}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement x="1" y="160" width="300" height="30" uuid="c3442313-5c41-4036-9320-0f426419a417"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_conditionig_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement x="0" y="40" width="580" height="20" uuid="3ea737b4-56b0-445b-9220-9d66c152442d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="93" y="0" width="466" height="20" uuid="d7869405-0889-424a-a573-1b4a291d297c"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_MOTHER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1" y="0" width="92" height="20" uuid="67babeb8-13e1-4596-b4a4-5a50b94903a7"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{MotherPathology}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="60" width="580" height="20" uuid="d66281fe-609b-455c-8e30-b3e318b6914f">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="93" y="0" width="466" height="20" uuid="8ea518eb-4256-433d-b345-11f65882c6f4"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_SIBLINGS}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1" y="0" width="92" height="20" uuid="43f2d187-a62c-4ee5-92f6-c6ad649a8d27"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Siblings}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="80" width="580" height="20" uuid="4d55daac-ee8a-4125-99b0-52f531789e7d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="93" y="0" width="466" height="20" uuid="c34fc591-7a24-4067-8376-5285be39cb14"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_OTHR_FAM_PATHO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1" y="0" width="92" height="20" uuid="79cc0589-46be-4b04-af10-6ffedb4546a5"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Others}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="100" width="580" height="20" uuid="b0d58f6b-d377-4bd2-846b-3e7772de7f56">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="2" y="0" width="298" height="20" uuid="3aab7a50-3c6c-4ee8-bc6a-b5f3527a261e"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{OtherUsefulInformation}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="120" width="580" height="40" uuid="883ede81-0e19-4e0f-953d-948c9859de49">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="170" y="0" width="370" height="40" uuid="2e6ccae7-e48f-49f3-ade2-1b6b1e22f2cf"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MH_OTHER_USEFUL_INFORMATION}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="1" y="0" width="169" height="20" uuid="b0053b58-68ea-4dee-8583-f786c14813e2"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{OtherUsefulInformation} + " :"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>
