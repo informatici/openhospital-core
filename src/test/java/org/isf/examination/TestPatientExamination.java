@@ -48,6 +48,7 @@ public class TestPatientExamination {
 	private String pex_ausc = "normal";
 	private String pex_note = "";
 	private Double pex_branchial_perimeter = 30.5;
+	private String pex_ipt = "";
 
 	public PatientExamination setup(Patient patient, boolean usingSet) throws OHException {
 		PatientExamination patientExamination;
@@ -59,7 +60,7 @@ public class TestPatientExamination {
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, examinationType, patient, pex_height, pex_weight,
 					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat,
-					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note);
+					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note, pex_ipt);
 			patientExamination.setPex_branchial_perimeter(pex_branchial_perimeter);
 		}
 
