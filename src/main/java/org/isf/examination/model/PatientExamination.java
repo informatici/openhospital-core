@@ -129,6 +129,9 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 
 	@Column(name = "PEX_BRANCHIAL_PERIMETER")
 	private Double pex_branchial_perimeter;
+
+	@Column(name="PEX_IPT")
+	private String pex_ipt;
 	
 	@Transient
 	private volatile int hashCode;
@@ -208,7 +211,9 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 		String pex_bowel_desc,
 		Integer pex_rr,
 		String pex_ausc,
-		String pex_note) {
+		String pex_note,
+		String pex_ipt
+	) {
 		super();
 		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 		this.pex_type = examinationType;
@@ -227,6 +232,7 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 		this.pex_rr= pex_rr;
 		this.pex_auscultation = pex_ausc;
 		this.pex_note = pex_note;
+		this.pex_ipt = pex_ipt;
 	}
 
 	/**
@@ -499,6 +505,12 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 
 	public void setPex_branchial_perimeter(Double pex_branchial_perimeter) {
 		this.pex_branchial_perimeter = pex_branchial_perimeter;
+	}
+
+	public String getPex_ipt() { return this.pex_ipt; }
+
+	public void setPex_ipt(String pex_ipt) {
+		this.pex_ipt = pex_ipt;
 	}
 
 	@Override
