@@ -19,7 +19,8 @@ LEFT JOIN oh_admissiontype admt
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT = $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})
+LIMIT 1]]>
 	</queryString>
 	<field name="MH_SIBLI_RANK" class="java.lang.String"/>
 	<field name="MH_TERM_PREG" class="java.lang.String"/>
@@ -91,14 +92,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="93" y="0" width="466" height="20" uuid="e991ed5d-b197-4fe0-a92a-5e3d23afb808"/>
+					<reportElement x="60" y="0" width="499" height="20" uuid="e991ed5d-b197-4fe0-a92a-5e3d23afb808"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_FATHER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="1" y="0" width="92" height="20" uuid="b1f6588a-0ce9-4e17-88f8-4beae6f7049d"/>
+					<reportElement x="1" y="0" width="59" height="20" uuid="b1f6588a-0ce9-4e17-88f8-4beae6f7049d"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -124,14 +125,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="93" y="0" width="466" height="20" uuid="d7869405-0889-424a-a573-1b4a291d297c"/>
+					<reportElement x="60" y="0" width="499" height="20" uuid="d7869405-0889-424a-a573-1b4a291d297c"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_MOTHER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="1" y="0" width="92" height="20" uuid="67babeb8-13e1-4596-b4a4-5a50b94903a7"/>
+					<reportElement x="1" y="0" width="59" height="20" uuid="67babeb8-13e1-4596-b4a4-5a50b94903a7"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -143,14 +144,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="93" y="0" width="466" height="20" uuid="8ea518eb-4256-433d-b345-11f65882c6f4"/>
+					<reportElement x="60" y="0" width="499" height="20" uuid="8ea518eb-4256-433d-b345-11f65882c6f4"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_SIBLINGS}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="1" y="0" width="92" height="20" uuid="43f2d187-a62c-4ee5-92f6-c6ad649a8d27"/>
+					<reportElement x="1" y="0" width="59" height="20" uuid="43f2d187-a62c-4ee5-92f6-c6ad649a8d27"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -162,14 +163,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="93" y="0" width="466" height="20" uuid="c34fc591-7a24-4067-8376-5285be39cb14"/>
+					<reportElement x="60" y="0" width="499" height="20" uuid="c34fc591-7a24-4067-8376-5285be39cb14"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{MH_OTHR_FAM_PATHO}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="1" y="0" width="92" height="20" uuid="79cc0589-46be-4b04-af10-6ffedb4546a5"/>
+					<reportElement x="1" y="0" width="59" height="20" uuid="79cc0589-46be-4b04-af10-6ffedb4546a5"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>

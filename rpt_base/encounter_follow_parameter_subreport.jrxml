@@ -28,6 +28,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="PEX_AP_MIN" class="java.lang.Integer"/>
 	<field name="PEX_AP_MAX" class="java.lang.Integer"/>
 	<field name="PEX_SAT" class="java.lang.Double"/>
+	<field name="PEX_IPT" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -239,7 +240,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_BODY_MASS_INDEX}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PEX_IPT}]]></textFieldExpression>
 				</textField>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="50" height="20" uuid="8056c67b-23ee-41a7-a040-93ea316a286c"/>

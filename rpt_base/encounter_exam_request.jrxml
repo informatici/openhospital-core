@@ -16,13 +16,9 @@ LEFT JOIN oh_exam exa ON lab.LAB_EXA_ID_A = exa.EXA_ID_A
 		AND enc.ENC_PERFORMED_AT = $P{performedAt}
 		AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	</queryString>
-	<field name="LAB_DATE" class="java.sql.Timestamp"/>
-	<field name="LAB_PAT_ID" class="java.lang.Integer"/>
-	<field name="LAB_SEX" class="java.lang.String"/>
-	<field name="LAB_AGE" class="java.lang.Integer"/>
-	<field name="LAB_PAT_NAME" class="java.lang.String"/>
 	<field name="EXA_DESC" class="java.lang.String"/>
 	<field name="LAB_RES" class="java.lang.String"/>
+	<field name="LAB_PAT_ID" class="java.lang.Integer"/>
 	<group name="PatientGroup">
 		<groupExpression><![CDATA[$F{LAB_PAT_ID}]]></groupExpression>
 		<groupHeader>
@@ -46,14 +42,14 @@ LEFT JOIN oh_exam exa ON lab.LAB_EXA_ID_A = exa.EXA_ID_A
 	</group>
 	<detail>
 		<band height="22" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="-20" y="0" width="250" height="20" uuid="e9ea03b0-0128-4fc1-bdb6-cd40df5410b2"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["• " + $F{EXA_DESC}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{EXA_DESC} == null ? "" :"• " + $F{EXA_DESC}]]></textFieldExpression>
 			</textField>
-			<textField pattern="jj/MM/yyyy HH:mm">
+			<textField pattern="jj/MM/yyyy HH:mm" isBlankWhenNull="true">
 				<reportElement x="240" y="0" width="310" height="20" uuid="3fe73370-6dd5-4501-bbf9-fbf79bd35b74"/>
 				<textElement textAlignment="Left">
 					<font size="12"/>

@@ -14,7 +14,8 @@ INNER JOIN oh_conditioning cond
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT = $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})
+LIMIT 1]]>
 	</queryString>
 	<field name="COND_ASPIRATION" class="java.lang.Boolean"/>
 	<field name="COND_CPAP" class="java.lang.Boolean"/>

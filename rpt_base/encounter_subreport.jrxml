@@ -19,7 +19,8 @@ LEFT JOIN oh_admissiontype admt
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT = $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})
+LIMIT 1]]>
 	</queryString>
 	<field name="MH_SIBLI_RANK" class="java.lang.String"/>
 	<field name="MH_TERM_PREG" class="java.lang.String"/>
@@ -66,6 +67,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="MH_SURGICAL_PROCEDURE_TYPE" class="java.lang.String"/>
 	<field name="MH_SURGICAL_PROCEDURE_DATE" class="java.sql.Timestamp"/>
 	<field name="MH_OTHR_SUPP" class="java.lang.String"/>
+	<field name="MH_PREGNANCY" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -231,14 +233,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textField>
-						<reportElement x="1" y="0" width="177" height="19" uuid="030d5458-24a9-4414-abd2-73dbe1e15e86"/>
+						<reportElement x="1" y="0" width="149" height="19" uuid="030d5458-24a9-4414-abd2-73dbe1e15e86"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$R{NeonatalPeriod}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement x="178" y="0" width="381" height="19" uuid="d22737b9-f10d-4344-a68e-dbeb9d74fb4e"/>
+						<reportElement x="150" y="0" width="409" height="19" uuid="d22737b9-f10d-4344-a68e-dbeb9d74fb4e"/>
 						<textElement verticalAlignment="Middle">
 							<font size="12"/>
 						</textElement>
@@ -328,14 +330,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textField>
-						<reportElement x="1" y="0" width="199" height="20" uuid="66915625-a771-4f9b-b53e-82617f173b62"/>
+						<reportElement x="1" y="0" width="129" height="20" uuid="66915625-a771-4f9b-b53e-82617f173b62"/>
 						<textElement>
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$R{OtherBackgroundInformation}]]></textFieldExpression>
 					</textField>
 					<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-						<reportElement x="200" y="1" width="379" height="49" uuid="f411e8a3-8e7f-412e-8374-213af8ba5b3f"/>
+						<reportElement x="130" y="1" width="432" height="49" uuid="f411e8a3-8e7f-412e-8374-213af8ba5b3f"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
@@ -347,14 +349,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textField>
-						<reportElement x="0" y="0" width="150" height="20" uuid="e5323da9-777e-46ad-ac73-5acea8935828"/>
+						<reportElement x="0" y="0" width="130" height="20" uuid="e5323da9-777e-46ad-ac73-5acea8935828"/>
 						<textElement>
 							<font size="12" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$R{Specify}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement x="152" y="1" width="410" height="19" uuid="189f2b67-d76b-4e9c-8d58-580e3242b80e"/>
+						<reportElement x="130" y="1" width="432" height="19" uuid="189f2b67-d76b-4e9c-8d58-580e3242b80e"/>
 						<textElement>
 							<font size="12"/>
 						</textElement>
@@ -367,14 +369,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="170" height="20" uuid="1fa74c1a-6e40-461c-9f53-46f591684820"/>
+					<reportElement x="0" y="0" width="140" height="20" uuid="1fa74c1a-6e40-461c-9f53-46f591684820"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{BirthOrder}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="170" y="0" width="400" height="20" uuid="f7590099-8386-43b9-ba26-5bc7ed55938f"/>
+					<reportElement x="140" y="0" width="420" height="20" uuid="f7590099-8386-43b9-ba26-5bc7ed55938f"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -386,18 +388,18 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="100" height="20" uuid="e19330f4-ac29-48ac-80d3-e214e662aa56"/>
+					<reportElement x="0" y="0" width="90" height="20" uuid="e19330f4-ac29-48ac-80d3-e214e662aa56"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Pregnancy}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="100" y="1" width="479" height="19" uuid="4fb0a3ab-73a9-4180-848f-2c831e0f41a9"/>
+					<reportElement x="90" y="1" width="470" height="19" uuid="4fb0a3ab-73a9-4180-848f-2c831e0f41a9"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{MH_TERM_PREG}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{MH_PREGNANCY}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -459,7 +461,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{MH_ANTI_MLRIAL_PROPHY_MILDA}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="225" y="20" width="345" height="20" uuid="b3ddbc63-e614-41aa-96db-e017e9de5200"/>
+					<reportElement x="220" y="20" width="350" height="20" uuid="b3ddbc63-e614-41aa-96db-e017e9de5200"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
@@ -473,7 +475,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$R{MILDA}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="160" y="20" width="65" height="20" uuid="44b0b239-8d63-4c06-8f86-be46ab95930d"/>
+					<reportElement x="160" y="20" width="60" height="20" uuid="44b0b239-8d63-4c06-8f86-be46ab95930d"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -499,14 +501,14 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textField>
-					<reportElement x="0" y="0" width="139" height="20" uuid="d3e1f528-8fab-4887-8a45-6279ec511610"/>
+					<reportElement x="0" y="0" width="128" height="20" uuid="d3e1f528-8fab-4887-8a45-6279ec511610"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Diet}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
-					<reportElement x="139" y="0" width="420" height="20" uuid="c32b8d6a-122c-4c87-afd3-fa660aa51354"/>
+					<reportElement x="128" y="0" width="431" height="20" uuid="c32b8d6a-122c-4c87-afd3-fa660aa51354"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
