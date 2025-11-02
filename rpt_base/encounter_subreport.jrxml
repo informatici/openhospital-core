@@ -852,7 +852,7 @@ LIMIT 1]]>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{MH_DLV_MODE}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{MH_DLV_MODE}.equals("cesarian") ? $R{Cesarian} : $R{Vaginaldelivery}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="391" y="1" width="169" height="19" uuid="76c0f9e5-ac58-43e5-ba5b-57cbe6faf5dd"/>
