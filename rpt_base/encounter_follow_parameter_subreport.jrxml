@@ -269,7 +269,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PEX_SAT}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
 					<reportElement x="350" y="0" width="140" height="20" uuid="fc060606-1d7d-411a-886a-d6ad696ef12e"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
