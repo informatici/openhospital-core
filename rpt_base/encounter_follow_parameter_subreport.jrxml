@@ -29,13 +29,15 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="PEX_AP_MAX" class="java.lang.Integer"/>
 	<field name="PEX_SAT" class="java.lang.Double"/>
 	<field name="PEX_IPT" class="java.lang.String"/>
+	<field name="PEX_CREATED_BY" class="java.lang.String"/>
+	<field name="PEX_NOTE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="75">
+		<band height="76">
 			<textField>
-				<reportElement x="0" y="54" width="50" height="21" uuid="890b264e-9691-4e48-a8e4-3229c048d582"/>
+				<reportElement x="0" y="54" width="80" height="21" uuid="890b264e-9691-4e48-a8e4-3229c048d582"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -45,10 +47,10 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{Date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{DateAndTime}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="50" y="54" width="50" height="21" uuid="d4bbfe77-3a77-424b-aaf6-969584a8fcad"/>
+				<reportElement x="80" y="54" width="100" height="21" uuid="0652b800-78b9-4fb5-a3d5-f924307c5a87"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -58,10 +60,10 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{Weight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{Nurse}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="54" width="40" height="21" uuid="0652b800-78b9-4fb5-a3d5-f924307c5a87"/>
+				<reportElement x="490" y="54" width="50" height="21" uuid="e58f0407-2c48-46c0-a42d-8c56a1a37b9f"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -71,49 +73,10 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{Size}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{Obs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="140" y="54" width="40" height="21" uuid="b7c38e44-320d-480c-a0f8-72f7789bdcc0"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$R{PB}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="180" y="54" width="40" height="21" uuid="bc8618d4-16aa-4ba4-9c0e-95293bb1ca93"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$R{IMC}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="220" y="54" width="40" height="21" uuid="e58f0407-2c48-46c0-a42d-8c56a1a37b9f"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$R{IPT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="260" y="54" width="40" height="21" uuid="3f59478c-fd68-4b20-b545-2bf867590d11"/>
+				<reportElement x="180" y="54" width="40" height="22" uuid="3f59478c-fd68-4b20-b545-2bf867590d11"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -126,7 +89,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textFieldExpression><![CDATA[$R{Temp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="54" width="50" height="21" uuid="7b63e0e2-77c9-4306-90ae-16a3297a6ee7"/>
+				<reportElement x="250" y="54" width="30" height="21" uuid="7b63e0e2-77c9-4306-90ae-16a3297a6ee7"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -139,7 +102,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textFieldExpression><![CDATA[$R{FR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="350" y="54" width="50" height="21" uuid="87af1989-dc7e-40a6-823a-63d00aadf168"/>
+				<reportElement x="220" y="54" width="30" height="22" uuid="87af1989-dc7e-40a6-823a-63d00aadf168"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -152,7 +115,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textFieldExpression><![CDATA[$R{FC}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="400" y="54" width="40" height="21" uuid="8de2406a-7290-4302-a3dd-f7647e832fed"/>
+				<reportElement x="310" y="54" width="40" height="21" uuid="8de2406a-7290-4302-a3dd-f7647e832fed"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -165,7 +128,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				<textFieldExpression><![CDATA[$R{TA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="54" width="50" height="21" uuid="0fe59934-2fb4-4dbc-ae1d-d9fcd28919ac"/>
+				<reportElement x="280" y="54" width="30" height="21" uuid="0fe59934-2fb4-4dbc-ae1d-d9fcd28919ac"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -184,14 +147,27 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$R{TrackingParameter}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="350" y="54" width="140" height="21" uuid="f4d86007-0d6b-4016-aa7b-1815a5259f4a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Care}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="21" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="490" height="20" uuid="7559abca-9786-46a8-844a-9124ac0fd93b"/>
+				<reportElement x="0" y="0" width="570" height="20" uuid="7559abca-9786-46a8-844a-9124ac0fd93b"/>
 				<textField isBlankWhenNull="true">
-					<reportElement x="50" y="0" width="50" height="20" uuid="99a7b48b-c22b-4390-b066-49be0b0de842"/>
+					<reportElement x="80" y="0" width="100" height="20" uuid="453e657b-6d38-4e74-82e0-a1eb6bb9be4a"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -201,10 +177,10 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_WEIGHT}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PEX_CREATED_BY}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="100" y="0" width="40" height="20" uuid="453e657b-6d38-4e74-82e0-a1eb6bb9be4a"/>
+					<reportElement x="490" y="0" width="50" height="20" uuid="dee402d0-6212-4728-a110-e773f3cbf9d1"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -214,10 +190,9 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_HEIGHT}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="140" y="0" width="40" height="20" uuid="16ea920d-9e43-4735-a364-8276302b1909"/>
+				<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="80" height="20" uuid="8056c67b-23ee-41a7-a040-93ea316a286c"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -227,36 +202,10 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_BRANCHIAL_PERIMETER}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format($F{PEX_DATE})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="220" y="0" width="40" height="20" uuid="dee402d0-6212-4728-a110-e773f3cbf9d1"/>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_IPT}]]></textFieldExpression>
-				</textField>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement x="0" y="0" width="50" height="20" uuid="8056c67b-23ee-41a7-a040-93ea316a286c"/>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{PEX_DATE})]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="400" y="0" width="40" height="20" uuid="d824db5c-49ba-4f3d-bec5-a218f76e6bd9"/>
+					<reportElement x="310" y="0" width="40" height="20" uuid="d824db5c-49ba-4f3d-bec5-a218f76e6bd9"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -269,7 +218,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{PEX_AP_MIN} != null ? $F{PEX_AP_MIN} + "/" + $F{PEX_AP_MAX} : ""]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="260" y="0" width="40" height="20" uuid="7ad24651-a49b-4bc5-b7ce-1ab569c10613"/>
+					<reportElement x="180" y="-1" width="40" height="21" uuid="7ad24651-a49b-4bc5-b7ce-1ab569c10613"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -282,7 +231,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{PEX_TEMP}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="300" y="0" width="50" height="20" uuid="512fa6ac-9060-4538-a3da-c979822735fa"/>
+					<reportElement x="250" y="0" width="30" height="20" uuid="512fa6ac-9060-4538-a3da-c979822735fa"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -295,7 +244,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{PEX_RR}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="350" y="0" width="50" height="20" uuid="a3d2a584-2194-4181-9b46-213ef87e31f2"/>
+					<reportElement x="220" y="-1" width="30" height="21" uuid="a3d2a584-2194-4181-9b46-213ef87e31f2"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -308,7 +257,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{PEX_HR}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="440" y="0" width="50" height="20" uuid="611cc540-0e87-402d-ac2b-08a50d8e4cd5"/>
+					<reportElement x="280" y="0" width="30" height="20" uuid="611cc540-0e87-402d-ac2b-08a50d8e4cd5"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -321,7 +270,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textFieldExpression><![CDATA[$F{PEX_SAT}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="180" y="0" width="40" height="20" uuid="83075af1-0087-40c1-9e32-bd7db3fbb40b"/>
+					<reportElement x="350" y="0" width="140" height="20" uuid="fc060606-1d7d-411a-886a-d6ad696ef12e"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -331,7 +280,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{PEX_BODY_MASS_INDEX}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{PEX_NOTE}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
