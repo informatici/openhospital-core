@@ -14,7 +14,8 @@ INNER JOIN oh_conditioning cond
 WHERE enc.ENC_PAT_ID = $P{patID}
 AND enc.ENC_STATUS <> "CANCELLED"
 AND enc.ENC_PERFORMED_AT = $P{performedAt}
-AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
+AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})
+LIMIT 1]]>
 	</queryString>
 	<field name="COND_ASPIRATION" class="java.lang.Boolean"/>
 	<field name="COND_CPAP" class="java.lang.Boolean"/>
@@ -26,14 +27,19 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 	<field name="COND_BOLUS_SS_VOLUME" class="java.lang.Double"/>
 	<field name="COND_SNG_NUMBER" class="java.lang.String"/>
 	<field name="COND_CONDITION_AT_ADMISSION" class="java.lang.String"/>
-	<field name="COND_TDR" class="java.lang.String"/>
+	<field name="COND_MALARIA" class="java.lang.String"/>
+	<field name="COND_HIV_TEST" class="java.lang.String"/>
+	<field name="COND_PERFORMED_AT" class="java.sql.Date"/>
+	<field name="COND_PERFORMED_BY" class="java.lang.String"/>
+	<field name="COND_BLOOD_GLUCOSE_LEVEL" class="java.lang.Double"/>
+	<field name="COND_OTHERS" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="128" splitType="Stretch">
+		<band height="381" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="40" width="560" height="40" uuid="fe2a9524-cc9a-4c1a-9c03-6232c4dc65fd"/>
+				<reportElement x="0" y="130" width="560" height="40" uuid="fe2a9524-cc9a-4c1a-9c03-6232c4dc65fd"/>
 				<textField>
 					<reportElement x="0" y="0" width="90" height="40" uuid="edc3c482-4447-41b8-a5d3-295bb600759a"/>
 					<box>
@@ -56,11 +62,11 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Aspiration}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="140" y="0" width="30" height="20" uuid="cd435352-95e4-4979-9368-06b146face7e"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -69,11 +75,11 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{MCE}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="170" y="0" width="60" height="20" uuid="73c2cd39-3a78-489b-8422-97663ddd33e3"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -82,7 +88,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Ventilation}]]></textFieldExpression>
 				</textField>
@@ -95,7 +101,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Oxygen}]]></textFieldExpression>
 				</textField>
@@ -108,11 +114,11 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{SG}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="370" y="0" width="50" height="20" uuid="26f91275-14b7-4aea-9d96-18abf0405d3a"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -121,7 +127,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Diazepam}]]></textFieldExpression>
 				</textField>
@@ -134,7 +140,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Bolus}]]></textFieldExpression>
 				</textField>
@@ -147,7 +153,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{CPAP}]]></textFieldExpression>
 				</textField>
@@ -160,7 +166,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{SNG}]]></textFieldExpression>
 				</textField>
@@ -283,7 +289,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="10" width="561" height="20" uuid="cca9334a-0989-4368-9edf-53ffe645b5fb"/>
+				<reportElement x="0" y="50" width="561" height="20" uuid="cca9334a-0989-4368-9edf-53ffe645b5fb"/>
 				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
 					<reportElement x="121" y="0" width="430" height="20" uuid="bbc0aecb-e41e-4cd1-bb5f-d406f928d0f9"/>
 					<textElement>
@@ -300,20 +306,162 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="90" width="561" height="20" uuid="9ce26d7c-8be6-4285-8279-e0c09e5653db"/>
+				<reportElement x="0" y="200" width="561" height="20" uuid="9ce26d7c-8be6-4285-8279-e0c09e5653db"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-					<reportElement x="121" y="0" width="430" height="20" uuid="20eb2158-6eda-4508-8745-b7167d40a8b1"/>
+					<reportElement x="80" y="0" width="471" height="20" uuid="20eb2158-6eda-4508-8745-b7167d40a8b1"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{COND_TDR}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{COND_MALARIA}.equals("POSITIF") ? $R{Positive} : $F{COND_MALARIA}.equals("NEGATIF") ? $R{Negative} : $R{Indeterminate}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="0" width="121" height="20" uuid="5bf06d48-194d-4ec2-b5e2-76aaee1d2bd2"/>
+					<reportElement x="0" y="0" width="80" height="20" uuid="5bf06d48-194d-4ec2-b5e2-76aaee1d2bd2"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$R{TDR}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$R{Malaria}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="220" width="561" height="20" uuid="f38efde1-b36d-4f4d-95d5-73eecf0a1a31"/>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement x="40" y="0" width="511" height="20" uuid="33af120e-ee87-42e9-b1b2-65222a8b7fdb"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_HIV_TEST}.equals("POSITIF") ? $R{Positive} : $F{COND_HIV_TEST}.equals("NEGATIF") ? $R{Negative} : $R{Indeterminate}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="40" height="20" uuid="7058a657-b2fc-4bb0-883a-3c441e3d15d4"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{VIH}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="240" width="561" height="20" uuid="9310a264-f400-418c-8ff9-6793e9eb5e8d"/>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement x="160" y="0" width="391" height="20" uuid="b30a80c9-d89f-459e-9320-9e6a8595947c"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_BLOOD_GLUCOSE_LEVEL}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="160" height="20" uuid="e821e081-d6cf-4d58-9b2d-3b8fd832f391"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{BloodSugarLevel}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="30" width="561" height="20" uuid="ee7b4e7d-db12-464e-bc0b-0b51ca17ad75"/>
+				<textField textAdjust="ScaleFont" pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement x="110" y="0" width="80" height="20" uuid="4f3b92a2-cd22-4286-b457-121fd2486fb6"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("HH:mm").format($F{COND_PERFORMED_AT})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="110" height="20" uuid="d41f92ee-cebe-4d6d-8b6d-71e72ed84ac1"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{MECHour}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="190" y="0" width="100" height="20" uuid="3558b9fe-35ec-4bac-abba-e79312f66444"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Managers}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="290" y="0" width="261" height="20" uuid="c8a3c365-fde0-432e-b212-bd4b4c6b6b46"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_PERFORMED_BY}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="-1" y="0" width="562" height="30" uuid="4b0f52bb-8636-4b14-a33f-125c41f1fc09">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="562" height="30" uuid="96430990-3666-47e8-a716-e143dde7b906"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{Conditioning}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement x="0" y="80" width="301" height="20" uuid="07bb3fc7-2314-4c56-9f36-14353f12e11f"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_parameter_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement x="0" y="110" width="561" height="10" uuid="0eae525d-ddf0-4212-a8c5-252a6bd64e9f"/>
+			</frame>
+			<subreport>
+				<reportElement x="0" y="270" width="301" height="20" uuid="320c2993-d4c6-479b-a8bc-df509c6c70ee"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_exam_request.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="350" width="301" height="21" uuid="51da3b2b-32d9-4d83-ba2c-192e3b304d34"/>
+				<subreportParameter name="patID">
+					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="performedAt">
+					<subreportParameterExpression><![CDATA[$P{performedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="closedAt">
+					<subreportParameterExpression><![CDATA[$P{closedAt}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["encounter_follow_parameter_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement x="0" y="300" width="561" height="40" uuid="da5819ba-6572-493c-af59-116b9db39748"/>
+			</frame>
+			<frame>
+				<reportElement x="0" y="180" width="561" height="20" uuid="f2544c9f-e540-4168-8194-77ba1cfb67fe"/>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="160" y="0" width="391" height="20" uuid="b8f64fd7-37cc-4a1b-a9a6-56791c0a2713"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_OTHERS}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="160" height="20" uuid="0e9e04af-142a-445f-82fe-7c44307864c1"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{OthersConditioning}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
