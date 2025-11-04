@@ -32,11 +32,12 @@ LIMIT 1]]>
 	<field name="COND_PERFORMED_AT" class="java.sql.Date"/>
 	<field name="COND_PERFORMED_BY" class="java.lang.String"/>
 	<field name="COND_BLOOD_GLUCOSE_LEVEL" class="java.lang.Double"/>
+	<field name="COND_OTHERS" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="359" splitType="Stretch">
+		<band height="381" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="130" width="560" height="40" uuid="fe2a9524-cc9a-4c1a-9c03-6232c4dc65fd"/>
 				<textField>
@@ -305,7 +306,7 @@ LIMIT 1]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="180" width="561" height="20" uuid="9ce26d7c-8be6-4285-8279-e0c09e5653db"/>
+				<reportElement x="0" y="200" width="561" height="20" uuid="9ce26d7c-8be6-4285-8279-e0c09e5653db"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 					<reportElement x="80" y="0" width="471" height="20" uuid="20eb2158-6eda-4508-8745-b7167d40a8b1"/>
 					<textElement>
@@ -322,7 +323,7 @@ LIMIT 1]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="200" width="561" height="20" uuid="f38efde1-b36d-4f4d-95d5-73eecf0a1a31"/>
+				<reportElement x="0" y="220" width="561" height="20" uuid="f38efde1-b36d-4f4d-95d5-73eecf0a1a31"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 					<reportElement x="40" y="0" width="511" height="20" uuid="33af120e-ee87-42e9-b1b2-65222a8b7fdb"/>
 					<textElement>
@@ -339,7 +340,7 @@ LIMIT 1]]>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="220" width="561" height="20" uuid="9310a264-f400-418c-8ff9-6793e9eb5e8d"/>
+				<reportElement x="0" y="240" width="561" height="20" uuid="9310a264-f400-418c-8ff9-6793e9eb5e8d"/>
 				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 					<reportElement x="160" y="0" width="391" height="20" uuid="b30a80c9-d89f-459e-9320-9e6a8595947c"/>
 					<textElement>
@@ -416,7 +417,7 @@ LIMIT 1]]>
 				<reportElement x="0" y="110" width="561" height="10" uuid="0eae525d-ddf0-4212-a8c5-252a6bd64e9f"/>
 			</frame>
 			<subreport>
-				<reportElement x="0" y="250" width="301" height="20" uuid="320c2993-d4c6-479b-a8bc-df509c6c70ee"/>
+				<reportElement x="0" y="270" width="301" height="20" uuid="320c2993-d4c6-479b-a8bc-df509c6c70ee"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -430,7 +431,7 @@ LIMIT 1]]>
 				<subreportExpression><![CDATA["encounter_exam_request.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="330" width="301" height="21" uuid="51da3b2b-32d9-4d83-ba2c-192e3b304d34"/>
+				<reportElement x="0" y="350" width="301" height="21" uuid="51da3b2b-32d9-4d83-ba2c-192e3b304d34"/>
 				<subreportParameter name="patID">
 					<subreportParameterExpression><![CDATA[$P{patID}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -444,7 +445,24 @@ LIMIT 1]]>
 				<subreportExpression><![CDATA["encounter_follow_parameter_subreport.jasper"]]></subreportExpression>
 			</subreport>
 			<frame>
-				<reportElement x="-1" y="280" width="561" height="40" uuid="da5819ba-6572-493c-af59-116b9db39748"/>
+				<reportElement x="0" y="300" width="561" height="40" uuid="da5819ba-6572-493c-af59-116b9db39748"/>
+			</frame>
+			<frame>
+				<reportElement x="0" y="180" width="561" height="20" uuid="f2544c9f-e540-4168-8194-77ba1cfb67fe"/>
+				<textField textAdjust="ScaleFont" isBlankWhenNull="true">
+					<reportElement x="160" y="0" width="391" height="20" uuid="b8f64fd7-37cc-4a1b-a9a6-56791c0a2713"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COND_OTHERS}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="160" height="20" uuid="0e9e04af-142a-445f-82fe-7c44307864c1"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$R{OthersConditioning}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>
