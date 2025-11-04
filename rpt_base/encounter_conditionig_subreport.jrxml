@@ -61,11 +61,11 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Aspiration}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="140" y="0" width="30" height="20" uuid="cd435352-95e4-4979-9368-06b146face7e"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -74,11 +74,11 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{MCE}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="170" y="0" width="60" height="20" uuid="73c2cd39-3a78-489b-8422-97663ddd33e3"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -87,7 +87,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Ventilation}]]></textFieldExpression>
 				</textField>
@@ -100,7 +100,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Oxygen}]]></textFieldExpression>
 				</textField>
@@ -113,11 +113,11 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{SG}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField textAdjust="StretchHeight">
 					<reportElement x="370" y="0" width="50" height="20" uuid="26f91275-14b7-4aea-9d96-18abf0405d3a"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -126,7 +126,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Diazepam}]]></textFieldExpression>
 				</textField>
@@ -139,7 +139,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{Bolus}]]></textFieldExpression>
 				</textField>
@@ -152,7 +152,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{CPAP}]]></textFieldExpression>
 				</textField>
@@ -165,7 +165,7 @@ LIMIT 1]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10" isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$R{SNG}]]></textFieldExpression>
 				</textField>
