@@ -166,7 +166,7 @@ AND (enc.ENC_CLOSED_AT IS NULL OR enc.ENC_CLOSED_AT = $P{closedAt})]]>
 		<band height="21" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="570" height="20" uuid="7559abca-9786-46a8-844a-9124ac0fd93b"/>
-				<textField isBlankWhenNull="true">
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 					<reportElement x="80" y="0" width="100" height="20" uuid="453e657b-6d38-4e74-82e0-a1eb6bb9be4a"/>
 					<box>
 						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
