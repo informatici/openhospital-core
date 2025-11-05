@@ -20,7 +20,7 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.14.2-SNAPSHOT</version>
+	<version>1.15.0</version>
 
 	<properties>
 		<oh.version>1.14.2-SNAPSHOT</oh.version>
