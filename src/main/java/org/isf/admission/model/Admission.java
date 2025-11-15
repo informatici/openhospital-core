@@ -214,6 +214,9 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@Column(name="ADM_TRANSPORTATION")
 	private String transportation;
+	
+	@Column(name = "ADM_PHYSICAL_EXAM")
+	private String physicalExam;    // ADM_PHYSICAL_EXAM
 
 	public Admission() {
 		super();
@@ -636,6 +639,16 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setQualifiedAgent(Boolean qualifiedAgent) {
 		this.qualifiedAgent = qualifiedAgent;
+	}
+	
+	
+	public String getPhysicalExam() {
+		return physicalExam;
+	}
+
+	
+	public void setPhysicalExam(String physicalExam) {
+		this.physicalExam = physicalExam;
 	}
 
 	@Override
