@@ -133,6 +133,9 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	@Column(name="PEX_IPT")
 	private String pex_ipt;
 	
+	@Column(name="PEX_PC")
+	private String pex_pc;
+	
 	@Transient
 	private volatile int hashCode;
 
@@ -511,6 +514,15 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 
 	public void setPex_ipt(String pex_ipt) {
 		this.pex_ipt = pex_ipt;
+	}
+	
+	public String getPex_pc() {
+		return pex_pc;
+	}
+
+	
+	public void setPex_pc(String pex_pc) {
+		this.pex_pc = pex_pc;
 	}
 
 	@Override
