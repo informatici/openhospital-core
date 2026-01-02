@@ -73,6 +73,15 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 
+	@Column(name = "PAT_AGE_DAYS")
+	private Integer ageDays;
+
+	@Column(name = "PAT_AGE_WEEKS")
+	private Integer ageWeeks;
+
+	@Column(name = "PAT_AGE_MONTHS")
+	private Integer ageMonths;
+
 	@NotNull
 	@Column(name="PAT_SEX")
 	private char sex;
@@ -345,6 +354,30 @@ public class Patient extends Auditable<String> {
 
 	public String getAgetype() {
 		return agetype;
+	}
+
+	public Integer getAgeDays() {
+		return ageDays;
+	}
+
+	public void setAgeDays(Integer ageDays) {
+		this.ageDays = ageDays;
+	}
+
+	public Integer getAgeWeeks() {
+		return ageWeeks;
+	}
+
+	public void setAgeWeeks(Integer ageWeeks) {
+		this.ageWeeks = ageWeeks;
+	}
+
+	public Integer getAgeMonths() {
+		return ageMonths;
+	}
+
+	public void setAgeMonths(Integer ageMonths) {
+		this.ageMonths = ageMonths;
 	}
 
 	public String getCity() {

@@ -125,3 +125,4 @@ source step_a128_add_examination_type_in_oh_patientexamination_table.sql;
 source step_a129_add_permissions.sql;
 source step_a130_update_patient_table.sql;
 source step_a131_update_admission_table.sql;
+source step_a132_update_patient_age_units.sql;
