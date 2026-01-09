@@ -1142,8 +1142,8 @@ public class JasperReportsManager {
 			parameters.put("examId", examId);
 			parameters.put("REPORT_LOCALE", locale);
 			String jasperFileName = "patient_examination";
-			String pdfFilename = this.compilePDFFilename("rpt_base", jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
-			JasperReportResultDto result = this.generateJasperReport(this.compileJasperFilename("rpt_base", jasperFileName), pdfFilename, parameters);
+			String pdfFilename = this.compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
+			JasperReportResultDto result = this.generateJasperReport(this.compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
 			return result;
 		} catch (Exception e) {
