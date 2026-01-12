@@ -27,7 +27,9 @@ package org.isf.generaldata;
  * @author Mwithi
  */
 public final class ExaminationParameters extends ConfigurationProperties {
-	
+    
+       
+
 	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
@@ -126,9 +128,13 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final int DEFAULT_LIST_SIZE = 4;
 	
 	private static ExaminationParameters mySingleData;
+        
+        
 
 	private ExaminationParameters(String fileProperties) {
+                
 		super(fileProperties);
+                
 			
 		HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
 		HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
