@@ -21,9 +21,15 @@
  */
 package org.isf.generaldata;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
@@ -116,5 +122,26 @@ public class MessageBundle {
 		MessageFormat messageFormat = new MessageFormat("");
 		messageFormat.applyPattern(message);
 		return messageFormat.format(args);
+	}
+
+	/**
+	 * Static file reader with UTF8 charset
+	 * 
+	 * @param file - the file name
+	 * @param logger - the {@link Logger} of the concrete class
+	 */
+	public static Properties loadPropertiesFileUtf8(Path file, Logger logger) {
+		Properties prop = new Properties();
+		if (file == null || !Files.exists(file)) {
+			logger.error(">> '{}' file not found.", file);
+			return prop;
+		}
+		try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+			prop.load(reader);
+			logger.info("File {} loaded (UTF-8).", file);
+		} catch (IOException e) {
+			logger.error(">> Cannot load '{}'.", file, e);
+		}
+		return prop;
 	}
 }
