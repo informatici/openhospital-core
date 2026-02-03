@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -46,7 +46,7 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
 	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") char deletedStatus);
 
-	@Modifying
+	@Modifying(clearAutomatically=true, flushAutomatically=true)
 	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 
@@ -62,4 +62,6 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	@Query("select count(p) from Patient p where active=1 and deleted not like 'Y'")
 	long countAllActiveNotDeletedPatients();
+	
+	List<Patient> findAllByCodeIn(List<Integer> codes);
 }

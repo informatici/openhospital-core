@@ -21,15 +21,15 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-import org.hibernate.engine.spi.SessionImplementor;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
@@ -78,8 +78,8 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.OS_BITNESS, String.valueOf(os.getBitness()));
 			result.put(CollectorsConstants.OS_CODENAME, os.getVersionInfo().getCodeName());
 
-			SessionImplementor sessionImp = (SessionImplementor) em.getDelegate();
-			DatabaseMetaData dbmd = sessionImp.connection().getMetaData();
+			Connection connection = em.unwrap(Connection.class);
+			DatabaseMetaData dbmd = connection.getMetaData();
 			result.put(CollectorsConstants.DBMS_DRIVER_NAME, dbmd.getDriverName());
 			result.put(CollectorsConstants.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
 			result.put(CollectorsConstants.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
@@ -91,7 +91,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.APP_DEMODATA, String.valueOf(GeneralData.DEMODATA));
 			result.put(CollectorsConstants.APP_APISERVER, String.valueOf(GeneralData.APISERVER));
 			result.put(CollectorsConstants.APP_LANGUAGE, GeneralData.LANGUAGE);
-			// result.put(CollectorsConstants.APP_SINGLEUSER, GeneralData.getSINGLEUSER());
+			result.put(CollectorsConstants.APP_SINGLEUSER, String.valueOf(GeneralData.getGeneralData().getSINGLEUSER()));
 			result.put(CollectorsConstants.APP_DEBUG, String.valueOf(GeneralData.DEBUG));
 			result.put(CollectorsConstants.APP_INTERNALVIEWER, String.valueOf(GeneralData.INTERNALVIEWER));
 			result.put(CollectorsConstants.APP_SMSENABLED, String.valueOf(GeneralData.SMSENABLED));
@@ -116,6 +116,8 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.APP_LOTWITHCOST, String.valueOf(GeneralData.LOTWITHCOST));
 			result.put(CollectorsConstants.APP_DICOMMODULEENABLED, String.valueOf(GeneralData.DICOMMODULEENABLED));
 			result.put(CollectorsConstants.APP_DICOMTHUMBNAILS, String.valueOf(GeneralData.DICOMTHUMBNAILS));
+			result.put(CollectorsConstants.APP_STRONGPASSWORD, String.valueOf(GeneralData.STRONGPASSWORD));
+			result.put(CollectorsConstants.APP_USERSLISTLOGIN, String.valueOf(GeneralData.getGeneralData().getUSERSLISTLOGIN()));
 
 		} catch (RuntimeException | SQLException e) {
 			LOGGER.error("Something went wrong with " + ID);

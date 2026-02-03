@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -41,43 +41,45 @@ import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class TherapyManager {
 
-	@Autowired
-	private TherapyIoOperations ioOperations;
+	private final TherapyIoOperations ioOperations;
 
-	@Autowired
-	private SmsOperations smsOp;
+	private final SmsOperations smsOp;
 
-	@Autowired
-	private PatientBrowserManager patientManager;
+	private final PatientBrowserManager patientManager;
 
-	@Autowired
-	private MedicalBrowsingManager medManager;
+	private final MedicalBrowsingManager medManager;
 
-	@Autowired
-	private MovWardBrowserManager wardManager;
+	private final MovWardBrowserManager wardManager;
+
+	public TherapyManager(TherapyIoOperations therapyIoOperations, SmsOperations smsOperations, PatientBrowserManager patientBrowserManager,
+		MedicalBrowsingManager medicalBrowsingManager, MovWardBrowserManager movWardBrowserManager) {
+		this.ioOperations = therapyIoOperations;
+		this.smsOp = smsOperations;
+		this.patientManager = patientBrowserManager;
+		this.medManager = medicalBrowsingManager;
+		this.wardManager = movWardBrowserManager;
+	}
 
 	/**
 	 * Returns a {@link Therapy} object from a {@link TherapyRow} (DB record)
 	 *
-	 * @param th - the {@link TherapyRow}
+	 * @param th the {@link TherapyRow}
 	 * @return the {@link Therapy}
 	 * @throws OHServiceException
 	 */
 	public Therapy createTherapy(TherapyRow th) throws OHServiceException {
 		return createTherapy(th.getTherapyID(), th.getPatient().getCode(), th.getMedical(), th.getQty(), th.getStartDate(), th.getEndDate(),
-				th.getFreqInPeriod(), th.getFreqInDay(), th.getNote(), th.isNotify(), th.isSms());
+			th.getFreqInPeriod(), th.getFreqInDay(), th.getNote(), th.isNotify(), th.isSms());
 	}
 
 	/**
-	 * Creates a {@link Therapy} from its parameters, fetching the {@link Medical}
-	 * and building the array of Dates ({@link LocalDateTime})
+	 * Creates a {@link Therapy} from its parameters, fetching the {@link Medical} and building the array of Dates ({@link LocalDateTime})
 	 *
 	 * @param therapyID
 	 * @param patID
@@ -93,8 +95,8 @@ public class TherapyManager {
 	 * @return the {@link Therapy}
 	 */
 	private Therapy createTherapy(int therapyID, int patID, Integer medId, Double qty,
-			LocalDateTime startDate, LocalDateTime endDate, int freqInPeriod,
-			int freqInDay, String note, boolean notify, boolean sms) throws OHServiceException {
+		LocalDateTime startDate, LocalDateTime endDate, int freqInPeriod,
+		int freqInDay, String note, boolean notify, boolean sms) throws OHServiceException {
 
 		List<LocalDateTime> datesArray = new ArrayList<>();
 
@@ -122,7 +124,7 @@ public class TherapyManager {
 	/**
 	 * Returns a list of {@link Therapy}s from a list of {@link TherapyRow}s (DB records)
 	 *
-	 * @param thRows - the list of {@link TherapyRow}s
+	 * @param thRows the list of {@link TherapyRow}s
 	 * @return the list of {@link Therapy}s
 	 * @throws OHServiceException
 	 */
@@ -139,11 +141,9 @@ public class TherapyManager {
 	}
 
 	/**
-	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
-	 * or
-	 * return all {@link TherapyRow}s (therapies) if {@code 0} is passed
+	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID or return all {@link TherapyRow}s (therapies) if {@code 0} is passed
 	 *
-	 * @param code - the Patient ID
+	 * @param code the Patient ID
 	 * @return the list of {@link TherapyRow}s (therapies)
 	 * @throws OHServiceException
 	 */
@@ -154,7 +154,7 @@ public class TherapyManager {
 	/**
 	 * Insert a new {@link TherapyRow} (therapy) for related Patient
 	 *
-	 * @param thRow - the {@link TherapyRow}s (therapy)
+	 * @param thRow the {@link TherapyRow}s (therapy)
 	 * @return the therapyID
 	 * @throws OHServiceException
 	 */
@@ -165,7 +165,7 @@ public class TherapyManager {
 	/**
 	 * Replace all {@link TherapyRow}s (therapies) for related Patient
 	 *
-	 * @param thRows - the list of {@link TherapyRow}s (therapies)
+	 * @param thRows the list of {@link TherapyRow}s (therapies)
 	 * @return {@code true} if the row has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -205,12 +205,10 @@ public class TherapyManager {
 	}
 
 	/**
-	 * Builds the {@link Sms} text for the specified {@link Therapy}
-	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
-	 * (example:
+	 * Builds the {@link Sms} text for the specified {@link Therapy} If length exceed {@code SmsManager.MAX_LENGTH} the message will be cropped (example:
 	 * "REMINDER: {@link Medical} 3pcs - 2pd - {@link Therapy#getNote()}")
 	 *
-	 * @param th - the {@link Therapy}s
+	 * @param th the {@link Therapy}s
 	 * @return a string containing the text
 	 */
 	private String prepareSmsFromTherapy(Therapy th) {
@@ -223,8 +221,8 @@ public class TherapyManager {
 		if (note != null && !note.isEmpty()) {
 			sb.append(" - ").append(note);
 		}
-		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
-			return sb.substring(0, SmsManager.MAX_LENGHT);
+		if (sb.toString().length() > SmsManager.MAX_LENGTH) {
+			return sb.substring(0, SmsManager.MAX_LENGTH);
 		}
 		return sb.toString();
 	}
@@ -232,7 +230,7 @@ public class TherapyManager {
 	/**
 	 * Delete all {@link TherapyRow}s (therapies) for specified Patient ID
 	 *
-	 * @param code - the Patient ID
+	 * @param code the Patient ID
 	 * @return {@code true} if the therapies have been deleted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -246,7 +244,7 @@ public class TherapyManager {
 	/**
 	 * Returns the {@link Medical}s that are not available for the specified list of {@link Therapy}s
 	 *
-	 * @param therapies - the list of {@link Therapy}s
+	 * @param therapies the list of {@link Therapy}s
 	 * @return the list of {@link Medical}s out of stock
 	 * @throws OHServiceException
 	 */
@@ -306,16 +304,16 @@ public class TherapyManager {
 	 * @param note
 	 * @param notify
 	 * @param sms
-	 * @return 
+	 * @return
 	 * @throws OHServiceException
 	 */
 	public TherapyRow newTherapy(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
-			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
+		int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
 		Patient patient = patientManager.getPatientById(patID);
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
 	}
-	
+
 	/**
 	 * Prepare a {@link TherapyRow} (DB record) object from a {@link Therapy}
 	 *
@@ -335,7 +333,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	public TherapyRow getTherapyRow(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
-			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
+		int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
 		Patient patient = patientManager.getPatientById(patID);
 		return new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 	}

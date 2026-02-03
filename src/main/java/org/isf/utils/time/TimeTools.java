@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -49,24 +49,46 @@ public class TimeTools {
 
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
+	public static final String DD_MM_YYYY = "dd/MM/yyyy";
+
 	private TimeTools() {
 	}
 
 	/**
 	 * Returns {@code true} if the DATE part is the same (no matter the time)
 	 *
-	 * @param aDate
-	 * @param today
+	 * @param date1
+	 * @param date2
 	 * @return
 	 */
-	public static boolean isSameDay(LocalDate aDate, LocalDate today) {
-		return today.equals(aDate);
+	public static boolean isSameDay(LocalDate date1, LocalDate date2) {
+		return date2.equals(date1);
 	}
 
-	public static boolean isSameDay(LocalDateTime aDate, LocalDateTime today) {
-		LocalDate d1 = aDate.toLocalDate();
-		LocalDate d2 = today.toLocalDate();
+	/**
+	 * Returns {@code true} if the DATE part is the same (no matter the time)
+	 *
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static boolean isSameDay(LocalDateTime date1, LocalDateTime date2) {
+		LocalDate d1 = date1.toLocalDate();
+		LocalDate d2 = date2.toLocalDate();
 		return isSameDay(d1, d2);
+	}
+
+	/**
+	 * Extra method to be sure to exclude {@link ChronoUnit.SECONDS} from comparison as GoodDateTime* pickers do not return dates with seconds
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return {@code true} if the two objects represent the same date and time
+	 */
+	public static boolean isSameDateTime(LocalDateTime date1, LocalDateTime date2) {
+		return date1.truncatedTo(ChronoUnit.MINUTES).equals(date2.truncatedTo(ChronoUnit.MINUTES));
 	}
 
 	/**
@@ -178,7 +200,7 @@ public class TimeTools {
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
 	 *
 	 * @param date - a Date object
-	 * @return the String represetation of the Date
+	 * @return the String representation of the Date
 	 */
 	public static String formatDateTimeReport(LocalDate date) {
 		LocalDateTime time = date.atStartOfDay();
@@ -187,8 +209,9 @@ public class TimeTools {
 
 	/**
 	 * Truncate date time to SECONDS only if value is non-null
+	 * 
 	 * @param dateTime
-	 * @return LocaleDateTime turncated to seconds
+	 * @return LocaleDateTime truncated to seconds
 	 */
 	public static LocalDateTime truncateToSeconds(LocalDateTime dateTime) {
 		return dateTime == null ? null : dateTime.truncatedTo(ChronoUnit.SECONDS);
@@ -238,8 +261,8 @@ public class TimeTools {
 		LocalDateTime dateTime;
 		if (noTime) {
 			/*
-			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime
-			 * Java does not accept a bare Date value as DateTime
+			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime Java
+			 * does not accept a bare Date value as DateTime
 			 */
 			LocalDate date = LocalDate.parse(string, format);
 			dateTime = date.atTime(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);

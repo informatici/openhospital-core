@@ -27,7 +27,6 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class VisitsIoOperations {
 
-	@Autowired
 	private VisitsIoOperationRepository repository;
+
+	public VisitsIoOperations(VisitsIoOperationRepository visitsIoOperationRepository) {
+		this.repository = visitsIoOperationRepository;
+	}
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a {@link Patient} ID.

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,22 +26,25 @@ import java.util.List;
 import org.isf.accounting.model.Bill;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class AccountingPatientMergedEventListener {
-	@Autowired
-	AccountingIoOperations accountingIoOperations;
+
+	private AccountingIoOperations accountingIoOperations;
+
+	public AccountingPatientMergedEventListener(AccountingIoOperations accountingIoOperations) {
+		this.accountingIoOperations = accountingIoOperations;
+	}
 
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<Bill> bills = accountingIoOperations.getAllPatientsBills(patientMergedEvent.getObsoletePatient().getCode());
+		List<Bill> bills = accountingIoOperations.getAllPatientsBills(patientMergedEvent.obsoletePatient().getCode());
 		for (Bill bill : bills) {
-			bill.setBillPatient(patientMergedEvent.getMergedPatient());
+			bill.setBillPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 }

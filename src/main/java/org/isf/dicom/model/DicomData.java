@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,34 +23,46 @@ package org.isf.dicom.model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.sql.Blob;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.sql.rowset.serial.SerialBlob;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+import org.isf.utils.db.Auditable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * BLOB related to a {@link FileDicom}
  */
 @Entity
 @Table(name = "OH_DICOM_DATA")
-public class DicomData {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DMD_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DMD_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DMD_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DMD_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DMD_LAST_MODIFIED_DATE"))
+public class DicomData extends Auditable<String> implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DicomData.class);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "DMD_DATA_ID")
 	private long code;
 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,20 +26,23 @@ import java.util.List;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VisitsPatientMergedEventListener {
-	@Autowired
+
 	VisitsIoOperations visitsIoOperations;
+
+	public VisitsPatientMergedEventListener(VisitsIoOperations visitsIoOperations) {
+		this.visitsIoOperations = visitsIoOperations;
+	}
 
 	@EventListener
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<Visit> visits = visitsIoOperations.getVisits(patientMergedEvent.getObsoletePatient().getCode());
+		List<Visit> visits = visitsIoOperations.getVisits(patientMergedEvent.obsoletePatient().getCode());
 		for(Visit visit : visits) {
-			visit.setPatient(patientMergedEvent.getMergedPatient());
+			visit.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 

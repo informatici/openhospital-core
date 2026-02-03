@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,7 +27,6 @@ import java.util.Optional;
 import org.isf.distype.model.DiseaseType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +38,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DiseaseTypeIoOperation {
 
-	@Autowired
-	private DiseaseTypeIoOperationRepository repository;
+	private final DiseaseTypeIoOperationRepository repository;
+
+	public DiseaseTypeIoOperation(DiseaseTypeIoOperationRepository repository) {
+		this.repository = repository;
+	}
 	
 	/**
 	 * Returns all the stored {@link DiseaseType}s.
@@ -91,15 +93,15 @@ public class DiseaseTypeIoOperation {
 	}
 	
 	/**
-	 * Returns {@link DiseaseType}s.
+	 * Returns {@link DiseaseType} given the type code.
 	 * 
 	 * @Param code
-	 * @return a disease type.
+	 * @return object {@link DiseaseType}, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the diseases type.
 	 */
-	public DiseaseType getDiseaseTypes(String code) throws OHServiceException {
+	public DiseaseType getDiseaseType(String code) throws OHServiceException {
 		Optional<DiseaseType> diseaseType = repository.findById(code);
-		if ( diseaseType.isPresent()) {
+		if (diseaseType.isPresent()) {
 			return diseaseType.get();
 		}
 		return null;

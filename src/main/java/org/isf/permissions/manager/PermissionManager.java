@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,14 +26,16 @@ import java.util.List;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.PermissionIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PermissionManager {
 
-	@Autowired
-	private PermissionIoOperations operations;
+	private final PermissionIoOperations operations;
+
+	public PermissionManager(PermissionIoOperations permissionIoOperations) {
+		this.operations = permissionIoOperations;
+	}
 
 	public List<Permission> retrievePermissionsByGroupCode(String userGroupCode) throws OHServiceException {
 		return operations.retrivePermisionsByGroupCode(userGroupCode);
@@ -51,18 +53,6 @@ public class PermissionManager {
 		return operations.retrievePermissionByName(name);
 	}
 
-	public Permission insertPermission(Permission permission) throws OHServiceException {
-		return operations.insertPermission(permission);
-	}
-
-	public Permission updatePermission(Permission model) throws OHServiceException {
-		return operations.updatePermission(model);
-	}
-
-	public void deletePermission(Integer id) throws OHServiceException {
-		operations.deletePermission(id);
-	}
-
 	public List<Permission> retrieveAllPermissions() throws OHServiceException {
 		return operations.retrieveAllPermissions();
 	}
@@ -71,4 +61,7 @@ public class PermissionManager {
 		return operations.exists(id);
 	}
 
+	public Permission save(Permission permission) {
+		return operations.save(permission);
+	}
 }

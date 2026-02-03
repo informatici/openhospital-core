@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,9 +21,15 @@
  */
 package org.isf.generaldata;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
@@ -49,8 +55,9 @@ public class MessageBundle {
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
 			JComponent.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
 		} catch (MissingResourceException e) {
-			LOGGER.error(">> no resource bundle found.");
-			System.exit(1);
+			LOGGER.error(">> no resource bundle found for \"{}\". Defaulting to \"en\"", GeneralData.LANGUAGE);
+			resourceBundle = defaultResourceBundle;
+			JComponent.setDefaultLocale(new Locale("en"));
 		}
 	}
 
@@ -85,8 +92,8 @@ public class MessageBundle {
 	}
 
 	/**
-	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for
-	 * the setMemonic() method associated for example with a Button object.
+	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for the setMemonic() method associated for example with a Button
+	 * object.
 	 * <p>
 	 * This works because: VK_A through VK_Z are the same as ASCII 'A' through 'Z' (0x41 - 0x5A)
 	 *
@@ -98,17 +105,13 @@ public class MessageBundle {
 	}
 
 	/**
-	 * Given a key to an entry in the resource bundle and a series of objects to place into the
-	 * message, return the formatted or compound message.
+	 * Given a key to an entry in the resource bundle and a series of objects to place into the message, return the formatted or compound message.
 	 * <p>
-	 * For example, given the resource bundle strings:
-	 *    English:   User {0} added new item {1} to group {2}.
-	 *    Italian:   L'utente {0} ha aggiunto un nuovo elemento {1} al gruppo {2}.
-	 *    German:    Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
+	 * For example, given the resource bundle strings: English: User {0} added new item {1} to group {2}. Italian: L'utente {0} ha aggiunto un nuovo elemento
+	 * {1} al gruppo {2}. German: Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
 	 * <p>
-	 * Unlike concatenating the various components together which would work for English and Italian,
-	 * it would fail for German (note the ordering of the subsitutable strings).
-	 * Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
+	 * Unlike concatenating the various components together which would work for English and Italian, it would fail for German (note the ordering of the
+	 * subsitutable strings). Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
 	 *
 	 * @param key a MessageBundle key (that contains ".fmt." in the key name) for a string that contains n-substituables.
 	 * @param args a list of n-arguments that matches the substituables in the message string
@@ -119,5 +122,26 @@ public class MessageBundle {
 		MessageFormat messageFormat = new MessageFormat("");
 		messageFormat.applyPattern(message);
 		return messageFormat.format(args);
+	}
+
+	/**
+	 * Static file reader with UTF8 charset
+	 * 
+	 * @param file - the file name
+	 * @param logger - the {@link Logger} of the concrete class
+	 */
+	public static Properties loadPropertiesFileUtf8(Path file, Logger logger) {
+		Properties prop = new Properties();
+		if (file == null || !Files.exists(file)) {
+			logger.error(">> '{}' file not found.", file);
+			return prop;
+		}
+		try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+			prop.load(reader);
+			logger.info("File {} loaded (UTF-8).", file);
+		} catch (IOException e) {
+			logger.error(">> Cannot load '{}'.", file, e);
+		}
+		return prop;
 	}
 }

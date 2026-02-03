@@ -30,14 +30,16 @@ import org.isf.generaldata.GeneralData;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.model.TelemetryId;
 import org.isf.telemetry.service.TelemetryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TelemetryManager {
 
-	@Autowired
 	private TelemetryRepository telemetryRepository;
+
+	public TelemetryManager(TelemetryRepository telemetryRepository) {
+		this.telemetryRepository = telemetryRepository;
+	}
 
 	public Telemetry enable(Map<String, Boolean> consentMap) {
 		Telemetry telemetry = retrieveOrBuildNewTelemetry();

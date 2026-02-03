@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,6 +30,9 @@ public class JasperReportResultDto implements Serializable {
     private JasperPrint jasperPrint;
     private String jasperFile;
     private String filename;
+
+    public JasperReportResultDto() {
+    }
 
     public JasperReportResultDto(JasperPrint jasperPrint, String jasperFile, String filename) {
         this.jasperPrint = jasperPrint;

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,20 +23,20 @@ package org.isf.menu.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 
 @Entity
-@Table(name="OH_USER")
+@Table(name = "OH_USER")
 @AttributeOverride(name = "createdBy", column = @Column(name = "US_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "US_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
@@ -45,32 +45,35 @@ import org.isf.utils.db.Auditable;
 public class User extends Auditable<String> {
 
 	@Id
-	@Column(name="US_ID_A")		
+	@Column(name = "US_ID_A")
 	private String userName;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="US_UG_ID_A")
+	@JoinColumn(name = "US_UG_ID_A")
 	private UserGroup userGroupName;
 
 	@NotNull
-	@Column(name="US_PASSWD")
+	@Column(name = "US_PASSWD")
 	private String passwd;
 
-	@Column(name="US_DESC")
+	@Column(name = "US_DESC")
 	private String desc;
 
-	@Column(name="US_FAILED_ATTEMPTS")
+	@Column(name = "US_FAILED_ATTEMPTS")
 	private int failedAttempts;
 
-	@Column(name="US_ACCOUNT_LOCKED")
+	@Column(name = "US_ACCOUNT_LOCKED")
 	private boolean isAccountLocked;
 
-	@Column(name="US_LOCK_TIME")
+	@Column(name = "US_LOCK_TIME")
 	private LocalDateTime lockedTime;
 
-	@Column(name="US_LAST_LOGIN")
+	@Column(name = "US_LAST_LOGIN")
 	private LocalDateTime lastLogin;
+
+	@Column(name = "US_DELETED")
+	private boolean deleted;
 
 	@Transient
 	private volatile int hashCode;
@@ -151,6 +154,14 @@ public class User extends Auditable<String> {
 		this.lastLogin = lastLogin;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	@Override
 	public String toString() {
 		return getUserName();
@@ -159,21 +170,21 @@ public class User extends Auditable<String> {
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof User && (getUserName().equalsIgnoreCase(((User) anObject).getUserName())
-				&& getDesc().equalsIgnoreCase(((User) anObject).getDesc()));
+			&& getDesc().equalsIgnoreCase(((User) anObject).getDesc()));
 	}
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + userName.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
-	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + userName.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
+
 }//class User

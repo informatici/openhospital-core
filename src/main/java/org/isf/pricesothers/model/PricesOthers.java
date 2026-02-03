@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,16 +21,17 @@
  */
 package org.isf.pricesothers.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -46,7 +47,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class PricesOthers extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="OTH_ID")
     private int id;
 
@@ -75,6 +76,10 @@ public class PricesOthers extends Auditable<String> {
 	
 	@Column(name="OTH_UNDEFINED") 
 	private boolean undefined;
+
+	@Version
+	@Column(name = "OTH_LOCK")
+	private int lock;
     
 	@Transient
 	private volatile int hashCode;
@@ -180,6 +185,10 @@ public class PricesOthers extends Auditable<String> {
 		this.undefined = undefined;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public String toString() {
 		return this.description;
@@ -191,11 +200,10 @@ public class PricesOthers extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof PricesOthers)) {
+		if (!(obj instanceof PricesOthers priceOther)) {
 			return false;
 		}
-		
-		PricesOthers priceOther = (PricesOthers)obj;
+
 		return (id == priceOther.getId());
 	}
 	

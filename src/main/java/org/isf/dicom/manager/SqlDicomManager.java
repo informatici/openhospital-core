@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,7 +24,6 @@ package org.isf.dicom.manager;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,10 +35,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SqlDicomManager implements DicomManagerInterface {
 
-	@Autowired
-	private DicomIoOperations ioOperations;
+	private final DicomIoOperations ioOperations;
 
-	public SqlDicomManager() {
+	public SqlDicomManager(DicomIoOperations dicomIoOperations) {
+		this.ioOperations = dicomIoOperations;
 	}
 
 	/**
@@ -70,7 +69,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	/**
 	 * Check if dicom is loaded
 	 *
-	 * @param dicom - the detail of the dicom
+	 * @param dicom the detail of the dicom
 	 * @return true if file exist
 	 * @throws OHServiceException
 	 */

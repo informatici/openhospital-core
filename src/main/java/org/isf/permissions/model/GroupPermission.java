@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,16 +21,16 @@
  */
 package org.isf.permissions.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.menu.model.UserGroup;
 import org.isf.utils.db.Auditable;
@@ -45,7 +45,7 @@ import org.isf.utils.db.Auditable;
 public class GroupPermission extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "GP_ID")
 	private int id;
 
@@ -56,8 +56,16 @@ public class GroupPermission extends Auditable<String> {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "GP_P_ID_A", referencedColumnName="P_ID_A")
+	@JoinColumn(name = "GP_P_ID_A", referencedColumnName = "P_ID_A")
 	private Permission permission;
+
+	public GroupPermission() {
+	}
+
+	public GroupPermission(UserGroup userGroup, Permission permission) {
+		this.userGroup = userGroup;
+		this.permission = permission;
+	}
 
 	public int getId() {
 		return id;
@@ -82,7 +90,5 @@ public class GroupPermission extends Auditable<String> {
 	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
 	}
-	
-	
 
 }

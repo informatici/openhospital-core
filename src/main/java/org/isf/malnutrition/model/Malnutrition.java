@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,22 +23,21 @@ package org.isf.malnutrition.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
-import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -54,7 +53,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Malnutrition extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="MLN_ID")
 	private int code;
 
@@ -94,15 +93,6 @@ public class Malnutrition extends Auditable<String> {
 	public Malnutrition() { }
 
 	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, float aHeight, float aWeight) {
-		code = aCode;
-		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
-		dateConf = TimeTools.truncateToSeconds(aDateConf);
-		admission = anAdmission;
-		height = aHeight;
-		weight = aWeight;
-	}
-
-	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, Patient aPatient, float aHeight, float aWeight) {
 		code = aCode;
 		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
 		dateConf = TimeTools.truncateToSeconds(aDateConf);

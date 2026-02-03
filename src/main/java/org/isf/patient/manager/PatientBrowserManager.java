@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -39,25 +39,27 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientBrowserManager {
 
-	@Autowired
-	private PatientIoOperations ioOperations;
+	private final PatientIoOperations ioOperations;
 
-	@Autowired
-	private AdmissionBrowserManager admissionManager;
+	private final AdmissionBrowserManager admissionManager;
 
-	@Autowired
-	private BillBrowserManager billManager;
+	private final BillBrowserManager billManager;
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 
 	protected LinkedHashMap<String, String> professionHashMap;
+
+	public PatientBrowserManager(PatientIoOperations ioOperations, AdmissionBrowserManager admissionManager, BillBrowserManager billManager) {
+		this.ioOperations = ioOperations;
+		this.admissionManager = admissionManager;
+		this.billManager = billManager;
+	}
 
 	/**
 	 * Method that inserts a new {@link Patient}.
@@ -255,7 +257,7 @@ public class PatientBrowserManager {
 	 * Method that logically deletes a {@link Patient} (not physically deleted).
 	 *
 	 * @param patient
-	 *            - the {@link Patient} to be deleted
+	 *            the {@link Patient} to be deleted
 	 * @throws OHServiceException
 	 */
 	public void deletePatient(Patient patient) throws OHServiceException {
@@ -419,5 +421,16 @@ public class PatientBrowserManager {
 	 */
 	public List<String> getCities() throws OHServiceException {
 		return ioOperations.getCities();
+	}
+	
+	/**
+	 * Method that returns the list of {@link Patient}s with specified codes.
+	 *
+	 * @param codes - the list of patient's code.
+	 * @return the list of {@link Patient}s.
+	 * @throws OHServiceException
+	 */
+	public List<Patient> getPatientByCodes(List<Integer> codes) throws OHServiceException {
+		return ioOperations.getPatientByCodes(codes);
 	}
 }

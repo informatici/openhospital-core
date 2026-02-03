@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,19 +27,21 @@ import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LabRowManager {
 
-	@Autowired
-	private LabIoOperations ioOperations;
+	private final LabIoOperations ioOperations;
+
+	public LabRowManager(LabIoOperations labIoOperations) {
+		this.ioOperations = labIoOperations;
+	}
 
 	/**
 	 * Return a list of results ({@link LaboratoryRow}s) for passed lab entry.
 	 *
-	 * @param code - the {@link Laboratory} record ID.
+	 * @param code the {@link Laboratory} record ID.
 	 * @return the list of {@link LaboratoryRow}s. It could be {@code empty}
 	 * @throws OHServiceException
 	 */

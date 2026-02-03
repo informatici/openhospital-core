@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,18 +23,18 @@ package org.isf.therapy.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
@@ -53,7 +53,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class TherapyRow extends Auditable<String> {
 
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="THR_ID")	
 	private int therapyID;
 
@@ -283,11 +283,10 @@ public class TherapyRow extends Auditable<String> {
 			return true;
 		}
 		
-		if (!(obj instanceof TherapyRow)) {
+		if (!(obj instanceof TherapyRow therapy)) {
 			return false;
 		}
-		
-		TherapyRow therapy = (TherapyRow)obj;
+
 		return (therapyID == therapy.getTherapyID());
 	}
 	

@@ -59,50 +59,66 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 	private static final String ID = "TEL_OH";
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
 
-	@Autowired
 	private PatientIoOperations patientIoOperations;
 
-	@Autowired
 	private MenuIoOperations menuIoOperations;
 
-	@Autowired
 	private WardIoOperations wardIoOperations;
 
-	@Autowired
 	private OpdIoOperations opdIoOperations;
 
-	@Autowired
 	private AdmissionIoOperations admissionIoOperations;
 
-	@Autowired
 	private LabIoOperations laboratoryIoOperations;
 
-	@Autowired
 	private VaccineIoOperations vaccineIoOperations;
 
-	@Autowired
-	private OperationRowIoOperations operationIoOperations;
+	private OperationRowIoOperations operationRowIoOperations;
 
-	@Autowired
 	private MedicalStockIoOperations medicalStockIoOperations;
 
-	@Autowired
 	private MedicalStockWardIoOperations medicalStockWardIoOperations;
 
-	@Autowired
 	private TherapyIoOperations therapyIoOperations;
 
-	@Autowired
-	private VisitsIoOperations visitIoOperations;
+	private VisitsIoOperations visitsIoOperations;
 
-	@Autowired
 	private AccountingIoOperations accountingIoOperations;
 
 	@Autowired
 	private List<GeoIpInfoCommonService> geoIpServices;
 
-	@Autowired
 	private GeoIpInfoSettings settings;
+
+	public OpenHospitalDataCollector(PatientIoOperations patientIoOperations,
+	                                 MenuIoOperations menuIoOperations,
+	                                 WardIoOperations wardIoOperations,
+	                                 OpdIoOperations opdIoOperations,
+	                                 AdmissionIoOperations admissionIoOperations,
+	                                 LabIoOperations laboratoryIoOperations,
+	                                 VaccineIoOperations vaccineIoOperations,
+	                                 OperationRowIoOperations operationRowIoOperations,
+	                                 MedicalStockIoOperations medicalStockIoOperations,
+	                                 MedicalStockWardIoOperations medicalStockWardIoOperations,
+	                                 TherapyIoOperations therapyIoOperations,
+	                                 VisitsIoOperations visitsIoOperations,
+	                                 AccountingIoOperations accountingIoOperations,
+	                                 GeoIpInfoSettings geoIpInfoSettings) {
+		this.patientIoOperations = patientIoOperations;
+		this.menuIoOperations = menuIoOperations;
+		this.wardIoOperations = wardIoOperations;
+		this.opdIoOperations = opdIoOperations;
+		this.admissionIoOperations = admissionIoOperations;
+		this.laboratoryIoOperations = laboratoryIoOperations;
+		this.vaccineIoOperations = vaccineIoOperations;
+		this.operationRowIoOperations = operationRowIoOperations;
+		this.medicalStockIoOperations = medicalStockIoOperations;
+		this.medicalStockWardIoOperations = medicalStockWardIoOperations;
+		this.therapyIoOperations = therapyIoOperations;
+		this.visitsIoOperations = visitsIoOperations;
+		this.accountingIoOperations = accountingIoOperations;
+		this.settings = geoIpInfoSettings;
+	}
 
 	@Override
 	public String getId() {
@@ -111,7 +127,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hospital general information (Country, Region, City, Postal Code, TimeZone, Currency, OH Version, Number of Patients / Beds / Wards / Users)";
+		return "Hospital general information (Country; Region, City, Postal Code, TimeZone, Currency, OH Version, Number of Patients / Beds / Wards / Users)";
 	}
 
 	@Override
@@ -145,11 +161,11 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.OH_NUMBER_OF_ADMISSIONS, String.valueOf(admissionIoOperations.countAllActiveAdmissions()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_EXAMS, String.valueOf(laboratoryIoOperations.countAllActiveLabs()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_VACCINES, String.valueOf(vaccineIoOperations.countAllActiveVaccinations()));
-			result.put(CollectorsConstants.OH_NUMBER_OF_OPERATIONS, String.valueOf(operationIoOperations.countAllActiveOperations()));
+			result.put(CollectorsConstants.OH_NUMBER_OF_OPERATIONS, String.valueOf(operationRowIoOperations.countAllActiveOperations()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_STOCKMOVEMENTS, String.valueOf(medicalStockIoOperations.countAllActiveMovements()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_STOCKWMOVEMENTSWARDS, String.valueOf(medicalStockWardIoOperations.countAllActiveMovementsWard()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_THERAPIES, String.valueOf(therapyIoOperations.countAllActiveTherapies()));
-			result.put(CollectorsConstants.OH_NUMBER_OF_APPOINTMENTS, String.valueOf(visitIoOperations.countAllActiveAppointments()));
+			result.put(CollectorsConstants.OH_NUMBER_OF_APPOINTMENTS, String.valueOf(visitsIoOperations.countAllActiveAppointments()));
 			result.put(CollectorsConstants.OH_NUMBER_OF_BILLS, String.valueOf(accountingIoOperations.countAllActiveBills()));
 
 			LocalDateTime lastUsedTime = opdIoOperations.lastOpdCreationDate();

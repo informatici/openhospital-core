@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdmissionTypeBrowserManager {
 
-	@Autowired
-	private AdmissionTypeIoOperation ioOperations;
+	private final AdmissionTypeIoOperation ioOperations;
+
+	public AdmissionTypeBrowserManager(AdmissionTypeIoOperation admissionTypeIoOperation) {
+		this.ioOperations = admissionTypeIoOperation;
+	}
 
 	/**
 	 * Returns all the available {@link AdmissionType}s.
@@ -118,7 +120,7 @@ public class AdmissionTypeBrowserManager {
 		}
 		if (admissionType.getDescription().isEmpty()) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+				new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,16 +24,17 @@ package org.isf.medicalstock.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -116,6 +117,10 @@ public class Lot extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode;
+	
+	@Version
+	@Column(name="LT_LOCK")
+	private int lock;
 
 	public Lot() {
 	}
@@ -124,7 +129,8 @@ public class Lot extends Auditable<String> {
 		code = aCode;
 	}
 
-	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+		medical = aMedical;
 		code = aCode;
 		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 		dueDate = TimeTools.truncateToSeconds(aDueDate);
@@ -196,6 +202,14 @@ public class Lot extends Auditable<String> {
 
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
+	}
+	
+	public int getLock() {
+		return lock;
+	}
+	
+	public void setLock(int lock) {
+		this.lock = lock;
 	}
 
 	@Override

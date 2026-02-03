@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -34,17 +34,19 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OperationBrowserManager {
 
-	@Autowired
-	private OperationIoOperations ioOperations;
-	
-	LinkedHashMap<String, String> resultsListHashMap;
+	private final OperationIoOperations ioOperations;
+
+	protected LinkedHashMap<String, String> resultsListHashMap;
+
+	public OperationBrowserManager(OperationIoOperations operationIoOperations) {
+		this.ioOperations = operationIoOperations;
+	}
 
 	/**
 	 * Return the list of {@link Operation}s
@@ -52,7 +54,7 @@ public class OperationBrowserManager {
 	 * @return the list of {@link Operation}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException
 	 */
-	//TODO: Evaluate the use of a parameter in one method only
+	// TODO: Evaluate the use of a parameter in one method only
 	public List<Operation> getOperationOpd() throws OHServiceException {
 		return ioOperations.getOperationOpd();
 	}
@@ -79,18 +81,18 @@ public class OperationBrowserManager {
 	/**
 	 * Return the {@link Operation}s whose {@link OperationType} matches specified string
 	 *
-	 * @param typecode - a type description
+	 * @param typeDescription the type description
 	 * @return the list of {@link Operation}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException
 	 */
-	public List<Operation> getOperationByTypeDescription(String typecode) throws OHServiceException {
-		return ioOperations.getOperationByTypeDescription(typecode);
+	public List<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
+		return ioOperations.getOperationByTypeDescription(typeDescription);
 	}
 
 	/**
 	 * Insert an {@link Operation} in the DB
 	 *
-	 * @param operation - the {@link Operation} to insert
+	 * @param operation the {@link Operation} to insert
 	 * @return the newly inserted {@link Operation} object
 	 * @throws OHServiceException
 	 */
@@ -101,7 +103,7 @@ public class OperationBrowserManager {
 	/**
 	 * Updates an {@link Operation} in the DB
 	 *
-	 * @param operation - the {@link Operation} to update
+	 * @param operation the {@link Operation} to update
 	 * @return the newly updated {@link Operation} object
 	 * @throws OHServiceException
 	 */
@@ -113,7 +115,7 @@ public class OperationBrowserManager {
 	/**
 	 * Delete a {@link Operation} in the DB
 	 *
-	 * @param operation - the {@link Operation} to delete
+	 * @param operation the {@link Operation} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteOperation(Operation operation) throws OHServiceException {
@@ -123,7 +125,7 @@ public class OperationBrowserManager {
 	/**
 	 * Checks if an {@link Operation} code has already been used
 	 *
-	 * @param code - the code
+	 * @param code the code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -134,8 +136,8 @@ public class OperationBrowserManager {
 	/**
 	 * Checks if an {@link Operation} description has already been used within the specified {@link OperationType}
 	 *
-	 * @param description - the {@link Operation} description
-	 * @param typeCode - the {@link OperationType} code
+	 * @param description the {@link Operation} description
+	 * @param typeCode the {@link OperationType} code
 	 * @return {@code true} if the description is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -154,14 +156,14 @@ public class OperationBrowserManager {
 		}
 		return resultsListHashMap;
 	}
-	
+
 	private void buildResultHashMap() {
 		resultsListHashMap = new LinkedHashMap<>();
 		resultsListHashMap.put("success", MessageBundle.getMessage("angal.operation.result.success.txt"));
 		resultsListHashMap.put("failure", MessageBundle.getMessage("angal.operation.result.failure.txt"));
 		resultsListHashMap.put("unknown", MessageBundle.getMessage("angal.operation.result.undefined.txt"));
 	}
-	
+
 	public String getResultDescriptionKey(String description) {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
@@ -189,20 +191,20 @@ public class OperationBrowserManager {
 		}
 		return resultsListHashMap.get(resultDescKey);
 	}
-	
+
 	/**
 	 * Retrieves a page of {@link Operation}s
 	 * 
-	 * @param page - The page number of the operations to retrieve
-	 * @param size - The size of the page of operations to retrieve.
+	 * @param page the page number of the operations to retrieve
+	 * @param size the size of the page of operations to retrieve.
 	 * @return a {@link PagedResponse} object that contains the {@link Operation}s.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public PagedResponse<Operation> getOperationPageable(int page, int size) throws OHServiceException {
-		Page<Operation> operations= ioOperations.getOperationPageable(page, size);
+		Page<Operation> operations = ioOperations.getOperationPageable(page, size);
 		return setPaginationData(operations);
 	}
-	
+
 	PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
 		PagedResponse<Operation> data = new PagedResponse<>();
 		data.setData(pages.getContent());

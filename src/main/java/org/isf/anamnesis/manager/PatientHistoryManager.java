@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,14 +23,16 @@ package org.isf.anamnesis.manager;
 
 import org.isf.anamnesis.model.PatientHistory;
 import org.isf.anamnesis.service.PatientHistoryIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientHistoryManager {
 
-	@Autowired
-	private PatientHistoryIoOperations ioOperations;
+	private final PatientHistoryIoOperations ioOperations;
+
+	public PatientHistoryManager(PatientHistoryIoOperations patientHistoryIoOperations) {
+		this.ioOperations = patientHistoryIoOperations;
+	}
 
 	public PatientHistory getByPatientId(int patientId) {
 		return ioOperations.getByPatientId(patientId);

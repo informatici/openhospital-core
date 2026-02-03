@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,14 +30,16 @@ import org.isf.opetype.service.OperationTypeIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OperationTypeBrowserManager {
 
-	@Autowired
-	private OperationTypeIoOperation ioOperations;
+	private final OperationTypeIoOperation ioOperations;
+
+	public OperationTypeBrowserManager(OperationTypeIoOperation operationTypeIoOperation) {
+		this.ioOperations = operationTypeIoOperation;
+	}
 
 	/**
 	 * Return the list of {@link OperationType}s
@@ -52,7 +54,7 @@ public class OperationTypeBrowserManager {
 	/**
 	 * Insert an {@link OperationType} in the DB
 	 *
-	 * @param operationType - the {@link OperationType} to insert
+	 * @param operationType the {@link OperationType} to insert
 	 * @return the newly inserted {@link OperationType} object.
 	 * @throws OHServiceException
 	 */
@@ -64,7 +66,7 @@ public class OperationTypeBrowserManager {
 	/**
 	 * Update an {@link OperationType}
 	 *
-	 * @param operationType - the {@link OperationType} to update
+	 * @param operationType the {@link OperationType} to update
 	 * @return the newly updated {@link OperationType} object.
 	 * @throws OHServiceException
 	 */
@@ -74,10 +76,10 @@ public class OperationTypeBrowserManager {
 	}
 
 	/**
-	 * Delete an {@link OperationType} object. If the object does not exist it is silently ignored.  If the
-	 * object is null a {@link OHServiceException} is thrown.
+	 * Delete an {@link OperationType} object. If the object does not exist it is silently ignored. If the object is null a {@link OHServiceException} is
+	 * thrown.
 	 *
-	 * @param operationType - the {@link OperationType} to delete
+	 * @param operationType the {@link OperationType} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteOperationType(OperationType operationType) throws OHServiceException {
@@ -87,7 +89,7 @@ public class OperationTypeBrowserManager {
 	/**
 	 * Checks if an {@link OperationType} code has already been used
 	 *
-	 * @param code - the code
+	 * @param code the code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -107,7 +109,7 @@ public class OperationTypeBrowserManager {
 			}
 		}
 		if (insert && isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
 		if (description == null || description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));

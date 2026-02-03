@@ -21,19 +21,21 @@
  */
 package org.isf.supplier.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.utils.db.Auditable;
@@ -52,10 +54,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SUP_LAST_MODIFIED_DATE"))
 public class Supplier extends Auditable<String> implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SUP_ID")
 	private Integer supId;
 
@@ -82,7 +85,11 @@ public class Supplier extends Auditable<String> implements Serializable {
 	private String supNote;
 
 	@Column(name = "SUP_DELETED", columnDefinition = "char(1) default 'N'")
-	private char supDeleted;
+	private char supDeleted = 'N';
+
+	@Version
+	@Column(name = "SUP_LOCK")
+	private int lock;
 
 	@Transient
 	private volatile int hashCode;
@@ -92,15 +99,16 @@ public class Supplier extends Auditable<String> implements Serializable {
 	}
 
 	/**
-	 * @param supID
-	 * @param supName
-	 * @param supAddress
-	 * @param supTaxcode
-	 * @param supPhone
-	 * @param supFax
-	 * @param supEmail
-	 * @param supNote
+	 * @param supID ID
+	 * @param supName Name
+	 * @param supAddress Address
+	 * @param supTaxcode Tax Code
+	 * @param supPhone Phone number
+	 * @param supFax Fax
+	 * @param supEmail Email
+	 * @param supNote Extra note
 	 */
+	// TODO: to verify if it is really needed to have supID in the constructor
 	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote) {
 		this.supId = supID;
 		this.supName = supName;
@@ -110,22 +118,22 @@ public class Supplier extends Auditable<String> implements Serializable {
 		this.supFax = supFax;
 		this.supEmail = supEmail;
 		this.supNote = supNote;
-		this.supDeleted = 'N';
 	}
 
 	/**
-	 * @param supID
-	 * @param supName
-	 * @param supAddress
-	 * @param supTaxcode
-	 * @param supPhone
-	 * @param supFax
-	 * @param supEmail
-	 * @param supNote
-	 * @param supDeleted
+	 * @param supID ID
+	 * @param supName Name
+	 * @param supAddress Address
+	 * @param supTaxcode Tax Code
+	 * @param supPhone Phone number
+	 * @param supFax Fax
+	 * @param supEmail Email
+	 * @param supNote Extra note
+	 * @param supDeleted Is deleted?
 	 */
+	// TODO: to remove, used only in tests
 	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote,
-					Character supDeleted) {
+		Character supDeleted) {
 		this.supId = supID;
 		this.supName = supName;
 		this.supAddress = supAddress;
@@ -209,6 +217,10 @@ public class Supplier extends Auditable<String> implements Serializable {
 		this.supDeleted = supDeleted;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public String toString() {
 		return this.supName;
@@ -220,11 +232,10 @@ public class Supplier extends Auditable<String> implements Serializable {
 			return true;
 		}
 
-		if (!(obj instanceof Supplier)) {
+		if (!(obj instanceof Supplier supplier)) {
 			return false;
 		}
 
-		Supplier supplier = (Supplier) obj;
 		return (this.getSupId().equals(supplier.getSupId()));
 	}
 

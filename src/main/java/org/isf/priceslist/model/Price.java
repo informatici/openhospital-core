@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,18 +21,19 @@
  */
 package org.isf.priceslist.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -48,86 +49,89 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Price extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PRC_ID")
 	private int id;
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="PRC_LST_ID")
-    private PriceList list;
+	private PriceList list;
 
 	@NotNull
-	@Column(name="PRC_GRP", length=3)  
-    private String group;
+	@Column(name="PRC_GRP", length=3)
+	private String group;
 
 	@NotNull
-	@Column(name="PRC_ITEM")  
-    private String item;
+	@Column(name="PRC_ITEM")
+	private String item;
 
 	@NotNull
-	@Column(name="PRC_DESC")  
-    private String description;
+	@Column(name="PRC_DESC")
+	private String description;
 
 	@NotNull
-	@Column(name="PRC_PRICE")  
-    private Double price; 
-	
+	@Column(name="PRC_PRICE")
+	private Double price;
+
+	@Version
+	@Column(name = "PRC_LOCK")
+	private int lock;
+
 	@Transient
-    private boolean editable;
-	
+	private boolean editable;
+
 	@Transient
 	private volatile int hashCode;
-    
-    public Price() {
+
+	public Price() {
 		super();
 	}
-    
-    /**
-     * @param list
-     * @param group
-     * @param item
-     * @param desc
-     * @param price
-     * @param editable
-     */
-    public Price(PriceList list, String group, String item, String desc, Double price, boolean editable) {
-	    super();
-	    this.list = list;
-	    this.group = group;
-	    this.item = item;
-	    this.description = desc;
-	    this.price = price;
-	    this.editable = editable;
-    }
-    
-    /**
-     * 
-     * @param id
-     * @param list
-     * @param group
-     * @param item
-     * @param desc
-     * @param price
-     */
-    public Price(int id, PriceList list, String group, String item, String desc, Double price) {
-	    super();
-	    this.id = id;
-	    this.list = list;
-	    this.group = group;
-	    this.item = item;
-	    this.description = desc;
-	    this.price = price;
-	    this.editable = true;
-    }
 
 	/**
-	 * 
-	 * @param list
-	 * @param group
-	 * @param item
-	 * @param desc
-	 * @param price
+	 * @param list Parent list
+	 * @param group Item group name
+	 * @param item Item name
+	 * @param desc Item description
+	 * @param price Price
+	 * @param editable Can be edited or not
+	 */
+	public Price(PriceList list, String group, String item, String desc, Double price, boolean editable) {
+		super();
+		this.list = list;
+		this.group = group;
+		this.item = item;
+		this.description = desc;
+		this.price = price;
+		this.editable = editable;
+	}
+
+	/**
+	 *
+	 * @param id Price ID
+	 * @param list Parent list
+	 * @param group Item group name
+	 * @param item Item name
+	 * @param desc Item description
+	 * @param price Price
+	 */
+	public Price(int id, PriceList list, String group, String item, String desc, Double price) {
+		super();
+		this.id = id;
+		this.list = list;
+		this.group = group;
+		this.item = item;
+		this.description = desc;
+		this.price = price;
+		this.editable = true;
+	}
+
+	/**
+	 * @param list Parent list
+	 * @param group Item group name
+	 * @param item Item name
+	 * @param desc Item description
+	 * @param price Price
 	 */
 	public Price(PriceList list, String group, String item, String desc, Double price) {
 		this.list = list;
@@ -141,36 +145,36 @@ public class Price extends Auditable<String> {
 	public int getId() {
 		return id;
 	}
-	
-    public void setId(int id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
-	
-    public PriceList getList() {
+
+	public PriceList getList() {
 		return list;
 	}
-	
-    public void setList(PriceList list) {
+
+	public void setList(PriceList list) {
 		this.list = list;
 	}
-	
-    public String getGroup() {
+
+	public String getGroup() {
 		return group;
 	}
-	
-    public void setGroup(String group) {
+
+	public void setGroup(String group) {
 		this.group = group;
 	}
-	
-    public String getItem() {
+
+	public String getItem() {
 		return item;
 	}
-	
-    public void setItem(String item) {
+
+	public void setItem(String item) {
 		this.item = item;
 	}
-	
-    public String getDesc() {
+
+	public String getDesc() {
 		return description;
 	}
 
@@ -181,8 +185,8 @@ public class Price extends Auditable<String> {
 	public Double getPrice() {
 		return price;
 	}
-	
-    public void setPrice(Double price) {
+
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -198,36 +202,39 @@ public class Price extends Auditable<String> {
 		this.editable = editable;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public String toString() {
 		return description;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
-		if (!(obj instanceof Price)) {
+
+		if (!(obj instanceof Price price1)) {
 			return false;
 		}
-		
-		Price price = (Price)obj;
-		return (id == price.getId());
+
+		return (id == price1.getId());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + id;
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + id;
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
 }

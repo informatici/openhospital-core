@@ -41,7 +41,7 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	List<BillItems> findAllGroupByDescription();
 
 	@Modifying
-	@Query(value = "delete from BillItems b where b.id = :billId")
+	@Query(value = "delete from BillItems b where b.bill.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 
 }

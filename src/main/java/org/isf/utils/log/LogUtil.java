@@ -25,9 +25,12 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.RollingFileAppender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.appender.RollingFileAppender;
+import org.apache.logging.log4j.core.appender.RollingRandomAccessFileAppender;
 
 public class LogUtil {
 
@@ -35,20 +38,26 @@ public class LogUtil {
 	}
 
 	/**
-	 * Gets the application log file ({@code openhospital.log}) absolute path defined in the {@code log4j.properties}
+	 * Gets the application log file ({@code openhospital.log}) absolute path defined in the {@code log4j2-spring.properties}
 	 * 
 	 * @return
 	 */
 	public static String getLogFileAbsolutePath() {
-		Logger rootLogger = Logger.getRootLogger();
-		Appender appender = rootLogger.getAppender("RollingFile");
+		String logFilePath = null;
+		Logger rootLogger = LogManager.getRootLogger();
 
-		if (appender instanceof RollingFileAppender rollingFileAppender) {
-			String relativePath = rollingFileAppender.getFile();
-			return new File(relativePath).getAbsolutePath();
-		} else {
-			return "No appender found with the name 'RollingFile' in the root logger.";
+		if (rootLogger instanceof org.apache.logging.log4j.core.Logger coreLogger) {
+			for (Appender appender : coreLogger.getAppenders().values()) {
+				if (appender instanceof FileAppender fileAppender) {
+					logFilePath = fileAppender.getFileName();
+				} else if (appender instanceof RollingFileAppender rollingFileAppender) {
+					logFilePath = rollingFileAppender.getFileName();
+				} else if (appender instanceof RollingRandomAccessFileAppender rollingRandomAccessFileAppender) {
+					logFilePath = rollingRandomAccessFileAppender.getFileName();
+				}
+			}
 		}
+		return logFilePath;
 	}
 
 	/**

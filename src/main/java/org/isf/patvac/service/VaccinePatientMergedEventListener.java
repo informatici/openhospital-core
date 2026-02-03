@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,22 +25,25 @@ import java.util.List;
 
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patvac.model.PatientVaccine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class VaccinePatientMergedEventListener {
-	@Autowired
-	PatVacIoOperations patVacIoOperations;
+
+	private PatVacIoOperations patVacIoOperations;
+
+	public VaccinePatientMergedEventListener(PatVacIoOperations patVacIoOperations) {
+		this.patVacIoOperations = patVacIoOperations;
+	}
 
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) {
-		List<PatientVaccine> vaccines = patVacIoOperations.findForPatient(patientMergedEvent.getObsoletePatient().getCode());
+		List<PatientVaccine> vaccines = patVacIoOperations.findForPatient(patientMergedEvent.obsoletePatient().getCode());
 		for (PatientVaccine vaccine : vaccines) {
-			vaccine.setPatient(patientMergedEvent.getMergedPatient());
+			vaccine.setPatient(patientMergedEvent.mergedPatient());
 		}
 	}
 

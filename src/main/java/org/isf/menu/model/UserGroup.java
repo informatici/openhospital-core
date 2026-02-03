@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,17 +21,17 @@
  */
 package org.isf.menu.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.isf.utils.db.Auditable;
 
 @Entity
-@Table(name="OH_USERGROUP")
+@Table(name = "OH_USERGROUP")
 @AttributeOverride(name = "createdBy", column = @Column(name = "UG_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "UG_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))
@@ -40,12 +40,15 @@ import org.isf.utils.db.Auditable;
 public class UserGroup extends Auditable<String> {
 
 	@Id
-	@Column(name="UG_ID_A")
+	@Column(name = "UG_ID_A")
 	private String code;
-	
-	@Column(name="UG_DESC")
+
+	@Column(name = "UG_DESC")
 	private String desc;
-	
+
+	@Column(name = "UG_DELETED")
+	private boolean deleted;
+
 	@Transient
 	private volatile int hashCode;
 
@@ -65,6 +68,14 @@ public class UserGroup extends Auditable<String> {
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public String getDesc() {
 		return desc;
@@ -82,20 +93,20 @@ public class UserGroup extends Auditable<String> {
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof UserGroup && (getCode().equalsIgnoreCase(((UserGroup) anObject).getCode())
-				&& getDesc().equalsIgnoreCase(((UserGroup) anObject).getDesc()));
+			&& getDesc().equalsIgnoreCase(((UserGroup) anObject).getDesc()));
 	}
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}		
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }

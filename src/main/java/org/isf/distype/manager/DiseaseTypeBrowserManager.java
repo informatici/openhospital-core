@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +38,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiseaseTypeBrowserManager {
 
-	@Autowired
-	private DiseaseTypeIoOperation ioOperations;
+	private final DiseaseTypeIoOperation ioOperations;
+
+	public DiseaseTypeBrowserManager(DiseaseTypeIoOperation diseaseTypeIoOperation) {
+		this.ioOperations = diseaseTypeIoOperation;
+	}
 
 	/**
 	 * Returns all the stored {@link DiseaseType}s.
@@ -80,7 +82,7 @@ public class DiseaseTypeBrowserManager {
 	 * Checks if the specified code is already used by any {@link DiseaseType}.
 	 *
 	 * @param code the code to check.
-	 * @return {@code true} if the code is used, false otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -124,16 +126,16 @@ public class DiseaseTypeBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
-	
+
 	/**
-	 * Returns {@link DiseaseType}.
+	 * Returns a {@link DiseaseType} given the type code.
 	 *
 	 * @param code
-	 * @return  object {@link DiseaseType}, {@code null} otherwise.
+	 * @return object {@link DiseaseType}, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public DiseaseType getDiseaseType(String code) throws OHServiceException {
-		return ioOperations.getDiseaseTypes(code);
+		return ioOperations.getDiseaseType(code);
 	}
 
 }

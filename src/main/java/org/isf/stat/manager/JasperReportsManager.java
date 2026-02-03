@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
+import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
@@ -59,10 +61,10 @@ import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
+import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -91,11 +93,17 @@ public class JasperReportsManager {
 
 	private static final String RPT_BASE = "rpt_base";
 
-	@Autowired
 	private HospitalBrowsingManager hospitalManager;
 
-	@Autowired
 	private DataSource dataSource;
+	
+	private WardBrowserManager wardManager;
+
+	public JasperReportsManager(HospitalBrowsingManager hospitalBrowsingManager, DataSource dataSource, WardBrowserManager wardManager) {
+		this.hospitalManager = hospitalBrowsingManager;
+		this.dataSource = dataSource;
+		this.wardManager = wardManager;
+	}
 
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
@@ -162,7 +170,7 @@ public class JasperReportsManager {
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
-			
+
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("admID", String.valueOf(admID)); // real param
 			parameters.put("patientID", patID); // real param
@@ -287,7 +295,7 @@ public class JasperReportsManager {
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
-			
+
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("opdID", String.valueOf(opdID)); // real param
 			parameters.put("patientID", patID); // real param
@@ -310,7 +318,7 @@ public class JasperReportsManager {
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
-			
+
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
 
@@ -382,7 +390,7 @@ public class JasperReportsManager {
 			String dateFromQuery = dateFrom.format(dtf);
 			String dateToQuery = dateTo.format(dtf);
 			String patID = String.valueOf(patientID);
-			
+
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("patientID", patID);
 			parameters.put("All", parametersString.contains("All"));
@@ -433,36 +441,17 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportPharmaceuticalStockPdf(LocalDateTime date, String jasperFileName, String filter, String groupBy, String sortBy)
-					throws OHServiceException {
-
+	public JasperReportResultDto GenericReportPharmaceuticalAMCPdf(LocalDateTime date, String jasperFileName) throws OHServiceException {
 		try {
-			HashMap<String, Object> parameters = getHospitalParameters();
-			addBundleParameter(RPT_BASE, jasperFileName, parameters);
-
 			if (date == null) {
 				date = TimeTools.getNow();
 			}
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(E_D_MMMM_YYYY);
-			String dateReport = formatter.format(date);
-			formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-			String dateQuery = formatter.format(date);
-			formatter = DateTimeFormatter.ofPattern(YYYY_M_MDD);
-			String dateFile = formatter.format(date);
+			HashMap<String, Object> parameters = compileGenericReportPharmaceuticalAMCparameters(date);
+			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
-			parameters.put("Date", dateReport);
-			parameters.put("todate", dateQuery);
-			if (groupBy != null) {
-				parameters.put("groupBy", groupBy);
-			}
-			if (sortBy != null) {
-				parameters.put("sortBy", sortBy);
-			}
-			if (filter != null) {
-				parameters.put("filter", filter);
-			}
-
-			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(dateFile), "pdf");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+			String todayFile = formatter.format(date);
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(todayFile), "pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -471,6 +460,54 @@ public class JasperReportsManager {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
+	}
+
+	public void getGenericReportPharmaceuticalAMCExcel(LocalDateTime date, String jasperFileName, String exportFilename) throws OHServiceException {
+		try {
+			if (date == null) {
+				date = TimeTools.getNow();
+			}
+			HashMap<String, Object> parameters = compileGenericReportPharmaceuticalAMCparameters(date);
+
+			String dateTodayQuery = TimeTools.formatDateTime((LocalDateTime) parameters.get("TODAY_DATE"), YYYY_MM_DD);
+			String dateStartQuery = TimeTools.formatDateTime((LocalDateTime) parameters.get("START_DATE"), YYYY_MM_DD);
+			String dateEndQuery = TimeTools.formatDateTime((LocalDateTime) parameters.get("END_DATE"), YYYY_MM_DD);
+			File jasperFile = new File(compileJasperFilename(RPT_BASE, jasperFileName));
+
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+			JRQuery query = jasperReport.getMainDataset().getQuery();
+
+			String queryString = query.getText();
+			queryString = queryString.replace("$P{TODAY_DATE}", '\'' + dateTodayQuery + '\'');
+			queryString = queryString.replace("$P{START_DATE}", '\'' + dateStartQuery + '\'');
+			queryString = queryString.replace("$P{END_DATE}", '\'' + dateEndQuery + '\'');
+
+			DbQueryLogger dbQuery = new DbQueryLogger();
+			ResultSet resultSet = dbQuery.getData(queryString, true);
+
+			File exportFile = new File(exportFilename);
+			ExcelExporter xlsExport = new ExcelExporter();
+			if (exportFile.getName().endsWith(".xls")) {
+				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
+			} else {
+				xlsExport.exportResultsetToExcel(resultSet, exportFile);
+			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
+	}
+
+	private HashMap<String, Object> compileGenericReportPharmaceuticalAMCparameters(LocalDateTime date) throws OHServiceException {
+		HashMap<String, Object> parameters = getHospitalParameters();
+
+		LocalDateTime startDate = date.minusMonths(12).withDayOfMonth(1);
+		LocalDateTime endDate = date.minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
+
+		parameters.put("TODAY_DATE", date);
+		parameters.put("START_DATE", startDate);
+		parameters.put("END_DATE", endDate);
+		return parameters;
 	}
 
 	public void getGenericReportPharmaceuticalStockExcel(LocalDateTime date, String jasperFileName, String exportFilename, String filter, String groupBy,
@@ -508,6 +545,46 @@ public class JasperReportsManager {
 			} else {
 				xlsExport.exportResultsetToExcel(resultSet, exportFile);
 			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
+	}
+
+	public JasperReportResultDto getGenericReportPharmaceuticalStockPdf(LocalDateTime date, String jasperFileName, String filter, String groupBy, String sortBy)
+					throws OHServiceException {
+
+		try {
+			HashMap<String, Object> parameters = getHospitalParameters();
+			addBundleParameter(RPT_BASE, jasperFileName, parameters);
+
+			if (date == null) {
+				date = TimeTools.getNow();
+			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(E_D_MMMM_YYYY);
+			String dateReport = formatter.format(date);
+			formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+			String dateQuery = formatter.format(date);
+			formatter = DateTimeFormatter.ofPattern(YYYY_M_MDD);
+			String dateFile = formatter.format(date);
+
+			parameters.put("Date", dateReport);
+			parameters.put("todate", dateQuery);
+			if (groupBy != null) {
+				parameters.put("groupBy", groupBy);
+			}
+			if (sortBy != null) {
+				parameters.put("sortBy", sortBy);
+			}
+			if (filter != null) {
+				parameters.put("filter", filter);
+			}
+
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(dateFile), "pdf");
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
@@ -668,7 +745,7 @@ public class JasperReportsManager {
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
 			String patID = String.valueOf(patientID);
-			
+
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("admID", String.valueOf(admID)); // real param
 			parameters.put("patientID", patID); // real param
@@ -894,11 +971,11 @@ public class JasperReportsManager {
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those. The parent report must contain parameters like:
-		 * 
+		 *
 		 * SUBREPORT_RESOURCE_BUNDLE_1 SUBREPORT_RESOURCE_BUNDLE_2 SUBREPORT_RESOURCE_BUNDLE_...
-		 * 
+		 *
 		 * and pass them as REPORT_RESOURCE_BUNDLE to each related subreport.
-		 * 
+		 *
 		 * If nothing is passed, subreports still work, but REPORT_LOCALE will be used (if passed to the subreport) and corresponding bundle (UTF-8 decoding not
 		 * available)
 		 */
@@ -919,8 +996,7 @@ public class JasperReportsManager {
 			List<JRChild> elements = band.getChildren(); // Get all children
 			for (JRChild child : elements) {
 				int index = 1;
-				if (child instanceof JRBaseSubreport) { // This is a subreport
-					JRBaseSubreport subreport = (JRBaseSubreport) child;
+				if (child instanceof JRBaseSubreport subreport) { // This is a subreport
 					String expression = ""; // Lets find out the expression used
 					JRExpressionChunk[] chunks = subreport.getExpression().getChunks();
 					for (JRExpressionChunk c : chunks) {
@@ -1013,9 +1089,8 @@ public class JasperReportsManager {
 
 	/**
 	 * Converts a {@link LocalDateTime} to a {@link Date}.
-	 * 
-	 * @param localDateTime
-	 *            the localDateTime to convert.
+	 *
+	 * @param localDateTime the localDateTime to convert.
 	 * @return the converted value or {@code null} if the passed value is {@code null}.
 	 */
 	private static Date toDate(LocalDateTime localDateTime) {
@@ -1024,6 +1099,38 @@ public class JasperReportsManager {
 
 	private static Date toDate(LocalDate localDate) {
 		return Optional.ofNullable(localDate).map(t -> Date.from(t.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())).orElse(null);
+	}
+
+	public JasperReportResultDto getInventoryReportPdf(MedicalInventory inventory, String jasperFileName, int printRealQty) throws OHServiceException {
+		try {
+			String status = inventory.getStatus();
+			Map<String, Object> parameters = new HashMap<>(getHospitalParameters());
+			parameters.put("inventoryReference", inventory.getInventoryReference());
+			parameters.put("inventoryStatus", status);
+			parameters.put("printRealQty", printRealQty);
+			parameters.put("inventoryId", inventory.getId());
+			if (inventory.getWardCode() != null) {
+				Ward ward = wardManager.findWard(inventory.getWardCode());
+				parameters.put("ward", ward.getDescription());
+			} else {
+				parameters.put("ward", "Main Store");
+			}
+			LocalDateTime inventoryDateTime = inventory.getInventoryDate();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DD_MM_YYYY);
+			String formattedDate = inventoryDateTime.format(formatter);
+			parameters.put("inventoryDate", formattedDate);
+
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(inventory.getId())), "pdf ");
+			LOGGER.info("Generated PDF File: {}", pdfFilename);
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
+		}
 	}
 
 }

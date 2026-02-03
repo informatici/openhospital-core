@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,44 +23,44 @@ package org.isf.sms.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.isf.generaldata.SmsParameters;
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
+@PropertySource("classpath:sms.properties")
 public class SmsSenderOperations {
 
 	private static final String KEY_SMS_GATEWAY = "sms.gateway";
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSenderOperations.class);
 
-	@Resource(name = "smsProperties")
-	private Properties smsProperties;
+	private final Environment smsProperties;
 
-	@Autowired
-	private List<SmsSenderInterface> smsGateways;
+	private final List<SmsSenderInterface> smsGateways;
+
+	public SmsSenderOperations(Environment smsProperties, List<SmsSenderInterface> smsGateways) {
+		this.smsProperties = smsProperties;
+		this.smsGateways = smsGateways;
+	}
 
 	public boolean initialize() {
+		SmsParameters.initialize();
 		String gateway = this.smsProperties.getProperty(KEY_SMS_GATEWAY);
 		if (gateway == null || gateway.isEmpty()) {
 			LOGGER.error("No HTTP Gateway has been set. Please check sms.properties file (v.2 - init)");
 			return false;
 		}
 		Optional<SmsSenderInterface> smsGatewayOpt = findSmsGatewayService(gateway);
-		if (smsGatewayOpt.isPresent()) {
-			return smsGatewayOpt.get().initialize();
-		}
-		return false;
+		return smsGatewayOpt.map(SmsSenderInterface::initialize).orElse(false);
 	}
 
 	public void preSMSSending(Sms sms) {
@@ -93,10 +93,7 @@ public class SmsSenderOperations {
 			return false;
 		}
 		Optional<SmsSenderInterface> smsGatewayOpt = findSmsGatewayService(gateway);
-		if (smsGatewayOpt.isPresent()) {
-			return smsGatewayOpt.get().terminate();
-		}
-		return false;
+		return smsGatewayOpt.map(SmsSenderInterface::terminate).orElse(false);
 	}
 
 	private Optional<SmsSenderInterface> findSmsGatewayService(String gateway) {

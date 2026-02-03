@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -33,19 +33,21 @@ import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatVacManager {
 
-	@Autowired
-	private PatVacIoOperations ioOperations;
+	private final PatVacIoOperations ioOperations;
+
+	public PatVacManager(PatVacIoOperations patVacIoOperations) {
+		this.ioOperations = patVacIoOperations;
+	}
 
 	/**
 	 * Returns all {@link PatientVaccine}s for today or one week ago.
 	 *
-	 * @param minusOneWeek - if {@code true} return the last week
+	 * @param minusOneWeek if {@code true} return the last week
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
@@ -67,14 +69,14 @@ public class PatVacManager {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode, LocalDateTime dateFrom, LocalDateTime dateTo, char sex,
-			int ageFrom, int ageTo) throws OHServiceException {
+		int ageFrom, int ageTo) throws OHServiceException {
 		return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
 	}
 
 	/**
 	 * Inserts a {@link PatientVaccine}.
 	 *
-	 * @param patVac - the {@link PatientVaccine} to insert
+	 * @param patVac the {@link PatientVaccine} to insert
 	 * @return the newly {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
@@ -86,7 +88,7 @@ public class PatVacManager {
 	/**
 	 * Updates a {@link PatientVaccine}.
 	 *
-	 * @param patVac - the {@link PatientVaccine} to update
+	 * @param patVac the {@link PatientVaccine} to update
 	 * @return the updated {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
@@ -98,7 +100,7 @@ public class PatVacManager {
 	/**
 	 * Deletes a {@link PatientVaccine}.
 	 *
-	 * @param patVac - the {@link PatientVaccine} to delete
+	 * @param patVac the {@link PatientVaccine} to delete
 	 * @throws OHServiceException
 	 */
 	public void deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
@@ -109,13 +111,13 @@ public class PatVacManager {
 	 * Returns the max progressive number within specified year or within current year if {@code 0}.
 	 *
 	 * @param year
-	 * @return {@code int} - the progressive number in the year
+	 * @return {@code int} the progressive number in the year
 	 * @throws OHServiceException
 	 */
 	public int getProgYear(int year) throws OHServiceException {
 		return ioOperations.getProgYear(year);
 	}
-	
+
 	public Optional<PatientVaccine> getPatientVaccine(int code) throws OHServiceException {
 		return ioOperations.getPatientVaccine(code);
 	}
@@ -136,12 +138,12 @@ public class PatVacManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg")));
 		}
 		if (patientVaccine.getVaccine() == null
-				|| patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
+			|| patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg")));
 		}
 		if (patientVaccine.getPatient() == null
-				|| StringUtils.isEmpty(patientVaccine.getPatName())
-				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
+			|| StringUtils.isEmpty(patientVaccine.getPatName())
+			|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
 		}
 		if (!errors.isEmpty()) {

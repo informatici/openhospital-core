@@ -106,6 +106,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		return instance;
 	}
 
+	@Override
 	public void run() {
 		while (running) {
 			if (reloadSettings) {
@@ -194,7 +195,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	}
 
 	/**
-	 * Returns the neame of the geoIpService selected
+	 * Returns the name of the geoIpService selected
 	 * @return the geoIpService
 	 */
 	public String getGeoIpServiceSelected() {

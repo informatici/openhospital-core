@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,20 +24,21 @@ package org.isf.hospital.manager;
 import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dynamic data (memory)
+ * Class that provides gui separation from database operations and gives some useful logic manipulations of the dynamic data (memory)
  *
  * @author bob
  */
 @Component
 public class HospitalBrowsingManager {
 
-	@Autowired
-	private HospitalIoOperations ioOperations;
+	private final HospitalIoOperations ioOperations;
+
+	public HospitalBrowsingManager(HospitalIoOperations hospitalIoOperations) {
+		this.ioOperations = hospitalIoOperations;
+	}
 
 	/**
 	 * Reads from the database the {@link Hospital} information.
@@ -69,4 +70,3 @@ public class HospitalBrowsingManager {
 		return ioOperations.updateHospital(hospital);
 	}
 }
-	

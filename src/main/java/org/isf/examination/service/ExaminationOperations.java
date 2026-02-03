@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -29,7 +29,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -43,10 +42,10 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExaminationOperations {
 
-	@Autowired
 	private ExaminationIoOperationRepository repository;
 	
-	public ExaminationOperations() {
+	public ExaminationOperations(ExaminationIoOperationRepository examinationIoOperationRepository) {
+		this.repository = examinationIoOperationRepository;
 	}
 
 	/**

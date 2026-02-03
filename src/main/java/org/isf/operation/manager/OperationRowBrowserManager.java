@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -29,7 +29,6 @@ import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationRowIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,13 +37,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationRowBrowserManager {
 
-	@Autowired
-	private OperationRowIoOperations ioOperations;
+	private final OperationRowIoOperations ioOperations;
+
+	public OperationRowBrowserManager(OperationRowIoOperations operationRowIoOperations) {
+		this.ioOperations = operationRowIoOperations;
+	}
 
 	public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException {
 		return ioOperations.getOperationRowByAdmission(adm);
 	}
-	
+
 	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		return ioOperations.getOperationRowByOpd(opd);
 	}
@@ -60,7 +62,7 @@ public class OperationRowBrowserManager {
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
 		return ioOperations.newOperationRow(opRow);
 	}
-	
+
 	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {
 		return ioOperations.getOperationRowByPatient(patient);
 	}

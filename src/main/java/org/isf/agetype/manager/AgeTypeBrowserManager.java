@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AgeTypeBrowserManager {
 
-	@Autowired
-	private AgeTypeIoOperations ioOperations;
+	private final AgeTypeIoOperations ioOperations;
+
+	public AgeTypeBrowserManager(AgeTypeIoOperations ageTypeIoOperations) {
+		this.ioOperations = ageTypeIoOperations;
+	}
 
 	/**
 	 * Returns all available age types.
@@ -90,7 +92,7 @@ public class AgeTypeBrowserManager {
 	public AgeType getTypeByCode(int index) throws OHServiceException {
 		return ioOperations.getAgeTypeByCode(index);
 	}
-	
+
 	/**
 	 * Gets the {@link AgeType} from the code.
 	 *

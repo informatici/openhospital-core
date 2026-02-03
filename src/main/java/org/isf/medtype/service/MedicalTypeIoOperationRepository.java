@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,11 +25,15 @@ import java.util.List;
 
 import org.isf.medtype.model.MedicalType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MedicalTypeIoOperationRepository extends JpaRepository<MedicalType, String> {
 
 	List<MedicalType> findAllByOrderByDescriptionAsc();
+	
+	@Query("SELECT m FROM MedicalType m WHERE m.deleted = 'N' ORDER BY m.description ASC")
+	List<MedicalType> findByAllNotDeletedOrderByDescriptionAsc();
 
 }

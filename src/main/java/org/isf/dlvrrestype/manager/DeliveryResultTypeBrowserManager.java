@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -31,7 +31,6 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,8 +39,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliveryResultTypeBrowserManager {
 
-	@Autowired
-	private DeliveryResultTypeIoOperation ioOperations;
+	private final DeliveryResultTypeIoOperation ioOperations;
+
+	public DeliveryResultTypeBrowserManager(DeliveryResultTypeIoOperation deliveryResultTypeIoOperation) {
+		this.ioOperations = deliveryResultTypeIoOperation;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -72,8 +74,7 @@ public class DeliveryResultTypeBrowserManager {
 	}
 
 	/**
-	 * Returns all stored {@link DeliveryResultType}s.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all stored {@link DeliveryResultType}s. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return the stored {@link DeliveryResultType}s, {@code null} if an error occurred.
 	 * @throws OHServiceException
@@ -83,8 +84,7 @@ public class DeliveryResultTypeBrowserManager {
 	}
 
 	/**
-	 * Stores the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Stores the specified {@link DeliveryResultType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to store.
 	 * @return the new {@link DeliveryResultType}.
@@ -96,8 +96,7 @@ public class DeliveryResultTypeBrowserManager {
 	}
 
 	/**
-	 * Updates the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Updates the specified {@link DeliveryResultType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to update.
 	 * @return the updated {@link DeliveryResultType}.
@@ -109,8 +108,8 @@ public class DeliveryResultTypeBrowserManager {
 	}
 
 	/**
-	 * Checks if the specified code is already used by others {@link DeliveryResultType}s.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Checks if the specified code is already used by others {@link DeliveryResultType}s. In case of error a message error is shown and a {@code false} value
+	 * is returned.
 	 *
 	 * @param code the code to check.
 	 * @return {@code true} if the code is used, {@code false} otherwise.
@@ -121,8 +120,7 @@ public class DeliveryResultTypeBrowserManager {
 	}
 
 	/**
-	 * Deletes the specified {@link DeliveryResultType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Deletes the specified {@link DeliveryResultType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryresultType the delivery result type to delete.
 	 * @throws OHServiceException

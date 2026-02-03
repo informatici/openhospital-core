@@ -25,7 +25,6 @@ import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoComm
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +34,13 @@ public class GeoIpLookupService extends GeoIpInfoCommonService {
 	private static final String SERVICE_NAME = "geoiplookup-remote-service";
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoIpLookupService.class);
 
-	@Autowired
 	private GeoIpInfoSettings settings;
 
+	public GeoIpLookupService(GeoIpInfoSettings geoIpInfoSettings) {
+		this.settings = geoIpInfoSettings;
+	}
+
+	@Override
 	public GeoIpLookup retrieveIpInfo() {
 		GeoIpLookupRemoteService httpClient = super.buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), GeoIpLookupRemoteService.class,
 						GeoIpLookupService.class);
@@ -48,6 +51,7 @@ public class GeoIpLookupService extends GeoIpInfoCommonService {
 		return result;
 	}
 
+	@Override
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}

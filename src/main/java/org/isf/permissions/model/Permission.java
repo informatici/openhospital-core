@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,15 +23,15 @@ package org.isf.permissions.model;
 
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import org.isf.utils.db.Auditable;
 
@@ -43,18 +43,18 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "P_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "P_ACTIVE"))
 public class Permission extends Auditable<String> {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "P_ID_A")
 	private int id;
 
-	@Column(name="P_NAME")
-	private String name;	
+	@Column(name = "P_NAME")
+	private String name;
 
-	@Column(name="P_DESCRIPTION")
+	@Column(name = "P_DESCRIPTION")
 	private String description;
-	
+
 	@OneToMany(mappedBy = "permission", cascade = CascadeType.REMOVE)
 	private List<GroupPermission> groupPermission;
 
@@ -88,8 +88,6 @@ public class Permission extends Auditable<String> {
 
 	public void setGroupPermission(List<GroupPermission> groupPermission) {
 		this.groupPermission = groupPermission;
-	}	
-	
-	
+	}
 
 }

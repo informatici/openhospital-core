@@ -51,7 +51,6 @@ public class ParamsData implements Closeable {
 	}
 
 	private ParamsData() {
-		GeneralData.getGeneralData();
 		this.configProvider = ConfigProviderFactory.createConfigProvider();
 	}
 

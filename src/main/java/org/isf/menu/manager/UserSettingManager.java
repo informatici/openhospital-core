@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,19 +27,21 @@ import java.util.Optional;
 import org.isf.menu.model.UserSetting;
 import org.isf.menu.service.UserSettingOperationRepository;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserSettingManager {
 
-	@Autowired
-	private UserSettingOperationRepository userSettingIoOperationRepository;
+	private final UserSettingOperationRepository userSettingIoOperationRepository;
+
+	public UserSettingManager(UserSettingOperationRepository userSettingOperationRepository) {
+		this.userSettingIoOperationRepository = userSettingOperationRepository;
+	}
 
 	/**
 	 * Inserts a new {@link UserSetting} into the DB.
 	 *
-	 * @param userSetting - the {@link UserSetting} to insert
+	 * @param userSetting the {@link UserSetting} to insert
 	 * @return {@link UserSetting} if the userSetting has been inserted, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
@@ -50,18 +52,18 @@ public class UserSettingManager {
 	/**
 	 * Updates an existing {@link UserSetting} in the DB.
 	 *
-	 * @param userSetting - the {@link UserSetting} to insert
+	 * @param userSetting the {@link UserSetting} to insert
 	 * @return {@link UserSetting} if the userSetting has been updated, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting updateUserSetting(UserSetting userSetting) throws OHServiceException {
 		return userSettingIoOperationRepository.save(userSetting);
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userName - the user name
+	 * @param userName the user name
 	 * @return the list of {@link UserSetting}s
 	 * @throws OHServiceException
 	 */
@@ -72,30 +74,30 @@ public class UserSettingManager {
 	/**
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userName     - the user name
-	 * @param configName - the name of the user setting
+	 * @param userName the user name
+	 * @param configName the name of the user setting
 	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting getUserSettingByUserNameConfigName(String userName, String configName) throws OHServiceException {
 		return userSettingIoOperationRepository.findByUserNameAndConfigName(userName, configName);
 	}
-	
+
 	/**
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userSettingId - the user id
+	 * @param userSettingId the user id
 	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Optional<UserSetting> getUserSettingById(int userSettingId) throws OHServiceException {
-		 return userSettingIoOperationRepository.findById(userSettingId);
+		return userSettingIoOperationRepository.findById(userSettingId);
 	}
 
 	/**
 	 * Delete the {@link UserSetting}.
 	 * 
-	 * @param userSetting - the userSetting to delete
+	 * @param userSetting the userSetting to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteUserSetting(UserSetting userSetting) throws OHServiceException {

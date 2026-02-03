@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,21 +24,21 @@ package org.isf.patient.model;
 import java.time.LocalDate;
 import java.time.Period;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.anamnesis.model.PatientHistory;
@@ -59,7 +59,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Patient extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="PAT_ID")
 	private Integer code;
 
@@ -225,7 +225,7 @@ public class Patient extends Auditable<String> {
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatut, char parentTogether, String personalCode,
+			String bloodType, char economicStatus, char parentTogether, String personalCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -242,7 +242,7 @@ public class Patient extends Auditable<String> {
 		this.mother = mother;
 		this.fatherName = fatherName;
 		this.father = father;
-		this.hasInsurance = economicStatut;
+		this.hasInsurance = economicStatus;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = personalCode;
@@ -253,7 +253,7 @@ public class Patient extends Auditable<String> {
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatut, char parentTogether, String taxCode,
+			String bloodType, char economicStatus, char parentTogether, String taxCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
@@ -272,7 +272,7 @@ public class Patient extends Auditable<String> {
 		this.mother = mother;
 		this.fatherName = fatherName;
 		this.father = father;
-		this.hasInsurance = economicStatut;
+		this.hasInsurance = economicStatus;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = taxCode;
@@ -561,11 +561,10 @@ public class Patient extends Auditable<String> {
 			return true;
 		}
 
-		if (!(obj instanceof Patient)) {
+		if (!(obj instanceof Patient patient)) {
 			return false;
 		}
 
-		Patient patient = (Patient)obj;
 		return (this.getCode().equals(patient.getCode()));
 	}
 

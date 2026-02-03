@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -46,7 +46,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,17 +56,23 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class AdmissionIoOperations {
 
-	@Autowired
 	private AdmissionIoOperationRepository repository;
 
-	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
 
-	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
 
-	@Autowired
 	private PatientIoOperationRepository patientRepository;
+
+	public AdmissionIoOperations(AdmissionIoOperationRepository admissionIoOperationRepository,
+	                             AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository,
+	                             DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository,
+	                             PatientIoOperationRepository patientIoOperationRepository) {
+		this.repository = admissionIoOperationRepository;
+		this.typeRepository = admissionTypeIoOperationRepository;
+		this.dischargeRepository = dischargeTypeIoOperationRepository;
+		this.patientRepository = patientIoOperationRepository;
+	}
 
 	/**
 	 * Returns all patients with ward in which they are admitted.
@@ -248,8 +253,6 @@ public class AdmissionIoOperations {
 	 * The default path ({@code testing == false}) ensures that the code performs as it
 	 * always has in the past.
 	 * This code permits the unit testing of maternity wards with dates before and after June.
-	 * TODO: once the LocalDateTime object is replaced by Java 8+ date/time objects this can be revisited
-	 * as there is more flexibility in modifying the new objects in Java 8+.
 	 */
 	public static boolean testing;
 	public static boolean afterJune;
@@ -314,27 +317,14 @@ public class AdmissionIoOperations {
 	}
 
 	/**
-	 * Returns the list of Admissions by pages
-	 *
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param pageable
-	 * @return the list of {@link Admission}.
-	 * @throws OHServiceException if an error occurs during database request.
-	 */
-	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
-		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
-	}
-
-	/**
-	 * Returns the list of Admissions
+	 * Returns the list of Admissions within a date range
 	 *
 	 * @param dateFrom
 	 * @param dateTo
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<Admission> getAdmissionsByAdmDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findAllWhereAdmissionDate(dateFrom, dateTo);
 	}
 
@@ -343,12 +333,11 @@ public class AdmissionIoOperations {
 	 *
 	 * @param dateFrom
 	 * @param dateTo
-	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
-		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo);
 	}
 
 	/**

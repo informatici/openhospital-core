@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,18 +23,18 @@ package org.isf.medicalstock.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
@@ -46,7 +46,7 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSRSTOCKMOV")
+@Table(name = "OH_MEDICALDSRSTOCKMOV")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MMV_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MMV_CREATED_DATE", updatable = false))
@@ -56,48 +56,49 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Movement extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="MMV_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MMV_ID")
 	private int code;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMV_MDSR_ID")
+	@JoinColumn(name = "MMV_MDSR_ID")
 	private Medical medical;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMV_MMVT_ID_A")
+	@JoinColumn(name = "MMV_MMVT_ID_A")
 	private MovementType type;
 
 	@ManyToOne
-	@JoinColumn(name="MMV_WRD_ID_A")
+	@JoinColumn(name = "MMV_WRD_ID_A")
 	private Ward ward;
 
 	@ManyToOne
-	@JoinColumn(name="MMV_LT_ID_A")
+	@JoinColumn(name = "MMV_LT_ID_A")
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMV_DATE")		// SQL type: datetime
+	@Column(name = "MMV_DATE") // SQL type: datetime
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="MMV_QTY")
+	@Column(name = "MMV_QTY")
 	private int quantity;
 
-	@ManyToOne(optional = true, targetEntity=Supplier.class)
-	@JoinColumn(name="MMV_FROM")
+	@ManyToOne(optional = true, targetEntity = Supplier.class)
+	@JoinColumn(name = "MMV_FROM")
 	private Supplier supplier;
 
 	@NotNull
-	@Column(name="MMV_REFNO")
+	@Column(name = "MMV_REFNO")
 	private String refNo;
 
 	@Transient
 	private volatile int hashCode;
-	
-	public Movement() { }
+
+	public Movement() {
+	}
 
 	public Movement(Medical aMedical, MovementType aType, Ward aWard, Lot aLot, LocalDateTime aDate, int aQuantity, Supplier aSupplier, String aRefNo) {
 		medical = aMedical;
@@ -189,9 +190,10 @@ public class Movement extends Auditable<String> {
 	@Override
 	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
-				medical != null ? medical.toString() : "NULL",
-				type != null ? type.toString() : "NULL",
-				quantity);
+						medical != null ? medical.toString() : "NULL",
+						lot != null ? lot.getCode() : "NULL",
+						type != null ? type.toString() : "NULL",
+						quantity);
 	}
 
 	@Override
@@ -200,25 +202,24 @@ public class Movement extends Auditable<String> {
 			return true;
 		}
 
-		if (!(obj instanceof Movement)) {
+		if (!(obj instanceof Movement movement)) {
 			return false;
 		}
-		
-		Movement movement = (Movement)obj;
+
 		return (this.getCode() == movement.getCode());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code;
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code;
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -32,26 +32,23 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
- *
- * @author bob
- * 19-dec-2005
- * 14-jan-2006
+ * Class that provides gui separation from database operations and gives some useful logic manipulations of the dynamic data (memory)
  */
 @Component
 public class ExamBrowsingManager {
 
-	@Autowired
-	private ExamIoOperations ioOperations;
+	private final ExamIoOperations ioOperations;
+
+	public ExamBrowsingManager(ExamIoOperations examIoOperations) {
+		this.ioOperations = examIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 *
+	 * 
 	 * @param exam
 	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
@@ -76,7 +73,7 @@ public class ExamBrowsingManager {
 
 	/**
 	 * Returns the list of {@link Exam}s
-	 *
+	 * 
 	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -86,8 +83,8 @@ public class ExamBrowsingManager {
 
 	/**
 	 * Returns the list of {@link Exam}s that matches passed description
-	 *
-	 * @param description - the exam description
+	 * 
+	 * @param description the exam description
 	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -97,8 +94,8 @@ public class ExamBrowsingManager {
 
 	/**
 	 * Returns the list of {@link Exam}s by {@link ExamType} description
-	 *
-	 * @param description - the exam description
+	 * 
+	 * @param description the exam description
 	 * @return the list of {@link Exam}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -108,7 +105,7 @@ public class ExamBrowsingManager {
 
 	/**
 	 * Returns the list of {@link ExamType}s
-	 *
+	 * 
 	 * @return the list of {@link ExamType}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -117,10 +114,8 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * This function controls the presence of a record with the same key as in
-	 * the parameter; Returns false if the query finds no record, else returns
-	 * true
-	 *
+	 * This function controls the presence of a record with the same key as in the parameter; Returns false if the query finds no record, else returns true
+	 * 
 	 * @param exam the {@link Exam}
 	 * @return {@code true} if the Exam code has already been used, {@code false} otherwise
 	 * @throws OHServiceException
@@ -130,9 +125,33 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Insert a new {@link Exam} in the DB.
-	 *
-	 * @param exam - the {@link Exam} to insert
+	 * Insert a new {@link Exam} with exam rows.
+	 * 
+	 * @param payload the {@link Exam} to insert
+	 * @param rows the {@link List<String>} to associate as exam rows
+	 * @return the newly persisted {@link Exam}.
+	 * @throws OHServiceException
+	 */
+	public Exam create(Exam payload, List<String> rows) throws OHServiceException {
+		return ioOperations.create(payload, rows);
+	}
+
+	/**
+	 * Update an existing {@link Exam}with exam rows.
+	 * 
+	 * @param payload the {@link Exam} to insert
+	 * @param rows the {@link List<String>} to associate as exam rows
+	 * @return the newly persisted {@link Exam}.
+	 * @throws OHServiceException
+	 */
+	public Exam update(Exam payload, List<String> rows) throws OHServiceException {
+		return ioOperations.update(payload, rows);
+	}
+
+	/**
+	 * Insert a new {@link Exam}.
+	 * 
+	 * @param exam the {@link Exam} to insert
 	 * @return the newly persisted {@link Exam}.
 	 * @throws OHServiceException
 	 */
@@ -142,9 +161,9 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Updates an existing {@link Exam} in the db
-	 *
-	 * @param exam -  the {@link Exam} to update
+	 * Updates an existing {@link Exam}.
+	 * 
+	 * @param exam the {@link Exam} to update
 	 * @return {@code true} if the existing {@link Exam} has been updated, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -155,11 +174,22 @@ public class ExamBrowsingManager {
 
 	/**
 	 * Delete an {@link Exam}
-	 *
-	 * @param exam - the {@link Exam} to delete
+	 * 
+	 * @param exam the {@link Exam} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteExam(Exam exam) throws OHServiceException {
 		ioOperations.deleteExam(exam);
+	}
+
+	/**
+	 * Find exam by code
+	 * 
+	 * @param code the code
+	 * @return The exam if found, {@code null} otherwise.
+	 * @throws OHServiceException
+	 */
+	public Exam findByCode(String code) throws OHServiceException {
+		return ioOperations.findByCode(code);
 	}
 }

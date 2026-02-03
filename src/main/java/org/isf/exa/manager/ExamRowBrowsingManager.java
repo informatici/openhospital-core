@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,14 +30,16 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExamRowBrowsingManager {
 
-	@Autowired
-	private ExamRowIoOperations ioOperations;
+	private final ExamRowIoOperations ioOperations;
+
+	public ExamRowBrowsingManager(ExamRowIoOperations examRowIoOperations) {
+		this.ioOperations = examRowIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -69,7 +71,7 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Returns a list of {@link ExamRow}s that matches passed exam code
 	 *
-	 * @param aExamCode - the exam code
+	 * @param aExamCode the exam code
 	 * @return the list of {@link ExamRow}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -80,8 +82,8 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Returns a list of {@link ExamRow}s that matches passed exam code and description
 	 *
-	 * @param aExamRowCode - the exam code
-	 * @param aDescription - the exam description
+	 * @param aExamRowCode the exam code
+	 * @param aDescription the exam description
 	 * @return the list of {@link ExamRow}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */
@@ -92,7 +94,7 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Insert a new {@link ExamRow} in the DB.
 	 *
-	 * @param examRow - the {@link ExamRow} to insert
+	 * @param examRow the {@link ExamRow} to insert
 	 * @return {@code true} if the {@link ExamRow} has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -104,7 +106,7 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Delete an {@link ExamRow}.
 	 *
-	 * @param examRow - the {@link ExamRow} to delete
+	 * @param examRow the {@link ExamRow} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteExamRow(ExamRow examRow) throws OHServiceException {
@@ -114,7 +116,7 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Returns a list of {@link ExamRow}s that matches passed exam code
 	 *
-	 * @param aExamCode - the exam code
+	 * @param aExamCode the exam code
 	 * @return the list of {@link ExamRow}s. It could be {@code null}
 	 * @throws OHServiceException
 	 */

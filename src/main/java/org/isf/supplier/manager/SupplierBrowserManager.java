@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,17 +28,23 @@ import java.util.Map;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SupplierBrowserManager {
 
-	@Autowired
-	private SupplierOperations ioOperations;
+	private final SupplierOperations ioOperations;
+
+	public SupplierBrowserManager(SupplierOperations supplierOperations) {
+		this.ioOperations = supplierOperations;
+	}
 
 	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
 		return ioOperations.saveOrUpdate(supplier);
+	}
+
+	public void delete(Supplier supplier) throws OHServiceException {
+		ioOperations.delete(supplier);
 	}
 
 	public Supplier getByID(int id) throws OHServiceException {
@@ -56,9 +62,9 @@ public class SupplierBrowserManager {
 	/**
 	 * Returns the {@link HashMap} of all {@link Supplier}'s ids and names.
 	 *
-	 * @param all - if {@code true} it will return deleted ones also
+	 * @param all if {@code true} it will return deleted ones also
 	 * @return the {@link HashMap} of all {@link Supplier}'s ids and names.
-	 * @throws OHServiceException
+	 * @throws OHServiceException When failed to get suppliers
 	 */
 	public Map<Integer, String> getHashMap(boolean all) throws OHServiceException {
 		List<Supplier> supList;

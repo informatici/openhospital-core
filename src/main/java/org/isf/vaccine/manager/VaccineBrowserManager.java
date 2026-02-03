@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -31,14 +31,16 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VaccineBrowserManager {
 
-	@Autowired
-	private VaccineIoOperations ioOperations;
+	private final VaccineIoOperations ioOperations;
+
+	public VaccineBrowserManager(VaccineIoOperations vaccineIoOperations) {
+		this.ioOperations = vaccineIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any.
@@ -80,7 +82,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Returns the list of {@link Vaccine}s based on vaccine type code.
 	 *
-	 * @param vaccineTypeCode - the type code.
+	 * @param vaccineTypeCode the type code.
 	 * @return the list of {@link Vaccine}s
 	 */
 	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
@@ -90,7 +92,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Inserts a new {@link Vaccine} into the DB.
 	 *
-	 * @param vaccine - the {@link Vaccine} object to insert
+	 * @param vaccine the {@link Vaccine} object to insert
 	 * @return the newly inserted {@link Vaccine} object.
 	 */
 	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
@@ -101,7 +103,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Updates the specified {@link Vaccine} object.
 	 *
-	 * @param vaccine - the {@link Vaccine} object to update.
+	 * @param vaccine the {@link Vaccine} object to update.
 	 * @return the updated {@link Vaccine} object.
 	 */
 	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
@@ -112,7 +114,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Deletes a {@link Vaccine} in the DB.
 	 *
-	 * @param vaccine - the item to delete
+	 * @param vaccine the item to delete
 	 */
 	public void deleteVaccine(Vaccine vaccine) throws OHServiceException {
 		ioOperations.deleteVaccine(vaccine);
@@ -121,7 +123,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Checks if the code is already in use.
 	 *
-	 * @param code - the vaccine code
+	 * @param code the vaccine code
 	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -131,7 +133,7 @@ public class VaccineBrowserManager {
 	/**
 	 * Returns the {@link Vaccine} based on vaccine code.
 	 *
-	 * @param code - the {@link Vaccine} code.
+	 * @param code the {@link Vaccine} code.
 	 * @return the {@link Vaccine}
 	 */
 	public Vaccine findVaccine(String code) throws OHServiceException {

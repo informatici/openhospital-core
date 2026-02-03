@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: ${jdbc.class:org.mariadb.jdbc.Driver}
+    url: ${jdbc.url}
+    username: ${jdbc.username}
+    password: ${jdbc.password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+  cloud:
+    compatibility-verifier:
+      enabled: false

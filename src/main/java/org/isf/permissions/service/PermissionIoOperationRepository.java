@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -32,10 +32,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissionIoOperationRepository extends JpaRepository<Permission, Integer> {
 
+	List<Permission> findByIdIn(List<Integer> ids);
+
 	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
 	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
 
-	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName from User where active=1 and userName like :currentUserName))")
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName.code from User where active=1 and userName like :currentUserName))")
 	List<Permission> retrievePermissionsByCurrentLoggedInUser(@Param("currentUserName") String currentUserName);
 
 	Permission findByName(String name);

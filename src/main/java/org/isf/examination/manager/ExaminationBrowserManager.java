@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,40 +38,42 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ExaminationBrowserManager {
 
-	@Autowired
-	private ExaminationOperations ioOperations;
+	private final ExaminationOperations ioOperations;
 
 	protected HashMap<String, String> diuresisDescriptionHashMap;
 	protected HashMap<String, String> bowelDescriptionHashMap;
 	protected LinkedHashMap<String, String> auscultationHashMap;
+
+	public ExaminationBrowserManager(ExaminationOperations examinationOperations) {
+		this.ioOperations = examinationOperations;
+	}
 
 	/**
 	 * Default PatientExamination
 	 */
 	public PatientExamination getDefaultPatientExamination(Patient patient) {
 		return new PatientExamination(
-				TimeTools.getNow(),
-				patient,
-				ExaminationParameters.HEIGHT_INIT,
-				(double) ExaminationParameters.WEIGHT_INIT,
-				ExaminationParameters.AP_MIN_INIT,
-				ExaminationParameters.AP_MAX_INIT,
-				ExaminationParameters.HR_INIT,
-				(double) ExaminationParameters.TEMP_INIT,
-				(double) ExaminationParameters.SAT_INIT,
-				ExaminationParameters.HGT_INIT,
-				ExaminationParameters.DIURESIS_INIT,
-				ExaminationParameters.DIURESIS_DESC_INIT,
-				ExaminationParameters.BOWEL_DESC_INIT,
-				ExaminationParameters.RR_INIT,
-				ExaminationParameters.AUSCULTATION_INIT,
-				"");
+			TimeTools.getNow(),
+			patient,
+			ExaminationParameters.HEIGHT_INIT,
+			(double) ExaminationParameters.WEIGHT_INIT,
+			ExaminationParameters.AP_MIN_INIT,
+			ExaminationParameters.AP_MAX_INIT,
+			ExaminationParameters.HR_INIT,
+			(double) ExaminationParameters.TEMP_INIT,
+			(double) ExaminationParameters.SAT_INIT,
+			ExaminationParameters.HGT_INIT,
+			ExaminationParameters.DIURESIS_INIT,
+			ExaminationParameters.DIURESIS_DESC_INIT,
+			ExaminationParameters.BOWEL_DESC_INIT,
+			ExaminationParameters.RR_INIT,
+			ExaminationParameters.AUSCULTATION_INIT,
+			"");
 	}
 
 	/**
@@ -79,29 +81,29 @@ public class ExaminationBrowserManager {
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
 		return new PatientExamination(TimeTools.getNow(),
-				lastPatientExamination.getPatient(),
-				lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(),
-				lastPatientExamination.getPex_ap_min(),
-				lastPatientExamination.getPex_ap_max(),
-				lastPatientExamination.getPex_hr(),
-				lastPatientExamination.getPex_temp(),
-				lastPatientExamination.getPex_sat(),
-				lastPatientExamination.getPex_hgt(),
-				lastPatientExamination.getPex_diuresis(),
-				lastPatientExamination.getPex_diuresis_desc(),
-				lastPatientExamination.getPex_bowel_desc(),
-				lastPatientExamination.getPex_rr(),
-				lastPatientExamination.getPex_auscultation(),
-				formatLastNote(lastPatientExamination));
+			lastPatientExamination.getPatient(),
+			lastPatientExamination.getPex_height(),
+			lastPatientExamination.getPex_weight(),
+			lastPatientExamination.getPex_ap_min(),
+			lastPatientExamination.getPex_ap_max(),
+			lastPatientExamination.getPex_hr(),
+			lastPatientExamination.getPex_temp(),
+			lastPatientExamination.getPex_sat(),
+			lastPatientExamination.getPex_hgt(),
+			lastPatientExamination.getPex_diuresis(),
+			lastPatientExamination.getPex_diuresis_desc(),
+			lastPatientExamination.getPex_bowel_desc(),
+			lastPatientExamination.getPex_rr(),
+			lastPatientExamination.getPex_auscultation(),
+			formatLastNote(lastPatientExamination));
 	}
 
 	private String formatLastNote(PatientExamination lastPatientExamination) {
 		String note = lastPatientExamination.getPex_note();
 		if (!note.isEmpty()) {
-			return MessageBundle.formatMessage("angal.examination.lastnote.fmt.msg", 
-							TimeTools.formatDateTime(lastPatientExamination.getPex_date(), null), 
-							lastPatientExamination.getPex_note());
+			return MessageBundle.formatMessage("angal.examination.lastnote.fmt.msg",
+				TimeTools.formatDateTime(lastPatientExamination.getPex_date(), null),
+				lastPatientExamination.getPex_note());
 		}
 		return "";
 	}
@@ -145,7 +147,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * @param patex - the PatientExamination to save
+	 * @param patex the PatientExamination to save
 	 * @throws OHServiceException
 	 */
 	public PatientExamination saveOrUpdate(PatientExamination patex) throws OHServiceException {
@@ -175,7 +177,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * @param patexList - the {@link PatientExamination} to delete.
+	 * @param patexList the {@link PatientExamination} to delete.
 	 * @throws OHServiceException
 	 */
 	public void remove(List<PatientExamination> patexList) throws OHServiceException {
@@ -225,15 +227,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * Return a list of diuresis descriptions:
-	 * physiological,
-	 * oliguria,
-	 * anuria,
-	 * fequent,
-	 * nocturia,
-	 * stranguria,
-	 * hematuria,
-	 * pyuria
+	 * Return a list of diuresis descriptions: physiological, oliguria, anuria, fequent, nocturia, stranguria, hematuria, pyuria
 	 *
 	 * @return
 	 */
@@ -247,11 +241,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * Return a list of bowel descriptions:
-	 * regular,
-	 * irregular,
-	 * constipation,
-	 * diarrheal
+	 * Return a list of bowel descriptions: regular, irregular, constipation, diarrheal
 	 *
 	 * @return
 	 */
@@ -308,14 +298,14 @@ public class ExaminationBrowserManager {
 	 * @param patex
 	 * @throws OHDataValidationException
 	 */
-	protected void validateExamination(PatientExamination patex)  throws OHDataValidationException {
+	protected void validateExamination(PatientExamination patex) throws OHDataValidationException {
 		buildAuscultationHashMap();
 		buildBowelDescriptionHashMap();
 		buildDiuresisDescriptionHashMap();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_note() != null && patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGTH) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH)));
+				new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH)));
 		}
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg")));

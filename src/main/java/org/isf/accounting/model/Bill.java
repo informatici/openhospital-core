@@ -23,18 +23,19 @@ package org.isf.accounting.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
@@ -54,7 +55,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "BLL_ID")
 	private int id;
 
@@ -97,6 +98,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name = "BLL_BALANCE")
 	private Double balance;
 
+	@Version
+	@Column(name = "BLL_LOCK")
+	private int lock;
+
 	@NotNull
 	@Column(name = "BLL_USR_ID_A")
 	private String user;
@@ -124,8 +129,8 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	}
 
 	public Bill(int id, LocalDateTime date, LocalDateTime update,
-					boolean isList, PriceList list, String listName, boolean isPatient,
-					Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+		boolean isList, PriceList list, String listName, boolean isPatient,
+		Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -237,6 +242,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.admission = admission;
 	}
 
+	public int getLock() { return lock; }
+
+	public void setLock(int lock) { this.lock = lock; }
+
 	@Override
 	public int compareTo(Bill obj) {
 		return this.id - obj.getId();
@@ -248,11 +257,10 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 			return true;
 		}
 
-		if (!(obj instanceof Bill)) {
+		if (!(obj instanceof Bill bill)) {
 			return false;
 		}
 
-		Bill bill = (Bill) obj;
 		return (id == bill.getId());
 	}
 

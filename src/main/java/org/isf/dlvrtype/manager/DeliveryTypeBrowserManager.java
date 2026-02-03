@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,12 +38,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliveryTypeBrowserManager {
 
-	@Autowired
-	private DeliveryTypeIoOperation ioOperations;
+	private final DeliveryTypeIoOperation ioOperations;
+
+	public DeliveryTypeBrowserManager(DeliveryTypeIoOperation deliveryTypeIoOperation) {
+		this.ioOperations = deliveryTypeIoOperation;
+	}
 
 	/**
-	 * Returns all stored {@link DeliveryType}s.
-	 * In case of error a message error is shown and a {@code null} value is returned.
+	 * Returns all stored {@link DeliveryType}s. In case of error a message error is shown and a {@code null} value is returned.
 	 *
 	 * @return all stored delivery types, {@code null} if an error occurred.
 	 * @throws OHServiceException
@@ -54,8 +55,7 @@ public class DeliveryTypeBrowserManager {
 	}
 
 	/**
-	 * Stores the specified {@link DeliveryType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Stores the specified {@link DeliveryType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryType the delivery type to store.
 	 * @return the newly persisted {@link DeliveryType} object.
@@ -67,8 +67,7 @@ public class DeliveryTypeBrowserManager {
 	}
 
 	/**
-	 * Updates the specified {@link DeliveryType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Updates the specified {@link DeliveryType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryType the delivery type to update.
 	 * @return the updated {@link DeliveryType} object.
@@ -80,8 +79,8 @@ public class DeliveryTypeBrowserManager {
 	}
 
 	/**
-	 * Checks if the specified code is already used by others {@link DeliveryType}s.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Checks if the specified code is already used by others {@link DeliveryType}s. In case of error a message error is shown and a {@code false} value is
+	 * returned.
 	 *
 	 * @param code the code to check.
 	 * @return {@code true} if the code is used, {@code false} otherwise.
@@ -92,8 +91,7 @@ public class DeliveryTypeBrowserManager {
 	}
 
 	/**
-	 * Delete the specified {@link DeliveryType}.
-	 * In case of error a message error is shown and a {@code false} value is returned.
+	 * Delete the specified {@link DeliveryType}. In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param deliveryType the delivery type to delete.
 	 * @throws OHServiceException

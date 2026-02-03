@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -42,15 +42,17 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovWardBrowserManager {
 
-	@Autowired
-	private MedicalStockWardIoOperations ioOperations;
+	private final MedicalStockWardIoOperations ioOperations;
+
+	public MovWardBrowserManager(MedicalStockWardIoOperations medicalStockWardIoOperations) {
+		this.ioOperations = medicalStockWardIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -79,23 +81,35 @@ public class MovWardBrowserManager {
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
 	 *
 	 * @param wardId the ward id.
-	 * @param stripeEmpty - if {@code true}, stripes the empty lots
+	 * @param stripeEmpty if {@code true}, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+	public List<MedicalWard> getMedicalsWard(String wardId, boolean stripeEmpty) throws OHServiceException {
 		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
 	}
 
 	/**
-	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
-	 * (total quantity, regardless the lot)
+	 * Gets all the {@link MedicalWard}s associated to the specified ward and the specified medical
+	 * 
+	 * @param wardId the ward id.
+	 * @param medId the medical id.
+	 * @param stripeEmpty if {@code true}, stripes the empty lots
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalWard> getMedicalsWard(String wardId, int medId, boolean stripeEmpty) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, medId, stripeEmpty);
+	}
+
+	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot (total quantity, regardless the lot)
 	 *
 	 * @param wardId the ward id.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public List<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+	public List<MedicalWard> getMedicalsWardTotalQuantity(String wardId) throws OHServiceException {
 		return ioOperations.getMedicalsWardTotalQuantity(wardId);
 	}
 
@@ -140,11 +154,12 @@ public class MovWardBrowserManager {
 	 * Persists the specified movement.
 	 *
 	 * @param newMovement the movement to persist.
+	 * @return the stored movement.
 	 * @throws OHServiceException
 	 */
-	public void newMovementWard(MovementWard newMovement) throws OHServiceException {
+	public MovementWard newMovementWard(MovementWard newMovement) throws OHServiceException {
 		validateMovementWard(newMovement);
-		ioOperations.newMovementWard(newMovement);
+		return ioOperations.newMovementWard(newMovement);
 	}
 
 	/**
@@ -178,8 +193,8 @@ public class MovWardBrowserManager {
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
 	 *
-	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param medical - the {@link Medical} to check.
+	 * @param ward if {@code null} the quantity is counted for the whole hospital
+	 * @param medical the {@link Medical} to check.
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
@@ -190,8 +205,8 @@ public class MovWardBrowserManager {
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 *
-	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param lot - the {@link Lot} to filter
+	 * @param ward if {@code null} the quantity is counted for the whole hospital
+	 * @param lot the {@link Lot} to filter
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
@@ -229,9 +244,9 @@ public class MovWardBrowserManager {
 	/**
 	 * Get the MedicalWard for the specified criteria.
 	 *
-	 * @param wardCode - the ward id  
-	 * @param medical - the mecical id 
-	 * @param lotCode - the lot id
+	 * @param wardCode the ward id
+	 * @param medical the mecical id
+	 * @param lotCode the lot id
 	 * @return the retrieved medical.
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
@@ -242,8 +257,8 @@ public class MovWardBrowserManager {
 	/**
 	 * Deletes the specified {@link MedicalWard}.
 	 *
-	 * @param medWard - the MedicalWard to delete. 
-	 * @throws OHServiceException.
+	 * @param medWard the MedicalWard to delete.
+	 * @throws OHServiceException
 	 */
 	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		ioOperations.deleteMedicalWard(medWard);
@@ -252,8 +267,8 @@ public class MovWardBrowserManager {
 	/**
 	 * Updates the specified {@link MedicalWard}.
 	 *
-	 * @param medWard - the MedicalWard to update. 
-	 * @throws OHServiceException.
+	 * @param medWard the MedicalWard to update.
+	 * @throws OHServiceException
 	 */
 	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
 		return ioOperations.updateMedicalWard(medWard);
@@ -301,7 +316,7 @@ public class MovWardBrowserManager {
 	/**
 	 * Delete a {@link MovementWard}
 	 *
-	 * @param movWardToDelete - the movement ward
+	 * @param movWardToDelete the movement ward
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
@@ -309,14 +324,14 @@ public class MovWardBrowserManager {
 		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
 		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
 			throw new OHDataValidationException(
-							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
+				new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
 		Ward wardTo = movWardToDelete.getWardTo();
 		Medical medical = movWardToDelete.getMedical();
 		Lot lot = movWardToDelete.getLot();
 		if (wardTo != null) {
 			List<MovementWard> latestMovementWardList = ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(),
-							lot.getCode(), movWardToDelete.getDate());
+				lot.getCode(), movWardToDelete.getDate());
 			if (latestMovementWardList.size() == 1) {
 				/*
 				 * If the medical has not been used in the destination ward, the movements for that Ward, Medical and Lot after the movWardToDelete Date will be
@@ -336,13 +351,13 @@ public class MovWardBrowserManager {
 				ioOperations.deleteMovementWard(lastMovInWardTo);
 			} else {
 				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.formatMessage(
-												"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
-												medical.getDescription(), wardTo.getDescription())));
+					new OHExceptionMessage(MessageBundle.formatMessage(
+						"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+						medical.getDescription(), wardTo.getDescription())));
 			}
 		}
 		MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(),
-						movWardToDelete.getLot().getCode());
+			movWardToDelete.getLot().getCode());
 		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();
 		float quantity = medWard.getOut_quantity() - movQty;
 		medWard.setOut_quantity(quantity);

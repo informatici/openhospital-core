@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,41 +36,43 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class BillBrowserManager {
 
-	@Autowired
-	private AccountingIoOperations ioOperations;
+	private final AccountingIoOperations ioOperations;
+
+	public BillBrowserManager(AccountingIoOperations accountingIoOperations) {
+		this.ioOperations = accountingIoOperations;
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * 
 	 * @param bill
-	 * @param billItems
 	 * @param billPayments
 	 * @throws OHDataValidationException
 	 */
-	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<>();
+	protected void validateBill(Bill bill, List<BillPayments> billPayments) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime upDate;
-		LocalDateTime firstPay = LocalDateTime.from(today);
-		LocalDateTime lastPay = LocalDateTime.from(today);
+		LocalDateTime firstPay = today;
+		LocalDateTime lastPay = today;
 
 		LocalDateTime billDate = bill.getDate();
 		if (!billPayments.isEmpty()) {
 			firstPay = billPayments.get(0).getDate();
-			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
+			lastPay = billPayments.get(billPayments.size() - 1).getDate(); // most recent payment
 			upDate = lastPay;
 		} else {
 			upDate = billDate;
 		}
 		bill.setUpdate(upDate);
-        
+
 		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
 		}
@@ -93,9 +95,10 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link BillItems} associated to the passed {@link Bill} id.
+	 * 
 	 * @param billID the bill id.
 	 * @return a list of {@link BillItems} or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<BillItems> getItems(int billID) throws OHServiceException {
 		if (billID == 0) {
@@ -106,53 +109,57 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the bills of a given patient between dateFrom and datTo
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
 	 * @return the bills list
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
+	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
 	 * Retrieves all the billPayments for a given patient between dateFrom and dateTo
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
 	 * @return the list of payments
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
+	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
 	 * Gets all the {@link BillPayments} for the specified {@link Bill}.
+	 * 
 	 * @param billID the bill id.
 	 * @return a list of {@link BillPayments}
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<BillPayments> getPayments(int billID) throws OHServiceException {
 		return ioOperations.getPayments(billID);
 	}
-	
+
 	/**
 	 * Stores a new {@link Bill} along with all its {@link BillItems} and {@link BillPayments}
-	 * @param bill - the bill to store.
-	 * @param billItems - the list of bill's items
-	 * @param billPayments - the list of bill's payments
+	 * 
+	 * @param bill the bill to store.
+	 * @param billItems the list of bill's items
+	 * @param billPayments the list of bill's payments
 	 * @returns the persisted Bill object
 	 * @throws OHServiceException
 	 */
-	@Transactional(rollbackFor=OHServiceException.class)
+	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Bill newBill(
-			Bill bill,
-			List<BillItems> billItems,
-			List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(bill, billItems, billPayments);
+		Bill bill,
+		List<BillItems> billItems,
+		List<BillPayments> billPayments) throws OHServiceException {
+		validateBill(bill, billPayments);
 		Bill newBill = newBill(bill);
 		int billId = newBill.getId();
 		if (!billItems.isEmpty()) {
@@ -166,6 +173,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Stores a new {@link Bill}.
+	 * 
 	 * @param newBill the bill to store.
 	 * @return the persisted Bill object
 	 * @throws OHServiceException
@@ -176,6 +184,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
+	 * 
 	 * @param billID the bill id.
 	 * @param billItems the bill items to store.
 	 * @throws OHServiceException
@@ -183,9 +192,10 @@ public class BillBrowserManager {
 	private void newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
 		ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
 	}
-	
+
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
+	 * 
 	 * @param billID the bill id.
 	 * @param payItems the bill payments.
 	 * @throws OHServiceException
@@ -193,21 +203,22 @@ public class BillBrowserManager {
 	private void newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
 		ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
 	}
-	
+
 	/**
 	 * Updates the specified {@link Bill} along with all its {@link BillItems} and {@link BillPayments}
-	 * @param updateBill - the bill to update.
-	 * @param billItems - the list of bill's items
-	 * @param billPayments - the list of bill's payments
+	 * 
+	 * @param updateBill the bill to update.
+	 * @param billItems the list of bill's items
+	 * @param billPayments the list of bill's payments
 	 * @return the updated Bill object
 	 * @throws OHServiceException
 	 */
-	@Transactional(rollbackFor=OHServiceException.class)
+	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Bill updateBill(Bill updateBill,
-			List<BillItems> billItems,
-			List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(updateBill, billItems, billPayments);
+		List<BillItems> billItems,
+		List<BillPayments> billPayments) throws OHServiceException {
+		validateBill(updateBill, billPayments);
 		Bill updatedBill = updateBill(updateBill);
 		newBillItems(updateBill.getId(), billItems);
 		newBillPayments(updateBill.getId(), billPayments);
@@ -216,19 +227,21 @@ public class BillBrowserManager {
 
 	/**
 	 * Updates the specified {@link Bill}.
+	 * 
 	 * @param updateBill the bill to update.
 	 * @return the updated Bill object
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	private Bill updateBill(Bill updateBill) throws OHServiceException {
 		return ioOperations.updateBill(updateBill);
 	}
-	
+
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.
+	 * 
 	 * @param patID the patient id.
 	 * @return the list of pending bills or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<Bill> getPendingBills(int patID) throws OHServiceException {
 		return ioOperations.getPendingBills(patID);
@@ -236,9 +249,10 @@ public class BillBrowserManager {
 
 	/**
 	 * Get the {@link Bill} with specified billID
+	 * 
 	 * @param billID
 	 * @return the {@link Bill} or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public Bill getBill(int billID) throws OHServiceException {
 		return ioOperations.getBill(billID);
@@ -246,16 +260,17 @@ public class BillBrowserManager {
 
 	/**
 	 * Returns all user ids related to a {@link BillPayments}.
+	 * 
 	 * @return a list of user id or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<String> getUsers() throws OHServiceException {
 		return ioOperations.getUsers();
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
-	 * If the Bill is not found it is silently ignored.
+	 * Deletes the specified {@link Bill}. If the argument is NULL then an error is thrown. If the Bill is not found it is silently ignored.
+	 * 
 	 * @param deleteBill the bill to delete.
 	 * @throws OHServiceException
 	 */
@@ -265,10 +280,11 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link Bill}s for the specified date range.
-	 * @param dateFrom the low date range endpoint, inclusive. 
+	 * 
+	 * @param dateFrom the low date range endpoint, inclusive.
 	 * @param dateTo the high date range endpoint, inclusive.
 	 * @return a list of retrieved {@link Bill}s or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getBillsBetweenDates(dateFrom, dateTo);
@@ -276,9 +292,10 @@ public class BillBrowserManager {
 
 	/**
 	 * Gets all the {@link Bill}s associated to the passed {@link BillPayments}.
+	 * 
 	 * @param billPayments the {@link BillPayments} associated to the bill to retrieve.
 	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<Bill> getBills(List<BillPayments> billPayments) throws OHServiceException {
 		if (billPayments.isEmpty()) {
@@ -289,10 +306,11 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link BillPayments} for the specified date range.
-	 * @param dateFrom low endpoint, inclusive, for the date range. 
+	 * 
+	 * @param dateFrom low endpoint, inclusive, for the date range.
 	 * @param dateTo high endpoint, inclusive, for the date range.
 	 * @return a list of {@link BillPayments} for the specified date range or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getPayments(dateFrom, dateTo);
@@ -300,9 +318,10 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link BillPayments} associated to the passed {@link Bill} list.
+	 * 
 	 * @param billArray the bill array list of {@link Bill}s.
 	 * @return a list of {@link BillPayments} associated to the passed bill list or {@code null} if an error occurred.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<BillPayments> getPayments(List<Bill> billArray) throws OHServiceException {
 		return ioOperations.getPayments(billArray);
@@ -310,9 +329,10 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link Bill}s associated to the specified {@link Patient}.
-	 * @param patID - the Patient's ID
+	 * 
+	 * @param patID the Patient's ID
 	 * @return the list of {@link Bill}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
 		return ioOperations.getPendingBillsAffiliate(patID);
@@ -321,22 +341,23 @@ public class BillBrowserManager {
 	/**
 	 * Returns all the distinct stored {@link BillItems}.
 	 * 
-	 * @return a list of  distinct {@link BillItems} or null if an error occurs.
-	 * @throws OHServiceException 
+	 * @return a list of distinct {@link BillItems} or null if an error occurs.
+	 * @throws OHServiceException
 	 */
-	public List<BillItems> getDistinctItems() throws OHServiceException{
+	public List<BillItems> getDistinctItems() throws OHServiceException {
 		return ioOperations.getDistictsBillItems();
 	}
-	
+
 	/**
 	 * Get the bills list with a given billItem
+	 * 
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem
 	 * @return
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,BillItems billItem) throws OHServiceException {
+	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, BillItems billItem) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 }

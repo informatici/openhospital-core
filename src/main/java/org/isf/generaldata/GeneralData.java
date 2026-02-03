@@ -22,21 +22,7 @@
 package org.isf.generaldata;
 
 /**
- * ------------------------------------------
  * General Data
- * <p>
- *    12/2007 - isf bari - added resource bundle for internationalization
- *    19/06/2008 - isf bari - added patientsheet jasper report name
- *    20/12/2008 - isf bari - added patientextended
- *    01/01/2009 - Fabrizio - added OPDEXTENDED
- *    20/01/2009 - Chiara   - added attribute MATERNITYRESTARTINJUNE to reset progressive number of maternity ward
- *    25/02/2011 - Claudia  - added attribute MAINMENUALWAYSONTOP to handle main menu always on Top 
- *    01/05/2011 - Vito 	 - added attribute VIDEOMODULEENABLED to enable/disable video module
- *    10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
- *    19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
- *    29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
- *    06/07/2022 - Nicole   - added USERSLISTLOGIN to login by typing the username in a textbox (no) or selecting the user from a list (yes)
- * -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
 
@@ -247,6 +233,8 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
 		PARAMSURL = myGetProperty("PARAMSURL", DEFAULT_PARAMSURL);
+
+		ParamsData.getInstance();
 	}
 
 	public static GeneralData getGeneralData() {

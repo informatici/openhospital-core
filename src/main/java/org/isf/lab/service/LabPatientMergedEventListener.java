@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,7 +27,6 @@ import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,15 +34,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class LabPatientMergedEventListener {
 
-	@Autowired
-	LabIoOperations labIoOperations;
+	private LabIoOperations labIoOperations;
+
+	public LabPatientMergedEventListener(LabIoOperations labIoOperations) {
+		this.labIoOperations = labIoOperations;
+	}
 
 	@EventListener
 	@Transactional
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
-		List<Laboratory> laboratories = labIoOperations.getLaboratory(patientMergedEvent.getObsoletePatient());
+		List<Laboratory> laboratories = labIoOperations.getLaboratory(patientMergedEvent.obsoletePatient());
 		for (Laboratory laboratory : laboratories) {
-			Patient mergedPatient = patientMergedEvent.getMergedPatient();
+			Patient mergedPatient = patientMergedEvent.mergedPatient();
 			laboratory.setPatient(mergedPatient);
 			laboratory.setPatName(mergedPatient.getName());
 			laboratory.setAge(mergedPatient.getAge());

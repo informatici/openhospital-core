@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -34,14 +34,16 @@ import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PriceListManager {
 
-	@Autowired
-	private PricesListIoOperations ioOperations;
+	private final PricesListIoOperations ioOperations;
+
+	public PriceListManager(PricesListIoOperations pricesListIoOperations) {
+		this.ioOperations = pricesListIoOperations;
+	}
 
 	/**
 	 * Return the list of {@link PriceList}s in the DB
@@ -66,8 +68,8 @@ public class PriceListManager {
 	/**
 	 * Updates all {@link Price}s in the specified {@link PriceList}
 	 *
-	 * @param list - the {@link PriceList}
-	 * @param prices - the list of {@link Price}s
+	 * @param list the {@link PriceList}
+	 * @param prices the list of {@link Price}s
 	 * @throws OHServiceException
 	 */
 	public void updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
@@ -77,7 +79,7 @@ public class PriceListManager {
 	/**
 	 * Insert a new {@link PriceList} in the DB
 	 *
-	 * @param list - the {@link PriceList}
+	 * @param list the {@link PriceList}
 	 * @return {@code true} if the list has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -89,7 +91,7 @@ public class PriceListManager {
 	/**
 	 * Update a {@link PriceList} in the DB
 	 *
-	 * @param updateList - the {@link PriceList} to update
+	 * @param updateList the {@link PriceList} to update
 	 * @return {@code true} if the list has been updated, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -101,7 +103,7 @@ public class PriceListManager {
 	/**
 	 * Delete a {@link PriceList} in the DB
 	 *
-	 * @param deleteList - the {@link PriceList} to delete
+	 * @param deleteList the {@link PriceList} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteList(PriceList deleteList) throws OHServiceException {
@@ -122,9 +124,9 @@ public class PriceListManager {
 	/**
 	 * Duplicate {@link PriceList} multiplying by {@code factor} and rounding by {@code step}.
 	 *
-	 * @param list - the {@link PriceList} to be duplicated
-	 * @param factor - the multiplying factor
-	 * @param step - the rounding step
+	 * @param list the {@link PriceList} to be duplicated
+	 * @param factor the multiplying factor
+	 * @param step the rounding step
 	 * @return the duplicated {@link PriceList}
 	 * @throws OHServiceException
 	 */

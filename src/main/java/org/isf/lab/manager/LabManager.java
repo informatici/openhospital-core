@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
@@ -42,18 +41,20 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class LabManager {
 
-	@Autowired
-	private LabIoOperations ioOperations;
+	private final LabIoOperations ioOperations;
 
 	protected HashMap<String, String> materialHashMap;
 	private Integer procedure;
+
+	public LabManager(LabIoOperations labIoOperations) {
+		this.ioOperations = labIoOperations;
+	}
 
 	protected void setPatientConsistency(Laboratory laboratory) {
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {
@@ -113,17 +114,13 @@ public class LabManager {
 
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
-	 * 
+	 *
 	 * @param oneWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
-		return ioOperations.getLaboratory(oneWeek, pageNo, pageSize);
-	}
-	
 	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		return ioOperations.getLaboratoryPageable(oneWeek, pageNo, pageSize);
 	}
@@ -137,11 +134,11 @@ public class LabManager {
 	public List<Laboratory> getLaboratory() throws OHServiceException {
 		return ioOperations.getLaboratory();
 	}
-	
+
 	/**
 	 * Return a list of exams ({@link Laboratory}s) related to a {@link Patient}.
 	 *
-	 * @param aPatient - the {@link Patient}.
+	 * @param aPatient the {@link Patient}.
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -152,9 +149,9 @@ public class LabManager {
 	/**
 	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name.
 	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param exam the exam name as {@code String}
+	 * @param dateFrom the lower date for the range
+	 * @param dateTo the highest date for the range
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -165,24 +162,24 @@ public class LabManager {
 	/**
 	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
 	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
-	 * @param patient - the object patient
+	 * @param exam the exam name as {@code String}
+	 * @param dateFrom the lower date for the range
+	 * @param dateTo the highest date for the range
+	 * @param patient the object patient
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo, patient);
 	}
+
 	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
-	 * between specified dates and matching passed exam name. If a lab has multiple
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) between specified dates and matching passed exam name. If a lab has multiple
 	 * results, these are concatenated and added to the result string.
 	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param exam the exam name as {@code String}
+	 * @param dateFrom the lower date for the range
+	 * @param dateTo the highest date for the range
 	 * @return the list of {@link LaboratoryForPrint}s . It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -193,26 +190,25 @@ public class LabManager {
 	}
 
 	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
-	 * between specified dates and matching passed exam name. If a lab has multiple
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) between specified dates and matching passed exam name. If a lab has multiple
 	 * results, these are concatenated and added to the result string.
 	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * @param exam the exam name as {@code String}
+	 * @param dateFrom the lower date for the range
+	 * @param dateTo the highest date for the range
 	 * @return the list of {@link LaboratoryForPrint}s . It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
-					throws OHServiceException {
+		throws OHServiceException {
 		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
 	}
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
 	 *
-	 * @param laboratory - the laboratory with its result (Procedure 1)
-	 * @param labRow - the list of results (Procedure 2) - it can be {@code null}
+	 * @param laboratory the laboratory with its result (Procedure 1)
+	 * @param labRow the list of results (Procedure 2); it can be {@code null}
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
@@ -220,26 +216,24 @@ public class LabManager {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			case 2:
-				if (labRow == null || labRow.isEmpty()) {
-					throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
-				}
-				return ioOperations.newLabSecondProcedure(laboratory, labRow);
-			case 3:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		return switch (procedure) {
+		case 1 -> ioOperations.newLabFirstProcedure(laboratory);
+		case 2 -> {
+			if (labRow == null || labRow.isEmpty()) {
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
+			}
+			yield ioOperations.newLabSecondProcedure(laboratory, labRow);
 		}
+		case 3 -> ioOperations.newLabFirstProcedure(laboratory);
+		default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures).
 	 *
-	 * @param laboratory - the laboratory with its result (Procedure 1)
-	 * @param labRow - the list of results (Procedure 2) - it can be {@code null}
+	 * @param laboratory the laboratory with its result (Procedure 1)
+	 * @param labRow the list of results (Procedure 2); it can be {@code null}
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
@@ -247,22 +241,18 @@ public class LabManager {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			case 2:
-				return ioOperations.newLabSecondProcedure2(laboratory, labRow);
-			case 3:
-				return ioOperations.newLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
-		}
+		return switch (procedure) {
+		case 1 -> ioOperations.newLabFirstProcedure(laboratory);
+		case 2 -> ioOperations.newLabSecondProcedure2(laboratory, labRow);
+		case 3 -> ioOperations.newLabFirstProcedure(laboratory);
+		default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**
 	 * Inserts one Laboratory request (All Procedures).
 	 *
-	 * @param laboratory - the laboratory without result
+	 * @param laboratory the laboratory without result
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
@@ -270,12 +260,12 @@ public class LabManager {
 		setPatientConsistency(laboratory);
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
-	
+
 	/**
 	 * Update one Laboratory request {(All Procedures).
 	 *
-	 * @param code - the code of the laboratory
-	 * @param status - the LaboratoryStatus to set
+	 * @param code the code of the laboratory
+	 * @param status the LaboratoryStatus to set
 	 * @return the updated {@link Laboratory}
 	 * @throws OHServiceException
 	 */
@@ -292,35 +282,34 @@ public class LabManager {
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures).
 	 *
-	 * @param laboratory - the laboratory with its result (Procedure 1)
-	 * @param labRow - the list of results (Procedure 2) - it can be {@code null}
+	 * @param laboratory the laboratory with its result (Procedure 1)
+	 * @param labRow the list of results (Procedure 2); it can be {@code null}
 	 * @return the updated {@link Laboratory}
 	 * @throws OHServiceException
 	 */
 	public Laboratory updateLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		Integer procedure = laboratory.getExam().getProcedure();
-		switch (procedure) {
-			case 1:
-				return ioOperations.updateLabFirstProcedure(laboratory);
-			case 2:
-				if (labRow == null || labRow.isEmpty()) {
-					throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
-				}
-				return ioOperations.updateLabSecondProcedure(laboratory, labRow);
-			case 3:
-				// TODO: is it enough to call FirstProcedure?
-				return ioOperations.updateLabFirstProcedure(laboratory);
-			default:
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		return switch (procedure) {
+		case 1 -> ioOperations.updateLabFirstProcedure(laboratory);
+		case 2 -> {
+			if (labRow == null || labRow.isEmpty()) {
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
+			}
+			yield ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		}
+		case 3 ->
+			// TODO: is it enough to call FirstProcedure?
+			ioOperations.updateLabFirstProcedure(laboratory);
+		default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
+		};
 	}
 
 	/**
 	 * Inserts list of Laboratory exams {@link Laboratory} (All Procedures).
 	 *
-	 * @param labList - the laboratory list with results
-	 * @param labRowList - the list of results, it can be {@code null}
+	 * @param labList the laboratory list with results
+	 * @param labRowList the list of results, it can be {@code null}
 	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
 	 */
@@ -343,8 +332,8 @@ public class LabManager {
 	/**
 	 * Inserts list of Laboratory exams {@link Laboratory} (All Procedures).
 	 *
-	 * @param labList - the laboratory list with results
-	 * @param labRowList - the list of results, it can be {@code null}
+	 * @param labList the laboratory list with results
+	 * @param labRowList the list of results, it can be {@code null}
 	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
 	 */
@@ -367,7 +356,7 @@ public class LabManager {
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (Procedure One)
 	 *
-	 * @param laboratory - the {@link Laboratory} to insert
+	 * @param laboratory the {@link Laboratory} to insert
 	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
@@ -378,8 +367,8 @@ public class LabManager {
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two).
 	 *
-	 * @param laboratory - the {@link Laboratory} to insert
-	 * @param labRow - the list of results ({@link String}s)
+	 * @param laboratory the {@link Laboratory} to insert
+	 * @param labRow the list of results ({@link String}s)
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
@@ -388,10 +377,9 @@ public class LabManager {
 	}
 
 	/**
-	 * Delete a Laboratory exam {@link Laboratory} (Procedure One or Two).
-	 * Previous results, if any, are deleted as well.
+	 * Delete a Laboratory exam {@link Laboratory} (Procedure One or Two). Previous results, if any, are deleted as well.
 	 *
-	 * @param laboratory - the {@link Laboratory} to delete
+	 * @param laboratory the {@link Laboratory} to delete
 	 * @throws OHServiceException
 	 */
 	public void deleteLaboratory(Laboratory laboratory) throws OHServiceException {
@@ -457,16 +445,7 @@ public class LabManager {
 	}
 
 	/**
-	 * Return a list of material descriptions (default: undefined):
-	 * undefined,
-	 * blood,
-	 * urine,
-	 * stool,
-	 * sputum,
-	 * cfs,
-	 * swabs,
-	 * tissues,
-	 * film
+	 * Return a list of material descriptions (default: undefined): undefined, blood, urine, stool, sputum, cfs, swabs, tissues, film
 	 *
 	 * @return
 	 */
@@ -480,8 +459,9 @@ public class LabManager {
 	}
 
 	/**
-	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 * Return the whole list of exams ({@link Laboratory}s) with the given code
 	 *
+	 * @param code the {@link Laboratory} code
 	 * @return the list of {@link Laboratory}s. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
@@ -498,8 +478,9 @@ public class LabManager {
 	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
 		return ioOperations.getLabRow(code);
 	}
-	
-	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size) throws OHServiceException {
+
+	public PagedResponse<Laboratory> getLaboratoryPageable(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size)
+		throws OHServiceException {
 		return ioOperations.getLaboratoryPageable(exam, dateFrom, dateTo, patient, page, size);
 	}
 
