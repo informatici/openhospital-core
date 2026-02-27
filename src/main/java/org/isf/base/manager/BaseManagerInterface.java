@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.base.manager;
 
-import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
-import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.base.model.BaseEntity;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional(rollbackFor = OHServiceException.class)
-@TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
+import java.util.List;
 
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
-	}
+public interface BaseManagerInterface<T extends BaseEntity> {
+
+	List<T> getAll();
+
+	T getById(Integer id) throws OHServiceException;
+
+	T create(T entity) throws OHDataValidationException;
+
+	T update(Integer id, T entity) throws OHDataValidationException;
+
+	void delete(Integer id);
 }

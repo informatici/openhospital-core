@@ -21,10 +21,10 @@
  */
 package org.isf.town.service;
 
+import org.isf.base.service.BaseIoOperationRepository;
 import org.isf.town.model.Town;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TownIoOperationRepository extends JpaRepository<Town, Integer> {
+public interface TownIoOperationRepository extends BaseIoOperationRepository<Town> {
 }

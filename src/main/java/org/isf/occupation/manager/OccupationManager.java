@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.occupation.manager;
 
-import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
-import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.base.manager.BaseManager;
+import org.isf.generaldata.MessageBundle;
+import org.isf.occupation.model.Occupation;
+import org.isf.occupation.service.OccupationIoOperation;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.isf.utils.exception.model.OHExceptionMessage;
+import org.springframework.stereotype.Component;
 
-@Service
-@Transactional(rollbackFor = OHServiceException.class)
-@TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
+import java.util.List;
 
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
+@Component
+public class OccupationManager extends BaseManager<Occupation> {
+
+	public OccupationManager(OccupationIoOperation occupationIoOperation) {
+		super(occupationIoOperation);
 	}
 }

@@ -21,10 +21,10 @@
  */
 package org.isf.ethnic.service;
 
+import org.isf.base.service.BaseIoOperationRepository;
 import org.isf.ethnic.model.Ethnic;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EthnicIoOperationRepository extends JpaRepository<Ethnic, Integer> {
+public interface EthnicIoOperationRepository extends BaseIoOperationRepository<Ethnic> {
 }

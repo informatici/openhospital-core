@@ -21,41 +21,19 @@
  */
 package org.isf.town.service;
 
+import org.isf.base.service.BaseIoOperation;
 import org.isf.town.model.Town;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class TownIoOperation {
-	private final TownIoOperationRepository townIoOperationRepository;
+public class TownIoOperation extends BaseIoOperation<Town, TownIoOperationRepository> {
 
 	public TownIoOperation(TownIoOperationRepository townIoOperationRepository) {
-		this.townIoOperationRepository = townIoOperationRepository;
-	}
-
-	public List<Town> getTowns() {
-		return townIoOperationRepository.findAll();
-	}
-
-	public Town getTownById(Integer id) {
-		return townIoOperationRepository.findById(id).orElse(null);
-	}
-
-	public Town save(Town town) {
-		return townIoOperationRepository.save(town);
-	}
-
-	public Town update(Town town) {
-		return townIoOperationRepository.save(town);
-	}
-
-	public void delete(Town town) {
-		townIoOperationRepository.delete(town);
+		super(townIoOperationRepository);
 	}
 }

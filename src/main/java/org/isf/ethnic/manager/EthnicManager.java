@@ -21,83 +21,15 @@
  */
 package org.isf.ethnic.manager;
 
+import org.isf.base.manager.BaseManager;
 import org.isf.ethnic.model.Ethnic;
 import org.isf.ethnic.service.EthnicIoOperation;
-import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHDataValidationException;
-import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class EthnicManager {
-
-	private final EthnicIoOperation ethnicIoOperation;
+public class EthnicManager extends BaseManager<Ethnic> {
 
 	public EthnicManager(EthnicIoOperation ethnicIoOperation) {
-		this.ethnicIoOperation = ethnicIoOperation;
-	}
-
-	/**
-	 * Inserts a new {@link Ethnic} into the DB.
-	 *
-	 * @param ethnic the {@link Ethnic} object to insert
-	 * @return the newly inserted {@link Ethnic} object.
-	 */
-	public Ethnic newEthnic(Ethnic ethnic) throws OHDataValidationException {
-		validEthnic(ethnic);
-		return ethnicIoOperation.save(ethnic);
-	}
-
-	/**
-	 * Updates the specified {@link Ethnic} object.
-	 *
-	 * @param ethnic the {@link Ethnic} object to update.
-	 * @return the updated {@link Ethnic} object.
-	 */
-	public Ethnic updateEthnic(Ethnic ethnic) throws OHDataValidationException {
-		validEthnic(ethnic);
-		return ethnicIoOperation.update(ethnic);
-	}
-
-	/**
-	 * Returns the list of {@link Ethnic}s in DB.
-	 *
-	 * @return the list of {@link Ethnic}s
-	 */
-	public List<Ethnic> getAllEthnics() {
-		return ethnicIoOperation.getEthnics();
-	}
-
-	/**
-	 * Returns a specific {@link Ethnic} based on ethnic id.
-	 *
-	 * @param id the type code.
-	 * @return a {@link Ethnic}
-	 */
-	public Ethnic getEthnic(Integer id) throws OHServiceException {
-		Ethnic foundEthnic = ethnicIoOperation.getEthnicById(id);
-		if (foundEthnic == null) {
-			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.notfound.msg")));
-		}
-		return foundEthnic;
-	}
-
-	/**
-	 * Deletes a {@link Ethnic} in the DB.
-	 *
-	 * @param ethnic the item to delete
-	 */
-	public void deleteEthnic(Ethnic ethnic) throws OHServiceException {
-		ethnicIoOperation.delete(ethnic);
-	}
-
-	private void validEthnic(Ethnic ethnic) throws OHDataValidationException {
-
-		if (ethnic.getName() == null || ethnic.getName().isBlank() || ethnic.getName().isEmpty()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidname.msg")));
-		}
+		super(ethnicIoOperation);
 	}
 }

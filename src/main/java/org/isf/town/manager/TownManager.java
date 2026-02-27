@@ -21,82 +21,15 @@
  */
 package org.isf.town.manager;
 
-import org.isf.generaldata.MessageBundle;
+import org.isf.base.manager.BaseManager;
 import org.isf.town.model.Town;
 import org.isf.town.service.TownIoOperation;
-import org.isf.utils.exception.OHDataValidationException;
-import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class TownManager {
-
-	private final TownIoOperation townIoOperation;
+public class TownManager extends BaseManager<Town> {
 
 	public TownManager(TownIoOperation townIoOperation) {
-		this.townIoOperation = townIoOperation;
-	}
-
-	/**
-	 * Inserts a new {@link Town} into the DB.
-	 *
-	 * @param town the {@link Town} object to insert
-	 * @return the newly inserted {@link Town} object.
-	 */
-	public Town newTown(Town town) throws OHDataValidationException {
-		return townIoOperation.save(town);
-	}
-
-	/**
-	 * Updates the specified {@link Town} object.
-	 *
-	 * @param town the {@link Town} object to update.
-	 * @return the updated {@link Town} object.
-	 */
-	public Town updateTown(Town town) throws OHDataValidationException {
-		validTown(town);
-		return townIoOperation.update(town);
-	}
-
-	/**
-	 * Returns the list of {@link Town}s in DB.
-	 *
-	 * @return the list of {@link Town}s
-	 */
-	public List<Town> getAllTowns() {
-		return townIoOperation.getTowns();
-	}
-
-	/**
-	 * Returns a specific {@link Town} based on town id.
-	 *
-	 * @param id the type code.
-	 * @return a {@link Town}
-	 */
-	public Town getTown(Integer id) throws OHServiceException {
-		Town foundTown = townIoOperation.getTownById(id);
-		if (foundTown == null) {
-			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.notfound.msg")));
-		}
-		return foundTown;
-	}
-
-	/**
-	 * Deletes a {@link Town} in the DB.
-	 *
-	 * @param town the item to delete
-	 */
-	public void deleteTown(Town town) throws OHServiceException {
-		townIoOperation.delete(town);
-	}
-
-	private void validTown(Town town) throws OHDataValidationException {
-
-		if (town.getName() == null || town.getName().isBlank() || town.getName().isEmpty()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidname.msg")));
-		}
+		super(townIoOperation);
 	}
 }

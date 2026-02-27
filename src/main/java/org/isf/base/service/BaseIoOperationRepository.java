@@ -19,21 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.base.service;
 
-import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
-import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.isf.base.model.BaseEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-@Service
-@Transactional(rollbackFor = OHServiceException.class)
-@TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
-
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
-	}
+@NoRepositoryBean
+public interface BaseIoOperationRepository<T extends BaseEntity> extends JpaRepository<T, Integer> {
+	T findByName(String name);
 }

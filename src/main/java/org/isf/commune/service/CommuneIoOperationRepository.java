@@ -21,10 +21,10 @@
  */
 package org.isf.commune.service;
 
+import org.isf.base.service.BaseIoOperationRepository;
 import org.isf.commune.model.Commune;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommuneIoOperationRepository extends JpaRepository<Commune, Integer> {
+public interface CommuneIoOperationRepository extends BaseIoOperationRepository<Commune> {
 }

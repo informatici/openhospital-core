@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.base.model;
 
-import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
-import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.*;
+import org.isf.utils.db.Auditable;
 
-@Service
-@Transactional(rollbackFor = OHServiceException.class)
-@TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
+@MappedSuperclass
+public abstract class BaseEntity extends Auditable<String> {
 
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
-	}
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Integer id;
+
+	@Column(nullable = false, unique = true)
+	protected String name;
+
+	public Integer getId() { return id; }
+
+	public void setId(Integer id) { this.id = id; }
+
+	public String getName() { return name; }
+
+	public void setName(String name) { this.name = name; }
+
 }

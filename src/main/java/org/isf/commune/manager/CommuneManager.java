@@ -21,83 +21,15 @@
  */
 package org.isf.commune.manager;
 
+import org.isf.base.manager.BaseManager;
 import org.isf.commune.model.Commune;
 import org.isf.commune.service.CommuneIoOperation;
-import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHDataValidationException;
-import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class CommuneManager {
-
-	private final CommuneIoOperation communeIoOperation;
+public class CommuneManager extends BaseManager<Commune> {
 
 	public CommuneManager(CommuneIoOperation communeIoOperation) {
-		this.communeIoOperation = communeIoOperation;
-	}
-
-	/**
-	 * Inserts a new {@link Commune} into the DB.
-	 *
-	 * @param commune the {@link Commune} object to insert
-	 * @return the newly inserted {@link Commune} object.
-	 */
-	public Commune newCommune(Commune commune) throws OHDataValidationException {
-		validCommune(commune);
-		return communeIoOperation.save(commune);
-	}
-
-	/**
-	 * Updates the specified {@link Commune} object.
-	 *
-	 * @param commune the {@link Commune} object to update.
-	 * @return the updated {@link Commune} object.
-	 */
-	public Commune updateCommune(Commune commune) throws OHDataValidationException {
-		validCommune(commune);
-		return communeIoOperation.update(commune);
-	}
-
-	/**
-	 * Returns the list of {@link Commune}s in DB.
-	 *
-	 * @return the list of {@link Commune}s
-	 */
-	public List<Commune> getAllCommunes() {
-		return communeIoOperation.getCommunes();
-	}
-
-	/**
-	 * Returns a specific {@link Commune} based on commune id.
-	 *
-	 * @param id the type code.
-	 * @return a {@link Commune}
-	 */
-	public Commune getCommune(Integer id) throws OHServiceException {
-		Commune foundCommune = communeIoOperation.getCommuneById(id);
-		if (foundCommune == null) {
-			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.notfound.msg")));
-		}
-		return foundCommune;
-	}
-
-	/**
-	 * Deletes a {@link Commune} in the DB.
-	 *
-	 * @param commune the item to delete
-	 */
-	public void deleteCommune(Commune commune) throws OHServiceException {
-		communeIoOperation.delete(commune);
-	}
-
-	private void validCommune(Commune commune) throws OHDataValidationException {
-
-		if (commune.getName() == null || commune.getName().isBlank() || commune.getName().isEmpty()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavalidname.msg")));
-		}
+		super(communeIoOperation);
 	}
 }

@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.occupation.service;
 
 import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
+import org.isf.occupation.model.Occupation;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
+public class OccupationIoOperation extends BaseIoOperation<Occupation, OccupationIoOperationRepository> {
 
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
+	public OccupationIoOperation(OccupationIoOperationRepository occupationIoOperationRepository) {
+		super(occupationIoOperationRepository);
 	}
 }

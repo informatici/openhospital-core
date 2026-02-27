@@ -21,41 +21,19 @@
  */
 package org.isf.ethnic.service;
 
+import org.isf.base.service.BaseIoOperation;
 import org.isf.ethnic.model.Ethnic;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class EthnicIoOperation {
-	private final EthnicIoOperationRepository ethnicIoOperationRepository;
+public class EthnicIoOperation extends BaseIoOperation<Ethnic, EthnicIoOperationRepository> {
 
 	public EthnicIoOperation(EthnicIoOperationRepository ethnicIoOperationRepository) {
-		this.ethnicIoOperationRepository = ethnicIoOperationRepository;
-	}
-
-	public List<Ethnic> getEthnics() {
-		return ethnicIoOperationRepository.findAll();
-	}
-
-	public Ethnic getEthnicById(Integer id) {
-		return ethnicIoOperationRepository.findById(id).orElse(null);
-	}
-
-	public Ethnic save(Ethnic ethnic) {
-		return ethnicIoOperationRepository.save(ethnic);
-	}
-
-	public Ethnic update(Ethnic ethnic) {
-		return ethnicIoOperationRepository.save(ethnic);
-	}
-
-	public void delete(Ethnic ethnic) {
-		ethnicIoOperationRepository.delete(ethnic);
+		super(ethnicIoOperationRepository);
 	}
 }

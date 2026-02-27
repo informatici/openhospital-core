@@ -19,21 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.commune.service;
+package org.isf.occupation.model;
 
-import org.isf.base.service.BaseIoOperation;
-import org.isf.commune.model.Commune;
-import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.*;
+import org.isf.base.model.BaseEntity;
+import org.isf.utils.db.Auditable;
 
-@Service
-@Transactional(rollbackFor = OHServiceException.class)
-@TranslateOHServiceException
-public class CommuneIoOperation extends BaseIoOperation<Commune, CommuneIoOperationRepository> {
-
-	public CommuneIoOperation(CommuneIoOperationRepository communeIoOperationRepository) {
-		super(communeIoOperationRepository);
-	}
+@Entity
+@Table(name="OH_OCCUPATION")
+@AttributeOverride(name = "createdBy", column = @Column(name = "OCC_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OCC_CREATED_DATE", updatable = false))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OCC_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OCC_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "active", column = @Column(name = "OCC_ACTIVE"))
+@AttributeOverride(name = "id",   column = @Column(name="OCC_ID"))
+@AttributeOverride(name = "name", column = @Column(name="OCC_NAME"))
+public class Occupation extends BaseEntity {
 }

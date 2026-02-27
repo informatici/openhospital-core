@@ -21,8 +21,11 @@
  */
 package org.isf.commune.model;
 
-import jakarta.persistence.*;
-import org.isf.utils.db.Auditable;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.isf.base.model.BaseEntity;
 
 @Entity
 @Table(name="OH_COMMUNE")
@@ -31,37 +34,7 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "COM_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "COM_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "COM_ACTIVE"))
-public class Commune extends Auditable<String> {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="COM_ID")
-	private Integer id;
-
-	@Column(name="COM_NAME")
-	private String name;
-
-	public Commune() {
-	}
-
-	public Commune(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+@AttributeOverride(name = "id",   column = @Column(name="COM_ID"))
+@AttributeOverride(name = "name", column = @Column(name="COM_NAME"))
+public class Commune extends BaseEntity {
 }
