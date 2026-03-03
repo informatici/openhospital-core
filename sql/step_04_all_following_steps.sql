@@ -127,3 +127,4 @@ source step_a130_update_patient_table.sql;
 source step_a131_update_admission_table.sql;
 source step_a132_update_patient_age_units.sql;
 source step_a133_add_town_ethnic_commune.sql;
+source step_a134_update_medical_history_table.sql;

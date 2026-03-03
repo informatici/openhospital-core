@@ -22,26 +22,16 @@
 package org.isf.medicalhistory.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.*;
 import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.Patient;
+import org.isf.utils.converter.JsonListConverter;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.drew.lang.annotations.NotNull;
-
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "OH_MEDICALHISTORY")
@@ -84,11 +74,13 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "MH_BIRTH_WGHT")
 	private Double birthWeight;
 
-	@Column(name = "MH_VACC_STATE_PREV")
-	private String vaccinationStatePev;
+	@Column(name = "MH_VACC_STATE_PREV", columnDefinition = "JSON")
+	@Convert(converter = JsonListConverter.class)
+	private List<String> vaccinationStatePev;
 
-	@Column(name = "MH_VACC_STATE_NO_PREV")
-	private String vaccinationStateNoPev;
+	@Column(name = "MH_VACC_STATE_NO_PREV", columnDefinition = "JSON")
+	@Convert(converter = JsonListConverter.class)
+	private List<String> vaccinationStateNoPev;
 
 	@Column(name = "MH_ANTI_MLRIAL_PROPHY_MILDA")
 	private String antiMalarialProphylaxisMilda;
@@ -194,7 +186,7 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 
 	}
 
-	public MedicalHistory(Integer id, Patient patient, String siblingRank, String termPregnancy, String deliveryMode, String reasonMode, String apgarScore, Double birthWeight, String vaccinationStatePev, String vaccinationStateNoPev, String antiMalarialProphylaxisMilda, String antiMalarialProphylaxisVap, String antiMalarialProphylaxisOthers, Boolean surgicalProcedure, String surgicalProcedureCondition, String surgicalProcedureType, LocalDateTime surgicalProcedureDate, String diversification, String neonatalPeriod, String previousHospitalization, String father, String mother, String siblings, String otherUsefulInformation, String diet, Boolean deParasitization, String psychomotorDev, String somaticGrowth, Boolean ironSupplement, Boolean folicAcidSupplement, Boolean vitASupplement, String otherSupplements, Boolean transfusion, LocalDateTime lastTransfusionDate, Boolean sickleCell, Boolean drugAllergy, String allergyPrecision, String hemylosis, String otherPersonalPathologies, String otherFamilyPathologies, LocalDateTime performedAt, int lock, int hashCode) {
+	public MedicalHistory(Integer id, Patient patient, String siblingRank, String termPregnancy, String deliveryMode, String reasonMode, String apgarScore, Double birthWeight, List<String> vaccinationStatePev, List<String> vaccinationStateNoPev, String antiMalarialProphylaxisMilda, String antiMalarialProphylaxisVap, String antiMalarialProphylaxisOthers, Boolean surgicalProcedure, String surgicalProcedureCondition, String surgicalProcedureType, LocalDateTime surgicalProcedureDate, String diversification, String neonatalPeriod, String previousHospitalization, String father, String mother, String siblings, String otherUsefulInformation, String diet, Boolean deParasitization, String psychomotorDev, String somaticGrowth, Boolean ironSupplement, Boolean folicAcidSupplement, Boolean vitASupplement, String otherSupplements, Boolean transfusion, LocalDateTime lastTransfusionDate, Boolean sickleCell, Boolean drugAllergy, String allergyPrecision, String hemylosis, String otherPersonalPathologies, String otherFamilyPathologies, LocalDateTime performedAt, int lock, int hashCode) {
 		this.id = id;
 		this.patient = patient;
 		this.siblingRank = siblingRank;
@@ -507,19 +499,19 @@ public class MedicalHistory extends Auditable<String> implements Comparable<Pati
 		this.reasonMode = reasonMode;
 	}
 
-	public String getVaccinationStatePev() {
+	public List<String> getVaccinationStatePev() {
 		return vaccinationStatePev;
 	}
 
-	public void setVaccinationStatePev(String vaccinationStatePev) {
+	public void setVaccinationStatePev(List<String> vaccinationStatePev) {
 		this.vaccinationStatePev = vaccinationStatePev;
 	}
 
-	public String getVaccinationStateNoPev() {
+	public List<String> getVaccinationStateNoPev() {
 		return vaccinationStateNoPev;
 	}
 
-	public void setVaccinationStateNoPev(String vaccinationStateNoPev) {
+	public void setVaccinationStateNoPev(List<String> vaccinationStateNoPev) {
 		this.vaccinationStateNoPev = vaccinationStateNoPev;
 	}
 
