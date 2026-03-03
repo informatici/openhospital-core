@@ -41,5 +41,4 @@ public abstract class BaseEntity extends Auditable<String> {
 	public String getName() { return name; }
 
 	public void setName(String name) { this.name = name; }
-
 }
