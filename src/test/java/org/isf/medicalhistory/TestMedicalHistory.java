@@ -24,6 +24,7 @@ package org.isf.medicalhistory;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.isf.medicalhistory.model.MedicalHistory;
 import org.isf.patient.TestPatient;
@@ -57,8 +58,8 @@ public class TestMedicalHistory {
 		mh.setApgarScore("8/10");
 		mh.setBirthWeight(3.2);
 
-		mh.setVaccinationStatePev("Up to date");
-		mh.setVaccinationStateNoPev("Missing Hepatitis B");
+		mh.setVaccinationStatePev(List.of("Up to date"));
+		mh.setVaccinationStateNoPev(List.of("Missing Hepatitis B"));
 
 		mh.setAntiMalarialProphylaxisMilda("Yes");
 		mh.setAntiMalarialProphylaxisVap("No");
@@ -111,8 +112,8 @@ public class TestMedicalHistory {
 		assertThat(mh.getApgarScore()).isEqualTo("8/10");
 		assertThat(mh.getBirthWeight()).isEqualTo(3.2);
 
-		assertThat(mh.getVaccinationStatePev()).isEqualTo("Up to date");
-		assertThat(mh.getVaccinationStateNoPev()).isEqualTo("Missing Hepatitis B");
+		assertThat(mh.getVaccinationStatePev().get(0)).isEqualTo("Up to date");
+		assertThat(mh.getVaccinationStateNoPev().get(0)).isEqualTo("Missing Hepatitis B");
 
 		assertThat(mh.getAntiMalarialProphylaxisMilda()).isEqualTo("Yes");
 		assertThat(mh.getAntiMalarialProphylaxisVap()).isEqualTo("No");
