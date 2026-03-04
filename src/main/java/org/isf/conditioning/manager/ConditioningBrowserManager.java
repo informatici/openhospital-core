@@ -104,9 +104,6 @@ public class ConditioningBrowserManager {
 		if (conditioning.getMce() != null && conditioning.getMce() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("mceDuree should be positif.")));
 		}
-		if (conditioning.getVentilation() != null && conditioning.getVentilation() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("ventilationDuree should be positif.")));
-		}
 
 		if (conditioning.getOxygenDebit() != null && conditioning.getOxygenDebit() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("oxygeneDebit should be positif.")));
@@ -123,10 +120,6 @@ public class ConditioningBrowserManager {
 
 		if (conditioning.getPerformedAt() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("performAt is required.")));
-		}
-
-		if (conditioning.getSngNumber() != null && conditioning.getSngNumber().length() > 50) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("sngNumero should have 50 caraters max.")));
 		}
 
 		if (!errors.isEmpty()) {

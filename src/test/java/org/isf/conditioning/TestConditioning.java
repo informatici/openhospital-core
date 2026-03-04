@@ -35,18 +35,19 @@ public class TestConditioning {
 	private static final Boolean ASPIRATION = true;
 	private static final Boolean CPAP = true;
 	private static final Integer MCE = 4;
-	private static final Integer VENTILATION = 2;
+	private static final Boolean VENTILATION = true;
 	private static final Double OXYGEN_DEBIT = 3.0;
 	private static final Double SG_VOLUME = 10.0;
 	private static final Double DIAZEPAM_DOSE = 12.0;
 	private static final Double BOLUS_SS_VOLUME = 3.0;
-	private static final String SNG_NUMBER = "SNG-123";
+	private static final Boolean SNG_NUMBER = true;
 	private static final String OTHERS = "others note";
 	private static final LocalDateTime PERFORMED_AT = LocalDateTime.of(2025, 1, 1, 10, 0);
 	private static final int LOCK = 0;
 	private static final String HIV_TEST = "INDETERMINATE";
 	private static final String MALARIA = "undetermined";
 	private static final Double BLOOD_GLUCOSE_LEVEL = 5.6;
+	private static final Boolean REHEATING = false;
 
 	public Conditioning setup(Patient patient, User user, boolean usingSet) throws OHException {
 		Conditioning conditioning;
@@ -55,7 +56,7 @@ public class TestConditioning {
 			conditioning = new Conditioning();
 			setParameters(conditioning, user, patient);
 		} else {
-			conditioning = new Conditioning(null, user, ASPIRATION, MCE, VENTILATION, OXYGEN_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMBER, OTHERS, PERFORMED_AT, patient, CPAP, LOCK, MALARIA, BLOOD_GLUCOSE_LEVEL, HIV_TEST);
+			conditioning = new Conditioning(null, user, ASPIRATION, MCE, VENTILATION, OXYGEN_DEBIT, BOLUS_SS_VOLUME, DIAZEPAM_DOSE, SG_VOLUME, SNG_NUMBER, OTHERS, PERFORMED_AT, patient, CPAP, LOCK, MALARIA, BLOOD_GLUCOSE_LEVEL, HIV_TEST, REHEATING);
 			conditioning.setLock(LOCK);
 		}
 
