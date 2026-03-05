@@ -65,6 +65,7 @@ public class TestAdmission {
 	private Boolean referenceSheet = false;
 	private Boolean qualifiedAgent = false;
 	private String transportation = "transportation";
+	private String courseOfAction = "Course of action";
 
 	public Admission setup(
 			Ward ward,
@@ -92,7 +93,7 @@ public class TestAdmission {
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, anamnesis,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
 					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason,
-					alertReceived, referenceSheet, qualifiedAgent, transportation);
+					alertReceived, referenceSheet, qualifiedAgent, transportation, courseOfAction);
 		}
 
 		return admission;
@@ -146,6 +147,7 @@ public class TestAdmission {
 		admission.setReferenceSheet(referenceSheet);
 		admission.setQualifiedAgent(qualifiedAgent);
 		admission.setTransportation(transportation);
+		admission.setCourseOfAction(courseOfAction);
 	}
 
 	public void check(Admission admission) {
@@ -174,6 +176,7 @@ public class TestAdmission {
 		assertThat(admission.getReferenceSheet()).isEqualTo(referenceSheet);
 		assertThat(admission.getQualifiedAgent()).isEqualTo(qualifiedAgent);
 		assertThat(admission.getTransportation()).isEqualTo(transportation);
+		assertThat(admission.getCourseOfAction()).isEqualTo(courseOfAction);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();
