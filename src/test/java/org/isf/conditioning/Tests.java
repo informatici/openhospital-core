@@ -124,10 +124,10 @@ public class Tests extends OHCoreTestCase {
 		Conditioning conditioning = setupConditioning(true);
 		Conditioning saved = conditioningBrowserManager.newConditioning(conditioning);
 		saved.setMce(99);
-		saved.setSngNumber("SN-02");
+		saved.setSngNumber(true);
 		Conditioning updated = conditioningBrowserManager.updateConditioning(saved);
 		assertThat(99).isEqualTo(updated.getMce());
-		assertThat("SN-02").isEqualTo(updated.getSngNumber());
+		assertThat(true).isEqualTo(updated.getSngNumber());
 	}
 
 	@Test

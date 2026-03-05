@@ -59,7 +59,7 @@ public class Conditioning extends Auditable<String> {
 	private Integer mce;
 
 	@Column(name = "COND_VENTILATION")
-	private Integer ventilation;
+	private Boolean ventilation;
 
 	@Column(name = "COND_OXYGEN_DEBIT")
 	private Double oxygenDebit;
@@ -74,7 +74,7 @@ public class Conditioning extends Auditable<String> {
 	private Double bolusSsVolume;
 
 	@Column(name = "COND_SNG_NUMBER")
-	private String sngNumber;
+	private Boolean sngNumber;
 
 	@Column(name = "COND_MALARIA")
 	private String malaria;
@@ -84,6 +84,9 @@ public class Conditioning extends Auditable<String> {
 
 	@Column(name = "COND_BLOOD_GLUCOSE_LEVEL")
 	private Double bloodGlucoseLevel;
+
+	@Column(name = "COND_REHEATING")
+	private Boolean reheating;
 
 	@Column(name = "COND_OTHERS")
 	private String others;
@@ -107,7 +110,7 @@ public class Conditioning extends Auditable<String> {
 	@Column(name="COND_LOCK")
 	private int lock;
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient) {
+	public Conditioning(Integer id, Boolean aspiration, Integer mce, Boolean ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose, Double bolusSsVolume, Boolean sngNumber, String others, LocalDateTime performedAt, Patient patient) {
 		this.id = id;
 		this.aspiration = aspiration;
 		this.mce = mce;
@@ -121,8 +124,8 @@ public class Conditioning extends Auditable<String> {
 		this.patient = patient;
 	}
 
-	public Conditioning(Integer id, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
-						Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock) {
+	public Conditioning(Integer id, Boolean aspiration, Integer mce, Boolean ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
+						Double bolusSsVolume, Boolean sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock) {
 		super();
 		this.id = id;
 		this.aspiration = aspiration;
@@ -140,9 +143,9 @@ public class Conditioning extends Auditable<String> {
 		this.lock = lock;
 	}
 
-	public Conditioning(Integer id, User performedBy, Boolean aspiration, Integer mce, Integer ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
-		Double bolusSsVolume, String sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock,
-		String malaria, Double bloodGlucoseLevel, String hivTest
+	public Conditioning(Integer id, User performedBy, Boolean aspiration, Integer mce, Boolean ventilation, Double oxygenDebit, Double sgVolume, Double diazepamDose,
+		Double bolusSsVolume, Boolean sngNumber, String others, LocalDateTime performedAt, Patient patient, Boolean cpap, int lock,
+		String malaria, Double bloodGlucoseLevel, String hivTest, Boolean reheating
 	) {
 		super();
 		this.id = id;
@@ -163,6 +166,7 @@ public class Conditioning extends Auditable<String> {
 		this.malaria = malaria;
 		this.bloodGlucoseLevel = bloodGlucoseLevel;
 		this.hivTest =  hivTest;
+		this.reheating = reheating;
 	}
 
 	public Conditioning() {
@@ -200,11 +204,11 @@ public class Conditioning extends Auditable<String> {
 		this.mce = mce;
 	}
 
-	public Integer getVentilation() {
+	public Boolean getVentilation() {
 		return ventilation;
 	}
 
-	public void setVentilation(Integer ventilation) {
+	public void setVentilation(Boolean ventilation) {
 		this.ventilation = ventilation;
 	}
 
@@ -252,11 +256,11 @@ public class Conditioning extends Auditable<String> {
 
 	public void setBloodGlucoseLevel(Double bloodGlucoseLevel) {this.bloodGlucoseLevel = bloodGlucoseLevel;}
 
-	public String getSngNumber() {
+	public Boolean getSngNumber() {
 		return sngNumber;
 	}
 
-	public void setSngNumber(String sngNumber) {
+	public void setSngNumber(Boolean sngNumber) {
 		this.sngNumber = sngNumber;
 	}
 
@@ -297,7 +301,15 @@ public class Conditioning extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-	
+
+	public Boolean getReheating() {
+		return reheating;
+	}
+
+	public void setReheating(Boolean reheating) {
+		this.reheating = reheating;
+	}
+
 	public int getLock() {
 		return lock;
 	}
