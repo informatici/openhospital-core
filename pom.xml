@@ -218,7 +218,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.5.5</version>
 				<configuration>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
