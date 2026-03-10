@@ -3,6 +3,7 @@ package org.isf.cares.manager;
 import org.isf.cares.model.Care;
 import org.isf.cares.services.CareIoOperation;
 import org.isf.conditioning.model.Conditioning;
+import org.isf.encounter.model.Encounter;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Component;
 
@@ -57,5 +58,16 @@ public class CareManager {
 	 */
 	public Care getCareById(int careId) throws OHServiceException {
 		return careIoOperation.getCareById(careId);
+	}
+
+	/**
+	 * Returns the list of Care for a given patient's encounter
+	 *
+	 * @param encounter encounter during which Care were created.
+	 * @return the list of {@link Care}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Care> getCareByPatientEncounter(Encounter encounter) throws OHServiceException {
+		return careIoOperation.getCareByPatientEncounter(encounter);
 	}
 }

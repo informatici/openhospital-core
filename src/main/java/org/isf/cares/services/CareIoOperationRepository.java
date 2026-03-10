@@ -26,9 +26,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CareIoOperationRepository extends JpaRepository<Care, Integer> {
 	@Query(value = "select c from Care c where c.patient.code = :patientId")
 	List<Care> findByPatient(@Param("patientId") Integer patientId);
+
+	@Query("SELECT c FROM Care c WHERE c.patient.code = :patientCode " + "AND c.careDate BETWEEN :performedAt AND :closedAt")
+	List<Care> findByDateBetweenAndPatientCode(
+		@Param("performedAt") LocalDateTime performedAt,
+		@Param("closedAt") LocalDateTime closedAt,
+		@Param("patientCode") Integer patientCode
+	);
 }

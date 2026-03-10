@@ -22,12 +22,15 @@
 package org.isf.cares.services;
 
 import org.isf.cares.model.Care;
+import org.isf.conditioning.model.Conditioning;
+import org.isf.encounter.model.Encounter;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,5 +105,19 @@ public class CareIoOperation {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+
+	/**
+	 * Returns the list of Care for a given patient's encounter
+	 *
+	 * @param encounter encounter during which Care were created.
+	 * @return the list of {@link Care}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Care> getCareByPatientEncounter(Encounter encounter) throws OHServiceException {
+		if (encounter.getClosedAt() != null) {
+			return careIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), encounter.getClosedAt(), encounter.getPatient().getCode());
+		}
+		return careIoOperationRepository.findByDateBetweenAndPatientCode(encounter.getPerformedAt(), LocalDateTime.now(), encounter.getPatient().getCode());
 	}
 }
