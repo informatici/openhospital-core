@@ -171,7 +171,7 @@
 		<dependency>
 			<groupId>com.github.oshi</groupId>
 			<artifactId>oshi-core</artifactId>
-			<version>6.6.5</version>
+			<version>6.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
