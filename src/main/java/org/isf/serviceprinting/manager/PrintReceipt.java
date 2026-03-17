@@ -1,29 +1,46 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici
+ * Senza Frontiere
+ * (info@informaticisenzafrontiere.org)
  *
- * Open Hospital is a free and open source software for healthcare data management.
+ * Open Hospital is a free and open
+ * source software for healthcare data
+ * management.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software: you
+ * can redistribute it and/or modify it
+ * under the terms of the GNU General
+ * Public License as published by the
+ * Free Software Foundation, either
+ * version 3 of the License, or (at your
+ * option) any later version.
  *
- * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ * https://www.gnu.org/licenses/gpl-3.0-
+ * standalone.html
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the
+ * hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even
+ * the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU
+ * General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of
+ * the GNU General Public License along
+ * with this program. If not, see
+ * <https://www.gnu.org/licenses/>.
  */
 package org.isf.serviceprinting.manager;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.print.Doc;
@@ -45,16 +62,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.export.JRTextExporter;
-import net.sf.jasperreports.engine.export.JRTextExporterParameter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleTextReportConfiguration;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 /**
- * This class will read generic/text printer parameters and compile and
- * print given jasper report. A copy will be at given file path
+ * This class will read generic/text
+ * printer parameters and compile and
+ * print given jasper report. A copy
+ * will be at given file path
  *
  * @author Mwithi
  */
@@ -69,32 +89,24 @@ public class PrintReceipt {
 	 * @param fileName
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
-				
+
 		TxtPrinter.initialize();
-		
+
 		try {
 			defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
 			if (defaultPrintService != null) {
 				if (TxtPrinter.MODE.equalsIgnoreCase("ZPL")) {
-					
-					JRTextExporter exporter = new JRTextExporter();
-					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-					exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, fileName);
-					exporter.setParameter(JRTextExporterParameter.CHARACTER_WIDTH, TxtPrinter.TXT_CHAR_WIDTH);
-					exporter.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT, TxtPrinter.TXT_CHAR_HEIGHT);
-					exporter.exportReport();
-					
+
+					exportToTxtFile(jasperPrint, fileName);
 					printFileZPL(fileName, !TxtPrinter.USE_DEFAULT_PRINTER);
-					
+
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("TXT")) {
-						
-					if (jasperPrint.getPages().size() > 1) {
-						printReversPages(jasperPrint);
-					} else {
-						JasperPrintManager.printReport(jasperPrint, !TxtPrinter.USE_DEFAULT_PRINTER);
-					}
+
+					exportToTxtFile(jasperPrint, fileName);
+					printFileTXT(fileName, !TxtPrinter.USE_DEFAULT_PRINTER);
+
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("PDF")) {
-					
+
 					if (jasperPrint.getPages().size() > 1) {
 						printReversPages(jasperPrint);
 					} else {
@@ -112,7 +124,74 @@ public class PrintReceipt {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
-	
+
+	private void exportToTxtFile(JasperPrint jasperPrint, String fileName) throws JRException {
+		JRTextExporter exporter = new JRTextExporter();
+
+		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+		exporter.setExporterOutput(new SimpleWriterExporterOutput(fileName));
+
+		SimpleTextReportConfiguration reportConfig = new SimpleTextReportConfiguration();
+		reportConfig.setCharWidth(Float.valueOf(TxtPrinter.TXT_CHAR_WIDTH));
+		reportConfig.setCharHeight(Float.valueOf(TxtPrinter.TXT_CHAR_HEIGHT));
+		exporter.setConfiguration(reportConfig);
+
+		exporter.exportReport();
+	}
+
+	private void printFileTXT(String file, boolean showDialog) {
+
+		PrintService printService;
+		if (showDialog) {
+			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+			PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
+			PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
+			printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
+		} else {
+			printService = defaultPrintService;
+		}
+		if (printService == null) {
+			return;
+		}
+
+		DocPrintJob job = printService.createPrintJob();
+		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+		PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+		DocAttributeSet das = new HashDocAttributeSet();
+
+		try {
+
+			byte[] text = Files.readAllBytes(Paths.get(file));
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			// ESC/POS init
+			out.write(new byte[] { 0x1B, '@' });
+
+			// Text content
+			out.write(text);
+
+			// Feed lines
+			for (int i = 0; i < TxtPrinter.TXT_FEED_LINES; i++) {
+				out.write('\n');
+			}
+
+			// Cut only if enabled
+			if (TxtPrinter.TXT_CUTTER) {
+				out.write(new byte[] { 0x1D, 'V', 1 }); // partial cut
+			}
+
+			byte[] data = out.toByteArray();
+
+			Doc doc = new SimpleDoc(data, flavor, das);
+			job.print(doc, pras);
+
+		} catch (IOException | PrintException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * @param file
 	 * @param showDialog
@@ -123,9 +202,9 @@ public class PrintReceipt {
 			if (showDialog) {
 				PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 				DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
-			    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
-			    PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
-			    printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
+				PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
+				PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
+				printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
 			} else {
 				printService = defaultPrintService;
 			}
@@ -137,30 +216,27 @@ public class PrintReceipt {
 			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
 			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 			DocAttributeSet das = new HashDocAttributeSet();
-			
+
 			try (FileReader frStream = new FileReader(file)) {
 				try (BufferedReader brStream = new BufferedReader(frStream)) {
 
 					int charH = TxtPrinter.ZPL_ROW_HEIGHT;
 					String font = "^A" + TxtPrinter.ZPL_FONT_TYPE;
 					String aLine = brStream.readLine();
-					String header = "^XA^LH0,30" + aLine;//starting point
 
-					StringBuilder zpl = new StringBuilder();
+					StringBuilder zpl = new StringBuilder("^XA^LH0,30");
 					int i = 0;
-					while (!aLine.equals("")) {
-						zpl.append("^FO0,").append(i * charH);         //line position
-						zpl.append(font).append(',').append(charH);    //font size
-						zpl.append("^FD").append(aLine).append("^FS"); //line field
+					while (aLine != null) {
+						zpl.append("^FO0,").append(i * charH);
+						zpl.append(font).append(',').append(charH);
+						zpl.append("^FD").append(aLine).append("^FS");
 						aLine = brStream.readLine();
 						i++;
 					}
-					zpl.append("^XZ");//end
-					String labelLength = "^LL" + charH * i;
-					header += labelLength;
-					String label = header + zpl;
+					zpl.append("^LL").append(charH * i);
+					zpl.append("^XZ");
 
-					byte[] by = label.getBytes();
+					byte[] by = zpl.toString().getBytes();
 					Doc doc = new SimpleDoc(by, flavor, das);
 					job.print(doc, pras);
 				}
@@ -169,19 +245,19 @@ public class PrintReceipt {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
-	
+
 	/**
 	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
 		try {
 			List<JRPrintPage> pages = jasperPrint.getPages();
-			JasperPrintManager.printPages(jasperPrint, 0, pages.size()-1, !TxtPrinter.USE_DEFAULT_PRINTER);
+			JasperPrintManager.printPages(jasperPrint, 0, pages.size() - 1, !TxtPrinter.USE_DEFAULT_PRINTER);
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
-	
+
 	/**
 	 * @param printService
 	 */
