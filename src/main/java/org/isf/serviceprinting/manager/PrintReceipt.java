@@ -126,9 +126,10 @@ public class PrintReceipt {
 	private void printFileTXT(String file, boolean showDialog) {
 
 		PrintService printService;
+		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+
 		if (showDialog) {
 			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
 			PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
 			PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
 			printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
@@ -140,7 +141,6 @@ public class PrintReceipt {
 		}
 
 		DocPrintJob job = printService.createPrintJob();
-		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
 		PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 		DocAttributeSet das = new HashDocAttributeSet();
 
