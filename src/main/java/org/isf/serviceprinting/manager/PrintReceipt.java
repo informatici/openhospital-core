@@ -45,12 +45,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.export.JRTextExporter;
-import net.sf.jasperreports.engine.export.JRTextExporterParameter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleTextReportConfiguration;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 /**
  * This class will read generic/text printer parameters and compile and
@@ -69,32 +70,26 @@ public class PrintReceipt {
 	 * @param fileName
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
-				
+
 		TxtPrinter.initialize();
-		
+
 		try {
 			defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
 			if (defaultPrintService != null) {
 				if (TxtPrinter.MODE.equalsIgnoreCase("ZPL")) {
-					
-					JRTextExporter exporter = new JRTextExporter();
-					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-					exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, fileName);
-					exporter.setParameter(JRTextExporterParameter.CHARACTER_WIDTH, TxtPrinter.TXT_CHAR_WIDTH);
-					exporter.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT, TxtPrinter.TXT_CHAR_HEIGHT);
-					exporter.exportReport();
-					
+
+					exportToTxtFile(jasperPrint, fileName);
 					printFileZPL(fileName, !TxtPrinter.USE_DEFAULT_PRINTER);
-					
+
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("TXT")) {
-						
+
 					if (jasperPrint.getPages().size() > 1) {
 						printReversPages(jasperPrint);
 					} else {
 						JasperPrintManager.printReport(jasperPrint, !TxtPrinter.USE_DEFAULT_PRINTER);
 					}
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("PDF")) {
-					
+
 					if (jasperPrint.getPages().size() > 1) {
 						printReversPages(jasperPrint);
 					} else {
@@ -112,7 +107,21 @@ public class PrintReceipt {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
-	
+
+	private void exportToTxtFile(JasperPrint jasperPrint, String fileName) throws JRException {
+		JRTextExporter exporter = new JRTextExporter();
+
+		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+		exporter.setExporterOutput(new SimpleWriterExporterOutput(fileName));
+
+		SimpleTextReportConfiguration reportConfig = new SimpleTextReportConfiguration();
+		reportConfig.setCharWidth(Float.valueOf(TxtPrinter.TXT_CHAR_WIDTH));
+		reportConfig.setCharHeight(Float.valueOf(TxtPrinter.TXT_CHAR_HEIGHT));
+		exporter.setConfiguration(reportConfig);
+
+		exporter.exportReport();
+	}
+
 	/**
 	 * @param file
 	 * @param showDialog
@@ -123,9 +132,9 @@ public class PrintReceipt {
 			if (showDialog) {
 				PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 				DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
-			    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
-			    PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
-			    printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
+				PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
+				PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
+				printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
 			} else {
 				printService = defaultPrintService;
 			}
@@ -137,30 +146,27 @@ public class PrintReceipt {
 			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
 			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 			DocAttributeSet das = new HashDocAttributeSet();
-			
+
 			try (FileReader frStream = new FileReader(file)) {
 				try (BufferedReader brStream = new BufferedReader(frStream)) {
 
 					int charH = TxtPrinter.ZPL_ROW_HEIGHT;
 					String font = "^A" + TxtPrinter.ZPL_FONT_TYPE;
 					String aLine = brStream.readLine();
-					String header = "^XA^LH0,30" + aLine;//starting point
 
-					StringBuilder zpl = new StringBuilder();
+					StringBuilder zpl = new StringBuilder("^XA^LH0,30");
 					int i = 0;
-					while (!aLine.equals("")) {
-						zpl.append("^FO0,").append(i * charH);         //line position
-						zpl.append(font).append(',').append(charH);    //font size
-						zpl.append("^FD").append(aLine).append("^FS"); //line field
+					while (aLine != null) {
+						zpl.append("^FO0,").append(i * charH);
+						zpl.append(font).append(',').append(charH);
+						zpl.append("^FD").append(aLine).append("^FS");
 						aLine = brStream.readLine();
 						i++;
 					}
-					zpl.append("^XZ");//end
-					String labelLength = "^LL" + charH * i;
-					header += labelLength;
-					String label = header + zpl;
+					zpl.append("^LL").append(charH * i);
+					zpl.append("^XZ");
 
-					byte[] by = label.getBytes();
+					byte[] by = zpl.toString().getBytes();
 					Doc doc = new SimpleDoc(by, flavor, das);
 					job.print(doc, pras);
 				}
@@ -169,19 +175,19 @@ public class PrintReceipt {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
-	
+
 	/**
 	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
 		try {
 			List<JRPrintPage> pages = jasperPrint.getPages();
-			JasperPrintManager.printPages(jasperPrint, 0, pages.size()-1, !TxtPrinter.USE_DEFAULT_PRINTER);
+			JasperPrintManager.printPages(jasperPrint, 0, pages.size() - 1, !TxtPrinter.USE_DEFAULT_PRINTER);
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
-	
+
 	/**
 	 * @param printService
 	 */
