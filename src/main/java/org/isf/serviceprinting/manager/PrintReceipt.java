@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,8 +22,11 @@
 package org.isf.serviceprinting.manager;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.print.Doc;
@@ -54,8 +57,8 @@ import net.sf.jasperreports.export.SimpleTextReportConfiguration;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 /**
- * This class will read generic/text printer parameters and compile and
- * print given jasper report. A copy will be at given file path
+ * This class will read generic/text printer parameters and compile and print
+ * given jasper report. A copy will be at given file path
  *
  * @author Mwithi
  */
@@ -83,11 +86,9 @@ public class PrintReceipt {
 
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("TXT")) {
 
-					if (jasperPrint.getPages().size() > 1) {
-						printReversPages(jasperPrint);
-					} else {
-						JasperPrintManager.printReport(jasperPrint, !TxtPrinter.USE_DEFAULT_PRINTER);
-					}
+					exportToTxtFile(jasperPrint, fileName);
+					printFileTXT(fileName, !TxtPrinter.USE_DEFAULT_PRINTER);
+
 				} else if (TxtPrinter.MODE.equalsIgnoreCase("PDF")) {
 
 					if (jasperPrint.getPages().size() > 1) {
@@ -120,6 +121,59 @@ public class PrintReceipt {
 		exporter.setConfiguration(reportConfig);
 
 		exporter.exportReport();
+	}
+
+	private void printFileTXT(String file, boolean showDialog) {
+
+		PrintService printService;
+		DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+
+		if (showDialog) {
+			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+			PrintService[] printServices = PrintServiceLookup.lookupPrintServices(flavor, pras);
+			PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
+			printService = ServiceUI.printDialog(null, 200, 200, printServices, defaultService, flavor, pras);
+		} else {
+			printService = defaultPrintService;
+		}
+		if (printService == null) {
+			return;
+		}
+
+		DocPrintJob job = printService.createPrintJob();
+		PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+		DocAttributeSet das = new HashDocAttributeSet();
+
+		try {
+
+			byte[] text = Files.readAllBytes(Paths.get(file));
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			// ESC/POS init
+			out.write(new byte[] { 0x1B, '@' });
+
+			// Text content
+			out.write(text);
+
+			// Feed lines
+			for (int i = 0; i < TxtPrinter.TXT_FEED_LINES; i++) {
+				out.write('\n');
+			}
+
+			// Cut only if enabled
+			if (TxtPrinter.TXT_CUTTER) {
+				out.write(new byte[] { 0x1D, 'V', 1 }); // partial cut
+			}
+
+			byte[] data = out.toByteArray();
+
+			Doc doc = new SimpleDoc(data, flavor, das);
+			job.print(doc, pras);
+
+		} catch (IOException | PrintException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
