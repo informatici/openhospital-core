@@ -636,18 +636,14 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void mgrNewBillNoItemsNoPayments() throws Exception {
+		// A bill with no items must be rejected
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, null, false);
-		billBrowserManager.newBill(
-			bill,
-			new ArrayList<>(),
-			new ArrayList<>());
-		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
-		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
-		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, new ArrayList<>(), new ArrayList<>()))
+				.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -671,6 +667,7 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void mgrNewBillNoItemsAndPayments() throws Exception {
+		// A bill with no items must be rejected even when payments are supplied
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
@@ -680,13 +677,8 @@ class Tests extends OHCoreTestCase {
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
-		billBrowserManager.newBill(
-			bill,
-			new ArrayList<>(),
-			billPayments);
-		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
-		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
-		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, new ArrayList<>(), billPayments))
+				.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -829,15 +821,14 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void mgrUpdateBillNoItemsNoPayements() throws Exception {
-		int id = setupTestBill(true);
+		// Payment-only update (empty items list): amount must be recomputed from the items already stored in the DB
+		int id = setupTestBillWithItems(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(bill).isNotNull();
-		bill.setAmount(12.34);
-		Bill updatedBill = billBrowserManager.updateBill(
-			bill,
-			new ArrayList<>(),
-			new ArrayList<>());
-		assertThat(updatedBill.getAmount()).isCloseTo(12.34, offset(0.1));
+		Bill updatedBill = billBrowserManager.updateBill(bill, new ArrayList<>(), new ArrayList<>());
+		assertThat(updatedBill.getAmount()).isCloseTo(202.0, offset(0.1));
+		assertThat(updatedBill.getBalance()).isCloseTo(202.0, offset(0.1));
+		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 	}
 
 	@Test
@@ -918,9 +909,97 @@ class Tests extends OHCoreTestCase {
 		testPatient.check(foundBillPayment.getBill().getBillPatient());
 	}
 
+	private int setupTestBillWithItems(boolean usingSet) throws OHException {
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		Bill bill = testBill.setup(priceList, patient, null, usingSet);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		accountingBillIoOperationRepository.saveAndFlush(bill);
+		BillItems billItem = testBillItems.setup(bill, usingSet);
+		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
+		return bill.getId();
+	}
+
 	private Patient setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
+	}
+
+	@Test
+	void mgrNewBillRecomputesAmountAndBalance() throws Exception {
+		// Verify that amount and balance are authoritative from items, ignoring whatever the ones passed as bill.amount / bill.balance.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		BillItems item = testBillItems.setup(null, false);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+
+		Bill saved = billBrowserManager.newBill(bill, billItems, new ArrayList<>());
+
+		assertThat(saved.getAmount()).isCloseTo(202.0, offset(0.01));  // 20 * 10.10
+		assertThat(saved.getBalance()).isCloseTo(202.0, offset(0.01)); // no payments
+	}
+
+	@Test
+	void mgrNewBillWithPaymentRecomputesBalance() throws Exception {
+		// Balance = gross total - payments.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		BillItems item = testBillItems.setup(null, false);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+		BillPayments payment = testBillPayments.setup(bill, false);
+		payment.setDate(TimeTools.getNow());
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(payment);
+
+		Bill saved = billBrowserManager.newBill(bill, billItems, billPayments);
+
+		assertThat(saved.getAmount()).isCloseTo(202.0, offset(0.01));
+		assertThat(saved.getBalance()).isCloseTo(191.9, offset(0.01));
+	}
+
+	@Test
+	void mgrUpdateBillPaymentOnlyRecomputesBalance() throws Exception {
+		// Payment-only update: items stay in DB, a payment is added.
+		int id = setupTestBillWithItems(false);
+		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(bill).isNotNull();
+
+		BillPayments payment = testBillPayments.setup(bill, false);
+		payment.setDate(TimeTools.getNow());
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(payment);
+
+		Bill updated = billBrowserManager.updateBill(bill, new ArrayList<>(), billPayments);
+
+		assertThat(updated.getAmount()).isCloseTo(202.0, offset(0.01));
+		assertThat(updated.getBalance()).isCloseTo(191.9, offset(0.01));
+	}
+
+	@Test
+	void mgrNewBillClosedWithOutstandingBalanceThrows() throws Exception {
+		// A closed bill whose balance is non-zero after recalculation must be rejected.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		bill.setStatus("C"); // mark closed
+		BillItems item = testBillItems.setup(null, false);
+		item.setItemQuantity(1); // 1 * 10.10 = 10.10 → balance ≠ 0
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, new ArrayList<>()))
+				.isInstanceOf(OHDataValidationException.class);
 	}
 }
