@@ -111,3 +111,6 @@ source step_a114_medical_type_soft_deletion.sql;
 source step_a115_add_missing_foreign_key_for_auditable_entities.sql;
 source step_a116_fix_alcohol_and_bowel_column.sql;
 source step_a117_fix_ward_pharmacy.sql;
+source step_a118_add_radiology_permissions.sql;
+source step_a119_alter_table_examrow_and_laboratoryrow.sql;
+source step_a120_settings.sql;
