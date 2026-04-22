@@ -66,10 +66,12 @@ public class TelemetryUtils {
 		boolean sent = true;
 		String jsonToSend = (new Gson()).toJson(dataToSend);
 
-		if (!isSimulation) {
-			LOGGER.debug("Data to send: {}", jsonToSend);
-			sent = this.telemetryGatewayService.send(jsonToSend);
+		if (isSimulation) {
+			LOGGER.debug("Simulation mode (DEBUG=true) - data NOT sent: {}", jsonToSend);
+			return;
 		}
+		LOGGER.debug("Data to send: {}", jsonToSend);
+		sent = this.telemetryGatewayService.send(jsonToSend);
 		if (sent) {
 			this.telemetryManager.updateStatusSuccess(jsonToSend);
 			LOGGER.debug("Data sent: {}", jsonToSend);

@@ -22,6 +22,7 @@
 package org.isf.telemetry.envdatacollector.collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
@@ -30,6 +31,8 @@ import java.util.Map;
 
 import jakarta.persistence.EntityManager;
 
+import org.hibernate.Session;
+import org.hibernate.jdbc.ReturningWork;
 import org.isf.OHCoreTestCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +47,8 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 
 	@Mock
 	EntityManager entityManagerMock;
+	@Mock
+	Session sessionMock;
 	@Mock
 	Connection connectionMock;
 	@Mock
@@ -76,7 +81,11 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 	@Test
 	void testRetrieveData() throws Exception {
 		ReflectionTestUtils.setField(softwareDataCollector, "em", entityManagerMock);
-		when(entityManagerMock.unwrap(Connection.class)).thenReturn(connectionMock);
+		when(entityManagerMock.unwrap(Session.class)).thenReturn(sessionMock);
+		when(sessionMock.doReturningWork(any())).thenAnswer(invocation -> {
+			ReturningWork<DatabaseMetaData> work = invocation.getArgument(0);
+			return work.execute(connectionMock);
+		});
 		when(connectionMock.getMetaData()).thenReturn(databaseMetaDataMock);
 		Map<String, String> data = softwareDataCollector.retrieveData();
 		assertThat(data).isNotNull();
