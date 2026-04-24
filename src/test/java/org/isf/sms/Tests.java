@@ -210,8 +210,8 @@ class Tests extends OHCoreTestCase {
 		Sms foundSms = smsIoOperation.getByID(code);
 		assertThat(foundSms).isNotNull();
 		assertThat(foundSms.toString())
-			.isEqualTo(
-				"Sms [smsId=1, smsDate=2010-09-08T00:00, smsDateSched=2011-09-08T00:00, smsNumber=***, smsText=***, smsDateSent=null, smsUser=TestUser, module=TestModule, moduleID=TestModId, hashCode=0]");
+						.isEqualTo(
+										"Sms [smsId=1, smsDate=2010-09-08T00:00, smsDateSched=2011-09-08T00:00, smsNumber=***, smsText=***, smsDateSent=null, smsUser=TestUser, module=TestModule, moduleID=TestModId, hashCode=0]");
 	}
 
 	@Test
@@ -235,7 +235,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(allSms).isEmpty();
 
 		allSms = smsManager.getAll(LocalDateTime.of(2011, 8, 8, 0, 0, 0),
-			LocalDateTime.of(2011, 9, 15, 0, 0, 0));
+						LocalDateTime.of(2011, 9, 15, 0, 0, 0));
 		assertThat(allSms).hasSize(1);
 	}
 
@@ -259,7 +259,7 @@ class Tests extends OHCoreTestCase {
 		sms.setSmsNumber("+1320241494");
 		smsManager.saveOrUpdate(sms, false);
 		List<Sms> allSms = smsManager.getAll(LocalDateTime.of(2011, 8, 8, 0, 0, 0),
-			LocalDateTime.of(2011, 9, 15, 0, 0, 0));
+						LocalDateTime.of(2011, 9, 15, 0, 0, 0));
 		assertThat(allSms).hasSize(1);
 		assertThat(smsIoOperation.getByID(1)).isNotNull();
 	}
@@ -270,7 +270,7 @@ class Tests extends OHCoreTestCase {
 		sms.setSmsNumber("+1320241494");
 		smsManager.saveOrUpdate(sms, true);
 		List<Sms> allSms = smsManager.getAll(LocalDateTime.of(2011, 8, 8, 0, 0, 0),
-			LocalDateTime.of(2011, 9, 15, 0, 0, 0));
+						LocalDateTime.of(2011, 9, 15, 0, 0, 0));
 		assertThat(allSms).hasSize(1);
 		assertThat(smsIoOperation.getByID(1)).isNotNull();
 	}
@@ -285,7 +285,7 @@ class Tests extends OHCoreTestCase {
 		UserSession.setUser(user);
 		smsManager.saveOrUpdate(sms, true);
 		List<Sms> allSms = smsManager.getAll(LocalDateTime.of(2011, 8, 8, 0, 0, 0),
-			LocalDateTime.of(2011, 9, 15, 0, 0, 0));
+						LocalDateTime.of(2011, 9, 15, 0, 0, 0));
 		assertThat(allSms).hasSize(3);
 	}
 
@@ -298,7 +298,7 @@ class Tests extends OHCoreTestCase {
 		User user = new User("admin", userGroup, "password", "description");
 		UserSession.setUser(user);
 		assertThatThrownBy(() -> smsManager.saveOrUpdate(sms, false))
-			.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -309,10 +309,10 @@ class Tests extends OHCoreTestCase {
 		User user = new User("admin", userGroup, "password", "description");
 		UserSession.setUser(user);
 		assertThatThrownBy(() -> smsManager.saveOrUpdate(sms, false))
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -324,10 +324,10 @@ class Tests extends OHCoreTestCase {
 		User user = new User("admin", userGroup, "password", "description");
 		UserSession.setUser(user);
 		assertThatThrownBy(() -> smsManager.saveOrUpdate(sms, false))
-			.isInstanceOf(OHDataValidationException.class)
-			.has(
-				new Condition<Throwable>(
-					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
+						.isInstanceOf(OHDataValidationException.class)
+						.has(
+										new Condition<Throwable>(
+														e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error"));
 	}
 
 	@Test
@@ -502,14 +502,13 @@ class Tests extends OHCoreTestCase {
 		testSms.check(foundSms);
 	}
 
-
 	private static class ConfiguredSmsGatewayEnvironmentStub extends EnvironmentStub {
 
 		@Override
 		public String getProperty(String key) {
 			return switch (key) {
-				case "sms.gateway" -> "failing-test-gateway";
-				default -> "";
+			case "sms.gateway" -> "failing-test-gateway";
+			default -> "";
 			};
 		}
 	}
