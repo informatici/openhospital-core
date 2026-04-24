@@ -38,6 +38,7 @@ import org.isf.menu.model.UserGroup;
 import org.isf.sessionaudit.model.UserSession;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
+import org.isf.sms.providers.SmsSenderInterface;
 import org.isf.sms.service.SmsIoOperationRepository;
 import org.isf.sms.service.SmsOperations;
 import org.isf.sms.service.SmsSender;
@@ -371,16 +372,16 @@ class Tests extends OHCoreTestCase {
 		assertThat(dummySmsSenderOperatinos.sendSMS(sms)).isFalse();
 	}
 
-//	Waiting for OP-1354 fix
-//	@Test
-//	void testSmsSenderOperationsSendSMSFailure() throws Exception {
-//		Sms sms = testSms.setup(true);
-//		sms.setSmsNumber("+1320241494");
-//		sms.setSmsText("SomeText");
-//		assertThat(smsSenderOperations.initialize()).isTrue();
-//		smsSenderOperations.preSMSSending(sms);
-//		assertThat(smsSenderOperations.sendSMS(sms)).isFalse();
-//	}
+	@Test
+	void testSmsSenderOperationsSendSMSFailure() throws Exception {
+		Sms sms = testSms.setup(true);
+		sms.setSmsNumber("+1320241494");
+		sms.setSmsText("SomeText");
+		SmsSenderOperations failingSmsSenderOperations = new SmsSenderOperations(new ConfiguredSmsGatewayEnvironmentStub(), List.of(new FailingSmsGateway()));
+		assertThat(failingSmsSenderOperations.initialize()).isTrue();
+		failingSmsSenderOperations.preSMSSending(sms);
+		assertThat(failingSmsSenderOperations.sendSMS(sms)).isFalse();
+	}
 
 	@Test
 	void testSmsSenderOperationsTerminate() throws Exception {
@@ -499,6 +500,46 @@ class Tests extends OHCoreTestCase {
 		Sms foundSms = smsIoOperation.getByID(code);
 		assertThat(foundSms).isNotNull();
 		testSms.check(foundSms);
+	}
+
+
+	private static class ConfiguredSmsGatewayEnvironmentStub extends EnvironmentStub {
+
+		@Override
+		public String getProperty(String key) {
+			return switch (key) {
+				case "sms.gateway" -> "failing-test-gateway";
+				default -> "";
+			};
+		}
+	}
+
+	private static class FailingSmsGateway implements SmsSenderInterface {
+
+		@Override
+		public boolean initialize() {
+			return true;
+		}
+
+		@Override
+		public boolean sendSMS(Sms sms) {
+			return false;
+		}
+
+		@Override
+		public String getName() {
+			return "failing-test-gateway";
+		}
+
+		@Override
+		public String getRootKey() {
+			return "failing-test-gateway";
+		}
+
+		@Override
+		public boolean terminate() {
+			return true;
+		}
 	}
 
 }
