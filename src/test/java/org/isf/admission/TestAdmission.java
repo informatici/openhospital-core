@@ -66,6 +66,7 @@ public class TestAdmission {
 	private Boolean qualifiedAgent = false;
 	private String transportation = "transportation";
 	private String courseOfAction = "Course of action";
+	private LocalDateTime nextAppointment = LocalDateTime.of(2007, 2, 1, 0, 0);
 
 	public Admission setup(
 			Ward ward,
@@ -93,7 +94,7 @@ public class TestAdmission {
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, anamnesis,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
 					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted, preTreatment, preAssessment, entryReason,
-					alertReceived, referenceSheet, qualifiedAgent, transportation, courseOfAction);
+					alertReceived, referenceSheet, qualifiedAgent, transportation, courseOfAction, nextAppointment);
 		}
 
 		return admission;
@@ -148,6 +149,7 @@ public class TestAdmission {
 		admission.setQualifiedAgent(qualifiedAgent);
 		admission.setTransportation(transportation);
 		admission.setCourseOfAction(courseOfAction);
+		admission.setNextAppointment(nextAppointment);
 	}
 
 	public void check(Admission admission) {
@@ -177,6 +179,7 @@ public class TestAdmission {
 		assertThat(admission.getQualifiedAgent()).isEqualTo(qualifiedAgent);
 		assertThat(admission.getTransportation()).isEqualTo(transportation);
 		assertThat(admission.getCourseOfAction()).isEqualTo(courseOfAction);
+		assertThat(admission.getNextAppointment()).isEqualTo(nextAppointment);
 
 		assertThat(admission.getDeliveryResult()).isNotNull();
 		assertThat(admission.getDeliveryType()).isNotNull();

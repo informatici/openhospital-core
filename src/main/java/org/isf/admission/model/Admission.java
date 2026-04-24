@@ -221,6 +221,9 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@Column(name = "ADM_COURSE_OF_ACTION")
 	private String courseOfAction;
 
+	@Column(name = "ADM_NEXT_APPOINTMENT")
+	private LocalDateTime nextAppointment;
+
 	public Admission() {
 		super();
 	}
@@ -339,7 +342,8 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 					 Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
 					 LocalDateTime abortDate, String userID, char deleted,
 					 String preTreatment, String preAssessment, String entryReason,
-					 Boolean alertReceived, Boolean referenceSheet, Boolean qualifiedAgent, String transportation, String courseOfAction ) {
+					 Boolean alertReceived, Boolean referenceSheet, Boolean qualifiedAgent, String transportation,
+					 String courseOfAction, LocalDateTime nextAppointment ) {
 
 		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
 			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
@@ -355,6 +359,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.qualifiedAgent = qualifiedAgent;
 		this.transportation = transportation;
 		this.courseOfAction = courseOfAction;
+		this.nextAppointment = nextAppointment;
 	}
 
 	public Float getTransUnit() {
@@ -644,13 +649,19 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	public void setQualifiedAgent(Boolean qualifiedAgent) {
 		this.qualifiedAgent = qualifiedAgent;
 	}
-	
-	
+
+	public LocalDateTime getNextAppointment() {
+		return nextAppointment;
+	}
+
+	public void setNextAppointment(LocalDateTime nextAppointment) {
+		this.nextAppointment = nextAppointment;
+	}
+
 	public String getPhysicalExam() {
 		return physicalExam;
 	}
 
-	
 	public void setPhysicalExam(String physicalExam) {
 		this.physicalExam = physicalExam;
 	}
