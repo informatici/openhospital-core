@@ -224,6 +224,30 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@Column(name = "ADM_NEXT_APPOINTMENT")
 	private LocalDateTime nextAppointment;
 
+	@Column(name = "ADM_REFERRING_CENTER")
+	private String referringCenter;
+
+	@Column(name = "ADM_REFERRAL_ALERT")
+	private String referralAlert;
+
+	@Column(name = "ADM_TRANSPORTATION_MODE")
+	private String transportationMode;
+
+	@Column(name = "ADM_REFERRAL_REASON", columnDefinition = "TEXT")
+	private String referralReason;
+
+	@Column(name = "ADM_DIAGNOSIS", columnDefinition = "TEXT")
+	private String diagnosis;
+
+	@Column(name = "ADM_TREATMENT_RECEIVED", columnDefinition = "TEXT")
+	private String treatmentReceived;
+
+	@Column(name = "ADM_OUTCOME")
+	private String outcome;
+
+	@Column(name = "ADM_IMPROVEMENT_FEEDBACK", columnDefinition = "TEXT")
+	private String improvementFeedback;
+
 	public Admission() {
 		super();
 	}
@@ -343,7 +367,9 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 					 LocalDateTime abortDate, String userID, char deleted,
 					 String preTreatment, String preAssessment, String entryReason,
 					 Boolean alertReceived, Boolean referenceSheet, Boolean qualifiedAgent, String transportation,
-					 String courseOfAction, LocalDateTime nextAppointment ) {
+					 String courseOfAction, LocalDateTime nextAppointment, String referringCenter, String referralAlert,
+					 String transportationMode, String referralReason, String diagnosis, String treatmentReceived,
+					 String outcome, String improvementFeedback ) {
 
 		this(id, admitted, type, ward, prog, patient, admDate, admType, fhu,
 			diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3,
@@ -360,6 +386,14 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.transportation = transportation;
 		this.courseOfAction = courseOfAction;
 		this.nextAppointment = nextAppointment;
+		this.referringCenter = referringCenter;
+		this.referralAlert = referralAlert;
+		this.transportationMode = transportationMode;
+		this.referralReason = referralReason;
+		this.diagnosis = diagnosis;
+		this.treatmentReceived = treatmentReceived;
+		this.outcome = outcome;
+		this.improvementFeedback = improvementFeedback;
 	}
 
 	public Float getTransUnit() {
@@ -672,6 +706,70 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setCourseOfAction(String courseOfAction) {
 		this.courseOfAction = courseOfAction;
+	}
+
+	public String getReferringCenter() {
+		return referringCenter;
+	}
+
+	public void setReferringCenter(String referringCenter) {
+		this.referringCenter = referringCenter;
+	}
+
+	public String getReferralAlert() {
+		return referralAlert;
+	}
+
+	public void setReferralAlert(String referralAlert) {
+		this.referralAlert = referralAlert;
+	}
+
+	public String getTransportationMode() {
+		return transportationMode;
+	}
+
+	public void setTransportationMode(String transportationMode) {
+		this.transportationMode = transportationMode;
+	}
+
+	public String getReferralReason() {
+		return referralReason;
+	}
+
+	public void setReferralReason(String referralReason) {
+		this.referralReason = referralReason;
+	}
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+	public String getTreatmentReceived() {
+		return treatmentReceived;
+	}
+
+	public void setTreatmentReceived(String treatmentReceived) {
+		this.treatmentReceived = treatmentReceived;
+	}
+
+	public String getOutcome() {
+		return outcome;
+	}
+
+	public void setOutcome(String outcome) {
+		this.outcome = outcome;
+	}
+
+	public String getImprovementFeedback() {
+		return improvementFeedback;
+	}
+
+	public void setImprovementFeedback(String improvementFeedback) {
+		this.improvementFeedback = improvementFeedback;
 	}
 
 	@Override
