@@ -378,9 +378,9 @@ class Tests extends OHCoreTestCase {
 		sms.setSmsNumber("+1320241494");
 		sms.setSmsText("SomeText");
 		SmsSenderOperations failingSmsSenderOperations = new SmsSenderOperations(new ConfiguredSmsGatewayEnvironmentStub(), List.of(new FailingSmsGateway()));
-		assertTrue(failingSmsSenderOperations.initialize());
+		assertThat(failingSmsSenderOperations.initialize()).isTrue();
 		failingSmsSenderOperations.preSMSSending(sms);
-		assertFalse(failingSmsSenderOperations.sendSMS(sms));
+		assertThat(failingSmsSenderOperations.sendSMS(sms)).isFalse();
 	}
 
 	@Test
