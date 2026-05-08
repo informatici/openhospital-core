@@ -21,7 +21,6 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
@@ -30,6 +29,7 @@ import java.util.Map;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import org.hibernate.Session;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
@@ -78,8 +78,8 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.OS_BITNESS, String.valueOf(os.getBitness()));
 			result.put(CollectorsConstants.OS_CODENAME, os.getVersionInfo().getCodeName());
 
-			Connection connection = em.unwrap(Connection.class);
-			DatabaseMetaData dbmd = connection.getMetaData();
+			Session session = em.unwrap(Session.class);
+			DatabaseMetaData dbmd = session.doReturningWork(connection -> connection.getMetaData());
 			result.put(CollectorsConstants.DBMS_DRIVER_NAME, dbmd.getDriverName());
 			result.put(CollectorsConstants.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
 			result.put(CollectorsConstants.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());

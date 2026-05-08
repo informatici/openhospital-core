@@ -15,7 +15,4 @@ spring:
         format_sql: ${hibernate.format_sql:true}
         hbm2ddl:
           auto: ${hibernate.hbm2ddl.auto:none}
-  cloud:
-    compatibility-verifier:
-      enabled: false
 
