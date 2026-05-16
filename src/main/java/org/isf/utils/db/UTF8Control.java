@@ -71,7 +71,8 @@ public class UTF8Control extends Control {
     }
 
 	@Override
-	public List<Locale> getCandidateLocales(String baseName, Locale locale) {
-		return Collections.singletonList(new Locale(GeneralData.LANGUAGE));
-	}
+    public List<Locale> getCandidateLocales(String baseName, Locale locale) {
+        return Collections.singletonList(new Locale(GeneralData.LANGUAGE));
+    }
+
 }

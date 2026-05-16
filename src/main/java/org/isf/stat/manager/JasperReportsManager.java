@@ -22,6 +22,13 @@
 package org.isf.stat.manager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,9 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +61,6 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
-import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
 import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
@@ -66,7 +71,6 @@ import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRException;
@@ -967,7 +971,7 @@ public class JasperReportsManager {
 		 * Jasper Report seems failing to decode resource bundles in UTF-8 encoding. For this reason we pass also the resource for the specific report read with
 		 * UTF8Control()
 		 */
-		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileName, parameters);
+		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileFolder, jasperFileName, parameters);
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those. The parent report must contain parameters like:
@@ -1011,7 +1015,7 @@ public class JasperReportsManager {
 					if (matcher.find()) {
 						String subreportName = matcher.group(1).split("\\.")[0];
 						LOGGER.debug("found a subreport: {}", subreportName);
-						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, subreportName, parameters);
+						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, jasperFileFolder, subreportName, parameters);
 					} else {
 						LOGGER.error(">> unexpected subreport expression {}", expression);
 					}
@@ -1029,16 +1033,19 @@ public class JasperReportsManager {
 		return patientPhotoFile;
 	}
 
-	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
-		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileName, Locale.getDefault(), new UTF8Control());
-			parameters.put(jasperParameter, resourceBundle);
+	private void addReportBundleParameter(String jasperParameter, String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) {
+		String language = new Locale(GeneralData.LANGUAGE).getLanguage();
+      	Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
+      	Path defaultPath = Path.of(jasperFileFolder, jasperFileName + ".properties");
 
-		} catch (MissingResourceException e) {
-			LOGGER.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
-			LOGGER.info(">> switch to default language '{}'", Locale.getDefault());
-			parameters.put(jasperParameter, ResourceBundle.getBundle(jasperFileName, Locale.getDefault()));
-			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
+		Path propsPath = Files.exists(langSpecificPath) ? langSpecificPath : defaultPath;
+
+		try (InputStream stream = new FileInputStream(propsPath.toFile());
+			InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+			parameters.put(jasperParameter, new PropertyResourceBundle(reader));
+		}
+		catch (IOException e) {
+			LOGGER.error(">> no resource bundle found for report {}", jasperFileName);
 		}
 	}
 
