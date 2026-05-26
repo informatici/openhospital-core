@@ -1045,7 +1045,8 @@ public class JasperReportsManager {
 			parameters.put(jasperParameter, new PropertyResourceBundle(reader));
 		}
 		catch (IOException e) {
-			LOGGER.error(">> no resource bundle found for report {}", jasperFileName);
+			LOGGER.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
+			// no REPORT_RESOURCE_BUNDLE set → Jasper fallback to default
 		}
 	}
 
