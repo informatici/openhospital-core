@@ -20,7 +20,7 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.15.0</version>
+	<version>1.15.1</version>
 	
 	<properties>
 		<java.version>17</java.version>
