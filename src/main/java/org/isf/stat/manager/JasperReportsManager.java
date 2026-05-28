@@ -1035,10 +1035,22 @@ public class JasperReportsManager {
 
 	private void addReportBundleParameter(String jasperParameter, String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) {
 		String language = new Locale(GeneralData.LANGUAGE).getLanguage();
-      	Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
-      	Path defaultPath = Path.of(jasperFileFolder, jasperFileName + ".properties");
+		Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
+		// TODO: Remove legacy fallback after all installations include file migrations (OP-214)
+		Path legacyPath = Path.of(jasperFileFolder, jasperFileName + "_" + GeneralData.LANGUAGE + ".properties");
+		Path defaultPath = Path.of(jasperFileFolder, jasperFileName + ".properties");
 
-		Path propsPath = Files.exists(langSpecificPath) ? langSpecificPath : defaultPath;
+		Path propsPath;
+		if (Files.exists(langSpecificPath)) {
+			propsPath = langSpecificPath;
+		}
+		else if (Files.exists(legacyPath)) {
+			LOGGER.warn(">> using legacy bundle path for '{}'; migrate to language subfolder structure", jasperFileName);
+			propsPath = legacyPath;
+		}
+		else {
+			propsPath = defaultPath;
+		}
 
 		try (InputStream stream = new FileInputStream(propsPath.toFile());
 			InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
