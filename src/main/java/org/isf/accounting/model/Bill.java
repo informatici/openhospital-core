@@ -129,8 +129,8 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	}
 
 	public Bill(int id, LocalDateTime date, LocalDateTime update,
-		boolean isList, PriceList list, String listName, boolean isPatient,
-		Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+					boolean isList, PriceList list, String listName, boolean isPatient,
+					Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -155,57 +155,75 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}
+
 	public void setDate(LocalDateTime date) {
 		this.date = TimeTools.truncateToSeconds(date);
 	}
+
 	public LocalDateTime getUpdate() {
 		return update;
 	}
+
 	public void setUpdate(LocalDateTime update) {
 		this.update = TimeTools.truncateToSeconds(update);
 	}
+
 	public boolean isList() {
 		return isList;
 	}
+
 	public void setIsList(boolean isList) {
 		this.isList = isList;
 	}
+
 	public PriceList getPriceList() {
 		return list;
 	}
+
 	public void setPriceList(PriceList list) {
 		this.list = list;
 	}
+
 	public String getListName() {
 		return listName;
 	}
+
 	public void setListName(String listName) {
 		this.listName = listName;
 	}
+
 	public boolean isPatient() {
 		return isPatient;
 	}
+
 	public void setIsPatient(boolean isPatient) {
 		this.isPatient = isPatient;
 	}
+
 	public Patient getBillPatient() {
 		return billPatient;
 	}
+
 	public void setBillPatient(Patient billPatient) {
 		this.billPatient = billPatient;
 	}
+
 	public String getPatName() {
 		return patName;
 	}
+
 	public void setPatName(String patName) {
 		this.patName = patName;
 	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -242,9 +260,13 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.admission = admission;
 	}
 
-	public int getLock() { return lock; }
+	public int getLock() {
+		return lock;
+	}
 
-	public void setLock(int lock) { this.lock = lock; }
+	public void setLock(int lock) {
+		this.lock = lock;
+	}
 
 	@Override
 	public int compareTo(Bill obj) {
