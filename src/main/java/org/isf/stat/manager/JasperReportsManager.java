@@ -1030,7 +1030,7 @@ public class JasperReportsManager {
 	}
 
 	private void addReportBundleParameter(String jasperParameter, String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) {
-		String language = new Locale(GeneralData.LANGUAGE).getLanguage(); // will be deprecated in Java 19+, replace with Locale.forLanguageTag()
+		String language = GeneralData.LANGUAGE;
 		Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
 		// TODO: Remove legacy fallback after all installations include file migrations (OP-214)
 		Path legacyPath = Path.of(jasperFileFolder, jasperFileName + "_" + GeneralData.LANGUAGE + ".properties");
