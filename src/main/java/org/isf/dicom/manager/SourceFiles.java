@@ -389,9 +389,13 @@ public class SourceFiles extends Thread {
 				studyUID = attributes.getString(Tag.StudyInstanceUID) == null ? studyUID : attributes.getString(Tag.StudyInstanceUID);
 				accessionNumber = attributes.getString(Tag.AccessionNumber) == null ? accessionNumber : attributes.getString(Tag.AccessionNumber);
 				studyDescription = attributes.getString(Tag.StudyDescription) == null ? studyDescription : attributes.getString(Tag.StudyDescription);
-				seriesUID = attributes.getString(Tag.SeriesInstanceUID) == null ? seriesUID : attributes.getString(Tag.SeriesInstanceUID);
-				seriesInstanceUID = attributes.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : attributes.getString(Tag.SeriesInstanceUID);
-				seriesNumber = attributes.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : attributes.getString(Tag.SeriesNumber);
+				//OP-219: when the user chose to load into an existing series these identifiers are already set;
+				//only derive them from the DICOM file otherwise.
+				if (seriesInstanceUID.isEmpty()) {
+					seriesUID = attributes.getString(Tag.SeriesInstanceUID) == null ? seriesUID : attributes.getString(Tag.SeriesInstanceUID);
+					seriesInstanceUID = attributes.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : attributes.getString(Tag.SeriesInstanceUID);
+					seriesNumber = attributes.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : attributes.getString(Tag.SeriesNumber);
+				}
 				seriesDescriptionCodeSequence = attributes.getString(Tag.SeriesDescriptionCodeSequence) == null ?
 						seriesDescriptionCodeSequence :
 						attributes.getString(Tag.SeriesDescriptionCodeSequence);
