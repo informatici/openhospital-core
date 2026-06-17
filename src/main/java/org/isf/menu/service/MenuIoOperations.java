@@ -249,7 +249,7 @@ public class MenuIoOperations {
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * @param user - the {@link User} to update
-	 * @return the {@link User} that has been deleted
+	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update the password
 	 */
 	public User updatePassword(User user) throws OHServiceException {

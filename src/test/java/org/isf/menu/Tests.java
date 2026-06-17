@@ -576,6 +576,10 @@ class Tests extends OHCoreTestCase {
 			user.setPasswdLastChanged(TimeTools.getNow().minusDays(10));
 			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
 
+			// password changed just inside the lease window (29 of 30 days): not expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(29));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
 			// password older than the lease: expired
 			user.setPasswdLastChanged(TimeTools.getNow().minusDays(31));
 			assertThat(userBrowsingManager.isPasswordExpired(user)).isTrue();
