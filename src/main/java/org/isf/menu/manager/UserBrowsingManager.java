@@ -174,6 +174,22 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * Checks whether the {@link User}'s password has exceeded its lease ({@link GeneralData#PASSWORDLEASE} days) and
+	 * therefore must be changed. Returns {@code false} when the lease is disabled ({@code PASSWORDLEASE <= 0}) or the
+	 * last-changed date is unknown.
+	 *
+	 * @param user the {@link User}
+	 * @return {@code true} if the password lease has expired
+	 */
+	public boolean isPasswordExpired(User user) {
+		LocalDateTime passwdLastChanged = user.getPasswdLastChanged();
+		if (GeneralData.PASSWORDLEASE <= 0 || passwdLastChanged == null) {
+			return false;
+		}
+		return passwdLastChanged.plusDays(GeneralData.PASSWORDLEASE).isBefore(TimeTools.getNow());
+	}
+
+	/**
 	 * Deletes an existing {@link User}.
 	 * 
 	 * @param user the {@link User} to delete

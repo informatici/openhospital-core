@@ -77,6 +77,12 @@ public class User extends SoftDeletableAuditable<String> {
 	@Column(name = "US_DELETED")
 	private boolean deleted;
 
+	@Column(name = "US_PASSWD_LAST_CHANGED")
+	private LocalDateTime passwdLastChanged;
+
+	@Column(name = "US_PASSWD_MUST_CHANGE")
+	private boolean passwdMustChange;
+
 	@Transient
 	private volatile int hashCode;
 
@@ -162,6 +168,22 @@ public class User extends SoftDeletableAuditable<String> {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public LocalDateTime getPasswdLastChanged() {
+		return passwdLastChanged;
+	}
+
+	public void setPasswdLastChanged(LocalDateTime passwdLastChanged) {
+		this.passwdLastChanged = passwdLastChanged;
+	}
+
+	public boolean isPasswdMustChange() {
+		return passwdMustChange;
+	}
+
+	public void setPasswdMustChange(boolean passwdMustChange) {
+		this.passwdMustChange = passwdMustChange;
 	}
 
 	@Override

@@ -24,10 +24,12 @@ package org.isf.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
@@ -46,6 +48,7 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -525,9 +528,60 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
 		assertThat(userBrowsingManager.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
+		// the password update is a bulk JPQL statement: clear the context so the re-read reflects the DB
+		entityManager.clear();
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");
+		// OP-896: changing the password resets the lease clock and clears the must-change flag by default
+		assertThat(updatedUser.getPasswdLastChanged()).isNotNull();
+		assertThat(updatedUser.isPasswdMustChange()).isFalse();
+	}
+
+	@Test
+	void testMgrUpdatePasswordForcingChange() throws Exception {
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(foundUser).isNotNull();
+		// e.g. an administrator setting another user's password: force a change at next login
+		foundUser.setPasswd("Reset");
+		foundUser.setPasswdMustChange(true);
+		userBrowsingManager.updatePassword(foundUser);
+		entityManager.clear();
+		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(updatedUser).isNotNull();
+		assertThat(updatedUser.getPasswdLastChanged()).isNotNull();
+		assertThat(updatedUser.isPasswdMustChange()).isTrue();
+	}
+
+	@Test
+	void testMgrIsPasswordExpired() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(user).isNotNull();
+
+		int previousLease = GeneralData.PASSWORDLEASE;
+		try {
+			// lease disabled: never expired
+			GeneralData.PASSWORDLEASE = 0;
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(100));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// lease enabled but unknown last-changed date: not expired
+			GeneralData.PASSWORDLEASE = 30;
+			user.setPasswdLastChanged(null);
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// password changed within the lease window: not expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(10));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// password older than the lease: expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(31));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isTrue();
+		} finally {
+			GeneralData.PASSWORDLEASE = previousLease;
+		}
 	}
 
 	@Test
