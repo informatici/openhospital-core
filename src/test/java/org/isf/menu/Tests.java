@@ -589,6 +589,33 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrIsPasswordValid() {
+		boolean previousStrong = GeneralData.STRONGPASSWORD;
+		int previousLength = GeneralData.STRONGLENGTH;
+		try {
+			GeneralData.STRONGPASSWORD = true;
+			GeneralData.STRONGLENGTH = 6;
+			assertThat(userBrowsingManager.isPasswordValid(null)).isFalse();
+			assertThat(userBrowsingManager.isPasswordValid("ab")).isFalse(); // too short
+			assertThat(userBrowsingManager.isPasswordValid("abcdef")).isFalse(); // long enough but not strong
+			assertThat(userBrowsingManager.isPasswordValid("Admin.123")).isTrue(); // strong and long enough
+
+			// length check disabled (0): only the strength policy applies
+			GeneralData.STRONGLENGTH = 0;
+			assertThat(userBrowsingManager.isPasswordValid("A.1")).isTrue();
+
+			// strength policy disabled: any non-null password is accepted
+			GeneralData.STRONGPASSWORD = false;
+			GeneralData.STRONGLENGTH = 6;
+			assertThat(userBrowsingManager.isPasswordValid("ab")).isFalse(); // still too short
+			assertThat(userBrowsingManager.isPasswordValid("abcdef")).isTrue();
+		} finally {
+			GeneralData.STRONGPASSWORD = previousStrong;
+			GeneralData.STRONGLENGTH = previousLength;
+		}
+	}
+
+	@Test
 	void testMgrDeleteUser() throws Exception {
 		String userName = setupTestUser(false);
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);

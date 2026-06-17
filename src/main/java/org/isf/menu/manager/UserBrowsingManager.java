@@ -476,4 +476,21 @@ public class UserBrowsingManager {
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
 	}
+
+	/**
+	 * Tests whether a password is acceptable, i.e. it satisfies the configured minimum length
+	 * ({@link GeneralData#STRONGLENGTH}, when enabled) and the strength policy ({@link #isPasswordStrong(String)}).
+	 *
+	 * @param password the password to validate
+	 * @return {@code true} if the password is acceptable, {@code false} otherwise
+	 */
+	public boolean isPasswordValid(String password) {
+		if (password == null) {
+			return false;
+		}
+		if (GeneralData.STRONGLENGTH > 0 && password.length() < GeneralData.STRONGLENGTH) {
+			return false;
+		}
+		return isPasswordStrong(password);
+	}
 }
