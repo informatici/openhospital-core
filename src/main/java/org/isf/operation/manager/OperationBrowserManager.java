@@ -30,7 +30,9 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
@@ -97,6 +99,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Operation newOperation(Operation operation) throws OHServiceException {
+		validateOperation(operation, true);
 		return ioOperations.newOperation(operation);
 	}
 
@@ -108,8 +111,36 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Operation updateOperation(Operation operation) throws OHServiceException {
+		validateOperation(operation, false);
 		// the user has confirmed he wants to overwrite the record
 		return ioOperations.updateOperation(operation);
+	}
+
+	/**
+	 * Verify if the {@link Operation} is valid for CRUD and return a list of errors, if any.
+	 *
+	 * @param operation the {@link Operation} to validate
+	 * @param insert {@code true} if the operation is being inserted, {@code false} if updated
+	 * @throws OHDataValidationException if the {@link Operation} is not valid
+	 */
+	protected void validateOperation(Operation operation, boolean insert) throws OHServiceException {
+		String code = operation.getCode();
+		String description = operation.getDescription();
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (code == null || code.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
+		} else if (code.length() > 10) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10)));
+		}
+		if (insert && code != null && !code.isEmpty() && isCodePresent(code)) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
+		}
+		if (description == null || description.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 
 	/**
