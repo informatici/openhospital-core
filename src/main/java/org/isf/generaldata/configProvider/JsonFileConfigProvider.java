@@ -54,6 +54,7 @@ class JsonFileConfigProvider implements ConfigProvider {
 			URL url = new URL(GeneralData.PARAMSURL);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "OpenHospital/" + VERSION);
 
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
