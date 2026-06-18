@@ -46,7 +46,7 @@ import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -64,7 +64,9 @@ entities={
 @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY"))
 @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE"))
 @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))
-public class Admission extends Auditable<String> implements Comparable<Admission> {
+@AttributeOverride(name="deletedBy", column=@Column(name="ADM_DELETED_BY"))
+@AttributeOverride(name="deletedDate", column=@Column(name="ADM_DELETED_DATE"))
+public class Admission extends SoftDeletableAuditable<String> implements Comparable<Admission> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -33,9 +33,11 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.GroupPermissionIoOperationRepository;
+import org.isf.utils.db.AuditorAwareInterface;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.time.TimeTools;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,18 +56,34 @@ public class MenuIoOperations {
 
 	private final GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
 
+	private final AuditorAwareInterface auditorAware;
+
 	public MenuIoOperations(
 		UserIoOperationRepository userIoOperationRepository,
 		UserGroupIoOperationRepository userGroupIoOperationRepository,
 		UserMenuItemIoOperationRepository userMenuItemIoOperationRepository,
 		GroupMenuIoOperationRepository groupMenuIoOperationRepository,
-		GroupPermissionIoOperationRepository groupPermissionIoOperationRepository
+		GroupPermissionIoOperationRepository groupPermissionIoOperationRepository,
+		AuditorAwareInterface auditorAware
 	) {
 		this.repository = userIoOperationRepository;
 		this.groupRepository = userGroupIoOperationRepository;
 		this.menuRepository = userMenuItemIoOperationRepository;
 		this.groupMenuRepository = groupMenuIoOperationRepository;
 		this.groupPermissionIoOperationRepository = groupPermissionIoOperationRepository;
+		this.auditorAware = auditorAware;
+	}
+
+	/**
+	 * The current auditor when {@code deleted} is {@code true} (i.e. a soft deletion is being performed), {@code null}
+	 * otherwise (a regular update or an un-deletion clears the deletion audit).
+	 */
+	private String deletedBy(boolean deleted) {
+		return deleted ? auditorAware.getCurrentAuditor().orElse(null) : null;
+	}
+
+	private LocalDateTime deletedDate(boolean deleted) {
+		return deleted ? TimeTools.getNow() : null;
 	}
 
 	/**
@@ -222,7 +240,8 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update user
 	 */
 	public User updateUser(User user) throws OHServiceException {
-		repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(), user.getUserName());
+		repository.updateUser(user.getDesc(), user.getUserGroupName(), user.isDeleted(),
+			deletedBy(user.isDeleted()), deletedDate(user.isDeleted()), user.getUserName());
 
 		return getUserByName(user.getUserName(), true);
 	}
@@ -393,7 +412,8 @@ public class MenuIoOperations {
 	 * @throws OHServiceException When failed to update the user group
 	 */
 	public UserGroup updateUserGroup(UserGroup aGroup) throws OHServiceException {
-		groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(), aGroup.getCode());
+		groupRepository.update(aGroup.getDesc(), aGroup.isDeleted(),
+			deletedBy(aGroup.isDeleted()), deletedDate(aGroup.isDeleted()), aGroup.getCode());
 
 		return findByCode(aGroup.getCode(), true);
 	}
@@ -410,7 +430,8 @@ public class MenuIoOperations {
 		if (group.isDeleted() && userGroup.isDeleted()) {
 			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.alreadysoftdeleted.msg")));
 		}
-		boolean updated = groupRepository.update(userGroup.getDesc(), userGroup.isDeleted(), userGroup.getCode()) > 0;
+		boolean updated = groupRepository.update(userGroup.getDesc(), userGroup.isDeleted(),
+			deletedBy(userGroup.isDeleted()), deletedDate(userGroup.isDeleted()), userGroup.getCode()) > 0;
 
 		if (updated && permissions != null && !permissions.isEmpty()) {
 			groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(userGroup.getCode());
