@@ -435,6 +435,9 @@ public class MenuIoOperations {
 
 		if (updated && permissions != null && !permissions.isEmpty()) {
 			groupPermissionIoOperationRepository.deleteAllByUserGroup_Code(userGroup.getCode());
+			// flush the removals before the inserts so the (user group, permission) unique constraint is not
+			// transiently violated by Hibernate ordering inserts ahead of the deferred deletes
+			groupPermissionIoOperationRepository.flush();
 			UserGroup updatedUserGroup = groupRepository.getReferenceById(userGroup.getCode());
 
 			List<GroupPermission> groupPermissions = permissions.stream().map(permission -> {

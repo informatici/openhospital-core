@@ -41,6 +41,7 @@ import org.isf.menu.service.UserMenuItemIoOperationRepository;
 import org.isf.permissions.manager.GroupPermissionManager;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
+import org.isf.permissions.service.GroupPermissionIoOperationRepository;
 import org.isf.permissions.service.PermissionIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -50,6 +51,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 class Tests extends OHCoreTestCase {
 
@@ -72,6 +74,8 @@ class Tests extends OHCoreTestCase {
 	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
 	@Autowired
 	private PermissionIoOperationRepository permissionIoOperationRepository;
+	@Autowired
+	private GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
 	@Autowired
 	private GroupPermissionManager groupPermissionManager;
 
@@ -315,6 +319,32 @@ class Tests extends OHCoreTestCase {
 		foundUserGroup.setDesc("Update");
 		assertThat(menuIoOperation.updateUserGroup(foundUserGroup, permissions).getCode()).isEqualTo(foundUserGroup.getCode());
 		checkUserGroupAndPermissionsIntoDb(foundUserGroup, permissions);
+	}
+
+	@Test
+	void testPermissionNameMustBeUnique() throws Exception {
+		Permission permission = TestPermission.generatePermissions(1).get(0);
+		permission.setName("duplicate.permission");
+		permissionIoOperationRepository.saveAndFlush(permission);
+
+		Permission duplicate = TestPermission.generatePermissions(1).get(0);
+		duplicate.setName("duplicate.permission");
+		assertThatThrownBy(() -> permissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@Test
+	void testGroupPermissionPairMustBeUnique() throws Exception {
+		String code = setupTestUserGroupPermissions();
+		UserGroup userGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(userGroup).isNotNull();
+		GroupPermission existing = groupPermissionManager.findUserGroupPermissions(code).get(0);
+
+		GroupPermission duplicate = new GroupPermission();
+		duplicate.setUserGroup(userGroup);
+		duplicate.setPermission(existing.getPermission());
+		assertThatThrownBy(() -> groupPermissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
 	}
 
 	@Test
