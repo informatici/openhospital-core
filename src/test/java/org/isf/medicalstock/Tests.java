@@ -203,14 +203,18 @@ class Tests extends OHCoreTestCase {
 		checkMovementIntoDb(code);
 	}
 
-	@Test
-	void testMedicalStockGets() throws Exception {
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMedicalStockGets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
 		int code = setupTestMedicalStock(false);
 		checkMedicalStockIntoDb(code);
 	}
 
-	@Test
-	void testMedicalStockSets() throws Exception {
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMedicalStockSets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
 		int code = setupTestMedicalStock(true);
 		checkMedicalStockIntoDb(code);
 	}
