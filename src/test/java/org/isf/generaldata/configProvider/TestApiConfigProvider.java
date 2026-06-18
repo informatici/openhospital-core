@@ -45,7 +45,7 @@ public class TestApiConfigProvider {
 
 	private static final String CONFIG_JSON = """
 		{
-		  "1.15.0": {
+		  "anyCurrentVersion": {
 		    "parameter": "https://version-url.com"
 		  },
 		  "default": {
@@ -116,7 +116,7 @@ public class TestApiConfigProvider {
 			// Mock the Version.getVersion() method to return a specific version
 			Version mockVersion = mock(Version.class);
 			mockedVersion.when(Version::getVersion).thenReturn(mockVersion);
-			when(mockVersion.toString()).thenReturn("1.15.0");
+			when(mockVersion.toString()).thenReturn("anyCurrentVersion");
 
 			// Mock the initialization to set PARAMSURL to the mock server URL
 			mockedGeneralData.when(GeneralData::initialize).thenAnswer(invocation -> {
@@ -132,7 +132,7 @@ public class TestApiConfigProvider {
 			assertThat(apiConfigProvider.get("parameter")).isEqualTo("https://version-url.com");
 
 			// The Feign client must send the custom User-Agent, otherwise the migrated server rejects it with HTTP 403.
-			mockServer.verify(request().withMethod("GET").withPath("/test").withHeader("User-Agent", "OpenHospital/1.15.0"));
+			mockServer.verify(request().withMethod("GET").withPath("/test").withHeader("User-Agent", "OpenHospital/anyCurrentVersion"));
 
 			apiConfigProvider.close();
 		}
