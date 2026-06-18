@@ -45,7 +45,7 @@ public class TestMedicalStock {
 			setParameters(medical, medicalStock);
 		} else {
 			// Create medicalStock with all parameters
-			medicalStock = new MedicalStock();
+			medicalStock = new MedicalStock(medical, balanceDate, balance, nextMovDate, days);
 		}
 
 		return medicalStock;
