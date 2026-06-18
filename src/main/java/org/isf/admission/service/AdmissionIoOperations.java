@@ -172,6 +172,7 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
 	public Admission newAdmission(Admission admission) throws OHServiceException {
+		admission.applyPatientData();
 		return repository.save(admission);
 	}
 

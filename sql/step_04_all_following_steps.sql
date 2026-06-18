@@ -111,4 +111,4 @@ source step_a114_medical_type_soft_deletion.sql;
 source step_a115_add_missing_foreign_key_for_auditable_entities.sql;
 source step_a116_fix_alcohol_and_bowel_column.sql;
 source step_a117_fix_ward_pharmacy.sql;
-source step_a118_add_deleted_by_and_date.sql;
+source step_a118_add_deleted_by_and_date.sql;source step_a122_admission_sex_age.sql;

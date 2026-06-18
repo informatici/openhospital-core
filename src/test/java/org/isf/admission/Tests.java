@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -507,6 +508,23 @@ class Tests extends OHCoreTestCase {
 		int id = admissionIoOperation.newAdmissionReturnKey(buildNewAdmission());
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		testAdmission.check(admission);
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
+	void testIoNewAdmissionStoresPatientSexAndAge(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		Admission admission = buildNewAdmission();
+		Admission result = admissionIoOperation.newAdmission(admission);
+		String expectedSex = String.valueOf(admission.getPatient().getSex());
+		// the stored age is the patient's age AT the admission date, not the current age
+		Integer expectedAge = (int) ChronoUnit.YEARS.between(admission.getPatient().getBirthDate(), admission.getAdmDate().toLocalDate());
+		assertThat(result.getSex()).isEqualTo(expectedSex);
+		assertThat(result.getAge()).isEqualTo(expectedAge);
+		// reload from the DB to confirm the snapshot is persisted on the admission itself
+		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
+		assertThat(reloaded.getSex()).isEqualTo(expectedSex);
+		assertThat(reloaded.getAge()).isEqualTo(expectedAge);
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")

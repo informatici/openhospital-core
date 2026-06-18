@@ -43,6 +43,8 @@ public class AdmissionPatientMergedEventListener {
 		List<Admission> admissions = admissionIoOperations.getAdmissions(patientMergedEvent.obsoletePatient());
 		for (Admission admission : admissions) {
 			admission.setPatient(patientMergedEvent.mergedPatient());
+			// ADM_SEX/ADM_AGE are an immutable snapshot taken at admission time and are intentionally NOT
+			// refreshed here (unlike Laboratory): the patient's sex/age at the historical admission do not change.
 		}
 	}
 
