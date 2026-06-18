@@ -131,6 +131,9 @@ public class TestApiConfigProvider {
 
 			assertThat(apiConfigProvider.get("parameter")).isEqualTo("https://version-url.com");
 
+			// The Feign client must send the custom User-Agent, otherwise the migrated server rejects it with HTTP 403.
+			mockServer.verify(request().withMethod("GET").withPath("/test").withHeader("User-Agent", "OpenHospital/1.15.0"));
+
 			apiConfigProvider.close();
 		}
 	}
