@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,7 +212,7 @@ class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(2.0 * price.getPrice(), within(0.10d));
+		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(2.0 * price.getPrice().doubleValue(), within(0.10d));
 	}
 
 	@Test
@@ -228,7 +229,7 @@ class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2.0 * price.getPrice() / 3.0) * 3L, within(0.10d));
+		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(Math.round(2.0 * price.getPrice().doubleValue() / 3.0) * 3L, within(0.10d));
 	}
 
 	@Test
@@ -302,7 +303,7 @@ class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2.0, 0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(2.0 * price.getPrice(), within(0.10d));
+		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(2.0 * price.getPrice().doubleValue(), within(0.10d));
 	}
 
 	@Test
@@ -314,7 +315,7 @@ class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2.0, 3.0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2.0 * price.getPrice() / 3.0) * 3, within(0.10d));
+		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(Math.round(2.0 * price.getPrice().doubleValue() / 3.0) * 3, within(0.10d));
 	}
 
 	@Test
@@ -326,7 +327,7 @@ class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isEqualTo(price.getPrice());
+		assertThat(copyPrice.getPrice()).isEqualByComparingTo(price.getPrice());
 	}
 
 	@Test
@@ -405,14 +406,14 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testPriceToString() throws Exception {
 		PriceList priceList = testPriceList.setup(true);
-		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", 10.10, true);
+		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", new BigDecimal("10.10"), true);
 		assertThat(price).hasToString("TestDescription");
 	}
 
 	@Test
 	void testPriceEquals() throws Exception {
 		PriceList priceList = testPriceList.setup(true);
-		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", 10.10);
+		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", new BigDecimal("10.10"));
 
 		assertThat(price)
 				.isEqualTo(price)
@@ -420,7 +421,7 @@ class Tests extends OHCoreTestCase {
 				.isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
-		Price price2 = new Price(priceList2, "TG", "TestItem", "TestDescriptionOther", 10.10);
+		Price price2 = new Price(priceList2, "TG", "TestItem", "TestDescriptionOther", new BigDecimal("10.10"));
 		assertThat(price).isEqualTo(price2);
 
 		price2.setDesc("TestDescription");
@@ -446,7 +447,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testPriceIs() throws Exception {
 		PriceList priceList = testPriceList.setup(true);
-		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", 10.10);
+		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", new BigDecimal("10.10"));
 
 		assertThat(price.isEditable()).isTrue();
 		price.setEditable(false);

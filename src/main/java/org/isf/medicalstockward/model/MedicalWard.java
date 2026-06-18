@@ -21,6 +21,8 @@
  */
 package org.isf.medicalstockward.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -50,10 +52,10 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	MedicalWardId id;
 
 	@Column(name = "MDSRWRD_IN_QTI")
-	private float in_quantity;
+	private int in_quantity;
 
-	@Column(name = "MDSRWRD_OUT_QTI")
-	private float out_quantity;
+	@Column(name = "MDSRWRD_OUT_QTI", precision = 19, scale = 2)
+	private BigDecimal out_quantity;
 
 	/**
 	 * Lock control
@@ -80,7 +82,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.qty = qty;
 	}
 
-	public MedicalWard(Ward ward, Medical medical, float inQuantity, float outQuantity, Lot lot) {
+	public MedicalWard(Ward ward, Medical medical, int inQuantity, BigDecimal outQuantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId(ward, medical, lot);
 		this.in_quantity = inQuantity;
@@ -155,19 +157,19 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.id.setMedical(medical);
 	}
 
-	public float getIn_quantity() {
+	public int getIn_quantity() {
 		return this.in_quantity;
 	}
 
-	public void setIn_quantity(float inQuantity) {
+	public void setIn_quantity(int inQuantity) {
 		this.in_quantity = inQuantity;
 	}
 
-	public float getOut_quantity() {
+	public BigDecimal getOut_quantity() {
 		return this.out_quantity;
 	}
 
-	public void setOut_quantity(float outQuantity) {
+	public void setOut_quantity(BigDecimal outQuantity) {
 		this.out_quantity = outQuantity;
 	}
 

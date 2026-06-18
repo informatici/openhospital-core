@@ -24,6 +24,7 @@ package org.isf.medicalsinventory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -865,7 +866,7 @@ class Tests extends OHCoreTestCase {
 			Lot lotTwo = testLot.setup(medical, false);
 			lotTwo.setCode("LOT-002");
 			MovementWard wardMovement = testMovementWard.setup(ward, null, medical, ward, destination, lotTwo, false);
-			wardMovement.setQuantity(100.0);
+			wardMovement.setQuantity(new BigDecimal("100.0"));
 			Lot lotThree = testLot.setup(medical, false);
 			lotThree.setCode("LOT-003");
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);

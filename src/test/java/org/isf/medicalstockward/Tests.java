@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.data.Offset.offset;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,7 +213,7 @@ class Tests extends OHCoreTestCase {
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 
 		checkMovementWardIntoDb(movementWard.getCode());
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(quantity));
 	}
 
 	@Test
@@ -238,7 +239,7 @@ class Tests extends OHCoreTestCase {
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(null, medical);
 
 		checkMovementWardIntoDb(movementWard.getCode());
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(quantity));
 	}
 
 	@Test
@@ -283,10 +284,10 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0f, 5.0f, lot);
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 10, new BigDecimal("5.0"), lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 
-		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0f, 15.0f, lot);
+		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10, new BigDecimal("15.0"), lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
@@ -312,10 +313,10 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0f, 5.0f, lot);
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 10, new BigDecimal("5.0"), lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 
-		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0f, 15.0f, lot);
+		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10, new BigDecimal("15.0"), lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
@@ -349,7 +350,7 @@ class Tests extends OHCoreTestCase {
 
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 		checkMovementWardIntoDb(movementWard.getCode());
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(quantity));
 	}
 
 	@Test
@@ -402,15 +403,15 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
 	}
 
 	@Test
 	void testIoGetMedicalsWardStripEmptyLots() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard medicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		medicalWard.setIn_quantity(10.0f);
-		medicalWard.setOut_quantity(10.0f);
+		medicalWard.setIn_quantity(10);
+		medicalWard.setOut_quantity(new BigDecimal("10.0"));
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode(), true);
 		assertThat(medicalWards).isEmpty();
@@ -492,7 +493,7 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
 	}
 
 	@Test
@@ -518,7 +519,7 @@ class Tests extends OHCoreTestCase {
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 
 		checkMovementWardIntoDb(movementWard.getCode());
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(quantity));
 	}
 
 	@Test
@@ -601,7 +602,7 @@ class Tests extends OHCoreTestCase {
 
 		Double quantity = (double) movWardBrowserManager.getCurrentQuantityInWard(wardTo, medical);
 		checkMovementWardIntoDb(movementWard.getCode());
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(quantity));
 	}
 
 	@Test
@@ -1140,7 +1141,7 @@ class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo")).isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, new BigDecimal("100.0"), "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1157,7 +1158,7 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo", lot))
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, new BigDecimal("100.0"), "kilo", lot))
 						.isNotNull();
 	}
 
@@ -1175,7 +1176,7 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo")).isNotNull();
+		assertThat(new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, new BigDecimal("100.0"), "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1192,8 +1193,8 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard1 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
-		MovementWard movementWard2 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard1 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, new BigDecimal("100.0"), "kilo");
+		MovementWard movementWard2 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, new BigDecimal("100.0"), "kilo");
 		movementWard2.setCode(-1);
 
 		assertThat(movementWard1).isEqualTo(movementWard1);
@@ -1221,7 +1222,7 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, new BigDecimal("100.0"), "kilo");
 		movementWard.setCode(1);
 
 		// generate hashCode
@@ -1361,13 +1362,13 @@ class Tests extends OHCoreTestCase {
 		Patient patient = firstmovementWard.getPatient();
 		int age = patient.getAge();
 		LocalDateTime date = LocalDateTime.now();
-		MovementWard secondMovementWard = new MovementWard(date, ward, lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard secondMovementWard = new MovementWard(date, ward, lot, "newDescription", medical, new BigDecimal("10.0"), "newUnits");
 		Ward wardTo = new Ward("C", "description", "telephone", "fax", "email", 5, 2, 1, false, false, true, true);
 		wardIoOperationRepository.saveAndFlush(wardTo);
 		secondMovementWard.setWardTo(wardTo);
-		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, -10.0, "newUnits");
+		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, new BigDecimal("-10.0"), "newUnits");
 		thirdMovementWard.setWardFrom(ward);
-		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, 5.0, "units", null,
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, new BigDecimal("5.0"), "units", null,
 						null, lot);
 		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
@@ -1429,7 +1430,7 @@ class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		Lot lot = testLot.setup(medical, false);
 		MedicalWard medicalWard = testMedicalWard.setup(medical, ward, lot, false);
-		medicalWard.setOut_quantity(0);
+		medicalWard.setOut_quantity(new BigDecimal("0"));
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		wardIoOperationRepository.saveAndFlush(ward);

@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -340,10 +341,10 @@ public class MovWardBrowserManager {
 				 */
 				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(wardTo);
 				MedicalWard medWard = getMedicalWardByWardMedicalAndLot(wardTo.getCode(), medical.getCode(), lot.getCode());
-				float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
-				float quantity = medWard.getIn_quantity() + movQty;
+				int movQty = lastMovInWardTo.getQuantity().intValue();
+				int quantity = medWard.getIn_quantity() + movQty;
 				medWard.setIn_quantity(quantity);
-				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity().compareTo(BigDecimal.ZERO) == 0) {
 					ioOperations.deleteMedicalWard(medWard);
 				} else {
 					ioOperations.updateMedicalWard(medWard);
@@ -358,8 +359,8 @@ public class MovWardBrowserManager {
 		}
 		MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(),
 			movWardToDelete.getLot().getCode());
-		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();
-		float quantity = medWard.getOut_quantity() - movQty;
+		BigDecimal movQty = movWardToDelete.getQuantity();
+		BigDecimal quantity = medWard.getOut_quantity().subtract(movQty);
 		medWard.setOut_quantity(quantity);
 		ioOperations.updateMedicalWard(medWard);
 		ioOperations.deleteMovementWard(movWardToDelete);

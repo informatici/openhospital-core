@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +146,7 @@ public class MedicalStockWardIoOperations {
 			destinationWardIncomeMovement.setDate(savedMovement.getDate());
 			destinationWardIncomeMovement.setDescription(savedMovement.getWard().getDescription());
 			destinationWardIncomeMovement.setMedical(savedMovement.getMedical());
-			destinationWardIncomeMovement.setQuantity(-savedMovement.getQuantity());
+			destinationWardIncomeMovement.setQuantity(savedMovement.getQuantity().negate());
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
@@ -196,7 +197,7 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	protected void updateStockWardQuantity(MovementWard movement) throws OHServiceException {
-		Double qty = movement.getQuantity();
+		BigDecimal qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
 		String lot = movement.getLot().getCode();
 		String wardTo = null;
@@ -209,17 +210,17 @@ public class MedicalStockWardIoOperations {
 		if (wardTo != null) {
 			MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
 			if (medicalWardTo != null) {
-				repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
+				repository.updateInQuantity(qty.abs().intValue(), wardTo, medical, lot);
 			} else {
 				MedicalWard medicalWard = new MedicalWard();
 				medicalWard.setWard(movement.getWardTo());
 				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setIn_quantity((float) Math.abs(qty));
-				medicalWard.setOut_quantity(0.0f);
+				medicalWard.setIn_quantity(qty.abs().intValue());
+				medicalWard.setOut_quantity(BigDecimal.ZERO);
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
 			}
-			repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
+			repository.updateOutQuantity(qty.abs(), ward, medical, lot);
 			return;
 		}
 
@@ -228,13 +229,13 @@ public class MedicalStockWardIoOperations {
 			medicalWard = new MedicalWard();
 			medicalWard.setWard(movement.getWard());
 			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setIn_quantity((float) -qty);
-			medicalWard.setOut_quantity(0.0f);
+			medicalWard.setIn_quantity(qty.negate().intValue());
+			medicalWard.setOut_quantity(BigDecimal.ZERO);
 			medicalWard.setLot(movement.getLot());
 			repository.save(medicalWard);
 		} else {
-			if (qty < 0) {
-				repository.updateInQuantity(-qty, ward, medical, lot); // TODO: change to jpa
+			if (qty.signum() < 0) {
+				repository.updateInQuantity(qty.negate().intValue(), ward, medical, lot); // TODO: change to jpa
 			} else {
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
@@ -270,7 +271,7 @@ public class MedicalStockWardIoOperations {
 			medicalWards = repository.findAllWhereWardAndMedical(wardId, medId);
 		}
 		for (int i = 0; i < medicalWards.size(); i++) {
-			double qty = medicalWards.get(i).getIn_quantity() - medicalWards.get(i).getOut_quantity();
+			double qty = BigDecimal.valueOf(medicalWards.get(i).getIn_quantity()).subtract(medicalWards.get(i).getOut_quantity()).doubleValue();
 			medicalWards.get(i).setQty(qty);
 
 			if (stripeEmpty && qty == 0) {
