@@ -1141,7 +1141,8 @@ class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, new BigDecimal("100.0"), "kilo")).isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical,
+						new BigDecimal("100.0"), "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1158,8 +1159,8 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, new BigDecimal("100.0"), "kilo", lot))
-						.isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical,
+						new BigDecimal("100.0"), "kilo", lot)).isNotNull();
 	}
 
 	@Test
@@ -1368,7 +1369,8 @@ class Tests extends OHCoreTestCase {
 		secondMovementWard.setWardTo(wardTo);
 		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, new BigDecimal("-10.0"), "newUnits");
 		thirdMovementWard.setWardFrom(ward);
-		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, new BigDecimal("5.0"), "units", null,
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description",
+						medical, new BigDecimal("5.0"), "units", null,
 						null, lot);
 		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);

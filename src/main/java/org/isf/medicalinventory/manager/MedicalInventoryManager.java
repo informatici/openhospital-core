@@ -644,8 +644,9 @@ public class MedicalInventoryManager {
 			Lot currentLot = medicalInventoryRow.getLot();
 			if (movQuantity != 0) {
 				insertedMovements
-					.add(movWardBrowserManager.newMovementWard(new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, BigDecimal.valueOf(movQuantity),
-						MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
+					.add(movWardBrowserManager.newMovementWard(
+						new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, BigDecimal.valueOf(movQuantity),
+							MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
 			}
 		}
 		String status = InventoryStatus.done.toString();
