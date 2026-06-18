@@ -203,13 +203,13 @@ class Tests extends OHCoreTestCase {
 		checkMovementIntoDb(code);
 	}
 
-	// TODO: fix setupTestMedicalStock
+	@Test
 	void testMedicalStockGets() throws Exception {
 		int code = setupTestMedicalStock(false);
 		checkMedicalStockIntoDb(code);
 	}
 
-	// TODO: fix setupTestMedicalStock
+	@Test
 	void testMedicalStockSets() throws Exception {
 		int code = setupTestMedicalStock(true);
 		checkMedicalStockIntoDb(code);
@@ -1593,7 +1593,10 @@ class Tests extends OHCoreTestCase {
 	private int setupTestMedicalStock(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
-		MedicalStock medicalStock = testMedicalStock.setup(medical, false);
+		MedicalStock medicalStock = testMedicalStock.setup(medical, usingSet);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		medicalStockIoOperationRepository.saveAndFlush(medicalStock);
 		return medicalStock.getCode();
 	}
 
