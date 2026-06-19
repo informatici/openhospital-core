@@ -23,19 +23,26 @@ package org.isf.stat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.stat.dto.JasperReportResultDto;
+import org.isf.stat.dto.ReportLauncherDto;
 import org.isf.stat.manager.JasperReportsManager;
 import org.isf.ward.manager.WardBrowserManager;
 import org.junit.jupiter.api.AfterEach;
@@ -47,6 +54,7 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -54,6 +62,9 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 class Tests extends OHCoreTestCase {
+
+	private static final String RPT_STAT = "rpt_stat";
+	private static final String RPT_EXTRA = "rpt_extra";
 
 	private static TestJasperReportResultDto testJasperReportResultDto;
 
@@ -168,6 +179,72 @@ class Tests extends OHCoreTestCase {
 			assertThat(jasperReportResultDto).isNotNull();
 			assertThat(jasperReportResultDto.getFilename()).containsAnyOf("rpt_base/PDF/operationslist.pdf", "rpt_base\\PDF\\operationslist.pdf");
 			assertThat(jasperReportResultDto.getJasperFile()).containsAnyOf("rpt_base/operationslist.jasper", "rpt_base\\operationslist.jasper");
+		}
+	}
+
+	@Test
+	void testGetReportsList() throws Exception {
+		String previousLanguage = GeneralData.LANGUAGE;
+		Path statFolder = Path.of(RPT_STAT);
+		Path extraFolder = Path.of(RPT_EXTRA);
+		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
+			GeneralData.LANGUAGE = "en";
+
+			// rpt_stat report with a localized title and two prompt parameters
+			Files.createDirectories(statFolder.resolve("en"));
+			Files.createFile(statFolder.resolve("POI_ByAgeBySex.jasper"));
+			Files.writeString(statFolder.resolve("en").resolve("POI_ByAgeBySex.properties"), "jTitle=Patients by age and sex\n");
+
+			// rpt_extra report whose title comes from the default (non-localized) properties
+			Files.createDirectories(extraFolder);
+			Files.createFile(extraFolder.resolve("Custom_Report.jasper"));
+			Files.writeString(extraFolder.resolve("Custom_Report.properties"), "jTitle=Custom report\n");
+
+			// a report without any title must be skipped
+			Files.createFile(statFolder.resolve("NoTitle.jasper"));
+
+			JRParameter systemParameter = mock(JRParameter.class);
+			when(systemParameter.isSystemDefined()).thenReturn(true);
+			JRParameter monthParameter = mock(JRParameter.class);
+			when(monthParameter.isSystemDefined()).thenReturn(false);
+			when(monthParameter.isForPrompting()).thenReturn(true);
+			when(monthParameter.getName()).thenReturn("month");
+			JRParameter yearParameter = mock(JRParameter.class);
+			when(yearParameter.isSystemDefined()).thenReturn(false);
+			when(yearParameter.isForPrompting()).thenReturn(true);
+			when(yearParameter.getName()).thenReturn("year");
+
+			when(jasperReport.getParameters()).thenReturn(new JRParameter[] { systemParameter, monthParameter, yearParameter });
+			mockedJRLoader.when(() -> JRLoader.loadObject(any(File.class))).thenReturn(jasperReport);
+
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
+			List<ReportLauncherDto> reports = jasperReportsManager.getReportsList();
+
+			// NoTitle.jasper is skipped, the remaining reports are sorted by title
+			assertThat(reports).hasSize(2);
+			assertThat(reports).extracting(ReportLauncherDto::getTitle).containsExactly("Custom report", "Patients by age and sex");
+
+			ReportLauncherDto statReport = reports.stream().filter(r -> "POI_ByAgeBySex".equals(r.getFileName())).findFirst().orElseThrow();
+			assertThat(statReport.getFolder()).isEqualTo(RPT_STAT);
+			assertThat(statReport.getTitle()).isEqualTo("Patients by age and sex");
+			// the system-defined parameter is excluded, only the prompt parameters remain
+			assertThat(statReport.getUserInputParameters()).containsExactly("month", "year");
+
+			ReportLauncherDto extraReport = reports.stream().filter(r -> "Custom_Report".equals(r.getFileName())).findFirst().orElseThrow();
+			assertThat(extraReport.getFolder()).isEqualTo(RPT_EXTRA);
+		} finally {
+			GeneralData.LANGUAGE = previousLanguage;
+			deleteRecursively(statFolder);
+			deleteRecursively(extraFolder);
+		}
+	}
+
+	private static void deleteRecursively(Path root) throws Exception {
+		if (!Files.exists(root)) {
+			return;
+		}
+		try (var paths = Files.walk(root)) {
+			paths.sorted(Comparator.reverseOrder()).forEach(path -> path.toFile().delete());
 		}
 	}
 }

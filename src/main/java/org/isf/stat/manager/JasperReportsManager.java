@@ -38,16 +38,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
@@ -60,6 +64,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.stat.dto.JasperReportResultDto;
+import org.isf.stat.dto.ReportLauncherDto;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.excel.ExcelExporter;
 import org.isf.utils.exception.OHReportException;
@@ -96,6 +101,10 @@ public class JasperReportsManager {
 	private static final String STAT_REPORTERROR_MSG = "angal.stat.reporterror.msg";
 
 	private static final String RPT_BASE = "rpt_base";
+	private static final String RPT_STAT = "rpt_stat";
+	private static final String RPT_EXTRA = "rpt_extra";
+	private static final String JASPER_FILE_EXTENSION = ".jasper";
+	private static final String REPORT_TITLE_PROPERTY = "jTitle";
 
 	private HospitalBrowsingManager hospitalManager;
 
@@ -107,6 +116,72 @@ public class JasperReportsManager {
 		this.hospitalManager = hospitalBrowsingManager;
 		this.dataSource = dataSource;
 		this.wardManager = wardManager;
+	}
+
+	/**
+	 * Returns the list of the stat reports the user can launch, scanning the {@code rpt_stat} and {@code rpt_extra} folders for compiled {@code .jasper} files.
+	 * For each report its localized title and the names of the parameters the user is expected to provide (e.g. {@code month}/{@code year} or
+	 * {@code fromdate}/{@code todate}) are resolved. The list is sorted by title. Scanning is best-effort: an unreadable folder is logged and skipped rather
+	 * than failing the whole listing.
+	 *
+	 * @return the available reports, never {@code null}
+	 */
+	public List<ReportLauncherDto> getReportsList() {
+		String language = new Locale(GeneralData.LANGUAGE).getLanguage();
+		List<ReportLauncherDto> reports = new ArrayList<>();
+		collectReports(RPT_STAT, language, reports);
+		collectReports(RPT_EXTRA, language, reports);
+		reports.sort(Comparator.comparing(ReportLauncherDto::getTitle, String.CASE_INSENSITIVE_ORDER));
+		return reports;
+	}
+
+	private void collectReports(String folder, String language, List<ReportLauncherDto> reports) {
+		Path folderPath = Path.of(folder);
+		if (!Files.isDirectory(folderPath)) {
+			LOGGER.warn(">> report folder '{}' not found; skipping.", folder);
+			return;
+		}
+		try (Stream<Path> walk = Files.walk(folderPath)) {
+			List<File> jasperFiles = walk.filter(Files::isRegularFile)
+							.map(Path::toFile)
+							.filter(file -> file.getName().endsWith(JASPER_FILE_EXTENSION))
+							.toList();
+			for (File jasperFile : jasperFiles) {
+				String fileName = jasperFile.getName().replace(JASPER_FILE_EXTENSION, "");
+				String title = getReportTitle(folder, fileName, language);
+				if (title == null || title.isBlank()) {
+					continue;
+				}
+				reports.add(new ReportLauncherDto(folder, fileName, title, getUserInputParameters(jasperFile)));
+			}
+		} catch (IOException e) {
+			LOGGER.error("Unable to scan report folder '{}'; skipping.", folder, e);
+		}
+	}
+
+	private String getReportTitle(String folder, String fileName, String language) {
+		Path localizedPath = Path.of(folder, language, fileName + ".properties");
+		Properties props = MessageBundle.loadPropertiesFileUtf8(localizedPath, LOGGER);
+		String title = props.getProperty(REPORT_TITLE_PROPERTY);
+		if (title == null || title.isBlank()) {
+			Path defaultPath = Path.of(folder, fileName + ".properties");
+			props = MessageBundle.loadPropertiesFileUtf8(defaultPath, LOGGER);
+			title = props.getProperty(REPORT_TITLE_PROPERTY);
+		}
+		return title;
+	}
+
+	private List<String> getUserInputParameters(File jasperFile) {
+		try {
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+			return Arrays.stream(jasperReport.getParameters())
+							.filter(parameter -> !parameter.isSystemDefined() && parameter.isForPrompting())
+							.map(JRParameter::getName)
+							.toList();
+		} catch (JRException e) {
+			LOGGER.error("Error loading parameters for report {}", jasperFile.getName(), e);
+			return List.of();
+		}
 	}
 
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
