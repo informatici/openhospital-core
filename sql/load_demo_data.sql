@@ -2168,6 +2168,7 @@ INSERT INTO `oh_groupmenu` VALUES (345,'admin','inventory',1,NULL,NULL,NULL,NULL
 INSERT INTO `oh_groupmenu` VALUES (346,'admin','inventoryward',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (347,'laboratorist','btnlaboratorynew',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (348,'laboratorist','btnlaboratoryedit',1,NULL,NULL,NULL,NULL);
+INSERT INTO `oh_groupmenu` VALUES (349,'admin','profession',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_groupmenu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4264,6 +4265,7 @@ INSERT INTO `oh_menuitem` VALUES ('pharmacy','angal.menu.btn.pharmacy','angal.me
 INSERT INTO `oh_menuitem` VALUES ('pretreatmenttype','angal.menu.btn.pretreatmenttype','angal.menu.pretreatmenttype','x','P','types','org.isf.pregtreattype.gui.PregnantTreatmentTypeBrowser','N',9);
 INSERT INTO `oh_menuitem` VALUES ('priceslists','angal.menu.btn.priceslists','angal.menu.priceslists','x','P','generaldata','org.isf.priceslist.gui.PricesBrowser','N',7);
 INSERT INTO `oh_menuitem` VALUES ('printing','angal.menu.btn.printing','angal.menu.printing','x','R','main','none','Y',9);
+INSERT INTO `oh_menuitem` VALUES ('profession','angal.menu.btn.profession','angal.menu.profession','x','P','generaldata','org.isf.profession.gui.ProfessionBrowser','N',11);
 INSERT INTO `oh_menuitem` VALUES ('smsmanager','angal.menu.btn.smsmanager','angal.menu.smsmanager','x','M','generaldata','org.isf.sms.gui.SmsBrowser','N',9);
 INSERT INTO `oh_menuitem` VALUES ('statistics','angal.menu.btn.statistics','angal.menu.statistics','x','T','main','org.isf.stat.reportlauncher.gui.ReportLauncher','N',8);
 INSERT INTO `oh_menuitem` VALUES ('supplier','angal.menu.btn.supplier','angal.menu.supplier','x','S','generaldata','org.isf.supplier.gui.SupplierBrowser','N',8);

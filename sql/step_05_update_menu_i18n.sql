@@ -18,6 +18,7 @@ UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.disease', MNI_LABEL='angal.men
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.exams', MNI_LABEL='angal.menu.exams' WHERE MNI_ID_A='exams';
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.operation', MNI_LABEL='angal.menu.operation' WHERE MNI_ID_A='operation';
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.vaccine', MNI_LABEL='angal.menu.vaccine' WHERE MNI_ID_A='vaccine';
+UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.profession', MNI_LABEL='angal.menu.profession' WHERE MNI_ID_A='profession';
 
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.menu.btn.labbrowsing', MNI_LABEL='angal.menu.labbrowsing' WHERE MNI_ID_A='labbrowsing';
 

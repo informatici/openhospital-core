@@ -53,6 +53,7 @@ INSERT INTO MENUITEM (MNI_ID_A,MNI_BTN_LABEL,MNI_LABEL,MNI_TOOLTIP,MNI_SHORTCUT,
  ('pharmacy','Pharmacy','Pharmacy','x','P','main','none','Y',3),
  ('pretreatmenttype','Pregnant Treatment','PregnantTreatment','x','P','types','org.isf.pregtreattype.gui.PregnantTreatmentTypeBrowser','N',9),
  ('printing','Printing','Printing','x','R','main','none','Y',7),
+ ('profession','Profession','Profession','x','P','generaldata','org.isf.profession.gui.ProfessionBrowser','N',11),
  ('statistics','Statistics','Statistics','x','T','main','org.isf.stat.reportlauncher.gui.ReportLauncher','N',6),
  ('types','Types','Types','x','T','generaldata','none','Y',0),
  ('users','Users','Users','x','U','file','none','Y',1),
@@ -99,6 +100,7 @@ INSERT INTO GROUPMENU (GM_ID,GM_UG_ID_A,GM_MNI_ID_A,GM_ACTIVE) VALUES
  (39,'admin','delresulttype','Y'),
  (40,'admin','printing','Y'),
  (41,'admin','examlist1','Y'),
- (42,'admin','diseaselist','Y');
+ (42,'admin','diseaselist','Y'),
+ (43,'admin','profession','Y');
 
 

@@ -35,15 +35,23 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
+import org.isf.profession.manager.ProfessionBrowserManager;
+import org.isf.profession.model.Profession;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientBrowserManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientBrowserManager.class);
+
+	private static final String PROFESSION_UNKNOWN_CODE = "unknown";
 
 	private final PatientIoOperations ioOperations;
 
@@ -51,14 +59,16 @@ public class PatientBrowserManager {
 
 	private final BillBrowserManager billManager;
 
+	private final ProfessionBrowserManager professionManager;
+
 	protected LinkedHashMap<String, String> maritalHashMap;
 
-	protected LinkedHashMap<String, String> professionHashMap;
-
-	public PatientBrowserManager(PatientIoOperations ioOperations, AdmissionBrowserManager admissionManager, BillBrowserManager billManager) {
+	public PatientBrowserManager(PatientIoOperations ioOperations, AdmissionBrowserManager admissionManager, BillBrowserManager billManager,
+			ProfessionBrowserManager professionManager) {
 		this.ioOperations = ioOperations;
 		this.admissionManager = admissionManager;
 		this.billManager = billManager;
+		this.professionManager = professionManager;
 	}
 
 	/**
@@ -179,46 +189,45 @@ public class PatientBrowserManager {
 		return "undefined";
 	}
 
-	private void buildProfessionHashMap() {
-		professionHashMap = new LinkedHashMap<>(12);
-		professionHashMap.put("unknown", MessageBundle.getMessage("angal.patient.profession.unknown.txt"));
-		professionHashMap.put("other", MessageBundle.getMessage("angal.patient.profession.other.txt"));
-		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming.txt"));
-		professionHashMap.put("construction", MessageBundle.getMessage("angal.patient.profession.construction.txt"));
-		professionHashMap.put("medicine", MessageBundle.getMessage("angal.patient.profession.medicine.txt"));
-		professionHashMap.put("foodhospitality", MessageBundle.getMessage("angal.patient.profession.foodhospitality.txt"));
-		professionHashMap.put("homemaker", MessageBundle.getMessage("angal.patient.profession.homemaker.txt"));
-		professionHashMap.put("mechanic", MessageBundle.getMessage("angal.patient.profession.mechanic.txt"));
-		professionHashMap.put("business", MessageBundle.getMessage("angal.patient.profession.business.txt"));
-		professionHashMap.put("janitorial", MessageBundle.getMessage("angal.patient.profession.janitorial.txt"));
-		professionHashMap.put("mining", MessageBundle.getMessage("angal.patient.profession.mining.txt"));
-		professionHashMap.put("engineering", MessageBundle.getMessage("angal.patient.profession.engineering.txt"));
+	private List<Profession> loadProfessions() {
+		try {
+			return professionManager.getProfessions();
+		} catch (OHServiceException e) {
+			LOGGER.error("Unable to load the professions list", e);
+			return new ArrayList<>();
+		}
 	}
 
 	public String[] getProfessionList() {
-		if (professionHashMap == null) {
-			buildProfessionHashMap();
+		List<Profession> professions = loadProfessions();
+		List<String> descriptions = new ArrayList<>(professions.size());
+		for (Profession profession : professions) {
+			descriptions.add(profession.getDescription());
 		}
-		return professionHashMap.values().toArray(new String[0]);
+		return descriptions.toArray(new String[0]);
 	}
 
 	public String getProfessionTranslated(String professionKey) {
-		if (professionHashMap == null) {
-			buildProfessionHashMap();
+		List<Profession> professions = loadProfessions();
+		if (professionKey != null) {
+			for (Profession profession : professions) {
+				if (profession.getCode().equals(professionKey)) {
+					return profession.getDescription();
+				}
+			}
 		}
-		if (professionKey == null || !professionHashMap.containsKey(professionKey)) {
-			return MessageBundle.getMessage("angal.patient.profession.unknown.txt");
+		for (Profession profession : professions) {
+			if (PROFESSION_UNKNOWN_CODE.equals(profession.getCode())) {
+				return profession.getDescription();
+			}
 		}
-		return professionHashMap.get(professionKey);
+		return MessageBundle.getMessage("angal.patient.profession.unknown.txt");
 	}
 
 	public String getProfessionKey(String description) {
-		if (professionHashMap == null) {
-			buildProfessionHashMap();
-		}
-		for (Map.Entry<String, String> entry : professionHashMap.entrySet()) {
-			if (entry.getValue().equals(description)) {
-				return entry.getKey();
+		for (Profession profession : loadProfessions()) {
+			if (profession.getDescription().equals(description)) {
+				return profession.getCode();
 			}
 		}
 		return "undefined";
