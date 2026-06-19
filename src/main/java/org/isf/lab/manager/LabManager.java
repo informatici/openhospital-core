@@ -211,7 +211,9 @@ public class LabManager {
 	 * @param labRow the list of results (Procedure 2); it can be {@code null}
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
+	 * @deprecated use {@link #newLaboratory2(Laboratory, List)} instead
 	 */
+	@Deprecated
 	public Laboratory newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
@@ -312,7 +314,9 @@ public class LabManager {
 	 * @param labRowList the list of results, it can be {@code null}
 	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
+	 * @deprecated use {@link #newLaboratory2(List, List)} instead
 	 */
+	@Deprecated
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Laboratory newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
@@ -371,7 +375,9 @@ public class LabManager {
 	 * @param labRow the list of results ({@link String}s)
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
+	 * @deprecated use {@link LabIoOperations#newLabSecondProcedure2(Laboratory, List)} instead
 	 */
+	@Deprecated
 	protected Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}
