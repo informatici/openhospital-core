@@ -58,6 +58,9 @@ public class PatientConsensus extends Auditable<String> {
 	@Column(name = "PTC_SERVICE")
 	private boolean serviceFlag;
 
+	@Column(name = "PTC_ADMINISTRATIVE")
+	private boolean administrativeFlag;
+
 	@OneToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
 	private Patient patient;
@@ -66,10 +69,11 @@ public class PatientConsensus extends Auditable<String> {
 		super();
 	}
 
-	public PatientConsensus(boolean consensusFlag, boolean serviceFlag, Patient patient) {
+	public PatientConsensus(boolean consensusFlag, boolean serviceFlag, boolean administrativeFlag, Patient patient) {
 		super();
 		this.consensusFlag = consensusFlag;
 		this.serviceFlag = serviceFlag;
+		this.administrativeFlag = administrativeFlag;
 		this.patient = patient;
 	}
 
@@ -97,6 +101,14 @@ public class PatientConsensus extends Auditable<String> {
 		this.serviceFlag = serviceFlag;
 	}
 
+	public boolean isAdministrativeFlag() {
+		return administrativeFlag;
+	}
+
+	public void setAdministrativeFlag(boolean administrativeFlag) {
+		this.administrativeFlag = administrativeFlag;
+	}
+
 	public Patient getPatient() {
 		return patient;
 	}
@@ -108,7 +120,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
-						+ ", patient=" + patient + ']';
+						+ ", administrativeFlag=" + administrativeFlag + ", patient=" + patient + ']';
 	}
 
 

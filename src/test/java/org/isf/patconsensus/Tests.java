@@ -83,18 +83,20 @@ class Tests extends OHCoreTestCase {
 	void testUpdatePatientConsensus() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		patientConsensus.setServiceFlag(true);
+		patientConsensus.setAdministrativeFlag(false);
 		PatientConsensus updatedPatientConsensus = patientConsensusBrowserManager.updatePatientConsensus(patientConsensus);
 		assertThat(updatedPatientConsensus.isServiceFlag()).isTrue();
+		assertThat(updatedPatientConsensus.isAdministrativeFlag()).isFalse();
 	}
 
 	@Test
 	void testToString() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=1, consensusFlag=true, serviceFlag=false, patient=TestFirstName TestSecondName]");
+						.isEqualTo("PatientConsensus [id=1, consensusFlag=true, serviceFlag=false, administrativeFlag=true, patient=TestFirstName TestSecondName]");
 		patientConsensus.setId(patientConsensus.getId() + 2);
 		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=3, consensusFlag=true, serviceFlag=false, patient=TestFirstName TestSecondName]");
+						.isEqualTo("PatientConsensus [id=3, consensusFlag=true, serviceFlag=false, administrativeFlag=true, patient=TestFirstName TestSecondName]");
 	}
 
 	@Test
