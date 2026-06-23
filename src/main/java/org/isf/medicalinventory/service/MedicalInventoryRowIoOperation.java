@@ -49,6 +49,11 @@ public class MedicalInventoryRowIoOperation {
 	 * @throws OHServiceException
 	 */
 	public MedicalInventoryRow newMedicalInventoryRow(MedicalInventoryRow medicalInventoryRow) throws OHServiceException {
+		// a new row is built with id 0 by the GUI; since the @Id is an Integer, a non-null 0 makes Spring Data treat it
+		// as an existing row (merge/update) and fail with a StaleObjectStateException - null it so it is inserted instead
+		if (medicalInventoryRow.getId() != null && medicalInventoryRow.getId() == 0) {
+			medicalInventoryRow.setId(null);
+		}
 		return repository.save(medicalInventoryRow);
 	}
 	
