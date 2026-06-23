@@ -242,7 +242,9 @@ public class LabIoOperations {
 	 * @param labRow - the list of results ({@link String}s)
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
+	 * @deprecated use {@link #newLabSecondProcedure2(Laboratory, List)} instead
 	 */
+	@Deprecated
 	public Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		Laboratory newLaboratory = newLaboratory(laboratory);
 		if (newLaboratory.getCode() > 0) {
