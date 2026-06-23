@@ -34,7 +34,6 @@ import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -260,11 +259,9 @@ public class OpdIoOperations {
 					int page,
 					int size) throws OHServiceException {
 		Pageable pageRequest = PageRequest.of(page, size);
-		List<Opd> ops = this.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
-		int start = (int) pageRequest.getOffset();
-		int end = Math.min(start + pageRequest.getPageSize(), ops.size());
-		List<Opd> pageContent = ops.subList(start, end);
-		return setPaginationData(new PageImpl<>(pageContent, pageRequest, ops.size()));
+		Page<Opd> pagedResult = repository.findAllOpdWhereParamsPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user,
+						pageRequest);
+		return setPaginationData(pagedResult);
 	}
 
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {

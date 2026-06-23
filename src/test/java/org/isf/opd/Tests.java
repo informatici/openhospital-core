@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -49,6 +50,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
@@ -147,6 +149,51 @@ class Tests extends OHCoreTestCase {
 				foundOpd.getNewPatient(),
 				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
+	@MethodSource("opdExtended")
+	void testIoGetOpdListPageable(boolean opdExtended) throws Exception {
+		GeneralData.OPDEXTENDED = opdExtended;
+		// three OPDs that all match a broad (date-only) filter, sharing the same patient/disease/ward/visit
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("199");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+
+		LocalDate day = LocalDate.of(2020, 1, 15);
+		List<Integer> codes = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			opd.setDate(day.atTime(8 + i, 0));
+			codes.add(opdIoOperationRepository.saveAndFlush(opd).getCode());
+		}
+
+		PagedResponse<Opd> page0 = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 0, 2);
+		PagedResponse<Opd> page1 = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 1, 2);
+
+		assertThat(page0.getData()).hasSize(2);
+		assertThat(page1.getData()).hasSize(1);
+		assertThat(page0.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
+		assertThat(page0.getPageInfo().getTotalPages()).isEqualTo(2);
+
+		// the two pages together must cover every row exactly once (this is what the ORDER BY guarantees)
+		List<Integer> pagedCodes = new ArrayList<>();
+		page0.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
+		page1.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
+		assertThat(pagedCodes).containsExactlyInAnyOrderElementsOf(codes);
+
+		// a page past the end is empty but the total stays correct
+		PagedResponse<Opd> beyond = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 5, 2);
+		assertThat(beyond.getData()).isEmpty();
+		assertThat(beyond.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
