@@ -117,7 +117,7 @@ public class OperationBrowserManager {
 	}
 
 	/**
-	 * Verify if the {@link Operation} is valid for CRUD and return a list of errors, if any.
+	 * Verify if the {@link Operation} is valid for CRUD and throw an exception with the list of errors, if any.
 	 *
 	 * @param operation the {@link Operation} to validate
 	 * @param insert {@code true} if the operation is being inserted, {@code false} if updated
