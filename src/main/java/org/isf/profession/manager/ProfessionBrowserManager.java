@@ -100,7 +100,7 @@ public class ProfessionBrowserManager {
 	}
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and throw an exception with the list of errors, if any.
 	 *
 	 * @param profession
 	 * @param insert {@code true} or updated {@code false}
