@@ -205,33 +205,6 @@ public class LabManager {
 	}
 
 	/**
-	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
-	 *
-	 * @param laboratory the laboratory with its result (Procedure 1)
-	 * @param labRow the list of results (Procedure 2); it can be {@code null}
-	 * @return the newly persisted {@link Laboratory} object.
-	 * @throws OHServiceException
-	 * @deprecated use {@link #newLaboratory2(Laboratory, List)} instead
-	 */
-	@Deprecated
-	public Laboratory newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory);
-		setPatientConsistency(laboratory);
-		procedure = laboratory.getExam().getProcedure();
-		return switch (procedure) {
-		case 1 -> ioOperations.newLabFirstProcedure(laboratory);
-		case 2 -> {
-			if (labRow == null || labRow.isEmpty()) {
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
-			}
-			yield ioOperations.newLabSecondProcedure(laboratory, labRow);
-		}
-		case 3 -> ioOperations.newLabFirstProcedure(laboratory);
-		default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
-		};
-	}
-
-	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures).
 	 *
 	 * @param laboratory the laboratory with its result (Procedure 1)
@@ -245,7 +218,12 @@ public class LabManager {
 		procedure = laboratory.getExam().getProcedure();
 		return switch (procedure) {
 		case 1 -> ioOperations.newLabFirstProcedure(laboratory);
-		case 2 -> ioOperations.newLabSecondProcedure2(laboratory, labRow);
+		case 2 -> {
+			if (labRow == null || labRow.isEmpty()) {
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
+			}
+			yield ioOperations.newLabSecondProcedure2(laboratory, labRow);
+		}
 		case 3 -> ioOperations.newLabFirstProcedure(laboratory);
 		default -> throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownprocedure.msg")));
 		};
@@ -314,32 +292,6 @@ public class LabManager {
 	 * @param labRowList the list of results, it can be {@code null}
 	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
-	 * @deprecated use {@link #newLaboratory2(List, List)} instead
-	 */
-	@Deprecated
-	@Transactional(rollbackFor = OHServiceException.class)
-	@TranslateOHServiceException
-	public Laboratory newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
-		if (labList.isEmpty()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.noexamsinserted.msg")));
-		}
-		if (labList.size() != labRowList.size()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
-		}
-		Laboratory newLaboratory = newLaboratory(labList.get(0), labRowList.get(0));
-		for (int i = 1; i < labList.size(); i++) {
-			newLaboratory(labList.get(i), labRowList.get(i));
-		}
-		return newLaboratory;
-	}
-
-	/**
-	 * Inserts list of Laboratory exams {@link Laboratory} (All Procedures).
-	 *
-	 * @param labList the laboratory list with results
-	 * @param labRowList the list of results, it can be {@code null}
-	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
-	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
@@ -366,20 +318,6 @@ public class LabManager {
 	 */
 	protected Laboratory newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return ioOperations.newLabFirstProcedure(laboratory);
-	}
-
-	/**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two).
-	 *
-	 * @param laboratory the {@link Laboratory} to insert
-	 * @param labRow the list of results ({@link String}s)
-	 * @return the newly persisted {@link Laboratory} object.
-	 * @throws OHServiceException
-	 * @deprecated use {@link LabIoOperations#newLabSecondProcedure2(Laboratory, List)} instead
-	 */
-	@Deprecated
-	protected Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}
 
 	/**

@@ -236,29 +236,6 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
-	 *
-	 * @param laboratory - the {@link Laboratory} to insert
-	 * @param labRow - the list of results ({@link String}s)
-	 * @return the newly persisted {@link Laboratory} object.
-	 * @throws OHServiceException
-	 * @deprecated use {@link #newLabSecondProcedure2(Laboratory, List)} instead
-	 */
-	@Deprecated
-	public Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		Laboratory newLaboratory = newLaboratory(laboratory);
-		if (newLaboratory.getCode() > 0) {
-			for (String aLabRow : labRow) {
-				LaboratoryRow laboratoryRow = new LaboratoryRow();
-				laboratoryRow.setLabId(laboratory);
-				laboratoryRow.setDescription(aLabRow);
-				rowRepository.save(laboratoryRow);
-			}
-		}
-		return newLaboratory;
-	}
-
-	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
 	 * between specified dates and matching passed exam name.
 	 *

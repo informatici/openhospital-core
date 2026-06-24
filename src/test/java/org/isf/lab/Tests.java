@@ -319,23 +319,6 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testIoNewLabSecondProcedure(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<String> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labRow.add("TestLabRow");
-		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
 	void testIoNewLabSecondProcedureTransaction(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<String> labRow = new ArrayList<>();
@@ -348,7 +331,7 @@ class Tests extends OHCoreTestCase {
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		labRow.add("TestLabRow");
 		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
-		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
+		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure2(laboratory, toLaboratoryRows(laboratory, labRow));
 		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
@@ -795,26 +778,6 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		ArrayList<String> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labRow.add("TestLabRow");
-		// method is protected not public thus use of reflection
-		Method method = labManager.getClass().getDeclaredMethod("newLabSecondProcedure", Laboratory.class, List.class);
-		method.setAccessible(true);
-		Laboratory newLaboratory = (Laboratory) method.invoke(labManager, laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
 	void testMgrNewLaboratoryProcedureEquals2EmptyLabRows(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
@@ -824,7 +787,7 @@ class Tests extends OHCoreTestCase {
 			Exam exam = testExam.setup(examType, 2, false);
 			Patient patient = testPatient.setup(false);
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 			.isInstanceOf(OHDataValidationException.class);
 	}
@@ -853,7 +816,7 @@ class Tests extends OHCoreTestCase {
 		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 
 		Laboratory updatedLaboratory = labManager.updateExamRequest(newLaboratory.getCode(), DRAFT);
 		assertThat(updatedLaboratory.getStatus()).isEqualTo(DRAFT);
@@ -874,63 +837,11 @@ class Tests extends OHCoreTestCase {
 		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 
 		Laboratory foundLaboratory = labManager.getLaboratory(newLaboratory.getCode()).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
 		assertThat(foundLaboratory.getCode()).isEqualTo(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2NullLabRows(boolean labExtended) {
-		GeneralData.LABEXTENDED = labExtended;
-		assertThatThrownBy(() ->
-		{
-			ExamType examType = testExamType.setup(false);
-			Exam exam = testExam.setup(examType, 2, false);
-			Patient patient = testPatient.setup(false);
-			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory(laboratory, null);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryExceptionsBadProcedureNumber(boolean labExtended) {
-		GeneralData.LABEXTENDED = labExtended;
-		assertThatThrownBy(() ->
-		{
-			List<String> labRow = new ArrayList<>();
-			ExamType examType = testExamType.setup(false);
-			Exam exam = testExam.setup(examType, 99, false);
-			Patient patient = testPatient.setup(false);
-			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory(laboratory, labRow);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2RollbackTransaction(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		ArrayList<String> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labRow.add("TestLabRow");
-		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
-		// method is protected not public thus use of reflection
-		Method method = labManager.getClass().getDeclaredMethod("newLabSecondProcedure", Laboratory.class, List.class);
-		method.setAccessible(true);
-		Laboratory newLaboratory = (Laboratory) method.invoke(labManager, laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
@@ -1004,7 +915,7 @@ class Tests extends OHCoreTestCase {
 			Exam exam = testExam.setup(examType, 2, false);
 			Patient patient = testPatient.setup(false);
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory(laboratory, null);
+			labManager.newLaboratory2(laboratory, null);
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1039,7 +950,7 @@ class Tests extends OHCoreTestCase {
 		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
@@ -1061,7 +972,7 @@ class Tests extends OHCoreTestCase {
 
 			laboratory.setLabDate(null);
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1086,7 +997,7 @@ class Tests extends OHCoreTestCase {
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			laboratory.setPatient(null);
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1108,7 +1019,7 @@ class Tests extends OHCoreTestCase {
 		// laboratory 1, Procedure One
 		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labManager.newLaboratory(laboratory, labRow);
+		labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 
 		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
@@ -1137,7 +1048,7 @@ class Tests extends OHCoreTestCase {
 			laboratory.setPatient(null);
 			laboratory.setSex("?");
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1162,7 +1073,7 @@ class Tests extends OHCoreTestCase {
 			laboratory.setPatient(null);
 			laboratory.setAge(-99);
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1186,7 +1097,7 @@ class Tests extends OHCoreTestCase {
 
 			laboratory.setExam(null);
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1210,7 +1121,7 @@ class Tests extends OHCoreTestCase {
 
 			laboratory.setResult("");
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1234,7 +1145,7 @@ class Tests extends OHCoreTestCase {
 
 			laboratory.setMaterial("");
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1258,7 +1169,7 @@ class Tests extends OHCoreTestCase {
 
 			laboratory.setInOutPatient("");
 
-			labManager.newLaboratory(laboratory, labRow);
+			labManager.newLaboratory2(laboratory, toLaboratoryRows(laboratory, labRow));
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1358,83 +1269,6 @@ class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			labManager.updateLaboratory(laboratory, labRow);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransaction(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<Laboratory> laboratories = new ArrayList<>();
-		List<List<String>> labRowList = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 1, false);
-		Exam exam2 = testExam.setup(examType, 2, false);
-		exam2.setCode("ZZZ");
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		examIoOperationRepository.saveAndFlush(exam2);
-		patientIoOperationRepository.saveAndFlush(patient);
-
-		// laboratory 1, Procedure One
-		List<String> labRow = new ArrayList<>();
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		laboratories.add(laboratory);
-		labRowList.add(labRow);
-
-		// laboratory 2, Procedure Two
-		Laboratory laboratory2 = testLaboratory.setup(exam2, patient, false);
-		laboratories.add(laboratory2);
-		labRow.add("TestLabRow");
-		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
-		labRowList.add(labRow);
-
-		Laboratory newLaboratory  = labManager.newLaboratory(laboratories, labRowList);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransactionNoLabList(boolean labExtended) {
-		GeneralData.LABEXTENDED = labExtended;
-		assertThatThrownBy(() ->
-		{
-			List<Laboratory> laboratories = new ArrayList<>();
-			List<List<String>> labRowList = new ArrayList<>();
-
-			labManager.newLaboratory(laboratories, labRowList);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransactionLabListNotEqualLabRowList(boolean labExtended) {
-		GeneralData.LABEXTENDED = labExtended;
-		assertThatThrownBy(() ->
-		{
-			List<Laboratory> laboratories = new ArrayList<>();
-			List<List<String>> labRowList = new ArrayList<>();
-			ExamType examType = testExamType.setup(false);
-			Exam exam = testExam.setup(examType, 1, false);
-			Patient patient = testPatient.setup(false);
-			examTypeIoOperationRepository.saveAndFlush(examType);
-			examIoOperationRepository.saveAndFlush(exam);
-			patientIoOperationRepository.saveAndFlush(patient);
-
-			// laboratory 1, Procedure One
-			List<String> labRow = new ArrayList<>();
-			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			laboratories.add(laboratory);
-			labRowList.add(labRow);
-
-			// laboratory 2, Procedure Two
-			labRow.add("TestLabRow");
-			labRowList.add(labRow);
-
-			labManager.newLaboratory(laboratories, labRowList);
 		})
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1757,6 +1591,18 @@ class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
 		testLaboratory.check(foundLaboratory);
+	}
+
+	/**
+	 * Builds the {@link LaboratoryRow} list (Procedure Two results) expected by {@code newLaboratory2}
+	 * from a plain list of result descriptions.
+	 */
+	private List<LaboratoryRow> toLaboratoryRows(Laboratory laboratory, List<String> descriptions) {
+		List<LaboratoryRow> rows = new ArrayList<>();
+		for (String description : descriptions) {
+			rows.add(new LaboratoryRow(laboratory, description));
+		}
+		return rows;
 	}
 
 	private Integer setupTestLaboratoryRow(boolean usingSet) throws OHException {
