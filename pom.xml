@@ -27,7 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>7.0.6</jasperreports.version>
 		<license.maven.plugin.version>5.0.0</license.maven.plugin.version>
-		<spring-cloud.version>2025.0.1</spring-cloud.version>
+		<spring-cloud.version>2025.1.2</spring-cloud.version>
 	</properties>
 	
 	<dependencyManagement>
