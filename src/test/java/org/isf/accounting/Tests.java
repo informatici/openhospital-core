@@ -314,7 +314,7 @@ class Tests extends OHCoreTestCase {
 		billItems.add(existingFromGui);
 		billItems.add(newItemFromGui);
 
-		// when: we call the service that internally does delete + re-insert
+		// when: we call the service that merges the list with the stored items
 		accountingIoOperation.newBillItems(bill, billItems);
 
 		// then: for that bill we now have exactly two items
@@ -326,10 +326,15 @@ class Tests extends OHCoreTestCase {
 			.extracting(i -> i.getBill().getId())
 			.containsOnly(bill.getId());
 
-		// and none of them keeps the old id (they've been re-inserted)
+		// and the resent item keeps its original id (updated in place, not re-inserted)
 		assertThat(persisted)
 			.extracting(BillItems::getId)
-			.doesNotContain(existingId);
+			.contains(existingId);
+
+		// while the new item got a freshly generated id
+		assertThat(persisted)
+			.filteredOn(item -> item.getId() != existingId)
+			.hasSize(1);
 	}
 
 	@Test
@@ -346,7 +351,7 @@ class Tests extends OHCoreTestCase {
 		existingFromGui.setAmount(existingPayment.getAmount());
 		existingFromGui.setDate(existingPayment.getDate());
 		existingFromGui.setUser(existingPayment.getUser());
-		existingFromGui.setBill(bill); // oppure null, tanto lo setti in newBillPayments
+		existingFromGui.setBill(bill);
 
 		// and: a second (new) payment created by the GUI (id = null / 0)
 		BillPayments newPayment = testBillPayments.setup(null, false);
@@ -356,7 +361,7 @@ class Tests extends OHCoreTestCase {
 		billPayments.add(existingFromGui); // existing, with original id
 		billPayments.add(newPayment); // new, with no id
 
-		// when: we call the service that internally does delete + re-insert
+		// when: we call the service that merges the list with the stored payments
 		accountingIoOperation.newBillPayments(bill, billPayments);
 
 		// then: for that bill we now have exactly two payments
@@ -368,10 +373,157 @@ class Tests extends OHCoreTestCase {
 			.extracting(p -> p.getBill().getId())
 			.containsOnly(bill.getId());
 
-		// and none of them keeps the old id (they've been re-inserted)
+		// and the resent payment keeps its original id (updated in place, not re-inserted)
 		assertThat(persisted)
 			.extracting(BillPayments::getId)
-			.doesNotContain(existingId);
+			.contains(existingId);
+
+		// while the new payment got a freshly generated id
+		assertThat(persisted)
+			.filteredOn(payment -> payment.getId() != existingId)
+			.hasSize(1);
+	}
+
+	@Test
+	void testIoNewBillItemsOrphanRemoval() throws Exception {
+		// given: an existing bill with two items already stored
+		int firstId = setupTestBillItems(false);
+		BillItems firstItem = accountingBillItemsIoOperationRepository.findById(firstId).orElse(null);
+		assertThat(firstItem).isNotNull();
+		Bill bill = firstItem.getBill();
+		BillItems secondItem = testBillItems.setup(bill, false);
+		bill.getItems().add(secondItem);
+		accountingBillItemsIoOperationRepository.saveAndFlush(secondItem);
+		int secondId = secondItem.getId();
+
+		// when: the GUI resends only the first item
+		BillItems firstFromGui = testBillItems.setup(null, false);
+		firstFromGui.setId(firstId);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(firstFromGui);
+		accountingIoOperation.newBillItems(bill, billItems);
+
+		// then: the missing item has been removed and the survivor keeps its id
+		List<BillItems> persisted = accountingIoOperation.getItems(bill.getId());
+		assertThat(persisted)
+			.extracting(BillItems::getId)
+			.containsExactly(firstId);
+		assertThat(accountingBillItemsIoOperationRepository.findById(secondId)).isEmpty();
+	}
+
+	@Test
+	void testIoNewBillItemsMixedUpdateInsert() throws Exception {
+		// given: an existing bill with one item already stored
+		int existingId = setupTestBillItems(false);
+		BillItems existingItem = accountingBillItemsIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(existingItem).isNotNull();
+		Bill bill = existingItem.getBill();
+
+		// when: the GUI resends the existing item with modified fields plus a new one
+		BillItems existingFromGui = testBillItems.setup(null, false);
+		existingFromGui.setId(existingId);
+		existingFromGui.setItemAmount(99.9);
+		existingFromGui.setItemQuantity(3);
+		BillItems newItemFromGui = testBillItems.setup(null, false);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(existingFromGui);
+		billItems.add(newItemFromGui);
+		accountingIoOperation.newBillItems(bill, billItems);
+
+		// then: the existing row has been updated in place and the new one inserted
+		List<BillItems> persisted = accountingIoOperation.getItems(bill.getId());
+		assertThat(persisted).hasSize(2);
+		BillItems updatedItem = accountingBillItemsIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(updatedItem).isNotNull();
+		assertThat(updatedItem.getItemAmount()).isCloseTo(99.9, offset(0.001));
+		assertThat(updatedItem.getItemQuantity()).isEqualTo(3);
+	}
+
+	@Test
+	void testIoNewBillPaymentsOrphanRemoval() throws Exception {
+		// given: an existing bill with two payments already stored
+		int firstId = setupTestBillPayments(false);
+		BillPayments firstPayment = accountingBillPaymentIoOperationRepository.findById(firstId).orElse(null);
+		assertThat(firstPayment).isNotNull();
+		Bill bill = firstPayment.getBill();
+		BillPayments secondPayment = testBillPayments.setup(bill, false);
+		bill.getPayments().add(secondPayment);
+		accountingBillPaymentIoOperationRepository.saveAndFlush(secondPayment);
+		int secondId = secondPayment.getId();
+
+		// when: the GUI resends only the first payment
+		BillPayments firstFromGui = testBillPayments.setup(null, false);
+		firstFromGui.setId(firstId);
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(firstFromGui);
+		accountingIoOperation.newBillPayments(bill, billPayments);
+
+		// then: the missing payment has been removed and the survivor keeps its id
+		List<BillPayments> persisted = accountingIoOperation.getPayments(bill.getId());
+		assertThat(persisted)
+			.extracting(BillPayments::getId)
+			.containsExactly(firstId);
+		assertThat(accountingBillPaymentIoOperationRepository.findById(secondId)).isEmpty();
+	}
+
+	@Test
+	void testIoNewBillPaymentsMixedUpdateInsert() throws Exception {
+		// given: an existing bill with one payment already stored
+		int existingId = setupTestBillPayments(false);
+		BillPayments existingPayment = accountingBillPaymentIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(existingPayment).isNotNull();
+		Bill bill = existingPayment.getBill();
+
+		// when: the GUI resends the existing payment with a modified amount plus a new one
+		BillPayments existingFromGui = testBillPayments.setup(null, false);
+		existingFromGui.setId(existingId);
+		existingFromGui.setAmount(99.9);
+		BillPayments newPaymentFromGui = testBillPayments.setup(null, false);
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(existingFromGui);
+		billPayments.add(newPaymentFromGui);
+		accountingIoOperation.newBillPayments(bill, billPayments);
+
+		// then: the existing row has been updated in place and the new one inserted
+		List<BillPayments> persisted = accountingIoOperation.getPayments(bill.getId());
+		assertThat(persisted).hasSize(2);
+		BillPayments updatedPayment = accountingBillPaymentIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(updatedPayment).isNotNull();
+		assertThat(updatedPayment.getAmount()).isCloseTo(99.9, offset(0.001));
+	}
+
+	@Test
+	void testIoNewBillPaymentsEmptyListRemovesAll() throws Exception {
+		// given: an existing bill with one payment already stored
+		int existingId = setupTestBillPayments(false);
+		BillPayments existingPayment = accountingBillPaymentIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(existingPayment).isNotNull();
+		Bill bill = existingPayment.getBill();
+
+		// when: an empty list is sent
+		accountingIoOperation.newBillPayments(bill, new ArrayList<>());
+
+		// then: all the payments of the bill are gone
+		assertThat(accountingIoOperation.getPayments(bill.getId())).isEmpty();
+	}
+
+	@Test
+	void testIoDeleteBillCascadesToItemsAndPayments() throws Exception {
+		// given: a stored bill with one item and one payment
+		int billId = setupTestBillWithItems(false);
+		Bill bill = accountingBillIoOperationRepository.findById(billId).orElse(null);
+		assertThat(bill).isNotNull();
+		BillPayments billPayment = testBillPayments.setup(bill, false);
+		bill.getPayments().add(billPayment);
+		accountingBillPaymentIoOperationRepository.saveAndFlush(billPayment);
+
+		// when: the bill is deleted
+		accountingIoOperation.deleteBill(bill);
+
+		// then: its items and payments are deleted as well
+		assertThat(accountingBillIoOperationRepository.findById(billId)).isEmpty();
+		assertThat(accountingBillItemsIoOperationRepository.findAll()).isEmpty();
+		assertThat(accountingBillPaymentIoOperationRepository.findAll()).isEmpty();
 	}
 
 	@Test
@@ -832,6 +984,30 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void mgrUpdateBillDetachedBillDoesNotWipeChildren() throws Exception {
+		// given: a stored bill with one item
+		int billId = setupTestBillWithItems(false);
+		Bill storedBill = accountingBillIoOperationRepository.findById(billId).orElse(null);
+		assertThat(storedBill).isNotNull();
+		List<BillItems> storedItems = billBrowserManager.getItems(billId);
+		assertThat(storedItems).hasSize(1);
+		int itemId = storedItems.get(0).getId();
+
+		// and: a detached copy of the bill built like the GUI does (constructor, empty collections)
+		Bill detachedBill = new Bill(billId, storedBill.getDate(), storedBill.getUpdate(), storedBill.isList(), storedBill.getPriceList(),
+			storedBill.getListName(), storedBill.isPatient(), storedBill.getBillPatient(), storedBill.getPatName(), storedBill.getStatus(),
+			storedBill.getAmount(), storedBill.getBalance(), storedBill.getUser(), storedBill.getAdmission());
+
+		// when: the bill is updated without resending the items
+		billBrowserManager.updateBill(detachedBill, new ArrayList<>(), new ArrayList<>());
+
+		// then: the stored item is still there with its original id
+		assertThat(billBrowserManager.getItems(billId))
+			.extracting(BillItems::getId)
+			.containsExactly(itemId);
+	}
+
+	@Test
 	void mgrDeleteBill() throws Exception {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
@@ -872,6 +1048,7 @@ class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		Bill bill = testBill.setup(priceList, patient, null, usingSet);
 		BillItems billItem = testBillItems.setup(bill, usingSet);
+		bill.getItems().add(billItem);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -893,6 +1070,7 @@ class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		Bill bill = testBill.setup(priceList, patient, null, usingSet);
 		BillPayments billPayment = testBillPayments.setup(bill, usingSet);
+		bill.getPayments().add(billPayment);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -917,6 +1095,7 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);
 		BillItems billItem = testBillItems.setup(bill, usingSet);
+		bill.getItems().add(billItem);
 		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
 		return bill.getId();
 	}
