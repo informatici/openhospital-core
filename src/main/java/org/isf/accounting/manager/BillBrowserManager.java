@@ -286,6 +286,17 @@ public class BillBrowserManager {
 	}
 
 	/**
+	 * Returns all the {@link Bill}s for the specified patient.
+	 *
+	 * @param patID the patient id.
+	 * @return the list of bills of the specified patient.
+	 * @throws OHServiceException
+	 */
+	public List<Bill> getPatientBills(int patID) throws OHServiceException {
+		return ioOperations.getAllPatientsBills(patID);
+	}
+
+	/**
 	 * Recomputes {@code BLL_AMOUNT} and {@code BLL_BALANCE} from the supplied item and payment lists, updating the {@link Bill} object in-place.
 	 *
 	 * @param bill the bill to update in-place

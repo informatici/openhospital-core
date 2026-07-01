@@ -2513,6 +2513,7 @@ INSERT INTO `oh_grouppermission` VALUES (314,'admin',169,'1',NULL,NULL,NULL,NULL
 INSERT INTO `oh_grouppermission` VALUES (315,'admin',170,'1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_grouppermission` VALUES (316,'admin',171,'1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_grouppermission` VALUES (317,'laboratorist',96,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (318,'admin',172,'1',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_grouppermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6594,6 +6595,7 @@ INSERT INTO `oh_permissions` VALUES (168,'usergroups.create','','1',NULL,NULL,NU
 INSERT INTO `oh_permissions` VALUES (169,'usergroups.read','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` VALUES (170,'usergroups.update','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` VALUES (171,'usergroups.delete','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (172,'patient.export','','1',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -322,6 +322,22 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetPatientVaccines() throws Exception {
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccines(foundPatientVaccine.getPatient().getCode());
+		assertThat(patientVaccines).hasSize(1);
+		assertThat(patientVaccines.get(0).getCode()).isEqualTo(foundPatientVaccine.getCode());
+	}
+
+	@Test
+	void testMgrGetPatientVaccinesNoneFound() throws Exception {
+		setupTestPatientVaccine(false);
+		assertThat(patVacManager.getPatientVaccines(-1)).isEmpty();
+	}
+
+	@Test
 	@Transactional // requires active session because of lazy loading patient
 	void testMgrUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);

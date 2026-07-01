@@ -635,6 +635,22 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void mgrGetPatientBills() throws Exception {
+		int id = setupTestBill(false);
+		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundBill).isNotNull();
+		List<Bill> bills = billBrowserManager.getPatientBills(foundBill.getBillPatient().getCode());
+		assertThat(bills).hasSize(1);
+		assertThat(bills.get(0).getId()).isEqualTo(foundBill.getId());
+	}
+
+	@Test
+	void mgrGetPatientBillsNoneFound() throws Exception {
+		setupTestBill(false);
+		assertThat(billBrowserManager.getPatientBills(-1)).isEmpty();
+	}
+
+	@Test
 	void mgrNewBillNoItemsNoPayments() throws Exception {
 		// A bill with no items must be rejected
 		Patient patient = testPatient.setup(false);
