@@ -41,6 +41,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean AUTOMATICLOT_OUT;
 	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
+	public static int LOTCOSTVARIANCEPERCENT;
 	public static String PATIENTSHEET;
 	public static String VISITSHEET;
 	public static String EXAMINATIONCHART;
@@ -100,6 +101,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static final boolean DEFAULT_AUTOMATICLOTWARD_TOWARD = true;
 	private static final boolean DEFAULT_LOTWITHCOST = false;
+	private static final int DEFAULT_LOTCOSTVARIANCEPERCENT = 50;
 	private static final String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
 	private static final String DEFAULT_VISITSHEET = "WardVisits";
 	private static final String DEFAULT_EXAMINATIONCHART = "patient_examination";
@@ -167,6 +169,11 @@ public final class GeneralData extends ConfigurationProperties {
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
 		AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
 		LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
+		// percentage deviation from the average previous lot cost that triggers a confirmation prompt; 0 disables the check
+		LOTCOSTVARIANCEPERCENT = myGetProperty("LOTCOSTVARIANCEPERCENT", DEFAULT_LOTCOSTVARIANCEPERCENT);
+		if (LOTCOSTVARIANCEPERCENT < 0) {
+			LOTCOSTVARIANCEPERCENT = DEFAULT_LOTCOSTVARIANCEPERCENT;
+		}
 		PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
 		VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
 		EXAMINATIONCHART = myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);

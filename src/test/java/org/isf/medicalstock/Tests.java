@@ -1552,6 +1552,54 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalWard.getLock()).isEqualTo(8);
 	}
 
+	@Test
+	void getAverageLotCostReturnsAverageOfPositiveCosts() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		saveLot(medical, "LOTA", new BigDecimal("10.00"));
+		saveLot(medical, "LOTB", new BigDecimal("20.00"));
+		saveLot(medical, "LOTC", BigDecimal.ZERO); // ignored: not a positive cost
+		saveLot(medical, "LOTD", null); // ignored: no cost
+
+		assertThat(movStockInsertingManager.getAverageLotCost(medical)).isEqualByComparingTo("15.00");
+	}
+
+	@Test
+	void getAverageLotCostReturnsNullWhenNoCostHistory() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		saveLot(medical, "LOTZERO", BigDecimal.ZERO);
+
+		assertThat(movStockInsertingManager.getAverageLotCost(medical)).isNull();
+	}
+
+	@Test
+	void isLotCostWithinVarianceHonorsThreshold() {
+		GeneralData.LOTCOSTVARIANCEPERCENT = 50;
+		BigDecimal average = new BigDecimal("10.00");
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(new BigDecimal("14.00"), average)).isTrue(); // 40%
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(new BigDecimal("15.00"), average)).isTrue(); // exactly 50%
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(new BigDecimal("16.00"), average)).isFalse(); // 60%
+	}
+
+	@Test
+	void isLotCostWithinVariancePassesWhenDisabledOrNoHistory() {
+		GeneralData.LOTCOSTVARIANCEPERCENT = 0;
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(new BigDecimal("999.00"), new BigDecimal("1.00"))).isTrue();
+		GeneralData.LOTCOSTVARIANCEPERCENT = 50;
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(new BigDecimal("999.00"), null)).isTrue();
+		assertThat(movStockInsertingManager.isLotCostWithinVariance(null, new BigDecimal("10.00"))).isTrue();
+	}
+
+	private void saveLot(Medical medical, String code, BigDecimal cost) {
+		Lot lot = new Lot(medical, code, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), cost);
+		lotIoOperationRepository.saveAndFlush(lot);
+	}
+
 	private String setupTestLot(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);

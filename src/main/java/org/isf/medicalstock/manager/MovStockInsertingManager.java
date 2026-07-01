@@ -22,6 +22,7 @@
 package org.isf.medicalstock.manager;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -283,6 +284,54 @@ public class MovStockInsertingManager {
 			return new ArrayList<>();
 		}
 		return ioOperations.getLotsByMedical(medical, removeEmpty);
+	}
+
+	/**
+	 * Computes the average cost of the previously stored {@link Lot}s of the given {@link Medical}, taking into account only lots that already have a
+	 * positive cost.
+	 *
+	 * @param medical the medical.
+	 * @return the average cost, or {@code null} when there is no previous lot with a cost to compare against.
+	 * @throws OHServiceException
+	 */
+	public BigDecimal getAverageLotCost(Medical medical) throws OHServiceException {
+		if (medical == null) {
+			return null;
+		}
+		List<Lot> lots = ioOperationsLots.findByMedicalOrderByDueDate(medical.getCode());
+		BigDecimal sum = BigDecimal.ZERO;
+		int count = 0;
+		for (Lot lot : lots) {
+			BigDecimal cost = lot.getCost();
+			if (cost != null && cost.compareTo(BigDecimal.ZERO) > 0) {
+				sum = sum.add(cost);
+				count++;
+			}
+		}
+		if (count == 0) {
+			return null;
+		}
+		return sum.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP);
+	}
+
+	/**
+	 * Checks whether the given cost stays within the configured variance ({@link GeneralData#LOTCOSTVARIANCEPERCENT}, a percentage) from the average
+	 * cost of the previous {@link Lot}s of a {@link Medical}. The check passes (returns {@code true}) when it is disabled
+	 * ({@code LOTCOSTVARIANCEPERCENT <= 0}) or when there is no cost history to compare against.
+	 *
+	 * @param cost the cost being entered.
+	 * @param averageCost the average cost of the previous lots, as returned by {@link #getAverageLotCost(Medical)}.
+	 * @return {@code true} if the cost is within the allowed variance, {@code false} otherwise.
+	 */
+	public boolean isLotCostWithinVariance(BigDecimal cost, BigDecimal averageCost) {
+		int threshold = GeneralData.LOTCOSTVARIANCEPERCENT;
+		if (threshold <= 0 || cost == null || averageCost == null || averageCost.compareTo(BigDecimal.ZERO) <= 0) {
+			return true;
+		}
+		BigDecimal deviationPercent = cost.subtract(averageCost).abs()
+			.multiply(BigDecimal.valueOf(100))
+			.divide(averageCost, 2, RoundingMode.HALF_UP);
+		return deviationPercent.compareTo(BigDecimal.valueOf(threshold)) <= 0;
 	}
 
 	/**
