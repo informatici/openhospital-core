@@ -252,6 +252,10 @@
 				<configuration>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+					<argLine>
+						--add-opens java.desktop/javax.imageio.stream=ALL-UNNAMED
+						--add-opens java.base/java.io=ALL-UNNAMED
+					</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
