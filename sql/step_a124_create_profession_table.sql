@@ -1,5 +1,5 @@
--- NOTE: step numbers a118-a122 are reserved by other open PRs; a123 was chosen to avoid a collision.
---       This file may need to be renumbered at merge time.
+-- NOTE: part of a contiguous merge-order block (a119-a125) shared by several open PRs;
+--       the step number may be reassigned at merge time to match the actual merge order.
 CREATE TABLE OH_PROFESSION (
   PRF_ID_A VARCHAR(50) NOT NULL,
   PRF_DESC VARCHAR(50) NOT NULL,
