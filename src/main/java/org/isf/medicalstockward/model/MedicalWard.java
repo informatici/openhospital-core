@@ -59,7 +59,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	 * Lock control
 	 */
 	@Version
-	@Column(name = "MDSRWRD_LOCK", columnDefinition = "INT(11) NOT NULL DEFAULT 0")
+	@Column(name = "MDSRWRD_LOCK")
 	private int lock;
 
 	@Transient
