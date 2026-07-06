@@ -370,6 +370,41 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testSoftDeleteUserStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		assertThat(user.getDeletedDate()).isNull();
+
+		// a regular update (deleted == false) must NOT stamp the deletion audit
+		user.setDesc("changed");
+		menuIoOperation.updateUser(user);
+		assertThat(userIoOperationRepository.findByUserName(userName).getDeletedDate()).isNull();
+
+		// a soft deletion records when the user was deleted
+		user.setDeleted(true);
+		menuIoOperation.updateUser(user);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		User afterDelete = userIoOperationRepository.findByUserName(userName);
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
+	}
+
+	@Test
+	void testSoftDeleteUserGroupStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		UserGroup group = userGroupIoOperationRepository.findByCode(user.getUserGroupName().getCode());
+		assertThat(group.getDeletedDate()).isNull();
+
+		group.setDeleted(true);
+		menuIoOperation.updateUserGroup(group);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		UserGroup afterDelete = userGroupIoOperationRepository.findByCode(group.getCode());
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
+	}
+
+	@Test
 	void testMgrGetUser() throws Exception {
 		String userName = setupTestUser(false);
 		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
