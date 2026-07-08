@@ -10,13 +10,15 @@
 ALTER TABLE OH_PERMISSIONS
 	ADD CONSTRAINT UX_PERMISSIONS_NAME UNIQUE (P_NAME);
 
--- Remove duplicate (user group, permission) rows, keeping the one with the lowest GP_ID.
+-- Remove duplicate (user group, permission) rows, keeping the one with the lowest GP_ID: the self-join
+-- matches a row only when another row with the same (user group, permission) and a lower GP_ID exists,
+-- so rows that are already unique are never touched.
 -- Such duplicates could have been produced by the previous updateUserGroup() behaviour.
 DELETE gp1 FROM OH_GROUPPERMISSION gp1
 	INNER JOIN OH_GROUPPERMISSION gp2
 		ON gp1.GP_UG_ID_A = gp2.GP_UG_ID_A
 		AND gp1.GP_P_ID_A = gp2.GP_P_ID_A
-		AND gp1.GP_ID > gp2.GP_ID;
+	WHERE gp1.GP_ID > gp2.GP_ID;
 
 -- Unique (user group, permission) pair.
 ALTER TABLE OH_GROUPPERMISSION

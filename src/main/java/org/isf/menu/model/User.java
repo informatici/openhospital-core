@@ -56,6 +56,7 @@ public class User extends SoftDeletableAuditable<String> {
 	private UserGroup userGroupName;
 
 	@NotNull
+	// 60 is the BCrypt hash output length; the GUI caps the raw password at 72 chars, the maximum BCrypt processes
 	@Column(name = "US_PASSWD", nullable = false, length = 60)
 	private String passwd;
 
