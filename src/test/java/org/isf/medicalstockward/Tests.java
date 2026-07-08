@@ -573,6 +573,25 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrNewMovementWardFractionalTransferError() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		Ward wardTo = testWard.setup(false);
+		wardTo.setCode("X");
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
+		// A ward-to-ward transfer (wardTo set) must be a whole number: the destination ward is credited through
+		// the integer MDSRWRD_IN_QTI column, so a fractional quantity would be truncated on the incoming side.
+		movementWard.setQuantity(new BigDecimal("2.5"));
+
+		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(movementWard))
+						.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
 	void testMgrNewMovementWardError() throws Exception {
 		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(new ArrayList<>()))
 						.isInstanceOf(OHDataValidationException.class);

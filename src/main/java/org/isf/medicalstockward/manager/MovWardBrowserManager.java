@@ -79,6 +79,13 @@ public class MovWardBrowserManager {
 		if (mov.getMedical() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg")));
 		}
+		// A ward-to-ward transfer credits the destination ward through the integer MDSRWRD_IN_QTI column, so a
+		// fractional quantity would be truncated on the incoming side and leave a stock discrepancy. Transfers
+		// between wards must therefore be whole units, regardless of the DECIMAL type used for other movements.
+		BigDecimal quantity = mov.getQuantity();
+		if (mov.getWardTo() != null && quantity != null && quantity.remainder(BigDecimal.ONE).signum() != 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.transferquantitymustbeaninteger.msg")));
+		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
