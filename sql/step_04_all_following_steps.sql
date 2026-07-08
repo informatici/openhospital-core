@@ -112,4 +112,4 @@ source step_a115_add_missing_foreign_key_for_auditable_entities.sql;
 source step_a116_fix_alcohol_and_bowel_column.sql;
 source step_a117_fix_ward_pharmacy.sql;
 source step_a118_add_deleted_by_and_date.sql;
-source step_a119_password_lease.sql;
+source step_a121_password_lease.sql;
