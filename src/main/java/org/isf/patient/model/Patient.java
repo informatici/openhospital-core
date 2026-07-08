@@ -143,6 +143,9 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
 	private char deleted = 'N';
 
+	@Column(name="PAT_ANONYMIZED", columnDefinition = "tinyint(1) default 0")
+	private boolean anonymized;
+
 	/**
 	 * field for "ui"
 	 * NOTE: to be replaced with {@link PatientHistory}
@@ -495,6 +498,14 @@ public class Patient extends Auditable<String> {
     public void setDeleted(char deleted) {
         this.deleted = deleted;
     }
+
+	public boolean isAnonymized() {
+		return anonymized;
+	}
+
+	public void setAnonymized(boolean anonymized) {
+		this.anonymized = anonymized;
+	}
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
