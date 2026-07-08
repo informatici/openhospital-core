@@ -14,6 +14,10 @@ ALTER TABLE OH_PERMISSIONS
 -- matches a row only when another row with the same (user group, permission) and a lower GP_ID exists,
 -- so rows that are already unique are never touched.
 -- Such duplicates could have been produced by the previous updateUserGroup() behaviour.
+--
+-- NOTE: this is NOT an unconditional delete. Deletion is bounded by the join and the WHERE below:
+-- gp1 is deleted only when a matching gp2 (same pair, lower GP_ID) exists. On a clean database the
+-- join produces no matching rows and the statement deletes nothing.
 DELETE gp1 FROM OH_GROUPPERMISSION gp1
 	INNER JOIN OH_GROUPPERMISSION gp2
 		ON gp1.GP_UG_ID_A = gp2.GP_UG_ID_A
