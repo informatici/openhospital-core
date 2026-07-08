@@ -47,6 +47,7 @@ import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
+import org.isf.medicalstockward.service.MovementWardLogIoOperationRepository;
 import org.isf.medstockmovtype.TestMovementType;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
@@ -96,6 +97,8 @@ class Tests extends OHCoreTestCase {
 	MovWardBrowserManager movWardBrowserManager;
 	@Autowired
 	MovementWardIoOperationRepository movementWardIoOperationRepository;
+	@Autowired
+	MovementWardLogIoOperationRepository movementWardLogIoOperationRepository;
 	@Autowired
 	MedicalsIoOperationRepository medicalsIoOperationRepository;
 	@Autowired
@@ -1347,9 +1350,12 @@ class Tests extends OHCoreTestCase {
 		int code = setupTestMovementWardWithMedicalWard(false);
 		Optional<MovementWard> lastMovementWard = movementWardIoOperationRepository.findById(code);
 		assertThat(lastMovementWard).isPresent();
-		movWardBrowserManager.deleteLastMovementWard(lastMovementWard.get());
+		movWardBrowserManager.deleteLastMovementWard(lastMovementWard.get(), "wrong entry");
 		Optional<MovementWard> movement = movementWardIoOperationRepository.findById(code);
 		assertThat(movement).isNotPresent();
+		// OP-1388: the deletion must be logged together with the reason
+		assertThat(movementWardLogIoOperationRepository.findAll())
+			.anyMatch(movementWardLog -> movementWardLog.getMovementWardCode() == code && "wrong entry".equals(movementWardLog.getReason()));
 	}
 
 	@Test
@@ -1375,12 +1381,12 @@ class Tests extends OHCoreTestCase {
 		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(fourthMovementWard);
-		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard))
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard, null))
 						.isInstanceOf(OHServiceException.class);
 		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(),
 						medical.getCode(), lot.getCode(), secondMovementWard.getDate());
 		assertThat(latestMovementWardList.size()).isEqualTo(2);
-		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard))
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard, null))
 						.isInstanceOf(OHServiceException.class);
 	}
 

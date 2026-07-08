@@ -34,7 +34,9 @@ import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.medicalstockward.model.MovementWardLog;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
+import org.isf.medicalstockward.service.MovementWardLogIoOperationRepository;
 import org.isf.patient.model.Patient;
 import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
@@ -51,8 +53,12 @@ public class MovWardBrowserManager {
 
 	private final MedicalStockWardIoOperations ioOperations;
 
-	public MovWardBrowserManager(MedicalStockWardIoOperations medicalStockWardIoOperations) {
+	private final MovementWardLogIoOperationRepository movementWardLogRepository;
+
+	public MovWardBrowserManager(MedicalStockWardIoOperations medicalStockWardIoOperations,
+		MovementWardLogIoOperationRepository movementWardLogRepository) {
 		this.ioOperations = medicalStockWardIoOperations;
+		this.movementWardLogRepository = movementWardLogRepository;
 	}
 
 	/**
@@ -321,12 +327,14 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public void deleteLastMovementWard(MovementWard movWardToDelete) throws OHServiceException {
+	public void deleteLastMovementWard(MovementWard movWardToDelete, String reason) throws OHServiceException {
 		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
 		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
 			throw new OHDataValidationException(
 				new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
+		// OP-1388: keep an audit record of the deletion (with the optional reason) before removing the movement
+		movementWardLogRepository.save(new MovementWardLog(movWardToDelete, reason));
 		Ward wardTo = movWardToDelete.getWardTo();
 		Medical medical = movWardToDelete.getMedical();
 		Lot lot = movWardToDelete.getLot();

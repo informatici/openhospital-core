@@ -52,6 +52,7 @@ import org.isf.medicalstock.service.MedicalStockIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
+import org.isf.medicalstock.service.MovementLogIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
@@ -117,6 +118,8 @@ class Tests extends OHCoreTestCase {
 	WardIoOperationRepository wardIoOperationRepository;
 	@Autowired
 	MovementIoOperationRepository movementIoOperationRepository;
+	@Autowired
+	MovementLogIoOperationRepository movementLogIoOperationRepository;
 	@Autowired
 	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
 	@Autowired
@@ -1337,7 +1340,7 @@ class Tests extends OHCoreTestCase {
 		int code = setupTestMovement(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code);
 		assertThat(movement).isPresent();
-		movBrowserManager.deleteLastMovement(movement.get());
+		movBrowserManager.deleteLastMovement(movement.get(), null);
 		Optional<Movement> movement2 = movementIoOperationRepository.findById(code);
 		assertThat(movement2).isNotPresent();
 	}
@@ -1376,7 +1379,7 @@ class Tests extends OHCoreTestCase {
 		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
-		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
+		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1413,7 +1416,7 @@ class Tests extends OHCoreTestCase {
 		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
-		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
+		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
 
 		Movement newMovement2 = new Movement(
 			medical,
@@ -1434,9 +1437,12 @@ class Tests extends OHCoreTestCase {
 			movement2.getLot().getCode(),
 			movement2.getDate());
 		assertThat(movWards).isEmpty();
-		movBrowserManager.deleteLastMovement(movement2);
+		movBrowserManager.deleteLastMovement(movement2, "wrong entry");
 		Optional<Movement> followingMovement2 = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement2).isNotPresent();
+		// OP-1388: the deletion must be logged together with the reason
+		assertThat(movementLogIoOperationRepository.findAll())
+			.anyMatch(movementLog -> movementLog.getMovementCode() == code2 && "wrong entry".equals(movementLog.getReason()));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
