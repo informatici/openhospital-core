@@ -21,6 +21,7 @@
  */
 package org.isf.medicalinventory.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -470,7 +471,7 @@ public class MedicalInventoryManager {
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty().doubleValue() : 0.0;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowSearchList.stream()
@@ -643,8 +644,9 @@ public class MedicalInventoryManager {
 			Lot currentLot = medicalInventoryRow.getLot();
 			if (movQuantity != 0) {
 				insertedMovements
-					.add(movWardBrowserManager.newMovementWard(new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, movQuantity,
-						MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
+					.add(movWardBrowserManager.newMovementWard(
+						new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, BigDecimal.valueOf(movQuantity),
+							MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
 			}
 		}
 		String status = InventoryStatus.done.toString();
@@ -879,7 +881,7 @@ public class MedicalInventoryManager {
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty().doubleValue() : 0.0;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()
