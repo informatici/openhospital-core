@@ -65,7 +65,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	private int lock;
 
 	@Transient
-	private Double qty = 0.0;
+	private BigDecimal qty = BigDecimal.ZERO;
 
 	@Transient
 	private volatile int hashCode;
@@ -75,7 +75,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.id = new MedicalWardId();
 	}
 
-	public MedicalWard(Medical medical, Double qty) {
+	public MedicalWard(Medical medical, BigDecimal qty) {
 		super();
 		this.id = new MedicalWardId();
 		this.id.setMedical(medical);
@@ -90,7 +90,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 
 	}
 
-	public MedicalWard(Medical med, double quantity, Lot lot) {
+	public MedicalWard(Medical med, BigDecimal quantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId();
 
@@ -115,11 +115,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		id.setLot(lot);
 	}
 
-	public Double getQty() {
+	public BigDecimal getQty() {
 		return qty;
 	}
 
-	public void setQty(Double qty) {
+	public void setQty(BigDecimal qty) {
 		this.qty = qty;
 	}
 

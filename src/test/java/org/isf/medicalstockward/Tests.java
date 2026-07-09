@@ -406,7 +406,7 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty().doubleValue()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
 	}
 
 	@Test
@@ -496,7 +496,7 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty().doubleValue()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
 	}
 
 	@Test
@@ -1260,7 +1260,7 @@ class Tests extends OHCoreTestCase {
 	void testMedicalWardConstructorWith2Parameters() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
 		Medical medical = testMedical.setup(medicalType, true);
-		assertThat(new MedicalWard(medical, 10.0d)).isNotNull();
+		assertThat(new MedicalWard(medical, new BigDecimal("10"))).isNotNull();
 	}
 
 	@Test
@@ -1268,7 +1268,7 @@ class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, true);
 		Lot lot = testLot.setup(medical, true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, new BigDecimal("10"), lot);
 		assertThat(medicalWard.getLot()).isEqualTo(lot);
 	}
 
@@ -1278,7 +1278,7 @@ class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lot = testLot.setup(medical, true);
 		Ward ward = testWard.setup(true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, new BigDecimal("10"), lot);
 		medicalWard.setId(ward, medical, lot);
 		assertThat(medicalWard.getId()).isEqualTo(new MedicalWardId(ward, medical, lot));
 	}
@@ -1289,7 +1289,7 @@ class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lot = testLot.setup(medical, true);
 		Ward ward = testWard.setup(true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, new BigDecimal("10"), lot);
 		assertThat(medicalWard.getLot()).isEqualTo(lot);
 	}
 
@@ -1299,14 +1299,14 @@ class Tests extends OHCoreTestCase {
 		Medical medical1 = testMedical.setup(medicalType1, false);
 		Lot lot1 = testLot.setup(medical1, true);
 		Ward ward1 = testWard.setup(true);
-		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0d, lot1);
+		MedicalWard medicalWard1 = new MedicalWard(medical1, new BigDecimal("10"), lot1);
 
 		MedicalType medicalType2 = testMedicalType.setup(true);
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		Lot lot2 = testLot.setup(medical2, true);
 		lot2.setCode("second");
 		Ward ward2 = testWard.setup(true);
-		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0d, lot2);
+		MedicalWard medicalWard2 = new MedicalWard(medical2, new BigDecimal("10"), lot2);
 
 		assertThat(medicalWard1.compareTo(1)).isZero();
 		assertThat(medicalWard1.compareTo(medicalWard2)).isZero();
@@ -1325,14 +1325,14 @@ class Tests extends OHCoreTestCase {
 		Medical medical1 = testMedical.setup(medicalType1, false);
 		Lot lot1 = testLot.setup(medical1, true);
 		Ward ward1 = testWard.setup(true);
-		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0d, lot1);
+		MedicalWard medicalWard1 = new MedicalWard(medical1, new BigDecimal("10"), lot1);
 
 		MedicalType medicalType2 = testMedicalType.setup(true);
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		Lot lot2 = testLot.setup(medical2, true);
 		lot2.setCode("second");
 		Ward ward2 = testWard.setup(true);
-		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0d, lot2);
+		MedicalWard medicalWard2 = new MedicalWard(medical2, new BigDecimal("10"), lot2);
 
 		assertThat(medicalWard1)
 						.isEqualTo(medicalWard1)

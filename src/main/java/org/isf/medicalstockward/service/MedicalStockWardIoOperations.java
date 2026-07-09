@@ -271,10 +271,10 @@ public class MedicalStockWardIoOperations {
 			medicalWards = repository.findAllWhereWardAndMedical(wardId, medId);
 		}
 		for (int i = 0; i < medicalWards.size(); i++) {
-			double qty = BigDecimal.valueOf(medicalWards.get(i).getIn_quantity()).subtract(medicalWards.get(i).getOut_quantity()).doubleValue();
+			BigDecimal qty = BigDecimal.valueOf(medicalWards.get(i).getIn_quantity()).subtract(medicalWards.get(i).getOut_quantity());
 			medicalWards.get(i).setQty(qty);
 
-			if (stripeEmpty && qty == 0) {
+			if (stripeEmpty && qty.signum() == 0) {
 				medicalWards.remove(i);
 				i = i - 1;
 			}
@@ -308,7 +308,7 @@ public class MedicalStockWardIoOperations {
 
 			if (!medicalWardsQty.contains(medicalWard)) {
 				Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), wardID);
-				medicalWard.setQty(qty);
+				medicalWard.setQty(qty == null ? BigDecimal.ZERO : BigDecimal.valueOf(qty));
 				medicalWardsQty.add(medicalWard);
 			}
 		}

@@ -471,7 +471,7 @@ public class MedicalInventoryManager {
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty().doubleValue() : 0.0;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowSearchList.stream()
@@ -881,7 +881,7 @@ public class MedicalInventoryManager {
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty().doubleValue() : 0.0;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()
