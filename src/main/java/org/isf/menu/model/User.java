@@ -47,16 +47,17 @@ import org.isf.utils.db.SoftDeletableAuditable;
 public class User extends SoftDeletableAuditable<String> {
 
 	@Id
-	@Column(name = "US_ID_A")
+	@Column(name = "US_ID_A", nullable = false, length = 50)
 	private String userName;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "US_UG_ID_A")
+	@JoinColumn(name = "US_UG_ID_A", nullable = false)
 	private UserGroup userGroupName;
 
 	@NotNull
-	@Column(name = "US_PASSWD")
+	// 60 is the BCrypt hash output length; the GUI caps the raw password at 72 chars, the maximum BCrypt processes
+	@Column(name = "US_PASSWD", nullable = false, length = 60)
 	private String passwd;
 
 	@Column(name = "US_DESC")
