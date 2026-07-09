@@ -571,6 +571,19 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
+	void testSetDeletedStampsDeletedDate(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		int id = setupTestAdmission(false);
+		assertThat(admissionIoOperation.getAdmission(id).getDeletedDate()).isNull();
+
+		Admission deleted = admissionIoOperation.setDeleted(id);
+		assertThat(deleted).isNotNull();
+		assertThat(deleted.getDeleted()).isEqualTo('Y');
+		assertThat(deleted.getDeletedDate()).isNotNull();
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
 	void testIoSetDeletedNotFound(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		setupTestAdmission(false);

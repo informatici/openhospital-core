@@ -33,7 +33,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 
 @Entity
 @Table(name = "OH_USER")
@@ -42,7 +42,9 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "US_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "US_ACTIVE"))
-public class User extends Auditable<String> {
+@AttributeOverride(name = "deletedBy", column = @Column(name = "US_DELETED_BY"))
+@AttributeOverride(name = "deletedDate", column = @Column(name = "US_DELETED_DATE"))
+public class User extends SoftDeletableAuditable<String> {
 
 	@Id
 	@Column(name = "US_ID_A")

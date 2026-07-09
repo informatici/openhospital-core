@@ -61,6 +61,7 @@ class ApiConfigProvider implements ConfigProvider {
 		} else {
 			LOGGER.debug("Configuration URL is: {}", baseUrl);
 			return Feign.builder()
+							.requestInterceptor(template -> template.header("User-Agent", "OpenHospital/" + version))
 							.decoder(new GsonDecoder())
 							.target(ParamsApi.class, baseUrl);
 		}

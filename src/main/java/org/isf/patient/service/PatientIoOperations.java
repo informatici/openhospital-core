@@ -33,11 +33,13 @@ import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.model.PatientProfilePhoto;
+import org.isf.utils.db.AuditorAwareInterface;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -71,11 +73,14 @@ public class PatientIoOperations {
 
 	private final EntityManager entityManager;
 
-	public PatientIoOperations(PatientIoOperationRepository repository, ApplicationEventPublisher applicationEventPublisher, FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository, EntityManager entityManager) {
+	private final AuditorAwareInterface auditorAware;
+
+	public PatientIoOperations(PatientIoOperationRepository repository, ApplicationEventPublisher applicationEventPublisher, FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository, EntityManager entityManager, AuditorAwareInterface auditorAware) {
 		this.repository = repository;
 		this.applicationEventPublisher = applicationEventPublisher;
 		this.fileSystemPatientPhotoRepository = fileSystemPatientPhotoRepository;
 		this.entityManager = entityManager;
+		this.auditorAware = auditorAware;
 	}
 	/**
 	 * Method that returns the full list of {@link Patient}s not logically deleted,
@@ -271,7 +276,7 @@ public class PatientIoOperations {
 		} else {
 			fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 		}
-		repository.updateDeleted(patient.getCode());
+		repository.updateDeleted(patient.getCode(), auditorAware.getCurrentAuditor().orElse(null), TimeTools.getNow());
 	}
 
 	/**
@@ -304,7 +309,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public void mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
-		repository.updateDeleted(obsoletePatient.getCode());
+		repository.updateDeleted(obsoletePatient.getCode(), auditorAware.getCurrentAuditor().orElse(null), TimeTools.getNow());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
 	}
 

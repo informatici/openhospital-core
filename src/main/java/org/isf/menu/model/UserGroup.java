@@ -28,7 +28,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 
 @Entity
 @Table(name = "OH_USERGROUP")
@@ -37,7 +37,9 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "UG_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "UG_ACTIVE"))
-public class UserGroup extends Auditable<String> {
+@AttributeOverride(name = "deletedBy", column = @Column(name = "UG_DELETED_BY"))
+@AttributeOverride(name = "deletedDate", column = @Column(name = "UG_DELETED_DATE"))
+public class UserGroup extends SoftDeletableAuditable<String> {
 
 	@Id
 	@Column(name = "UG_ID_A")
