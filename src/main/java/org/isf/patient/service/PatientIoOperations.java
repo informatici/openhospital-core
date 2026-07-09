@@ -237,11 +237,12 @@ public class PatientIoOperations {
 		patient.setCity("");
 		patient.setTelephone("");
 		patient.setTaxCode(ANONYMIZED_TAXCODE);
-		if (LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE)) {
-			patient.setPatientProfilePhoto(null);
-		} else {
+		// Remove the profile photo: when photos are stored on the filesystem delete the file too, but always
+		// detach the DB relation so no profile photo remains linked to the record (GDPR erasure).
+		if (!LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE)) {
 			fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 		}
+		patient.setPatientProfilePhoto(null);
 		patient.setAnonymized(true);
 		return repository.save(patient);
 	}

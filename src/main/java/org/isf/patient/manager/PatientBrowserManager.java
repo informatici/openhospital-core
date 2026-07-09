@@ -119,7 +119,9 @@ public class PatientBrowserManager {
 			for (String seriesNumber : seriesNumbers) {
 				dicomManager.deleteSeries(patientId, seriesNumber);
 			}
-		} catch (OHServiceException e) {
+		} catch (Exception e) {
+			// Best-effort: the DICOM module may be unavailable (e.g. when running outside the GUI context), which
+			// must not abort the anonymization of the patient data, the GDPR-critical part.
 			LOGGER.warn("Could not remove DICOM images for anonymized patient {}: {}", patientId, e.getMessage());
 		}
 	}
