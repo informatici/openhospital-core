@@ -23,9 +23,9 @@ package org.isf.priceslist;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.within;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -212,7 +212,7 @@ class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(2.0 * price.getPrice().doubleValue(), within(0.10d));
+		assertThat(copyPrice.getPrice()).isEqualByComparingTo(price.getPrice().multiply(BigDecimal.valueOf(2.0)));
 	}
 
 	@Test
@@ -229,7 +229,8 @@ class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(Math.round(2.0 * price.getPrice().doubleValue() / 3.0) * 3L, within(0.10d));
+		assertThat(copyPrice.getPrice()).isEqualByComparingTo(
+			price.getPrice().multiply(BigDecimal.valueOf(2.0)).divide(BigDecimal.valueOf(3.0), 0, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(3.0)));
 	}
 
 	@Test
@@ -303,7 +304,7 @@ class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2.0, 0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(2.0 * price.getPrice().doubleValue(), within(0.10d));
+		assertThat(copyPrice.getPrice()).isEqualByComparingTo(price.getPrice().multiply(BigDecimal.valueOf(2.0)));
 	}
 
 	@Test
@@ -315,7 +316,8 @@ class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2.0, 3.0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice().doubleValue()).isCloseTo(Math.round(2.0 * price.getPrice().doubleValue() / 3.0) * 3, within(0.10d));
+		assertThat(copyPrice.getPrice()).isEqualByComparingTo(
+			price.getPrice().multiply(BigDecimal.valueOf(2.0)).divide(BigDecimal.valueOf(3.0), 0, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(3.0)));
 	}
 
 	@Test

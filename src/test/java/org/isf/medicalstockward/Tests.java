@@ -23,7 +23,6 @@ package org.isf.medicalstockward;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -406,7 +405,8 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty().doubleValue()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty())
+			.isEqualByComparingTo(BigDecimal.valueOf(foundMedicalWard.getIn_quantity()).subtract(foundMedicalWard.getOut_quantity()));
 	}
 
 	@Test
@@ -496,7 +496,8 @@ class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode(), true);
-		assertThat(medicalWards.get(0).getQty().doubleValue()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity().doubleValue(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty())
+			.isEqualByComparingTo(BigDecimal.valueOf(foundMedicalWard.getIn_quantity()).subtract(foundMedicalWard.getOut_quantity()));
 	}
 
 	@Test
