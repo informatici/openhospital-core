@@ -104,13 +104,13 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
 	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
-		Double mainQuantity;
+		BigDecimal mainQuantity;
 		if (ward != null) {
 			mainQuantity = repository.findQuantityInWardWhereMedicalAndWard(medical.getCode(), ward.getCode());
 		} else {
 			mainQuantity = repository.findQuantityInWardWhereMedical(medical.getCode());
 		}
-		return (int) (mainQuantity != null ? mainQuantity : 0.0);
+		return mainQuantity != null ? mainQuantity.intValue() : 0;
 	}
 
 	/**
@@ -122,13 +122,12 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
 	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
-		Double quantity;
 		if (ward != null) {
-			quantity = lotRepository.getQuantityByWard(lot, ward);
-		} else {
-			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
+			Double quantity = lotRepository.getQuantityByWard(lot, ward);
+			return (int) (quantity == null ? 0 : quantity);
 		}
-		return (int) (quantity == null ? 0 : quantity);
+		BigDecimal quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
+		return quantity == null ? 0 : quantity.intValue();
 	}
 
 	/**
@@ -307,8 +306,8 @@ public class MedicalStockWardIoOperations {
 		for (MedicalWard medicalWard : medicalWards) {
 
 			if (!medicalWardsQty.contains(medicalWard)) {
-				Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), wardID);
-				medicalWard.setQty(qty == null ? BigDecimal.ZERO : BigDecimal.valueOf(qty));
+				BigDecimal qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), wardID);
+				medicalWard.setQty(qty == null ? BigDecimal.ZERO : qty);
 				medicalWardsQty.add(medicalWard);
 			}
 		}
