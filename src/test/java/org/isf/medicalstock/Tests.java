@@ -1615,4 +1615,14 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundMedicalStock).isNotNull();
 		testMedicalStock.check(foundMedicalStock);
 	}
+
+	@Test
+	void testMgrUpdateLotWithNegativeCostFails() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		lot.setCost(new BigDecimal("-1"));
+		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
+			.isInstanceOf(OHDataValidationException.class);
+	}
 }
