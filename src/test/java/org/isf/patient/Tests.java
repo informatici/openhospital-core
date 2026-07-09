@@ -783,6 +783,7 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrAnonymizePatient() throws Exception {
 		Integer code = setupTestPatient(false);
+		int birthYear = patientIoOperation.getPatient(code).getBirthDate().getYear();
 
 		Patient anonymized = patientBrowserManager.anonymizePatient(code);
 
@@ -791,6 +792,8 @@ class Tests extends OHCoreTestCase {
 		assertThat(anonymized.getSecondName()).isEqualTo(PatientIoOperations.ANONYMIZED_TEXT);
 		assertThat(anonymized.getTaxCode()).isEqualTo(PatientIoOperations.ANONYMIZED_TAXCODE);
 		assertThat(anonymized.getAddress()).isEmpty();
+		// only the birth year is kept, the exact day/month is dropped
+		assertThat(anonymized.getBirthDate()).isEqualTo(LocalDate.of(birthYear, 1, 1));
 		// the record itself is preserved (not logically deleted), only the identifying data is erased
 		Patient reloaded = patientIoOperation.getPatient(code);
 		assertThat(reloaded).isNotNull();

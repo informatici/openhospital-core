@@ -237,6 +237,11 @@ public class PatientIoOperations {
 		patient.setCity("");
 		patient.setTelephone("");
 		patient.setTaxCode(ANONYMIZED_TAXCODE);
+		if (patient.getBirthDate() != null) {
+			// Keep only the birth year (needed for age statistics) and drop the exact day/month, which would
+			// otherwise remain a re-identifying detail.
+			patient.setBirthDate(patient.getBirthDate().withDayOfYear(1));
+		}
 		// Remove the profile photo: when photos are stored on the filesystem delete the file too, but always
 		// detach the DB relation so no profile photo remains linked to the record (GDPR erasure).
 		if (!LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE)) {
