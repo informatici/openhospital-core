@@ -114,3 +114,4 @@ source step_a117_fix_ward_pharmacy.sql;
 source step_a118_add_deleted_by_and_date.sql;
 source step_a119_log_deleted_pharmaceutical_movements.sql;
 source step_a120_user_related_unique_constraints.sql;
+source step_a121_decimal_precision.sql;

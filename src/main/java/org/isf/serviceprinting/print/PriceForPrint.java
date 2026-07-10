@@ -21,13 +21,15 @@
  */
 package org.isf.serviceprinting.print;
 
+import java.math.BigDecimal;
+
 public class PriceForPrint implements Comparable<PriceForPrint> {
 
     private String list;
     private String currency;
     private String group;
     private String desc;
-    private Double price;
+    private BigDecimal price;
 
     /**
      * Default constructor
@@ -93,14 +95,14 @@ public class PriceForPrint implements Comparable<PriceForPrint> {
 	/**
 	 * @return the price
 	 */
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
 	/**
 	 * @param price the price to set
 	 */
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

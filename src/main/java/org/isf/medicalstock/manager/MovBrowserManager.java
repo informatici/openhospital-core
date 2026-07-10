@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstock.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -220,7 +221,7 @@ public class MovBrowserManager {
 			}
 			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardMedicalAndLot(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
-			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity().compareTo(BigDecimal.ZERO) == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);
 			} else {
 				movWardBrowserManager.updateMedicalWard(medWard);
