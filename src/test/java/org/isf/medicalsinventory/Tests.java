@@ -784,6 +784,14 @@ class Tests extends OHCoreTestCase {
 		MedicalInventory finalInventory = inventory;
 		Throwable throwable = catchThrowable(() -> medicalInventoryManager.confirmMedicalInventoryRow(finalInventory, medicalInventoryRows, false));
 		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
+
+		// fractional quantities with a whole difference must be rejected as well
+		medicalInventoryRow.setTheoreticQty(new BigDecimal("551.5"));
+		medicalInventoryRow.setRealqty(new BigDecimal("552.5"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
+		List<MedicalInventoryRow> fractionalQtyRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+		throwable = catchThrowable(() -> medicalInventoryManager.confirmMedicalInventoryRow(finalInventory, fractionalQtyRows, false));
+		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test

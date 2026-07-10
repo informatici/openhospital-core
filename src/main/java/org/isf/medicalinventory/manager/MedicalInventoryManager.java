@@ -589,27 +589,28 @@ public class MedicalInventoryManager {
 		List<Movement> dischargeMovements = new ArrayList<>();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
-			BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
-			BigDecimal realQty = medicalInventoryRow.getRealQty();
-			BigDecimal ajustQty = realQty.subtract(theoQty);
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
-			// main-store stock is integer: reject a fractional (or out-of-int-range) adjustment instead of silently truncating it
-			int ajustQtyInt;
+			// main-store stock is integer: validate both quantities, not only their difference, so fractional
+			// (or out-of-int-range) values cannot slip through with a whole adjustment
+			int theoQty;
+			int realQty;
 			try {
-				ajustQtyInt = ajustQty.intValueExact();
+				theoQty = medicalInventoryRow.getTheoreticQty().intValueExact();
+				realQty = medicalInventoryRow.getRealQty().intValueExact();
 			} catch (ArithmeticException e) {
 				errors.add(new OHExceptionMessage(
-					MessageBundle.formatMessage("angal.inventory.adjustmentquantitymustbeawholenumber.fmt.msg", medical.getDescription())));
+					MessageBundle.formatMessage("angal.inventory.quantitiesmustbewholenumbers.fmt.msg", medical.getDescription())));
 				continue;
 			}
-			if (ajustQtyInt > 0) { // charge movement when realQty > theoQty
-				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQtyInt, supplier, chargeReferenceNumber);
+			int ajustQty = realQty - theoQty;
+			if (ajustQty > 0) { // charge movement when realQty > theoQty
+				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQty, supplier, chargeReferenceNumber);
 				chargeMovements.add(movement);
-			} else if (ajustQtyInt < 0) { // discharge movement when realQty < theoQty
-				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQtyInt, null, dischargeReferenceNumber);
+			} else if (ajustQty < 0) { // discharge movement when realQty < theoQty
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQty, null, dischargeReferenceNumber);
 				dischargeMovements.add(movement);
-			} // else ajustQtyInt = 0, continue
+			} // else ajustQty = 0, continue
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
