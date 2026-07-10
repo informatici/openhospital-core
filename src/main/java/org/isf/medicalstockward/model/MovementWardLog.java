@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
@@ -36,9 +37,8 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Audit record of a deleted ward pharmaceutical {@link MovementWard}. It keeps a snapshot of the removed movement plus
- * an optional reason, so that deletions can be traced (OP-1388). The {@code createdBy}/{@code createdDate} audit columns
- * record who deleted it and when.
+ * Audit record of a deleted ward pharmaceutical {@link MovementWard}. It keeps a snapshot of the removed movement plus an optional reason, so that deletions
+ * can be traced (OP-1388). The {@code createdBy}/{@code createdDate} audit columns record who deleted it and when.
  */
 @Entity
 @Table(name = "OH_MEDICALDSRSTOCKMOVWARD_LOG")
@@ -74,7 +74,7 @@ public class MovementWardLog extends Auditable<String> {
 	private int medicalCode;
 
 	@Column(name = "MMVNL_MDSR_QTY")
-	private Double quantity;
+	private BigDecimal quantity;
 
 	@Column(name = "MMVNL_MDSR_UNITS")
 	private String units;
@@ -161,11 +161,11 @@ public class MovementWardLog extends Auditable<String> {
 		this.medicalCode = medicalCode;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 

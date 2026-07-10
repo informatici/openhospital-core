@@ -21,6 +21,8 @@
  */
 package org.isf.accounting.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,8 +69,8 @@ public class BillItems extends Auditable<String> {
 	private String itemDescription;
 
 	@NotNull
-	@Column(name="BLI_ITEM_AMOUNT")
-	private double itemAmount;
+	@Column(name="BLI_ITEM_AMOUNT", precision = 19, scale = 2)
+	private BigDecimal itemAmount;
 
 	@NotNull
 	@Column(name="BLI_QTY")
@@ -99,7 +101,7 @@ public class BillItems extends Auditable<String> {
 	}
 
 	public BillItems(int id, Bill bill, boolean isPrice, String priceID,
-			String itemDescription, double itemAmount, int itemQuantity) {
+			String itemDescription, BigDecimal itemAmount, int itemQuantity) {
 		super();
 		this.id = id;
 		this.bill = bill;
@@ -150,11 +152,11 @@ public class BillItems extends Auditable<String> {
 		this.itemDescription = itemDescription;
 	}
 
-	public double getItemAmount() {
+	public BigDecimal getItemAmount() {
 		return itemAmount;
 	}
 
-	public void setItemAmount(double itemAmount) {
+	public void setItemAmount(BigDecimal itemAmount) {
 		this.itemAmount = itemAmount;
 	}
 

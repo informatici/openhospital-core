@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +78,13 @@ public class MovWardBrowserManager {
 		}
 		if (mov.getMedical() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg")));
+		}
+		// A ward-to-ward transfer credits the destination ward through the integer MDSRWRD_IN_QTI column, so a
+		// fractional quantity would be truncated on the incoming side and leave a stock discrepancy. Transfers
+		// between wards must therefore be whole units, regardless of the DECIMAL type used for other movements.
+		BigDecimal quantity = mov.getQuantity();
+		if (mov.getWardTo() != null && quantity != null && quantity.remainder(BigDecimal.ONE).signum() != 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.transferquantitymustbeaninteger.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -348,10 +356,10 @@ public class MovWardBrowserManager {
 				 */
 				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(wardTo);
 				MedicalWard medWard = getMedicalWardByWardMedicalAndLot(wardTo.getCode(), medical.getCode(), lot.getCode());
-				float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
-				float quantity = medWard.getIn_quantity() + movQty;
+				int movQty = lastMovInWardTo.getQuantity().intValue();
+				int quantity = medWard.getIn_quantity() + movQty;
 				medWard.setIn_quantity(quantity);
-				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity().compareTo(BigDecimal.ZERO) == 0) {
 					ioOperations.deleteMedicalWard(medWard);
 				} else {
 					ioOperations.updateMedicalWard(medWard);
@@ -366,8 +374,8 @@ public class MovWardBrowserManager {
 		}
 		MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(),
 			movWardToDelete.getLot().getCode());
-		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();
-		float quantity = medWard.getOut_quantity() - movQty;
+		BigDecimal movQty = movWardToDelete.getQuantity();
+		BigDecimal quantity = medWard.getOut_quantity().subtract(movQty);
 		medWard.setOut_quantity(quantity);
 		ioOperations.updateMedicalWard(medWard);
 		ioOperations.deleteMovementWard(movWardToDelete);
