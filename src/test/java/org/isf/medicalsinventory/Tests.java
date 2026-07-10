@@ -752,6 +752,41 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testConfirmMedicalInventoryRowFractionalAdjustmentError() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
+		MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
+		Supplier supplier = new Supplier(null, "INVENTORY", null, null, null, null, null, null);
+		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false, false, false);
+		dischargeType = medicalDsrStockMovementTypeIoOperationRepository.save(dischargeType);
+		chargeType = medicalDsrStockMovementTypeIoOperationRepository.save(chargeType);
+		supplier = supplierIoOperationRepository.save(supplier);
+		destination = wardIoOperationRepository.save(destination);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		inventory.setChargeType(chargeType.getCode());
+		inventory.setDestination(destination.getCode());
+		inventory.setSupplier(supplier.getSupId());
+		inventory.setDischargeType(dischargeType.getCode());
+		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medical = medicalsIoOperationRepository.save(medical);
+		lot = lotIoOperationRepository.save(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(inventory, medical, lot, false);
+		medicalInventoryRow.setTheoreticQty(new BigDecimal("50"));
+		medicalInventoryRow.setRealqty(new BigDecimal("47.5"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+		assertThat(medicalInventoryRows).hasSize(1);
+		MedicalInventory finalInventory = inventory;
+		Throwable throwable = catchThrowable(() -> medicalInventoryManager.confirmMedicalInventoryRow(finalInventory, medicalInventoryRows, false));
+		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
 	void testReferenceOfInventoryExist() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);

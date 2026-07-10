@@ -587,12 +587,19 @@ public class MedicalInventoryManager {
 		// prepare movements
 		List<Movement> chargeMovements = new ArrayList<>();
 		List<Movement> dischargeMovements = new ArrayList<>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
 			BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
 			BigDecimal realQty = medicalInventoryRow.getRealQty();
 			BigDecimal ajustQty = realQty.subtract(theoQty);
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
+			// main-store stock is integer: reject a fractional adjustment instead of silently truncating it
+			if (ajustQty.stripTrailingZeros().scale() > 0) {
+				errors.add(new OHExceptionMessage(
+					MessageBundle.formatMessage("angal.inventory.adjustmentquantitymustbeawholenumber.fmt.msg", medical.getDescription())));
+				continue;
+			}
 			if (ajustQty.signum() > 0) { // charge movement when realQty > theoQty
 				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQty.intValue(), supplier, chargeReferenceNumber);
 				chargeMovements.add(movement);
@@ -600,6 +607,9 @@ public class MedicalInventoryManager {
 				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQty.intValue(), null, dischargeReferenceNumber);
 				dischargeMovements.add(movement);
 			} // else ajustQty = 0, continue
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
 		}
 		// create movements
 		List<Movement> insertedMovements = new ArrayList<>();
