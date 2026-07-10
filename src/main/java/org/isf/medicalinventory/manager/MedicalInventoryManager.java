@@ -354,7 +354,7 @@ public class MedicalInventoryManager {
 						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, theoQty, mainStoreQty, difference.signum() > 0 ? "+" + difference.toPlainString() : difference.toPlainString()));
+							medicalDesc, lotInfo, theoQty, mainStoreQty, (difference.signum() > 0 ? "+" : "") + difference.toPlainString()));
 
 				}
 			} else {
@@ -486,7 +486,7 @@ public class MedicalInventoryManager {
 					medDescriptionForLotUpdated
 						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, theoQty, wardStoreQty, difference.signum() > 0 ? "+" + difference.toPlainString() : difference.toPlainString()));
+							medicalDesc, lotInfo, theoQty, wardStoreQty, (difference.signum() > 0 ? "+" : "") + difference.toPlainString()));
 				}
 			} else {
 				// TODO: to decide if to give control to the user about this
