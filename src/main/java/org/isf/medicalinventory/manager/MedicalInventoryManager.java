@@ -594,19 +594,22 @@ public class MedicalInventoryManager {
 			BigDecimal ajustQty = realQty.subtract(theoQty);
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
-			// main-store stock is integer: reject a fractional adjustment instead of silently truncating it
-			if (ajustQty.stripTrailingZeros().scale() > 0) {
+			// main-store stock is integer: reject a fractional (or out-of-int-range) adjustment instead of silently truncating it
+			int ajustQtyInt;
+			try {
+				ajustQtyInt = ajustQty.intValueExact();
+			} catch (ArithmeticException e) {
 				errors.add(new OHExceptionMessage(
 					MessageBundle.formatMessage("angal.inventory.adjustmentquantitymustbeawholenumber.fmt.msg", medical.getDescription())));
 				continue;
 			}
-			if (ajustQty.signum() > 0) { // charge movement when realQty > theoQty
-				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQty.intValue(), supplier, chargeReferenceNumber);
+			if (ajustQtyInt > 0) { // charge movement when realQty > theoQty
+				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQtyInt, supplier, chargeReferenceNumber);
 				chargeMovements.add(movement);
-			} else if (ajustQty.signum() < 0) { // discharge movement when realQty < theoQty
-				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQty.intValue(), null, dischargeReferenceNumber);
+			} else if (ajustQtyInt < 0) { // discharge movement when realQty < theoQty
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQtyInt, null, dischargeReferenceNumber);
 				dischargeMovements.add(movement);
-			} // else ajustQty = 0, continue
+			} // else ajustQtyInt = 0, continue
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
