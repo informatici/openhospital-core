@@ -202,7 +202,7 @@ public class MovBrowserManager {
 				String lotCode = lot.getCode();
 				MedicalInventoryRow medicalInventoryRow = medicalInventoryRowIoOperation.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
 				if (medicalInventoryRow == null) {
-					lotRepository.deleteById(lotCode);
+					lotRepository.delete(lot);
 				} else {
 					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
 						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));

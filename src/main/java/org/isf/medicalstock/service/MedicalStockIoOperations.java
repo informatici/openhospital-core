@@ -104,7 +104,11 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
 	 */
 	public List<Integer> getMedicalsFromLot(String lotCode) throws OHServiceException {
-		return movRepository.findAllByLot(lotCode);
+		Lot lot = lotRepository.findByCode(lotCode).orElse(null);
+		if (lot == null) {
+			return Collections.emptyList();
+		}
+		return movRepository.findAllByLot(lot);
 	}
 
 	/**
@@ -247,7 +251,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs storing the movement.
 	 */
 	protected Movement storeMovement(Movement movement, String lotCode) throws OHServiceException {
-		Lot lot = lotRepository.findById(lotCode).orElse(null);
+		Lot lot = lotRepository.findByCode(lotCode).orElse(null);
 		if (lot == null) {
 			throw new OHServiceException(new OHExceptionMessage("Lot '" + lotCode + "' not found."));
 		}
@@ -264,12 +268,10 @@ public class MedicalStockIoOperations {
 	protected String generateLotCode() throws OHServiceException {
 		Random random = new Random();
 		long candidateCode;
-		Lot lot;
 
 		do {
 			candidateCode = Math.abs(random.nextLong());
-			lot = lotRepository.findById(String.valueOf(candidateCode)).orElse(null);
-		} while (lot != null);
+		} while (lotRepository.existsByCode(String.valueOf(candidateCode)));
 
 		return String.valueOf(candidateCode);
 	}
@@ -282,7 +284,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean lotExists(String lotCode) throws OHServiceException {
-		return lotRepository.findById(String.valueOf(lotCode)).orElse(null) != null;
+		return lotRepository.existsByCode(String.valueOf(lotCode));
 	}
 
 	/**
@@ -293,7 +295,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
-		Lot lot = lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		Lot lot = lotRepository.findByCode(String.valueOf(lotCode)).orElse(null);
 		if (lot == null) {
 			return null;
 		}
@@ -325,6 +327,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot updateLot(Lot lot) throws OHServiceException {
+		resolveLotId(lot);
 		return lotRepository.save(lot);
 	}
 
@@ -347,7 +350,20 @@ public class MedicalStockIoOperations {
 		}
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
+		resolveLotId(lot);
 		return lotRepository.save(lot);
+	}
+
+	/**
+	 * Resolves the internal id of the specified {@link Lot} through its (unique) code, so that saving a detached lot
+	 * known only by its code still updates the existing row, as it did when the code was the primary key.
+	 *
+	 * @param lot the lot whose id must be resolved.
+	 */
+	private void resolveLotId(Lot lot) {
+		if (lot.getId() == null) {
+			lotRepository.findByCode(lot.getCode()).ifPresent(existingLot -> lot.setId(existingLot.getId()));
+		}
 	}
 
 	/**
@@ -479,14 +495,14 @@ public class MedicalStockIoOperations {
 	 */
 	@SuppressWarnings("unchecked")
 	protected MedicalWard updateMedicalWardQuantity(Ward ward, Medical medical, int quantity, Lot lot) throws OHServiceException {
-		MedicalWard medicalWard = medicalStockWardRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
+		MedicalWard medicalWard = medicalStockWardRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getId());
 
 		if (medicalWard != null) {
 			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
 			medicalStockWardRepository.save(medicalWard);
 		} else {
 			medicalWard = new MedicalWard(ward, medical, quantity, BigDecimal.ZERO, lot);
-			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quantity, lot.getCode());
+			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quantity, lot.getId());
 		}
 		return medicalStockWardRepository.save(medicalWard);
 	}

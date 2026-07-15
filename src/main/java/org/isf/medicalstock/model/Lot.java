@@ -28,11 +28,14 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
@@ -45,7 +48,7 @@ import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_MEDICALDSRLOT")
+@Table(name="OH_MEDICALDSRLOT", uniqueConstraints = @UniqueConstraint(name = "UK_MEDICALDSRLOT_LT_ID_A", columnNames = "LT_ID_A"))
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "LT_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "LT_CREATED_DATE", updatable = false))
@@ -55,6 +58,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Lot extends Auditable<String> {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "LT_ID")
+	private Integer id;
+
+	/**
+	 * The printed lot number: the business identifier shown to users. It remains globally unique (OP-1427 stage 1).
+	 */
+	@NotNull
 	@Column(name="LT_ID_A")
 	private String code;
 
@@ -142,6 +153,14 @@ public class Lot extends Auditable<String> {
 		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 		dueDate = TimeTools.truncateToSeconds(aDueDate);
 		cost = aCost;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCode() {

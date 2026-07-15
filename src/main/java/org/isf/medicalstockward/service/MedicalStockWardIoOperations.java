@@ -24,6 +24,7 @@ package org.isf.medicalstockward.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
@@ -138,6 +139,11 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs.
 	 */
 	public MovementWard newMovementWard(MovementWard movement) throws OHServiceException {
+		Lot movementLot = movement.getLot();
+		if (movementLot != null && movementLot.getId() == null) {
+			// lots coming from the API/GUI may carry only the (unique) printed code: resolve them against the persisted lot
+			lotRepository.findByCode(movementLot.getCode()).ifPresent(movement::setlot);
+		}
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -198,7 +204,7 @@ public class MedicalStockWardIoOperations {
 	protected void updateStockWardQuantity(MovementWard movement) throws OHServiceException {
 		BigDecimal qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
-		String lot = movement.getLot().getCode();
+		Integer lot = movement.getLot().getId();
 		String wardTo = null;
 		if (movement.getWardTo() != null) {
 			// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -335,7 +341,11 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
-		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
+		Lot foundLot = lotRepository.findByCode(lot).orElse(null);
+		if (foundLot == null) {
+			return null;
+		}
+		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, foundLot.getId());
 	}
 
 	/**
@@ -391,6 +401,10 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
 	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
-		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+		Lot foundLot = lotRepository.findByCode(lotCode).orElse(null);
+		if (foundLot == null) {
+			return Collections.emptyList();
+		}
+		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, foundLot, date);
 	}
 }

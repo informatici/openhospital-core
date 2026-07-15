@@ -47,7 +47,7 @@ public class MedicalWardId implements Serializable {
 	private Medical medical;
 	
 	@ManyToOne
-	@JoinColumn(name="MDSRWRD_LT_ID_A")
+	@JoinColumn(name="MDSRWRD_LT_ID")
 	private Lot lot;
 
 	public MedicalWardId() {

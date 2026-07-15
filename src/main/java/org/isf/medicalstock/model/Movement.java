@@ -75,7 +75,7 @@ public class Movement extends Auditable<String> {
 	private Ward ward;
 
 	@ManyToOne
-	@JoinColumn(name = "MMV_LT_ID_A")
+	@JoinColumn(name = "MMV_LT_ID")
 	private Lot lot;
 
 	@NotNull

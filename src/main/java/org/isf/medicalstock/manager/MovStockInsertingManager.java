@@ -228,7 +228,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean lotExists(String lotCode) throws OHServiceException {
-		return ioOperationsLots.findById(String.valueOf(lotCode)).orElse(null) != null;
+		return ioOperationsLots.existsByCode(String.valueOf(lotCode));
 	}
 
 	/**

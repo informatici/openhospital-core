@@ -43,9 +43,8 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	@Query(value = "select distinct med.code from Movement mov " +
 					"join mov.medical med " +
 					"join mov.type movtype " +
-					"join mov.lot lot " +
-					"where lot.code=:lot")
-	List<Integer> findAllByLot(@Param("lot") String lot);
+					"where mov.lot = :lot")
+	List<Integer> findAllByLot(@Param("lot") Lot lot);
 
 	@Query(value = "select mov from Movement mov " +
 					"join mov.type movtype " +
