@@ -1439,6 +1439,38 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testLotQuantityUnchangedByFractionalRectificationMovementWard() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 100, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+		movementWard.setQuantity(new BigDecimal("-0.50"));
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+
+		// OP-1428: a fractional rectification-in is INT-truncated when crediting the ward (in_quantity is an int),
+		// so a -0.50 movement leaves the ward stock unchanged and the lot's persisted quantity must not change either
+		entityManager.clear();
+		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
+		assertThat(foundMedicalWard).isNotNull();
+		assertThat(foundMedicalWard.getIn_quantity()).isEqualTo(100);
+		Lot foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+	}
+
+	@Test
 	void testLotQuantityUnchangedByWardToWardTransfer() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);

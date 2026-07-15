@@ -208,8 +208,11 @@ public class MovBrowserManager {
 						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));
 				}
 			} else if (quantity != 0) {
-				// OP-1428: the lot survives the deletion, so remove the deleted charge from its overall remaining quantity
-				lotRepository.updateQuantity(lot.getCode(), BigDecimal.valueOf(-quantity));
+				// OP-1428: the lot survives the deletion, so reverse the deleted movement's contribution to its overall
+				// remaining quantity; the sign follows the movement type prefix ('+%') like the computed definition,
+				// independently of the contains("+") branch predicate above
+				int lotDelta = movType.getType().startsWith("+") ? -quantity : quantity;
+				lotRepository.updateQuantity(lot.getCode(), BigDecimal.valueOf(lotDelta));
 			}
 		} else {
 			Ward ward = lastMovement.getWard();

@@ -241,10 +241,14 @@ public class MedicalStockWardIoOperations {
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
 		}
-		if (qty.signum() != 0) {
-			// OP-1428: without a destination ward the movement changes the lot's overall remaining quantity:
-			// a dispense (qty > 0) decreases it, a rectification-in (qty < 0) increases it
-			lotRepository.updateQuantity(lot, qty.negate());
+		// OP-1428: without a destination ward the movement changes the lot's overall remaining quantity:
+		// a dispense (qty > 0) decreases it by the exact amount (the out column is a DECIMAL), while a
+		// rectification-in (qty < 0) credits the ward with the INT-truncated quantity (both paths above use
+		// intValue()), so the lot delta deliberately mirrors the same truncation to stay aligned with what
+		// actually reached the ward table (a truncated 0 must produce no update at all)
+		BigDecimal lotDelta = qty.signum() < 0 ? BigDecimal.valueOf(qty.negate().intValue()) : qty.negate();
+		if (lotDelta.signum() != 0) {
+			lotRepository.updateQuantity(lot, lotDelta);
 		}
 	}
 
