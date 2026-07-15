@@ -41,6 +41,7 @@ import org.isf.menu.service.UserMenuItemIoOperationRepository;
 import org.isf.permissions.manager.GroupPermissionManager;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
+import org.isf.permissions.service.GroupPermissionIoOperationRepository;
 import org.isf.permissions.service.PermissionIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -50,6 +51,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 class Tests extends OHCoreTestCase {
 
@@ -72,6 +74,8 @@ class Tests extends OHCoreTestCase {
 	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
 	@Autowired
 	private PermissionIoOperationRepository permissionIoOperationRepository;
+	@Autowired
+	private GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
 	@Autowired
 	private GroupPermissionManager groupPermissionManager;
 
@@ -318,6 +322,32 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testPermissionNameMustBeUnique() throws Exception {
+		Permission permission = TestPermission.generatePermissions(1).get(0);
+		permission.setName("duplicate.permission");
+		permissionIoOperationRepository.saveAndFlush(permission);
+
+		Permission duplicate = TestPermission.generatePermissions(1).get(0);
+		duplicate.setName("duplicate.permission");
+		assertThatThrownBy(() -> permissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@Test
+	void testGroupPermissionPairMustBeUnique() throws Exception {
+		String code = setupTestUserGroupPermissions();
+		UserGroup userGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(userGroup).isNotNull();
+		GroupPermission existing = groupPermissionManager.findUserGroupPermissions(code).get(0);
+
+		GroupPermission duplicate = new GroupPermission();
+		duplicate.setUserGroup(userGroup);
+		duplicate.setPermission(existing.getPermission());
+		assertThatThrownBy(() -> groupPermissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@Test
 	void testIoUpdateUserGroup() throws Exception {
 		String code = setupTestUserGroup(false);
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
@@ -367,6 +397,41 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUserGroup.isDeleted()).isTrue();
 		foundUserGroup = userBrowsingManager.findUserGroupByCode(foundUserGroup.getCode());
 		assertThat(foundUserGroup).isNull();
+	}
+
+	@Test
+	void testSoftDeleteUserStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		assertThat(user.getDeletedDate()).isNull();
+
+		// a regular update (deleted == false) must NOT stamp the deletion audit
+		user.setDesc("changed");
+		menuIoOperation.updateUser(user);
+		assertThat(userIoOperationRepository.findByUserName(userName).getDeletedDate()).isNull();
+
+		// a soft deletion records when the user was deleted
+		user.setDeleted(true);
+		menuIoOperation.updateUser(user);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		User afterDelete = userIoOperationRepository.findByUserName(userName);
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
+	}
+
+	@Test
+	void testSoftDeleteUserGroupStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		UserGroup group = userGroupIoOperationRepository.findByCode(user.getUserGroupName().getCode());
+		assertThat(group.getDeletedDate()).isNull();
+
+		group.setDeleted(true);
+		menuIoOperation.updateUserGroup(group);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		UserGroup afterDelete = userGroupIoOperationRepository.findByCode(group.getCode());
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
 	}
 
 	@Test

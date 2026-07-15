@@ -44,7 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.anamnesis.model.PatientHistory;
 import org.isf.opd.model.Opd;
 import org.isf.patconsensus.model.PatientConsensus;
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -55,8 +55,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "deletedBy", column = @Column(name = "PAT_DELETED_BY"))
+@AttributeOverride(name = "deletedDate", column = @Column(name = "PAT_DELETED_DATE"))
 
-public class Patient extends Auditable<String> {
+public class Patient extends SoftDeletableAuditable<String> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
