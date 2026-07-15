@@ -527,6 +527,19 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrNewUserForcesPasswordChangeAtFirstLogin() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		user.setPasswdMustChange(false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		User newUser = userBrowsingManager.newUser(user);
+		User foundUser = userIoOperationRepository.findById(newUser.getUserName()).orElse(null);
+		assertThat(foundUser).isNotNull();
+		// OP-896: the initial password is assigned by an administrator, so the new user must change it at first login
+		assertThat(foundUser.isPasswdMustChange()).isTrue();
+	}
+
+	@Test
 	void testMgrNewUserAlreadyExists() throws Exception {
 		assertThatThrownBy(() ->
 		{

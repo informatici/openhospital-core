@@ -126,8 +126,8 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Inserts a new {@link User} into the DB.
-	 * 
+	 * Inserts a new {@link User} into the DB. The new user is always required to change the password at first login.
+	 *
 	 * @param user the {@link User} to insert
 	 * @return the new {@link User}
 	 * @throws OHServiceException When error occurs
@@ -142,6 +142,8 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
 		}
+		// the initial password is assigned by an administrator: the user must change it at first login
+		user.setPasswdMustChange(true);
 		return ioOperations.newUser(user);
 	}
 
