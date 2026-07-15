@@ -463,9 +463,29 @@ class Tests extends OHCoreTestCase {
 		operationRow.setOperation(null);
 		operationRow.setPrescriber("");
 		operationRow.setOpDate(null);
-		// opResult and remarks are optional: leaving them empty must not, by itself, trigger validation
+		// remarks is optional: leaving it empty must not, by itself, trigger validation
 		operationRow.setOpResult("");
 		operationRow.setRemarks("");
+		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationRowEmptyResult() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationRow.setOpResult("");
+		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationRowNullResult() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationRow.setOpResult(null);
 		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
 			.isInstanceOf(OHDataValidationException.class);
 	}

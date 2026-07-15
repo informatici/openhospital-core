@@ -86,10 +86,10 @@ public class OperationRowBrowserManager {
 		} else if (prescriber.length() > 150) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theprescriberistoolongmaxchars.fmt.msg", 150)));
 		}
-		// opResult is optional at this layer: legacy rows and non-GUI callers may have none.
-		// The desktop GUI additionally requires it for new/edited rows (OperationRowBase/OperationRowAdm/OperationRowOpd).
 		String opResult = opRow.getOpResult();
-		if (opResult != null && opResult.length() > 250) {
+		if (opResult == null || opResult.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseselectaresult.msg")));
+		} else if (opResult.length() > 250) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theresultistoolongmaxchars.fmt.msg", 250)));
 		}
 		if (opRow.getOpDate() == null) {
