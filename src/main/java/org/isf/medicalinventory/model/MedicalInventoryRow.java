@@ -32,6 +32,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
@@ -75,6 +77,13 @@ public class MedicalInventoryRow extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name = "MINVTR_LT_ID")
 	private Lot lot;
+
+	/**
+	 * The printed code of {@link #lot}, kept in sync with the numeric foreign key (see {@link #syncLotCode()}) for the
+	 * legacy Jasper reports still joining on MINVTR_LT_ID_A, until stage 2 of OP-1427 rewrites them to use MINVTR_LT_ID.
+	 */
+	@Column(name = "MINVTR_LT_ID_A")
+	private String lotCode;
 
 	@Column(name = "MINVTR_IS_NEW_LOT")
 	private boolean isNewLot;
@@ -143,6 +152,17 @@ public class MedicalInventoryRow extends Auditable<String> {
 
 	public void setLot(Lot lot) {
 		this.lot = lot;
+		syncLotCode();
+	}
+
+	/**
+	 * Keeps the report-facing MINVTR_LT_ID_A column in sync with the lot. Also run as a lifecycle callback to cover
+	 * rows whose lot is assigned through the constructor rather than {@link #setLot(Lot)}.
+	 */
+	@PrePersist
+	@PreUpdate
+	private void syncLotCode() {
+		lotCode = lot == null ? null : lot.getCode();
 	}
 
 	public void setRealQty(BigDecimal realQty) {

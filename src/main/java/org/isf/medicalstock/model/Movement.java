@@ -32,6 +32,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
@@ -77,6 +79,13 @@ public class Movement extends Auditable<String> {
 	@ManyToOne
 	@JoinColumn(name = "MMV_LT_ID")
 	private Lot lot;
+
+	/**
+	 * The printed code of {@link #lot}, kept in sync with the numeric foreign key (see {@link #syncLotCode()}) for the
+	 * legacy Jasper reports still joining on MMV_LT_ID_A, until stage 2 of OP-1427 rewrites them to use MMV_LT_ID.
+	 */
+	@Column(name = "MMV_LT_ID_A")
+	private String lotCode;
 
 	@NotNull
 	@Column(name = "MMV_DATE") // SQL type: datetime
@@ -157,6 +166,17 @@ public class Movement extends Auditable<String> {
 
 	public void setLot(Lot lot) {
 		this.lot = lot;
+		syncLotCode();
+	}
+
+	/**
+	 * Keeps the report-facing MMV_LT_ID_A column in sync with the lot. Also run as a lifecycle callback to cover
+	 * movements whose lot is assigned through the constructor rather than {@link #setLot(Lot)}.
+	 */
+	@PrePersist
+	@PreUpdate
+	private void syncLotCode() {
+		lotCode = lot == null ? null : lot.getCode();
 	}
 
 	public void setDate(LocalDateTime date) {

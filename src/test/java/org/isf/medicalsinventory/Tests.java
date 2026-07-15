@@ -531,6 +531,27 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMedicalInventoryRowKeepsTheReportLotCodeColumnInSync() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		Lot lot = testLot.setup(medical, false);
+		lotIoOperationRepository.saveAndFlush(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
+		MedicalInventoryRow newMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
+		// OP-1427 stage 1: the legacy reports still join the inventory rows to the lots through MINVTR_LT_ID_A
+		String reportLotCode = (String) entityManager
+			.createNativeQuery("SELECT MINVTR_LT_ID_A FROM OH_MEDICALDSRINVENTORYROW WHERE MINVTR_ID = " + newMedicalInventoryRow.getId())
+			.getSingleResult();
+		assertThat(reportLotCode).isEqualTo(lot.getCode());
+	}
+
+	@Test
 	void testMgrNewMedicalInventoryRow() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);

@@ -33,7 +33,6 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.model.MovementLog;
-import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MovementLogIoOperationRepository;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
@@ -53,8 +52,6 @@ public class MovBrowserManager {
 
 	private final MedicalStockIoOperations ioOperations;
 
-	private final LotIoOperationRepository lotRepository;
-
 	private final MedicalsIoOperations medicalsIoOperation;
 
 	private final MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
@@ -65,11 +62,10 @@ public class MovBrowserManager {
 
 	private final MovementLogIoOperationRepository movementLogRepository;
 
-	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
+	public MovBrowserManager(MedicalStockIoOperations ioOperations, MedicalsIoOperations medicalsIoOperation,
 		MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager,
 		MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovementLogIoOperationRepository movementLogRepository) {
 		this.ioOperations = ioOperations;
-		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
 		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
 		this.movWardBrowserManager = movWardBrowserManager;
@@ -202,7 +198,9 @@ public class MovBrowserManager {
 				String lotCode = lot.getCode();
 				MedicalInventoryRow medicalInventoryRow = medicalInventoryRowIoOperation.getMedicalInventoryRowByMedicalCodeAndLotCode(medicalCode, lotCode);
 				if (medicalInventoryRow == null) {
-					lotRepository.delete(lot);
+					// the lot of a persisted movement always carries its internal id, but going through deleteLot()
+					// also covers callers passing a lot known only by its (unique) code (OP-1427 stage 1)
+					ioOperations.deleteLot(lot);
 				} else {
 					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
 						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));

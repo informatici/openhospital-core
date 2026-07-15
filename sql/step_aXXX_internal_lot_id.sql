@@ -1,3 +1,6 @@
+-- !! MERGE-ORDER REQUIREMENT !! This script DROPS OH_MEDICALDSRWARD.MDSRWRD_LT_ID_A, which the OP-1428 backfill
+-- joins on: the OP-1428 script must be numbered (and merged) BEFORE this one, so that it runs first.
+
 -- OP-1427 (stage 1): introduce an internal numeric lot id (LT_ID) as the primary key of OH_MEDICALDSRLOT.
 -- The printed lot number (LT_ID_A) remains globally UNIQUE and remains the business identifier shown to the users.
 
@@ -30,9 +33,14 @@ UPDATE OH_MEDICALDSRINVENTORYROW JOIN OH_MEDICALDSRLOT ON MINVTR_LT_ID_A = LT_ID
 
 UPDATE OH_MEDICALDSRSTOCKMOVWARD JOIN OH_MEDICALDSRLOT ON MMVN_LT_ID_A = LT_ID_A SET MMVN_LT_ID = LT_ID;
 
--- drop the varchar lot columns on the tables that had a real foreign key on them (every row there matched a lot).
--- OH_MEDICALDSRSTOCKMOV.MMV_LT_ID_A had no foreign key, so legacy movements may reference lot codes that no longer
--- exist: those rows keep MMV_LT_ID = NULL and MMV_LT_ID_A is kept as a plain column to avoid any data loss.
+-- OH_MEDICALDSRSTOCKMOV.MMV_LT_ID_A and OH_MEDICALDSRINVENTORYROW.MINVTR_LT_ID_A are KEPT (and kept in sync by the
+-- application) because the legacy Jasper reports still join on them: rpt_base Inventory/InventoryWard use
+-- MINVTR_LT_ID_A and the pharmacy reports (ProductLedger, PharmaceuticalExpiration, PharmaceuticalStock_ver4/ver5,
+-- PharmaceuticalAMC, PharmaceuticalStockWard, ProductLedgerWard) use MMV_LT_ID_A; stage 2 will rewrite them to the
+-- numeric foreign keys. MMV_LT_ID_A also had no foreign key, so legacy movements may reference lot codes that no
+-- longer exist: those rows keep MMV_LT_ID = NULL to avoid any data loss.
+-- OH_MEDICALDSRWARD.MDSRWRD_LT_ID_A and OH_MEDICALDSRSTOCKMOVWARD.MMVN_LT_ID_A appear in no report and are dropped
+-- (every row there matched a lot through a real foreign key).
 ALTER TABLE OH_MEDICALDSRWARD DROP FOREIGN KEY FK_MEDICALDSRWARD_MEDICALDSRLOT;
 
 ALTER TABLE OH_MEDICALDSRWARD MODIFY COLUMN MDSRWRD_LT_ID INT NOT NULL;
@@ -44,8 +52,6 @@ ADD PRIMARY KEY (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_LT_ID);
 ALTER TABLE OH_MEDICALDSRWARD DROP COLUMN MDSRWRD_LT_ID_A;
 
 ALTER TABLE OH_MEDICALDSRINVENTORYROW DROP FOREIGN KEY FK_MEDICALDSRINVENTORYROW_MEDICALDSRLOT;
-
-ALTER TABLE OH_MEDICALDSRINVENTORYROW DROP COLUMN MINVTR_LT_ID_A;
 
 ALTER TABLE OH_MEDICALDSRSTOCKMOVWARD DROP COLUMN MMVN_LT_ID_A;
 
@@ -69,6 +75,9 @@ ALTER TABLE OH_MEDICALDSRSTOCKMOVWARD
 ADD CONSTRAINT FK_MEDICALDSRSTOCKMOVWARD_LOT
 FOREIGN KEY (MMVN_LT_ID) REFERENCES OH_MEDICALDSRLOT (LT_ID) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+-- the index named FK_MEDICALDSRINVENTORYROW_MEDICALDSRLOT stays behind on the kept MINVTR_LT_ID_A column,
+-- so the new foreign key needs an explicitly named index for MINVTR_LT_ID
 ALTER TABLE OH_MEDICALDSRINVENTORYROW
+ADD KEY FK_MEDICALDSRINVENTORYROW_MEDICALDSRLOT_idx (MINVTR_LT_ID),
 ADD CONSTRAINT FK_MEDICALDSRINVENTORYROW_MEDICALDSRLOT
 FOREIGN KEY (MINVTR_LT_ID) REFERENCES OH_MEDICALDSRLOT (LT_ID) ON DELETE NO ACTION ON UPDATE NO ACTION;

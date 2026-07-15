@@ -36,6 +36,7 @@ import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.stereotype.Service;
@@ -139,11 +140,7 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs.
 	 */
 	public MovementWard newMovementWard(MovementWard movement) throws OHServiceException {
-		Lot movementLot = movement.getLot();
-		if (movementLot != null && movementLot.getId() == null) {
-			// lots coming from the API/GUI may carry only the (unique) printed code: resolve them against the persisted lot
-			lotRepository.findByCode(movementLot.getCode()).ifPresent(movement::setlot);
-		}
+		resolveMovementLot(movement);
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -182,7 +179,25 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public MovementWard updateMovementWard(MovementWard movement) throws OHServiceException {
+		resolveMovementLot(movement);
 		return movementRepository.save(movement);
+	}
+
+	/**
+	 * Resolves the {@link Lot} of the specified movement against the persisted lot when it carries no internal id:
+	 * lots coming from the API/GUI may be known only by the (unique) printed code. An unknown code is rejected, as it
+	 * was when the code was the primary key and the save violated the foreign key on it (OP-1427 stage 1).
+	 *
+	 * @param movement the movement whose lot must be resolved.
+	 * @throws OHServiceException if the movement lot carries a code that does not exist.
+	 */
+	private void resolveMovementLot(MovementWard movement) throws OHServiceException {
+		Lot movementLot = movement.getLot();
+		if (movementLot != null && movementLot.getId() == null) {
+			Lot persistedLot = lotRepository.findByCode(movementLot.getCode())
+				.orElseThrow(() -> new OHServiceException(new OHExceptionMessage("Lot '" + movementLot.getCode() + "' not found.")));
+			movement.setlot(persistedLot);
+		}
 	}
 
 	/**

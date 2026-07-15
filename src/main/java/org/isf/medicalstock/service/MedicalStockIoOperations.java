@@ -321,7 +321,11 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Update the {@link Lot}.
-	 * 
+	 * <p>
+	 * The row to update is resolved through the (unique) lot code, exactly as when the code was the primary key: a lot
+	 * carrying a code that belongs to an existing row updates that row, any other code results in a new row. The
+	 * printed code of an existing lot is therefore never renamed in place (see {@link #resolveLotId(Lot)}).
+	 *
 	 * @param lot - the lot.
 	 * @return the {@link Lot} updated.
 	 * @throws OHServiceException if an error occurs during the check.
@@ -355,15 +359,18 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Resolves the internal id of the specified {@link Lot} through its (unique) code, so that saving a detached lot
-	 * known only by its code still updates the existing row, as it did when the code was the primary key.
+	 * Resolves the internal id of the specified {@link Lot} through its (unique) code, so that saving or deleting a lot
+	 * targets the same row it targeted when the code was the primary key (OP-1427 stage 1).
+	 * <p>
+	 * The code is authoritative and any id carried by the lot is discarded: an existing code resolves to its row (a lot
+	 * known only by its code still updates the existing row instead of inserting a duplicate), while an unknown code
+	 * resolves to no row (an update inserts a new row instead of renaming the printed code of the row matching the
+	 * discarded id, and a delete is a silent no-op, as it was when it targeted a non-existing primary key).
 	 *
 	 * @param lot the lot whose id must be resolved.
 	 */
 	private void resolveLotId(Lot lot) {
-		if (lot.getId() == null) {
-			lotRepository.findByCode(lot.getCode()).ifPresent(existingLot -> lot.setId(existingLot.getId()));
-		}
+		lot.setId(lotRepository.findByCode(lot.getCode()).map(Lot::getId).orElse(null));
 	}
 
 	/**
@@ -795,11 +802,15 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Deletes the specified {@link Lot}.
+	 * <p>
+	 * The row to delete is resolved through the (unique) lot code (see {@link #resolveLotId(Lot)}): a lot known only by
+	 * its code deletes the existing row, an unknown code is a silent no-op, as when the code was the primary key.
 	 *
 	 * @param lot the lot to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteLot(Lot lot) throws OHServiceException {
+		resolveLotId(lot);
 		lotRepository.delete(lot);
 	}
 
