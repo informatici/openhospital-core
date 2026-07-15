@@ -36,9 +36,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -110,8 +107,6 @@ class Tests extends OHCoreTestCase {
 	MovStockInsertingManager movStockInsertingManager;
 	@Autowired
 	LotIoOperationRepository lotIoOperationRepository;
-	@PersistenceContext
-	EntityManager entityManager;
 	@Autowired
 	MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository;
 	@Autowired
@@ -1642,11 +1637,16 @@ class Tests extends OHCoreTestCase {
 		lot.setCost(new BigDecimal("10.50"));
 		Lot firstUpdate = movStockInsertingManager.updateLot(lot);
 		lotIoOperationRepository.flush();
+		// detach the returned instance too: inside this transactional test it is still managed, so the second
+		// update would otherwise be a no-op merge that never exercises the version check
+		entityManager.detach(firstUpdate);
 
 		// consecutive updates must reuse the fresh entity returned by the previous one
-		firstUpdate.setDueDate(firstUpdate.getDueDate().plusDays(1));
+		LocalDateTime postponedDueDate = firstUpdate.getDueDate().plusDays(1);
+		firstUpdate.setDueDate(postponedDueDate);
 		Lot secondUpdate = movStockInsertingManager.updateLot(firstUpdate);
 		assertThat(secondUpdate.getCost()).isEqualByComparingTo(new BigDecimal("10.50"));
+		assertThat(secondUpdate.getDueDate()).isEqualTo(postponedDueDate);
 
 		// re-submitting the stale first instance must fail on the optimistic lock (LT_LOCK)
 		lot.setCost(new BigDecimal("11.00"));
