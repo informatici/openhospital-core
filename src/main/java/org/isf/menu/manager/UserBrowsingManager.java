@@ -174,6 +174,22 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * Checks whether the {@link User}'s password has exceeded its lease ({@link GeneralData#PASSWORDLEASE} days) and
+	 * therefore must be changed. Returns {@code false} when the lease is disabled ({@code PASSWORDLEASE <= 0}) or the
+	 * last-changed date is unknown.
+	 *
+	 * @param user the {@link User}
+	 * @return {@code true} if the password lease has expired
+	 */
+	public boolean isPasswordExpired(User user) {
+		LocalDateTime passwdLastChanged = user.getPasswdLastChanged();
+		if (GeneralData.PASSWORDLEASE <= 0 || passwdLastChanged == null) {
+			return false;
+		}
+		return passwdLastChanged.plusDays(GeneralData.PASSWORDLEASE).isBefore(TimeTools.getNow());
+	}
+
+	/**
 	 * Deletes an existing {@link User}.
 	 * 
 	 * @param user the {@link User} to delete
@@ -459,5 +475,22 @@ public class UserBrowsingManager {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
+	}
+
+	/**
+	 * Tests whether a password is acceptable, i.e. it satisfies the configured minimum length
+	 * ({@link GeneralData#STRONGLENGTH}, when enabled) and the strength policy ({@link #isPasswordStrong(String)}).
+	 *
+	 * @param password the password to validate
+	 * @return {@code true} if the password is acceptable, {@code false} otherwise
+	 */
+	public boolean isPasswordValid(String password) {
+		if (password == null) {
+			return false;
+		}
+		if (GeneralData.STRONGLENGTH > 0 && password.length() < GeneralData.STRONGLENGTH) {
+			return false;
+		}
+		return isPasswordStrong(password);
 	}
 }
