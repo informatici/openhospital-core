@@ -967,6 +967,18 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrUpdateOperationRowEmptyResultAllowedForLegacyRows() throws Exception {
+		// legacy rows saved before the result became mandatory may have an empty result and the GUI
+		// re-submits every existing row on each save, so updates must tolerate an empty result
+		int id = setupTestOperationRow(false);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		operationRow.setOpResult("");
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isNotNull();
+		operationRow = operationRowIoOperationRepository.findById(id);
+		assertThat(operationRow.getOpResult()).isEmpty();
+	}
+
+	@Test
 	void testMgrRowNewOperationRow() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, true);
