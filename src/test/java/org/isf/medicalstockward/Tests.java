@@ -1404,7 +1404,7 @@ class Tests extends OHCoreTestCase {
 		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard, null))
 						.isInstanceOf(OHServiceException.class);
 		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(),
-						medical.getCode(), lot.getCode(), secondMovementWard.getDate());
+						medical.getCode(), lot, secondMovementWard.getDate());
 		assertThat(latestMovementWardList.size()).isEqualTo(2);
 		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard, null))
 						.isInstanceOf(OHServiceException.class);

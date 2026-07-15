@@ -719,7 +719,7 @@ class Tests extends OHCoreTestCase {
 		secondMovement.setQuantity(100);
 		MedicalStock secondmedicalStock = testMedicalStock.setup(firstMovement);
 		Lot lotThree = testLot.setup(medical, false);
-		lotTwo.setCode("LOT-003");
+		lotThree.setCode("LOT-003");
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medical = medicalsIoOperationRepository.save(medical);
 		lotOne = lotIoOperationRepository.save(lotOne);
@@ -852,7 +852,7 @@ class Tests extends OHCoreTestCase {
 		secondMovement.setQuantity(100);
 		MedicalStock secondmedicalStock = testMedicalStock.setup(firstMovement);
 		Lot lotThree = testLot.setup(medical, false);
-		lotTwo.setCode("LOT-003");
+		lotThree.setCode("LOT-003");
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medical = medicalsIoOperationRepository.save(medical);
 		lotOne = lotIoOperationRepository.save(lotOne);
