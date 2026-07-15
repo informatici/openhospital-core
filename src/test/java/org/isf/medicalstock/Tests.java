@@ -36,6 +36,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -66,6 +69,7 @@ import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.supplier.TestSupplier;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
+import org.isf.utils.exception.OHDataLockFailureException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
@@ -106,6 +110,8 @@ class Tests extends OHCoreTestCase {
 	MovStockInsertingManager movStockInsertingManager;
 	@Autowired
 	LotIoOperationRepository lotIoOperationRepository;
+	@PersistenceContext
+	EntityManager entityManager;
 	@Autowired
 	MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository;
 	@Autowired
@@ -1624,5 +1630,27 @@ class Tests extends OHCoreTestCase {
 		lot.setCost(new BigDecimal("-1"));
 		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
 			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrUpdateLotTwiceInARow() throws Exception {
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// detach the loaded instance so it behaves like the detached entities the clients hold between calls
+		entityManager.detach(lot);
+		lot.setCost(new BigDecimal("10.50"));
+		Lot firstUpdate = movStockInsertingManager.updateLot(lot);
+		lotIoOperationRepository.flush();
+
+		// consecutive updates must reuse the fresh entity returned by the previous one
+		firstUpdate.setDueDate(firstUpdate.getDueDate().plusDays(1));
+		Lot secondUpdate = movStockInsertingManager.updateLot(firstUpdate);
+		assertThat(secondUpdate.getCost()).isEqualByComparingTo(new BigDecimal("10.50"));
+
+		// re-submitting the stale first instance must fail on the optimistic lock (LT_LOCK)
+		lot.setCost(new BigDecimal("11.00"));
+		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
+			.isInstanceOf(OHDataLockFailureException.class);
 	}
 }
