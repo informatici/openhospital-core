@@ -632,6 +632,22 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetPasswordLeaseDays() {
+		int previousLease = GeneralData.PASSWORDLEASE;
+		try {
+			// lease policy disabled
+			GeneralData.PASSWORDLEASE = 0;
+			assertThat(userBrowsingManager.getPasswordLeaseDays()).isZero();
+
+			// lease policy active
+			GeneralData.PASSWORDLEASE = 30;
+			assertThat(userBrowsingManager.getPasswordLeaseDays()).isEqualTo(30);
+		} finally {
+			GeneralData.PASSWORDLEASE = previousLease;
+		}
+	}
+
+	@Test
 	void testMgrIsPasswordValid() {
 		boolean previousStrong = GeneralData.STRONGPASSWORD;
 		int previousLength = GeneralData.STRONGLENGTH;

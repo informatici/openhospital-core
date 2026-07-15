@@ -192,6 +192,16 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * Returns the configured password lease ({@link GeneralData#PASSWORDLEASE}), i.e. the number of days after which
+	 * a password expires and must be changed.
+	 *
+	 * @return the password lease in days, or {@code 0} when the lease policy is disabled
+	 */
+	public int getPasswordLeaseDays() {
+		return GeneralData.PASSWORDLEASE;
+	}
+
+	/**
 	 * Deletes an existing {@link User}.
 	 * 
 	 * @param user the {@link User} to delete
