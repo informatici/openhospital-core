@@ -21,6 +21,7 @@
  */
 package org.isf.serviceprinting.print;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 	private String ward;
 	private Date date;
 	private String medical;
-	private Double quantity;
+	private BigDecimal quantity;
 	private String units;
 	private String lot;
 	private boolean patient;
@@ -65,7 +66,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return date;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 

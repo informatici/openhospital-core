@@ -23,6 +23,8 @@ package org.isf.priceslist;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
+
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
@@ -32,7 +34,7 @@ public class TestPrice {
 	private static String group = "TG";
 	private static String item = "TestItem";
 	private static String desc = "TestDescription";
-	private static Double priceValue = 10.10;
+	private static BigDecimal priceValue = new BigDecimal("10.10");
 
 	public Price setup(PriceList list, boolean usingSet) throws OHException {
 		Price price;
@@ -62,6 +64,6 @@ public class TestPrice {
 		assertThat(price.getDesc()).isEqualTo(desc);
 		assertThat(price.getGroup()).isEqualTo(group);
 		assertThat(price.getItem()).isEqualTo(item);
-		assertThat(price.getPrice()).isEqualTo(priceValue);
+		assertThat(price.getPrice()).isEqualByComparingTo(priceValue);
 	}
 }

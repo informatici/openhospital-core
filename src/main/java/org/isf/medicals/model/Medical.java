@@ -99,21 +99,21 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	 */
 	@NotNull
 	@Column(name = "MDSR_IN_QTI")
-	private double inqty;
+	private int inqty;
 
 	/**
 	 * Out quantity
 	 */
 	@NotNull
 	@Column(name = "MDSR_OUT_QTI")
-	private double outqty;
+	private int outqty;
 
 	/**
 	 * Minimum quantity
 	 */
 	@NotNull
 	@Column(name = "MDSR_MIN_STOCK_QTI")
-	private double minqty;
+	private int minqty;
 
 	/**
 	 * Lock control
@@ -139,7 +139,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	/**
 	 * Constructor
 	 */
-	public Medical(Integer code, MedicalType type, String prodCode, String description, Integer pcsperpck, double minqty, double inqty, double outqty) {
+	public Medical(Integer code, MedicalType type, String prodCode, String description, Integer pcsperpck, int minqty, int inqty, int outqty) {
 		super();
 		this.code = code;
 		this.type = type;
@@ -177,18 +177,18 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		return initialqty;
 	}
 
-	public double getInqty() {
+	public int getInqty() {
 		return inqty;
 	}
 
-	public void setInqty(double inqty) {
+	public void setInqty(int inqty) {
 		this.inqty = inqty;
 	}
-	public double getMinqty() {
+	public int getMinqty() {
 		return minqty;
 	}
 
-	public void setMinqty(double minqty) {
+	public void setMinqty(int minqty) {
 		this.minqty = minqty;
 	}
 
@@ -200,11 +200,11 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.lock = lock;
 	}
 
-	public double getOutqty() {
+	public int getOutqty() {
 		return outqty;
 	}
 
-	public void setOutqty(double outqty) {
+	public void setOutqty(int outqty) {
 		this.outqty = outqty;
 	}
 

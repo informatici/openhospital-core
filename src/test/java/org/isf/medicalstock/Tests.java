@@ -431,7 +431,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(movement).isNotNull();
 		MovementType movementType = movement.getType();
 		movementType.setType("-");
-		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, BigDecimal.ZERO, movement.getLot());
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		Movement newMovement = new Movement(movement.getMedical(), movementType, movement.getWard(), movement.getLot(),
 			TimeTools.getNow(), 10, movement.getSupplier(), "newReference");
@@ -1368,7 +1368,7 @@ class Tests extends OHCoreTestCase {
 			null,
 			"newReference");
 		Movement storedMovement = medicalStockIoOperation.newMovement(newMovement);
-		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "newDescription", medical, new BigDecimal("10.0"), "newUnits");
 		MovementWard saveMovWard = movementWardIoOperationRepository.saveAndFlush(movementWard);
 		MovementWard foundMovWard = movementWardIoOperationRepository.findById(saveMovWard.getCode()).orElse(null);
 		assertThat(foundMovWard).isNotNull();
@@ -1405,7 +1405,7 @@ class Tests extends OHCoreTestCase {
 			null,
 			"newReference");
 		Movement storedMovement = medicalStockIoOperation.newMovement(newMovement);
-		MovementWard movementWard = new MovementWard(TimeTools.getDateToday0(), ward, lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard movementWard = new MovementWard(TimeTools.getDateToday0(), ward, lot, "newDescription", medical, new BigDecimal("10.0"), "newUnits");
 		MovementWard saveMovWard = movementWardIoOperationRepository.saveAndFlush(movementWard);
 		MovementWard foundMovWard = movementWardIoOperationRepository.findById(saveMovWard.getCode()).orElse(null);
 		assertThat(foundMovWard).isNotNull();
@@ -1551,7 +1551,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(movement).isNotNull();
 		MovementType movementType = movement.getType();
 		movementType.setType("-");
-		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, BigDecimal.ZERO, movement.getLot());
 
 		assertThat(medicalWard.getLock()).isZero();
 		medicalWard.setLock(8);
