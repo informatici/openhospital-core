@@ -21,11 +21,13 @@
  */
 package org.isf.medicalstock.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.isf.medicalstock.model.Lot;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -59,4 +61,8 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 	@Query("SELECT w.id.lot.code, COALESCE(SUM(w.in_quantity - w.out_quantity), 0.0) " +
 					"FROM MedicalWard w WHERE w.id.lot.code IN :lotCodes GROUP BY w.id.lot.code")
 	List<Object[]> getWardsTotalQuantities(@Param("lotCodes") List<String> lotCodes);
+
+	@Modifying
+	@Query("update Lot l set l.quantity = l.quantity + :delta where l.code = :code")
+	void updateQuantity(@Param("code") String code, @Param("delta") BigDecimal delta);
 }

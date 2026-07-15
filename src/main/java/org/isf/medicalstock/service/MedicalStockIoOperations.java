@@ -363,6 +363,10 @@ public class MedicalStockIoOperations {
 			Medical medical = movement.getMedical();
 			Medical updatedMedical = updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
 			updateMedicalStockTable(updatedMedical, movement.getDate().toLocalDate(), movement.getQuantity());
+			if (movement.getQuantity() != 0) {
+				// OP-1428: the charge increases the lot's overall remaining quantity
+				lotRepository.updateQuantity(movement.getLot().getCode(), BigDecimal.valueOf(movement.getQuantity()));
+			}
 			return updatedMedical;
 
 		} else {
@@ -375,6 +379,11 @@ public class MedicalStockIoOperations {
 				if (ward != null) {
 					// updates stock quantity for wards
 					updateMedicalWardQuantity(ward, medical, movement.getQuantity(), movement.getLot());
+					// OP-1428: hospital-wide the discharge is net-zero for the lot: the quantity leaving the main store
+					// is credited to the destination ward, so the lot's overall remaining quantity is left untouched
+				} else if (movement.getQuantity() != 0) {
+					// OP-1428: without a destination ward the quantity leaves the hospital altogether
+					lotRepository.updateQuantity(movement.getLot().getCode(), BigDecimal.valueOf(-movement.getQuantity()));
 				}
 				return updatedMedical;
 			} catch (OHServiceException serviceException) {

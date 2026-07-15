@@ -207,6 +207,9 @@ public class MovBrowserManager {
 					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
 						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));
 				}
+			} else if (quantity != 0) {
+				// OP-1428: the lot survives the deletion, so remove the deleted charge from its overall remaining quantity
+				lotRepository.updateQuantity(lot.getCode(), BigDecimal.valueOf(-quantity));
 			}
 		} else {
 			Ward ward = lastMovement.getWard();
@@ -229,6 +232,8 @@ public class MovBrowserManager {
 			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 
+			// OP-1428: deleting a discharge is net-zero for the lot's overall remaining quantity:
+			// the quantity taken back from the ward returns to the main store
 			ioOperations.deleteMovement(lastMovement);
 		}
 	}

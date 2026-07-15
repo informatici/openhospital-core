@@ -220,6 +220,8 @@ public class MedicalStockWardIoOperations {
 				repository.save(medicalWard);
 			}
 			repository.updateOutQuantity(qty.abs(), ward, medical, lot);
+			// OP-1428: a ward-to-ward transfer is net-zero for the lot's overall remaining quantity:
+			// the quantity leaving the origin ward is credited to the destination ward
 			return;
 		}
 
@@ -238,6 +240,11 @@ public class MedicalStockWardIoOperations {
 			} else {
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
+		}
+		if (qty.signum() != 0) {
+			// OP-1428: without a destination ward the movement changes the lot's overall remaining quantity:
+			// a dispense (qty > 0) decreases it, a rectification-in (qty < 0) increases it
+			lotRepository.updateQuantity(lot, qty.negate());
 		}
 	}
 
