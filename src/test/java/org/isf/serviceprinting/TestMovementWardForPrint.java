@@ -23,6 +23,7 @@ package org.isf.serviceprinting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +143,7 @@ class TestMovementWardForPrint extends OHCoreTestCase {
 						.containsExactly(0,0,0);
 		assertThat(movementWardForPrints)
 						.extracting(MovementWardForPrint::getQuantity)
-						.containsExactly(46.0, 46.0, 46.0);
+						.containsExactly(new BigDecimal("46.00"), new BigDecimal("46.00"), new BigDecimal("46.00"));
 		assertThat(movementWardForPrints)
 						.extracting(MovementWardForPrint::getLot)
 						.containsExactly("123456", "123456", "123456");
