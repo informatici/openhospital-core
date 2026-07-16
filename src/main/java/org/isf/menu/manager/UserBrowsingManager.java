@@ -34,6 +34,7 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.permissions.model.Permission;
 import org.isf.sessionaudit.model.UserSession;
+import org.isf.utils.db.BCrypt;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -504,5 +505,24 @@ public class UserBrowsingManager {
 			return false;
 		}
 		return isPasswordStrong(password);
+	}
+
+	/**
+	 * Tests whether the given clear-text password is the same as the user's current (hashed) password, so callers
+	 * can reject reusing the current password on a change.
+	 *
+	 * @param user the user whose current password to compare against
+	 * @param newPassword the candidate new password, in clear text
+	 * @return {@code true} if {@code newPassword} matches the user's current password, {@code false} otherwise
+	 */
+	public boolean isSameAsCurrentPassword(User user, String newPassword) {
+		if (user == null || newPassword == null || newPassword.isEmpty()) {
+			return false;
+		}
+		String currentPassword = user.getPasswd();
+		if (currentPassword == null || !currentPassword.startsWith("$2")) {
+			return false;
+		}
+		return BCrypt.checkpw(newPassword, currentPassword);
 	}
 }

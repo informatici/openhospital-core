@@ -33,6 +33,7 @@ import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.utils.db.BCrypt;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
@@ -107,6 +108,18 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		assertThat(userBrowsingManager.isPasswordStrong("abcdEF1_<")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("^abcdef1>")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("AaBbCcDdeF1/")).isTrue();
+	}
+
+	@Test
+	void isSameAsCurrentPassword() {
+		User user = new User();
+		user.setPasswd(BCrypt.hashpw("Secret1@", BCrypt.gensalt()));
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(user, "Secret1@")).isTrue();
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(user, "Different1@")).isFalse();
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(user, "")).isFalse();
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(user, null)).isFalse();
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(null, "Secret1@")).isFalse();
+		assertThat(userBrowsingManager.isSameAsCurrentPassword(new User(), "Secret1@")).isFalse();
 	}
 
 	@Test
