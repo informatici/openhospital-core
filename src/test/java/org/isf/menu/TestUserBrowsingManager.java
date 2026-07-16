@@ -110,6 +110,28 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
+	void passwordPolicyAccessorsReflectConfiguration() {
+		GeneralData.STRONGPASSWORD = true;
+		GeneralData.STRONGLENGTH = 8;
+		assertThat(userBrowsingManager.isStrongPasswordEnabled()).isTrue();
+		assertThat(userBrowsingManager.getPasswordMinLength()).isEqualTo(8);
+
+		GeneralData.STRONGPASSWORD = false;
+		GeneralData.STRONGLENGTH = 0;
+		assertThat(userBrowsingManager.isStrongPasswordEnabled()).isFalse();
+		assertThat(userBrowsingManager.getPasswordMinLength()).isZero();
+	}
+
+	@Test
+	void passwordStrengthRegexMatchesEnforcedPolicy() {
+		String regex = userBrowsingManager.getPasswordStrengthRegex();
+		assertThat(regex).isNotBlank();
+		// the exposed regex must accept/reject the same passwords the strength check enforces
+		assertThat("abcdef1@".matches(regex)).isTrue();
+		assertThat("abcdefgh".matches(regex)).isFalse();
+	}
+
+	@Test
 	void testIncreaseFailedAttempts() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
