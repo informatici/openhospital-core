@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import java.awt.HeadlessException;
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,7 +139,7 @@ class TestPrintManager extends OHCoreTestCase {
 		price4print.setCurrency("Currency");
 		price4print.setDesc("Description");
 		price4print.setGroup("Group");
-		price4print.setPrice(100.0D);
+		price4print.setPrice(new BigDecimal("100.0"));
 		pricePrint.add(price4print);
 		return pricePrint;
 	}

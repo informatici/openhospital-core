@@ -47,16 +47,17 @@ import org.isf.utils.db.SoftDeletableAuditable;
 public class User extends SoftDeletableAuditable<String> {
 
 	@Id
-	@Column(name = "US_ID_A")
+	@Column(name = "US_ID_A", nullable = false, length = 50)
 	private String userName;
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "US_UG_ID_A")
+	@JoinColumn(name = "US_UG_ID_A", nullable = false)
 	private UserGroup userGroupName;
 
 	@NotNull
-	@Column(name = "US_PASSWD")
+	// 60 is the BCrypt hash output length; the GUI caps the raw password at 72 chars, the maximum BCrypt processes
+	@Column(name = "US_PASSWD", nullable = false, length = 60)
 	private String passwd;
 
 	@Column(name = "US_DESC")
@@ -76,6 +77,12 @@ public class User extends SoftDeletableAuditable<String> {
 
 	@Column(name = "US_DELETED")
 	private boolean deleted;
+
+	@Column(name = "US_PASSWD_LAST_CHANGED")
+	private LocalDateTime passwdLastChanged;
+
+	@Column(name = "US_PASSWD_MUST_CHANGE")
+	private boolean passwdMustChange;
 
 	@Transient
 	private volatile int hashCode;
@@ -162,6 +169,22 @@ public class User extends SoftDeletableAuditable<String> {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public LocalDateTime getPasswdLastChanged() {
+		return passwdLastChanged;
+	}
+
+	public void setPasswdLastChanged(LocalDateTime passwdLastChanged) {
+		this.passwdLastChanged = passwdLastChanged;
+	}
+
+	public boolean isPasswdMustChange() {
+		return passwdMustChange;
+	}
+
+	public void setPasswdMustChange(boolean passwdMustChange) {
+		this.passwdMustChange = passwdMustChange;
 	}
 
 	@Override
