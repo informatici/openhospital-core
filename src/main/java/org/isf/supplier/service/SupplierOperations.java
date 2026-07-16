@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.supplier.model.Supplier;
+import org.isf.utils.db.AuditorAwareInterface;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,11 @@ public class SupplierOperations {
 
 	private final SupplierIoOperationRepository repository;
 
-	public SupplierOperations(SupplierIoOperationRepository supplierIoOperationRepository) {
+	private final AuditorAwareInterface auditorAware;
+
+	public SupplierOperations(SupplierIoOperationRepository supplierIoOperationRepository, AuditorAwareInterface auditorAware) {
 		this.repository = supplierIoOperationRepository;
+		this.auditorAware = auditorAware;
 		ExaminationParameters.initialize();
 	}
 
@@ -63,6 +67,7 @@ public class SupplierOperations {
 	 */
 	public void delete(Supplier supplier) throws OHServiceException {
 		supplier.setSupDeleted('Y');
+		supplier.recordDeletion(auditorAware.getCurrentAuditor().orElse(null));
 		repository.save(supplier);
 	}
 
