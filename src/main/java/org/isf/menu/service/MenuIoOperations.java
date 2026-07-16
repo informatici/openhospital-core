@@ -249,12 +249,14 @@ public class MenuIoOperations {
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * @param user - the {@link User} to update
-	 * @return the {@link User} that has been deleted
+	 * @return the {@link User} that has been updated
 	 * @throws OHServiceException When failed to update the password
 	 */
 	public User updatePassword(User user) throws OHServiceException {
 		ensureUserNotDeleted(user.getUserName());
-		repository.updatePassword(user.getPasswd(), user.getUserName());
+		// OP-896: any password change resets the lease clock; the caller decides via the user's
+		// passwdMustChange flag whether the new password must be changed again (admin reset) or not (self change)
+		repository.updatePassword(user.getPasswd(), TimeTools.getNow(), user.isPasswdMustChange(), user.getUserName());
 		return getUserByName(user.getUserName());
 	}
 
