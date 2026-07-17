@@ -116,6 +116,5 @@ source step_a119_log_deleted_pharmaceutical_movements.sql;
 source step_a120_user_related_unique_constraints.sql;
 source step_a121_decimal_precision.sql;
 source step_a122_password_lease.sql;
-source step_aXXX_admission_sex_age.sql;
-source step_aXXX_examination_sex_age.sql;
+source step_aXXX_sex_age_snapshot.sql;
 
