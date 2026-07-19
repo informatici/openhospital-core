@@ -1,7 +1,14 @@
 -- OP-1434: add the authority permissions guarding the billing (/bills) and
 -- stock movement (/stockmovements) REST endpoints, which previously had no
--- operation-specific authorization rule. Grant them to the admin group so the
--- existing supported workflows keep working for appropriately configured users.
+-- operation-specific authorization rule and fell through to
+-- anyRequest().authenticated(), so any authenticated user could reach them.
+--
+-- The permissions are granted to the admin group ONLY: admin already holds
+-- every permission, so existing admin-driven workflows keep working out of the
+-- box. Any other user group that needs billing or stock-movement API access
+-- must be granted these permissions explicitly by an administrator. That is
+-- intentional and is the point of the fix: unconfigured users must no longer
+-- reach these endpoints.
 INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (172,'bills.create','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (173,'bills.read','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` (`P_ID_A`, `P_NAME`, `P_DESCRIPTION`, `P_ACTIVE`, `P_CREATED_BY`, `P_CREATED_DATE`, `P_LAST_MODIFIED_BY`, `P_LAST_MODIFIED_DATE`) VALUES (174,'bills.update','','1',NULL,NULL,NULL,NULL);
