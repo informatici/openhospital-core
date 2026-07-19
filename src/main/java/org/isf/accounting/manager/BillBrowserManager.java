@@ -21,9 +21,13 @@
  */
 package org.isf.accounting.manager;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
@@ -49,13 +53,18 @@ public class BillBrowserManager {
 	}
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * 
-	 * @param bill
-	 * @param billPayments
-	 * @throws OHDataValidationException
+	 * Validates structural and business rules that can be checked <em>before</em> any DB operation: dates, patient name, non-empty item list.
+	 *
+	 * <p>
+	 * The balance-vs-status check is intentionally absent here because {@code BLL_BALANCE} is only authoritative after {@link #recalculateTotals}. Call
+	 * {@link #validateClosedBillBalance} after recalculation.
+	 *
+	 * @param bill the bill to validate
+	 * @param billItems effective item lines — must not be empty
+	 * @param billPayments payment lines used for date-ordering checks
+	 * @throws OHDataValidationException if any rule is violated
 	 */
-	protected void validateBill(Bill bill, List<BillPayments> billPayments) throws OHDataValidationException {
+	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		LocalDateTime today = TimeTools.getNow();
@@ -73,6 +82,9 @@ public class BillBrowserManager {
 		}
 		bill.setUpdate(upDate);
 
+		if (billItems.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillmustcontainatleastoneitem.msg")));
+		}
 		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
 		}
@@ -85,11 +97,23 @@ public class BillBrowserManager {
 		if (bill.getPatName().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg")));
 		}
-		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg")));
-		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
+		}
+	}
+
+	/**
+	 * Validates that a bill marked as closed ({@code status = "C"}) carries a zero balance. Must be called <em>after</em> {@link #recalculateTotals} so that
+	 * {@code BLL_BALANCE} reflects the authoritative computed value.
+	 *
+	 * @param bill the bill whose balance to check
+	 * @throws OHDataValidationException if the bill is closed with a non-zero balance
+	 */
+	private void validateClosedBillBalance(Bill bill) throws OHDataValidationException {
+		if (bill.getStatus().equals("C")
+						&& bill.getBalance().setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0) {
+			throw new OHDataValidationException(List.of(
+							new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"))));
 		}
 	}
 
@@ -156,10 +180,10 @@ public class BillBrowserManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Bill newBill(
-		Bill bill,
-		List<BillItems> billItems,
-		List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(bill, billPayments);
+					Bill bill,
+					List<BillItems> billItems,
+					List<BillPayments> billPayments) throws OHServiceException {
+		validateBill(bill, billItems, billPayments);
 		Bill newBill = newBill(bill);
 		int billId = newBill.getId();
 		if (!billItems.isEmpty()) {
@@ -168,7 +192,10 @@ public class BillBrowserManager {
 		if (!billPayments.isEmpty()) {
 			newBillPayments(billId, billPayments);
 		}
-		return newBill;
+		// Recompute totals, then check closed-bill balance constraint.
+		recalculateTotals(newBill, billItems, billPayments);
+		validateClosedBillBalance(newBill);
+		return ioOperations.updateBill(newBill);
 	}
 
 	/**
@@ -216,13 +243,24 @@ public class BillBrowserManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Bill updateBill(Bill updateBill,
-		List<BillItems> billItems,
-		List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(updateBill, billPayments);
+					List<BillItems> billItems,
+					List<BillPayments> billPayments) throws OHServiceException {
+		// Resolve effective items before touching the DB:
+		// - empty list means payment-only update → read current items from DB
+		// - non-empty list means the caller is replacing items → use as-is
+		List<BillItems> effectiveItems = billItems.isEmpty()
+						? ioOperations.getItems(updateBill.getId())
+						: billItems;
+		validateBill(updateBill, effectiveItems, billPayments);
 		Bill updatedBill = updateBill(updateBill);
-		newBillItems(updateBill.getId(), billItems);
+		if (!billItems.isEmpty()) {
+			newBillItems(updateBill.getId(), billItems);
+		}
 		newBillPayments(updateBill.getId(), billPayments);
-		return updatedBill;
+		// Recompute authoritative totals, then check closed-bill balance constraint.
+		recalculateTotals(updatedBill, effectiveItems, billPayments);
+		validateClosedBillBalance(updatedBill);
+		return ioOperations.updateBill(updatedBill);
 	}
 
 	/**
@@ -245,6 +283,50 @@ public class BillBrowserManager {
 	 */
 	public List<Bill> getPendingBills(int patID) throws OHServiceException {
 		return ioOperations.getPendingBills(patID);
+	}
+
+	/**
+	 * Recomputes {@code BLL_AMOUNT} and {@code BLL_BALANCE} from the supplied item and payment lists, updating the {@link Bill} object in-place.
+	 *
+	 * @param bill the bill to update in-place
+	 * @param items item lines (may be empty, not null)
+	 * @param payments payment lines (may be empty, not null)
+	 */
+	private void recalculateTotals(Bill bill, List<BillItems> items, List<BillPayments> payments) {
+		Map<String, BigDecimal[]> groups = new LinkedHashMap<>();
+		for (BillItems item : items) {
+			String key = item.getPriceID() + "|" + item.getItemDescription();
+			BigDecimal[] g = groups.get(key);
+			if (g == null) {
+				g = new BigDecimal[] {
+						BigDecimal.ZERO,
+						BigDecimal.ZERO,
+						item.getItemAmount()
+				};
+				groups.put(key, g);
+			}
+			BigDecimal qty = new BigDecimal(item.getItemQuantity());
+			BigDecimal amt = item.getItemAmount();
+			g[0] = g[0].add(qty);
+			g[1] = g[1].add(amt.multiply(qty));
+		}
+
+		BigDecimal amount = BigDecimal.ZERO;
+		BigDecimal bigTotal = BigDecimal.ZERO;
+		for (BigDecimal[] g : groups.values()) {
+			bigTotal = bigTotal.add(g[1]);
+			if (g[2].compareTo(BigDecimal.ZERO) > 0 && g[0].compareTo(BigDecimal.ZERO) > 0) {
+				amount = amount.add(g[1]);
+			}
+		}
+
+		BigDecimal paid = BigDecimal.ZERO;
+		for (BillPayments payment : payments) {
+			paid = paid.add(payment.getAmount());
+		}
+
+		bill.setAmount(amount.setScale(2, RoundingMode.HALF_UP));
+		bill.setBalance(bigTotal.subtract(paid).setScale(2, RoundingMode.HALF_UP));
 	}
 
 	/**

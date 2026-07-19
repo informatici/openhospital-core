@@ -52,6 +52,7 @@ import org.isf.medicalstock.service.MedicalStockIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
+import org.isf.medicalstock.service.MovementLogIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
@@ -117,6 +118,8 @@ class Tests extends OHCoreTestCase {
 	WardIoOperationRepository wardIoOperationRepository;
 	@Autowired
 	MovementIoOperationRepository movementIoOperationRepository;
+	@Autowired
+	MovementLogIoOperationRepository movementLogIoOperationRepository;
 	@Autowired
 	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
 	@Autowired
@@ -203,14 +206,18 @@ class Tests extends OHCoreTestCase {
 		checkMovementIntoDb(code);
 	}
 
-	// TODO: fix setupTestMedicalStock
-	void testMedicalStockGets() throws Exception {
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMedicalStockGets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
 		int code = setupTestMedicalStock(false);
 		checkMedicalStockIntoDb(code);
 	}
 
-	// TODO: fix setupTestMedicalStock
-	void testMedicalStockSets() throws Exception {
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMedicalStockSets(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
 		int code = setupTestMedicalStock(true);
 		checkMedicalStockIntoDb(code);
 	}
@@ -424,7 +431,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(movement).isNotNull();
 		MovementType movementType = movement.getType();
 		movementType.setType("-");
-		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, BigDecimal.ZERO, movement.getLot());
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		Movement newMovement = new Movement(movement.getMedical(), movementType, movement.getWard(), movement.getLot(),
 			TimeTools.getNow(), 10, movement.getSupplier(), "newReference");
@@ -1333,7 +1340,7 @@ class Tests extends OHCoreTestCase {
 		int code = setupTestMovement(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code);
 		assertThat(movement).isPresent();
-		movBrowserManager.deleteLastMovement(movement.get());
+		movBrowserManager.deleteLastMovement(movement.get(), null);
 		Optional<Movement> movement2 = movementIoOperationRepository.findById(code);
 		assertThat(movement2).isNotPresent();
 	}
@@ -1361,7 +1368,7 @@ class Tests extends OHCoreTestCase {
 			null,
 			"newReference");
 		Movement storedMovement = medicalStockIoOperation.newMovement(newMovement);
-		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "newDescription", medical, new BigDecimal("10.0"), "newUnits");
 		MovementWard saveMovWard = movementWardIoOperationRepository.saveAndFlush(movementWard);
 		MovementWard foundMovWard = movementWardIoOperationRepository.findById(saveMovWard.getCode()).orElse(null);
 		assertThat(foundMovWard).isNotNull();
@@ -1372,7 +1379,7 @@ class Tests extends OHCoreTestCase {
 		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
-		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
+		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1398,7 +1405,7 @@ class Tests extends OHCoreTestCase {
 			null,
 			"newReference");
 		Movement storedMovement = medicalStockIoOperation.newMovement(newMovement);
-		MovementWard movementWard = new MovementWard(TimeTools.getDateToday0(), ward, lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard movementWard = new MovementWard(TimeTools.getDateToday0(), ward, lot, "newDescription", medical, new BigDecimal("10.0"), "newUnits");
 		MovementWard saveMovWard = movementWardIoOperationRepository.saveAndFlush(movementWard);
 		MovementWard foundMovWard = movementWardIoOperationRepository.findById(saveMovWard.getCode()).orElse(null);
 		assertThat(foundMovWard).isNotNull();
@@ -1409,7 +1416,7 @@ class Tests extends OHCoreTestCase {
 		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
-		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
+		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
 
 		Movement newMovement2 = new Movement(
 			medical,
@@ -1430,9 +1437,12 @@ class Tests extends OHCoreTestCase {
 			movement2.getLot().getCode(),
 			movement2.getDate());
 		assertThat(movWards).isEmpty();
-		movBrowserManager.deleteLastMovement(movement2);
+		movBrowserManager.deleteLastMovement(movement2, "wrong entry");
 		Optional<Movement> followingMovement2 = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement2).isNotPresent();
+		// OP-1388: the deletion must be logged together with the reason
+		assertThat(movementLogIoOperationRepository.findAll())
+			.anyMatch(movementLog -> movementLog.getMovementCode() == code2 && "wrong entry".equals(movementLog.getReason()));
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1541,7 +1551,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(movement).isNotNull();
 		MovementType movementType = movement.getType();
 		movementType.setType("-");
-		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, BigDecimal.ZERO, movement.getLot());
 
 		assertThat(medicalWard.getLock()).isZero();
 		medicalWard.setLock(8);
@@ -1593,7 +1603,10 @@ class Tests extends OHCoreTestCase {
 	private int setupTestMedicalStock(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
-		MedicalStock medicalStock = testMedicalStock.setup(medical, false);
+		MedicalStock medicalStock = testMedicalStock.setup(medical, usingSet);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		medicalStockIoOperationRepository.saveAndFlush(medicalStock);
 		return medicalStock.getCode();
 	}
 

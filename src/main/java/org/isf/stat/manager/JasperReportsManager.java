@@ -22,6 +22,12 @@
 package org.isf.stat.manager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,9 +43,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +60,6 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
-import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
 import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
@@ -96,7 +100,7 @@ public class JasperReportsManager {
 	private HospitalBrowsingManager hospitalManager;
 
 	private DataSource dataSource;
-	
+
 	private WardBrowserManager wardManager;
 
 	public JasperReportsManager(HospitalBrowsingManager hospitalBrowsingManager, DataSource dataSource, WardBrowserManager wardManager) {
@@ -246,7 +250,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportBillGroupedPdf(Integer billID, String jasperFileName, Patient patient, List<Integer> billListId,
-					String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
+		String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
@@ -267,7 +271,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportBillGroupedTxt(Integer billID, String jasperFileName, Patient patient, List<Integer> billListId,
-					String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
+		String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
@@ -362,7 +366,7 @@ public class JasperReportsManager {
 			parameters.put("date", toDate(date)); // real param
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(wardID), TimeTools.formatDateTime(date, YYYY_M_MDD)),
-							"pdf");
+				"pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -377,7 +381,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String parametersString, LocalDateTime dateFrom, LocalDateTime dateTo,
-					String jasperFileName) throws OHServiceException {
+		String jasperFileName) throws OHServiceException {
 
 		try {
 
@@ -511,7 +515,7 @@ public class JasperReportsManager {
 	}
 
 	public void getGenericReportPharmaceuticalStockExcel(LocalDateTime date, String jasperFileName, String exportFilename, String filter, String groupBy,
-					String sortBy) throws OHServiceException {
+		String sortBy) throws OHServiceException {
 
 		try {
 			if (date == null) {
@@ -552,7 +556,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportPharmaceuticalStockPdf(LocalDateTime date, String jasperFileName, String filter, String groupBy, String sortBy)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
@@ -592,7 +596,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportPharmaceuticalStockCardPdf(String jasperFileName, String exportFileName, LocalDateTime dateFrom,
-					LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
+		LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
 
 		try {
 			if (dateFrom == null) {
@@ -627,7 +631,7 @@ public class JasperReportsManager {
 	}
 
 	public void getGenericReportPharmaceuticalStockCardExcel(String jasperFileName, String exportFileName, LocalDateTime dateFrom, LocalDateTime dateTo,
-					Medical medical, Ward ward) throws OHServiceException {
+		Medical medical, Ward ward) throws OHServiceException {
 
 		try {
 			if (dateFrom == null) {
@@ -762,7 +766,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportFromDateToDatePdf(LocalDate fromDate, LocalDate toDate, String jasperFileFolder, String jasperFileName)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = compileGenericReportFromDateToDateParameters(fromDate, toDate);
@@ -781,7 +785,7 @@ public class JasperReportsManager {
 	}
 
 	public JasperReportResultDto getGenericReportFromDateToDatePdf(String fromDate, String toDate, String jasperFileFolder, String jasperFileName)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = compileGenericReportFromDateToDateParameters(fromDate, toDate);
@@ -800,7 +804,7 @@ public class JasperReportsManager {
 	}
 
 	public void getGenericReportFromDateToDateExcel(LocalDate fromDate, LocalDate toDate, String jasperFileFolder, String jasperFileName, String exportFilename)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			String filename = compileJasperFilename(jasperFileFolder, jasperFileName);
@@ -829,7 +833,7 @@ public class JasperReportsManager {
 	}
 
 	public void getGenericReportFromDateToDateExcel(String fromDate, String toDate, String jasperFileFolder, String jasperFileName, String exportFilename)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			File jasperFile = new File(compileJasperFilename(jasperFileFolder, jasperFileName));
@@ -874,7 +878,7 @@ public class JasperReportsManager {
 	}
 
 	public void getGenericReportMYExcel(Integer month, Integer year, String jasperFileFolder, String jasperFileName, String exportFilename)
-					throws OHServiceException {
+		throws OHServiceException {
 
 		try {
 			File jasperFile = new File(compileJasperFilename(jasperFileFolder, jasperFileName));
@@ -924,7 +928,7 @@ public class JasperReportsManager {
 	}
 
 	private Map<String, Object> compileGenericReportMYParameters(Integer month, Integer year, String jasperFileFolder, String jasperFileName)
-					throws OHServiceException {
+		throws OHServiceException {
 		HashMap<String, Object> parameters = getHospitalParameters();
 		addBundleParameter(jasperFileFolder, jasperFileName, parameters);
 
@@ -963,11 +967,7 @@ public class JasperReportsManager {
 		 */
 		parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
 
-		/*
-		 * Jasper Report seems failing to decode resource bundles in UTF-8 encoding. For this reason we pass also the resource for the specific report read with
-		 * UTF8Control()
-		 */
-		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileName, parameters);
+		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileFolder, jasperFileName, parameters);
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those. The parent report must contain parameters like:
@@ -1011,7 +1011,7 @@ public class JasperReportsManager {
 					if (matcher.find()) {
 						String subreportName = matcher.group(1).split("\\.")[0];
 						LOGGER.debug("found a subreport: {}", subreportName);
-						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, subreportName, parameters);
+						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, jasperFileFolder, subreportName, parameters);
 					} else {
 						LOGGER.error(">> unexpected subreport expression {}", expression);
 					}
@@ -1029,21 +1029,34 @@ public class JasperReportsManager {
 		return patientPhotoFile;
 	}
 
-	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
-		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileName, Locale.getDefault(), new UTF8Control());
-			parameters.put(jasperParameter, resourceBundle);
+	private void addReportBundleParameter(String jasperParameter, String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) {
+		// This is needed because new Locale() returns lowercase codes (eg. "am_et") and this would fail the path case matching
+		String language = GeneralData.LANGUAGE;
+		Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
+		// TODO: Remove legacy fallback after all installations include file migrations (OP-214)
+		Path legacyPath = Path.of(jasperFileFolder, jasperFileName + "_" + GeneralData.LANGUAGE + ".properties");
 
-		} catch (MissingResourceException e) {
-			LOGGER.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
-			LOGGER.info(">> switch to default language '{}'", Locale.getDefault());
-			parameters.put(jasperParameter, ResourceBundle.getBundle(jasperFileName, Locale.getDefault()));
-			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
+		Path propsPath = null;
+		if (Files.exists(langSpecificPath)) {
+			propsPath = langSpecificPath;
+		} else if (Files.exists(legacyPath)) {
+			LOGGER.warn(">> using legacy bundle path for '{}'; migrate to language subfolder structure.", jasperFileName);
+			propsPath = legacyPath;
+		}
+
+		if (propsPath != null) {
+			try (InputStreamReader reader = new InputStreamReader(new FileInputStream(propsPath.toFile()), StandardCharsets.UTF_8)) {
+				parameters.put(jasperParameter, new PropertyResourceBundle(reader));
+			} catch (IOException e) {
+				LOGGER.error(">> error loading bundle for report {}", jasperFileName);
+			}
+		} else if (!Locale.ENGLISH.getLanguage().equals(language)) {
+			LOGGER.debug(">> no resource bundle for language '{}' found for report '{}', using JRXML default.", language, jasperFileName);
 		}
 	}
 
 	private JasperReportResultDto generateJasperReport(String jasperFilename, String filename, Map<String, Object> parameters)
-					throws JRException, SQLException {
+		throws JRException, SQLException {
 		File jasperFile = new File(jasperFilename);
 		final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
 		Connection connection = dataSource.getConnection();

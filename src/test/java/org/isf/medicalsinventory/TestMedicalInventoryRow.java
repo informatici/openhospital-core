@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,6 +23,8 @@ package org.isf.medicalsinventory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
+
 import org.isf.medicalinventory.model.MedicalInventory;
 import org.isf.medicalinventory.model.MedicalInventoryRow;
 import org.isf.medicals.model.Medical;
@@ -31,9 +33,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestMedicalInventoryRow {
 
-	private int id = 1;
-	private double theoreticQty = 50.0;
-	private double realQty = 50.0;
+	private Integer id = null;
+	private BigDecimal theoreticQty = new BigDecimal("50.0");
+	private BigDecimal realQty = new BigDecimal("50.0");
 	private boolean isNew = false;
 	
 	public MedicalInventoryRow setup(MedicalInventory inventory, Medical medical, Lot lot, boolean usingSet) throws OHException {
@@ -60,8 +62,8 @@ public class TestMedicalInventoryRow {
 
 	public void check(MedicalInventoryRow medicalInventoryRow, int id) {
 		assertThat(medicalInventoryRow.getId()).isEqualTo(id);
-		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualTo(theoreticQty);
-		assertThat(medicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualByComparingTo(theoreticQty);
+		assertThat(medicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
 		assertThat(medicalInventoryRow.isNewLot()).isEqualTo(isNew);
 	}
 }

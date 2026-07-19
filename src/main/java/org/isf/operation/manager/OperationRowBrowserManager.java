@@ -21,14 +21,18 @@
  */
 package org.isf.operation.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
+import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationRowIoOperations;
 import org.isf.patient.model.Patient;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.stereotype.Component;
 
 /**
@@ -56,11 +60,49 @@ public class OperationRowBrowserManager {
 	}
 
 	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
+		validateOperationRow(opRow);
 		return ioOperations.updateOperationRow(opRow);
 	}
 
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
+		validateOperationRow(opRow);
 		return ioOperations.newOperationRow(opRow);
+	}
+
+	/**
+	 * Verify if the {@link OperationRow} is valid for CRUD and throw an exception with the list of errors, if any.
+	 *
+	 * @param opRow the {@link OperationRow} to validate
+	 * @throws OHDataValidationException if the {@link OperationRow} is not valid
+	 */
+	protected void validateOperationRow(OperationRow opRow) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (opRow.getOperation() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseinsertanoperation.msg")));
+		}
+		String prescriber = opRow.getPrescriber();
+		if (prescriber == null || prescriber.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseinsertaprescriber.msg")));
+		} else if (prescriber.length() > 150) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theprescriberistoolongmaxchars.fmt.msg", 150)));
+		}
+		// opResult is optional at this layer: legacy rows and non-GUI callers may have none.
+		// The desktop GUI additionally requires it for new/edited rows (OperationRowBase/OperationRowAdm/OperationRowOpd).
+		String opResult = opRow.getOpResult();
+		if (opResult != null && opResult.length() > 250) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theresultistoolongmaxchars.fmt.msg", 250)));
+		}
+		if (opRow.getOpDate() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseinsertavaliddate.msg")));
+		}
+		// remarks is optional free text: only its length is constrained
+		String remarks = opRow.getRemarks();
+		if (remarks != null && remarks.length() > 250) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theremarksaretoolongmaxchars.fmt.msg", 250)));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 
 	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {

@@ -23,8 +23,8 @@ package org.isf.accounting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.data.Offset.offset;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +161,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		List<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
-		assertThat(foundBill.getAmount()).isCloseTo(bills.get(0).getAmount(), offset(0.1));
+		assertThat(foundBill.getAmount()).isEqualByComparingTo(bills.get(0).getAmount());
 	}
 
 	@Test
@@ -179,7 +179,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		Bill bill = accountingIoOperation.getBill(id);
-		assertThat(bill.getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -196,11 +196,11 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill2).isNotNull();
 
 		assertThat(bill)
-				.isNotEqualTo(TimeTools.getNow())
-				.isEqualTo(foundBill);
+			.isNotEqualTo(TimeTools.getNow())
+			.isEqualTo(foundBill);
 		foundBill2.setId(-1);
 		assertThat(bill).isNotEqualTo(foundBill2);
-		assertThat(bill.compareTo(foundBill2)).isEqualTo(id + 1);   // id - (-1)
+		assertThat(bill.compareTo(foundBill2)).isEqualTo(id + 1); // id - (-1)
 		foundBill.setId(id);
 
 		assertThat(bill.hashCode()).isPositive();
@@ -237,7 +237,7 @@ class Tests extends OHCoreTestCase {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillItem).isNotNull();
 		List<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
-		assertThat(billItems.get(0).getItemAmount()).isCloseTo(foundBillItem.getItemAmount(), offset(0.1));
+		assertThat(billItems.get(0).getItemAmount()).isEqualByComparingTo(foundBillItem.getItemAmount());
 	}
 
 	@Test
@@ -257,7 +257,7 @@ class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillPayment).isNotNull();
 		List<BillPayments> billItems = accountingIoOperation.getPayments(foundBillPayment.getBill().getId());
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -269,7 +269,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = accountingIoOperation.getBillsBetweenDatesWherePatient(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -279,7 +279,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill).isNotNull();
 		List<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -295,38 +295,83 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testIoNewBillItems() throws Exception {
-		List<BillItems> billItems = new ArrayList<>();
-		int deleteId = setupTestBillItems(false);
-		BillItems deleteBillItem = accountingBillItemsIoOperationRepository.findById(deleteId).orElse(null);
-		assertThat(deleteBillItem).isNotNull();
+		// given: an existing bill with one item already stored
+		int existingId = setupTestBillItems(false);
+		BillItems existingManaged = accountingBillItemsIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(existingManaged).isNotNull();
 
-		Bill bill = deleteBillItem.getBill();
-		BillItems insertBillItem = testBillItems.setup(null, false);
-		int insertId = deleteId + 1;
-		billItems.add(insertBillItem);
+		Bill bill = existingManaged.getBill();
+
+		// Simulate same item as new object from GUI
+		BillItems existingFromGui = testBillItems.setup(null, false);
+		existingFromGui.setId(existingId);
+
+		// and: a second (new) item created by the GUI (id = null / 0)
+		BillItems newItemFromGui = testBillItems.setup(null, false);
+
+		// GUI behaviour: resend the whole list: existing + new
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(existingFromGui);
+		billItems.add(newItemFromGui);
+
+		// when: we call the service that internally does delete + re-insert
 		accountingIoOperation.newBillItems(bill, billItems);
 
-		BillItems foundBillItems = accountingBillItemsIoOperationRepository.findById(insertId).orElse(null);
-		assertThat(foundBillItems).isNotNull();
-		assertThat(foundBillItems.getBill().getId()).isEqualTo(bill.getId());
+		// then: for that bill we now have exactly two items
+		List<BillItems> persisted = accountingIoOperation.getItems(bill.getId());
+		assertThat(persisted).hasSize(2);
+
+		// all items belong to the correct bill
+		assertThat(persisted)
+			.extracting(i -> i.getBill().getId())
+			.containsOnly(bill.getId());
+
+		// and none of them keeps the old id (they've been re-inserted)
+		assertThat(persisted)
+			.extracting(BillItems::getId)
+			.doesNotContain(existingId);
 	}
 
 	@Test
-	void testIoNewBillPayments() throws Exception {
-		List<BillPayments> billPayments = new ArrayList<>();
-		int deleteId = setupTestBillPayments(false);
-		BillPayments deleteBillPayment = accountingBillPaymentIoOperationRepository.findById(deleteId).orElse(null);
-		assertThat(deleteBillPayment).isNotNull();
+	void testIoNewBillPaymentsResendExistingAndNew() throws Exception {
+		// given: an existing bill with one payment already stored
+		int existingId = setupTestBillPayments(false);
+		BillPayments existingPayment = accountingBillPaymentIoOperationRepository.findById(existingId).orElse(null);
+		assertThat(existingPayment).isNotNull();
 
-		Bill bill = deleteBillPayment.getBill();
-		BillPayments insertBillPayment = testBillPayments.setup(null, false);
-		int insertId = deleteId + 1;
-		billPayments.add(insertBillPayment);
+		// Simulate same payment as new object from GUI
+		Bill bill = existingPayment.getBill();
+		BillPayments existingFromGui = new BillPayments();
+		existingFromGui.setId(existingPayment.getId());
+		existingFromGui.setAmount(existingPayment.getAmount());
+		existingFromGui.setDate(existingPayment.getDate());
+		existingFromGui.setUser(existingPayment.getUser());
+		existingFromGui.setBill(bill); // oppure null, tanto lo setti in newBillPayments
+
+		// and: a second (new) payment created by the GUI (id = null / 0)
+		BillPayments newPayment = testBillPayments.setup(null, false);
+
+		// GUI behaviour: resend the whole list: existing + new
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(existingFromGui); // existing, with original id
+		billPayments.add(newPayment); // new, with no id
+
+		// when: we call the service that internally does delete + re-insert
 		accountingIoOperation.newBillPayments(bill, billPayments);
 
-		BillPayments foundBillPayments = accountingBillPaymentIoOperationRepository.findById(insertId).orElse(null);
-		assertThat(foundBillPayments).isNotNull();
-		assertThat(foundBillPayments.getBill().getId()).isEqualTo(bill.getId());
+		// then: for that bill we now have exactly two payments
+		List<BillPayments> persisted = accountingIoOperation.getPayments(bill.getId());
+		assertThat(persisted).hasSize(2);
+
+		// all payments belong to the correct bill
+		assertThat(persisted)
+			.extracting(p -> p.getBill().getId())
+			.containsOnly(bill.getId());
+
+		// and none of them keeps the old id (they've been re-inserted)
+		assertThat(persisted)
+			.extracting(BillPayments::getId)
+			.doesNotContain(existingId);
 	}
 
 	@Test
@@ -334,11 +379,11 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(bill).isNotNull();
-		bill.setAmount(12.34);
+		bill.setAmount(new BigDecimal("12.34"));
 
 		accountingIoOperation.updateBill(bill);
 
-		assertThat(bill.getAmount()).isCloseTo(12.34, offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(new BigDecimal("12.34"));
 	}
 
 	@Test
@@ -412,7 +457,7 @@ class Tests extends OHCoreTestCase {
 		payments.add(foundBillPayment);
 		List<Bill> bills = accountingIoOperation.getBills(payments);
 
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getBill().getAmount());
 	}
 
 	@Test
@@ -427,7 +472,7 @@ class Tests extends OHCoreTestCase {
 		bills.add(foundBill);
 		List<BillPayments> payments = accountingIoOperation.getPayments(bills);
 
-		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(payments.get(0).getBill().getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -444,8 +489,8 @@ class Tests extends OHCoreTestCase {
 		BillPayments billPayment = payments.get(0);
 		assertThat(foundBillPayment).isEqualTo(foundBillPayment);
 		assertThat(foundBillPayment)
-				.isNotEqualTo(TimeTools.getNow())
-				.isEqualTo(billPayment);
+			.isNotEqualTo(TimeTools.getNow())
+			.isEqualTo(billPayment);
 		int id2 = setupTestBillPayments(false);
 		BillPayments foundBillPayment2 = accountingBillPaymentIoOperationRepository.findById(id2).orElse(null);
 		assertThat(foundBillPayment2).isNotNull();
@@ -511,7 +556,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = accountingIoOperation.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -536,7 +581,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -544,9 +589,9 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillPayment).isNotNull();
-		List<BillPayments> billItems = billBrowserManager.getPayments(0);  // get all
+		List<BillPayments> billItems = billBrowserManager.getPayments(0); // get all
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -556,7 +601,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBillPayment).isNotNull();
 		List<BillPayments> billItems = billBrowserManager.getPayments(foundBillPayment.getBill().getId());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -577,7 +622,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -586,23 +631,19 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		List<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
 	void mgrNewBillNoItemsNoPayments() throws Exception {
+		// A bill with no items must be rejected
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, null, false);
-		billBrowserManager.newBill(
-				bill,
-				new ArrayList<>(),
-				new ArrayList<>());
-		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
-		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
-		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, new ArrayList<>(), new ArrayList<>()))
+				.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -616,16 +657,17 @@ class Tests extends OHCoreTestCase {
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
 		billBrowserManager.newBill(
-				bill,
-				billItems,
-				new ArrayList<>());
+			bill,
+			billItems,
+			new ArrayList<>());
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
-		}
+	}
 
 	@Test
 	void mgrNewBillNoItemsAndPayments() throws Exception {
+		// A bill with no items must be rejected even when payments are supplied
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
@@ -635,14 +677,9 @@ class Tests extends OHCoreTestCase {
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
-		billBrowserManager.newBill(
-				bill,
-				new ArrayList<>(),
-				billPayments);
-		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
-		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
-		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
-		}
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, new ArrayList<>(), billPayments))
+				.isInstanceOf(OHDataValidationException.class);
+	}
 
 	@Test
 	void mgrNewBillItemsAndPayments() throws Exception {
@@ -659,9 +696,9 @@ class Tests extends OHCoreTestCase {
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		billBrowserManager.newBill(
-				bill,
-				billItems,
-				billPayments);
+			bill,
+			billItems,
+			billPayments);
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
@@ -680,7 +717,7 @@ class Tests extends OHCoreTestCase {
 		billPayments.add(payments);
 
 		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, billPayments))
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -693,7 +730,7 @@ class Tests extends OHCoreTestCase {
 		payments.add(foundBillPayment);
 		List<Bill> bills = billBrowserManager.getBills(payments);
 
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getBill().getAmount());
 	}
 
 	@Test
@@ -722,7 +759,7 @@ class Tests extends OHCoreTestCase {
 		List<Bill> bills = new ArrayList<>();
 		bills.add(foundBill);
 		List<BillPayments> payments = billBrowserManager.getPayments(bills);
-		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(payments.get(0).getBill().getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -769,7 +806,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		Bill bill = billBrowserManager.getBill(id);
-		assertThat(bill.getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -779,20 +816,19 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill).isNotNull();
 		List<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
 	void mgrUpdateBillNoItemsNoPayements() throws Exception {
-		int id = setupTestBill(true);
+		// Payment-only update (empty items list): amount must be recomputed from the items already stored in the DB
+		int id = setupTestBillWithItems(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(bill).isNotNull();
-		bill.setAmount(12.34);
-		Bill updatedBill = billBrowserManager.updateBill(
-				bill,
-				new ArrayList<>(),
-				new ArrayList<>());
-		assertThat(updatedBill.getAmount()).isCloseTo(12.34, offset(0.1));
+		Bill updatedBill = billBrowserManager.updateBill(bill, new ArrayList<>(), new ArrayList<>());
+		assertThat(updatedBill.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(updatedBill.getBalance()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 	}
 
 	@Test
@@ -842,7 +878,7 @@ class Tests extends OHCoreTestCase {
 		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
 		return billItem.getId();
 	}
-	
+
 	private void checkBillItemsIntoDb(int id) throws OHException {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillItem).isNotNull();
@@ -873,9 +909,97 @@ class Tests extends OHCoreTestCase {
 		testPatient.check(foundBillPayment.getBill().getBillPatient());
 	}
 
+	private int setupTestBillWithItems(boolean usingSet) throws OHException {
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		Bill bill = testBill.setup(priceList, patient, null, usingSet);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		accountingBillIoOperationRepository.saveAndFlush(bill);
+		BillItems billItem = testBillItems.setup(bill, usingSet);
+		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
+		return bill.getId();
+	}
+
 	private Patient setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
+	}
+
+	@Test
+	void mgrNewBillRecomputesAmountAndBalance() throws Exception {
+		// Verify that amount and balance are authoritative from items, ignoring whatever the ones passed as bill.amount / bill.balance.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		BillItems item = testBillItems.setup(null, false);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+
+		Bill saved = billBrowserManager.newBill(bill, billItems, new ArrayList<>());
+
+		assertThat(saved.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));  // 20 * 10.10
+		assertThat(saved.getBalance()).isEqualByComparingTo(new BigDecimal("202.0")); // no payments
+	}
+
+	@Test
+	void mgrNewBillWithPaymentRecomputesBalance() throws Exception {
+		// Balance = gross total - payments.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		BillItems item = testBillItems.setup(null, false);
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+		BillPayments payment = testBillPayments.setup(bill, false);
+		payment.setDate(TimeTools.getNow());
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(payment);
+
+		Bill saved = billBrowserManager.newBill(bill, billItems, billPayments);
+
+		assertThat(saved.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(saved.getBalance()).isEqualByComparingTo(new BigDecimal("191.9"));
+	}
+
+	@Test
+	void mgrUpdateBillPaymentOnlyRecomputesBalance() throws Exception {
+		// Payment-only update: items stay in DB, a payment is added.
+		int id = setupTestBillWithItems(false);
+		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(bill).isNotNull();
+
+		BillPayments payment = testBillPayments.setup(bill, false);
+		payment.setDate(TimeTools.getNow());
+		List<BillPayments> billPayments = new ArrayList<>();
+		billPayments.add(payment);
+
+		Bill updated = billBrowserManager.updateBill(bill, new ArrayList<>(), billPayments);
+
+		assertThat(updated.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(updated.getBalance()).isEqualByComparingTo(new BigDecimal("191.9"));
+	}
+
+	@Test
+	void mgrNewBillClosedWithOutstandingBalanceThrows() throws Exception {
+		// A closed bill whose balance is non-zero after recalculation must be rejected.
+		Patient patient = testPatient.setup(false);
+		PriceList priceList = testPriceList.setup(false);
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Bill bill = testBill.setup(priceList, patient, null, false);
+		bill.setStatus("C"); // mark closed
+		BillItems item = testBillItems.setup(null, false);
+		item.setItemQuantity(1); // 1 * 10.10 = 10.10 → balance ≠ 0
+		List<BillItems> billItems = new ArrayList<>();
+		billItems.add(item);
+
+		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, new ArrayList<>()))
+				.isInstanceOf(OHDataValidationException.class);
 	}
 }

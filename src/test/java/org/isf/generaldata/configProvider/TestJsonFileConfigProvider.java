@@ -22,23 +22,78 @@
 package org.isf.generaldata.configProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 import java.util.Map;
 
 import org.isf.generaldata.GeneralData;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.MediaType;
 
 public class TestJsonFileConfigProvider {
 
+	private static final String CONFIG_JSON = """
+		{
+		  "default": {
+		    "oh_telemetry_url": "https://default-url.com"
+		  }
+		}""";
+
+	private ClientAndServer mockServer;
+
+	@BeforeEach
+	public void startServer() {
+		mockServer = startClientAndServer();
+	}
+
+	@AfterEach
+	public void stopServer() {
+		mockServer.stop();
+	}
+
 	@Test
 	void testJsonFileConfigProvider() throws Exception {
+		mockServer.when(request().withMethod("GET").withPath("/oh-conf.json"))
+			.respond(response().withStatusCode(200)
+				.withContentType(MediaType.APPLICATION_JSON)
+				.withBody(CONFIG_JSON));
+
 		GeneralData.initialize();
+		GeneralData.PARAMSURL = "http://localhost:" + mockServer.getLocalPort() + "/oh-conf.json";
+
 		JsonFileConfigProvider jsonFileConfigProvider = new JsonFileConfigProvider();
 
 		Map<String, Object> configData = jsonFileConfigProvider.getConfigData();
 
 		assertThat(configData).containsKey("oh_telemetry_url");
-		assertThat(configData.get("oh_telemetry_url")).isNotNull();
+		assertThat(jsonFileConfigProvider.get("oh_telemetry_url")).isEqualTo("https://default-url.com");
+		assertThat(jsonFileConfigProvider.get("someParam")).isNull();
+
+		// The request must carry a custom User-Agent: the migrated server rejects the default Java one with HTTP 403.
+		mockServer.verify(request().withPath("/oh-conf.json").withHeader("User-Agent", "OpenHospital/.+"));
+
+		// void method
+		jsonFileConfigProvider.close();
+	}
+
+	@Test
+	void testJsonFileConfigProviderServerRejects() throws Exception {
+		// Characterizes the reported bug: a non-200 response (such as the 403 the migrated server returned to
+		// requests without a proper User-Agent) must yield an empty configuration rather than a failure.
+		mockServer.when(request().withMethod("GET").withPath("/oh-conf.json"))
+			.respond(response().withStatusCode(403));
+
+		GeneralData.initialize();
+		GeneralData.PARAMSURL = "http://localhost:" + mockServer.getLocalPort() + "/oh-conf.json";
+
+		JsonFileConfigProvider jsonFileConfigProvider = new JsonFileConfigProvider();
+
+		assertThat(jsonFileConfigProvider.getConfigData()).isEmpty();
 		assertThat(jsonFileConfigProvider.get("someParam")).isNull();
 
 		// void method

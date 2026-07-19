@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -231,7 +231,7 @@ class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
-		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), TimeTools.getNow(),
+		TherapyRow therapyRow = therapyManager.newTherapy(0, patient.getCode(), TimeTools.getNow(),
 						TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
 						longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
@@ -401,10 +401,10 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testTherapySettersGetters() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(false);
-		Medical medical = testMedical.setup(medicalType, false);
-		Patient patient = testPatient.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		Medical medical = testMedical.setup(medicalType, false);
 		medicalsIoOperationRepository.saveAndFlush(medical);
+		Patient patient = testPatient.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
 
 		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
@@ -452,13 +452,13 @@ class Tests extends OHCoreTestCase {
 		MedicalType medicalType2 = testMedicalType.setup(false);
 		medicalType2.setCode("someOtherCode");
 		Medical medical2 = testMedical.setup(medicalType2, false);
-		medical2.setCode(-99);
+		medical2.setCode(null);
 		medical2.setLock(1);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType2);
-		medicalsIoOperationRepository.saveAndFlush(medical2);
+		Medical savedMedical2 = medicalsIoOperationRepository.saveAndFlush(medical2);
 
 		assertThat(therapy.getMedical()).isEqualTo(medical);
-		therapy.setMedical(medical2);
+		therapy.setMedical(savedMedical2);
 		assertThat(therapy.getMedical()).isNotEqualTo(medical);
 	}
 

@@ -261,6 +261,20 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testDeletePatientStampsDeletedDate() throws Exception {
+		Integer code = setupTestPatient(false);
+		Patient patient = patientIoOperation.getPatient(code);
+		assertThat(patient.getDeletedDate()).isNull();
+
+		patientIoOperation.deletePatient(patient);
+
+		Patient deleted = patientIoOperationRepository.findById(code).orElse(null);
+		assertThat(deleted).isNotNull();
+		assertThat(deleted.getDeleted()).isEqualTo('Y');
+		assertThat(deleted.getDeletedDate()).isNotNull();
+	}
+
+	@Test
 	void testIoIsPatientPresent() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
