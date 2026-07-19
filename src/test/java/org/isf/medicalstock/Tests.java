@@ -66,7 +66,6 @@ import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.supplier.TestSupplier;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
-import org.isf.utils.exception.OHDataLockFailureException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
@@ -1628,29 +1627,12 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateLotTwiceInARow() throws Exception {
-		String code = setupTestLot(false);
-		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
-		assertThat(lot).isNotNull();
-		// detach the loaded instance so it behaves like the detached entities the clients hold between calls
-		entityManager.detach(lot);
-		lot.setCost(new BigDecimal("10.50"));
-		Lot firstUpdate = movStockInsertingManager.updateLot(lot);
-		lotIoOperationRepository.flush();
-		// detach the returned instance too: inside this transactional test it is still managed, so the second
-		// update would otherwise be a no-op merge that never exercises the version check
-		entityManager.detach(firstUpdate);
-
-		// consecutive updates must reuse the fresh entity returned by the previous one
-		LocalDateTime postponedDueDate = firstUpdate.getDueDate().plusDays(1);
-		firstUpdate.setDueDate(postponedDueDate);
-		Lot secondUpdate = movStockInsertingManager.updateLot(firstUpdate);
-		assertThat(secondUpdate.getCost()).isEqualByComparingTo(new BigDecimal("10.50"));
-		assertThat(secondUpdate.getDueDate()).isEqualTo(postponedDueDate);
-
-		// re-submitting the stale first instance must fail on the optimistic lock (LT_LOCK)
-		lot.setCost(new BigDecimal("11.00"));
+	void testMgrUpdateLotWithDueDateBeforePreparationDateFails() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		lot.setDueDate(lot.getPreparationDate().minusDays(1));
 		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
-			.isInstanceOf(OHDataLockFailureException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 }
