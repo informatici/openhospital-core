@@ -116,3 +116,4 @@ source step_a119_log_deleted_pharmaceutical_movements.sql;
 source step_a120_user_related_unique_constraints.sql;
 source step_a121_decimal_precision.sql;
 source step_a122_password_lease.sql;
+source step_aXXX_add_bills_and_stockmovements_api_permissions.sql;
