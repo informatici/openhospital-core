@@ -3,8 +3,8 @@
 -- personal data.
 
 ALTER TABLE OH_ADMISSION
-	ADD COLUMN ADM_SEX CHAR(1) NULL,
-	ADD COLUMN ADM_AGE INT NULL;
+	ADD COLUMN ADM_SEX CHAR(1) NULL AFTER ADM_PAT_ID,
+	ADD COLUMN ADM_AGE INT NULL AFTER ADM_SEX;
 
 -- Backfill existing admissions with the patient's sex and the patient's age at the admission date.
 UPDATE OH_ADMISSION a
@@ -16,8 +16,8 @@ UPDATE OH_ADMISSION a
 		END;
 
 ALTER TABLE OH_PATIENTEXAMINATION
-	ADD COLUMN PEX_SEX CHAR(1) NULL,
-	ADD COLUMN PEX_AGE INT NULL;
+	ADD COLUMN PEX_SEX CHAR(1) NULL AFTER PEX_PAT_ID,
+	ADD COLUMN PEX_AGE INT NULL AFTER PEX_SEX;
 
 -- Backfill existing examinations with the patient's sex and the patient's age at the examination date.
 UPDATE OH_PATIENTEXAMINATION e
