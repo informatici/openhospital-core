@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -298,20 +298,11 @@ public class MovStockInsertingManager {
 		if (medical == null) {
 			return null;
 		}
-		List<Lot> lots = ioOperationsLots.findByMedicalOrderByDueDate(medical.getCode());
-		BigDecimal sum = BigDecimal.ZERO;
-		int count = 0;
-		for (Lot lot : lots) {
-			BigDecimal cost = lot.getCost();
-			if (cost != null && cost.compareTo(BigDecimal.ZERO) > 0) {
-				sum = sum.add(cost);
-				count++;
-			}
-		}
-		if (count == 0) {
+		Double averageCost = ioOperationsLots.getAverageCostByMedical(medical.getCode());
+		if (averageCost == null) {
 			return null;
 		}
-		return sum.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP);
+		return BigDecimal.valueOf(averageCost).setScale(2, RoundingMode.HALF_UP);
 	}
 
 	/**
@@ -328,10 +319,11 @@ public class MovStockInsertingManager {
 		if (threshold <= 0 || cost == null || averageCost == null || averageCost.compareTo(BigDecimal.ZERO) <= 0) {
 			return true;
 		}
-		BigDecimal deviationPercent = cost.subtract(averageCost).abs()
-			.multiply(BigDecimal.valueOf(100))
-			.divide(averageCost, 2, RoundingMode.HALF_UP);
-		return deviationPercent.compareTo(BigDecimal.valueOf(threshold)) <= 0;
+		// Compare without dividing (and therefore without rounding the percentage first), so that a cost right at the
+		// variance boundary is not accepted or rejected because of a premature rounding: |cost - average| * 100 <= average * threshold.
+		BigDecimal difference = cost.subtract(averageCost).abs();
+		return difference.multiply(BigDecimal.valueOf(100))
+			.compareTo(averageCost.multiply(BigDecimal.valueOf(threshold))) <= 0;
 	}
 
 	/**
