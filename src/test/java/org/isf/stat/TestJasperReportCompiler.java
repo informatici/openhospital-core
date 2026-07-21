@@ -117,6 +117,24 @@ class TestJasperReportCompiler {
 		assertThat(JasperReportCompiler.compileStaleReports(List.of(new File(reportFolder, "does-not-exist").getPath()))).isZero();
 	}
 
+	@Test
+	void testMigratesCompiledReportToJasperReports7() throws Exception {
+		// a compiled report already holds a JasperReports 7 model, whatever the source format was
+		write("report.jrxml", VALID_JRXML);
+		JasperReportCompiler.compileStaleReports(List.of(reportFolder.getPath()));
+		File jasper = new File(reportFolder, "report.jasper");
+		assertThat(jasper).exists();
+
+		File outJrxml = new File(reportFolder, "migrated.jrxml");
+		File outJasper = new File(reportFolder, "migrated.jasper");
+		JasperReportCompiler.migrateToJasperReports7(jasper, outJrxml, outJasper);
+
+		// round-tripping produces a JasperReports 7 jrxml (no legacy namespace) that recompiles cleanly
+		assertThat(outJasper).exists();
+		String jrxml = new String(Files.readAllBytes(outJrxml.toPath()), StandardCharsets.UTF_8);
+		assertThat(jrxml).doesNotContain("jasperreports.sourceforge.net").contains("<element ");
+	}
+
 	private File write(String name, String content) throws Exception {
 		File file = new File(reportFolder, name);
 		Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));

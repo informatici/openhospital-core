@@ -22,13 +22,20 @@
 package org.isf.stat.manager;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**
  * Optional automatic compilation of JasperReports templates ({@code .jrxml}) into their compiled form ({@code .jasper}),
@@ -107,6 +114,28 @@ public final class JasperReportCompiler {
 			LOGGER.info("Report compilation in '{}': {} compiled, {} failed.", folder.getPath(), compiled, failed);
 		}
 		return compiled;
+	}
+
+	/**
+	 * Migrates a legacy (JasperReports 6) report to the current JasperReports 7 format headless, i.e. without Jaspersoft
+	 * Studio. A compiled report already carries a JasperReports 7 model, so this loads the committed {@code .jasper}, writes
+	 * it back with {@link JRXmlWriter} as a JasperReports 7 {@code .jrxml} (no legacy namespace) and recompiles it with the
+	 * pom's JasperReports version. It is the way to convert the templates Open Hospital still ships in the legacy JR6 XML
+	 * format — which {@link JasperCompileManager} cannot compile from source directly — after which
+	 * {@link #compileStaleReports(List)} keeps their {@code .jasper} up to date.
+	 *
+	 * @param compiledReport the committed {@code .jasper} to migrate.
+	 * @param outputJrxml    where the JasperReports 7 {@code .jrxml} is written.
+	 * @param outputJasper   where the recompiled {@code .jasper} is written.
+	 * @throws JRException if the report cannot be loaded or recompiled.
+	 * @throws IOException if the {@code .jrxml} cannot be written.
+	 */
+	public static void migrateToJasperReports7(File compiledReport, File outputJrxml, File outputJasper) throws JRException, IOException {
+		JasperReport report = (JasperReport) JRLoader.loadObject(compiledReport);
+		String jrxml = JRXmlWriter.writeReport(report, StandardCharsets.UTF_8.name());
+		Files.write(outputJrxml.toPath(), jrxml.getBytes(StandardCharsets.UTF_8));
+		JasperCompileManager.compileReportToFile(outputJrxml.getAbsolutePath(), outputJasper.getAbsolutePath());
+		LOGGER.info("Migrated report '{}' to JasperReports 7: '{}'.", compiledReport.getPath(), outputJrxml.getPath());
 	}
 
 	private static List<File> listJrxmlFiles(File folder) {
