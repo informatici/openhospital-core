@@ -1820,7 +1820,7 @@ CREATE TABLE `oh_groupmenu` (
   KEY `FK_GROUPMENU_LAST_MODIFIED_BY_IDX` (`GM_LAST_MODIFIED_BY`),
   CONSTRAINT `FK_GROUPMENU_CREATED_BY` FOREIGN KEY (`GM_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_GROUPMENU_LAST_MODIFIED_BY` FOREIGN KEY (`GM_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=349 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2168,6 +2168,7 @@ INSERT INTO `oh_groupmenu` VALUES (345,'admin','inventory',1,NULL,NULL,NULL,NULL
 INSERT INTO `oh_groupmenu` VALUES (346,'admin','inventoryward',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (347,'laboratorist','btnlaboratorynew',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (348,'laboratorist','btnlaboratoryedit',1,NULL,NULL,NULL,NULL);
+INSERT INTO `oh_groupmenu` VALUES (350,'admin','lotmanagement',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_groupmenu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4248,6 +4249,7 @@ INSERT INTO `oh_menuitem` VALUES ('inventory','angal.menu.btn.inventory','angal.
 INSERT INTO `oh_menuitem` VALUES ('inventoryward','angal.menu.btn.inventoryward','angal.menu.inventoryward','x','D','pharmacy','org.isf.medicalinventory.gui.InventoryWardBrowser','N',6);
 INSERT INTO `oh_menuitem` VALUES ('laboratory','angal.menu.btn.laboratory','angal.menu.laboratory','x','L','main','org.isf.lab.gui.LabBrowser','N',3);
 INSERT INTO `oh_menuitem` VALUES ('logfile','angal.menu.btn.logfile','angal.menu.logfile','x','L','help','org.isf.help.LogViewer','N',2);
+INSERT INTO `oh_menuitem` VALUES ('lotmanagement','angal.menu.btn.lotmanagement','angal.menu.lotmanagement','x','L','pharmacy','org.isf.lotmanagement.gui.LotBrowser','N',7);
 INSERT INTO `oh_menuitem` VALUES ('medicals','angal.menu.btn.medicals','angal.menu.medicals','x','P','pharmacy','org.isf.medicals.gui.MedicalBrowser','N',0);
 INSERT INTO `oh_menuitem` VALUES ('medicalstock','angal.menu.btn.medicalstock','angal.menu.medicalstock','x','S','pharmacy','org.isf.medicalstock.gui.MovStockBrowser','N',1);
 INSERT INTO `oh_menuitem` VALUES ('medicalstype','angal.menu.btn.medicalstype','angal.menu.medicalstype','x','M','types','org.isf.medtype.gui.MedicalTypeBrowser','N',7);
