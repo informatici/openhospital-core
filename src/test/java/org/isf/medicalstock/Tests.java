@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -1746,5 +1746,25 @@ class Tests extends OHCoreTestCase {
 		MedicalStock foundMedicalStock = medicalStockIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalStock).isNotNull();
 		testMedicalStock.check(foundMedicalStock);
+	}
+
+	@Test
+	void testMgrUpdateLotWithNegativeCostFails() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		lot.setCost(new BigDecimal("-1"));
+		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrUpdateLotWithDueDateBeforePreparationDateFails() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		lot.setDueDate(lot.getPreparationDate().minusDays(1));
+		assertThatThrownBy(() -> movStockInsertingManager.updateLot(lot))
+			.isInstanceOf(OHDataValidationException.class);
 	}
 }
