@@ -41,6 +41,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
+import org.isf.utils.db.AuditorAwareInterface;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
@@ -64,14 +65,18 @@ public class AdmissionIoOperations {
 
 	private PatientIoOperationRepository patientRepository;
 
+	private final AuditorAwareInterface auditorAware;
+
 	public AdmissionIoOperations(AdmissionIoOperationRepository admissionIoOperationRepository,
 	                             AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository,
 	                             DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository,
-	                             PatientIoOperationRepository patientIoOperationRepository) {
+	                             PatientIoOperationRepository patientIoOperationRepository,
+	                             AuditorAwareInterface auditorAware) {
 		this.repository = admissionIoOperationRepository;
 		this.typeRepository = admissionTypeIoOperationRepository;
 		this.dischargeRepository = dischargeTypeIoOperationRepository;
 		this.patientRepository = patientIoOperationRepository;
+		this.auditorAware = auditorAware;
 	}
 
 	/**
@@ -283,6 +288,7 @@ public class AdmissionIoOperations {
 			return null;
 		}
 		foundAdmission.setDeleted('Y');
+		foundAdmission.recordDeletion(auditorAware.getCurrentAuditor().orElse(null));
 		return repository.save(foundAdmission);
 	}
 
