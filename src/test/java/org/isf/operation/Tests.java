@@ -72,6 +72,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.visits.TestVisit;
@@ -433,6 +434,40 @@ class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		assertThat(operationBrowserManager.newOperation(operation)).isNotNull();
 		checkOperationIntoDb(operation.getCode());
+	}
+
+	@Test
+	void testMgrValidateOperationEmptyCodeAndDescription() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		operation.setCode("");
+		operation.setDescription("");
+		assertThatThrownBy(() -> operationBrowserManager.newOperation(operation))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationCodeTooLong() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		operation.setCode("123456789012"); // max is 10 chars
+		assertThatThrownBy(() -> operationBrowserManager.newOperation(operation))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationRowMissingMandatoryFields() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationRow.setOperation(null);
+		operationRow.setPrescriber("");
+		operationRow.setOpDate(null);
+		// opResult and remarks are optional: leaving them empty must not, by itself, trigger validation
+		operationRow.setOpResult("");
+		operationRow.setRemarks("");
+		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
