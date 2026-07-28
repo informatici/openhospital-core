@@ -200,6 +200,20 @@ class Tests extends OHCoreTestCase {
 		assertThat(supplierBrowserManager.getByID(1)).isNull();
 	}
 
+	@Test
+	void testDeleteSupplierStampsDeletedDate() throws Exception {
+		loadSuppliers();
+		Supplier supplier = supplierBrowserManager.getByID(1);
+		assertThat(supplier.getDeletedDate()).isNull();
+
+		supplierBrowserManager.delete(supplier);
+
+		Supplier deleted = supplierIoOperationRepository.findById(1).orElse(null);
+		assertThat(deleted).isNotNull();
+		assertThat(deleted.getSupDeleted()).isEqualTo('Y');
+		assertThat(deleted.getDeletedDate()).isNotNull();
+	}
+
 	private void loadSuppliers() {
 		AtomicInteger i = new AtomicInteger();
 		List<Supplier> suppliers = Stream.of('N','N','Y').map(deleted -> {

@@ -111,7 +111,7 @@ public class BillBrowserManager {
 	 */
 	private void validateClosedBillBalance(Bill bill) throws OHDataValidationException {
 		if (bill.getStatus().equals("C")
-						&& new BigDecimal(Double.toString(bill.getBalance())).setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0) {
+						&& bill.getBalance().setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0) {
 			throw new OHDataValidationException(List.of(
 							new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"))));
 		}
@@ -301,12 +301,12 @@ public class BillBrowserManager {
 				g = new BigDecimal[] {
 						BigDecimal.ZERO,
 						BigDecimal.ZERO,
-						new BigDecimal(Double.toString(item.getItemAmount()))
+						item.getItemAmount()
 				};
 				groups.put(key, g);
 			}
 			BigDecimal qty = new BigDecimal(item.getItemQuantity());
-			BigDecimal amt = new BigDecimal(Double.toString(item.getItemAmount()));
+			BigDecimal amt = item.getItemAmount();
 			g[0] = g[0].add(qty);
 			g[1] = g[1].add(amt.multiply(qty));
 		}
@@ -322,11 +322,11 @@ public class BillBrowserManager {
 
 		BigDecimal paid = BigDecimal.ZERO;
 		for (BillPayments payment : payments) {
-			paid = paid.add(new BigDecimal(Double.toString(payment.getAmount())));
+			paid = paid.add(payment.getAmount());
 		}
 
-		bill.setAmount(amount.setScale(2, RoundingMode.HALF_UP).doubleValue());
-		bill.setBalance(bigTotal.subtract(paid).setScale(2, RoundingMode.HALF_UP).doubleValue());
+		bill.setAmount(amount.setScale(2, RoundingMode.HALF_UP));
+		bill.setBalance(bigTotal.subtract(paid).setScale(2, RoundingMode.HALF_UP));
 	}
 
 	/**
