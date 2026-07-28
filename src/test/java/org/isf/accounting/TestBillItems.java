@@ -22,7 +22,8 @@
 package org.isf.accounting;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.data.Offset.offset;
+
+import java.math.BigDecimal;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
@@ -33,7 +34,7 @@ public class TestBillItems {
 	private static boolean isPrice;
 	private static String priceID = "TestPId";
 	private static String itemDescription = "TestItemDescription";
-	private static double itemAmount = 10.10;
+	private static BigDecimal itemAmount = new BigDecimal("10.10");
 	private static int itemQuantity = 20;
 
 	public BillItems setup(Bill bill, boolean usingSet) throws OHException {
@@ -60,7 +61,7 @@ public class TestBillItems {
 	}
 
 	public void check(BillItems billItem) {
-		assertThat(billItem.getItemAmount()).isCloseTo(itemAmount, offset(0.1));
+		assertThat(billItem.getItemAmount()).isEqualByComparingTo(itemAmount);
 		assertThat(billItem.getItemDescription()).isEqualTo(itemDescription);
 		assertThat(billItem.getItemQuantity()).isEqualTo(itemQuantity);
 		assertThat(billItem.isPrice()).isEqualTo(isPrice);
