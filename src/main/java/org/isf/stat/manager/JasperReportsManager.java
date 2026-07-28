@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -127,7 +126,9 @@ public class JasperReportsManager {
 	 * @return the available reports, never {@code null}
 	 */
 	public List<ReportLauncherDto> getReportsList() {
-		String language = new Locale(GeneralData.LANGUAGE).getLanguage();
+		// the configured value is used as it is: the report folders are named after it, and some of them carry a country (am_ET, sv_SE, zh_CN),
+		// which a Locale round-trip would lowercase into a folder that does not exist on a case-sensitive filesystem
+		String language = GeneralData.LANGUAGE;
 		List<ReportLauncherDto> reports = new ArrayList<>();
 		collectReports(RPT_STAT, language, reports);
 		collectReports(RPT_EXTRA, language, reports);
@@ -160,13 +161,16 @@ public class JasperReportsManager {
 	}
 
 	private String getReportTitle(String folder, String fileName, String language) {
+		// a missing localized bundle is the normal case for English, whose properties live next to the report: it is checked
+		// beforehand so that the fallback does not log an error for every single report
 		Path localizedPath = Path.of(folder, language, fileName + ".properties");
-		Properties props = MessageBundle.loadPropertiesFileUtf8(localizedPath, LOGGER);
-		String title = props.getProperty(REPORT_TITLE_PROPERTY);
+		String title = null;
+		if (Files.exists(localizedPath)) {
+			title = MessageBundle.loadPropertiesFileUtf8(localizedPath, LOGGER).getProperty(REPORT_TITLE_PROPERTY);
+		}
 		if (title == null || title.isBlank()) {
 			Path defaultPath = Path.of(folder, fileName + ".properties");
-			props = MessageBundle.loadPropertiesFileUtf8(defaultPath, LOGGER);
-			title = props.getProperty(REPORT_TITLE_PROPERTY);
+			title = MessageBundle.loadPropertiesFileUtf8(defaultPath, LOGGER).getProperty(REPORT_TITLE_PROPERTY);
 		}
 		return title;
 	}

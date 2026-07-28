@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -236,6 +236,33 @@ class Tests extends OHCoreTestCase {
 			GeneralData.LANGUAGE = previousLanguage;
 			deleteRecursively(statFolder);
 			deleteRecursively(extraFolder);
+		}
+	}
+
+	@Test
+	void testGetReportsListWithCountrySpecificLanguage() throws Exception {
+		String previousLanguage = GeneralData.LANGUAGE;
+		Path statFolder = Path.of(RPT_STAT);
+		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
+			// the languages shipped with a country (am_ET, sv_SE, zh_CN) name their folder exactly as configured
+			GeneralData.LANGUAGE = "am_ET";
+
+			Files.createDirectories(statFolder.resolve("am_ET"));
+			Files.createFile(statFolder.resolve("POI_ByAgeBySex.jasper"));
+			Files.writeString(statFolder.resolve("POI_ByAgeBySex.properties"), "jTitle=Patients by age and sex\n");
+			Files.writeString(statFolder.resolve("am_ET").resolve("POI_ByAgeBySex.properties"), "jTitle=localized title\n");
+
+			when(jasperReport.getParameters()).thenReturn(new JRParameter[] {});
+			mockedJRLoader.when(() -> JRLoader.loadObject(any(File.class))).thenReturn(jasperReport);
+
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
+			List<ReportLauncherDto> reports = jasperReportsManager.getReportsList();
+
+			// the localized title wins over the one sitting next to the report
+			assertThat(reports).extracting(ReportLauncherDto::getTitle).containsExactly("localized title");
+		} finally {
+			GeneralData.LANGUAGE = previousLanguage;
+			deleteRecursively(statFolder);
 		}
 	}
 
