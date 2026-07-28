@@ -160,55 +160,41 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) within the last week.
+	 * Returns a list of exams suitable for printing ({@link LaboratoryForPrint}s) between the specified dates, optionally filtered by exam name and patient.
+	 * When a {@code patient} is given the exam name is matched exactly and the patient data is included in the result; otherwise the exam name is matched
+	 * partially and the result is ordered by exam type. Meant for GUI use only.
 	 *
-	 * @return the list of {@link LaboratoryForPrint}s 
+	 * @param exam the exam name as {@code String}; it can be {@code null}
+	 * @param dateFrom the lower date for the range
+	 * @param dateTo the highest date for the range
+	 * @param patient the patient; it can be {@code null}
+	 * @return the list of {@link LaboratoryForPrint}s. It could be {@code empty}.
 	 * @throws OHServiceException
+	 * @deprecated meant for GUI use only
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
-		LocalDateTime time2 = TimeTools.getNow();
-		LocalDateTime time1 = time2.minusWeeks(1);
-		return getLaboratoryForPrint(null, time1, time2);
-	}
-
-	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * between specified dates and matching passed exam name.
-	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
-	 * @return the list of {@link LaboratoryForPrint}s 
-	 * @throws OHServiceException
-	 */
+	@Deprecated
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 					throws OHServiceException {
-		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-		List<Laboratory> laboritories = new ArrayList<>();
 		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
 		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
+		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 
-		if (exam != null && patient != null) {
-			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(truncatedDateFrom, truncatedDateTo, exam, patient.getCode());
-		}
-		if (exam != null && patient == null) {
-			laboritories = repository.findByLabDateBetweenAndExamDescriptionOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo, exam);
-		}
-		if (patient != null && exam == null) {
-			laboritories = repository.findByLabDateBetweenAndPatientCode(truncatedDateFrom, truncatedDateTo, patient.getCode());
-		}
-		if (patient == null && exam == null) {
-			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(truncatedDateFrom, truncatedDateTo);
-		}
-		for (Laboratory laboratory : laboritories) {
-
-			pLaboratory.add(new LaboratoryForPrint(
-							laboratory.getCode(),
-							laboratory.getExam(),
-							laboratory.getLabDate(),
-							laboratory.getResult(),
-							laboratory.getPatName(),
-							laboratory.getPatient().getCode()));
+		if (patient != null) {
+			List<Laboratory> laboratories = exam != null
+							? repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(truncatedDateFrom, truncatedDateTo, exam, patient.getCode())
+							: repository.findByLabDateBetweenAndPatientCode(truncatedDateFrom, truncatedDateTo, patient.getCode());
+			for (Laboratory laboratory : laboratories) {
+				pLaboratory.add(new LaboratoryForPrint(laboratory.getCode(), laboratory.getExam(), laboratory.getLabDate(), laboratory.getResult(),
+								laboratory.getPatName(), laboratory.getPatient().getCode()));
+			}
+		} else {
+			Iterable<Laboratory> laboratories = exam != null
+							? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo,
+											exam)
+							: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo);
+			for (Laboratory laboratory : laboratories) {
+				pLaboratory.add(new LaboratoryForPrint(laboratory.getCode(), laboratory.getExam(), laboratory.getLabDate(), laboratory.getResult()));
+			}
 		}
 		return pLaboratory;
 	}
@@ -235,34 +221,6 @@ public class LabIoOperations {
 		return newLaboratory(laboratory);
 	}
 
-	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * between specified dates and matching passed exam name.
-	 *
-	 * @param exam - the exam name as {@code String}
-	 * @param dateFrom - the starting date for the date range
-	 * @param dateTo - the ending date for the date range
-	 * @return the list of {@link LaboratoryForPrint}s 
-	 * @throws OHServiceException
-	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-		LocalDateTime truncatedDateFrom = TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN));
-		LocalDateTime truncatedDateTo = TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX));
-
-		Iterable<Laboratory> laboratories = exam != null
-						? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo, exam)
-						: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(truncatedDateFrom, truncatedDateTo);
-
-		for (Laboratory laboratory : laboratories) {
-			pLaboratory.add(new LaboratoryForPrint(
-							laboratory.getCode(),
-							laboratory.getExam(),
-							laboratory.getLabDate(),
-							laboratory.getResult()));
-		}
-		return pLaboratory;
-	}
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
 	 *
