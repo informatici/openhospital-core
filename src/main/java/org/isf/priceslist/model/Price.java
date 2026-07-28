@@ -21,6 +21,8 @@
  */
 package org.isf.priceslist.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -71,8 +73,8 @@ public class Price extends Auditable<String> {
 	private String description;
 
 	@NotNull
-	@Column(name="PRC_PRICE")
-	private Double price;
+	@Column(name="PRC_PRICE", precision = 19, scale = 2)
+	private BigDecimal price;
 
 	@Version
 	@Column(name = "PRC_LOCK")
@@ -96,7 +98,7 @@ public class Price extends Auditable<String> {
 	 * @param price Price
 	 * @param editable Can be edited or not
 	 */
-	public Price(PriceList list, String group, String item, String desc, Double price, boolean editable) {
+	public Price(PriceList list, String group, String item, String desc, BigDecimal price, boolean editable) {
 		super();
 		this.list = list;
 		this.group = group;
@@ -115,7 +117,7 @@ public class Price extends Auditable<String> {
 	 * @param desc Item description
 	 * @param price Price
 	 */
-	public Price(int id, PriceList list, String group, String item, String desc, Double price) {
+	public Price(int id, PriceList list, String group, String item, String desc, BigDecimal price) {
 		super();
 		this.id = id;
 		this.list = list;
@@ -133,7 +135,7 @@ public class Price extends Auditable<String> {
 	 * @param desc Item description
 	 * @param price Price
 	 */
-	public Price(PriceList list, String group, String item, String desc, Double price) {
+	public Price(PriceList list, String group, String item, String desc, BigDecimal price) {
 		this.list = list;
 		this.group = group;
 		this.item = item;
@@ -182,11 +184,11 @@ public class Price extends Auditable<String> {
 		this.description = desc;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

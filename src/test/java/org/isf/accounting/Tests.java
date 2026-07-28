@@ -23,8 +23,8 @@ package org.isf.accounting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.data.Offset.offset;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +161,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		List<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
-		assertThat(foundBill.getAmount()).isCloseTo(bills.get(0).getAmount(), offset(0.1));
+		assertThat(foundBill.getAmount()).isEqualByComparingTo(bills.get(0).getAmount());
 	}
 
 	@Test
@@ -179,7 +179,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		Bill bill = accountingIoOperation.getBill(id);
-		assertThat(bill.getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -237,7 +237,7 @@ class Tests extends OHCoreTestCase {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillItem).isNotNull();
 		List<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
-		assertThat(billItems.get(0).getItemAmount()).isCloseTo(foundBillItem.getItemAmount(), offset(0.1));
+		assertThat(billItems.get(0).getItemAmount()).isEqualByComparingTo(foundBillItem.getItemAmount());
 	}
 
 	@Test
@@ -257,7 +257,7 @@ class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBillPayment).isNotNull();
 		List<BillPayments> billItems = accountingIoOperation.getPayments(foundBillPayment.getBill().getId());
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -269,7 +269,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = accountingIoOperation.getBillsBetweenDatesWherePatient(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -279,7 +279,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill).isNotNull();
 		List<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -379,11 +379,11 @@ class Tests extends OHCoreTestCase {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(bill).isNotNull();
-		bill.setAmount(12.34);
+		bill.setAmount(new BigDecimal("12.34"));
 
 		accountingIoOperation.updateBill(bill);
 
-		assertThat(bill.getAmount()).isCloseTo(12.34, offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(new BigDecimal("12.34"));
 	}
 
 	@Test
@@ -457,7 +457,7 @@ class Tests extends OHCoreTestCase {
 		payments.add(foundBillPayment);
 		List<Bill> bills = accountingIoOperation.getBills(payments);
 
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getBill().getAmount());
 	}
 
 	@Test
@@ -472,7 +472,7 @@ class Tests extends OHCoreTestCase {
 		bills.add(foundBill);
 		List<BillPayments> payments = accountingIoOperation.getPayments(bills);
 
-		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(payments.get(0).getBill().getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -556,7 +556,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = accountingIoOperation.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -581,7 +581,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -591,7 +591,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBillPayment).isNotNull();
 		List<BillPayments> billItems = billBrowserManager.getPayments(0); // get all
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -601,7 +601,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBillPayment).isNotNull();
 		List<BillPayments> billItems = billBrowserManager.getPayments(foundBillPayment.getBill().getId());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getAmount());
 	}
 
 	@Test
@@ -622,7 +622,7 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -631,7 +631,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		List<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -746,7 +746,7 @@ class Tests extends OHCoreTestCase {
 		payments.add(foundBillPayment);
 		List<Bill> bills = billBrowserManager.getBills(payments);
 
-		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
+		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBillPayment.getBill().getAmount());
 	}
 
 	@Test
@@ -775,7 +775,7 @@ class Tests extends OHCoreTestCase {
 		List<Bill> bills = new ArrayList<>();
 		bills.add(foundBill);
 		List<BillPayments> payments = billBrowserManager.getPayments(bills);
-		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(payments.get(0).getBill().getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -822,7 +822,7 @@ class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundBill).isNotNull();
 		Bill bill = billBrowserManager.getBill(id);
-		assertThat(bill.getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(bill.getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -832,7 +832,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill).isNotNull();
 		List<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
-		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
+		assertThat(billItems.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
 	}
 
 	@Test
@@ -842,8 +842,8 @@ class Tests extends OHCoreTestCase {
 		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
 		assertThat(bill).isNotNull();
 		Bill updatedBill = billBrowserManager.updateBill(bill, new ArrayList<>(), new ArrayList<>());
-		assertThat(updatedBill.getAmount()).isCloseTo(202.0, offset(0.1));
-		assertThat(updatedBill.getBalance()).isCloseTo(202.0, offset(0.1));
+		assertThat(updatedBill.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(updatedBill.getBalance()).isEqualByComparingTo(new BigDecimal("202.0"));
 		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 	}
 
@@ -957,8 +957,8 @@ class Tests extends OHCoreTestCase {
 
 		Bill saved = billBrowserManager.newBill(bill, billItems, new ArrayList<>());
 
-		assertThat(saved.getAmount()).isCloseTo(202.0, offset(0.01));  // 20 * 10.10
-		assertThat(saved.getBalance()).isCloseTo(202.0, offset(0.01)); // no payments
+		assertThat(saved.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));  // 20 * 10.10
+		assertThat(saved.getBalance()).isEqualByComparingTo(new BigDecimal("202.0")); // no payments
 	}
 
 	@Test
@@ -979,8 +979,8 @@ class Tests extends OHCoreTestCase {
 
 		Bill saved = billBrowserManager.newBill(bill, billItems, billPayments);
 
-		assertThat(saved.getAmount()).isCloseTo(202.0, offset(0.01));
-		assertThat(saved.getBalance()).isCloseTo(191.9, offset(0.01));
+		assertThat(saved.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(saved.getBalance()).isEqualByComparingTo(new BigDecimal("191.9"));
 	}
 
 	@Test
@@ -997,8 +997,8 @@ class Tests extends OHCoreTestCase {
 
 		Bill updated = billBrowserManager.updateBill(bill, new ArrayList<>(), billPayments);
 
-		assertThat(updated.getAmount()).isCloseTo(202.0, offset(0.01));
-		assertThat(updated.getBalance()).isCloseTo(191.9, offset(0.01));
+		assertThat(updated.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
+		assertThat(updated.getBalance()).isEqualByComparingTo(new BigDecimal("191.9"));
 	}
 
 	@Test
