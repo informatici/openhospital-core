@@ -42,10 +42,10 @@ import org.isf.utils.db.SoftDeletableAuditable;
 public class UserGroup extends SoftDeletableAuditable<String> {
 
 	@Id
-	@Column(name = "UG_ID_A")
+	@Column(name = "UG_ID_A", nullable = false, length = 50)
 	private String code;
 
-	@Column(name = "UG_DESC")
+	@Column(name = "UG_DESC", length = 128)
 	private String desc;
 
 	@Column(name = "UG_DELETED")
