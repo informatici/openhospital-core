@@ -447,6 +447,14 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot updateLot(Lot lot) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		validateLot(errors, lot, true);
+		if (lot.getCost() != null && lot.getCost().signum() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thecostcannotbenegative.msg")));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 		return ioOperations.updateLot(lot);
 	}
 
