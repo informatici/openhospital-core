@@ -1021,18 +1021,18 @@ INSERT INTO `oh_bills` VALUES (4,'2022-11-20 00:30:23','2022-11-20 00:30:23',1,1
 INSERT INTO `oh_bills` VALUES (5,'2022-11-20 00:30:47','2022-11-20 02:13:51',1,1,'Basic',1,125,'Kristie Muldoon','O',64,64,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:41:34',1,0);
 INSERT INTO `oh_bills` VALUES (6,'2022-11-20 00:31:44','2022-11-20 00:32:08',1,1,'Basic',1,301,'Noe Kruse','O',12,-68,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:26:45',1,0);
 INSERT INTO `oh_bills` VALUES (7,'2022-11-20 00:36:56','2022-11-20 00:36:56',1,1,'Basic',1,167,'Richard Gauldin','O',26,26,'admin',NULL,NULL,NULL,'admin','2022-11-23 15:52:19',1,0);
-INSERT INTO `oh_bills` VALUES (8,'2022-11-20 00:37:45','2022-11-23 14:33:33',1,1,'Basic',1,141,'Brandie Lutz','O',180,-70,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:42:23',1,0);
-INSERT INTO `oh_bills` VALUES (9,'2022-11-20 00:43:04','2022-11-20 00:43:59',1,1,'Basic',1,191,'Leonard Badgett','O',46,-34,'admin',193,NULL,NULL,'admin','2022-11-23 19:43:42',1,0);
-INSERT INTO `oh_bills` VALUES (10,'2022-11-20 00:44:37','2022-11-23 14:20:13',1,1,'Basic',1,180,'Brock Boyter','O',145,145,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:43:48',1,0);
-INSERT INTO `oh_bills` VALUES (11,'2022-11-20 02:09:17','2022-11-20 02:10:13',1,1,'Basic',1,189,'Jake Tibbetts','O',224,74,'admin',191,NULL,NULL,'admin','2022-11-23 19:43:53',1,0);
-INSERT INTO `oh_bills` VALUES (12,'2022-11-20 02:40:44','2022-11-20 02:41:22',1,1,'Basic',1,514,'Mario Rossi','O',46,46,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:43:57',1,0);
-INSERT INTO `oh_bills` VALUES (13,'2022-11-21 02:03:41','2022-11-21 02:04:27',1,1,'Basic',1,515,'Alvaro Robertson','O',42,42,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:33:33',1,0);
-INSERT INTO `oh_bills` VALUES (14,'2022-11-21 02:21:07','2022-11-21 02:21:07',1,1,'Basic',1,516,'Genna Susterlind','O',16,16,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:33:30',1,0);
-INSERT INTO `oh_bills` VALUES (15,'2022-11-21 03:30:23','2022-11-21 03:31:06',1,1,'Basic',1,373,'Eleanora Albrecht','O',144,194,'admin',372,NULL,NULL,'admin','2022-11-23 19:44:13',1,0);
-INSERT INTO `oh_bills` VALUES (16,'2022-11-21 03:37:14','2022-11-21 03:37:41',1,1,'Basic',1,169,'Darrell Mondy','O',308,308,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:18',1,0);
-INSERT INTO `oh_bills` VALUES (17,'2022-11-21 21:59:18','2022-11-21 21:59:49',1,1,'Basic',1,519,'Jeanna Rickember','O',18,18,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:22',1,0);
-INSERT INTO `oh_bills` VALUES (18,'2022-11-21 22:00:18','2022-11-21 22:01:47',1,1,'Basic',1,319,'Solomon Stackpole','O',146,66,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:28',1,0);
-INSERT INTO `oh_bills` VALUES (19,'2022-11-21 22:02:01','2022-11-21 22:03:13',1,1,'Basic',1,130,'Otha Duer','O',135,135,'admin',134,NULL,NULL,'admin','2022-11-23 19:44:32',1,0);
+INSERT INTO `oh_bills` VALUES (8,'2022-11-20 00:37:45','2022-11-23 14:33:33',1,1,'Basic',1,141,'Brandie Lutz','O',0,-250,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:42:23',1,0);
+INSERT INTO `oh_bills` VALUES (9,'2022-11-20 00:43:04','2022-11-20 00:43:59',1,1,'Basic',1,191,'Leonard Badgett','O',0,-80,'admin',193,NULL,NULL,'admin','2022-11-23 19:43:42',1,0);
+INSERT INTO `oh_bills` VALUES (10,'2022-11-20 00:44:37','2022-11-23 14:20:13',1,1,'Basic',1,180,'Brock Boyter','O',25,25,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:43:48',1,0);
+INSERT INTO `oh_bills` VALUES (11,'2022-11-20 02:09:17','2022-11-20 02:10:13',1,1,'Basic',1,189,'Jake Tibbetts','O',0,-150,'admin',191,NULL,NULL,'admin','2022-11-23 19:43:53',1,0);
+INSERT INTO `oh_bills` VALUES (12,'2022-11-20 02:40:44','2022-11-20 02:41:22',1,1,'Basic',1,514,'Mario Rossi','O',0,0,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:43:57',1,0);
+INSERT INTO `oh_bills` VALUES (13,'2022-11-21 02:03:41','2022-11-21 02:04:27',1,1,'Basic',1,515,'Alvaro Robertson','O',0,0,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:33:33',1,0);
+INSERT INTO `oh_bills` VALUES (14,'2022-11-21 02:21:07','2022-11-21 02:21:07',1,1,'Basic',1,516,'Genna Susterlind','O',0,0,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:33:30',1,0);
+INSERT INTO `oh_bills` VALUES (15,'2022-11-21 03:30:23','2022-11-21 03:31:06',1,1,'Basic',1,373,'Eleanora Albrecht','O',0,50,'admin',372,NULL,NULL,'admin','2022-11-23 19:44:13',1,0);
+INSERT INTO `oh_bills` VALUES (16,'2022-11-21 03:37:14','2022-11-21 03:37:41',1,1,'Basic',1,169,'Darrell Mondy','O',0,0,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:18',1,0);
+INSERT INTO `oh_bills` VALUES (17,'2022-11-21 21:59:18','2022-11-21 21:59:49',1,1,'Basic',1,519,'Jeanna Rickember','O',0,0,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:22',1,0);
+INSERT INTO `oh_bills` VALUES (18,'2022-11-21 22:00:18','2022-11-21 22:01:47',1,1,'Basic',1,319,'Solomon Stackpole','O',0,-80,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:28',1,0);
+INSERT INTO `oh_bills` VALUES (19,'2022-11-21 22:02:01','2022-11-21 22:03:13',1,1,'Basic',1,130,'Otha Duer','O',50,50,'admin',134,NULL,NULL,'admin','2022-11-23 19:44:32',1,0);
 INSERT INTO `oh_bills` VALUES (20,'2022-11-21 22:05:03','2022-11-21 22:05:23',1,1,'Basic',1,187,'Bethel Booker','O',26,-54,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:36',1,0);
 INSERT INTO `oh_bills` VALUES (21,'2022-11-21 22:07:15','2022-11-21 22:07:15',1,1,'Basic',1,512,'Enriquetta Millman','O',39,39,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:41',1,0);
 INSERT INTO `oh_bills` VALUES (22,'2022-11-22 02:37:34','2022-11-22 02:38:15',1,1,'Basic',1,521,'Betta Jamison','O',204,224,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:44:45',1,0);
@@ -8892,4 +8892,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-15 18:59:34
+-- Dump completed on 2026-07-30 22:25:15
