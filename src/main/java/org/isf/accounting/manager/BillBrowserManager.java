@@ -85,6 +85,12 @@ public class BillBrowserManager {
 		if (billItems.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillmustcontainatleastoneitem.msg")));
 		}
+		if (billItems.stream().anyMatch(item -> item.getItemAmount() == null || item.getItemAmount().compareTo(BigDecimal.ZERO) < 0)) {
+			errors.add(new OHExceptionMessage("Bill item amounts must be zero or greater."));
+		}
+		if (billItems.stream().anyMatch(item -> item.getItemQuantity() < 0)) {
+			errors.add(new OHExceptionMessage("Bill item quantities must be zero or greater."));
+		}
 		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
 		}

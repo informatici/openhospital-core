@@ -47,6 +47,7 @@ import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -983,6 +984,34 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(updated.getAmount()).isEqualByComparingTo(new BigDecimal("202.0"));
 		assertThat(updated.getBalance()).isEqualByComparingTo(new BigDecimal("191.9"));
+	}
+
+	@Test
+	void mgrUpdateBillRejectsNegativeItemAmount() throws Exception {
+		int id = setupTestBillWithItems(false);
+		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(bill).isNotNull();
+		BillItems item = testBillItems.setup(null, false);
+		item.setItemAmount(new BigDecimal("-1.00"));
+
+		assertThatThrownBy(() -> billBrowserManager.updateBill(bill, List.of(item), new ArrayList<>()))
+			.isInstanceOfSatisfying(OHDataValidationException.class, exception -> assertThat(exception.getMessages())
+				.extracting(OHExceptionMessage::getMessage)
+				.contains("Bill item amounts must be zero or greater."));
+	}
+
+	@Test
+	void mgrUpdateBillRejectsNegativeItemQuantity() throws Exception {
+		int id = setupTestBillWithItems(false);
+		Bill bill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(bill).isNotNull();
+		BillItems item = testBillItems.setup(null, false);
+		item.setItemQuantity(-1);
+
+		assertThatThrownBy(() -> billBrowserManager.updateBill(bill, List.of(item), new ArrayList<>()))
+			.isInstanceOfSatisfying(OHDataValidationException.class, exception -> assertThat(exception.getMessages())
+				.extracting(OHExceptionMessage::getMessage)
+				.contains("Bill item quantities must be zero or greater."));
 	}
 
 	@Test
