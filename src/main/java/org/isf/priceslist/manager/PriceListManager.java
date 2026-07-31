@@ -21,6 +21,7 @@
  */
 package org.isf.priceslist.manager;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,7 +138,7 @@ public class PriceListManager {
 	public List<PriceForPrint> convertPrice(PriceList listSelected, Iterable<Price> prices) {
 		List<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
-			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.0) {
+			if (price.getList().getId() == listSelected.getId() && price.getPrice().compareTo(BigDecimal.ZERO) != 0) {
 				PriceForPrint price4print = new PriceForPrint();
 				price4print.setList(listSelected.getName());
 				price4print.setCurrency(listSelected.getCurrency());
