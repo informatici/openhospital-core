@@ -1,17 +1,41 @@
 version: 2
 updates:
+
   - package-ecosystem: maven
     directory: "/"
     schedule:
       interval: weekly
       day: monday
       time: "04:00"
-    open-pull-requests-limit: 5
+      timezone: Europe/Rome
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "chore(deps)"
-    labels: ["dependencies"]
+    labels:
+      - dependencies
     groups:
-      test-dependencies:
-        dependency-type: development
-      minor-and-patch:
-        update-types: ["minor", "patch"]
+      spring:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework.cloud:*"
+      log4j:
+        patterns:
+          - "org.apache.logging.log4j:*"
+      jna:
+        patterns:
+          - "net.java.dev.jna:*"
+      feign:
+        patterns:
+          - "io.github.openfeign:*"
+      smack:
+        patterns:
+          - "org.igniterealtime.smack:*"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "chore(ci)"
+    labels:
+      - ci
