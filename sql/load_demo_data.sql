@@ -87,7 +87,7 @@ CREATE TABLE `oh_admission` (
   CONSTRAINT `FK_ADMISSION_PREGNANTTREATMENTTYPE` FOREIGN KEY (`ADM_PRG_PTT_ID_A`) REFERENCES `oh_pregnanttreatmenttype` (`PTT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_ADMISSION_USER` FOREIGN KEY (`ADM_USR_ID_A`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_ADMISSION_WARD` FOREIGN KEY (`ADM_WRD_ID_A`) REFERENCES `oh_ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=515 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=520 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -556,6 +556,11 @@ INSERT INTO `oh_admission` VALUES (511,1,'N','I',1,542,'2021-11-10 17:09:12','I'
 INSERT INTO `oh_admission` VALUES (512,1,'N','F',1,553,'2023-02-04 02:27:00','A',NULL,'49',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2023-02-04 02:27:51','admin','2023-02-04 02:27:51',1);
 INSERT INTO `oh_admission` VALUES (513,1,'N','M',1,566,'2025-01-14 17:05:00','I',NULL,'116',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2025-01-14 17:05:00',NULL,'2025-01-14 17:05:00',NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2025-01-14 17:06:31','admin','2025-01-14 17:06:31',1);
 INSERT INTO `oh_admission` VALUES (514,1,'N','F',1,571,'2026-01-15 12:05:00','A',NULL,'92',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2026-01-15 18:54:27','admin','2026-01-15 18:54:27',1);
+INSERT INTO `oh_admission` VALUES (515,0,'N','I',1,574,'2023-12-07 14:50:00','A',NULL,'50','50',NULL,NULL,'2023-12-10 10:00:00','EQ','Clinical observation',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2023-12-07 14:55:00','admin','2023-12-10 10:00:00',1);
+INSERT INTO `oh_admission` VALUES (516,0,'N','I',1,576,'2024-12-03 16:20:00','I',NULL,'75','75',NULL,NULL,'2024-12-06 09:30:00','EQ','Treatment completed',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2024-12-03 16:25:00','admin','2024-12-06 09:30:00',1);
+INSERT INTO `oh_admission` VALUES (517,0,'N','I',1,578,'2025-12-09 13:40:00','A',NULL,'127','127',NULL,NULL,'2025-12-12 11:15:00','EQ','Stable at discharge',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2025-12-09 13:45:00','admin','2025-12-12 11:15:00',1);
+INSERT INTO `oh_admission` VALUES (518,0,'N','F',1,579,'2026-04-17 08:10:00','A',NULL,'92','92',NULL,NULL,'2026-04-20 09:00:00','EQ','Follow-up advised',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2026-04-17 08:15:00','admin','2026-04-20 09:00:00',1);
+INSERT INTO `oh_admission` VALUES (519,1,'N','I',1,580,'2026-08-05 15:50:00','I',NULL,'49',NULL,NULL,NULL,NULL,NULL,'Under observation',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'admin',0,'N','admin','2026-08-05 15:55:00','admin','2026-08-05 15:55:00',1);
 /*!40000 ALTER TABLE `oh_admission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -662,7 +667,7 @@ CREATE TABLE `oh_billitems` (
   CONSTRAINT `FK_BILLITEMS_BILLS` FOREIGN KEY (`BLI_ID_BILL`) REFERENCES `oh_bills` (`BLL_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BILLITEMS_CREATED_BY` FOREIGN KEY (`BLI_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILLITEMS_LAST_MODIFIED_BY` FOREIGN KEY (`BLI_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=258 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -828,6 +833,14 @@ INSERT INTO `oh_billitems` VALUES (244,6,1,'MED410','Creatinine 200ml (Calorimet
 INSERT INTO `oh_billitems` VALUES (245,6,1,'EXA03.02','3.2 Blood Slide (OTHERS, E.G. TRIUPHANOSOMIAS, MICRIFILARIA, LEISHMANIA, BORRELIA)',12,1,'admin','2026-07-31 11:42:37','admin','2026-07-31 11:42:37',1);
 INSERT INTO `oh_billitems` VALUES (248,8,1,'OTH1','Amount per day',30,2,'admin','2026-07-31 19:37:36','admin','2026-07-31 19:37:36',1);
 INSERT INTO `oh_billitems` VALUES (249,8,1,'OTH1','Amount per day',30,6,'admin','2026-07-31 19:37:36','admin','2026-07-31 19:37:36',1);
+INSERT INTO `oh_billitems` VALUES (250,68,1,'EXA03.01','3.1 Blood Slide (Malaria)',10,1,'admin','2023-06-18 09:20:00','admin','2023-06-18 09:20:00',1);
+INSERT INTO `oh_billitems` VALUES (251,69,1,'OTH1','Amount per day',30,1,'admin','2023-12-07 15:20:00','admin','2023-12-07 15:20:00',1);
+INSERT INTO `oh_billitems` VALUES (252,70,1,'EXA03.04','3.4 URINE MICROSCOPY',16,1,'admin','2024-06-22 11:05:00','admin','2024-06-22 11:05:00',1);
+INSERT INTO `oh_billitems` VALUES (253,71,1,'MED70','Ketamine 10mg/ml 20ml Vial',60,1,'admin','2024-12-03 17:00:00','admin','2024-12-03 17:00:00',1);
+INSERT INTO `oh_billitems` VALUES (254,72,1,'EXA05.03','5.3 INDIA INK',18,1,'admin','2025-06-14 10:45:00','admin','2025-06-14 10:45:00',1);
+INSERT INTO `oh_billitems` VALUES (255,73,1,'MED141','Diazepam 5mg Tab',40,1,'admin','2025-12-09 14:25:00','admin','2025-12-09 14:25:00',1);
+INSERT INTO `oh_billitems` VALUES (256,74,1,'OTH1','Amount per day',30,1,'admin','2026-04-17 08:50:00','admin','2026-04-17 08:50:00',1);
+INSERT INTO `oh_billitems` VALUES (257,75,1,'EXA03.02','3.2 Blood Slide (OTHERS, E.G. TRIUPHANOSOMIAS, MICRIFILARIA, LEISHMANIA, BORRELIA)',26,1,'admin','2026-08-05 16:35:00','admin','2026-08-05 16:35:00',1);
 /*!40000 ALTER TABLE `oh_billitems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -858,7 +871,7 @@ CREATE TABLE `oh_billpayments` (
   CONSTRAINT `FK_BILLPAYMENTS_CREATED_BY` FOREIGN KEY (`BLP_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILLPAYMENTS_LAST_MODIFIED_BY` FOREIGN KEY (`BLP_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILLPAYMENTS_USER` FOREIGN KEY (`BLP_USR_ID_A`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=341 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=347 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -971,6 +984,12 @@ INSERT INTO `oh_billpayments` VALUES (335,6,'2022-11-20 00:32:08',80,'admin','ad
 INSERT INTO `oh_billpayments` VALUES (338,8,'2022-11-20 00:38:16',500,'admin','admin','2026-07-31 19:37:36','admin','2026-07-31 19:37:36',1);
 INSERT INTO `oh_billpayments` VALUES (339,8,'2022-11-23 14:33:33',-250,'admin','admin','2026-07-31 19:37:36','admin','2026-07-31 19:37:36',1);
 INSERT INTO `oh_billpayments` VALUES (340,8,'2026-07-31 19:37:00',-10,'admin','admin','2026-07-31 19:37:36','admin','2026-07-31 19:37:36',1);
+INSERT INTO `oh_billpayments` VALUES (341,68,'2023-06-18 09:25:00',10,'admin','admin','2023-06-18 09:25:00','admin','2023-06-18 09:25:00',1);
+INSERT INTO `oh_billpayments` VALUES (342,69,'2023-12-07 15:30:00',20,'admin','admin','2023-12-07 15:30:00','admin','2023-12-07 15:30:00',1);
+INSERT INTO `oh_billpayments` VALUES (343,71,'2024-12-03 17:10:00',60,'admin','admin','2024-12-03 17:10:00','admin','2024-12-03 17:10:00',1);
+INSERT INTO `oh_billpayments` VALUES (344,72,'2025-06-14 10:50:00',18,'admin','admin','2025-06-14 10:50:00','admin','2025-06-14 10:50:00',1);
+INSERT INTO `oh_billpayments` VALUES (345,73,'2025-12-09 14:35:00',20,'admin','admin','2025-12-09 14:35:00','admin','2025-12-09 14:35:00',1);
+INSERT INTO `oh_billpayments` VALUES (346,74,'2026-04-17 09:00:00',30,'admin','admin','2026-04-17 09:00:00','admin','2026-04-17 09:00:00',1);
 /*!40000 ALTER TABLE `oh_billpayments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1015,7 +1034,7 @@ CREATE TABLE `oh_bills` (
   CONSTRAINT `FK_BILLS_PATIENT` FOREIGN KEY (`BLL_ID_PAT`) REFERENCES `oh_patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BILLS_PRICELISTS` FOREIGN KEY (`BLL_ID_LST`) REFERENCES `oh_pricelists` (`LST_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_BILLS_USER` FOREIGN KEY (`BLL_USR_ID_A`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1031,7 +1050,7 @@ INSERT INTO `oh_bills` VALUES (4,'2022-11-20 00:30:23','2022-11-20 00:30:23',1,1
 INSERT INTO `oh_bills` VALUES (5,'2022-11-20 00:30:47','2022-11-20 02:13:51',1,1,'Basic',1,125,'Kristie Muldoon','O',64,64,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:41:34',1,0);
 INSERT INTO `oh_bills` VALUES (6,'2022-11-20 00:31:44','2022-11-20 00:32:08',1,1,'Basic',1,301,'Kruse Noe','O',84,4,'admin',NULL,NULL,NULL,'admin','2026-07-31 11:42:37',1,1);
 INSERT INTO `oh_bills` VALUES (7,'2022-11-20 00:36:56','2022-11-20 00:36:56',1,1,'Basic',1,167,'Richard Gauldin','O',26,26,'admin',NULL,NULL,NULL,'admin','2022-11-23 15:52:19',1,0);
-INSERT INTO `oh_bills` VALUES (8,'2022-11-20 00:37:45','2026-07-31 19:37:00',1,1,'Basic',1,141,'Lutz Brandie','O',240,0,'admin',NULL,NULL,NULL,'admin','2026-07-31 19:37:36',1,3);
+INSERT INTO `oh_bills` VALUES (8,'2022-11-20 00:37:45','2022-11-23 14:33:33',1,1,'Basic',1,141,'Lutz Brandie','O',240,0,'admin',NULL,NULL,NULL,'admin','2026-07-31 19:37:36',1,3);
 INSERT INTO `oh_bills` VALUES (9,'2022-11-20 00:43:04','2022-11-20 00:43:59',1,1,'Basic',1,191,'Badgett Leonard','O',300,220,'admin',193,NULL,NULL,'admin','2026-07-31 11:18:48',1,1);
 INSERT INTO `oh_bills` VALUES (10,'2022-11-20 00:44:37','2022-11-23 14:20:13',1,1,'Basic',1,180,'Brock Boyter','O',25,25,'admin',NULL,NULL,NULL,'admin','2022-11-23 19:43:48',1,0);
 INSERT INTO `oh_bills` VALUES (11,'2022-11-20 02:09:17','2022-11-20 02:10:13',1,1,'Basic',1,189,'Jake Tibbetts','O',150,0,'admin',191,NULL,NULL,'admin','2026-07-31 11:18:36',1,1);
@@ -1073,7 +1092,7 @@ INSERT INTO `oh_bills` VALUES (46,'2021-11-09 17:44:01','2021-11-09 17:44:47',1,
 INSERT INTO `oh_bills` VALUES (47,'2021-11-09 18:29:46','2021-11-09 18:30:23',1,1,'Basic',1,540,'Redy Villen','C',80,0,'admin',510,'admin','2021-11-09 18:30:24','admin','2021-11-09 18:30:24',1,0);
 INSERT INTO `oh_bills` VALUES (48,'2021-11-10 15:50:58','2021-11-10 15:51:18',1,1,'Basic',1,541,'Philomena Jenkins','O',84,44,'admin',NULL,'admin','2021-11-10 15:51:29','admin','2026-07-31 11:41:57',1,1);
 INSERT INTO `oh_bills` VALUES (49,'2021-11-10 17:09:38','2021-11-10 17:10:11',1,1,'Basic',1,542,'Jeff Buskey','C',62,0,'admin',511,'admin','2021-11-10 17:10:12','admin','2021-11-10 17:10:12',1,0);
-INSERT INTO `oh_bills` VALUES (50,'2023-02-02 22:35:52','2026-07-31 11:14:00',1,1,'Basic',1,543,'Jeremy Keenan','O',90,0,'admin',NULL,'admin','2023-02-02 22:36:02','admin','2026-07-31 11:15:03',1,1);
+INSERT INTO `oh_bills` VALUES (50,'2023-02-02 22:35:52','2023-02-02 22:36:01',1,1,'Basic',1,543,'Jeremy Keenan','O',90,0,'admin',NULL,'admin','2023-02-02 22:36:02','admin','2026-07-31 11:15:03',1,1);
 INSERT INTO `oh_bills` VALUES (51,'2023-02-04 00:04:46','2023-02-04 00:05:30',1,1,'Basic',1,542,'Jeff Buskey','C',50,0,'admin',511,'admin','2023-02-04 00:05:31','admin','2023-02-04 00:05:31',1,0);
 INSERT INTO `oh_bills` VALUES (52,'2023-02-04 02:26:06','2023-02-04 02:26:50',1,1,'Basic',1,553,'Yellen Unison','O',130,30,'admin',512,NULL,NULL,'admin','2023-02-04 02:28:56',1,0);
 INSERT INTO `oh_bills` VALUES (53,'2024-02-01 23:57:50','2024-02-01 23:58:08',1,1,'Basic',1,554,'Stephen Gemison','O',50,0,'admin',NULL,'admin','2024-02-01 23:58:12','admin','2024-02-01 23:58:12',1,0);
@@ -1083,7 +1102,7 @@ INSERT INTO `oh_bills` VALUES (56,'2024-02-02 17:07:16','2024-02-02 17:07:16',1,
 INSERT INTO `oh_bills` VALUES (57,'2024-02-05 18:46:34','2024-02-05 18:47:13',1,1,'Basic',1,559,'Jonathan Smitherson','C',54,0,'admin',NULL,'admin','2024-02-05 18:47:16','admin','2024-02-05 18:47:16',1,0);
 INSERT INTO `oh_bills` VALUES (58,'2024-02-06 11:35:33','2024-02-06 11:35:33',1,1,'Basic',1,560,'Rosaline Jeffrey','O',0,0,'admin',NULL,'admin','2024-02-06 11:36:16','admin','2024-02-06 11:36:16',1,0);
 INSERT INTO `oh_bills` VALUES (59,'2024-02-07 00:30:49','2024-02-07 00:31:38',1,1,'Basic',1,561,'Georgina Urguanu','O',142,12,'admin',NULL,'admin','2024-02-07 00:31:41','admin','2024-02-07 00:31:41',1,0);
-INSERT INTO `oh_bills` VALUES (60,'2024-02-10 18:54:14','2026-07-31 11:41:00',1,1,'Basic',1,562,'Julian Freeman','O',171,0,'admin',NULL,'admin','2024-02-10 18:55:08','admin','2026-07-31 11:41:48',1,1);
+INSERT INTO `oh_bills` VALUES (60,'2024-02-10 18:54:14','2024-02-10 18:54:58',1,1,'Basic',1,562,'Julian Freeman','O',171,0,'admin',NULL,'admin','2024-02-10 18:55:08','admin','2026-07-31 11:41:48',1,1);
 INSERT INTO `oh_bills` VALUES (61,'2025-01-14 16:45:55','2025-01-14 16:46:07',1,1,'Basic',1,563,'John Okoche','C',20,0,'admin',NULL,'admin','2025-01-14 16:46:10','admin','2025-01-14 16:46:10',1,0);
 INSERT INTO `oh_bills` VALUES (62,'2025-01-14 16:45:55','2025-01-14 16:55:00',1,1,'Basic',1,565,'George Simland','O',940,540,'admin',NULL,'admin','2025-01-14 16:55:32','admin','2025-01-14 16:55:32',1,0);
 INSERT INTO `oh_bills` VALUES (63,'2025-01-14 18:10:45','2025-01-14 18:11:46',1,1,'Basic',1,567,'Melissa Reboy','C',50,0,'admin',NULL,'admin','2025-01-14 18:11:49','admin','2025-01-14 18:11:49',1,0);
@@ -1091,6 +1110,14 @@ INSERT INTO `oh_bills` VALUES (64,'2025-01-14 18:10:45','2025-01-14 18:15:00',1,
 INSERT INTO `oh_bills` VALUES (65,'2025-01-14 18:46:27','2025-01-14 18:47:01',1,1,'Basic',1,569,'Reny Velin','C',72,0,'admin',NULL,'admin','2025-01-14 18:47:04','admin','2025-01-14 18:47:04',1,0);
 INSERT INTO `oh_bills` VALUES (66,'2026-01-15 18:55:13','2026-01-15 18:55:27',1,1,'Basic',1,571,'Johanna Furly','C',60,0,'admin',514,'admin','2026-01-15 18:55:29','admin','2026-01-15 18:55:29',1,0);
 INSERT INTO `oh_bills` VALUES (67,'2026-01-15 18:55:13','2026-01-15 18:58:00',1,1,'Basic',1,572,'Quentin Serano','C',10,0,'admin',NULL,'admin','2026-01-15 18:59:04','admin','2026-01-15 18:59:04',1,0);
+INSERT INTO `oh_bills` VALUES (68,'2023-06-18 09:20:00','2023-06-18 09:25:00',1,1,'Basic',1,573,'Amara Diallo','C',10,0,'admin',NULL,'admin','2023-06-18 09:20:00','admin','2023-06-18 09:25:00',1,0);
+INSERT INTO `oh_bills` VALUES (69,'2023-12-07 15:20:00','2023-12-07 15:30:00',1,1,'Basic',1,574,'Daniel Mensah','O',30,10,'admin',515,'admin','2023-12-07 15:20:00','admin','2023-12-07 15:30:00',1,0);
+INSERT INTO `oh_bills` VALUES (70,'2024-06-22 11:05:00','2024-06-22 11:05:00',1,1,'Basic',1,575,'Grace Ndlovu','O',16,16,'admin',NULL,'admin','2024-06-22 11:05:00','admin','2024-06-22 11:05:00',1,0);
+INSERT INTO `oh_bills` VALUES (71,'2024-12-03 17:00:00','2024-12-03 17:10:00',1,1,'Basic',1,576,'Samuel Kamau','C',60,0,'admin',516,'admin','2024-12-03 17:00:00','admin','2024-12-03 17:10:00',1,0);
+INSERT INTO `oh_bills` VALUES (72,'2025-06-14 10:45:00','2025-06-14 10:50:00',1,1,'Basic',1,577,'Fatima Bello','C',18,0,'admin',NULL,'admin','2025-06-14 10:45:00','admin','2025-06-14 10:50:00',1,0);
+INSERT INTO `oh_bills` VALUES (73,'2025-12-09 14:25:00','2025-12-09 14:35:00',1,1,'Basic',1,578,'Peter Okafor','O',40,20,'admin',517,'admin','2025-12-09 14:25:00','admin','2025-12-09 14:35:00',1,0);
+INSERT INTO `oh_bills` VALUES (74,'2026-04-17 08:50:00','2026-04-17 09:00:00',1,1,'Basic',1,579,'Aisha Traore','C',30,0,'admin',518,'admin','2026-04-17 08:50:00','admin','2026-04-17 09:00:00',1,0);
+INSERT INTO `oh_bills` VALUES (75,'2026-08-05 16:35:00','2026-08-05 16:35:00',1,1,'Basic',1,580,'Joseph Moyo','O',26,26,'admin',519,'admin','2026-08-05 16:35:00','admin','2026-08-05 16:35:00',1,0);
 /*!40000 ALTER TABLE `oh_bills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2644,7 +2671,7 @@ CREATE TABLE `oh_laboratory` (
   CONSTRAINT `FK_LABORATORY_EXAM` FOREIGN KEY (`LAB_EXA_ID_A`) REFERENCES `oh_exam` (`EXA_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_LABORATORY_LAST_MODIFIED_BY` FOREIGN KEY (`LAB_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_LABORATORY_PATIENT` FOREIGN KEY (`LAB_PAT_ID`) REFERENCES `oh_patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=361 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=369 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2983,6 +3010,14 @@ INSERT INTO `oh_laboratory` VALUES (357,'06.06','2026-01-15 14:00:00','POSITIVE'
 INSERT INTO `oh_laboratory` VALUES (358,'01.06','2026-01-15 14:00:00','NEGATIVE',NULL,572,'Quentin Serano',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,71,'M','undefined','O','admin','2026-01-15 18:57:55','admin','2026-01-15 18:57:55',1,'done');
 INSERT INTO `oh_laboratory` VALUES (359,'05.06','2026-01-15 14:00:00','NEGATIVE',NULL,572,'Quentin Serano',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,71,'M','undefined','O','admin','2026-01-15 18:57:55','admin','2026-01-15 18:57:55',1,'done');
 INSERT INTO `oh_laboratory` VALUES (360,'07.04.1','2026-01-15 14:00:00','> 2.5',NULL,572,'Quentin Serano',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,71,'M','undefined','O','admin','2026-01-15 18:57:55','admin','2026-01-15 18:57:55',1,'done');
+INSERT INTO `oh_laboratory` VALUES (361,'03.01','2023-06-18 09:05:00','NEGATIVE',NULL,573,'Amara Diallo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,29,'F','blood','O','admin','2023-06-18 09:10:00','admin','2023-06-18 09:10:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (362,'01.02','2023-12-07 15:00:00','4000 - 7000 (NORMAL)',NULL,574,'Daniel Mensah',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,43,'M','blood','I','admin','2023-12-07 15:05:00','admin','2023-12-07 15:05:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (363,'URI','2024-06-22 10:40:00','Multiple results',NULL,575,'Grace Ndlovu',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,35,'F','urine','O','admin','2024-06-22 10:45:00','admin','2024-06-22 10:45:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (364,'07.03.4','2024-12-03 16:40:00','<= 50 (NORMAL)',NULL,576,'Samuel Kamau',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,48,'M','blood','I','admin','2024-12-03 16:45:00','admin','2024-12-03 16:45:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (365,'03.04','2025-06-14 10:20:00','NEGATIVE',NULL,577,'Fatima Bello',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,26,'F','stool','O','admin','2025-06-14 10:25:00','admin','2025-06-14 10:25:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (366,'05.06','2025-12-09 14:00:00','NEGATIVE',NULL,578,'Peter Okafor',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,57,'M','blood','I','admin','2025-12-09 14:05:00','admin','2025-12-09 14:05:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (367,'07.02','2026-04-17 08:25:00','NORMAL',NULL,579,'Aisha Traore',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,30,'F','blood','I','admin','2026-04-17 08:30:00','admin','2026-04-17 08:30:00',1,'done');
+INSERT INTO `oh_laboratory` VALUES (368,'03.01','2026-08-05 16:10:00','NEGATIVE',NULL,580,'Joseph Moyo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,40,'M','blood','I','admin','2026-08-05 16:15:00','admin','2026-08-05 16:15:00',1,'done');
 /*!40000 ALTER TABLE `oh_laboratory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3009,7 +3044,7 @@ CREATE TABLE `oh_laboratoryrow` (
   CONSTRAINT `FK_LABORATORYROW_CREATED_BY` FOREIGN KEY (`LABR_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_LABORATORYROW_LABORATORY` FOREIGN KEY (`LABR_LAB_ID`) REFERENCES `oh_laboratory` (`LAB_ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_LABORATORYROW_LAST_MODIFIED_BY` FOREIGN KEY (`LABR_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3064,6 +3099,7 @@ INSERT INTO `oh_laboratoryrow` VALUES (77,318,'SUGAR','admin','2021-03-15 00:51:
 INSERT INTO `oh_laboratoryrow` VALUES (78,341,'PROTEIN','admin','2024-02-10 18:57:40','admin','2024-02-10 18:57:40',1);
 INSERT INTO `oh_laboratoryrow` VALUES (79,341,'UROBILINOGEN','admin','2024-02-10 18:57:40','admin','2024-02-10 18:57:40',1);
 INSERT INTO `oh_laboratoryrow` VALUES (80,349,'SUGAR','admin','2025-01-14 17:05:37','admin','2025-01-14 17:05:37',1);
+INSERT INTO `oh_laboratoryrow` VALUES (81,363,'SUGAR','admin','2024-06-22 10:45:00','admin','2024-06-22 10:45:00',1);
 /*!40000 ALTER TABLE `oh_laboratoryrow` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4338,7 +4374,7 @@ CREATE TABLE `oh_opd` (
   CONSTRAINT `FK_OPD_PATIENT` FOREIGN KEY (`OPD_PAT_ID`) REFERENCES `oh_patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_OPD_USER` FOREIGN KEY (`OPD_USR_ID_A`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_OPD_WARD` FOREIGN KEY (`OPD_WRD_ID_A`) REFERENCES `oh_ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=425 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4756,6 +4792,14 @@ INSERT INTO `oh_opd` VALUES (421,'OPD','2025-01-14 18:07:00','N',3,'M',74,'16','
 INSERT INTO `oh_opd` VALUES (422,'OPD','2025-01-14 18:43:00','N',4,'F',32,'88',NULL,NULL,'','','',569,'admin',NULL,0,'admin','2025-01-14 18:45:52','admin','2025-01-14 18:45:52',1,NULL);
 INSERT INTO `oh_opd` VALUES (423,'OPD','2026-01-15 18:48:00','N',1,'M',54,'50',NULL,NULL,'','','',570,'admin',NULL,0,'admin','2026-01-15 18:50:14','admin','2026-01-15 18:50:14',1,NULL);
 INSERT INTO `oh_opd` VALUES (424,'OPD','2026-01-15 16:00:00','N',2,'M',71,'75',NULL,NULL,'','','',572,'admin',NULL,0,'admin','2026-01-15 18:57:30','admin','2026-01-15 18:57:30',1,NULL);
+INSERT INTO `oh_opd` VALUES (425,'OPD','2023-06-18 08:45:00','N',11,'F',29,'15',NULL,NULL,'','','Routine consultation',573,'admin',NULL,0,'admin','2023-06-18 08:50:00','admin','2023-06-18 08:50:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (426,'OPD','2023-12-07 14:20:00','N',12,'M',43,'50',NULL,NULL,'','','Referred for admission',574,'admin',NULL,0,'admin','2023-12-07 14:25:00','admin','2023-12-07 14:25:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (427,'OPD','2024-06-22 10:15:00','N',6,'F',35,'75',NULL,NULL,'','','Laboratory requested',575,'admin',NULL,0,'admin','2024-06-22 10:20:00','admin','2024-06-22 10:20:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (428,'OPD','2024-12-03 15:50:00','N',9,'M',48,'88',NULL,NULL,'','','Referred for admission',576,'admin',NULL,0,'admin','2024-12-03 15:55:00','admin','2024-12-03 15:55:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (429,'OPD','2025-06-14 09:55:00','N',7,'F',26,'92',NULL,NULL,'','','Outpatient follow-up',577,'admin',NULL,0,'admin','2025-06-14 10:00:00','admin','2025-06-14 10:00:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (430,'OPD','2025-12-09 13:10:00','N',10,'M',57,'127',NULL,NULL,'','','Referred for admission',578,'admin',NULL,0,'admin','2025-12-09 13:15:00','admin','2025-12-09 13:15:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (431,'OPD','2026-04-17 07:40:00','N',3,'F',30,'92',NULL,NULL,'','','Referred for observation',579,'admin',NULL,0,'admin','2026-04-17 07:45:00','admin','2026-04-17 07:45:00',1,NULL);
+INSERT INTO `oh_opd` VALUES (432,'OPD','2026-08-05 15:20:00','N',4,'M',40,'49',NULL,NULL,'','','Referred for admission',580,'admin',NULL,0,'admin','2026-08-05 15:25:00','admin','2026-08-05 15:25:00',1,NULL);
 /*!40000 ALTER TABLE `oh_opd` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4980,7 +5024,7 @@ CREATE TABLE `oh_patient` (
   KEY `FK_PATIENT_LAST_MODIFIED_BY_IDX` (`PAT_LAST_MODIFIED_BY`),
   CONSTRAINT `FK_PATIENT_CREATED_BY` FOREIGN KEY (`PAT_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_PATIENT_LAST_MODIFIED_BY` FOREIGN KEY (`PAT_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=573 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=581 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5514,6 +5558,14 @@ INSERT INTO `oh_patient` VALUES (569,'Reny','Velin','Reny Velin','1993-09-14',32
 INSERT INTO `oh_patient` VALUES (570,'Meridon','Assengbon','Meridon Assengbon','1971-09-28',54,'','M','Rapid Rd  86/c','Jeriah','Wife','+541423524524','','U','','U',NULL,'N','N','','N',0,'A+','462962','2026-01-15 17:49:57','admin','2026-01-15 18:49:57','admin','2026-01-15 18:49:57',1,'mechanic','married',NULL,NULL,NULL);
 INSERT INTO `oh_patient` VALUES (571,'Johanna','Furly','Johanna Furly','2004-11-02',21,'','F','Falklan St. 1','Herbon','Husband','+451134134134','Maria','A','Geovany','A',NULL,'N','Y','','N',0,'AB+','412\\5','2026-01-15 17:53:17','admin','2026-01-15 18:53:17','admin','2026-01-15 18:53:17',1,'farming','married',NULL,NULL,NULL);
 INSERT INTO `oh_patient` VALUES (572,'Quentin','Serano','Quentin Serano','1955-01-15',71,'','M','Huricane st. 56','Jurilo','Son','+125425245','','U','','U',NULL,'N','U','','N',0,'AB+','1552','2026-01-15 17:57:17','admin','2026-01-15 18:57:17','admin','2026-01-15 18:57:17',1,'medicine','married',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (573,'Amara','Diallo','Amara Diallo','1994-04-12',29,'','F','Market Road 12','Lakeside','Moussa Diallo','+250700000573','','U','','U',NULL,'N','N','','N',0,'O+','D573','2023-06-18 08:35:00','admin','2023-06-18 08:35:00','admin','2023-06-18 08:35:00',1,'teacher','single',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (574,'Daniel','Mensah','Daniel Mensah','1980-08-03',43,'','M','Garden Street 8','Hilltown','Eva Mensah','+250700000574','','U','','U',NULL,'N','N','','N',0,'A+','D574','2023-12-07 14:10:00','admin','2023-12-07 14:10:00','admin','2023-12-07 14:10:00',1,'driver','married',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (575,'Grace','Ndlovu','Grace Ndlovu','1989-02-21',35,'','F','Station Avenue 4','Riverside','Thabo Ndlovu','+250700000575','','U','','U',NULL,'N','N','','N',0,'B+','D575','2024-06-22 10:05:00','admin','2024-06-22 10:05:00','admin','2024-06-22 10:05:00',1,'shopkeeper','married',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (576,'Samuel','Kamau','Samuel Kamau','1976-09-17',48,'','M','School Lane 23','Greenfield','Mary Kamau','+250700000576','','U','','U',NULL,'N','N','','N',0,'O-','D576','2024-12-03 15:40:00','admin','2024-12-03 15:40:00','admin','2024-12-03 15:40:00',1,'carpenter','married',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (577,'Fatima','Bello','Fatima Bello','1999-01-30',26,'','F','Clinic Road 15','Newtown','Ibrahim Bello','+250700000577','','U','','U',NULL,'N','N','','N',0,'AB+','D577','2025-06-14 09:45:00','admin','2025-06-14 09:45:00','admin','2025-06-14 09:45:00',1,'student','single',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (578,'Peter','Okafor','Peter Okafor','1968-05-11',57,'','M','Church Street 31','Oldtown','Helen Okafor','+250700000578','','U','','U',NULL,'N','N','','N',0,'A-','D578','2025-12-09 13:00:00','admin','2025-12-09 13:00:00','admin','2025-12-09 13:00:00',1,'farmer','married',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (579,'Aisha','Traore','Aisha Traore','1995-07-08',31,'','F','Palm Avenue 6','Eastside','Mariam Traore','+250700000579','','U','','U',NULL,'N','N','','N',0,'B-','D579','2026-04-17 07:30:00','admin','2026-04-17 07:30:00','admin','2026-04-17 07:30:00',1,'nurse','single',NULL,NULL,NULL);
+INSERT INTO `oh_patient` VALUES (580,'Joseph','Moyo','Joseph Moyo','1986-03-19',40,'','M','Central Road 44','Westend','Ruth Moyo','+250700000580','','U','','U',NULL,'N','N','','N',0,'O+','D580','2026-08-05 15:10:00','admin','2026-08-05 15:10:00','admin','2026-08-05 15:10:00',1,'mechanic','married',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5541,7 +5593,7 @@ CREATE TABLE `oh_patient_consensus` (
   CONSTRAINT `FK_PATIENT_CONSENSUS_PATIENT` FOREIGN KEY (`PTC_PAT_ID`) REFERENCES `oh_patient` (`PAT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_PATIENT_CONSENSUS_USER_1` FOREIGN KEY (`PTC_CREATED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_PATIENT_CONSENSUS_USER_2` FOREIGN KEY (`PTC_LAST_MODIFIED_BY`) REFERENCES `oh_user` (`US_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=573 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=581 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6075,6 +6127,14 @@ INSERT INTO `oh_patient_consensus` VALUES (569,569,1,0,'admin','2025-01-14 18:45
 INSERT INTO `oh_patient_consensus` VALUES (570,570,1,1,'admin','2026-01-15 18:49:57','admin','2026-01-15 18:49:57',1);
 INSERT INTO `oh_patient_consensus` VALUES (571,571,1,0,'admin','2026-01-15 18:53:17','admin','2026-01-15 18:53:17',1);
 INSERT INTO `oh_patient_consensus` VALUES (572,572,1,1,'admin','2026-01-15 18:57:17','admin','2026-01-15 18:57:17',1);
+INSERT INTO `oh_patient_consensus` VALUES (573,573,1,1,'admin','2023-06-18 08:35:00','admin','2023-06-18 08:35:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (574,574,1,1,'admin','2023-12-07 14:10:00','admin','2023-12-07 14:10:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (575,575,1,0,'admin','2024-06-22 10:05:00','admin','2024-06-22 10:05:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (576,576,1,1,'admin','2024-12-03 15:40:00','admin','2024-12-03 15:40:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (577,577,1,0,'admin','2025-06-14 09:45:00','admin','2025-06-14 09:45:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (578,578,1,1,'admin','2025-12-09 13:00:00','admin','2025-12-09 13:00:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (579,579,1,1,'admin','2026-04-17 07:30:00','admin','2026-04-17 07:30:00',1);
+INSERT INTO `oh_patient_consensus` VALUES (580,580,1,1,'admin','2026-08-05 15:10:00','admin','2026-08-05 15:10:00',1);
 /*!40000 ALTER TABLE `oh_patient_consensus` ENABLE KEYS */;
 UNLOCK TABLES;
 
