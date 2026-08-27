@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -63,11 +63,29 @@ public class LogUtil {
 	/**
 	 * Opens the application log file ({@code openhospital.log}) folder with the System default file explorer.
 	 *
-	 * @throws IOException 
+	 * @throws IOException when the folder is unknown, so that the caller can report it instead of failing
 	 */
 	public static void openLogFileLocation() throws IOException {
-		File logFile = new File(getLogFileAbsolutePath());
-		Desktop.getDesktop().open(new File(logFile.getParent()));
+		Desktop.getDesktop().open(logFileFolder(getLogFileAbsolutePath()));
+	}
+
+	/**
+	 * Resolves the folder holding the given log file path.
+	 *
+	 * @param logFilePath the configured log file path, {@code null} when no file appender is configured
+	 * @return the folder holding the log file
+	 * @throws IOException when the path is unknown or has no folder
+	 */
+	static File logFileFolder(String logFilePath) throws IOException {
+		if (logFilePath == null) {
+			throw new IOException("No file appender is configured: there is no log file to show.");
+		}
+		// a bare file name has no parent, but it is written in the working directory
+		File folder = new File(logFilePath).getAbsoluteFile().getParentFile();
+		if (folder == null) {
+			throw new IOException("Cannot determine the folder holding " + logFilePath + '.');
+		}
+		return folder;
 	}
 
 }
