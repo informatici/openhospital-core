@@ -8399,6 +8399,7 @@ CREATE TABLE `oh_supplier` (
   `SUP_EMAIL` varchar(100) DEFAULT NULL,
   `SUP_NOTE` varchar(200) DEFAULT NULL,
   `SUP_DELETED` char(1) DEFAULT 'N',
+  `SUP_IS_VIRTUAL` tinyint(1) NOT NULL DEFAULT 0,
   `SUP_CREATED_BY` varchar(50) DEFAULT NULL,
   `SUP_CREATED_DATE` datetime DEFAULT NULL,
   `SUP_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
@@ -8423,10 +8424,10 @@ CREATE TABLE `oh_supplier` (
 
 LOCK TABLES `oh_supplier` WRITE;
 /*!40000 ALTER TABLE `oh_supplier` DISABLE KEYS */;
-INSERT INTO `oh_supplier` VALUES (1,'JMS Pharmaceuticals','Rome road N.1','','+431321321','','info@jms-pharma.net','','N',NULL,NULL,'admin','2024-02-02 00:06:25',1,0,NULL,NULL);
-INSERT INTO `oh_supplier` VALUES (2,'Medical Enterprise Limited','Sesame Strett - 73149 New Harrington 23','','+22.243454252','+22.243454252','info@medical-enterprise.com','','N','admin','2022-11-20 00:23:58','admin','2024-02-02 00:05:59',1,0,NULL,NULL);
-INSERT INTO `oh_supplier` VALUES (3,'X-Tech Ltd','Fulham Rd 27 - Chester','','+45132132112','+45132132100','contact@x-tech.com','','N','admin','2024-02-02 00:07:52','admin','2024-02-02 01:14:57',1,0,NULL,NULL);
-INSERT INTO `oh_supplier` VALUES (4,'INVENTORY',NULL,NULL,NULL,NULL,NULL,NULL,'N','admin','2024-06-06 10:07:52','admin','2024-06-06 10:14:57',1,0,NULL,NULL);
+INSERT INTO `oh_supplier` VALUES (1,'JMS Pharmaceuticals','Rome road N.1','','+431321321','','info@jms-pharma.net','','N',0,NULL,NULL,'admin','2024-02-02 00:06:25',1,0,NULL,NULL);
+INSERT INTO `oh_supplier` VALUES (2,'Medical Enterprise Limited','Sesame Strett - 73149 New Harrington 23','','+22.243454252','+22.243454252','info@medical-enterprise.com','','N',0,'admin','2022-11-20 00:23:58','admin','2024-02-02 00:05:59',1,0,NULL,NULL);
+INSERT INTO `oh_supplier` VALUES (3,'X-Tech Ltd','Fulham Rd 27 - Chester','','+45132132112','+45132132100','contact@x-tech.com','','N',0,'admin','2024-02-02 00:07:52','admin','2024-02-02 01:14:57',1,0,NULL,NULL);
+INSERT INTO `oh_supplier` VALUES (4,'INVENTORY',NULL,NULL,NULL,NULL,NULL,NULL,'N',0,'admin','2024-06-06 10:07:52','admin','2024-06-06 10:14:57',1,0,NULL,NULL);
 /*!40000 ALTER TABLE `oh_supplier` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -8877,6 +8878,7 @@ CREATE TABLE `oh_ward` (
   `WRD_IS_PHARMACY` tinyint(1) NOT NULL DEFAULT 1,
   `WRD_IS_MALE` tinyint(1) NOT NULL DEFAULT 1,
   `WRD_IS_FEMALE` tinyint(1) NOT NULL DEFAULT 1,
+  `WRD_IS_VIRTUAL` tinyint(1) NOT NULL DEFAULT 0,
   `WRD_VISIT_DURATION` int(11) NOT NULL DEFAULT 30,
   `WRD_LOCK` int(11) NOT NULL DEFAULT 0,
   `WRD_CREATED_BY` varchar(50) DEFAULT NULL,
@@ -8898,12 +8900,12 @@ CREATE TABLE `oh_ward` (
 
 LOCK TABLES `oh_ward` WRITE;
 /*!40000 ALTER TABLE `oh_ward` DISABLE KEYS */;
-INSERT INTO `oh_ward` VALUES ('C','CHILDREN WARD','219','','',35,18,2,0,1,1,1,30,3,NULL,NULL,'admin','2022-11-22 02:41:08',1);
-INSERT INTO `oh_ward` VALUES ('F','FEMALE WARD','218','','',41,15,4,0,1,0,1,30,5,NULL,NULL,'admin','2022-11-22 02:45:20',1);
-INSERT INTO `oh_ward` VALUES ('I','MALE WARD','210','','',53,14,4,0,1,1,0,30,3,NULL,NULL,'admin','2022-11-22 02:45:11',1);
-INSERT INTO `oh_ward` VALUES ('INV','INVENTORY','237','','',0,0,0,0,0,0,0,0,0,'admin','2024-06-06 10:03:55',NULL,NULL,1);
-INSERT INTO `oh_ward` VALUES ('M','MATERNITY WARD','211','','',67,19,4,0,1,0,1,30,2,NULL,NULL,'admin','2022-11-22 02:45:40',1);
-INSERT INTO `oh_ward` VALUES ('OPD','OPD','212','','',0,1,1,1,1,1,1,15,0,'admin','2022-10-05 22:03:55',NULL,NULL,1);
+INSERT INTO `oh_ward` VALUES ('C','CHILDREN WARD','219','','',35,18,2,0,1,1,1,0,30,3,NULL,NULL,'admin','2022-11-22 02:41:08',1);
+INSERT INTO `oh_ward` VALUES ('F','FEMALE WARD','218','','',41,15,4,0,1,0,1,0,30,5,NULL,NULL,'admin','2022-11-22 02:45:20',1);
+INSERT INTO `oh_ward` VALUES ('I','MALE WARD','210','','',53,14,4,0,1,1,0,0,30,3,NULL,NULL,'admin','2022-11-22 02:45:11',1);
+INSERT INTO `oh_ward` VALUES ('INV','INVENTORY','237','','',0,0,0,0,0,0,0,0,0,0,'admin','2024-06-06 10:03:55',NULL,NULL,1);
+INSERT INTO `oh_ward` VALUES ('M','MATERNITY WARD','211','','',67,19,4,0,1,0,1,0,30,2,NULL,NULL,'admin','2022-11-22 02:45:40',1);
+INSERT INTO `oh_ward` VALUES ('OPD','OPD','212','','',0,1,1,1,1,1,1,0,15,0,'admin','2022-10-05 22:03:55',NULL,NULL,1);
 /*!40000 ALTER TABLE `oh_ward` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -92,6 +92,10 @@ public class Ward extends Auditable<String> {
 	private boolean isFemale;
 
 	@NotNull
+	@Column(name = "WRD_IS_VIRTUAL")
+	private boolean isVirtual;
+
+	@NotNull
 	@Column(name = "WRD_VISIT_DURATION")
 	private int visitDuration;
 
@@ -271,6 +275,14 @@ public class Ward extends Auditable<String> {
 
 	public void setFemale(boolean isFemale) {
 		this.isFemale = isFemale;
+	}
+
+	public boolean isVirtual() {
+		return isVirtual;
+	}
+
+	public void setVirtual(boolean isVirtual) {
+		this.isVirtual = isVirtual;
 	}
 
 	public int getVisitDuration() {
