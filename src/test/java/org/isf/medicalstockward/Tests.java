@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -265,6 +265,77 @@ class Tests extends OHCoreTestCase {
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
 		checkMovementWardIntoDb(movementWard.getCode());
+	}
+
+	@Test
+	void testIoNewMovementWardWithCodeOnlyLot() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		Ward wardTo = testWard.setup(false);
+		wardTo.setCode("X");
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		wardIoOperationRepository.saveAndFlush(wardTo);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		// a lot known only by its (unique) printed code is resolved against the persisted lot (OP-1427 stage 1)
+		movementWard.setlot(new Lot(lot.getCode()));
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+		assertThat(movementWard.getLot().getId()).isEqualTo(lot.getId());
+		checkMovementWardIntoDb(movementWard.getCode());
+	}
+
+	@Test
+	void testIoNewMovementWardUnknownLotCode() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		// an unknown lot code is rejected, as when the code was the primary key and the insert violated the foreign key
+		movementWard.setlot(new Lot("nonExistingCode"));
+		assertThatThrownBy(() -> medicalStockWardIoOperations.newMovementWard(movementWard))
+						.isInstanceOf(OHServiceException.class);
+	}
+
+	@Test
+	void testIoUpdateMovementWardUnknownLotCode() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+		// the update resolves the lot exactly like the insert: an unknown lot code is rejected
+		movementWard.setlot(new Lot("nonExistingCode"));
+		assertThatThrownBy(() -> medicalStockWardIoOperations.updateMovementWard(movementWard))
+						.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
@@ -1404,7 +1475,7 @@ class Tests extends OHCoreTestCase {
 		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard, null))
 						.isInstanceOf(OHServiceException.class);
 		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(),
-						medical.getCode(), lot.getCode(), secondMovementWard.getDate());
+						medical.getCode(), lot, secondMovementWard.getDate());
 		assertThat(latestMovementWardList.size()).isEqualTo(2);
 		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard, null))
 						.isInstanceOf(OHServiceException.class);

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -104,7 +104,11 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the referencing medicals.
 	 */
 	public List<Integer> getMedicalsFromLot(String lotCode) throws OHServiceException {
-		return movRepository.findAllByLot(lotCode);
+		Lot lot = lotRepository.findByCode(lotCode).orElse(null);
+		if (lot == null) {
+			return Collections.emptyList();
+		}
+		return movRepository.findAllByLot(lot);
 	}
 
 	/**
@@ -247,7 +251,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs storing the movement.
 	 */
 	protected Movement storeMovement(Movement movement, String lotCode) throws OHServiceException {
-		Lot lot = lotRepository.findById(lotCode).orElse(null);
+		Lot lot = lotRepository.findByCode(lotCode).orElse(null);
 		if (lot == null) {
 			throw new OHServiceException(new OHExceptionMessage("Lot '" + lotCode + "' not found."));
 		}
@@ -264,12 +268,10 @@ public class MedicalStockIoOperations {
 	protected String generateLotCode() throws OHServiceException {
 		Random random = new Random();
 		long candidateCode;
-		Lot lot;
 
 		do {
 			candidateCode = Math.abs(random.nextLong());
-			lot = lotRepository.findById(String.valueOf(candidateCode)).orElse(null);
-		} while (lot != null);
+		} while (lotRepository.existsByCode(String.valueOf(candidateCode)));
 
 		return String.valueOf(candidateCode);
 	}
@@ -282,7 +284,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean lotExists(String lotCode) throws OHServiceException {
-		return lotRepository.findById(String.valueOf(lotCode)).orElse(null) != null;
+		return lotRepository.existsByCode(String.valueOf(lotCode));
 	}
 
 	/**
@@ -293,7 +295,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot getLot(String lotCode) throws OHServiceException {
-		Lot lot = lotRepository.findById(String.valueOf(lotCode)).orElse(null);
+		Lot lot = lotRepository.findByCode(String.valueOf(lotCode)).orElse(null);
 		if (lot == null) {
 			return null;
 		}
@@ -319,12 +321,17 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Update the {@link Lot}.
-	 * 
+	 * <p>
+	 * The row to update is resolved through the (unique) lot code, exactly as when the code was the primary key: a lot
+	 * carrying a code that belongs to an existing row updates that row, any other code results in a new row. The
+	 * printed code of an existing lot is therefore never renamed in place (see {@link #resolveLotId(Lot)}).
+	 *
 	 * @param lot - the lot.
 	 * @return the {@link Lot} updated.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public Lot updateLot(Lot lot) throws OHServiceException {
+		resolveLotId(lot);
 		return lotRepository.save(lot);
 	}
 
@@ -347,7 +354,23 @@ public class MedicalStockIoOperations {
 		}
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
+		resolveLotId(lot);
 		return lotRepository.save(lot);
+	}
+
+	/**
+	 * Resolves the internal id of the specified {@link Lot} through its (unique) code, so that saving or deleting a lot
+	 * targets the same row it targeted when the code was the primary key (OP-1427 stage 1).
+	 * <p>
+	 * The code is authoritative and any id carried by the lot is discarded: an existing code resolves to its row (a lot
+	 * known only by its code still updates the existing row instead of inserting a duplicate), while an unknown code
+	 * resolves to no row (an update inserts a new row instead of renaming the printed code of the row matching the
+	 * discarded id, and a delete is a silent no-op, as it was when it targeted a non-existing primary key).
+	 *
+	 * @param lot the lot whose id must be resolved.
+	 */
+	private void resolveLotId(Lot lot) {
+		lot.setId(lotRepository.findByCode(lot.getCode()).map(Lot::getId).orElse(null));
 	}
 
 	/**
@@ -479,14 +502,14 @@ public class MedicalStockIoOperations {
 	 */
 	@SuppressWarnings("unchecked")
 	protected MedicalWard updateMedicalWardQuantity(Ward ward, Medical medical, int quantity, Lot lot) throws OHServiceException {
-		MedicalWard medicalWard = medicalStockWardRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
+		MedicalWard medicalWard = medicalStockWardRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getId());
 
 		if (medicalWard != null) {
 			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
 			medicalStockWardRepository.save(medicalWard);
 		} else {
 			medicalWard = new MedicalWard(ward, medical, quantity, BigDecimal.ZERO, lot);
-			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quantity, lot.getCode());
+			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quantity, lot.getId());
 		}
 		return medicalStockWardRepository.save(medicalWard);
 	}
@@ -779,11 +802,15 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Deletes the specified {@link Lot}.
+	 * <p>
+	 * The row to delete is resolved through the (unique) lot code (see {@link #resolveLotId(Lot)}): a lot known only by
+	 * its code deletes the existing row, an unknown code is a silent no-op, as when the code was the primary key.
 	 *
 	 * @param lot the lot to delete.
 	 * @throws OHServiceException
 	 */
 	public void deleteLot(Lot lot) throws OHServiceException {
+		resolveLotId(lot);
 		lotRepository.delete(lot);
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,8 +35,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicalStockWardIoOperationRepository extends JpaRepository<MedicalWard, String>, MedicalStockWardIoOperationRepositoryCustom {
 
-	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
-	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID = :lot", nativeQuery = true)
+	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") Integer lot);
 
 	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code = :ward " +
 			"and medWard.id.medical.code = :medical")
@@ -51,20 +51,23 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 	BigDecimal findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
 
 	@Modifying
-	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
-	void updateInQuantity(@Param("quantity") int quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity " +
+			"WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID = :lot", nativeQuery = true)
+	void updateInQuantity(@Param("quantity") int quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") Integer lot);
 
 	@Modifying
 	@Query(value = "update MedicalWard set in_quantity=in_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
 	void updateInQuantity(@Param("quantity") int quantity, @Param("ward") String ward, @Param("medical") int medical);
 
 	@Modifying
-	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot ", nativeQuery = true)
-	void updateOutQuantity(@Param("quantity") BigDecimal quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity " +
+			"WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID = :lot ", nativeQuery = true)
+	void updateOutQuantity(@Param("quantity") BigDecimal quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") Integer lot);
 
 	@Modifying
-	@Query(value = "INSERT INTO OH_MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI, MDSRWRD_LT_ID_A, MDSRWRD_LOCK) VALUES (?, ?, ?, '0', ?, 0)", nativeQuery = true)
-	void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") int quantity, @Param("lot") String lot);
+	@Query(value = "INSERT INTO OH_MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI, MDSRWRD_LT_ID, MDSRWRD_LOCK) " +
+			"VALUES (?, ?, ?, '0', ?, 0)", nativeQuery = true)
+	void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") int quantity, @Param("lot") Integer lot);
 
 	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward", nativeQuery = true)
 	List<MedicalWard> findAllWhereWard(@Param("ward") char wardId);

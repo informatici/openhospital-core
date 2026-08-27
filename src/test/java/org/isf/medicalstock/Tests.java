@@ -82,6 +82,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -797,12 +798,15 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("automaticlot")
 	void testMgrUpdateLots() throws Exception {
 		String code1 = setupTestLot(false);
-		Lot lot1 = lotIoOperationRepository.findById(code1).orElse(null);
+		Lot lot1 = lotIoOperationRepository.findByCode(code1).orElse(null);
+		assertThat(lot1).isNotNull();
 
-		String code2 = setupTestLot(false);
-		Lot lot2 = lotIoOperationRepository.findById(code2).orElse(null);
-		String newCode = "456789";
-		lot2.setCode(newCode);
+		// the lot code is unique: the second lot needs its own code
+		Lot lot2 = new Lot(lot1.getMedical(), "456789", lot1.getPreparationDate(), lot1.getDueDate(), lot1.getCost());
+		lot2 = lotIoOperationRepository.saveAndFlush(lot2);
+
+		lot1.setCost(new BigDecimal("3.33"));
+		lot2.setCost(new BigDecimal("4.44"));
 
 		List<Lot> lots = Arrays.asList(lot1, lot2);
 		List<Lot> updatedLots = movStockInsertingManager.updateLot(lots);
@@ -1202,7 +1206,7 @@ class Tests extends OHCoreTestCase {
 	void testLotToString(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
 		String code = setupTestLot(true);
-		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
 		assertThat(lot).isNotNull();
 		lot.setCode(null);
 		// TODO: if resource bundles are available this string test needs to change
@@ -1216,7 +1220,7 @@ class Tests extends OHCoreTestCase {
 	void testLotIsValidLot(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
 		String code = setupTestLot(true);
-		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
 		assertThat(lot).isNotNull();
 		assertThat(lot.isValidLot()).isTrue();
 		lot.setCode("thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong");
@@ -1228,7 +1232,7 @@ class Tests extends OHCoreTestCase {
 	void testLotEquals(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
 		String code = setupTestLot(true);
-		Lot lot = lotIoOperationRepository.findById(code).orElse(null);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
 		assertThat(lot)
 			.isEqualTo(lot)
 			.isNotNull()
@@ -1279,6 +1283,134 @@ class Tests extends OHCoreTestCase {
 		assertThat(hashCode).isPositive();
 		// use computed value
 		assertThat(lot.hashCode()).isEqualTo(hashCode);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotSaveGeneratesInternalId(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// OP-1427 stage 1: the internal numeric id is generated on save, the code remains the business identifier
+		assertThat(lot.getId()).isNotNull();
+		assertThat(lot.getCode()).isEqualTo(code);
+		Lot sameLot = lotIoOperationRepository.findById(lot.getId()).orElse(null);
+		assertThat(sameLot).isNotNull();
+		assertThat(sameLot.getCode()).isEqualTo(code);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotFindByCodeNotFound(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		setupTestLot(false);
+		assertThat(lotIoOperationRepository.findByCode("nonExistingCode")).isEmpty();
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotCodeStillUnique(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// OP-1427 stage 1: two lots with the same code are still rejected
+		Lot duplicateLot = new Lot(lot.getMedical(), code, lot.getPreparationDate(), lot.getDueDate());
+		assertThatThrownBy(() -> lotIoOperationRepository.saveAndFlush(duplicateLot))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrUpdateLotByCodeOnlyUpdatesTheExistingRow(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// a detached lot known only by its (unique) code targets the existing row, as when the code was the primary key
+		Lot detachedLot = new Lot(lot.getMedical(), code, lot.getPreparationDate(), lot.getDueDate(), new BigDecimal("7.77"));
+		Lot updatedLot = movStockInsertingManager.updateLot(detachedLot);
+		assertThat(updatedLot.getId()).isEqualTo(lot.getId());
+		assertThat(updatedLot.getCost()).isEqualByComparingTo(new BigDecimal("7.77"));
+		assertThat(lotIoOperationRepository.count()).isEqualTo(1);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrUpdateLotWithChangedCodeCreatesANewRow(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// a lot carrying the internal id of an existing row but another code must not rename the printed code of that
+		// row in place: as when the code was the primary key, the update results in a new row for the new code
+		Lot renamedLot = new Lot(lot.getMedical(), "456789", lot.getPreparationDate(), lot.getDueDate(), lot.getCost());
+		renamedLot.setId(lot.getId());
+		Lot newLot = movStockInsertingManager.updateLot(renamedLot);
+		assertThat(newLot.getId()).isNotEqualTo(lot.getId());
+		assertThat(lotIoOperationRepository.findByCode(code)).isPresent();
+		assertThat(lotIoOperationRepository.findByCode("456789")).isPresent();
+		assertThat(lotIoOperationRepository.count()).isEqualTo(2);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrStoreLotByCodeOnlyUpdatesTheExistingRow(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		Lot detachedLot = new Lot(lot.getMedical(), code, lot.getPreparationDate(), lot.getDueDate(), lot.getCost());
+		Lot storedLot = movStockInsertingManager.storeLot(code, detachedLot, lot.getMedical());
+		assertThat(storedLot.getId()).isEqualTo(lot.getId());
+		assertThat(lotIoOperationRepository.count()).isEqualTo(1);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrDeleteLotByCodeOnlyDeletesTheExistingRow(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		Lot detachedLot = new Lot(lot.getMedical(), code, lot.getPreparationDate(), lot.getDueDate(), lot.getCost());
+		movStockInsertingManager.deleteLot(detachedLot);
+		assertThat(lotIoOperationRepository.findByCode(code)).isEmpty();
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMgrDeleteLotUnknownCodeIsASilentNoOp(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		String code = setupTestLot(false);
+		Lot lot = lotIoOperationRepository.findByCode(code).orElse(null);
+		assertThat(lot).isNotNull();
+		// same outcome as when the code was the primary key and the delete targeted a non-existing row
+		Lot unknownLot = new Lot(lot.getMedical(), "nonExistingCode", lot.getPreparationDate(), lot.getDueDate());
+		movStockInsertingManager.deleteLot(unknownLot);
+		assertThat(lotIoOperationRepository.findByCode(code)).isPresent();
+		assertThat(lotIoOperationRepository.count()).isEqualTo(1);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testMovementKeepsTheReportLotCodeColumnInSync(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		// OP-1427 stage 1: the legacy reports still join the movements to the lots through MMV_LT_ID_A
+		assertThat(getReportLotCodeColumn(code)).isEqualTo(movement.getLot().getCode());
+		Lot otherLot = new Lot(movement.getMedical(), "456789", movement.getLot().getPreparationDate(), movement.getLot().getDueDate());
+		lotIoOperationRepository.saveAndFlush(otherLot);
+		movement.setLot(otherLot);
+		movementIoOperationRepository.saveAndFlush(movement);
+		assertThat(getReportLotCodeColumn(code)).isEqualTo("456789");
+	}
+
+	private String getReportLotCodeColumn(int movementCode) {
+		return (String) entityManager.createNativeQuery("SELECT MMV_LT_ID_A FROM OH_MEDICALDSRSTOCKMOV WHERE MMV_ID = " + movementCode).getSingleResult();
 	}
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
@@ -1376,7 +1508,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(lastMovement).isNotNull();
 		assertThat(lastMovement.getType().getType()).isEqualTo("-");
 		assertThat(lastMovement.getMedical()).isEqualTo(foundMovWard.getMedical());
-		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
+		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot,
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
 		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
@@ -1413,7 +1545,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(lastMovement).isNotNull();
 		assertThat(lastMovement.getType().getType()).isEqualTo("-");
 		assertThat(lastMovement.getMedical()).isEqualTo(foundMovWard.getMedical());
-		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
+		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot,
 			storedMovement.getDate());
 		assertThat(movWards).hasSizeGreaterThan(0);
 		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement, null));
@@ -1434,7 +1566,7 @@ class Tests extends OHCoreTestCase {
 		Movement movement2 = followingMovement.get();
 		movWards = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(movement2.getWard().getCode(),
 			movement2.getMedical().getCode(),
-			movement2.getLot().getCode(),
+			movement2.getLot(),
 			movement2.getDate());
 		assertThat(movWards).isEmpty();
 		movBrowserManager.deleteLastMovement(movement2, "wrong entry");
@@ -1569,7 +1701,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	private void checkLotIntoDb(String code) {
-		Lot foundLot = lotIoOperationRepository.findById(code).orElse(null);
+		Lot foundLot = lotIoOperationRepository.findByCode(code).orElse(null);
 		assertThat(foundLot).isNotNull();
 		testLot.check(foundLot);
 	}
