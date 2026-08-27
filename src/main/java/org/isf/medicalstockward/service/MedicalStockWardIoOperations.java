@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -220,6 +220,8 @@ public class MedicalStockWardIoOperations {
 				repository.save(medicalWard);
 			}
 			repository.updateOutQuantity(qty.abs(), ward, medical, lot);
+			// OP-1428: a ward-to-ward transfer is net-zero for the lot's overall remaining quantity:
+			// the quantity leaving the origin ward is credited to the destination ward
 			return;
 		}
 
@@ -238,6 +240,15 @@ public class MedicalStockWardIoOperations {
 			} else {
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
+		}
+		// OP-1428: without a destination ward the movement changes the lot's overall remaining quantity:
+		// a dispense (qty > 0) decreases it by the exact amount (the out column is a DECIMAL), while a
+		// rectification-in (qty < 0) credits the ward with the INT-truncated quantity (both paths above use
+		// intValue()), so the lot delta deliberately mirrors the same truncation to stay aligned with what
+		// actually reached the ward table (a truncated 0 must produce no update at all)
+		BigDecimal lotDelta = qty.signum() < 0 ? BigDecimal.valueOf(qty.negate().intValue()) : qty.negate();
+		if (lotDelta.signum() != 0) {
+			lotRepository.updateQuantity(lot, lotDelta);
 		}
 	}
 
