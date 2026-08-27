@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,7 +25,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
@@ -39,7 +38,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -78,6 +79,9 @@ public class ExcelExporter {
 	private CellStyle bigDecimalStyle;
 	private CellStyle headerStyle;
 	private CreationHelper createHelper;
+
+	private static final String CSV_SEPARATOR = ";";
+	private static final String CSV_LINE_TERMINATOR = "\r\n";
 
 	public ExcelExporter() {
 		encoder = StandardCharsets.UTF_8.newEncoder();
@@ -124,75 +128,53 @@ public class ExcelExporter {
 	}
 
 	/**
-	 * Export a jTable to CSV file with a semi-column (;) as list separator
+	 * Export a {@link JTable} to a CSV (RFC 4180) file, UTF-8 encoded, using a semicolon ({@code ;}) as list separator.
 	 *
 	 * @param jtable
 	 * @param file
 	 * @throws IOException
 	 */
 	public void exportTableToCSV(JTable jtable, File file) throws IOException {
-		exportTableToCSV(jtable, file, ";");
+		exportTableToCSV(jtable, file, -1);
 	}
 
 	/**
-	 * Export a jTable to CSV file format
+	 * Export a {@link JTable} to a CSV (RFC 4180) file, UTF-8 encoded, using a semicolon ({@code ;}) as list separator.
 	 *
 	 * @param jtable
 	 * @param file
-	 * @param separator - the character to use as separator (usually ',' or ';')
+	 * @param columnCount if -1 use the table model column count; otherwise export only the first {@code columnCount} columns
 	 * @throws IOException
 	 */
-	private void exportTableToCSV(JTable jtable, File file, String separator) throws IOException {
+	public void exportTableToCSV(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
+		int colCount = columnCount == -1 ? model.getColumnCount() : columnCount;
+
 		FileOutputStream fileStream = new FileOutputStream(file);
 		writeBOM(fileStream);
 
 		try (BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-			int colCount = model.getColumnCount();
+			List<String> header = new ArrayList<>(colCount);
 			for (int i = 0; i < colCount; i++) {
-				if (i == colCount - 1) {
-					outFile.write(model.getColumnName(i));
-				} else {
-					outFile.write(model.getColumnName(i) + separator);
-				}
+				header.add(model.getColumnName(i));
 			}
-			outFile.write("\n");
+			writeCSVRow(outFile, header);
 
 			int rowCount = model.getRowCount();
 			for (int i = 0; i < rowCount; i++) {
+				List<String> row = new ArrayList<>(colCount);
 				for (int j = 0; j < colCount; j++) {
-					String strVal;
-					Object objVal = model.getValueAt(i, j);
-					if (objVal != null) {
-						if (objVal instanceof Integer val) {
-							NumberFormat format = NumberFormat.getInstance(currentLocale);
-							strVal = format.format(val);
-						} else if (objVal instanceof Double val) {
-							NumberFormat format = NumberFormat.getInstance(currentLocale);
-							strVal = format.format(val);
-						} else if (objVal instanceof Timestamp val) {
-							strVal = sdf.format(val);
-						} else {
-							strVal = objVal.toString();
-						}
-					} else {
-						strVal = " ";
-					}
-					if (j == colCount - 1) {
-						outFile.write(strVal);
-					} else {
-						outFile.write(strVal + separator);
-					}
+					row.add(formatValue(model.getValueAt(i, j), sdf));
 				}
-				outFile.write("\n");
+				writeCSVRow(outFile, row);
 			}
 		}
 	}
 
 	/**
-	 * Export a {@link ResultSet} to CSV file with a semi-column (;) as list separator
+	 * Export a {@link ResultSet} to a CSV (RFC 4180) file, UTF-8 encoded, using a semicolon ({@code ;}) as list separator.
 	 *
 	 * @param resultSet
 	 * @param exportFile
@@ -200,71 +182,29 @@ public class ExcelExporter {
 	 * @throws OHException
 	 */
 	public void exportResultsetToCSV(ResultSet resultSet, File exportFile) throws IOException, OHException {
-		exportResultsetToCSV(resultSet, exportFile, ";");
-	}
 
-	/**
-	 * Export a {@link ResultSet} to CSV file
-	 *
-	 * @param resultSet
-	 * @param exportFile
-	 * @param separator - the character to use as separator (usually ',' or ';')
-	 * @throws IOException
-	 * @throws OHException
-	 */
-	private void exportResultsetToCSV(ResultSet resultSet, File exportFile, String separator) throws IOException, OHException {
-
-		/*
-		 * write BOM for Excel UTF-8 automatic handling
-		 */
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
 		writeBOM(fileStream);
 
 		try (BufferedWriter output = new BufferedWriter(new OutputStreamWriter(fileStream, encoder))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			NumberFormat numFormat = NumberFormat.getInstance(currentLocale);
 
 			try {
 				ResultSetMetaData rsmd = resultSet.getMetaData();
-
 				int colCount = rsmd.getColumnCount();
+
+				List<String> header = new ArrayList<>(colCount);
 				for (int i = 1; i <= colCount; i++) {
-					if (i == colCount) {
-						output.write(rsmd.getColumnName(i));
-					} else {
-						output.write(rsmd.getColumnName(i) + separator);
-					}
+					header.add(rsmd.getColumnName(i));
 				}
-				output.write("\n");
+				writeCSVRow(output, header);
 
 				while (resultSet.next()) {
-
-					String strVal;
+					List<String> row = new ArrayList<>(colCount);
 					for (int i = 1; i <= colCount; i++) {
-						Object objVal = resultSet.getObject(i);
-						if (objVal != null) {
-							if (objVal instanceof Double val) {
-
-								strVal = numFormat.format(val);
-							} else if (objVal instanceof Timestamp val) {
-
-								strVal = sdf.format(val);
-							} else {
-
-								strVal = objVal.toString();
-							}
-						} else {
-							strVal = " ";
-						}
-						if (i == colCount - 1) {
-							output.write(strVal);
-						} else {
-							output.write(strVal + separator);
-						}
-
+						row.add(formatValue(resultSet.getObject(i), sdf));
 					}
-					output.write("\n");
-
+					writeCSVRow(output, row);
 				}
 			} catch (SQLException e) {
 				throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
@@ -273,7 +213,7 @@ public class ExcelExporter {
 	}
 
 	/**
-	 * Export a {@link Collection} to CSV using Apache POI library
+	 * Export a {@link Collection} of {@link Map} rows to a CSV (RFC 4180) file, UTF-8 encoded, using a semicolon ({@code ;}) as list separator.
 	 *
 	 * @param data
 	 * @param exportFile
@@ -282,53 +222,82 @@ public class ExcelExporter {
 	 */
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
 
-		try (FileWriter outFile = new FileWriter(exportFile)) {
+		FileOutputStream fileStream = new FileOutputStream(exportFile);
+		writeBOM(fileStream);
+
+		try (BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder))) {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			boolean header = false;
 			for (Object map : data) {
 				Map thisMap = ((Map) map);
 				if (!header) {
-					Set columns = thisMap.keySet();
-					for (Object column : columns) {
-						outFile.write(column.toString() + ';');
+					List<String> columns = new ArrayList<>();
+					for (Object column : thisMap.keySet()) {
+						columns.add(column == null ? "" : column.toString());
 					}
-					outFile.write("\n");
+					writeCSVRow(outFile, columns);
 					header = true;
 				}
 
-				String strVal;
-				Collection values = thisMap.values();
-				for (Object value : values) {
-					strVal = convertValue(value);
-					outFile.write(strVal + ';');
+				List<String> values = new ArrayList<>();
+				for (Object value : thisMap.values()) {
+					values.add(formatValue(value, sdf));
 				}
-				outFile.write("\n");
+				writeCSVRow(outFile, values);
 			}
 		}
 	}
 
-	private String convertValue(Object value) {
-		String strVal;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		if (value != null) {
-			if (value instanceof BigDecimal val) {
-
-				NumberFormat format = NumberFormat.getInstance(currentLocale);
-				strVal = format.format(val);
-			} else if (value instanceof Double val) {
-
-				NumberFormat format = NumberFormat.getInstance(currentLocale);
-				strVal = format.format(val);
-			} else if (value instanceof Timestamp val) {
-
-				strVal = sdf.format(val);
-			} else {
-
-				strVal = value.toString();
+	/**
+	 * Writes a single CSV row, escaping each field per RFC 4180 and terminating the line with CRLF.
+	 */
+	private void writeCSVRow(BufferedWriter out, List<String> fields) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < fields.size(); i++) {
+			if (i > 0) {
+				sb.append(CSV_SEPARATOR);
 			}
-		} else {
-			strVal = " ";
+			sb.append(escapeCSV(fields.get(i)));
 		}
-		return strVal;
+		sb.append(CSV_LINE_TERMINATOR);
+		out.write(sb.toString());
+	}
+
+	/**
+	 * Escapes a field per RFC 4180: a field that contains the separator, a double quote, CR or LF is wrapped in double
+	 * quotes and any embedded double quote is doubled.
+	 */
+	private static String escapeCSV(String value) {
+		if (value == null) {
+			return "";
+		}
+		boolean mustQuote = value.contains(CSV_SEPARATOR) || value.indexOf('"') >= 0
+						|| value.indexOf('\n') >= 0 || value.indexOf('\r') >= 0;
+		if (mustQuote) {
+			return '"' + value.replace("\"", "\"\"") + '"';
+		}
+		return value;
+	}
+
+	/**
+	 * Renders a cell value as text for CSV output: numbers use the current locale, timestamps use {@code dd/MM/yyyy HH:mm:ss},
+	 * {@code null} becomes an empty field.
+	 */
+	private String formatValue(Object value, SimpleDateFormat sdf) {
+		if (value == null) {
+			return "";
+		}
+		if (value instanceof Integer || value instanceof Long) {
+			// integral identifiers/counts: keep them verbatim, without locale grouping separators
+			return value.toString();
+		} else if (value instanceof Double || value instanceof BigDecimal) {
+			NumberFormat numberFormat = NumberFormat.getInstance(currentLocale);
+			numberFormat.setGroupingUsed(false);
+			return numberFormat.format(value);
+		} else if (value instanceof Timestamp val) {
+			return sdf.format(val);
+		}
+		return value.toString();
 	}
 
 	/**
@@ -700,13 +669,68 @@ public class ExcelExporter {
 		}
 	}
 
+	/**
+	 * Export a {@link JTable} to the file format implied by the file extension: {@code .csv} (open format), {@code .xls}
+	 * (Excel 97-2003) or, by default, {@code .xlsx}.
+	 *
+	 * @param jtable
+	 * @param file
+	 * @param columnCount if -1 use the table model column count; otherwise export only the first {@code columnCount} columns
+	 * @throws IOException
+	 */
+	public void exportTable(JTable jtable, File file, int columnCount) throws IOException {
+		String name = file.getName().toLowerCase(Locale.ROOT);
+		if (name.endsWith(".csv")) {
+			exportTableToCSV(jtable, file, columnCount);
+		} else if (name.endsWith(".xls")) {
+			exportTableToExcelOLD(jtable, file, columnCount);
+		} else {
+			exportTableToExcel(jtable, file, columnCount);
+		}
+	}
+
+	/**
+	 * Export a {@link JTable} to the file format implied by the file extension: {@code .csv} (open format), {@code .xls}
+	 * (Excel 97-2003) or, by default, {@code .xlsx}.
+	 *
+	 * @param jtable
+	 * @param file
+	 * @throws IOException
+	 */
+	public void exportTable(JTable jtable, File file) throws IOException {
+		exportTable(jtable, file, -1);
+	}
+
+	/**
+	 * Export a {@link ResultSet} to the file format implied by the file extension: {@code .csv} (open format), {@code .xls}
+	 * (Excel 97-2003) or, by default, {@code .xlsx}.
+	 *
+	 * @param resultSet
+	 * @param exportFile
+	 * @throws IOException
+	 * @throws OHException
+	 */
+	public void exportResultset(ResultSet resultSet, File exportFile) throws IOException, OHException {
+		String name = exportFile.getName().toLowerCase(Locale.ROOT);
+		if (name.endsWith(".csv")) {
+			exportResultsetToCSV(resultSet, exportFile);
+		} else if (name.endsWith(".xls")) {
+			exportResultsetToExcelOLD(resultSet, exportFile);
+		} else {
+			exportResultsetToExcel(resultSet, exportFile);
+		}
+	}
+
 	public static JFileChooser getJFileChooserExcel(File defaultFilename) {
 		JFileChooser fcExcel = new JFileChooser();
+		FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV - open format (*.csv)", "csv");
 		FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx");
 		FileNameExtensionFilter excelFilter2003 = new FileNameExtensionFilter("Excel 97-2003 (*.xls)", "xls");
+		fcExcel.setAcceptAllFileFilterUsed(false);
+		fcExcel.addChoosableFileFilter(csvFilter);
 		fcExcel.addChoosableFileFilter(excelFilter);
 		fcExcel.addChoosableFileFilter(excelFilter2003);
-		fcExcel.setFileFilter(excelFilter);
+		fcExcel.setFileFilter(csvFilter);
 		fcExcel.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fcExcel.setSelectedFile(defaultFilename);
 		return fcExcel;
