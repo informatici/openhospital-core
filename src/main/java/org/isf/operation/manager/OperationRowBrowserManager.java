@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -60,12 +60,12 @@ public class OperationRowBrowserManager {
 	}
 
 	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
-		validateOperationRow(opRow);
+		validateOperationRow(opRow, false);
 		return ioOperations.updateOperationRow(opRow);
 	}
 
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
-		validateOperationRow(opRow);
+		validateOperationRow(opRow, true);
 		return ioOperations.newOperationRow(opRow);
 	}
 
@@ -73,9 +73,10 @@ public class OperationRowBrowserManager {
 	 * Verify if the {@link OperationRow} is valid for CRUD and throw an exception with the list of errors, if any.
 	 *
 	 * @param opRow the {@link OperationRow} to validate
+	 * @param insert {@code true} if the operation row is being inserted, {@code false} if updated
 	 * @throws OHDataValidationException if the {@link OperationRow} is not valid
 	 */
-	protected void validateOperationRow(OperationRow opRow) throws OHServiceException {
+	protected void validateOperationRow(OperationRow opRow, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (opRow.getOperation() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseinsertanoperation.msg")));
@@ -86,10 +87,12 @@ public class OperationRowBrowserManager {
 		} else if (prescriber.length() > 150) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theprescriberistoolongmaxchars.fmt.msg", 150)));
 		}
-		// opResult is optional at this layer: legacy rows and non-GUI callers may have none.
-		// The desktop GUI additionally requires it for new/edited rows (OperationRowBase/OperationRowAdm/OperationRowOpd).
+		// opResult is mandatory on insert only: legacy rows may have an empty result and the GUI re-submits
+		// every existing row on each save, so requiring it on update would make such rows unsavable
 		String opResult = opRow.getOpResult();
-		if (opResult != null && opResult.length() > 250) {
+		if (insert && (opResult == null || opResult.isEmpty())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.operationrow.pleaseselectaresult.msg")));
+		} else if (opResult != null && opResult.length() > 250) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.operationrow.theresultistoolongmaxchars.fmt.msg", 250)));
 		}
 		if (opRow.getOpDate() == null) {

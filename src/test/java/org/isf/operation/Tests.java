@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -463,9 +463,29 @@ class Tests extends OHCoreTestCase {
 		operationRow.setOperation(null);
 		operationRow.setPrescriber("");
 		operationRow.setOpDate(null);
-		// opResult and remarks are optional: leaving them empty must not, by itself, trigger validation
+		// remarks is optional: leaving it empty must not, by itself, trigger validation
 		operationRow.setOpResult("");
 		operationRow.setRemarks("");
+		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationRowEmptyResult() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationRow.setOpResult("");
+		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
+			.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void testMgrValidateOperationRowNullResult() throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationRow.setOpResult(null);
 		assertThatThrownBy(() -> operationRowBrowserManager.newOperationRow(operationRow))
 			.isInstanceOf(OHDataValidationException.class);
 	}
@@ -944,6 +964,18 @@ class Tests extends OHCoreTestCase {
 		assertThat(operationRowBrowserManager.updateOperationRow(operationRow).getAdmission().getUserID()).isEqualTo("TestUserId");
 		operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isEqualTo("someNewRemarks");
+	}
+
+	@Test
+	void testMgrUpdateOperationRowEmptyResultAllowedForLegacyRows() throws Exception {
+		// legacy rows saved before the result became mandatory may have an empty result and the GUI
+		// re-submits every existing row on each save, so updates must tolerate an empty result
+		int id = setupTestOperationRow(false);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		operationRow.setOpResult("");
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isNotNull();
+		operationRow = operationRowIoOperationRepository.findById(id);
+		assertThat(operationRow.getOpResult()).isEmpty();
 	}
 
 	@Test
