@@ -422,7 +422,7 @@ class Tests extends OHCoreTestCase {
 		// when: the GUI resends the existing item with modified fields plus a new one
 		BillItems existingFromGui = testBillItems.setup(null, false);
 		existingFromGui.setId(existingId);
-		existingFromGui.setItemAmount(99.9);
+		existingFromGui.setItemAmount(new BigDecimal("99.9"));
 		existingFromGui.setItemQuantity(3);
 		BillItems newItemFromGui = testBillItems.setup(null, false);
 		List<BillItems> billItems = new ArrayList<>();
@@ -435,7 +435,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(persisted).hasSize(2);
 		BillItems updatedItem = accountingBillItemsIoOperationRepository.findById(existingId).orElse(null);
 		assertThat(updatedItem).isNotNull();
-		assertThat(updatedItem.getItemAmount()).isCloseTo(99.9, offset(0.001));
+		assertThat(updatedItem.getItemAmount()).isEqualByComparingTo(new BigDecimal("99.9"));
 		assertThat(updatedItem.getItemQuantity()).isEqualTo(3);
 	}
 
@@ -477,7 +477,7 @@ class Tests extends OHCoreTestCase {
 		// when: the GUI resends the existing payment with a modified amount plus a new one
 		BillPayments existingFromGui = testBillPayments.setup(null, false);
 		existingFromGui.setId(existingId);
-		existingFromGui.setAmount(99.9);
+		existingFromGui.setAmount(new BigDecimal("99.9"));
 		BillPayments newPaymentFromGui = testBillPayments.setup(null, false);
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(existingFromGui);
@@ -489,7 +489,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(persisted).hasSize(2);
 		BillPayments updatedPayment = accountingBillPaymentIoOperationRepository.findById(existingId).orElse(null);
 		assertThat(updatedPayment).isNotNull();
-		assertThat(updatedPayment.getAmount()).isCloseTo(99.9, offset(0.001));
+		assertThat(updatedPayment.getAmount()).isEqualByComparingTo(new BigDecimal("99.9"));
 	}
 
 	@Test
