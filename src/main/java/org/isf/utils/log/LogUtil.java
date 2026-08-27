@@ -66,7 +66,8 @@ public class LogUtil {
 	 * @throws IOException when the folder is unknown, so that the caller can report it instead of failing
 	 */
 	public static void openLogFileLocation() throws IOException {
-		Desktop.getDesktop().open(logFileFolder(getLogFileAbsolutePath()));
+		File folder = logFileFolder(getLogFileAbsolutePath());
+		Desktop.getDesktop().open(folder);
 	}
 
 	/**
