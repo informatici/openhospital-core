@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -219,29 +219,6 @@ public class LabIoOperations {
 	 */
 	public Laboratory newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return newLaboratory(laboratory);
-	}
-
-	/**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
-	 *
-	 * @param laboratory - the {@link Laboratory} to insert
-	 * @param labRow - the list of results ({@link String}s)
-	 * @return the newly persisted {@link Laboratory} object.
-	 * @throws OHServiceException
-	 * @deprecated use {@link #newLabSecondProcedure2(Laboratory, List)} instead
-	 */
-	@Deprecated
-	public Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		Laboratory newLaboratory = newLaboratory(laboratory);
-		if (newLaboratory.getCode() > 0) {
-			for (String aLabRow : labRow) {
-				LaboratoryRow laboratoryRow = new LaboratoryRow();
-				laboratoryRow.setLabId(laboratory);
-				laboratoryRow.setDescription(aLabRow);
-				rowRepository.save(laboratoryRow);
-			}
-		}
-		return newLaboratory;
 	}
 
 	/**
