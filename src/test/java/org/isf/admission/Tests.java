@@ -529,6 +529,23 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
+	void testIoNewAdmissionUsesRecordedAgeWhenBirthDateIsMissing(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		Admission admission = buildNewAdmission();
+		// patients are often registered by age alone, with no birth date; the snapshot must still be usable
+		Patient patient = admission.getPatient();
+		patient.setBirthDate(null);
+		patient.setAge(7);
+
+		Admission result = admissionIoOperation.newAdmission(admission);
+
+		assertThat(result.getAge()).isEqualTo(7);
+		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
+		assertThat(reloaded.getAge()).isEqualTo(7);
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
 	void testIoUpdateAdmission(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
