@@ -5062,7 +5062,6 @@ INSERT INTO `oh_medicaldsrstockmovward` VALUES (131,'F','2026-07-11 13:08:00',1,
 INSERT INTO `oh_medicaldsrstockmovward` VALUES (132,'F','2026-07-11 13:12:00',1,571,21,0,'Johanna Furly',177,3,'pieces','admin',NULL,NULL,'LT2612','2026-07-11 13:12:00','admin','2026-07-11 13:12:00',1);
 INSERT INTO `oh_medicaldsrstockmovward` VALUES (133,'F','2026-07-11 13:16:00',1,553,28,0,'Yellen Unison',50,1,'pieces','admin',NULL,NULL,'LT2613','2026-07-11 13:16:00','admin','2026-07-11 13:16:00',1);
 INSERT INTO `oh_medicaldsrstockmovward` VALUES (134,'F','2026-07-11 13:20:00',1,679,48,0,'Rebecca Marie Acheampong',151,2,'pieces','admin',NULL,NULL,'LT2614','2026-07-11 13:20:00','admin','2026-07-11 13:20:00',1);
-INSERT INTO `oh_medicaldsrward` VALUES ('C',415,10,3,'LT2520','admin','2025-11-06 11:04:00','admin','2025-11-06 13:04:00',1,0);
 /*!40000 ALTER TABLE `oh_medicaldsrstockmovward` ENABLE KEYS */;
 UNLOCK TABLES;
 
