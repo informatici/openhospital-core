@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -107,6 +107,28 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 		assertThat(userBrowsingManager.isPasswordStrong("abcdEF1_<")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("^abcdef1>")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("AaBbCcDdeF1/")).isTrue();
+	}
+
+	@Test
+	void passwordPolicyAccessorsReflectConfiguration() {
+		GeneralData.STRONGPASSWORD = true;
+		GeneralData.STRONGLENGTH = 8;
+		assertThat(userBrowsingManager.isStrongPasswordEnabled()).isTrue();
+		assertThat(userBrowsingManager.getPasswordMinLength()).isEqualTo(8);
+
+		GeneralData.STRONGPASSWORD = false;
+		GeneralData.STRONGLENGTH = 0;
+		assertThat(userBrowsingManager.isStrongPasswordEnabled()).isFalse();
+		assertThat(userBrowsingManager.getPasswordMinLength()).isZero();
+	}
+
+	@Test
+	void passwordStrengthRegexMatchesEnforcedPolicy() {
+		String regex = userBrowsingManager.getPasswordStrengthRegex();
+		assertThat(regex).isNotBlank();
+		// the exposed regex must accept/reject the same passwords the strength check enforces
+		assertThat("abcdef1@".matches(regex)).isTrue();
+		assertThat("abcdefgh".matches(regex)).isFalse();
 	}
 
 	@Test
