@@ -59,6 +59,12 @@ public class PatientIoOperations {
 
 	public static final char NOT_DELETED_STATUS = 'N';
 
+	/** Sentinel written over identifying text fields when a patient is anonymized (GDPR right to erasure). */
+	public static final String ANONYMIZED_TEXT = "ANONYMIZED";
+
+	/** Sentinel written over the tax code when a patient is anonymized. */
+	public static final String ANONYMIZED_TAXCODE = "DELETED";
+
 	private final PatientIoOperationRepository repository;
 
 	private final ApplicationEventPublisher applicationEventPublisher;
@@ -214,6 +220,40 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient updatePatient(Patient patient) throws OHServiceException {
+		return repository.save(patient);
+	}
+
+	/**
+	 * Irreversibly anonymizes the personal identification data of a {@link Patient}, keeping the clinical
+	 * records (admissions, lab, OPD, therapies, ...) for statistical use (GDPR right to erasure). The
+	 * identifying text fields are overwritten with sentinel values, the profile photo is removed and the
+	 * {@code anonymized} flag is set. The caller is responsible for removing any linked DICOM images.
+	 *
+	 * @param patient the {@link Patient} to anonymize.
+	 * @return the anonymized {@link Patient}.
+	 * @throws OHServiceException
+	 */
+	public Patient anonymizePatient(Patient patient) throws OHServiceException {
+		patient.setFirstName(ANONYMIZED_TEXT);
+		patient.setSecondName(ANONYMIZED_TEXT);
+		patient.setMotherName(ANONYMIZED_TEXT);
+		patient.setFatherName(ANONYMIZED_TEXT);
+		patient.setAddress("");
+		patient.setCity("");
+		patient.setTelephone("");
+		patient.setTaxCode(ANONYMIZED_TAXCODE);
+		if (patient.getBirthDate() != null) {
+			// Keep only the birth year (needed for age statistics) and drop the exact day/month, which would
+			// otherwise remain a re-identifying detail.
+			patient.setBirthDate(patient.getBirthDate().withDayOfYear(1));
+		}
+		// Remove the profile photo: when photos are stored on the filesystem delete the file too, but always
+		// detach the DB relation so no profile photo remains linked to the record (GDPR erasure).
+		if (!LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE)) {
+			fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
+		}
+		patient.setPatientProfilePhoto(null);
+		patient.setAnonymized(true);
 		return repository.save(patient);
 	}
 

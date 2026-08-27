@@ -794,6 +794,35 @@ class Tests extends OHCoreTestCase {
 		assertThat(mergedPatientResult.getDeleted()).isEqualTo('N');
 	}
 
+	@Test
+	void testMgrAnonymizePatient() throws Exception {
+		Integer code = setupTestPatient(false);
+		int birthYear = patientIoOperation.getPatient(code).getBirthDate().getYear();
+
+		Patient anonymized = patientBrowserManager.anonymizePatient(code);
+
+		assertThat(anonymized.isAnonymized()).isTrue();
+		assertThat(anonymized.getFirstName()).isEqualTo(PatientIoOperations.ANONYMIZED_TEXT);
+		assertThat(anonymized.getSecondName()).isEqualTo(PatientIoOperations.ANONYMIZED_TEXT);
+		assertThat(anonymized.getTaxCode()).isEqualTo(PatientIoOperations.ANONYMIZED_TAXCODE);
+		assertThat(anonymized.getAddress()).isEmpty();
+		// only the birth year is kept, the exact day/month is dropped
+		assertThat(anonymized.getBirthDate()).isEqualTo(LocalDate.of(birthYear, 1, 1));
+		// the record itself is preserved (not logically deleted), only the identifying data is erased
+		Patient reloaded = patientIoOperation.getPatient(code);
+		assertThat(reloaded).isNotNull();
+		assertThat(reloaded.isAnonymized()).isTrue();
+	}
+
+	@Test
+	void testMgrAnonymizePatientAlreadyAnonymizedThrows() throws Exception {
+		Integer code = setupTestPatient(false);
+		patientBrowserManager.anonymizePatient(code);
+
+		assertThatThrownBy(() -> patientBrowserManager.anonymizePatient(code))
+						.isInstanceOf(OHServiceException.class);
+	}
+
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
