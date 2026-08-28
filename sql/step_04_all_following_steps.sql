@@ -117,4 +117,4 @@ source step_a120_user_related_unique_constraints.sql;
 source step_a121_decimal_precision.sql;
 source step_a122_password_lease.sql;
 source step_a123_add_lot_management_in_pharmacy.sql;
-
+source step_a124_sex_age_snapshot.sql;

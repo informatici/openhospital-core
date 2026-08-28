@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -77,6 +77,11 @@ public class ExaminationOperations {
 	 * @throws OHServiceException
 	 */
 	public PatientExamination saveOrUpdate(PatientExamination patex) throws OHServiceException {
+		// OP-892: snapshot the patient's sex and age on the examination at insertion time (anonymous
+		// statistics); it is an immutable snapshot, so it is not refreshed when an existing exam is updated
+		if (patex.getPex_ID() == 0) {
+			patex.applyPatientData();
+		}
 		return repository.save(patex);
 	}
 
