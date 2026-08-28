@@ -3961,6 +3961,88 @@ INSERT INTO `oh_medicaldsrstockmov` VALUES (71,177,NULL,'inventory+','2525258796
 UNLOCK TABLES;
 
 --
+-- Table structure for table `oh_medicaldsrstockmovdraft`
+--
+
+DROP TABLE IF EXISTS `oh_medicaldsrstockmovdraft`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `oh_medicaldsrstockmovdraft` (
+  `MMVD_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MMVD_KIND` varchar(10) NOT NULL,
+  `MMVD_MMVT_ID_A` varchar(10) DEFAULT NULL,
+  `MMVD_DATE` datetime DEFAULT NULL,
+  `MMVD_REFNO` varchar(50) DEFAULT NULL,
+  `MMVD_SUP_ID` int(11) DEFAULT NULL,
+  `MMVD_WRD_ID_A` char(3) DEFAULT NULL,
+  `MMVD_LOCK` int(11) NOT NULL DEFAULT 0,
+  `MMVD_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MMVD_CREATED_DATE` datetime DEFAULT NULL,
+  `MMVD_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MMVD_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MMVD_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MMVD_ID`),
+  KEY `MMVD_MMVT_ID_A` (`MMVD_MMVT_ID_A`),
+  KEY `MMVD_SUP_ID` (`MMVD_SUP_ID`),
+  KEY `MMVD_WRD_ID_A` (`MMVD_WRD_ID_A`),
+  CONSTRAINT `oh_medicaldsrstockmovdraft_ibfk_1` FOREIGN KEY (`MMVD_MMVT_ID_A`) REFERENCES `oh_medicaldsrstockmovtype` (`MMVT_ID_A`),
+  CONSTRAINT `oh_medicaldsrstockmovdraft_ibfk_2` FOREIGN KEY (`MMVD_SUP_ID`) REFERENCES `oh_supplier` (`SUP_ID`),
+  CONSTRAINT `oh_medicaldsrstockmovdraft_ibfk_3` FOREIGN KEY (`MMVD_WRD_ID_A`) REFERENCES `oh_ward` (`WRD_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oh_medicaldsrstockmovdraft`
+--
+
+LOCK TABLES `oh_medicaldsrstockmovdraft` WRITE;
+/*!40000 ALTER TABLE `oh_medicaldsrstockmovdraft` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oh_medicaldsrstockmovdraft` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `oh_medicaldsrstockmovdraftrow`
+--
+
+DROP TABLE IF EXISTS `oh_medicaldsrstockmovdraftrow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `oh_medicaldsrstockmovdraftrow` (
+  `MMVDR_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MMVDR_MMVD_ID` int(11) NOT NULL,
+  `MMVDR_MDSR_ID` int(11) NOT NULL,
+  `MMVDR_QTY` int(11) NOT NULL DEFAULT 0,
+  `MMVDR_UNITS_OR_PACKETS` tinyint(1) NOT NULL DEFAULT 0,
+  `MMVDR_LT_ID_A` varchar(50) DEFAULT NULL,
+  `MMVDR_LT_PREP_DATE` datetime DEFAULT NULL,
+  `MMVDR_LT_DUE_DATE` datetime DEFAULT NULL,
+  `MMVDR_LT_COST` double DEFAULT NULL,
+  `MMVDR_IS_NEW_LOT` tinyint(1) NOT NULL DEFAULT 0,
+  `MMVDR_UPDATE_LOT_COST` tinyint(1) NOT NULL DEFAULT 0,
+  `MMVDR_LOCK` int(11) NOT NULL DEFAULT 0,
+  `MMVDR_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MMVDR_CREATED_DATE` datetime DEFAULT NULL,
+  `MMVDR_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MMVDR_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MMVDR_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MMVDR_ID`),
+  KEY `MMVDR_MMVD_ID` (`MMVDR_MMVD_ID`),
+  KEY `MMVDR_MDSR_ID` (`MMVDR_MDSR_ID`),
+  CONSTRAINT `oh_medicaldsrstockmovdraftrow_ibfk_1` FOREIGN KEY (`MMVDR_MMVD_ID`) REFERENCES `oh_medicaldsrstockmovdraft` (`MMVD_ID`),
+  CONSTRAINT `oh_medicaldsrstockmovdraftrow_ibfk_2` FOREIGN KEY (`MMVDR_MDSR_ID`) REFERENCES `oh_medicaldsr` (`MDSR_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oh_medicaldsrstockmovdraftrow`
+--
+
+LOCK TABLES `oh_medicaldsrstockmovdraftrow` WRITE;
+/*!40000 ALTER TABLE `oh_medicaldsrstockmovdraftrow` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oh_medicaldsrstockmovdraftrow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `oh_medicaldsrstockmovtype`
 --
 
