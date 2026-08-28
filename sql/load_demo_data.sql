@@ -2520,6 +2520,14 @@ INSERT INTO `oh_grouppermission` VALUES (314,'admin',169,'1',NULL,NULL,NULL,NULL
 INSERT INTO `oh_grouppermission` VALUES (315,'admin',170,'1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_grouppermission` VALUES (316,'admin',171,'1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_grouppermission` VALUES (317,'laboratorist',96,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (318,'admin',172,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (319,'admin',173,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (320,'admin',174,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (321,'admin',175,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (322,'admin',176,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (323,'admin',177,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (324,'admin',178,'1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_grouppermission` VALUES (325,'admin',179,'1',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_grouppermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6608,6 +6616,14 @@ INSERT INTO `oh_permissions` VALUES (168,'usergroups.create','','1',NULL,NULL,NU
 INSERT INTO `oh_permissions` VALUES (169,'usergroups.read','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` VALUES (170,'usergroups.update','','1',NULL,NULL,NULL,NULL);
 INSERT INTO `oh_permissions` VALUES (171,'usergroups.delete','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (172,'bills.create','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (173,'bills.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (174,'bills.update','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (175,'bills.delete','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (176,'stockmovements.create','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (177,'stockmovements.read','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (178,'stockmovements.update','','1',NULL,NULL,NULL,NULL);
+INSERT INTO `oh_permissions` VALUES (179,'stockmovements.delete','','1',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
