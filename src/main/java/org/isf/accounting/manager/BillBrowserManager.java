@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -283,6 +283,17 @@ public class BillBrowserManager {
 	 */
 	public List<Bill> getPendingBills(int patID) throws OHServiceException {
 		return ioOperations.getPendingBills(patID);
+	}
+
+	/**
+	 * Returns all the {@link Bill}s for the specified patient.
+	 *
+	 * @param patID the patient id.
+	 * @return the list of bills of the specified patient.
+	 * @throws OHServiceException
+	 */
+	public List<Bill> getPatientBills(int patID) throws OHServiceException {
+		return ioOperations.getAllPatientsBills(patID);
 	}
 
 	/**

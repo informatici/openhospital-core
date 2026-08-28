@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -632,6 +632,22 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundBill).isNotNull();
 		List<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
 		assertThat(bills.get(0).getAmount()).isEqualByComparingTo(foundBill.getAmount());
+	}
+
+	@Test
+	void mgrGetPatientBills() throws Exception {
+		int id = setupTestBill(false);
+		Bill foundBill = accountingBillIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundBill).isNotNull();
+		List<Bill> bills = billBrowserManager.getPatientBills(foundBill.getBillPatient().getCode());
+		assertThat(bills).hasSize(1);
+		assertThat(bills.get(0).getId()).isEqualTo(foundBill.getId());
+	}
+
+	@Test
+	void mgrGetPatientBillsNoneFound() throws Exception {
+		setupTestBill(false);
+		assertThat(billBrowserManager.getPatientBills(-1)).isEmpty();
 	}
 
 	@Test
