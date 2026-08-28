@@ -21,6 +21,7 @@
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.menu.model.UserGroup;
@@ -46,8 +47,9 @@ public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup,
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
 	@Modifying
-	@Query(value = "update UserGroup ug set ug.desc=:description, ug.deleted=:deleted where ug.code=:id")
-	int update(@Param("description") String description, @Param("deleted") boolean deleted, @Param("id") String id);
+	@Query(value = "update UserGroup ug set ug.desc=:description, ug.deleted=:deleted, ug.deletedBy=:deletedBy, ug.deletedDate=:deletedDate where ug.code=:id")
+	int update(@Param("description") String description, @Param("deleted") boolean deleted, @Param("deletedBy") String deletedBy,
+		@Param("deletedDate") LocalDateTime deletedDate, @Param("id") String id);
 
 	List<UserGroup> findByCodeIn(List<String> userGroupIds);
 

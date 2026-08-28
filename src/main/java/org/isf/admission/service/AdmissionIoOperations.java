@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -41,6 +41,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
+import org.isf.utils.db.AuditorAwareInterface;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PageInfo;
@@ -64,14 +65,18 @@ public class AdmissionIoOperations {
 
 	private PatientIoOperationRepository patientRepository;
 
+	private final AuditorAwareInterface auditorAware;
+
 	public AdmissionIoOperations(AdmissionIoOperationRepository admissionIoOperationRepository,
 	                             AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository,
 	                             DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository,
-	                             PatientIoOperationRepository patientIoOperationRepository) {
+	                             PatientIoOperationRepository patientIoOperationRepository,
+	                             AuditorAwareInterface auditorAware) {
 		this.repository = admissionIoOperationRepository;
 		this.typeRepository = admissionTypeIoOperationRepository;
 		this.dischargeRepository = dischargeTypeIoOperationRepository;
 		this.patientRepository = patientIoOperationRepository;
+		this.auditorAware = auditorAware;
 	}
 
 	/**
@@ -167,6 +172,7 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
 	public Admission newAdmission(Admission admission) throws OHServiceException {
+		admission.applyPatientData();
 		return repository.save(admission);
 	}
 
@@ -283,6 +289,7 @@ public class AdmissionIoOperations {
 			return null;
 		}
 		foundAdmission.setDeleted('Y');
+		foundAdmission.recordDeletion(auditorAware.getCurrentAuditor().orElse(null));
 		return repository.save(foundAdmission);
 	}
 
