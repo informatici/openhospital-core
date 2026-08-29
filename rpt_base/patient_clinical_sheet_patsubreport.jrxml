@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="patient_clinical_sheet_patsubreport" pageWidth="535" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="patient_clinical_sheet_patsubreport" whenResourceMissingType="Key" uuid="dfd8ed2e-99db-4e93-bf8b-45a42f8a6dbf">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="oh"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<import value="java.util.*"/>
+	<import value="org.joda.time.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="patientID" class="java.lang.String"/>
+	<parameter name="PATIENT_PHOTO" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[Image file]]></parameterDescription>
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT * 
+FROM OH_PATIENT p
+LEFT JOIN OH_PATIENT_PROFILE_PHOTO f ON f.PAT_PROFILE_PHOTO_ID = p.PAT_PROFILE_PHOTO_ID
+LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT, PEX_WEIGHT FROM OH_PATIENTEXAMINATION WHERE PEX_PAT_ID = $P{patientID} ORDER BY PEX_DATE DESC LIMIT 1) AS HW
+ON PAT_ID = PEX_PAT_ID
+WHERE PAT_ID = $P{patientID}]]>
+	</queryString>
+	<field name="PAT_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_FNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_FNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_FNAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_SNAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_SNAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_SNAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_BDATE" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_BDATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_BDATE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_AGE" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_AGE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_AGE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_AGETYPE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_AGETYPE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_AGETYPE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_SEX" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_SEX"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_SEX"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_ADDR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_ADDR"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_ADDR"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_CITY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_CITY"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_CITY"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_NEXT_KIN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_NEXT_KIN"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_NEXT_KIN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_TELE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_TELE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_TELE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_MOTH_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_MOTH_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_MOTH_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_MOTH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_MOTH"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_MOTH"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_FATH_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_FATH_NAME"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_FATH_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_FATH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_FATH"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_FATH"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_LEDU" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_LEDU"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_LEDU"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_ESTA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_ESTA"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_ESTA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_PTOGE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_PTOGE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_PTOGE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_NOTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_NOTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_NOTE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_DELETED" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_DELETED"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_DELETED"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_LOCK" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_LOCK"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_LOCK"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_BTYPE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_BTYPE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_BTYPE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_TAXCODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_TAXCODE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_TAXCODE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_TIMESTAMP" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_TIMESTAMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_TIMESTAMP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_CREATED_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_CREATED_BY"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_CREATED_BY"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_CREATED_DATE" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_CREATED_DATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_CREATED_DATE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_LAST_MODIFIED_BY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_LAST_MODIFIED_BY"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_LAST_MODIFIED_BY"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_LAST_MODIFIED_DATE" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_LAST_MODIFIED_DATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_LAST_MODIFIED_DATE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_ACTIVE" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_ACTIVE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_ACTIVE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_PROFESSION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_PROFESSION"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_PROFESSION"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_MAR_STAT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_MAR_STAT"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_MAR_STAT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_PROFILE_PHOTO_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_PROFILE_PHOTO_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_PROFILE_PHOTO_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient"/>
+	</field>
+	<field name="PAT_PHOTO" class="byte[]">
+		<property name="com.jaspersoft.studio.field.name" value="PAT_PHOTO"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAT_PHOTO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patient_profile_photo"/>
+	</field>
+	<field name="PEX_PAT_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PEX_PAT_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="PEX_PAT_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patientexamination"/>
+	</field>
+	<field name="PEX_HEIGHT" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PEX_HEIGHT"/>
+		<property name="com.jaspersoft.studio.field.label" value="PEX_HEIGHT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patientexamination"/>
+		<fieldDescription><![CDATA[Height in cm]]></fieldDescription>
+	</field>
+	<field name="PEX_WEIGHT" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="PEX_WEIGHT"/>
+		<property name="com.jaspersoft.studio.field.label" value="PEX_WEIGHT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="oh_patientexamination"/>
+		<fieldDescription><![CDATA[Weight in Kg]]></fieldDescription>
+	</field>
+	<variable name="now" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<variable name="age" class="java.lang.String">
+		<variableExpression><![CDATA[new Integer( (int) ( (new Date().getTime() - $F{PAT_BDATE}.getTime()) / (1000*60*60*24) ))]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="135" splitType="Stretch">
+			<textField>
+				<reportElement key="staticText-11" x="418" y="14" width="107" height="107" uuid="18ce2d50-1b7e-4585-804e-3dbe0b1a6599"/>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$R{Passport}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-1" x="80" y="19" width="322" height="14" uuid="c2c91e76-befb-4a4b-9532-363eae1da554"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAT_FNAME} + " " + $F{PAT_SNAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="80" y="5" width="53" height="14" uuid="8c6f2846-e828-46f6-9bc5-396f73e71c76"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAT_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-5" x="7" y="5" width="66" height="14" uuid="39631721-5011-45c6-9b91-90fa476d4f58"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{PatientId}+":"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-6" x="7" y="19" width="66" height="14" uuid="f3d5a17c-7ac7-4e52-8705-ce0e67262c58"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Name}+":"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-3" x="80" y="33" width="322" height="14" uuid="da99dd12-7482-46d5-b349-03bef9843b43"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PAT_SEX}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-4" x="80" y="61" width="322" height="14" uuid="b02c12a6-4225-4d04-82c0-1a79b2f7e49f"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PAT_AGE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-7" x="7" y="33" width="66" height="14" uuid="7ac1c3a5-358f-4d82-8fe1-4000852d136b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Sex}+":"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-8" x="7" y="61" width="66" height="14" uuid="a03cee30-a70b-47e8-9095-410bd5ed4192"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Age}+":"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-5" x="80" y="75" width="322" height="14" uuid="f2b51898-d307-4e9e-bfb8-57f0ae2a0d7d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PAT_ADDR}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-6" x="80" y="89" width="322" height="14" uuid="32b89989-52b4-4c50-84ec-799abaec9a4c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PAT_CITY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-9" x="7" y="75" width="66" height="14" uuid="13799081-d434-4654-86d7-a077f39925e0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Address}+":"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-10" x="7" y="89" width="66" height="14" uuid="8bae4349-8740-4fe0-b3c6-a3b38c5de466"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{City}+":"]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" onErrorType="Icon">
+				<reportElement key="image-1" x="418" y="14" width="107" height="107" uuid="5077d354-6ac1-47ea-bc57-831c44fd41e5"/>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<imageExpression><![CDATA[$F{PAT_PHOTO} != null ? $F{PAT_PHOTO} : $P{PATIENT_PHOTO}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-1" x="0" y="1" width="535" height="1" uuid="edbf4e23-3e0a-4b7b-a247-5fd68849d3ca"/>
+			</line>
+			<line>
+				<reportElement key="line-2" x="0" y="134" width="535" height="1" uuid="b925c11a-2265-4f55-bc6c-919f0070cc70"/>
+			</line>
+			<textField>
+				<reportElement key="staticText-12" x="7" y="103" width="66" height="14" uuid="ebc63078-b38d-404f-978c-ddca025f3284"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Height}+":"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-13" x="7" y="117" width="66" height="14" uuid="86b7f51b-cec4-40db-96e4-fd4edb3cde21"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{Weight}+":"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-7" x="80" y="117" width="322" height="14" uuid="63262052-8e79-4504-86bd-5dbd778f58fb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PEX_WEIGHT}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement key="textField-8" x="80" y="103" width="322" height="14" uuid="b5e05450-d4cc-46c3-8bb1-54a46f687799"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PEX_HEIGHT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-14" x="7" y="47" width="66" height="14" uuid="0b125ac1-109e-4a4c-983f-219e6c534030"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$R{BirthDate}+":"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField-9" x="80" y="47" width="322" height="14" uuid="05b19552-68b1-49e2-b7a8-d977a1aafa52"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{PAT_BDATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
