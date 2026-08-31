@@ -45,6 +45,8 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
+import org.isf.profession.model.Profession;
+import org.isf.profession.service.ProfessionIoOperationRepository;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PagedResponse;
@@ -67,6 +69,8 @@ class Tests extends OHCoreTestCase {
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
+	@Autowired
+	ProfessionIoOperationRepository professionIoOperationRepository;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -534,15 +538,15 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrGetProfessionList() throws Exception {
-		resetHashMaps();
-		String[] maritalDescriptionList = patientBrowserManager.getProfessionList();
-		assertThat(maritalDescriptionList).isNotEmpty();
+		setupTestProfessions();
+		String[] professionDescriptionList = patientBrowserManager.getProfessionList();
+		assertThat(professionDescriptionList).isNotEmpty();
+		assertThat(professionDescriptionList[0]).isEqualTo("angal.patient.profession.unknown.txt");
 	}
 
 	@Test
 	void testMgrGetProfessionTranslated() throws Exception {
-		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		setupTestProfessions();
 		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown.txt");
 		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown.txt");
 		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining.txt");
@@ -550,8 +554,7 @@ class Tests extends OHCoreTestCase {
 
 	@Test
 	void testMgrGetProfessionKey() throws Exception {
-		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		setupTestProfessions();
 		assertThat(patientBrowserManager.getProfessionKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("someKeyNotInTheList")).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining.txt")).isEqualTo("mining");
@@ -776,13 +779,21 @@ class Tests extends OHCoreTestCase {
 	}
 
 	private void resetHashMaps() throws Exception {
-		Field diuresisDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("maritalHashMap");
-		diuresisDescriptionHashMap.setAccessible(true);
-		diuresisDescriptionHashMap.set(patientBrowserManager, null);
+		Field maritalDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("maritalHashMap");
+		maritalDescriptionHashMap.setAccessible(true);
+		maritalDescriptionHashMap.set(patientBrowserManager, null);
+	}
 
-		Field bowelDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("professionHashMap");
-		bowelDescriptionHashMap.setAccessible(true);
-		bowelDescriptionHashMap.set(patientBrowserManager, null);
+	/**
+	 * Seeds the {@link Profession} lookup table. The descriptions are set to the i18n keys because, in the core test
+	 * environment, no resource bundle is available and {@code MessageBundle.getMessage} returns the key itself.
+	 */
+	private void setupTestProfessions() {
+		String[] codes = { "unknown", "other", "farming", "construction", "medicine", "foodhospitality", "homemaker", "mechanic", "business",
+				"janitorial", "mining", "engineering" };
+		for (String code : codes) {
+			professionIoOperationRepository.saveAndFlush(new Profession(code, "angal.patient.profession." + code + ".txt"));
+		}
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
