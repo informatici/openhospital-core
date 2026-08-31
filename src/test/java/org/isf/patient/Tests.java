@@ -541,6 +541,7 @@ class Tests extends OHCoreTestCase {
 		setupTestProfessions();
 		String[] professionDescriptionList = patientBrowserManager.getProfessionList();
 		assertThat(professionDescriptionList).isNotEmpty();
+		assertThat(professionDescriptionList[0]).isEqualTo("angal.patient.profession.unknown.txt");
 	}
 
 	@Test

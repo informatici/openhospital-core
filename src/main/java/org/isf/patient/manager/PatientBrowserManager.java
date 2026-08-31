@@ -202,7 +202,12 @@ public class PatientBrowserManager {
 		List<Profession> professions = loadProfessions();
 		List<String> descriptions = new ArrayList<>(professions.size());
 		for (Profession profession : professions) {
-			descriptions.add(profession.getDescription());
+			// 'unknown' leads the list so it stays the preselected choice for new patients, as before this table existed
+			if (PROFESSION_UNKNOWN_CODE.equals(profession.getCode())) {
+				descriptions.add(0, profession.getDescription());
+			} else {
+				descriptions.add(profession.getDescription());
+			}
 		}
 		return descriptions.toArray(new String[0]);
 	}
