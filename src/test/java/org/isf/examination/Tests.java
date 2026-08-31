@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -108,6 +109,26 @@ class Tests extends OHCoreTestCase {
 		patientExamination.setPex_hr(pex_hr + 1);
 		examinationOperations.saveOrUpdate(patientExamination);
 		assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
+	}
+
+	@Test
+	void testSaveOrUpdateStoresSexAgeSnapshot() throws Exception {
+		Patient patient = testPatient.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		PatientExamination patientExamination = testPatientExamination.setup(patient, false);
+
+		// a new examination goes through the operations layer, which snapshots the patient's sex and age
+		PatientExamination saved = examinationOperations.saveOrUpdate(patientExamination);
+		int expectedAge = (int) ChronoUnit.YEARS.between(patient.getBirthDate(), saved.getPex_date().toLocalDate());
+		assertThat(saved.getSex()).isEqualTo(String.valueOf(patient.getSex()));
+		assertThat(saved.getAge()).isEqualTo(expectedAge);
+
+		// the snapshot is immutable: updating an existing examination must not refresh it from the patient
+		saved.setSex("M");
+		saved.setAge(999);
+		PatientExamination updated = examinationOperations.saveOrUpdate(saved);
+		assertThat(updated.getSex()).isEqualTo("M");
+		assertThat(updated.getAge()).isEqualTo(999);
 	}
 
 	@Test
