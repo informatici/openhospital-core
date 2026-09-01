@@ -47,6 +47,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PTC_LAST_MODIFIED_DATE"))
 public class PatientConsensus extends Auditable<String> {
 
+	public static final int ADMINISTRATIVE_REASON_LENGTH = 255;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PTC_ID")
@@ -61,6 +63,9 @@ public class PatientConsensus extends Auditable<String> {
 	@Column(name = "PTC_ADMINISTRATIVE")
 	private boolean administrativeFlag;
 
+	@Column(name = "PTC_ADMINISTRATIVE_REASON", length = ADMINISTRATIVE_REASON_LENGTH)
+	private String administrativeReason;
+
 	@OneToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
 	private Patient patient;
@@ -69,11 +74,10 @@ public class PatientConsensus extends Auditable<String> {
 		super();
 	}
 
-	public PatientConsensus(boolean consensusFlag, boolean serviceFlag, boolean administrativeFlag, Patient patient) {
+	public PatientConsensus(boolean consensusFlag, boolean serviceFlag, Patient patient) {
 		super();
 		this.consensusFlag = consensusFlag;
 		this.serviceFlag = serviceFlag;
-		this.administrativeFlag = administrativeFlag;
 		this.patient = patient;
 	}
 
@@ -109,6 +113,14 @@ public class PatientConsensus extends Auditable<String> {
 		this.administrativeFlag = administrativeFlag;
 	}
 
+	public String getAdministrativeReason() {
+		return administrativeReason;
+	}
+
+	public void setAdministrativeReason(String administrativeReason) {
+		this.administrativeReason = administrativeReason;
+	}
+
 	public Patient getPatient() {
 		return patient;
 	}
@@ -120,7 +132,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
-						+ ", administrativeFlag=" + administrativeFlag + ", patient=" + patient + ']';
+						+ ", administrativeFlag=" + administrativeFlag + ", administrativeReason=" + administrativeReason + ", patient=" + patient + ']';
 	}
 
 

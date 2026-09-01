@@ -33,6 +33,7 @@ public class TestPatientConsensus {
 	private static boolean CONSENSUSFLAG = true;
 	private static boolean SERVICEFLAG = false;
 	private static boolean ADMINISTRATIVEFLAG = true;
+	private static String ADMINISTRATIVEREASON = "TestAdministrativeReason";
 
 	public PatientConsensus setup(boolean usingSet) throws OHException {
 		PatientConsensus patientConsensus;
@@ -44,7 +45,9 @@ public class TestPatientConsensus {
 			setParameters(patientConsensus, patient);
 		} else {
 			// Create PatientConsensus with all parameters
-			patientConsensus = new PatientConsensus(CONSENSUSFLAG, SERVICEFLAG, ADMINISTRATIVEFLAG, patient);
+			patientConsensus = new PatientConsensus(CONSENSUSFLAG, SERVICEFLAG, patient);
+			patientConsensus.setAdministrativeFlag(ADMINISTRATIVEFLAG);
+			patientConsensus.setAdministrativeReason(ADMINISTRATIVEREASON);
 		}
 		return patientConsensus;
 	}
@@ -53,6 +56,7 @@ public class TestPatientConsensus {
 		patientConsensus.setConsensusFlag(CONSENSUSFLAG);
 		patientConsensus.setServiceFlag(SERVICEFLAG);
 		patientConsensus.setAdministrativeFlag(ADMINISTRATIVEFLAG);
+		patientConsensus.setAdministrativeReason(ADMINISTRATIVEREASON);
 		patientConsensus.setPatient(patient);
 	}
 
@@ -60,6 +64,7 @@ public class TestPatientConsensus {
 		assertThat(patientConsensus.isConsensusFlag()).isTrue();
 		assertThat(patientConsensus.isServiceFlag()).isFalse();
 		assertThat(patientConsensus.isAdministrativeFlag()).isTrue();
+		assertThat(patientConsensus.getAdministrativeReason()).isEqualTo(ADMINISTRATIVEREASON);
 		assertThat(patientConsensus.getPatient()).isNotNull();
 	}
 

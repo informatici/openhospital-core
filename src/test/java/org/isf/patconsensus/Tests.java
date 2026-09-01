@@ -84,19 +84,48 @@ class Tests extends OHCoreTestCase {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		patientConsensus.setServiceFlag(true);
 		patientConsensus.setAdministrativeFlag(false);
+		patientConsensus.setAdministrativeReason(null);
 		PatientConsensus updatedPatientConsensus = patientConsensusBrowserManager.updatePatientConsensus(patientConsensus);
 		assertThat(updatedPatientConsensus.isServiceFlag()).isTrue();
 		assertThat(updatedPatientConsensus.isAdministrativeFlag()).isFalse();
+		assertThat(updatedPatientConsensus.getAdministrativeReason()).isNull();
+		updatedPatientConsensus.setAdministrativeFlag(true);
+		updatedPatientConsensus.setAdministrativeReason("Missing insurance documents");
+		PatientConsensus twiceUpdatedPatientConsensus = patientConsensusBrowserManager.updatePatientConsensus(updatedPatientConsensus);
+		assertThat(twiceUpdatedPatientConsensus.isAdministrativeFlag()).isTrue();
+		assertThat(twiceUpdatedPatientConsensus.getAdministrativeReason()).isEqualTo("Missing insurance documents");
+	}
+
+	@Test
+	void testUpdatePatientConsensusReasonWithoutAdministrativeFlag() throws Exception {
+		assertThatThrownBy(() -> {
+			PatientConsensus patientConsensus = setupTestPatientConsensus(true);
+			patientConsensus.setAdministrativeFlag(false);
+			patientConsensusBrowserManager.updatePatientConsensus(patientConsensus);
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+						(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	void testUpdatePatientConsensusReasonTooLong() throws Exception {
+		assertThatThrownBy(() -> {
+			PatientConsensus patientConsensus = setupTestPatientConsensus(true);
+			patientConsensus.setAdministrativeReason("a".repeat(PatientConsensus.ADMINISTRATIVE_REASON_LENGTH + 1));
+			patientConsensusBrowserManager.updatePatientConsensus(patientConsensus);
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+						(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
 	void testToString() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=1, consensusFlag=true, serviceFlag=false, administrativeFlag=true, patient=TestFirstName TestSecondName]");
+						.isEqualTo("PatientConsensus [id=1, consensusFlag=true, serviceFlag=false, administrativeFlag=true, "
+										+ "administrativeReason=TestAdministrativeReason, patient=TestFirstName TestSecondName]");
 		patientConsensus.setId(patientConsensus.getId() + 2);
 		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=3, consensusFlag=true, serviceFlag=false, administrativeFlag=true, patient=TestFirstName TestSecondName]");
+						.isEqualTo("PatientConsensus [id=3, consensusFlag=true, serviceFlag=false, administrativeFlag=true, "
+										+ "administrativeReason=TestAdministrativeReason, patient=TestFirstName TestSecondName]");
 	}
 
 	@Test
