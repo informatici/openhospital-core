@@ -5558,7 +5558,7 @@ INSERT INTO `oh_patient_consensus` VALUES (0,0,1,0,NULL,1,'admin','2023-03-22 21
 INSERT INTO `oh_patient_consensus` VALUES (2,2,1,0,NULL,1,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
 INSERT INTO `oh_patient_consensus` VALUES (4,4,1,0,NULL,0,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
 INSERT INTO `oh_patient_consensus` VALUES (5,5,1,0,NULL,0,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
-INSERT INTO `oh_patient_consensus` VALUES (16,16,1,1,'Insurance to be verified',1,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
+INSERT INTO `oh_patient_consensus` VALUES (16,16,1,1,'Insurance still needs to be verified',1,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
 INSERT INTO `oh_patient_consensus` VALUES (42,42,1,1,'Registration form still to be signed',0,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
 INSERT INTO `oh_patient_consensus` VALUES (43,43,1,0,NULL,0,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
 INSERT INTO `oh_patient_consensus` VALUES (44,44,1,0,NULL,1,'admin','2023-03-22 21:06:29','admin','2023-03-22 21:06:29',1);
