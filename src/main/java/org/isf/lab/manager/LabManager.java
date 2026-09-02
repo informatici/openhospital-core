@@ -174,34 +174,23 @@ public class LabManager {
 	}
 
 	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) between specified dates and matching passed exam name. If a lab has multiple
-	 * results, these are concatenated and added to the result string.
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) between specified dates, optionally filtered by exam name and patient. If a lab
+	 * has multiple results, these are concatenated and added to the result string. Meant for GUI use only.
 	 *
-	 * @param exam the exam name as {@code String}
+	 * @param exam the exam name as {@code String}; it can be {@code null}
 	 * @param dateFrom the lower date for the range
 	 * @param dateTo the highest date for the range
+	 * @param patient the patient; it can be {@code null}
 	 * @return the list of {@link LaboratoryForPrint}s . It could be {@code empty}.
 	 * @throws OHServiceException
+	 * @deprecated meant for GUI use only
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
-		setLabMultipleResults(labs);
-		return labs;
-	}
-
-	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) between specified dates and matching passed exam name. If a lab has multiple
-	 * results, these are concatenated and added to the result string.
-	 *
-	 * @param exam the exam name as {@code String}
-	 * @param dateFrom the lower date for the range
-	 * @param dateTo the highest date for the range
-	 * @return the list of {@link LaboratoryForPrint}s . It could be {@code empty}.
-	 * @throws OHServiceException
-	 */
+	@Deprecated
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 		throws OHServiceException {
-		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
+		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
+		setLabMultipleResults(labs);
+		return labs;
 	}
 
 	/**
@@ -211,7 +200,9 @@ public class LabManager {
 	 * @param labRow the list of results (Procedure 2); it can be {@code null}
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
+	 * @deprecated use {@link #newLaboratory2(Laboratory, List)} instead
 	 */
+	@Deprecated
 	public Laboratory newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
@@ -312,7 +303,9 @@ public class LabManager {
 	 * @param labRowList the list of results, it can be {@code null}
 	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
+	 * @deprecated use {@link #newLaboratory2(List, List)} instead
 	 */
+	@Deprecated
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public Laboratory newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
@@ -371,7 +364,9 @@ public class LabManager {
 	 * @param labRow the list of results ({@link String}s)
 	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
+	 * @deprecated use {@link LabIoOperations#newLabSecondProcedure2(Laboratory, List)} instead
 	 */
+	@Deprecated
 	protected Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}

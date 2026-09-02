@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -34,6 +34,7 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.permissions.model.Permission;
 import org.isf.sessionaudit.model.UserSession;
+import org.isf.utils.db.BCrypt;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -126,8 +127,8 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Inserts a new {@link User} into the DB.
-	 * 
+	 * Inserts a new {@link User} into the DB. The new user is always required to change the password at first login.
+	 *
 	 * @param user the {@link User} to insert
 	 * @return the new {@link User}
 	 * @throws OHServiceException When error occurs
@@ -142,6 +143,8 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(
 				new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
 		}
+		// the initial password is assigned by an administrator: the user must change it at first login
+		user.setPasswdMustChange(true);
 		return ioOperations.newUser(user);
 	}
 
@@ -171,6 +174,32 @@ public class UserBrowsingManager {
 	 */
 	public User updatePassword(User user) throws OHServiceException {
 		return ioOperations.updatePassword(user);
+	}
+
+	/**
+	 * Checks whether the {@link User}'s password has exceeded its lease ({@link GeneralData#PASSWORDLEASE} days) and
+	 * therefore must be changed. Returns {@code false} when the lease is disabled ({@code PASSWORDLEASE <= 0}) or the
+	 * last-changed date is unknown.
+	 *
+	 * @param user the {@link User}
+	 * @return {@code true} if the password lease has expired
+	 */
+	public boolean isPasswordExpired(User user) {
+		LocalDateTime passwdLastChanged = user.getPasswdLastChanged();
+		if (GeneralData.PASSWORDLEASE <= 0 || passwdLastChanged == null) {
+			return false;
+		}
+		return passwdLastChanged.plusDays(GeneralData.PASSWORDLEASE).isBefore(TimeTools.getNow());
+	}
+
+	/**
+	 * Returns the configured password lease ({@link GeneralData#PASSWORDLEASE}), i.e. the number of days after which
+	 * a password expires and must be changed.
+	 *
+	 * @return the password lease in days, or {@code 0} when the lease policy is disabled
+	 */
+	public int getPasswordLeaseDays() {
+		return GeneralData.PASSWORDLEASE;
 	}
 
 	/**
@@ -459,5 +488,41 @@ public class UserBrowsingManager {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
+	}
+
+	/**
+	 * Tests whether a password is acceptable, i.e. it satisfies the configured minimum length
+	 * ({@link GeneralData#STRONGLENGTH}, when enabled) and the strength policy ({@link #isPasswordStrong(String)}).
+	 *
+	 * @param password the password to validate
+	 * @return {@code true} if the password is acceptable, {@code false} otherwise
+	 */
+	public boolean isPasswordValid(String password) {
+		if (password == null) {
+			return false;
+		}
+		if (GeneralData.STRONGLENGTH > 0 && password.length() < GeneralData.STRONGLENGTH) {
+			return false;
+		}
+		return isPasswordStrong(password);
+	}
+
+	/**
+	 * Tests whether the given clear-text password is the same as the user's current (hashed) password, so callers
+	 * can reject reusing the current password on a change.
+	 *
+	 * @param user the user whose current password to compare against
+	 * @param newPassword the candidate new password, in clear text
+	 * @return {@code true} if {@code newPassword} matches the user's current password, {@code false} otherwise
+	 */
+	public boolean isSameAsCurrentPassword(User user, String newPassword) {
+		if (user == null || newPassword == null || newPassword.isEmpty()) {
+			return false;
+		}
+		String currentPassword = user.getPasswd();
+		if (currentPassword == null || !currentPassword.startsWith("$2")) {
+			return false;
+		}
+		return BCrypt.checkpw(newPassword, currentPassword);
 	}
 }

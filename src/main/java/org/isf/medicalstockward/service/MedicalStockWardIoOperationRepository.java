@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.isf.medicalstockward.model.MedicalWard;
@@ -38,39 +39,39 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code = :ward " +
-			"and medWard.id.medical.code = :medical")
+		"and medWard.id.medical.code = :medical")
 	MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);
 
 	@Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
-			"where medWard.id.medical.code=:medical")
-	Double findQuantityInWardWhereMedical(@Param("medical") int medical);
+		"where medWard.id.medical.code=:medical")
+	BigDecimal findQuantityInWardWhereMedical(@Param("medical") int medical);
 
 	@Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
-			"where medWard.id.medical.code=:medical and medWard.id.ward.code=:ward")
-	Double findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
+		"where medWard.id.medical.code=:medical and medWard.id.ward.code=:ward")
+	BigDecimal findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
 
 	@Modifying
 	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
-	void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+	void updateInQuantity(@Param("quantity") int quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Modifying
 	@Query(value = "update MedicalWard set in_quantity=in_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
-	void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);
+	void updateInQuantity(@Param("quantity") int quantity, @Param("ward") String ward, @Param("medical") int medical);
 
 	@Modifying
 	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot ", nativeQuery = true)
-	void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+	void updateOutQuantity(@Param("quantity") BigDecimal quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Modifying
 	@Query(value = "INSERT INTO OH_MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI, MDSRWRD_LT_ID_A, MDSRWRD_LOCK) VALUES (?, ?, ?, '0', ?, 0)", nativeQuery = true)
-	void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity, @Param("lot") String lot);
+	void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") int quantity, @Param("lot") String lot);
 
 	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward", nativeQuery = true)
 	List<MedicalWard> findAllWhereWard(@Param("ward") char wardId);
 
 	@Modifying
 	@Query(value = "update MedicalWard set out_quantity=out_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
-	void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);
+	void updateOutQuantity(@Param("quantity") BigDecimal quantity, @Param("ward") String ward, @Param("medical") int medical);
 
 	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward")
 	List<MedicalWard> findAllWhereWard(@Param("ward") String wordCode);
