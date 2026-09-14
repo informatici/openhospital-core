@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,6 +35,9 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 
 	@Query("select l from Lot l where l.medical.code = :medical order by l.dueDate")
 	List<Lot> findByMedicalOrderByDueDate(@Param("medical") int medicalCode);
+
+	@Query("select avg(l.cost) from Lot l where l.medical.code = :medical and l.cost > 0")
+	Double getAverageCostByMedical(@Param("medical") int medicalCode);
 
 	@Query("select coalesce(sum(case when m.type.type like '+%' then m.quantity else -m.quantity end), 0) from Movement m where m.lot = :lot")
 	Integer getMainStoreQuantity(@Param("lot") Lot lot);
