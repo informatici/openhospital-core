@@ -23,8 +23,11 @@ package org.isf.accounting.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -33,6 +36,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
@@ -110,6 +114,12 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@ManyToOne
 	@JoinColumn(name = "BLL_ADM_ID")
 	private Admission admission;
+
+	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BillItems> items = new ArrayList<>();
+
+	@OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BillPayments> payments = new ArrayList<>();
 
 	@Transient
 	private volatile int hashCode;
@@ -259,6 +269,14 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 
 	public void setAdmission(Admission admission) {
 		this.admission = admission;
+	}
+
+	public List<BillItems> getItems() {
+		return items;
+	}
+
+	public List<BillPayments> getPayments() {
+		return payments;
 	}
 
 	public int getLock() {
