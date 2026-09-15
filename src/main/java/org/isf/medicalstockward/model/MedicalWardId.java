@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -47,7 +47,7 @@ public class MedicalWardId implements Serializable {
 	private Medical medical;
 	
 	@ManyToOne
-	@JoinColumn(name="MDSRWRD_LT_ID_A")
+	@JoinColumn(name="MDSRWRD_LT_ID")
 	private Lot lot;
 
 	public MedicalWardId() {

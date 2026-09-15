@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,6 +24,7 @@ package org.isf.medicalstockward.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstockward.model.MovementWard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -52,9 +53,10 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
 	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOVWARD WHERE MMVN_WRD_ID_A = :wardID ORDER BY MMVN_ID DESC LIMIT 1", nativeQuery = true)
 	MovementWard findLastMovement(@Param("wardID") String wardID);
 
-	@Query(value = "select movWard from MovementWard movWard where movWard.ward.code = :wardCode and movWard.medical.code = :medicalCode and movWard.lot.code = :lotCode and movWard.date >= :date")
+	@Query(value = "select movWard from MovementWard movWard where movWard.ward.code = :wardCode and movWard.medical.code = :medicalCode " +
+					"and movWard.lot = :lot and movWard.date >= :date")
 	List<MovementWard> findByWardMedicalAndLotAfterOrSameDate(@Param("wardCode") String wardCode,
 					@Param("medicalCode") int medicalCode,
-					@Param("lotCode") String lotCode,
+					@Param("lot") Lot lot,
 					@Param("date") LocalDateTime date);
 }

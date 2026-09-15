@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,6 +22,7 @@
 package org.isf.medicalstock.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.medicalstock.model.Lot;
 import org.isf.ward.model.Ward;
@@ -31,7 +32,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
+public interface LotIoOperationRepository extends JpaRepository<Lot, Integer> {
+
+	Optional<Lot> findByCode(String code);
+
+	boolean existsByCode(String code);
 
 	@Query("select l from Lot l where l.medical.code = :medical order by l.dueDate")
 	List<Lot> findByMedicalOrderByDueDate(@Param("medical") int medicalCode);
@@ -47,7 +52,7 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 
 	@Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"
 			+ "SUM(IF(MMVT_TYPE LIKE '%+%',MMV_QTY,-MMV_QTY)) as quantity from "
-			+ "((OH_MEDICALDSRLOT join OH_MEDICALDSRSTOCKMOV on MMV_LT_ID_A=LT_ID_A) join OH_MEDICALDSR on MMV_MDSR_ID=MDSR_ID)"
+			+ "((OH_MEDICALDSRLOT join OH_MEDICALDSRSTOCKMOV on MMV_LT_ID=LT_ID) join OH_MEDICALDSR on MMV_MDSR_ID=MDSR_ID)"
 			+ " join OH_MEDICALDSRSTOCKMOVTYPE on MMV_MMVT_ID_A=MMVT_ID_A "
 			+ "where LT_ID_A=:code group by LT_ID_A order by LT_DUE_DATE", nativeQuery = true)
 	List<Object[]> findAllWhereLot(@Param("code") String code);

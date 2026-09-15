@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,6 +24,7 @@ package org.isf.medicalstockward.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
@@ -35,6 +36,7 @@ import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.stereotype.Service;
@@ -138,6 +140,7 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs.
 	 */
 	public MovementWard newMovementWard(MovementWard movement) throws OHServiceException {
+		resolveMovementLot(movement);
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -176,7 +179,25 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public MovementWard updateMovementWard(MovementWard movement) throws OHServiceException {
+		resolveMovementLot(movement);
 		return movementRepository.save(movement);
+	}
+
+	/**
+	 * Resolves the {@link Lot} of the specified movement against the persisted lot when it carries no internal id:
+	 * lots coming from the API/GUI may be known only by the (unique) printed code. An unknown code is rejected, as it
+	 * was when the code was the primary key and the save violated the foreign key on it (OP-1427 stage 1).
+	 *
+	 * @param movement the movement whose lot must be resolved.
+	 * @throws OHServiceException if the movement lot carries a code that does not exist.
+	 */
+	private void resolveMovementLot(MovementWard movement) throws OHServiceException {
+		Lot movementLot = movement.getLot();
+		if (movementLot != null && movementLot.getId() == null) {
+			Lot persistedLot = lotRepository.findByCode(movementLot.getCode())
+				.orElseThrow(() -> new OHServiceException(new OHExceptionMessage("Lot '" + movementLot.getCode() + "' not found.")));
+			movement.setlot(persistedLot);
+		}
 	}
 
 	/**
@@ -198,7 +219,7 @@ public class MedicalStockWardIoOperations {
 	protected void updateStockWardQuantity(MovementWard movement) throws OHServiceException {
 		BigDecimal qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
-		String lot = movement.getLot().getCode();
+		Integer lot = movement.getLot().getId();
 		String wardTo = null;
 		if (movement.getWardTo() != null) {
 			// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -335,7 +356,11 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
-		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
+		Lot foundLot = lotRepository.findByCode(lot).orElse(null);
+		if (foundLot == null) {
+			return null;
+		}
+		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, foundLot.getId());
 	}
 
 	/**
@@ -391,6 +416,10 @@ public class MedicalStockWardIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
 	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
-		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+		Lot foundLot = lotRepository.findByCode(lotCode).orElse(null);
+		if (foundLot == null) {
+			return Collections.emptyList();
+		}
+		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, foundLot, date);
 	}
 }
