@@ -69,6 +69,14 @@ public class PatientConsensusBrowserManager {
 		if (!patientConsensus.isConsensusFlag()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.consensus.mandatory.msg")));
 		}
+		String administrativeReason = patientConsensus.getAdministrativeReason();
+		if (administrativeReason != null && administrativeReason.length() > PatientConsensus.ADMINISTRATIVE_REASON_LENGTH) {
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.patient.consensus.thereasonistoolongmaxchars.fmt.msg",
+							PatientConsensus.ADMINISTRATIVE_REASON_LENGTH)));
+		}
+		if (administrativeReason != null && !patientConsensus.isAdministrativeFlag()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.reasonwithoutadministrativeflag.msg")));
+		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}

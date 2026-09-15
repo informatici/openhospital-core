@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -32,6 +32,8 @@ public class TestPatientConsensus {
 
 	private static boolean CONSENSUSFLAG = true;
 	private static boolean SERVICEFLAG = false;
+	private static boolean ADMINISTRATIVEFLAG = true;
+	private static String ADMINISTRATIVEREASON = "TestAdministrativeReason";
 
 	public PatientConsensus setup(boolean usingSet) throws OHException {
 		PatientConsensus patientConsensus;
@@ -44,6 +46,8 @@ public class TestPatientConsensus {
 		} else {
 			// Create PatientConsensus with all parameters
 			patientConsensus = new PatientConsensus(CONSENSUSFLAG, SERVICEFLAG, patient);
+			patientConsensus.setAdministrativeFlag(ADMINISTRATIVEFLAG);
+			patientConsensus.setAdministrativeReason(ADMINISTRATIVEREASON);
 		}
 		return patientConsensus;
 	}
@@ -51,12 +55,16 @@ public class TestPatientConsensus {
 	public void setParameters(PatientConsensus patientConsensus, Patient patient) {
 		patientConsensus.setConsensusFlag(CONSENSUSFLAG);
 		patientConsensus.setServiceFlag(SERVICEFLAG);
+		patientConsensus.setAdministrativeFlag(ADMINISTRATIVEFLAG);
+		patientConsensus.setAdministrativeReason(ADMINISTRATIVEREASON);
 		patientConsensus.setPatient(patient);
 	}
 
 	public void check(PatientConsensus patientConsensus) {
 		assertThat(patientConsensus.isConsensusFlag()).isTrue();
 		assertThat(patientConsensus.isServiceFlag()).isFalse();
+		assertThat(patientConsensus.isAdministrativeFlag()).isTrue();
+		assertThat(patientConsensus.getAdministrativeReason()).isEqualTo(ADMINISTRATIVEREASON);
 		assertThat(patientConsensus.getPatient()).isNotNull();
 	}
 
