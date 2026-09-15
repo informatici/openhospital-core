@@ -53,7 +53,7 @@ Bills with status `'D'` (Deleted) are skipped entirely.
    mysql -u <user> -p <database> < fix_bill_amount_balance.sql
    ```
 
-3. Examine the diff report printed by Step 5.  It lists only the bills whose
+3. Examine the diff report printed by Step 5. It lists only the bills whose
    stored values differ from the recomputed ones:
 
    | Column | Meaning |
@@ -88,7 +88,7 @@ Bills with status `'D'` (Deleted) are skipped entirely.
    ```
 
 **Idempotency**  
-The script is safe to run multiple times.  After a successful `COMMIT` the diff
+The script can be executed multiple times. After a successful `COMMIT` the diff
 report will return zero rows on subsequent runs.
 
 **Caution**  
