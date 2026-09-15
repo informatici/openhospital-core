@@ -251,7 +251,8 @@ class Tests extends OHCoreTestCase {
 		Integer id = setupTestLaboratory(true);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
+		var now = TimeTools.getNow();
+		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, now.minusWeeks(1), now, null);
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -263,7 +264,7 @@ class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -280,7 +281,7 @@ class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -296,7 +297,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundLaboratory).isNotNull();
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -682,7 +683,7 @@ class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundLaboratory).isNotNull();
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -699,7 +700,7 @@ class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -715,7 +716,7 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundLaboratory).isNotNull();
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -738,7 +739,7 @@ class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -767,7 +768,34 @@ class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getLabDate(), laboratory.getLabDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getLabDate(), laboratory.getLabDate(), null);
+
+		// then:
+		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
+		// TODO: if resource bundles are made available this value needs to change
+		assertThat(laboratories.get(0).getResult()).isEqualTo("angal.lab.multipleresults.txt,TestDescription");
+	}
+
+	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
+	@MethodSource("labExtended")
+	void testMgrGetLaboratoryForPrintMultipeResultsRowsWithPatient(boolean labExtended) throws Exception {
+		GeneralData.LABEXTENDED = labExtended;
+		ExamType examType = testExamType.setup(false);
+		Exam exam = testExam.setup(examType, 2, false);
+		Patient patient = testPatient.setup(false);
+		examTypeIoOperationRepository.saveAndFlush(examType);
+		examIoOperationRepository.saveAndFlush(exam);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
+		// TODO: if resource bundles are made available this setResults() needs to change
+		laboratory.setResult("angal.lab.multipleresults.txt");
+		labIoOperationRepository.saveAndFlush(laboratory);
+		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
+		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
+
+		// when: the patient-aware path also expands multiple results
+		List<LaboratoryForPrint> laboratories = labManager
+				.getLaboratoryForPrint(laboratory.getExam().getDescription(), laboratory.getLabDate(), laboratory.getLabDate(), patient);
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
@@ -1727,7 +1755,8 @@ class Tests extends OHCoreTestCase {
 	void testLaboratoryForPrintGetterSetter(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		setupTestLaboratory(false);
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
+		var now = TimeTools.getNow();
+		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, now.minusWeeks(1), now, null);
 
 		LaboratoryForPrint laboratoryForPrint = laboratories.get(0);
 

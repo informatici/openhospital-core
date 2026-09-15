@@ -273,10 +273,16 @@ public class TimeTools {
 	}
 
 	public static LocalDateTime getBeginningOfDay(LocalDateTime date) {
+		if (date == null) {
+			return null;
+		}
 		return date.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	public static LocalDateTime getBeginningOfNextDay(LocalDateTime date) {
+		if (date == null) {
+			return null;
+		}
 		return date.plusDays(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
