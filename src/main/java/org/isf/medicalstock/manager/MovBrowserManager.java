@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -207,6 +207,12 @@ public class MovBrowserManager {
 					throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage(
 						"angal.medicalstock.notpossibletodeletethismovementbecauseitisrelatedtoaninventory.msg")));
 				}
+			} else if (quantity != 0) {
+				// OP-1428: the lot survives the deletion, so reverse the deleted movement's contribution to its overall
+				// remaining quantity; the sign follows the movement type prefix ('+%') like the computed definition,
+				// independently of the contains("+") branch predicate above
+				int lotDelta = movType.getType().startsWith("+") ? -quantity : quantity;
+				lotRepository.updateQuantity(lot.getCode(), BigDecimal.valueOf(lotDelta));
 			}
 		} else {
 			Ward ward = lastMovement.getWard();
@@ -229,6 +235,8 @@ public class MovBrowserManager {
 			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 
+			// OP-1428: deleting a discharge is net-zero for the lot's overall remaining quantity:
+			// the quantity taken back from the ward returns to the main store
 			ioOperations.deleteMovement(lastMovement);
 		}
 	}

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -1408,6 +1408,133 @@ class Tests extends OHCoreTestCase {
 		assertThat(latestMovementWardList.size()).isEqualTo(2);
 		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard, null))
 						.isInstanceOf(OHServiceException.class);
+	}
+
+	@Test
+	void testLotQuantityUpdatedByDispenseMovementWard() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 100, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+
+		// OP-1428: the dispensed quantity leaves the hospital, decreasing the lot's persisted quantity;
+		// updateQuantity() bypasses the persistence context, so re-fetch the lot from the database
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo("-46.00");
+	}
+
+	@Test
+	void testLotQuantityUnchangedByFractionalRectificationMovementWard() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 100, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+		movementWard.setQuantity(new BigDecimal("-0.50"));
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+
+		// OP-1428: a fractional rectification-in is INT-truncated when crediting the ward (in_quantity is an int),
+		// so a -0.50 movement leaves the ward stock unchanged and the lot's persisted quantity must not change either
+		entityManager.clear();
+		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
+		assertThat(foundMedicalWard).isNotNull();
+		assertThat(foundMedicalWard.getIn_quantity()).isEqualTo(100);
+		Lot foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+	}
+
+	@Test
+	void testLotQuantityUnchangedByWardToWardTransfer() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		Ward wardTo = testWard.setup(false);
+		wardTo.setCode("X");
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		wardIoOperationRepository.saveAndFlush(wardTo);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 100, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
+		medicalStockWardIoOperations.newMovementWard(movementWard);
+
+		// OP-1428: a ward-to-ward transfer is net-zero hospital-wide: the lot's persisted quantity must not change
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+	}
+
+	@Test
+	void testLotQuantityRestoredByDeleteLastMovementWard() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 100, BigDecimal.ZERO, lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
+		movWardBrowserManager.newMovementWard(movementWard);
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo("-46.00");
+
+		MovementWard lastMovementWard = movementWardIoOperationRepository.findById(movementWard.getCode()).orElse(null);
+		assertThat(lastMovementWard).isNotNull();
+		movWardBrowserManager.deleteLastMovementWard(lastMovementWard, "wrong entry");
+		// OP-1428: deleting the dispense returns the quantity to the ward, restoring the lot's persisted quantity
+		entityManager.clear();
+		foundLot = lotIoOperationRepository.findById(lot.getCode()).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
 	}
 
 	private Patient setupTestPatient(boolean usingSet) throws OHException {

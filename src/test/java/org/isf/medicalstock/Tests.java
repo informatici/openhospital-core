@@ -1447,6 +1447,104 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
+	void testLotQuantityUpdatedByChargeMovement(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		Medical medical = foundMovement.getMedical();
+		Lot lot2 = testLot.setup(medical, false);
+		lot2.setCode("second");
+		Movement chargeMovement = new Movement(medical, foundMovement.getType(), null, lot2, TimeTools.getNow(), 7, foundMovement.getSupplier(), "newReference");
+		medicalStockIoOperation.newMovement(chargeMovement);
+		// OP-1428: updateQuantity() bypasses the persistence context, so re-fetch the lot from the database
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById("second").orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo("7");
+		// the persisted quantity mirrors the computed overall quantity
+		Lot lotWithQuantities = medicalStockIoOperation.getLot("second");
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(lotWithQuantities.getOverallQuantity()));
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotQuantityUnchangedByAutomaticDischargingMovement(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		Medical medical = foundMovement.getMedical();
+		Ward ward = foundMovement.getWard();
+		String lotCode = foundMovement.getLot().getCode();
+		Movement chargeMovement = new Movement(medical, foundMovement.getType(), null, foundMovement.getLot(), TimeTools.getNow(), 10,
+			foundMovement.getSupplier(), "newReference");
+		medicalStockIoOperation.newMovement(chargeMovement);
+
+		MovementType dischargeMovementType = testMovementType.setup(false);
+		dischargeMovementType.setCode("discharge");
+		dischargeMovementType.setType("-");
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
+		Movement dischargeMovement = new Movement(medical, dischargeMovementType, ward, null, TimeTools.getNow(), 5, null, "newReference2");
+		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
+
+		// OP-1428: the discharge moves the quantity to the destination ward, so hospital-wide the lot quantity must not change
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById(lotCode).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo("10");
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotQuantityUpdatedByDeleteLastChargeMovement(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		Medical medical = foundMovement.getMedical();
+		String lotCode = foundMovement.getLot().getCode();
+		Movement chargeMovement = new Movement(medical, foundMovement.getType(), null, foundMovement.getLot(), TimeTools.getNow(), 7,
+			foundMovement.getSupplier(), "newReference");
+		Movement storedMovement = medicalStockIoOperation.newMovement(chargeMovement);
+		entityManager.clear();
+		Lot foundLot = lotIoOperationRepository.findById(lotCode).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo("7");
+
+		Movement lastMovement = movementIoOperationRepository.findById(storedMovement.getCode()).orElse(null);
+		assertThat(lastMovement).isNotNull();
+		movBrowserManager.deleteLastMovement(lastMovement, null);
+		// OP-1428: the lot survives (another movement references it), so only the deleted charge is removed from its quantity
+		entityManager.clear();
+		foundLot = lotIoOperationRepository.findById(lotCode).orElse(null);
+		assertThat(foundLot).isNotNull();
+		assertThat(foundLot.getQuantity()).isEqualByComparingTo(BigDecimal.ZERO);
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
+	void testLotDeletedByDeleteLastChargeMovementWithSingleMovement(boolean in, boolean out, boolean toward) throws Exception {
+		setGeneralData(in, out, toward);
+		int code = setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundMovement).isNotNull();
+		Medical medical = foundMovement.getMedical();
+		Lot lot2 = testLot.setup(medical, false);
+		lot2.setCode("second");
+		Movement chargeMovement = new Movement(medical, foundMovement.getType(), null, lot2, TimeTools.getNow(), 7, foundMovement.getSupplier(), "newReference");
+		Movement storedMovement = medicalStockIoOperation.newMovement(chargeMovement);
+		Movement lastMovement = movementIoOperationRepository.findById(storedMovement.getCode()).orElse(null);
+		assertThat(lastMovement).isNotNull();
+		movBrowserManager.deleteLastMovement(lastMovement, null);
+		// OP-1428: the deleted charge was the only movement of the lot, so the lot itself is removed
+		entityManager.flush();
+		entityManager.clear();
+		assertThat(lotIoOperationRepository.findById("second")).isNotPresent();
+	}
+
+	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@MethodSource("automaticlot")
 	void testIoUpdateMedicalStockTableSameDate() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);

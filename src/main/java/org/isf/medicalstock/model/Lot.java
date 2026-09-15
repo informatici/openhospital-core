@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -75,7 +75,14 @@ public class Lot extends Auditable<String> {
 	private BigDecimal cost;
 
 	/**
-	 * Automatic calculated field for a lot's quantity stocked in the main store, 
+	 * Persisted mirror of the lot's overall remaining quantity in the whole hospital (main store + wards,
+	 * see {@link #overallQuantity}), maintained via atomic deltas applied by every stock movement operation.
+	 */
+	@Column(name = "LT_QTY", precision = 19, scale = 2, nullable = false, updatable = false)
+	private BigDecimal quantity = BigDecimal.ZERO;
+
+	/**
+	 * Automatic calculated field for a lot's quantity stocked in the main store,
 	 * taking in account only the main MedicalStock movements (charges and discharges).<br>
 	 * 
 	 * <i>
@@ -174,6 +181,10 @@ public class Lot extends Auditable<String> {
 
 	public BigDecimal getCost() {
 		return cost;
+	}
+
+	public BigDecimal getQuantity() {
+		return quantity;
 	}
 
 	public void setCode(String aCode) {

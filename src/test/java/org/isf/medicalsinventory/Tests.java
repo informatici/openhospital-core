@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -632,6 +632,13 @@ class Tests extends OHCoreTestCase {
 		testMedicalInventoryRow.check(foundMedicalInventoryRow, foundMedicalInventoryRow.getId());
 	}
 
+	private void checkPersistedLotQuantity(String lotCode) {
+		Lot persistedLot = lotIoOperationRepository.findById(lotCode).orElse(null);
+		assertThat(persistedLot).isNotNull();
+		double overallQuantity = lotIoOperationRepository.getMainStoreQuantity(persistedLot) + lotIoOperationRepository.getWardsTotalQuantity(persistedLot);
+		assertThat(persistedLot.getQuantity()).isEqualByComparingTo(BigDecimal.valueOf(overallQuantity));
+	}
+
 	private int setupTestMedicalInventoryRow() throws OHServiceException, OHException {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -749,6 +756,12 @@ class Tests extends OHCoreTestCase {
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
 		assertThat(inventory.getStatus()).isEqualTo(status);
+		// OP-1428: the persisted lot quantities must mirror the computed overall quantities after the inventory is confirmed;
+		// updateQuantity() bypasses the persistence context, so re-fetch the lots from the database
+		entityManager.clear();
+		checkPersistedLotQuantity(lotOne.getCode());
+		checkPersistedLotQuantity(lotTwo.getCode());
+		checkPersistedLotQuantity(lotThree.getCode());
 	}
 
 	@Test

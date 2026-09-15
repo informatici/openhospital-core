@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -32,6 +32,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.model.MovementWardLog;
@@ -55,10 +56,13 @@ public class MovWardBrowserManager {
 
 	private final MovementWardLogIoOperationRepository movementWardLogRepository;
 
+	private final LotIoOperationRepository lotRepository;
+
 	public MovWardBrowserManager(MedicalStockWardIoOperations medicalStockWardIoOperations,
-		MovementWardLogIoOperationRepository movementWardLogRepository) {
+		MovementWardLogIoOperationRepository movementWardLogRepository, LotIoOperationRepository lotRepository) {
 		this.ioOperations = medicalStockWardIoOperations;
 		this.movementWardLogRepository = movementWardLogRepository;
+		this.lotRepository = lotRepository;
 	}
 
 	/**
@@ -365,6 +369,8 @@ public class MovWardBrowserManager {
 					ioOperations.updateMedicalWard(medWard);
 				}
 				ioOperations.deleteMovementWard(lastMovInWardTo);
+				// OP-1428: deleting a ward-to-ward transfer is net-zero for the lot's overall remaining quantity:
+				// the quantity taken back from the destination ward returns to the origin ward below
 			} else {
 				throw new OHDataValidationException(
 					new OHExceptionMessage(MessageBundle.formatMessage(
@@ -378,6 +384,10 @@ public class MovWardBrowserManager {
 		BigDecimal quantity = medWard.getOut_quantity().subtract(movQty);
 		medWard.setOut_quantity(quantity);
 		ioOperations.updateMedicalWard(medWard);
+		if (wardTo == null && movQty.signum() != 0) {
+			// OP-1428: reversing a dispense returns the quantity to the ward, increasing the lot's overall remaining quantity
+			lotRepository.updateQuantity(lot.getCode(), movQty);
+		}
 		ioOperations.deleteMovementWard(movWardToDelete);
 	}
 

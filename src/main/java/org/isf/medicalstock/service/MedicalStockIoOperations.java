@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -363,6 +363,13 @@ public class MedicalStockIoOperations {
 			Medical medical = movement.getMedical();
 			Medical updatedMedical = updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
 			updateMedicalStockTable(updatedMedical, movement.getDate().toLocalDate(), movement.getQuantity());
+			if (movement.getQuantity() != 0) {
+				// OP-1428: the charge increases the lot's overall remaining quantity; the delta sign follows the movement type
+				// prefix ('+%') like the computed definition (getMainStoreQuantity and the migration backfill), independently
+				// of the contains("+") branch predicate above
+				int lotDelta = movement.getType().getType().startsWith("+") ? movement.getQuantity() : -movement.getQuantity();
+				lotRepository.updateQuantity(movement.getLot().getCode(), BigDecimal.valueOf(lotDelta));
+			}
 			return updatedMedical;
 
 		} else {
@@ -375,6 +382,14 @@ public class MedicalStockIoOperations {
 				if (ward != null) {
 					// updates stock quantity for wards
 					updateMedicalWardQuantity(ward, medical, movement.getQuantity(), movement.getLot());
+					// OP-1428: hospital-wide the discharge is net-zero for the lot: the quantity leaving the main store
+					// is credited to the destination ward, so the lot's overall remaining quantity is left untouched
+				} else if (movement.getQuantity() != 0) {
+					// OP-1428: without a destination ward the quantity leaves the hospital altogether; the delta sign follows
+					// the movement type prefix ('+%') like the computed definition, independently of the contains("+")
+					// branch predicate above
+					int lotDelta = movement.getType().getType().startsWith("+") ? movement.getQuantity() : -movement.getQuantity();
+					lotRepository.updateQuantity(movement.getLot().getCode(), BigDecimal.valueOf(lotDelta));
 				}
 				return updatedMedical;
 			} catch (OHServiceException serviceException) {
