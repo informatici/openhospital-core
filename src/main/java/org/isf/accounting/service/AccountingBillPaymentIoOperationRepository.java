@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,7 +28,6 @@ import java.util.List;
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -49,10 +48,6 @@ public interface AccountingBillPaymentIoOperationRepository extends JpaRepositor
 
 	@Query(value = "SELECT BP FROM BillPayments BP WHERE BP.bill.id = :billId ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllWherBillIdByOrderByBillAndDate(@Param("billId") Integer billId);
-
-	@Modifying
-	@Query(value = "DELETE FROM BillPayments BP where BP.bill.id = :billId")
-	void deleteWhereId(@Param("billId") Integer billId);
 
 	@Query(value = "SELECT BP FROM BillPayments BP WHERE " +
 			"BP.bill.billPatient.code = :patientCode and " +
