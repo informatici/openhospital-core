@@ -37,6 +37,7 @@ public class TestSupplier {
 	private final String supEmail = "TestEmail";
 	private final String supNote = "TestNote";
 	private final Character supDeleted = 'N';
+	private final boolean isVirtual = true;
 
 	public Supplier setup(boolean usingSet) throws OHException {
 		Supplier supplier;
@@ -45,8 +46,9 @@ public class TestSupplier {
 			supplier = new Supplier();
 			setParameters(supplier);
 		} else {
-			// Create Supplier with all parameters 
+			// Create Supplier with all parameters
 			supplier = new Supplier(supId, supName, supAddress, supTaxcode, supPhone, supFax, supEmail, supNote, supDeleted);
+			supplier.setVirtual(isVirtual);
 		}
 
 		return supplier;
@@ -61,6 +63,7 @@ public class TestSupplier {
 		supplier.setSupNote(supNote);
 		supplier.setSupPhone(supPhone);
 		supplier.setSupTaxcode(supTaxcode);
+		supplier.setVirtual(isVirtual);
 	}
 
 	public void check(Supplier supplier) {
@@ -72,5 +75,6 @@ public class TestSupplier {
 		assertThat(supplier.getSupNote()).isEqualTo(supNote);
 		assertThat(supplier.getSupPhone()).isEqualTo(supPhone);
 		assertThat(supplier.getSupTaxcode()).isEqualTo(supTaxcode);
+		assertThat(supplier.isVirtual()).isEqualTo(isVirtual);
 	}
 }

@@ -89,6 +89,9 @@ public class Supplier extends SoftDeletableAuditable<String> implements Serializ
 	@Column(name = "SUP_DELETED", columnDefinition = "char(1) default 'N'")
 	private char supDeleted = 'N';
 
+	@Column(name = "SUP_IS_VIRTUAL")
+	private boolean isVirtual;
+
 	@Version
 	@Column(name = "SUP_LOCK")
 	private int lock;
@@ -217,6 +220,14 @@ public class Supplier extends SoftDeletableAuditable<String> implements Serializ
 
 	public void setSupDeleted(Character supDeleted) {
 		this.supDeleted = supDeleted;
+	}
+
+	public boolean isVirtual() {
+		return this.isVirtual;
+	}
+
+	public void setVirtual(boolean isVirtual) {
+		this.isVirtual = isVirtual;
 	}
 
 	public int getLock() { return lock; }
