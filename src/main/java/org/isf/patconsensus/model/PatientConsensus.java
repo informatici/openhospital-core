@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -47,8 +47,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PTC_LAST_MODIFIED_DATE"))
 public class PatientConsensus extends Auditable<String> {
 
-	public static final int ADMINISTRATIVE_REASON_LENGTH = 255;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PTC_ID")
@@ -59,12 +57,6 @@ public class PatientConsensus extends Auditable<String> {
 
 	@Column(name = "PTC_SERVICE")
 	private boolean serviceFlag;
-
-	@Column(name = "PTC_ADMINISTRATIVE")
-	private boolean administrativeFlag;
-
-	@Column(name = "PTC_ADMINISTRATIVE_REASON", length = ADMINISTRATIVE_REASON_LENGTH)
-	private String administrativeReason;
 
 	@OneToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
@@ -105,22 +97,6 @@ public class PatientConsensus extends Auditable<String> {
 		this.serviceFlag = serviceFlag;
 	}
 
-	public boolean isAdministrativeFlag() {
-		return administrativeFlag;
-	}
-
-	public void setAdministrativeFlag(boolean administrativeFlag) {
-		this.administrativeFlag = administrativeFlag;
-	}
-
-	public String getAdministrativeReason() {
-		return administrativeReason;
-	}
-
-	public void setAdministrativeReason(String administrativeReason) {
-		this.administrativeReason = administrativeReason;
-	}
-
 	public Patient getPatient() {
 		return patient;
 	}
@@ -132,7 +108,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
-						+ ", administrativeFlag=" + administrativeFlag + ", administrativeReason=" + administrativeReason + ", patient=" + patient + ']';
+						+ ", patient=" + patient + ']';
 	}
 
 
