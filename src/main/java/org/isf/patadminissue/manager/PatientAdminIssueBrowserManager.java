@@ -21,6 +21,7 @@
  */
 package org.isf.patadminissue.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,6 +75,9 @@ public class PatientAdminIssueBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<PatientAdminIssue> getOpenIssues(Collection<Integer> patientCodes) throws OHServiceException {
+		if (patientCodes.isEmpty()) {
+			return List.of();
+		}
 		return ioOperations.getOpenIssues(patientCodes);
 	}
 
@@ -85,11 +89,7 @@ public class PatientAdminIssueBrowserManager {
 	 * @throws OHServiceException if the issue is not valid
 	 */
 	public PatientAdminIssue openIssue(PatientAdminIssue issue) throws OHServiceException {
-		validateIssue(issue);
-		issue.setReason(issue.getReason().trim());
-		issue.setFromDate(TimeTools.getNow());
-		issue.setToDate(null);
-		return ioOperations.saveIssue(issue);
+		return saveIssues(List.of(issue), List.of()).get(0);
 	}
 
 	/**
@@ -97,24 +97,59 @@ public class PatientAdminIssueBrowserManager {
 	 *
 	 * @param issue the issue to resolve
 	 * @return the resolved issue.
-	 * @throws OHServiceException if the issue is already resolved
+	 * @throws OHServiceException if the issue is not open
 	 */
 	public PatientAdminIssue resolveIssue(PatientAdminIssue issue) throws OHServiceException {
-		if (!issue.isOpen()) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.patadminissue.theissueisalreadyresolved.msg")));
-		}
-		issue.setToDate(TimeTools.getNow());
-		return ioOperations.saveIssue(issue);
+		return saveIssues(List.of(), List.of(issue)).get(0);
 	}
 
 	/**
-	 * Verify if the {@link PatientAdminIssue} is valid for CRUD and throw an exception with the list of errors, if any.
+	 * Open and resolve {@link PatientAdminIssue}s in a single transaction: the issues to open start now, the issues to
+	 * resolve end now, and nothing is written unless every issue is valid.
+	 *
+	 * @param issuesToOpen the issues to open, each with its patient and reason
+	 * @param issuesToResolve the open issues to resolve
+	 * @return the saved issues, the opened ones first.
+	 * @throws OHServiceException if an issue to open is not valid or an issue to resolve is not open
+	 */
+	public List<PatientAdminIssue> saveIssues(List<PatientAdminIssue> issuesToOpen, List<PatientAdminIssue> issuesToResolve) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		for (PatientAdminIssue issue : issuesToOpen) {
+			validateIssue(issue, errors);
+		}
+		for (PatientAdminIssue issue : issuesToResolve) {
+			if (issue.getId() == 0 || !issue.isOpen()) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patadminissue.theissueisnotopen.msg")));
+			}
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+		LocalDateTime now = TimeTools.getNow();
+		for (PatientAdminIssue issue : issuesToOpen) {
+			issue.setReason(issue.getReason().trim());
+			issue.setFromDate(now);
+			issue.setToDate(null);
+		}
+		issuesToResolve.forEach(issue -> issue.setToDate(now));
+		List<PatientAdminIssue> issues = new ArrayList<>(issuesToOpen);
+		issues.addAll(issuesToResolve);
+		try {
+			return ioOperations.saveIssues(issues);
+		} catch (OHServiceException e) {
+			// nothing was written, so the issues to resolve are still open: leave them as they were
+			issuesToResolve.forEach(issue -> issue.setToDate(null));
+			throw e;
+		}
+	}
+
+	/**
+	 * Verify if the {@link PatientAdminIssue} is valid for CRUD and add the errors found, if any, to the given list.
 	 *
 	 * @param issue the issue to validate
-	 * @throws OHDataValidationException
+	 * @param errors the list the errors are added to
 	 */
-	private void validateIssue(PatientAdminIssue issue) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<>();
+	private void validateIssue(PatientAdminIssue issue, List<OHExceptionMessage> errors) {
 		if (issue.getPatient() == null || issue.getPatient().getCode() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patadminissue.thepatientismandatory.msg")));
 		}
@@ -124,9 +159,6 @@ public class PatientAdminIssueBrowserManager {
 		} else if (reason.trim().length() > PatientAdminIssue.REASON_LENGTH) {
 			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.patadminissue.thereasonistoolongmaxchars.fmt.msg",
 							PatientAdminIssue.REASON_LENGTH)));
-		}
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
 		}
 	}
 

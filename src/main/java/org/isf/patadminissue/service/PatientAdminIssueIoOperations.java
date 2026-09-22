@@ -75,14 +75,14 @@ public class PatientAdminIssueIoOperations {
 	}
 
 	/**
-	 * Save a {@link PatientAdminIssue}.
+	 * Save the {@link PatientAdminIssue}s in a single transaction.
 	 *
-	 * @param issue the issue to save
-	 * @return the saved issue.
+	 * @param issues the issues to save
+	 * @return the saved issues, in the same order.
 	 * @throws OHServiceException
 	 */
-	public PatientAdminIssue saveIssue(PatientAdminIssue issue) throws OHServiceException {
-		return repository.save(issue);
+	public List<PatientAdminIssue> saveIssues(List<PatientAdminIssue> issues) throws OHServiceException {
+		return repository.saveAll(issues);
 	}
 
 }
