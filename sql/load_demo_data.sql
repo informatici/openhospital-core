@@ -6967,6 +6967,42 @@ INSERT INTO `oh_patient` VALUES (681,'Geonna','Revendul','Geonna Revendul','1988
 UNLOCK TABLES;
 
 --
+-- Table structure for table `oh_patient_admin_issue`
+--
+
+DROP TABLE IF EXISTS `oh_patient_admin_issue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `oh_patient_admin_issue` (
+  `PAI_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PAI_PAT_ID` int(11) NOT NULL,
+  `PAI_REASON` varchar(255) NOT NULL,
+  `PAI_FROM` datetime NOT NULL,
+  `PAI_TO` datetime DEFAULT NULL,
+  `PAI_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PAI_CREATED_DATE` datetime DEFAULT NULL,
+  `PAI_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PAI_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PAI_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`PAI_ID`),
+  KEY `FK_PATIENT_ADMIN_ISSUE_PATIENT` (`PAI_PAT_ID`),
+  CONSTRAINT `FK_PATIENT_ADMIN_ISSUE_PATIENT` FOREIGN KEY (`PAI_PAT_ID`) REFERENCES `oh_patient` (`PAT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `oh_patient_admin_issue`
+--
+
+LOCK TABLES `oh_patient_admin_issue` WRITE;
+/*!40000 ALTER TABLE `oh_patient_admin_issue` DISABLE KEYS */;
+INSERT INTO `oh_patient_admin_issue` VALUES (1,16,'Identity document still to be verified','2026-01-15 18:49:57',NULL,'admin','2026-01-15 18:49:57','admin','2026-01-15 18:49:57',1);
+INSERT INTO `oh_patient_admin_issue` VALUES (2,42,'Referral letter missing from the file','2025-11-03 09:12:00','2025-11-20 16:40:00','admin','2025-11-03 09:12:00','admin','2025-11-20 16:40:00',1);
+INSERT INTO `oh_patient_admin_issue` VALUES (3,42,'Registration form still to be signed','2026-01-15 18:53:17',NULL,'admin','2026-01-15 18:53:17','admin','2026-01-15 18:53:17',1);
+/*!40000 ALTER TABLE `oh_patient_admin_issue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `oh_patient_consensus`
 --
 
