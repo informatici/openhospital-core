@@ -141,6 +141,12 @@
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.6</version>
+			<exclusions>
+		        <exclusion>
+		            <groupId>net.java.dev.jna</groupId>
+		            <artifactId>platform</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
