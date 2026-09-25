@@ -24,6 +24,7 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.telemetry.manager.TelemetryManager;
@@ -65,6 +66,7 @@ public class TelemetryDataCollector extends AbstractDataCollector {
 		try {
 			Telemetry telemetry = telemetryManager.retrieveOrBuildNewTelemetry();
 			result.put(CollectorsConstants.TEL_UUID, telemetry.getId().getSoftwareUUID());
+			result.put(CollectorsConstants.APP_VERSION, Version.getVersion().toString());
 			if (null != telemetry.getSentTimestamp()) {
 				result.put(CollectorsConstants.TEL_SENT_DATE, TimeTools.formatDateTimeReport(telemetry.getSentTimestamp()));
 			}
