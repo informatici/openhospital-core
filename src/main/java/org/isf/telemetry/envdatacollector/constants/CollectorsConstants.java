@@ -28,6 +28,7 @@ public interface CollectorsConstants {
 	String TEL_SENT_DATE = "tel_sent_date";
 	String TEL_OPTIN_DATE = "tel_optin_date";
 	String TEL_OPTOUT_DATE = "tel_optout_date";
+	String APP_VERSION = "app_version";
 
 	// TEL_DBMS
 	String DBMS_DRIVER_NAME = "dbms_driver_name";
@@ -54,7 +55,6 @@ public interface CollectorsConstants {
 	String OS_CODENAME = "os_codename";
 
 	// TEL_OH
-	String APP_VERSION = "app_version";
 	String APP_MODE = "app_mode";
 	String APP_DEMODATA = "app_demodata";
 	String APP_APISERVER = "app_apiserver";

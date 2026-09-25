@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.Version;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.model.TelemetryId;
@@ -75,7 +77,18 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 		Map<String, String> data = telemetryDataCollector.retrieveData();
 		assertThat(data).isNotNull();
 		assertThat(data).isNotEmpty();
-		assertThat(data).hasSize(4);
+		assertThat(data).hasSize(5);
+		assertThat(data).containsEntry(CollectorsConstants.APP_VERSION, Version.getVersion().toString());
+	}
+
+	@Test
+	void testRetrieveDataWithoutTimestamps() throws Exception {
+		Telemetry telemetry = new Telemetry();
+		telemetry.setId(new TelemetryId());
+		when(telemetryManagerMock.retrieveOrBuildNewTelemetry()).thenReturn(telemetry);
+		Map<String, String> data = telemetryDataCollector.retrieveData();
+		assertThat(data).containsOnlyKeys(CollectorsConstants.TEL_UUID, CollectorsConstants.APP_VERSION);
+		assertThat(data).containsEntry(CollectorsConstants.APP_VERSION, Version.getVersion().toString());
 	}
 
 	private Telemetry getTelemetry() {
