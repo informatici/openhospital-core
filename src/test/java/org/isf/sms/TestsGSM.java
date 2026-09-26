@@ -24,6 +24,7 @@ package org.isf.sms;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 import org.isf.OHCoreTestCase;
 import org.isf.sms.model.Sms;
@@ -32,6 +33,7 @@ import org.isf.sms.service.SmsIoOperationRepository;
 import org.isf.sms.service.SmsOperations;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -53,9 +55,12 @@ class TestsGSM extends OHCoreTestCase {
 
 	@Test
 	void testInitialize() throws Exception {
-		GSMGatewayService gsmGatewayService = new GSMGatewayService();
-		// does not get very far into the method
-		assertThat(gsmGatewayService.initialize()).isFalse();
+		try (MockedStatic<SerialPort> mockedSerialPort = mockStatic(SerialPort.class)) {
+			mockedSerialPort.when(SerialPort::getCommPorts).thenReturn(new SerialPort[0]);
+
+			GSMGatewayService gsmGatewayService = new GSMGatewayService();
+			assertThat(gsmGatewayService.initialize()).isFalse();
+		}
 	}
 
 	@Test
