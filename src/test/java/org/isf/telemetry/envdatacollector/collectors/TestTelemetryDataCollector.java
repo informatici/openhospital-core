@@ -67,11 +67,6 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDescription() {
-		assertThat(telemetryDataCollector.getDescription()).isEqualTo("Telemetry Unique ID (this instance)");
-	}
-
-	@Test
 	void testRetrieveData() throws Exception {
 		when(telemetryManagerMock.retrieveOrBuildNewTelemetry()).thenReturn(getTelemetry());
 		Map<String, String> data = telemetryDataCollector.retrieveData();

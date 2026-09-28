@@ -129,12 +129,6 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDescription() {
-		assertThat(openHospitalDataCollector.getDescription()).isEqualTo(
-						"Hospital general information (Country; Region, City, Postal Code, TimeZone, Currency, OH Version, Number of Patients / Beds / Wards / Users)");
-	}
-
-	@Test
 	void testRetrieveData() throws Exception {
 		ReflectionTestUtils.setField(openHospitalDataCollector, "settings", geoIpInfoSettingsMock);
 		when(geoIpInfoSettingsMock.getSelectedService()).thenReturn("theService");

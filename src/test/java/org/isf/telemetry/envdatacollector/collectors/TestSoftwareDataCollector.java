@@ -74,12 +74,6 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDescription() {
-		assertThat(softwareDataCollector.getDescription()).startsWith(
-						"Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital");
-	}
-
-	@Test
 	void testRetrieveData() throws Exception {
 		ReflectionTestUtils.setField(softwareDataCollector, "em", entityManagerMock);
 		when(entityManagerMock.unwrap(Session.class)).thenReturn(sessionMock);

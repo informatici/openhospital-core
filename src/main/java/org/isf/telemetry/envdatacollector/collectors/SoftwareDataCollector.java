@@ -31,7 +31,7 @@ import jakarta.persistence.PersistenceContext;
 
 import org.hibernate.Session;
 import org.isf.generaldata.GeneralData;
-import org.isf.generaldata.Version;
+import org.isf.generaldata.MessageBundle;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
@@ -60,8 +60,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		String version = Version.getVersion().toString();
-		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ')';
+		return MessageBundle.getMessage("angal.telemetry.collector.tel_sw");
 	}
 
 	@Override
