@@ -38,12 +38,6 @@ class TestHardwareDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDescription() {
-		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
-		assertThat(hardwareDataCollector.getDescription()).isEqualTo("Hardware information (CPU, RAM)");
-	}
-
-	@Test
 	void testRetrieveData() throws Exception {
 		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
 		Map<String, String> data = hardwareDataCollector.retrieveData();

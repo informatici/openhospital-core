@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.isf.accounting.service.AccountingIoOperations;
+import org.isf.generaldata.MessageBundle;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
@@ -127,7 +128,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hospital general information (Country; Region, City, Postal Code, TimeZone, Currency, OH Version, Number of Patients / Beds / Wards / Users)";
+		return MessageBundle.getMessage("angal.telemetry.collector.tel_oh");
 	}
 
 	@Override

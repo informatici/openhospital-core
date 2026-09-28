@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.isf.generaldata.Version;
+import org.isf.generaldata.MessageBundle;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.telemetry.manager.TelemetryManager;
@@ -56,7 +57,7 @@ public class TelemetryDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Telemetry Unique ID (this instance)";
+		return MessageBundle.getMessage("angal.telemetry.collector.tel_id");
 	}
 
 	@Override

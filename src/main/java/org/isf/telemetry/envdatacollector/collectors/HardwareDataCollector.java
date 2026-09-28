@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.generaldata.MessageBundle;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class HardwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hardware information (CPU, RAM)";
+		return MessageBundle.getMessage("angal.telemetry.collector.tel_hw");
 	}
 
 	@Override
