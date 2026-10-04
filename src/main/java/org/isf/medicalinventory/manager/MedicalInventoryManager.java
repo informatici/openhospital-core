@@ -645,6 +645,22 @@ public class MedicalInventoryManager {
 		// validate the inventory
 		this.validateMedicalWardInventoryRow(inventory, inventoryRowSearchList, allMedicals);
 
+		// the incoming quantity of a ward is an integer: a row that raises its lot by a fraction would be refused
+		// when its movement is stored. Check them all first and name them, as for the main store
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
+			BigDecimal increase = medicalInventoryRow.getRealQty().subtract(medicalInventoryRow.getTheoreticQty());
+			if (increase.signum() > 0 && increase.remainder(BigDecimal.ONE).signum() != 0) {
+				Lot lot = medicalInventoryRow.getLot();
+				String lotInfo = GeneralData.AUTOMATICLOT_IN ? TimeTools.formatDateTime(lot.getDueDate(), TimeTools.DD_MM_YYYY) : lot.getCode();
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.inventory.wardquantitycanonlybeincreasedbywholeunits.fmt.msg",
+					medicalInventoryRow.getMedical().getDescription(), lotInfo)));
+			}
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+
 		// get general info
 		Ward selectedWard = wardManager.findWard(inventory.getWardCode());
 		LocalDateTime now = TimeTools.getNow();

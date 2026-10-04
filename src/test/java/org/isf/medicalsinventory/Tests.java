@@ -22,6 +22,7 @@
 package org.isf.medicalsinventory;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.math.BigDecimal;
@@ -1132,5 +1133,42 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalInventoryManager.confirmMedicalWardInventoryRow(inventory, medicalInventoryRows, true)).isNotEmpty();
 		List<MovementWard> movWard = movementWardIoOperationRepository.findByMedicalCode(medical.getCode());
 		assertThat(movWard).hasSize(2);
+	}
+
+	@Test
+	void confirmMedicalWardInventoryRowFractionalIncreaseError() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MedicalInventory inventory = testMedicalWardInventory.setup(ward, false);
+		inventory.setId(null);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medical = medicalsIoOperationRepository.saveAndFlush(medical);
+		lot = lotIoOperationRepository.saveAndFlush(lot);
+
+		inventory = medicalInventoryIoOperationRepository.saveAndFlush(inventory);
+		// one row lowers its lot, the other raises it by a fraction: the incoming quantity of a ward is an integer,
+		// so the confirmation is refused as a whole and no movement is stored, not even the valid one
+		MedicalInventoryRow lowered = testMedicalInventoryRow.setup(inventory, medical, lot, false);
+		lowered.setRealqty(new BigDecimal("8.5"));
+		lowered.setTheoreticQty(new BigDecimal("10"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(lowered);
+		Lot lotTwo = testLot.setup(medical, false);
+		lotTwo.setCode("LOT-TEST");
+		lotTwo = lotIoOperationRepository.save(lotTwo);
+		MedicalInventoryRow raised = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
+		raised.setId(null);
+		raised.setRealqty(new BigDecimal("10.5"));
+		raised.setTheoreticQty(new BigDecimal("10"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(raised);
+		MedicalInventory savedInventory = inventory;
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+		assertThat(medicalInventoryRows).hasSize(2);
+
+		assertThatThrownBy(() -> medicalInventoryManager.confirmMedicalWardInventoryRow(savedInventory, medicalInventoryRows, true))
+						.isInstanceOf(OHDataValidationException.class);
+		assertThat(movementWardIoOperationRepository.findByMedicalCode(medical.getCode())).isEmpty();
 	}
 }

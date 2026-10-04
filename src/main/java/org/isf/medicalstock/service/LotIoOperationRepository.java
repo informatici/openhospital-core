@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstock.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.isf.medicalstock.model.Lot;
@@ -43,7 +44,7 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 	Double getWardsTotalQuantity(@Param("lot") Lot lot);
 
 	@Query("select sum(w.in_quantity - w.out_quantity) FROM MedicalWard w WHERE w.id.lot = :lot and w.id.ward = :ward")
-	Double getQuantityByWard(@Param("lot") Lot lot, @Param("ward") Ward ward);
+	BigDecimal getQuantityByWard(@Param("lot") Lot lot, @Param("ward") Ward ward);
 
 	@Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"
 			+ "SUM(IF(MMVT_TYPE LIKE '%+%',MMV_QTY,-MMV_QTY)) as quantity from "

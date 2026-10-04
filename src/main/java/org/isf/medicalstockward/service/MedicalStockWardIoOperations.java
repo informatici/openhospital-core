@@ -121,13 +121,14 @@ public class MedicalStockWardIoOperations {
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
-	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
+	public BigDecimal getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
+		BigDecimal quantity;
 		if (ward != null) {
-			Double quantity = lotRepository.getQuantityByWard(lot, ward);
-			return (int) (quantity == null ? 0 : quantity);
+			quantity = lotRepository.getQuantityByWard(lot, ward);
+		} else {
+			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
 		}
-		BigDecimal quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
-		return quantity == null ? 0 : quantity.intValue();
+		return quantity == null ? BigDecimal.ZERO : quantity;
 	}
 
 	/**
@@ -209,12 +210,12 @@ public class MedicalStockWardIoOperations {
 		if (wardTo != null) {
 			MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
 			if (medicalWardTo != null) {
-				repository.updateInQuantity(qty.abs().intValue(), wardTo, medical, lot);
+				repository.updateInQuantity(qty.abs().intValueExact(), wardTo, medical, lot);
 			} else {
 				MedicalWard medicalWard = new MedicalWard();
 				medicalWard.setWard(movement.getWardTo());
 				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setIn_quantity(qty.abs().intValue());
+				medicalWard.setIn_quantity(qty.abs().intValueExact());
 				medicalWard.setOut_quantity(BigDecimal.ZERO);
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
@@ -228,13 +229,19 @@ public class MedicalStockWardIoOperations {
 			medicalWard = new MedicalWard();
 			medicalWard.setWard(movement.getWard());
 			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setIn_quantity(qty.negate().intValue());
-			medicalWard.setOut_quantity(BigDecimal.ZERO);
+			// a quantity going out of a lot the ward does not hold yet stays on the outgoing side, with its decimals
+			if (qty.signum() < 0) {
+				medicalWard.setIn_quantity(qty.negate().intValueExact());
+				medicalWard.setOut_quantity(BigDecimal.ZERO);
+			} else {
+				medicalWard.setIn_quantity(0);
+				medicalWard.setOut_quantity(qty);
+			}
 			medicalWard.setLot(movement.getLot());
 			repository.save(medicalWard);
 		} else {
 			if (qty.signum() < 0) {
-				repository.updateInQuantity(qty.negate().intValue(), ward, medical, lot); // TODO: change to jpa
+				repository.updateInQuantity(qty.negate().intValueExact(), ward, medical, lot); // TODO: change to jpa
 			} else {
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
