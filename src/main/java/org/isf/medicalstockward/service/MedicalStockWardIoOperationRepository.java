@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -39,15 +39,15 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code = :ward " +
-			"and medWard.id.medical.code = :medical")
+		"and medWard.id.medical.code = :medical")
 	MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);
 
 	@Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
-			"where medWard.id.medical.code=:medical")
+		"where medWard.id.medical.code=:medical")
 	BigDecimal findQuantityInWardWhereMedical(@Param("medical") int medical);
 
 	@Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
-			"where medWard.id.medical.code=:medical and medWard.id.ward.code=:ward")
+		"where medWard.id.medical.code=:medical and medWard.id.ward.code=:ward")
 	BigDecimal findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
 
 	@Modifying
