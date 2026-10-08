@@ -347,19 +347,37 @@
 								<exclude>./ide-settings/eclipse/**</exclude>
 								<exclude>./ide-settings/idea/**</exclude>
 								<exclude>.editorconfig</exclude>
+								<exclude>.env</exclude>
+								<exclude>dotenv</exclude>
 								<exclude>.springBeans</exclude>
 								<exclude>**/README</exclude>
 								<exclude>doc/**/*.txt</exclude>
 								<exclude>lib/**</exclude>
+								<exclude>mysql/db/**</exclude>
+								<exclude>repo/**</exclude>
 								<exclude>sql/**</exclude>
+								<exclude>rpt_base/**</exclude>
+								<exclude>rpt_extra/**</exclude>
+								<exclude>rpt_stat/**</exclude>
 								<exclude>rsc/**</exclude>
 								<exclude>rsc-test/**</exclude>
 								<exclude>src/test/resources/**</exclude>
 								<exclude>src/main/resources/**</exclude>
 								<exclude>**/*.properties</exclude>
 								<exclude>**/*.xml</exclude>
+								<exclude>**/*.yaml</exclude>
 								<exclude>**/*.yml</exclude>
 								<exclude>**/*.jfd</exclude>
+								<exclude>**/*.log.*</exclude>
+								<exclude>Dockerfile-ohdb</exclude>
+								<exclude>**/.DS_Store</exclude>
+								<exclude>pom.xml</exclude>
+								<exclude>**/*.ps1</exclude>
+								<exclude>**/*.bat</exclude>
+								<exclude>**/*.sh</exclude>
+								<exclude>**/Makefile</exclude>
+								<exclude>**/Dockerfile.*</exclude>
+								<exclude>**/Dockerfile.*</exclude>
 							</excludes>
 						</licenseSet>
 					</licenseSets>
