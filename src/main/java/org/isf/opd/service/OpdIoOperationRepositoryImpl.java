@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,6 +36,9 @@ import jakarta.persistence.criteria.Root;
 
 import org.isf.opd.model.Opd;
 import org.isf.ward.model.Ward;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -74,9 +77,76 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
-		List<Predicate> predicates = new ArrayList<>();
-
 		query.select(opd);
+		List<Predicate> predicates = buildOpdPredicates(cb, opd, ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+		query.where(cb.and(predicates.toArray(new Predicate[0])));
+
+		return entityManager.createQuery(query);
+	}
+
+	@Override
+	public Page<Opd> findAllOpdWhereParamsPageable(
+			Ward ward,
+			String diseaseTypeCode,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			String user,
+			Pageable pageable) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
+		Root<Opd> opd = query.from(Opd.class);
+		query.select(opd);
+		List<Predicate> predicates = buildOpdPredicates(cb, opd, ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+		query.where(cb.and(predicates.toArray(new Predicate[0])));
+		// a total order is required so DB-level LIMIT/OFFSET paging does not drop or duplicate rows across pages
+		query.orderBy(cb.asc(opd.get("prog_year")), cb.asc(opd.get("code")));
+		TypedQuery<Opd> typedQuery = entityManager.createQuery(query);
+		typedQuery.setFirstResult((int) pageable.getOffset());
+		typedQuery.setMaxResults(pageable.getPageSize());
+		List<Opd> content = typedQuery.getResultList();
+		long total = countOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+		return new PageImpl<>(content, pageable, total);
+	}
+
+	private long countOpdWhereParams(
+			Ward ward,
+			String diseaseTypeCode,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			String user) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = cb.createQuery(Long.class);
+		Root<Opd> opd = query.from(Opd.class);
+		query.select(cb.count(opd));
+		List<Predicate> predicates = buildOpdPredicates(cb, opd, ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+		query.where(cb.and(predicates.toArray(new Predicate[0])));
+		return entityManager.createQuery(query).getSingleResult();
+	}
+
+	private List<Predicate> buildOpdPredicates(
+			CriteriaBuilder cb,
+			Root<Opd> opd,
+			Ward ward,
+			String diseaseTypeCode,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			String user) {
+		List<Predicate> predicates = new ArrayList<>();
 		if (ward != null) {
 			predicates.add(
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
@@ -115,9 +185,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		predicates.add(
 				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.plusDays(1).atStartOfDay())
 		);
-		query.where(cb.and(predicates.toArray(new Predicate[0])));
-
-		return entityManager.createQuery(query);
+		return predicates;
 	}
 
 }
