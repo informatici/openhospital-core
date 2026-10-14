@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.visits;
+package org.isf.visits.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
@@ -47,7 +47,7 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
-import org.isf.visits.manager.VisitManager;
+import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.service.VisitsIoOperations;
@@ -59,7 +59,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class VisitManagerTest extends OHCoreTestCase {
 
 	private static TestVisit testVisit;
 	private static TestPatient testPatient;
@@ -92,134 +92,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testVisitGets() throws Exception {
-		int id = setupTestVisit(false);
-		checkVisitIntoDb(id);
-	}
-
-	@Test
-	void testVisitSets() throws Exception {
-		int id = setupTestVisit(true);
-		checkVisitIntoDb(id);
-	}
-
-	@Test
-	void testIoGetVisitShouldReturnVisitWhenPatientCodeProvided() throws Exception {
-		// given:
-		int id = setupTestVisit(false);
-		// when:
-		Visit foundVisit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundVisit).isNotNull();
-		List<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
-		// then:
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(foundVisit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-	@Test
-	void testIoGetVisitShouldReturnAllVisitsWhenZeroPatientCodeProvided() throws Exception {
-		// given:
-		int id = setupTestVisit(false);
-		Visit foundVisit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundVisit).isNotNull();
-
-		// when:
-		List<Visit> visits = visitsIoOperation.getVisits(0);
-
-		// then:
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(foundVisit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-	@Test
-	void testIoGetVisitsWardNullWardId() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(visit).isNotNull();
-		List<Visit> visits = visitsIoOperation.getVisitsWard(null);
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-	@Test
-	void testIoGetVisitsWardWardId() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(visit).isNotNull();
-		List<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-	@Test
-	void testIoNewVisit() throws Exception {
-		Patient patient = testPatient.setup(false);
-		Ward ward = testWard.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		wardIoOperationRepository.saveAndFlush(ward);
-		Visit visit = testVisit.setup(patient, true, ward);
-		int id = visitsIoOperation.newVisit(visit).getVisitID();
-		checkVisitIntoDb(id);
-	}
-
-	@Test
-	void testIoFindVisit() throws Exception {
-		int id = setupTestVisit(false);
-		Visit result = visitsIoOperation.findVisit(id);
-
-		assertThat(result).isNotNull();
-		assertThat(result.getVisitID()).isEqualTo(id);
-	}
-
-	@Test
-	void testIoGetVisitNoOPDWithPatientCode() throws Exception {
-		// given:
-		int id = setupTestVisit(false);
-		// when:
-		Visit foundVisit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundVisit).isNotNull();
-		List<Visit> visits = visitsIoOperation.getVisitsOPD(foundVisit.getPatient().getCode());
-		// then:
-		assertThat(visits).isEmpty();
-	}
-
-	@Test
-	void testIoGetVisitNoOPDWithOutPatientCode() throws Exception {
-		// given:
-		setupTestVisit(false);
-		// when:
-		List<Visit> visits = visitsIoOperation.getVisitsOPD(0);
-		// then:
-		assertThat(visits).isEmpty();
-	}
-
-	@Test
-	void testIoGetVisitSingleOPDWithPatientCode() throws Exception {
-		// given:
-		Patient patient = testPatient.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Visit visit = testVisit.setup(patient, true, null);
-		visitsIoOperationRepository.saveAndFlush(visit);
-		// when:
-		List<Visit> visits = visitsIoOperation.getVisitsOPD(visit.getPatient().getCode());
-		// then:
-		assertThat(visits).isNotEmpty();
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-	@Test
-	void testIoGetVisitSingleOPDWithOutPatientCode() throws Exception {
-		// given:
-		Patient patient = testPatient.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Visit visit = testVisit.setup(patient, true, null);
-		visitsIoOperationRepository.saveAndFlush(visit);
-		// when:
-		List<Visit> visits = visitsIoOperation.getVisitsOPD(0);
-		// then:
-		assertThat(visits).isNotEmpty();
-		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
-	}
-
-
-	@Test
-	void testMgrGetVisitNoOPDWithPatientCode() throws Exception {
+	void getVisitsOPD_shouldReturnEmpty_whenPatientVisitHasWard() throws Exception {
 		// given:
 		int id = setupTestVisit(false);
 		// when:
@@ -231,7 +104,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitNoOPDWithOutPatientCode() throws Exception {
+	void getVisitsOPD_shouldReturnEmpty_whenPatientCodeIsZeroAndVisitHasWard() throws Exception {
 		// given:
 		setupTestVisit(false);
 		// when:
@@ -241,7 +114,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitSingleOPDWithPatientCode() throws Exception {
+	void getVisitsOPD_shouldReturnPatientVisit_whenVisitHasNoWard() throws Exception {
 		// given:
 		Patient patient = testPatient.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -255,7 +128,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitSingleOPDWithOutPatientCode() throws Exception {
+	void getVisitsOPD_shouldReturnVisitWithoutWard_whenPatientCodeIsZero() throws Exception {
 		// given:
 		Patient patient = testPatient.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -269,25 +142,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoGetVisit() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
-		assertThat(visit).isNotNull();
-
-		Visit foundVisit = visitsIoOperation.getVisit(visit.getVisitID());
-		assertThat(foundVisit).isEqualTo(foundVisit);
-
-		assertThat(visitsIoOperation.getVisit(-99)).isNull();
-	}
-
-	@Test
-	void testCountAllActiveAppointments() throws Exception {
-		setupTestVisit(true);
-		assertThat(visitsIoOperation.countAllActiveAppointments()).isEqualTo(1);
-	}
-
-	@Test
-	void testMgrGetVisitPatientCode() throws Exception {
+	void getVisits_shouldReturnPatientVisits_whenPatientCodeIsGiven() throws Exception {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
 		assertThat(visit).isNotNull();
@@ -296,7 +151,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitNoPatientCode() throws Exception {
+	void getVisits_shouldReturnAllVisits_whenPatientCodeIsZero() throws Exception {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
 		assertThat(visit).isNotNull();
@@ -305,7 +160,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitsWard() throws Exception {
+	void getVisitsWard_shouldReturnAllVisits_whenNoWardIdIsGiven() throws Exception {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
 		assertThat(visit).isNotNull();
@@ -314,7 +169,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitsWardWardId() throws Exception {
+	void getVisitsWard_shouldReturnWardVisits_whenWardIdIsGiven() throws Exception {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
 		assertThat(visit).isNotNull();
@@ -323,12 +178,12 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetVisitsEmpty() throws Exception {
+	void getVisits_shouldReturnEmpty_whenNoVisitIsSaved() throws Exception {
 		assertThat(visitManager.getVisits(0)).isEmpty();
 	}
 
 	@Test
-	void testMgrNewVisit() throws Exception {
+	void newVisit_shouldSaveVisit() throws Exception {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -339,7 +194,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateVisit() throws Exception {
+	void updateVisit_shouldSaveNewNote() throws Exception {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -355,28 +210,12 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoUpdateVisit() throws Exception {
-		Patient patient = testPatient.setup(false);
-		Ward ward = testWard.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		wardIoOperationRepository.saveAndFlush(ward);
-		Visit visit = testVisit.setup(patient, true, ward);
-		int id = visitManager.newVisit(visit).getVisitID();
-		Visit foundVisit = visitsIoOperation.findVisit(id);
-		foundVisit.setNote("Update");
-		Visit result = visitsIoOperation.updateVisit(foundVisit);
-		assertThat(result.getNote()).isEqualTo("Update");
-		Visit updateVisit = visitsIoOperation.findVisit(id);
-		assertThat(updateVisit.getNote()).isEqualTo("Update");
-	}
-
-	@Test
-	void testMgrNewVisitsEmptyList() throws Exception {
+	void newVisits_shouldReturnTrue_whenListIsEmpty() throws Exception {
 		assertThat(visitManager.newVisits(new ArrayList<>())).isTrue();
 	}
 
 	@Test
-	void testMgrNewVisitsSMSFalse() throws Exception {
+	void newVisits_shouldReturnTrue_whenSmsIsFalse() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
@@ -387,7 +226,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewVisitsSMSTrueDatePassed() throws Exception {
+	void newVisits_shouldReturnTrue_whenVisitDateIsPast() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).orElse(null);
@@ -397,7 +236,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
+	void newVisits_shouldScheduleSmsOneDayBefore_whenVisitDateIsFuture() throws Exception {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
@@ -415,7 +254,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewVisitsSMSTrueMessageTooLong() throws Exception {
+	void newVisits_shouldScheduleOneSms_whenNoteIsTooLong() throws Exception {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
@@ -433,7 +272,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrDeleteVisit() throws Exception {
+	void deleteAllVisits_shouldDeletePatientVisits() throws Exception {
 		int id = setupTestVisit(false);
 		Visit foundVisit = visitManager.findVisit(id);
 		assertThat(visitManager.deleteAllVisits(foundVisit.getPatient().getCode())).isTrue();
@@ -441,7 +280,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrFindVisit() throws Exception {
+	void findVisit_shouldReturnVisit_whenIdExists() throws Exception {
 		int id = setupTestVisit(false);
 		Visit result = visitManager.findVisit(id);
 		assertThat(result).isNotNull();
@@ -449,7 +288,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateNoPatientOverlappingVisitsInDifferentWards() throws Exception {
+	void validateVisit_shouldThrow_whenPatientVisitOverlapsVisitInOtherWard() throws Exception {
 		// test data common setup
 		Patient patient = testPatient.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -496,7 +335,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateNoPatientMultipleOverlappingVisitsInDifferentWards() throws Exception {
+	void validateVisit_shouldThrow_whenPatientVisitOverlapsManyVisitsInOtherWards() throws Exception {
 		// given
 		Patient patient = testPatient.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -539,7 +378,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitNotOverlappingAnyVisitsInSameWard() throws Exception {
+	void validateVisit_shouldThrow_whenVisitOverlapsAnotherVisitInSameWard() throws Exception {
 		// setup two patients
 		Patient patient1 = testPatient.setup(false);
 		patient1.setName("patient1");
@@ -587,7 +426,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitNotOverlappingManyVisitsInSameWard() throws Exception {
+	void validateVisit_shouldThrow_whenVisitOverlapsManyVisitsInSameWard() throws Exception {
 		Ward ward = testWard.setup(false);
 		ward.setCode("ward");
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -632,7 +471,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateShouldAcceptValidVisits() throws Exception {
+	void validateVisit_shouldNotThrow_whenVisitDoesNotOverlap() throws Exception {
 		// test data common setup
 		LocalDateTime existingVisitDateTime = LocalDateTime.of(2023, 3, 15, 14, 30, 0);
 		int existingVisitDuration = 60;
@@ -665,7 +504,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitDurationIsPositive() throws OHException {
+	void validateVisit_shouldThrow_whenDurationIsZero() throws OHException {
 		// given
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -686,7 +525,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitMissingDate() throws Exception {
+	void validateVisit_shouldThrow_whenDateIsNull() throws Exception {
 		// given
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -707,7 +546,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitMissingWard() throws Exception {
+	void validateVisit_shouldThrow_whenWardIsNull() throws Exception {
 		// given
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -728,7 +567,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitMissingPatient() throws Exception {
+	void validateVisit_shouldThrow_whenPatientIsNull() throws Exception {
 		// given
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -749,7 +588,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateVisitSexAndWardDoNotAgree() throws Exception {
+	void validateVisit_shouldThrow_whenPatientSexAndWardDoNotAgree() throws Exception {
 		// given
 		Patient patient = testPatient.setup(false);
 		patient.setSex('M');
@@ -770,103 +609,6 @@ class Tests extends OHCoreTestCase {
 		then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
 	}
 
-	@Test
-	void testVisitGetEnd() {
-		// given
-		Visit visit = new Visit();
-		visit.setDate(LocalDateTime.of(2023, 3, 15, 14, 30, 0));
-		visit.setDuration(90);
-		// when
-		LocalDateTime visitEnd = visit.getEnd();
-		// then
-		then(visitEnd).isEqualTo(LocalDateTime.of(2023, 3, 15, 16, 0, 0));
-	}
-
-	@Test
-	void testVisitGetSet() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-
-		assertThat(visit.getDuration()).isEqualTo(10);
-		visit.setDuration(null);
-		assertThat(visit.getDuration()).isNull();
-
-		assertThat(visit.getService()).isEqualTo("testService");
-		visit.setService("");
-		assertThat(visit.getService()).isEmpty();
-	}
-
-	@Test
-	void testVisitToStringSMS() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.toStringSMS()).isEqualTo("08/09/10 00:00");
-	}
-
-	@Test
-	void testVisitToString() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		assertThat(visit).hasToString("TestDescription - testService - 08/09/10 - 00:00:00");
-	}
-
-	@Test
-	void testVisitToStringNullWard() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		visit.setWard(null);
-		// NOTE: resource bundle key value included here
-		assertThat(visit).hasToString("angal.menu.opd - testService - 08/09/10 - 00:00:00");
-	}
-
-	@Test
-	void testVisitToStringNullService() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		visit.setService(null);
-		assertThat(visit).hasToString("TestDescription - 08/09/10 - 00:00:00");
-	}
-
-	@Test
-	void testVisitFormatDateTime() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.formatDateTime(visit.getDate())).isEqualTo("08/09/10 - 00:00:00");
-	}
-
-	@Test
-	void testVisitFormatDateTimeSMS() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.formatDateTimeSMS(visit.getDate())).isEqualTo("08/09/10 00:00");
-	}
-
-	@Test
-	void testVisitEquals() throws Exception {
-		int id = setupTestVisit(false);
-		Visit visit = visitManager.findVisit(id);
-
-		assertThat(visit)
-			.isNotNull()
-			.isNotEqualTo("someString");
-
-		Visit visit2 = new Visit(-1, null, null, null, false, null, null, null);
-		assertThat(visit).isNotEqualTo(visit2);
-
-		visit2.setVisitID(visit.getVisitID());
-		assertThat(visit).isEqualTo(visit2);
-	}
-
-	@Test
-	void testVisitHashCode() throws Exception {
-		int id = setupTestVisit(true);
-		Visit visit = visitManager.findVisit(id);
-		int hashCode = visit.hashCode();
-		assertThat(hashCode).isEqualTo(23 * 133 + visit.getVisitID());
-		// return computed value
-		assertThat(visit.hashCode()).isEqualTo(hashCode);
-	}
-
 	private int setupTestVisit(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -881,4 +623,5 @@ class Tests extends OHCoreTestCase {
 		Visit foundVisit = visitsIoOperation.findVisit(id);
 		testVisit.check(foundVisit);
 	}
+
 }
