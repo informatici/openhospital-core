@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -68,7 +68,7 @@ class GroupPermissionManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Assign a permission to a user group")
-	void assignPermissionToUserGroup() throws OHDataValidationException {
+	void create_shouldAssignPermissionToUserGroup() throws OHDataValidationException {
 		GroupPermission createdGroupPermission = groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
 		GroupPermission foundPermission = groupPermissionManager.findById(createdGroupPermission.getId());
 		assertThat(foundPermission).isNotNull();
@@ -78,7 +78,7 @@ class GroupPermissionManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Assign already assigned permission to a user group")
-	void assignAlreadyAssignedPermissionToUserGroup() throws OHDataValidationException {
+	void create_shouldThrow_whenPermissionAlreadyAssigned() throws OHDataValidationException {
 		groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
 		assertThatThrownBy(() -> {
 			groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
@@ -87,7 +87,7 @@ class GroupPermissionManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Remove a permission from a user group")
-	void removePermissionFromUserGroup() throws OHDataValidationException {
+	void delete_shouldRemovePermissionFromUserGroup() throws OHDataValidationException {
 		GroupPermission createdGroupPermission = groupPermissionManager.create(groupPermission.getUserGroup(), groupPermission.getPermission());
 		groupPermissionManager.delete(groupPermission.getUserGroup(), groupPermission.getPermission());
 		GroupPermission foundPermission = groupPermissionManager.findById(createdGroupPermission.getId());
@@ -96,7 +96,7 @@ class GroupPermissionManagerTest extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Remove not assigned permission from a user group")
-	void removeNotAssignedPermissionFromUserGroup() throws OHDataValidationException {
+	void delete_shouldThrow_whenPermissionNotAssigned() throws OHDataValidationException {
 		assertThatThrownBy(() -> {
 			groupPermissionManager.delete(groupPermission.getUserGroup(), groupPermission.getPermission());
 		}).isInstanceOf(OHDataValidationException.class);
