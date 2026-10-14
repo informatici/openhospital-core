@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -61,7 +61,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.FileSystemUtils;
 
-public class TestSourceFiles extends OHCoreTestCase {
+class SourceFilesTest extends OHCoreTestCase {
 
 	public static final int PATIENT_ID = 0;
 	private static TestDicom testFileDicom;
@@ -89,13 +89,13 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesGenerateSeriesNumber() throws Exception {
+	void generateSeriesNumber_shouldReturnNonEmptySeriesNumber() throws Exception {
 		String seriesNumber = SourceFiles.generateSeriesNumber(PATIENT_ID);
 		assertThat(seriesNumber).isNotEmpty();
 	}
 
 	@Test
-	void testSourceFilesLoadDicom() throws Exception {
+	void loadDicom_shouldReadDicomAttributes() throws Exception {
 		File file = getFile("case3c_002.dcm");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -108,7 +108,7 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesLoadDicomWhenImageFormatIsJpg() throws Exception {
+	void loadDicom_shouldSetFileName_whenFileIsJpg() throws Exception {
 		File file = getFile("image.0007.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -120,7 +120,7 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesLoadDicomWhenImageFormatIsBadJpg() throws Exception {
+	void loadDicom_shouldThrow_whenJpgFileIsInvalid() throws Exception {
 		File file = getFile("BadJPGFile.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -129,7 +129,7 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesPreloadDicom() throws Exception {
+	void preLoadDicom_shouldReadFileNameFrameCountAndDates() throws Exception {
 		File file = getFile("case3c_002.dcm");
 		DicomInputStream dicomInputStream = new DicomInputStream(file);
 		Attributes attributes = dicomInputStream.readDataset();
@@ -143,7 +143,7 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesPreloadDicomTest9() throws Exception {
+	void preLoadDicom_shouldReadStudyDate_when9BitSignedFileHasNoSeriesDate() throws Exception {
 		// has studydate but not seriesdate
 		File file = getFile("test9signed.dcm");
 		DicomInputStream dicomInputStream = new DicomInputStream(file);
@@ -156,7 +156,7 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesPreloadDicomTest16() throws Exception {
+	void preLoadDicom_shouldReadStudyDate_when16BitUnsignedFileHasNoSeriesDate() throws Exception {
 		// has studydate but not seriesdate
 		File file = getFile("test16unsigned.dcm");
 		DicomInputStream dicomInputStream = new DicomInputStream(file);
@@ -169,21 +169,21 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSourceFilesPreloadBadDicomFormat() throws Exception {
+	void dicomInputStream_shouldThrow_whenFileIsNotDicom() throws Exception {
 		File file = getFile("BadDicomFile.dcm");
 		assertThatThrownBy(() -> new DicomInputStream(file))
 						.isInstanceOf(DicomStreamException.class);
 	}
 
 	@Test
-	void testSourceFilesCountFiles() throws Exception {
+	void countFiles_shouldReturnPositiveCount_whenDirectoryHasFiles() throws Exception {
 		File file = getFile("dicomdir");
 		int count = SourceFiles.countFiles(file, 1);
 		assertThat(count).isPositive();
 	}
 
 	@Test
-	void testAutoRotate() throws Exception {
+	void autoRotate_shouldReturnImageForEachOrientation() throws Exception {
 		BufferedImage bufferedImage = ImageIO.read(getFile("image.0007.jpg"));
 
 		// method is private not public thus use of reflection
@@ -197,12 +197,12 @@ public class TestSourceFiles extends OHCoreTestCase {
 	}
 
 	@Test
-	void testNewSourceFiles() throws Exception {
+	void constructor_shouldNotThrow_whenDicomLoaderIsNull() throws Exception {
 		File file = getFile("case3c_002.dcm");
 		File directoryFile = file.getParentFile();
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
-		TestSourceFiles.ThumbnailViewGui thumbnailViewGui = new TestSourceFiles.ThumbnailViewGui();
+		SourceFilesTest.ThumbnailViewGui thumbnailViewGui = new SourceFilesTest.ThumbnailViewGui();
 		thumbnailViewGui.initialize();
 
 		// This statement really doesn't work too well as a NPE is generated but the code
@@ -217,11 +217,11 @@ public class TestSourceFiles extends OHCoreTestCase {
 	//    java.awt.HeadlessException:
 	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
 	@Test
-	void testSourceFilesConstructorDirectoryNumberOfFiles() throws Exception {
-		TestSourceFiles.ThumbnailViewGui thumbnailViewGui = new TestSourceFiles.ThumbnailViewGui();
+	void constructor_shouldLoadEveryFileOfDirectory() throws Exception {
+		SourceFilesTest.ThumbnailViewGui thumbnailViewGui = new SourceFilesTest.ThumbnailViewGui();
 		thumbnailViewGui.initialize();
 		SourceFiles sourceFiles = new SourceFiles(new FileDicom(), new File("src/test/resources/org/isf/dicom/dicomdir/"), 2, 1, thumbnailViewGui,
-						new TestSourceFiles.DicomLoader(1, new JFrame()));
+						new SourceFilesTest.DicomLoader(1, new JFrame()));
 		assertThat(sourceFiles).isNotNull();
 		assertThat(sourceFiles.working()).isTrue();
 		while (sourceFiles.working()) {
@@ -258,4 +258,5 @@ public class TestSourceFiles extends OHCoreTestCase {
 	private File getFile(String fileName) {
 		return new File(getClass().getResource(fileName).getFile());
 	}
+
 }
