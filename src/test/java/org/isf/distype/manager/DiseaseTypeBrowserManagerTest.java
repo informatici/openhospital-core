@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.distype;
+package org.isf.distype.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.distype.manager.DiseaseTypeBrowserManager;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperation;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-class Tests extends OHCoreTestCase {
+class DiseaseTypeBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestDiseaseType testDiseaseType;
 
@@ -64,51 +64,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDiseaseTypeGets() throws Exception {
-		String code = setupTestDiseaseType(false);
-		checkDiseaseTypeIntoDb(code);
-	}
-
-	@Test
-	void testDiseaseTypeSets() throws Exception {
-		String code = setupTestDiseaseType(true);
-		checkDiseaseTypeIntoDb(code);
-	}
-
-	@Test
-	void testIoGetDiseaseType() throws Exception {
-		String code = setupTestDiseaseType(false);
-		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
-		List<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
-		assertThat(diseaseTypes).contains(foundDiseaseType);
-
-	}
-
-	@Test
-	void testIoUpdateDiseaseType() throws Exception {
-		String code = setupTestDiseaseType(false);
-		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
-		foundDiseaseType.setDescription("Update");
-		DiseaseType updatedDiseaseType = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
-		assertThat(updatedDiseaseType.getDescription()).isEqualTo("Update");
-	}
-
-	@Test
-	void testIoNewDiseaseType() throws Exception {
-		DiseaseType diseaseType = testDiseaseType.setup(true);
-		DiseaseType newDiseaseType = diseaseTypeIoOperation.newDiseaseType(diseaseType);
-		checkDiseaseTypeIntoDb(newDiseaseType.getCode());
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		String code = setupTestDiseaseType(false);
-		boolean result = diseaseTypeIoOperation.isCodePresent(code);
-		assertThat(result).isTrue();
-	}
-
-	@Test
-	void testIoDeleteDiseaseType() throws Exception {
+	void deleteDiseaseType_shouldRemoveDiseaseType_whenCheckedViaIoOperation() throws Exception {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		diseaseTypeBrowserManager.deleteDiseaseType(foundDiseaseType);
@@ -117,7 +73,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetDiseaseType() throws Exception {
+	void getDiseaseType_shouldContainSavedDiseaseType() throws Exception {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		List<DiseaseType> diseaseTypes = diseaseTypeBrowserManager.getDiseaseType();
@@ -126,7 +82,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateDiseaseType() throws Exception {
+	void updateDiseaseType_shouldSaveNewDescription() throws Exception {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		foundDiseaseType.setDescription("Update");
@@ -135,33 +91,33 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewDiseaseType() throws Exception {
+	void newDiseaseType_shouldSaveDiseaseType() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(true);
 		DiseaseType newDiseaseType = diseaseTypeBrowserManager.newDiseaseType(diseaseType);
 		checkDiseaseTypeIntoDb(newDiseaseType.getCode());
 	}
 
 	@Test
-	void testMgrIsCodePresent() throws Exception {
+	void isCodePresent_shouldReturnTrue_whenCodeExists() throws Exception {
 		String code = setupTestDiseaseType(false);
 		boolean result = diseaseTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	void testGetDiseaseTypeFound() throws Exception {
+	void getDiseaseType_shouldReturnDiseaseType_whenCodeExists() throws Exception {
 		String code = setupTestDiseaseType(false);
 		assertThat(diseaseTypeBrowserManager.getDiseaseType(code)).isNotNull();
 	}
 
 	@Test
-	void testGetDiseaseTypeNotFound() throws Exception {
+	void getDiseaseType_shouldReturnNull_whenCodeDoesNotExist() throws Exception {
 		setupTestDiseaseType(false);
 		assertThat(diseaseTypeBrowserManager.getDiseaseType("someCodeThatDoesNotExist")).isNull();
 	}
 
 	@Test
-	void testMgrDeleteDiseaseType() throws Exception {
+	void deleteDiseaseType_shouldRemoveDiseaseType() throws Exception {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		diseaseTypeBrowserManager.deleteDiseaseType(foundDiseaseType);
@@ -170,7 +126,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateDiseaseTypeCodeEmpty() throws Exception {
+	void newDiseaseType_shouldThrow_whenCodeIsEmpty() throws Exception {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setCode("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
@@ -182,7 +138,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateDiseaseTypeCodeTooLong() throws Exception {
+	void newDiseaseType_shouldThrow_whenCodeIsTooLong() throws Exception {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setCode("12345678901234567");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
@@ -194,7 +150,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateDiseaseTypeDescriptionEmpty() throws Exception {
+	void newDiseaseType_shouldThrow_whenDescriptionIsEmpty() throws Exception {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setDescription("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
@@ -206,7 +162,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationInsert() throws Exception {
+	void newDiseaseType_shouldThrow_whenCodeExists() throws Exception {
 		String code = setupTestDiseaseType(false);
 		diseaseTypeIoOperationRepository.getReferenceById(code);
 		// code already exists
@@ -220,24 +176,6 @@ class Tests extends OHCoreTestCase {
 				);
 	}
 
-	@Test
-	void testDiseaseTypeEqualHashToString() throws Exception {
-		String code = setupTestDiseaseType(false);
-		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
-		DiseaseType diseaseType2 = new DiseaseType("code", "description");
-		assertThat(diseaseType)
-				.isEqualTo(diseaseType)
-				.isNotEqualTo(diseaseType2)
-				.isNotEqualTo("xyzzy");
-		diseaseType2.setCode(diseaseType.getCode());
-		diseaseType2.setDescription(diseaseType.getDescription());
-		assertThat(diseaseType).isEqualTo(diseaseType2);
-
-		assertThat(diseaseType.hashCode()).isPositive();
-
-		assertThat(diseaseType).hasToString(diseaseType.getDescription());
-	}
-
 	private String setupTestDiseaseType(boolean usingSet) throws OHException {
 		DiseaseType diseaseType = testDiseaseType.setup(usingSet);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -248,4 +186,5 @@ class Tests extends OHCoreTestCase {
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		testDiseaseType.check(foundDiseaseType);
 	}
+
 }
