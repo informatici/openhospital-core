@@ -71,7 +71,7 @@ public class Lot extends Auditable<String> {
 	@Column(name="LT_DUE_DATE")		   // SQL type: datetime
 	private LocalDateTime dueDate;
 
-	@Column(name="LT_COST")
+	@Column(name="LT_COST", precision = 19, scale = 2)
 	private BigDecimal cost;
 
 	/**

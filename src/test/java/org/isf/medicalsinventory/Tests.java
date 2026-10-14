@@ -24,6 +24,7 @@ package org.isf.medicalsinventory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -230,15 +231,15 @@ class Tests extends OHCoreTestCase {
 		medicalInventoryRow.setId(id);
 		assertThat(medicalInventoryRow.getId()).isEqualTo(id);
 
-		double theoreticQty = -17.9;
+		BigDecimal theoreticQty = new BigDecimal("-17.9");
 		medicalInventoryRow.setTheoreticQty(theoreticQty);
-		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualTo(theoreticQty);
+		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualByComparingTo(theoreticQty);
 
-		double realQty = -37.3;
+		BigDecimal realQty = new BigDecimal("-37.3");
 		medicalInventoryRow.setRealqty(realQty);
-		assertThat(medicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(medicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
 		medicalInventoryRow.setRealQty(realQty); // Note the uppercase 'Q'
-		assertThat(medicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(medicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
 
 		int lock = -99;
 		medicalInventoryRow.setLock(lock);
@@ -572,10 +573,10 @@ class Tests extends OHCoreTestCase {
 		Integer id = setupTestMedicalInventoryRow();
 		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventoryRow).isNotNull();
-		double realQty = 100.0;
+		BigDecimal realQty = new BigDecimal("100.0");
 		foundMedicalInventoryRow.setRealqty(realQty);
 		MedicalInventoryRow updatedMedicalInventoryRow = medIvnRowIoOperation.updateMedicalInventoryRow(foundMedicalInventoryRow);
-		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
 	}
 
 	@Test
@@ -583,10 +584,10 @@ class Tests extends OHCoreTestCase {
 		Integer id = setupTestMedicalInventoryRow();
 		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventoryRow).isNotNull();
-		double realQty = 100.0;
+		BigDecimal realQty = new BigDecimal("100.0");
 		foundMedicalInventoryRow.setRealqty(realQty);
 		MedicalInventoryRow updatedMedicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(foundMedicalInventoryRow);
-		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualTo(realQty);
+		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
 	}
 
 	@Test
@@ -729,10 +730,10 @@ class Tests extends OHCoreTestCase {
 		medicalStockIoOperationRepository.saveAndFlush(firstmedicalStock);
 		medicalStockIoOperationRepository.saveAndFlush(secondmedicalStock);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
-		medicalInventoryRowOne.setRealqty(60);
+		medicalInventoryRowOne.setRealqty(new BigDecimal("60"));
 		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
 		medicalInventoryRowTwo.setId(null);
-		medicalInventoryRowTwo.setRealqty(30);
+		medicalInventoryRowTwo.setRealqty(new BigDecimal("30"));
 		MedicalInventoryRow medicalInventoryRowThree = testMedicalInventoryRow.setup(inventory, medical, lotThree, false);
 		medicalInventoryRowThree.setId(null);
 		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
@@ -748,6 +749,49 @@ class Tests extends OHCoreTestCase {
 		inventory = medicalInventoryIoOperation.getInventoryById(inventoryId);
 		assertThat(inventory).isNotNull();
 		assertThat(inventory.getStatus()).isEqualTo(status);
+	}
+
+	@Test
+	void testConfirmMedicalInventoryRowFractionalAdjustmentError() throws Exception {
+		Ward ward = testWard.setup(false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
+		MovementType dischargeType = new MovementType("inventory-", "Inventory-", "-", "non-operational");
+		Supplier supplier = new Supplier(null, "INVENTORY", null, null, null, null, null, null);
+		Ward destination = new Ward("INV", "ward inventory", null, null, null, 8, 1, 1, false, false, false, false);
+		dischargeType = medicalDsrStockMovementTypeIoOperationRepository.save(dischargeType);
+		chargeType = medicalDsrStockMovementTypeIoOperationRepository.save(chargeType);
+		supplier = supplierIoOperationRepository.save(supplier);
+		destination = wardIoOperationRepository.save(destination);
+		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
+		inventory.setChargeType(chargeType.getCode());
+		inventory.setDestination(destination.getCode());
+		inventory.setSupplier(supplier.getSupId());
+		inventory.setDischargeType(dischargeType.getCode());
+		inventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, false);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medical = medicalsIoOperationRepository.save(medical);
+		lot = lotIoOperationRepository.save(lot);
+		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(inventory, medical, lot, false);
+		medicalInventoryRow.setTheoreticQty(new BigDecimal("50"));
+		medicalInventoryRow.setRealqty(new BigDecimal("47.5"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
+		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+		assertThat(medicalInventoryRows).hasSize(1);
+		MedicalInventory finalInventory = inventory;
+		Throwable throwable = catchThrowable(() -> medicalInventoryManager.confirmMedicalInventoryRow(finalInventory, medicalInventoryRows, false));
+		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
+
+		// fractional quantities with a whole difference must be rejected as well
+		medicalInventoryRow.setTheoreticQty(new BigDecimal("551.5"));
+		medicalInventoryRow.setRealqty(new BigDecimal("552.5"));
+		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRow);
+		List<MedicalInventoryRow> fractionalQtyRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventory.getId());
+		throwable = catchThrowable(() -> medicalInventoryManager.confirmMedicalInventoryRow(finalInventory, fractionalQtyRows, false));
+		assertThat(throwable).isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -815,10 +859,10 @@ class Tests extends OHCoreTestCase {
 		lotTwo = lotIoOperationRepository.save(lotTwo);
 		lotThree = lotIoOperationRepository.save(lotThree);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
-		medicalInventoryRowOne.setRealqty(60);
+		medicalInventoryRowOne.setRealqty(new BigDecimal("60"));
 		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
 		medicalInventoryRowTwo.setId(null);
-		medicalInventoryRowTwo.setRealqty(30);
+		medicalInventoryRowTwo.setRealqty(new BigDecimal("30"));
 		MedicalInventoryRow medicalInventoryRowThree = testMedicalInventoryRow.setup(inventory, medical, lotThree, false);
 		medicalInventoryRowThree.setId(null);
 		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
@@ -865,7 +909,7 @@ class Tests extends OHCoreTestCase {
 			Lot lotTwo = testLot.setup(medical, false);
 			lotTwo.setCode("LOT-002");
 			MovementWard wardMovement = testMovementWard.setup(ward, null, medical, ward, destination, lotTwo, false);
-			wardMovement.setQuantity(100.0);
+			wardMovement.setQuantity(new BigDecimal("100.0"));
 			Lot lotThree = testLot.setup(medical, false);
 			lotThree.setCode("LOT-003");
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
@@ -878,10 +922,10 @@ class Tests extends OHCoreTestCase {
 			// Create inventory and inventory rows
 			inventory = medIvnIoOperationRepository.saveAndFlush(inventory);
 			MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
-			medicalInventoryRowOne.setRealqty(60);
+			medicalInventoryRowOne.setRealqty(new BigDecimal("60"));
 			MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
 			medicalInventoryRowTwo.setId(null);
-			medicalInventoryRowTwo.setRealqty(30);
+			medicalInventoryRowTwo.setRealqty(new BigDecimal("30"));
 			MedicalInventoryRow medicalInventoryRowThree = testMedicalInventoryRow.setup(inventory, medical, lotThree, false);
 			medicalInventoryRowThree.setId(null);
 			medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
@@ -987,8 +1031,8 @@ class Tests extends OHCoreTestCase {
 		// Create inventory and inventory rows
 		inventory = medicalInventoryIoOperationRepository.saveAndFlush(inventory);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
-		medicalInventoryRowOne.setRealqty(10);
-		medicalInventoryRowOne.setTheoreticQty(10);
+		medicalInventoryRowOne.setRealqty(new BigDecimal("10"));
+		medicalInventoryRowOne.setTheoreticQty(new BigDecimal("10"));
 		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
 		int inventoryId = inventory.getId();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
@@ -1040,16 +1084,16 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalInventoryRows).hasSize(3);
 
 		assertThat(medicalInventoryRows.get(0).getLot()).isEqualTo(lotOne);
-		assertThat(medicalInventoryRows.get(0).getRealQty()).isEqualTo(20);
-		assertThat(medicalInventoryRows.get(0).getTheoreticQty()).isEqualTo(20);
+		assertThat(medicalInventoryRows.get(0).getRealQty()).isEqualByComparingTo(new BigDecimal("20"));
+		assertThat(medicalInventoryRows.get(0).getTheoreticQty()).isEqualByComparingTo(new BigDecimal("20"));
 
 		assertThat(medicalInventoryRows.get(1).getLot()).isEqualTo(lotTwo);
-		assertThat(medicalInventoryRows.get(1).getRealQty()).isEqualTo(20);
-		assertThat(medicalInventoryRows.get(1).getTheoreticQty()).isEqualTo(20);
+		assertThat(medicalInventoryRows.get(1).getRealQty()).isEqualByComparingTo(new BigDecimal("20"));
+		assertThat(medicalInventoryRows.get(1).getTheoreticQty()).isEqualByComparingTo(new BigDecimal("20"));
 
 		assertThat(medicalInventoryRows.get(2).getLot()).isEqualTo(lotThree);
-		assertThat(medicalInventoryRows.get(2).getRealQty()).isEqualTo(30);
-		assertThat(medicalInventoryRows.get(2).getTheoreticQty()).isEqualTo(30);
+		assertThat(medicalInventoryRows.get(2).getRealQty()).isEqualByComparingTo(new BigDecimal("30"));
+		assertThat(medicalInventoryRows.get(2).getTheoreticQty()).isEqualByComparingTo(new BigDecimal("30"));
 	}
 
 	@Test
@@ -1069,16 +1113,16 @@ class Tests extends OHCoreTestCase {
 		// Create inventory and inventory rows
 		inventory = medicalInventoryIoOperationRepository.saveAndFlush(inventory);
 		MedicalInventoryRow medicalInventoryRowOne = testMedicalInventoryRow.setup(inventory, medical, lotOne, false);
-		medicalInventoryRowOne.setRealqty(10);
-		medicalInventoryRowOne.setTheoreticQty(20);
+		medicalInventoryRowOne.setRealqty(new BigDecimal("10"));
+		medicalInventoryRowOne.setTheoreticQty(new BigDecimal("20"));
 		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowOne);
 		Lot lotTwo = testLot.setup(medical, false);
 		lotTwo.setCode("LOT-TEST");
 		lotTwo = lotIoOperationRepository.save(lotTwo);
 		MedicalInventoryRow medicalInventoryRowTwo = testMedicalInventoryRow.setup(inventory, medical, lotTwo, false);
 		medicalInventoryRowTwo.setId(null);
-		medicalInventoryRowTwo.setRealqty(30);
-		medicalInventoryRowTwo.setTheoreticQty(20);
+		medicalInventoryRowTwo.setRealqty(new BigDecimal("30"));
+		medicalInventoryRowTwo.setTheoreticQty(new BigDecimal("20"));
 		medicalInventoryRowIoOperationRepository.saveAndFlush(medicalInventoryRowTwo);
 		int inventoryId = inventory.getId();
 		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);

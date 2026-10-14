@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstock.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -310,7 +311,7 @@ public class MedicalStockIoOperations {
 
 		// Process wardsTotalQuantities and update lots
 		for (Object[] result : wardsTotalQuantities) {
-			Double wardsTotalQuantity = (Double) result[1];
+			double wardsTotalQuantity = ((Number) result[1]).doubleValue();
 			lot.setWardsTotalQuantity(wardsTotalQuantity);
 		}
 		return lot;
@@ -390,7 +391,7 @@ public class MedicalStockIoOperations {
 	 * @return the updated {@link Medical} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	protected Medical updateMedicalIncomingQuantity(int medicalCode, double incrementQuantity) throws OHServiceException {
+	protected Medical updateMedicalIncomingQuantity(int medicalCode, int incrementQuantity) throws OHServiceException {
 		Medical medical = medicalRepository.findById(medicalCode).orElse(null);
 		if (medical == null) {
 			throw new OHServiceException(new OHExceptionMessage("Medical '" + medicalCode + "' not found."));
@@ -407,7 +408,7 @@ public class MedicalStockIoOperations {
 	 * @return the updated {@link Medical} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	protected Medical updateMedicalOutcomingQuantity(int medicalCode, double incrementQuantity) throws OHServiceException {
+	protected Medical updateMedicalOutcomingQuantity(int medicalCode, int incrementQuantity) throws OHServiceException {
 		Medical medical = medicalRepository.findById(medicalCode).orElse(null);
 		if (medical == null) {
 			throw new OHServiceException(new OHExceptionMessage("Medical '" + medicalCode + "' not found."));
@@ -484,8 +485,8 @@ public class MedicalStockIoOperations {
 			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
 			medicalStockWardRepository.save(medicalWard);
 		} else {
-			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
-			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), (double) quantity, lot.getCode());
+			medicalWard = new MedicalWard(ward, medical, quantity, BigDecimal.ZERO, lot);
+			medicalStockWardRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quantity, lot.getCode());
 		}
 		return medicalStockWardRepository.save(medicalWard);
 	}
@@ -648,7 +649,7 @@ public class MedicalStockIoOperations {
 		// Process wardsTotalQuantities and update lots
 		for (Object[] result : wardsTotalQuantities) {
 			String lotCode = (String) result[0];
-			Double wardsTotalQuantity = (Double) result[1];
+			double wardsTotalQuantity = ((Number) result[1]).doubleValue();
 
 			// Find the corresponding lot in the lots list
 			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();

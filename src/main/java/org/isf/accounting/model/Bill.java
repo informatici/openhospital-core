@@ -21,6 +21,7 @@
  */
 package org.isf.accounting.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
@@ -92,11 +93,11 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name = "BLL_STATUS")
 	private String status;
 
-	@Column(name = "BLL_AMOUNT")
-	private Double amount;
+	@Column(name = "BLL_AMOUNT", precision = 19, scale = 2)
+	private BigDecimal amount;
 
-	@Column(name = "BLL_BALANCE")
-	private Double balance;
+	@Column(name = "BLL_BALANCE", precision = 19, scale = 2)
+	private BigDecimal balance;
 
 	@Version
 	@Column(name = "BLL_LOCK")
@@ -123,14 +124,14 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.isPatient = false;
 		this.patName = "";
 		this.status = "";
-		this.amount = 0.0;
-		this.balance = 0.0;
+		this.amount = BigDecimal.ZERO;
+		this.balance = BigDecimal.ZERO;
 		this.user = "admin";
 	}
 
 	public Bill(int id, LocalDateTime date, LocalDateTime update,
 					boolean isList, PriceList list, String listName, boolean isPatient,
-					Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+					Patient billPatient, String patName, String status, BigDecimal amount, BigDecimal balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -228,19 +229,19 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.status = status;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-	public Double getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
-	public void setBalance(Double balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 

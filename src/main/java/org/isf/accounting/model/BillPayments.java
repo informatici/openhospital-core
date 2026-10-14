@@ -21,6 +21,7 @@
  */
 package org.isf.accounting.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
@@ -64,8 +65,8 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="BLP_AMOUNT")
-	private double amount;
+	@Column(name="BLP_AMOUNT", precision = 19, scale = 2)
+	private BigDecimal amount;
 
 	@NotNull
 	@Column(name="BLP_USR_ID_A")
@@ -79,7 +80,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		super();
 	}
 	
-	public BillPayments(int id, Bill bill, LocalDateTime date, double amount, String user) {
+	public BillPayments(int id, Bill bill, LocalDateTime date, BigDecimal amount, String user) {
 		super();
 		this.id = id;
 		this.bill = bill;
@@ -112,11 +113,11 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		this.date = TimeTools.truncateToSeconds(date);
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

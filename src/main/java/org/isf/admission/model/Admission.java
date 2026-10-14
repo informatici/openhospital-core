@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,6 +22,7 @@
 package org.isf.admission.model;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -46,7 +47,7 @@ import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -64,7 +65,9 @@ entities={
 @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY"))
 @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE"))
 @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))
-public class Admission extends Auditable<String> implements Comparable<Admission> {
+@AttributeOverride(name="deletedBy", column=@Column(name="ADM_DELETED_BY"))
+@AttributeOverride(name="deletedDate", column=@Column(name="ADM_DELETED_DATE"))
+public class Admission extends SoftDeletableAuditable<String> implements Comparable<Admission> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,6 +95,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@ManyToOne
 	@JoinColumn(name = "ADM_PAT_ID")
 	private Patient patient;                // patient key
+
+	@Column(name = "ADM_SEX", length = 1)
+	private String sex;                     // patient sex at admission time (anonymous statistics)
+
+	@Column(name = "ADM_AGE")
+	private Integer age;                    // patient age at admission time (anonymous statistics)
 
 	@NotNull
 	@Column(name = "ADM_DATE_ADM")        // SQL type: datetime
@@ -431,6 +440,39 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	/**
+	 * Stores on this admission a snapshot of the linked patient's sex and age <b>at the admission date</b>, so that
+	 * aggregate statistics can be produced without joining (and exposing) the patient's personal data. This is meant
+	 * to be an immutable snapshot taken at insertion time: it is intentionally not refreshed afterwards.
+	 */
+	public void applyPatientData() {
+		if (patient == null) {
+			return;
+		}
+		this.sex = String.valueOf(patient.getSex());
+		if (patient.getBirthDate() != null && admDate != null) {
+			this.age = (int) ChronoUnit.YEARS.between(patient.getBirthDate(), admDate.toLocalDate());
+		} else {
+			this.age = patient.getAge();
+		}
 	}
 
 	public PregnantTreatmentType getPregTreatmentType() {

@@ -24,6 +24,7 @@ package org.isf.medicalstockward;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -43,7 +44,7 @@ public class TestMovementWard {
 	private int age = 10;
 	private float weight = 78;
 	private String description = "TestDescriptionm";
-	private Double quantity = 46.0;
+	private BigDecimal quantity = new BigDecimal("46.00");
 	private String units = "TestUni";
 
 	public MovementWard setup(
@@ -95,7 +96,7 @@ public class TestMovementWard {
 		assertThat(movementWard.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		assertThat(movementWard.getDescription()).isEqualTo(description);
 		assertThat(movementWard.isPatient()).isEqualTo(isPatient);
-		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getQuantity()).isEqualByComparingTo(quantity);
 		assertThat(movementWard.getUnits()).isEqualTo(units);
 		assertThat(movementWard.getWeight()).isCloseTo(weight, within(0.1F));
 	}

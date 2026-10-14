@@ -21,6 +21,7 @@
  */
 package org.isf.patient.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -47,8 +48,8 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") char deletedStatus);
 
 	@Modifying(clearAutomatically=true, flushAutomatically=true)
-	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
-	int updateDeleted(@Param("id") Integer id);
+	@Query(value = "update Patient p set p.deleted = 'Y', p.deletedBy = :deletedBy, p.deletedDate = :deletedDate where p.code = :id")
+	int updateDeleted(@Param("id") Integer id, @Param("deletedBy") String deletedBy, @Param("deletedDate") LocalDateTime deletedDate);
 
 	List<Patient> findByNameAndDeleted(String name, char deletedStatus);
 

@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstockward.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
@@ -95,8 +96,8 @@ public class MovementWard extends Auditable<String> {
 	private Medical medical;
 
 	@NotNull
-	@Column(name = "MMVN_MDSR_QTY")
-	private Double quantity;
+	@Column(name = "MMVN_MDSR_QTY", precision = 19, scale = 2)
+	private BigDecimal quantity;
 
 	@NotNull
 	@Column(name = "MMVN_MDSR_UNITS")
@@ -130,7 +131,7 @@ public class MovementWard extends Auditable<String> {
 	 * @param units
 	 */
 	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-					Double quantity, String units) {
+					BigDecimal quantity, String units) {
 		super();
 		this.ward = ward;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -145,7 +146,7 @@ public class MovementWard extends Auditable<String> {
 	}
 
 	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-					Double quantity, String units, Lot lot) {
+					BigDecimal quantity, String units, Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -176,7 +177,7 @@ public class MovementWard extends Auditable<String> {
 	 * @param wardFrom
 	 */
 	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
-					Double quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
+					BigDecimal quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -193,7 +194,7 @@ public class MovementWard extends Auditable<String> {
 		this.lot = lot;
 	}
 
-	public MovementWard(LocalDateTime date, Ward ward, Lot lot, String description, Medical medical, Double quantity, String units) {
+	public MovementWard(LocalDateTime date, Ward ward, Lot lot, String description, Medical medical, BigDecimal quantity, String units) {
 		super();
 		this.date = date;
 		this.ward = ward;
@@ -216,7 +217,7 @@ public class MovementWard extends Auditable<String> {
 		return date;
 	}
 
-	public Double getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
@@ -288,7 +289,7 @@ public class MovementWard extends Auditable<String> {
 		this.date = TimeTools.truncateToSeconds(date);
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 

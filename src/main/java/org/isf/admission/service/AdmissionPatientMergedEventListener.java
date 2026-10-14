@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -43,6 +43,8 @@ public class AdmissionPatientMergedEventListener {
 		List<Admission> admissions = admissionIoOperations.getAdmissions(patientMergedEvent.obsoletePatient());
 		for (Admission admission : admissions) {
 			admission.setPatient(patientMergedEvent.mergedPatient());
+			// ADM_SEX/ADM_AGE are an immutable snapshot taken at admission time and are intentionally NOT
+			// refreshed here (unlike Laboratory): the patient's sex/age at the historical admission do not change.
 		}
 	}
 

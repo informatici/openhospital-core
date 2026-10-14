@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -511,6 +512,40 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
+	void testIoNewAdmissionStoresPatientSexAndAge(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		Admission admission = buildNewAdmission();
+		Admission result = admissionIoOperation.newAdmission(admission);
+		String expectedSex = String.valueOf(admission.getPatient().getSex());
+		// the stored age is the patient's age AT the admission date, not the current age
+		Integer expectedAge = (int) ChronoUnit.YEARS.between(admission.getPatient().getBirthDate(), admission.getAdmDate().toLocalDate());
+		assertThat(result.getSex()).isEqualTo(expectedSex);
+		assertThat(result.getAge()).isEqualTo(expectedAge);
+		// reload from the DB to confirm the snapshot is persisted on the admission itself
+		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
+		assertThat(reloaded.getSex()).isEqualTo(expectedSex);
+		assertThat(reloaded.getAge()).isEqualTo(expectedAge);
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
+	void testIoNewAdmissionUsesRecordedAgeWhenBirthDateIsMissing(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		Admission admission = buildNewAdmission();
+		// patients are often registered by age alone, with no birth date; the snapshot must still be usable
+		Patient patient = admission.getPatient();
+		patient.setBirthDate(null);
+		patient.setAge(7);
+
+		Admission result = admissionIoOperation.newAdmission(admission);
+
+		assertThat(result.getAge()).isEqualTo(7);
+		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
+		assertThat(reloaded.getAge()).isEqualTo(7);
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
 	void testIoUpdateAdmission(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
@@ -567,6 +602,19 @@ class Tests extends OHCoreTestCase {
 		Admission deletedAdmission = admissionIoOperation.setDeleted(admission.getId());
 		assertThat(deletedAdmission).isNotNull();
 		assertThat(deletedAdmission.getDeleted()).isEqualTo('Y');
+	}
+
+	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
+	@MethodSource("maternityRestartInJune")
+	void testSetDeletedStampsDeletedDate(boolean maternityRestartInJune) throws Exception {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+		int id = setupTestAdmission(false);
+		assertThat(admissionIoOperation.getAdmission(id).getDeletedDate()).isNull();
+
+		Admission deleted = admissionIoOperation.setDeleted(id);
+		assertThat(deleted).isNotNull();
+		assertThat(deleted.getDeleted()).isEqualTo('Y');
+		assertThat(deleted.getDeletedDate()).isNotNull();
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")

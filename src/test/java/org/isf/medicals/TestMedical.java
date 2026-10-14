@@ -22,7 +22,6 @@
 package org.isf.medicals;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.data.Offset.offset;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medtype.model.MedicalType;
@@ -34,9 +33,9 @@ public class TestMedical {
 	private String prod_code = "TP1";
 	private String description = "TestDescription";
 	private Integer pcsperpck = 11;
-	private double inqty = 30.30;
-	private double outqty = 20.20;
-	private double minqty = 40.40;
+	private int inqty = 30;
+	private int outqty = 20;
+	private int minqty = 40;
 
 	public Medical setup(MedicalType medicalType, boolean usingSet) throws OHException {
 		Medical medical;
@@ -64,9 +63,9 @@ public class TestMedical {
 
 	public void check(Medical medical) {
 		assertThat(medical.getDescription()).isEqualTo(description);
-		assertThat(medical.getInqty()).isCloseTo(inqty, offset(0.1));
-		assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
-		assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));
+		assertThat(medical.getInqty()).isEqualTo(inqty);
+		assertThat(medical.getMinqty()).isEqualTo(minqty);
+		assertThat(medical.getOutqty()).isEqualTo(outqty);
 		assertThat(medical.getPcsperpck()).isEqualTo(pcsperpck);
 		assertThat(medical.getProdCode()).isEqualTo(prod_code);
 	}

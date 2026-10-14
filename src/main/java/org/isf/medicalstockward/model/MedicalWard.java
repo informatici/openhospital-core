@@ -21,6 +21,8 @@
  */
 package org.isf.medicalstockward.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -50,10 +52,10 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	MedicalWardId id;
 
 	@Column(name = "MDSRWRD_IN_QTI")
-	private float in_quantity;
+	private int in_quantity;
 
-	@Column(name = "MDSRWRD_OUT_QTI")
-	private float out_quantity;
+	@Column(name = "MDSRWRD_OUT_QTI", precision = 19, scale = 2)
+	private BigDecimal out_quantity;
 
 	/**
 	 * Lock control
@@ -63,7 +65,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	private int lock;
 
 	@Transient
-	private Double qty = 0.0;
+	private BigDecimal qty = BigDecimal.ZERO;
 
 	@Transient
 	private volatile int hashCode;
@@ -73,14 +75,14 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.id = new MedicalWardId();
 	}
 
-	public MedicalWard(Medical medical, Double qty) {
+	public MedicalWard(Medical medical, BigDecimal qty) {
 		super();
 		this.id = new MedicalWardId();
 		this.id.setMedical(medical);
 		this.qty = qty;
 	}
 
-	public MedicalWard(Ward ward, Medical medical, float inQuantity, float outQuantity, Lot lot) {
+	public MedicalWard(Ward ward, Medical medical, int inQuantity, BigDecimal outQuantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId(ward, medical, lot);
 		this.in_quantity = inQuantity;
@@ -88,7 +90,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 
 	}
 
-	public MedicalWard(Medical med, double quantity, Lot lot) {
+	public MedicalWard(Medical med, BigDecimal quantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId();
 
@@ -113,11 +115,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		id.setLot(lot);
 	}
 
-	public Double getQty() {
+	public BigDecimal getQty() {
 		return qty;
 	}
 
-	public void setQty(Double qty) {
+	public void setQty(BigDecimal qty) {
 		this.qty = qty;
 	}
 
@@ -155,19 +157,19 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.id.setMedical(medical);
 	}
 
-	public float getIn_quantity() {
+	public int getIn_quantity() {
 		return this.in_quantity;
 	}
 
-	public void setIn_quantity(float inQuantity) {
+	public void setIn_quantity(int inQuantity) {
 		this.in_quantity = inQuantity;
 	}
 
-	public float getOut_quantity() {
+	public BigDecimal getOut_quantity() {
 		return this.out_quantity;
 	}
 
-	public void setOut_quantity(float outQuantity) {
+	public void setOut_quantity(BigDecimal outQuantity) {
 		this.out_quantity = outQuantity;
 	}
 

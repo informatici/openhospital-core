@@ -21,6 +21,7 @@
  */
 package org.isf.medicalinventory.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -330,12 +331,12 @@ public class MedicalInventoryManager {
 			Medical medical = lot.getMedical();
 			String medicalDesc = medical.getDescription();
 			Integer medicalCode = medical.getCode();
-			double mainStoreQty = 0.0;
+			BigDecimal mainStoreQty = BigDecimal.ZERO;
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<Lot> optLot = movStockInsertingManager.getLotByMedical(medical, false).stream().filter(l -> l.getCode().equals(lotCodeOfMovement))
 				.findFirst();
 			if (optLot.isPresent()) {
-				mainStoreQty = optLot.get().getMainStoreQuantity();
+				mainStoreQty = BigDecimal.valueOf(optLot.get().getMainStoreQuantity());
 			}
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
@@ -345,15 +346,15 @@ public class MedicalInventoryManager {
 
 			if (matchingRow.isPresent()) {
 				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
-				double theoQty = medicalInventoryRow.getTheoreticQty();
-				if (mainStoreQty != theoQty) {
+				BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
+				if (mainStoreQty.compareTo(theoQty) != 0) {
 					lotUpdated = true;
-					double difference = mainStoreQty - theoQty;
+					BigDecimal difference = mainStoreQty.subtract(theoQty);
 					medDescriptionForLotUpdated
 						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, theoQty, mainStoreQty, difference > 0 ? "+" + difference : difference));
+							medicalDesc, lotInfo, theoQty, mainStoreQty, (difference.signum() > 0 ? "+" : "") + difference.toPlainString()));
 
 				}
 			} else {
@@ -365,7 +366,7 @@ public class MedicalInventoryManager {
 						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
-							medicalDesc, lotInfo, "+" + mainStoreQty));
+							medicalDesc, lotInfo, "+" + mainStoreQty.toPlainString()));
 				} else {
 					// New Lot
 					lotAdded = true;
@@ -373,7 +374,7 @@ public class MedicalInventoryManager {
 						.append("\n")
 						.append(MessageBundle.formatMessage(
 							"angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, "+" + mainStoreQty));
+							medicalDesc, lotInfo, "+" + mainStoreQty.toPlainString()));
 				}
 			}
 		}
@@ -470,7 +471,7 @@ public class MedicalInventoryManager {
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
 
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			BigDecimal wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : BigDecimal.ZERO;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowSearchList.stream()
@@ -478,14 +479,14 @@ public class MedicalInventoryManager {
 
 			if (matchingRow.isPresent()) {
 				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
-				double theoQty = medicalInventoryRow.getTheoreticQty();
-				if (wardStoreQty != theoQty) {
+				BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
+				if (wardStoreQty.compareTo(theoQty) != 0) {
 					lotUpdated = true;
-					double difference = wardStoreQty - theoQty;
+					BigDecimal difference = wardStoreQty.subtract(theoQty);
 					medDescriptionForLotUpdated
 						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.theoreticalqtyhavebeenupdatedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, theoQty, wardStoreQty, difference > 0 ? "+" + difference : difference));
+							medicalDesc, lotInfo, theoQty, wardStoreQty, (difference.signum() > 0 ? "+" : "") + difference.toPlainString()));
 				}
 			} else {
 				// TODO: to decide if to give control to the user about this
@@ -495,14 +496,14 @@ public class MedicalInventoryManager {
 					medDescriptionForNewMedical
 						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.newmedicalshavebeenfound.detail.fmt.msg",
-							medicalDesc, lotInfo, "+" + wardStoreQty));
+							medicalDesc, lotInfo, "+" + wardStoreQty.toPlainString()));
 				} else {
 					// New Lot
 					lotAdded = true;
 					medDescriptionForNewLot
 						.append("\n")
 						.append(MessageBundle.formatMessage("angal.inventory.newlotshavebeenaddedforsomemedical.detail.fmt.msg",
-							medicalDesc, lotInfo, "+" + wardStoreQty));
+							medicalDesc, lotInfo, "+" + wardStoreQty.toPlainString()));
 				}
 			}
 		}
@@ -586,19 +587,33 @@ public class MedicalInventoryManager {
 		// prepare movements
 		List<Movement> chargeMovements = new ArrayList<>();
 		List<Movement> dischargeMovements = new ArrayList<>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
-			double theoQty = medicalInventoryRow.getTheoreticQty();
-			double realQty = medicalInventoryRow.getRealQty();
-			Double ajustQty = realQty - theoQty;
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
+			// main-store stock is integer: validate both quantities, not only their difference, so fractional
+			// (or out-of-int-range) values cannot slip through with a whole adjustment
+			int theoQty;
+			int realQty;
+			try {
+				theoQty = medicalInventoryRow.getTheoreticQty().intValueExact();
+				realQty = medicalInventoryRow.getRealQty().intValueExact();
+			} catch (ArithmeticException e) {
+				errors.add(new OHExceptionMessage(
+					MessageBundle.formatMessage("angal.inventory.quantitiesmustbewholenumbers.fmt.msg", medical.getDescription())));
+				continue;
+			}
+			int ajustQty = realQty - theoQty;
 			if (ajustQty > 0) { // charge movement when realQty > theoQty
-				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQty.intValue(), supplier, chargeReferenceNumber);
+				Movement movement = new Movement(medical, chargeType, null, currentLot, inventoryDate, ajustQty, supplier, chargeReferenceNumber);
 				chargeMovements.add(movement);
 			} else if (ajustQty < 0) { // discharge movement when realQty < theoQty
-				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQty.intValue(), null, dischargeReferenceNumber);
+				Movement movement = new Movement(medical, dischargeType, ward, currentLot, inventoryDate, -ajustQty, null, dischargeReferenceNumber);
 				dischargeMovements.add(movement);
 			} // else ajustQty = 0, continue
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
 		}
 		// create movements
 		List<Movement> insertedMovements = new ArrayList<>();
@@ -636,15 +651,16 @@ public class MedicalInventoryManager {
 		String reason = inventory.getInventoryReference();
 		List<MovementWard> insertedMovements = new ArrayList<>();
 		for (MedicalInventoryRow medicalInventoryRow : inventoryRowSearchList) {
-			double theoQty = medicalInventoryRow.getTheoreticQty();
-			double realQty = medicalInventoryRow.getRealQty();
-			double movQuantity = theoQty - realQty;
+			BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
+			BigDecimal realQty = medicalInventoryRow.getRealQty();
+			BigDecimal movQuantity = theoQty.subtract(realQty);
 			Medical medical = medicalInventoryRow.getMedical();
 			Lot currentLot = medicalInventoryRow.getLot();
-			if (movQuantity != 0) {
+			if (movQuantity.signum() != 0) {
 				insertedMovements
-					.add(movWardBrowserManager.newMovementWard(new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, movQuantity,
-						MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
+					.add(movWardBrowserManager.newMovementWard(
+						new MovementWard(selectedWard, now, false, null, 0, 0, reason, medical, movQuantity,
+							MessageBundle.getMessage("angal.medicalstockward.rectify.pieces"), currentLot)));
 			}
 		}
 		String status = InventoryStatus.done.toString();
@@ -724,7 +740,7 @@ public class MedicalInventoryManager {
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<Lot> optLot = movStockInsertingManager.getLotByMedical(medical, false).stream().filter(l -> l.getCode().equals(lotCode))
 				.findFirst();
-			double mainStoreQty = optLot.isPresent() ? optLot.get().getMainStoreQuantity() : 0.;
+			BigDecimal mainStoreQty = optLot.isPresent() ? BigDecimal.valueOf(optLot.get().getMainStoreQuantity()) : BigDecimal.ZERO;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()
@@ -733,15 +749,15 @@ public class MedicalInventoryManager {
 
 			if (matchingRow.isPresent()) {
 				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
-				double theoQty = medicalInventoryRow.getTheoreticQty();
-				if (mainStoreQty != theoQty) {
+				BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
+				if (mainStoreQty.compareTo(theoQty) != 0) {
 					// Update Lot
 					medicalInventoryRow.setTheoreticQty(mainStoreQty);
 					medicalInventoryRowManager.updateMedicalInventoryRow(medicalInventoryRow);
 				}
 			} else {
 				// TODO: to decide if to give control to the user about this
-				double realQty = mainStoreQty;
+				BigDecimal realQty = mainStoreQty;
 				MedicalInventoryRow newMedicalInventoryRow = new MedicalInventoryRow(null, mainStoreQty, realQty, inventory, medical,
 					lot);
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
@@ -879,7 +895,7 @@ public class MedicalInventoryManager {
 			// Fetch also empty lots because some movements may have discharged them completely
 			Optional<MedicalWard> optMedicalWard = movWardBrowserManager.getMedicalsWard(inventory.getWardCode(), medical.getCode(), false).stream()
 				.filter(m -> m.getLot().getCode().equals(lotCode)).findFirst();
-			double wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : 0.0;
+			BigDecimal wardStoreQty = optMedicalWard.isPresent() ? optMedicalWard.get().getQty() : BigDecimal.ZERO;
 
 			// Search for the specific Lot and Medical in inventoryRowSearchList (Lot should be enough)
 			Optional<MedicalInventoryRow> matchingRow = inventoryRowList.stream()
@@ -888,8 +904,8 @@ public class MedicalInventoryManager {
 
 			if (matchingRow.isPresent()) {
 				MedicalInventoryRow medicalInventoryRow = matchingRow.get();
-				double theoQty = medicalInventoryRow.getTheoreticQty();
-				if (wardStoreQty != theoQty) {
+				BigDecimal theoQty = medicalInventoryRow.getTheoreticQty();
+				if (wardStoreQty.compareTo(theoQty) != 0) {
 					// Update Lot
 					medicalInventoryRow.setTheoreticQty(wardStoreQty);
 					medicalInventoryRow.setRealqty(wardStoreQty);
@@ -897,7 +913,7 @@ public class MedicalInventoryManager {
 				}
 			} else {
 				// TODO: to decide if to give control to the user about this
-				double realQty = wardStoreQty;
+				BigDecimal realQty = wardStoreQty;
 				MedicalInventoryRow newMedicalInventoryRow = new MedicalInventoryRow(null, wardStoreQty, realQty, inventory, medical, lot);
 				medicalInventoryRowManager.newMedicalInventoryRow(newMedicalInventoryRow);
 			}
