@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.admtype;
+package org.isf.admtype.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,9 +28,8 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.admtype.manager.AdmissionTypeBrowserManager;
+import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
-import org.isf.admtype.service.AdmissionTypeIoOperation;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
@@ -39,12 +38,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class AdmissionTypeBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestAdmissionType testAdmissionType;
 
-	@Autowired
-	private AdmissionTypeIoOperation admissionTypeIoOperation;
 	@Autowired
 	private AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
 	@Autowired
@@ -61,62 +58,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testAdmissionTypeGets() throws Exception {
-		String code = setupTestAdmissionType(false);
-		checkAdmissionTypeIntoDb(code);
-	}
-
-	@Test
-	void testAdmissionTypeSets() throws Exception {
-		String code = setupTestAdmissionType(true);
-		checkAdmissionTypeIntoDb(code);
-	}
-
-	@Test
-	void testIoGetAdmissionType() throws Exception {
-		String code = setupTestAdmissionType(false);
-		List<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
-		assertThat(admissionTypes).hasSize(1);
-		assertThat(admissionTypes.get(0).getDescription()).isEqualTo("TestDescription");
-	}
-
-	@Test
-	void testIoUpdateAdmissionType() throws Exception {
-		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(admissionType).isNotNull();
-		admissionType.setDescription("Update");
-		AdmissionType updatedAdmissionType = admissionTypeIoOperation.updateAdmissionType(admissionType);
-		assertThat(updatedAdmissionType).isNotNull();
-		assertThat(updatedAdmissionType.getDescription()).isEqualTo("Update");
-	}
-
-	@Test
-	void testIoNewAdmissionType() throws Exception {
-		AdmissionType admissionType = testAdmissionType.setup(true);
-		AdmissionType newAdmissionType = admissionTypeIoOperation.newAdmissionType(admissionType);
-		assertThat(newAdmissionType).isNotNull();
-		checkAdmissionTypeIntoDb(newAdmissionType.getCode());
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		String code = setupTestAdmissionType(false);
-		boolean result = admissionTypeIoOperation.isCodePresent(code);
-		assertThat(result).isTrue();
-	}
-
-	@Test
-	void testIoDeleteAdmissionType() throws Exception {
-		String code = setupTestAdmissionType(false);
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundAdmissionType).isNotNull();
-		admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
-		assertThat(admissionTypeIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@Test
-	void testMgrGetAdmissionType() throws Exception {
+	void getAdmissionType_shouldReturnSavedAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
 		List<AdmissionType> admissionTypes = admissionTypeBrowserManager.getAdmissionType();
 		assertThat(admissionTypes).hasSize(1);
@@ -124,7 +66,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateAdmissionType() throws Exception {
+	void updateAdmissionType_shouldSaveNewDescription() throws Exception {
 		String code = setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(admissionType).isNotNull();
@@ -135,25 +77,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testAdmissionTypeEqualHashToString() throws Exception {
-		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(admissionType).isNotNull();
-		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
-		assertThat(admissionType)
-			.isEqualTo(admissionType)
-			.isNotEqualTo(admissionType2)
-			.isNotEqualTo("xyzzy");
-		admissionType2.setCode(code);
-		assertThat(admissionType).isEqualTo(admissionType2);
-
-		assertThat(admissionType.hashCode()).isPositive();
-
-		assertThat(admissionType2).hasToString("someDescription");
-	}
-
-	@Test
-	void testMgrAdmissionValidation() throws Exception {
+	void newAndUpdateAdmissionType_shouldThrow_whenCodeOrDescriptionIsInvalid() throws Exception {
 		String code = setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(admissionType).isNotNull();
@@ -196,7 +120,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewAdmissionType() throws Exception {
+	void newAdmissionType_shouldSaveAdmissionType() throws Exception {
 		AdmissionType admissionType = testAdmissionType.setup(true);
 		AdmissionType newAdmissionType = admissionTypeBrowserManager.newAdmissionType(admissionType);
 		assertThat(newAdmissionType).isNotNull();
@@ -204,14 +128,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrIsCodePresent() throws Exception {
+	void isCodePresent_shouldReturnTrue_whenCodeExists() throws Exception {
 		String code = setupTestAdmissionType(false);
 		boolean result = admissionTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	void testMgrDeleteAdmissionType() throws Exception {
+	void deleteAdmissionType_shouldRemoveAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundAdmissionType).isNotNull();
@@ -230,4 +154,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundAdmissionType).isNotNull();
 		testAdmissionType.check(foundAdmissionType);
 	}
+
 }
