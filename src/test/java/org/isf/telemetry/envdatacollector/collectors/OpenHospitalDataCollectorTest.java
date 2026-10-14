@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.common;
+package org.isf.telemetry.envdatacollector.collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -40,7 +40,8 @@ import org.isf.menu.service.MenuIoOperations;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.operation.service.OperationRowIoOperations;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.telemetry.envdatacollector.collectors.OpenHospitalDataCollector;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.vaccine.service.VaccineIoOperations;
 import org.isf.visits.service.VisitsIoOperations;
@@ -54,7 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class TestOpenHospitalDataCollector extends OHCoreTestCase {
+class OpenHospitalDataCollectorTest extends OHCoreTestCase {
 
 	@Autowired
 	private PatientIoOperations patientIoOperations;
@@ -124,12 +125,12 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetId() {
+	void getId_shouldReturnTelOh() {
 		assertThat(openHospitalDataCollector.getId()).isEqualTo("TEL_OH");
 	}
 
 	@Test
-	void testRetrieveData() throws Exception {
+	void retrieveData_shouldReturnUsageCountersAndLastUsedTime() throws Exception {
 		ReflectionTestUtils.setField(openHospitalDataCollector, "settings", geoIpInfoSettingsMock);
 		when(geoIpInfoSettingsMock.getSelectedService()).thenReturn("theService");
 		ReflectionTestUtils.setField(openHospitalDataCollector, "geoIpServices", geoIpServicesMock);
@@ -140,4 +141,5 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 		assertThat(data).isNotNull();
 		assertThat(data).hasSize(16);
 	}
+
 }

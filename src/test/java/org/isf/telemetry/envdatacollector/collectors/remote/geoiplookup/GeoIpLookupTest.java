@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,37 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.model;
+package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.OHCoreTestCase;
 import org.junit.jupiter.api.Test;
 
-class TestConsentData extends OHCoreTestCase {
+class GeoIpLookupTest extends OHCoreTestCase {
 
 	@Test
-	void testModel() {
-		ConsentData consentData = new ConsentData();
+	void setCurrencyName_shouldSetCurrencyName() {
+		GeoIpLookup geoIpLookup = new GeoIpLookup();
 
-		consentData.setApplication(false);
-		assertThat(consentData.getApplication()).isFalse();
-
-		consentData.setOss(true);
-		assertThat(consentData.getOss()).isTrue();
-
-		consentData.setDbms(false);
-		assertThat(consentData.getDbms()).isFalse();
-
-		consentData.setLocation(true);
-		assertThat(consentData.getLocation()).isTrue();
-
-		consentData.setHospital(false);
-		assertThat(consentData.getHospital()).isFalse();
-
-		consentData.setTime(true);
-		assertThat(consentData.getTime()).isTrue();
-
-		assertThat(consentData.toString()).isNotNull();
+		geoIpLookup.setCurrencyName("currencyName");
+		assertThat(geoIpLookup.getCurrencyName()).isEqualTo("currencyName");
 	}
+
 }
