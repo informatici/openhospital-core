@@ -34,6 +34,7 @@ import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
 import org.isf.OHCoreTestCase;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,12 +74,6 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDescription() {
-		assertThat(softwareDataCollector.getDescription()).startsWith(
-						"Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital");
-	}
-
-	@Test
 	void testRetrieveData() throws Exception {
 		ReflectionTestUtils.setField(softwareDataCollector, "em", entityManagerMock);
 		when(entityManagerMock.unwrap(Session.class)).thenReturn(sessionMock);
@@ -89,6 +84,7 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 		when(connectionMock.getMetaData()).thenReturn(databaseMetaDataMock);
 		Map<String, String> data = softwareDataCollector.retrieveData();
 		assertThat(data).isNotNull();
-		assertThat(data).hasSize(41);
+		assertThat(data).hasSize(40);
+		assertThat(data).doesNotContainKey(CollectorsConstants.APP_VERSION);
 	}
 }
