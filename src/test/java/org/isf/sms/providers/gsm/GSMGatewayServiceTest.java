@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms;
+package org.isf.sms.providers.gsm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,8 +27,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
 import org.isf.OHCoreTestCase;
+import org.isf.sms.TestSms;
 import org.isf.sms.model.Sms;
-import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.service.SmsIoOperationRepository;
 import org.isf.sms.service.SmsOperations;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
-class TestsGSM extends OHCoreTestCase {
+class GSMGatewayServiceTest extends OHCoreTestCase {
 
 	private static TestSms testSms;
 
@@ -54,7 +54,7 @@ class TestsGSM extends OHCoreTestCase {
 	}
 
 	@Test
-	void testInitialize() throws Exception {
+	void initialize_shouldReturnFalse_whenNoPortIsFound() throws Exception {
 		try (MockedStatic<SerialPort> mockedSerialPort = mockStatic(SerialPort.class)) {
 			mockedSerialPort.when(SerialPort::getCommPorts).thenReturn(new SerialPort[0]);
 
@@ -64,7 +64,7 @@ class TestsGSM extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendSMS() throws Exception {
+	void sendSMS_shouldReturnFalse_whenNotConnected() throws Exception {
 		Sms sms = setupTestSms(false);
 		GSMGatewayService gsmGatewayService = new GSMGatewayService();
 		// does not get very far into the method
@@ -72,7 +72,7 @@ class TestsGSM extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendSMSDebug() throws Exception {
+	void sendSMS_shouldReturnFalse_whenNotConnectedAndDebugIsTrue() throws Exception {
 		Sms sms = setupTestSms(false);
 		GSMGatewayService gsmGatewayService = new GSMGatewayService();
 		// does not get very far into the method
@@ -80,7 +80,7 @@ class TestsGSM extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGets() throws Exception {
+	void getters_shouldReturnServiceNameAndListeningEvents() throws Exception {
 		GSMGatewayService gsmGatewayService = new GSMGatewayService();
 		assertThat(gsmGatewayService.getName()).isEqualTo("gsm-gateway-service");
 		assertThat(gsmGatewayService.getRootKey()).isEqualTo("gsm-gateway-service");
@@ -88,14 +88,14 @@ class TestsGSM extends OHCoreTestCase {
 	}
 
 	@Test
-	void testTerminate() throws Exception {
+	void terminate_shouldThrowNullPointerException_whenNotInitialized() throws Exception {
 		GSMGatewayService gsmGatewayService = new GSMGatewayService();
 		assertThatThrownBy(gsmGatewayService::terminate)
 						.isInstanceOf(NullPointerException.class);
 	}
 
 	@Test
-	void testSerialEvent() throws Exception {
+	void serialEvent_shouldThrowNullPointerException_whenNotInitialized() throws Exception {
 		GSMGatewayService gsmGatewayService = new GSMGatewayService();
 		SerialPort serialPort = mock(SerialPort.class);
 		SerialPortEvent serialPortEvent = new SerialPortEvent(serialPort, 1);
@@ -110,4 +110,5 @@ class TestsGSM extends OHCoreTestCase {
 		assertThat(foundSms).isNotNull();
 		return foundSms;
 	}
+
 }
