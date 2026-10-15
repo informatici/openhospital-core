@@ -23,6 +23,7 @@ package org.isf.accounting.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -33,6 +34,7 @@ import org.isf.accounting.model.BillPayments;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -150,53 +152,145 @@ public class AccountingIoOperations {
 	 * 
 	 * @param newBill the bill to store.
 	 * @return the persisted Bill object
-	 * @throws OHServiceException if an error occurs storing the bill.
+	 * @throws OHServiceException if the bill already exists or an error occurs storing the bill.
 	 */
 	public Bill newBill(Bill newBill) throws OHServiceException {
+		if (newBill.getId() != 0) {
+			throw new OHServiceException(new OHExceptionMessage("Bill '" + newBill.getId() + "' already exists."));
+		}
 		return billRepository.save(newBill);
 	}
 
 	/**
-	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
-	 * 
+	 * Synchronizes the {@link BillItems} of the specified {@link Bill} with the passed list. Items with a matching id are updated in place, items with id
+	 * {@code 0} are inserted as new rows and stored items missing from the list are deleted (orphan removal).
+	 *
 	 * @param bill the bill.
 	 * @param billItems the bill items to store.
-	 * @throws OHServiceException if an error occurs during the store operation.
+	 * @throws OHServiceException if the bill is not found or an error occurs during the store operation.
 	 */
 	public void newBillItems(Bill bill, List<BillItems> billItems) throws OHServiceException {
-		billItemsRepository.deleteWhereId(bill.getId());
-		for (BillItems item : billItems) {
-			item.setBill(bill);
-			item.setId(0);
-			billItemsRepository.save(item);
+		Bill managedBill = billRepository.findById(bill.getId()).orElse(null);
+		if (managedBill == null) {
+			throw new OHServiceException(new OHExceptionMessage("Bill '" + bill.getId() + "' not found."));
 		}
+		List<BillItems> currentItems = managedBill.getItems();
+		Set<Integer> incomingIds = new HashSet<>();
+		for (BillItems item : billItems) {
+			if (item.getId() != 0) {
+				incomingIds.add(item.getId());
+			}
+		}
+		currentItems.removeIf(currentItem -> !incomingIds.contains(currentItem.getId()));
+		Set<Integer> mergedIds = new HashSet<>();
+		for (BillItems item : billItems) {
+			BillItems managedItem = null;
+			if (item.getId() != 0 && mergedIds.add(item.getId())) {
+				managedItem = findBillItem(currentItems, item.getId());
+			}
+			if (managedItem != null) {
+				managedItem.setPrice(item.isPrice());
+				managedItem.setPriceID(item.getPriceID());
+				managedItem.setItemDescription(item.getItemDescription());
+				managedItem.setItemAmount(item.getItemAmount());
+				managedItem.setItemQuantity(item.getItemQuantity());
+			} else if (item.getId() == 0) {
+				item.setBill(managedBill);
+				currentItems.add(item);
+			} else {
+				currentItems.add(new BillItems(0, managedBill, item.isPrice(), item.getPriceID(), item.getItemDescription(), item.getItemAmount(),
+					item.getItemQuantity()));
+			}
+		}
+		billRepository.flush();
 	}
 
 	/**
-	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
-	 * 
+	 * Synchronizes the {@link BillPayments} of the specified {@link Bill} with the passed list. Payments with a matching id are updated in place, payments with
+	 * id {@code 0} are inserted as new rows and stored payments missing from the list are deleted (orphan removal).
+	 *
 	 * @param bill the bill.
 	 * @param payItems the bill payments.
-	 * @throws OHServiceException if an error occurs during the store procedure.
+	 * @throws OHServiceException if the bill is not found or an error occurs during the store procedure.
 	 */
 	public void newBillPayments(Bill bill, List<BillPayments> payItems) throws OHServiceException {
-		billPaymentRepository.deleteWhereId(bill.getId());
-		for (BillPayments payment : payItems) {
-			payment.setBill(bill);
-			payment.setId(0);
-			billPaymentRepository.save(payment);
+		Bill managedBill = billRepository.findById(bill.getId()).orElse(null);
+		if (managedBill == null) {
+			throw new OHServiceException(new OHExceptionMessage("Bill '" + bill.getId() + "' not found."));
 		}
+		List<BillPayments> currentPayments = managedBill.getPayments();
+		Set<Integer> incomingIds = new HashSet<>();
+		for (BillPayments payment : payItems) {
+			if (payment.getId() != 0) {
+				incomingIds.add(payment.getId());
+			}
+		}
+		currentPayments.removeIf(currentPayment -> !incomingIds.contains(currentPayment.getId()));
+		Set<Integer> mergedIds = new HashSet<>();
+		for (BillPayments payment : payItems) {
+			BillPayments managedPayment = null;
+			if (payment.getId() != 0 && mergedIds.add(payment.getId())) {
+				managedPayment = findBillPayment(currentPayments, payment.getId());
+			}
+			if (managedPayment != null) {
+				managedPayment.setDate(payment.getDate());
+				managedPayment.setAmount(payment.getAmount());
+				managedPayment.setUser(payment.getUser());
+			} else if (payment.getId() == 0) {
+				payment.setBill(managedBill);
+				currentPayments.add(payment);
+			} else {
+				currentPayments.add(new BillPayments(0, managedBill, payment.getDate(), payment.getAmount(), payment.getUser()));
+			}
+		}
+		billRepository.flush();
+	}
+
+	private BillItems findBillItem(List<BillItems> items, int id) {
+		for (BillItems item : items) {
+			if (item.getId() == id) {
+				return item;
+			}
+		}
+		return null;
+	}
+
+	private BillPayments findBillPayment(List<BillPayments> payments, int id) {
+		for (BillPayments payment : payments) {
+			if (payment.getId() == id) {
+				return payment;
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * Updates the specified {@link Bill}.
-	 * 
+	 * Updates the specified {@link Bill}. The scalar fields of the stored bill are updated from the passed object; the associated {@link BillItems} and
+	 * {@link BillPayments} are left untouched (use {@link #newBillItems} and {@link #newBillPayments} to update them).
+	 *
 	 * @param updateBill the bill to update.
 	 * @return the updated Bill object
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public Bill updateBill(Bill updateBill) throws OHServiceException {
-		return billRepository.save(updateBill);
+		Bill managedBill = billRepository.findById(updateBill.getId()).orElse(null);
+		if (managedBill == null) {
+			return billRepository.save(updateBill);
+		}
+		managedBill.setDate(updateBill.getDate());
+		managedBill.setUpdate(updateBill.getUpdate());
+		managedBill.setIsList(updateBill.isList());
+		managedBill.setPriceList(updateBill.getPriceList());
+		managedBill.setListName(updateBill.getListName());
+		managedBill.setIsPatient(updateBill.isPatient());
+		managedBill.setBillPatient(updateBill.getBillPatient());
+		managedBill.setPatName(updateBill.getPatName());
+		managedBill.setStatus(updateBill.getStatus());
+		managedBill.setAmount(updateBill.getAmount());
+		managedBill.setBalance(updateBill.getBalance());
+		managedBill.setUser(updateBill.getUser());
+		managedBill.setAdmission(updateBill.getAdmission());
+		return billRepository.save(managedBill);
 	}
 
 	/**
