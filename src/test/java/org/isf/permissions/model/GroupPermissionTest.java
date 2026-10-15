@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,20 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions;
+package org.isf.permissions.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.OHCoreTestCase;
 import org.isf.menu.model.UserGroup;
-import org.isf.permissions.model.GroupPermission;
-import org.isf.permissions.model.Permission;
 import org.junit.jupiter.api.Test;
 
-class TestGroupPermission extends OHCoreTestCase {
+class GroupPermissionTest extends OHCoreTestCase {
 
 	@Test
-	void testModel() throws Exception {
+	void setters_shouldSetFields() throws Exception {
 		GroupPermission groupPermission = new GroupPermission();
 
 		groupPermission.setId(-1);
@@ -48,4 +46,5 @@ class TestGroupPermission extends OHCoreTestCase {
 		groupPermission.setUserGroup(userGroup);
 		assertThat(groupPermission.getUserGroup().getCode()).isEqualTo("code");
 	}
+
 }
