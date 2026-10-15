@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -319,6 +319,22 @@ class Tests extends OHCoreTestCase {
 				foundPatientVaccine.getPatient().getAge(),
 				foundPatientVaccine.getPatient().getAge());
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(foundPatientVaccine.getPatName());
+	}
+
+	@Test
+	void testMgrGetPatientVaccines() throws Exception {
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPatientVaccine).isNotNull();
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccines(foundPatientVaccine.getPatient().getCode());
+		assertThat(patientVaccines).hasSize(1);
+		assertThat(patientVaccines.get(0).getCode()).isEqualTo(foundPatientVaccine.getCode());
+	}
+
+	@Test
+	void testMgrGetPatientVaccinesNoneFound() throws Exception {
+		setupTestPatientVaccine(false);
+		assertThat(patVacManager.getPatientVaccines(-1)).isEmpty();
 	}
 
 	@Test
