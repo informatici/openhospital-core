@@ -491,11 +491,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
@@ -544,11 +540,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
@@ -663,11 +655,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFileName);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 
 		} catch (Exception e) {
 			LOGGER.error("", e);
@@ -822,11 +810,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 		} catch (Exception exception) {
 			throw new OHReportException(exception, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
@@ -852,11 +836,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 		} catch (Exception exception) {
 			throw new OHReportException(exception, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
 		}
@@ -893,11 +873,7 @@ public class JasperReportsManager {
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls")) {
-				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			} else {
-				xlsExport.exportResultsetToExcel(resultSet, exportFile);
-			}
+			xlsExport.exportResultset(resultSet, exportFile);
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(STAT_REPORTERROR_MSG)));
