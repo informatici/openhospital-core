@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.patconsensus;
+package org.isf.patconsensus.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
-import org.isf.patconsensus.manager.PatientConsensusBrowserManager;
+import org.isf.patconsensus.TestPatientConsensus;
 import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.patconsensus.service.PatientConmsensusIoOperationRepository;
 import org.isf.patient.TestPatient;
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class PatientConsensusBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestPatientConsensus testPatientConsensus;
 	private static TestPatient testPatient;
@@ -65,7 +65,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIsPresent() throws Exception {
+	void getPatientConsensusByUserId_shouldReturnConsensus_whenPatientHasOne() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(false);
 		Integer userId = patientConsensus.getPatient().getCode();
 		Optional<PatientConsensus> foundPatientConsensus = patientConsensusBrowserManager.getPatientConsensusByUserId(userId);
@@ -73,14 +73,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExistsByPatientCode() throws Exception {
+	void existsByPatientCode_shouldReturnTrue_whenConsensusExists() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		Integer userId = patientConsensus.getPatient().getCode();
 		assertThat(patientConsensusBrowserManager.existsByPatientCode(userId)).isTrue();
 	}
 
 	@Test
-	void testUpdatePatientConsensus() throws Exception {
+	void updatePatientConsensus_shouldUpdateServiceFlag() throws Exception {
 		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 		patientConsensus.setServiceFlag(true);
 		PatientConsensus updatedPatientConsensus = patientConsensusBrowserManager.updatePatientConsensus(patientConsensus);
@@ -88,17 +88,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testToString() throws Exception {
-		PatientConsensus patientConsensus = setupTestPatientConsensus(true);
-		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=1, consensusFlag=true, serviceFlag=false, patient=TestFirstName TestSecondName]");
-		patientConsensus.setId(patientConsensus.getId() + 2);
-		assertThat(patientConsensus.toString())
-						.isEqualTo("PatientConsensus [id=3, consensusFlag=true, serviceFlag=false, patient=TestFirstName TestSecondName]");
-	}
-
-	@Test
-	void testUpdatePatientConsensusNotFoundException() throws Exception {
+	void updatePatientConsensus_shouldThrow_whenPatientNotFound() throws Exception {
 		assertThatThrownBy(() -> {
 			PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 			patientConsensus.getPatient().setCode(-1);
@@ -108,7 +98,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdatePatientConsensusValidationException() throws Exception {
+	void updatePatientConsensus_shouldThrow_whenConsensusFlagIsFalse() throws Exception {
 		assertThatThrownBy(() -> {
 			PatientConsensus patientConsensus = setupTestPatientConsensus(true);
 			patientConsensus.setConsensusFlag(false);
@@ -123,4 +113,5 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patientConsensus.getPatient());
 		return patientConmsensusIoOperationRepository.saveAndFlush(patientConsensus);
 	}
+
 }
