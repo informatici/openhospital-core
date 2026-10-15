@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.examination;
+package org.isf.examination.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,39 +33,30 @@ import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.examination.manager.ExaminationBrowserManager;
-import org.isf.examination.model.GenderPatientExamination;
+import org.isf.examination.TestPatientExamination;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
-import org.isf.examination.service.ExaminationOperations;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
-import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PagedResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 
-class Tests extends OHCoreTestCase {
+class ExaminationBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
 
-	@Autowired
-	ExaminationOperations examinationOperations;
 	@Autowired
 	ExaminationIoOperationRepository examinationIoOperationRepository;
 	@Autowired
 	ExaminationBrowserManager examinationBrowserManager;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
-	@Autowired
-	ApplicationEventPublisher applicationEventPublisher;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -80,134 +70,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPatientExaminationGets() throws Exception {
-		int id = setupTestPatientExamination(false);
-		checkPatientExaminationIntoDb(id);
-	}
-
-	@Test
-	void testPatientExaminationSets() throws Exception {
-		int id = setupTestPatientExamination(true);
-		checkPatientExaminationIntoDb(id);
-	}
-
-	@Test
-	void testIoGetFromLastPatientExamination() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		PatientExamination patientExamination = examinationOperations.getFromLastPatientExamination(lastPatientExamination);
-		testPatientExamination.check(patientExamination);
-		testPatient.check(patientExamination.getPatient());
-	}
-
-	@Test
-	void testIoSaveOrUpdate() throws Exception {
-		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
-		assertThat(patientExamination).isNotNull();
-		Integer pex_hr = patientExamination.getPex_hr();
-		patientExamination.setPex_hr(pex_hr + 1);
-		examinationOperations.saveOrUpdate(patientExamination);
-		assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
-	}
-
-	@Test
-	void testSaveOrUpdateStoresSexAgeSnapshot() throws Exception {
-		Patient patient = testPatient.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		PatientExamination patientExamination = testPatientExamination.setup(patient, false);
-
-		// a new examination goes through the operations layer, which snapshots the patient's sex and age
-		PatientExamination saved = examinationOperations.saveOrUpdate(patientExamination);
-		int expectedAge = (int) ChronoUnit.YEARS.between(patient.getBirthDate(), saved.getPex_date().toLocalDate());
-		assertThat(saved.getSex()).isEqualTo(String.valueOf(patient.getSex()));
-		assertThat(saved.getAge()).isEqualTo(expectedAge);
-
-		// the snapshot is immutable: updating an existing examination must not refresh it from the patient
-		saved.setSex("M");
-		saved.setAge(999);
-		PatientExamination updated = examinationOperations.saveOrUpdate(saved);
-		assertThat(updated.getSex()).isEqualTo("M");
-		assertThat(updated.getAge()).isEqualTo(999);
-	}
-
-	@Test
-	void testIoGetByID() throws Exception {
-		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationOperations.getByID(id);
-		testPatientExamination.check(patientExamination);
-		testPatient.check(patientExamination.getPatient());
-	}
-
-	@Test
-	void testIoGetLastByPatID() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		PatientExamination foundExamination = examinationOperations.getLastByPatID(patient.getCode());
-		checkPatientExaminationIntoDb(foundExamination.getPex_ID());
-	}
-
-	@Test
-	void testIoGetLastNByPatID() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		List<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
-		checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
-	}
-	
-	@Test
-	void testIoGetLastNByPatIDPaginated() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		PagedResponse<PatientExamination> foundExamination = examinationOperations.getLastNByPatIDPageable(patient.getCode(), 1);
-		checkPatientExaminationIntoDb(foundExamination.getData().get(0).getPex_ID());
-	}
-
-	@Test
-	void testIoGetByPatID() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		List<PatientExamination> foundExamination = examinationOperations.getByPatID(patient.getCode());
-		checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
-	}
-
-	@Test
-	void testIoRemove() throws Exception {
-		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationBrowserManager.getByID(id);
-		List<PatientExamination> patexList = new ArrayList<>(1);
-		patexList.add(patientExamination);
-		examinationOperations.remove(patexList);
-		assertThat(examinationIoOperationRepository.findById(id)).isEmpty();
-	}
-
-	@Test
-	void testIoListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
-		// given:
-		int id = setupTestPatientExamination(false);
-		PatientExamination found = examinationIoOperationRepository.findById(id).orElse(null);
-		assertThat(found).isNotNull();
-		Patient mergedPatient = setupTestPatient(false);
-
-		// when:
-		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
-
-		// then:
-		PatientExamination result = examinationIoOperationRepository.findById(id).orElse(null);
-		assertThat(result).isNotNull();
-		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-	}
-
-	@Test
-	void testMgrGetFromLastPatientExamination() throws Exception {
+	void getFromLastPatientExamination_shouldCopyLastExaminationValues() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		PatientExamination patientExamination = examinationBrowserManager.getFromLastPatientExamination(lastPatientExamination);
@@ -216,7 +79,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrSaveOrUpdate() throws Exception {
+	void saveOrUpdate_shouldKeepUpdatedHeartRate() throws Exception {
 		int id = setupTestPatientExamination(false);
 		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
 		assertThat(patientExamination).isNotNull();
@@ -231,7 +94,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetLastByPatID() throws Exception {
+	void getLastByPatID_shouldReturnLastExaminationOfPatient() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -241,7 +104,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetLastNByPatID() throws Exception {
+	void getLastNByPatID_shouldReturnLastExaminationsOfPatient() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -251,7 +114,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetByPatID() throws Exception {
+	void getByPatID_shouldReturnExaminationsOfPatient() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -261,7 +124,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrRemove() throws Exception {
+	void remove_shouldDeleteExaminations() throws Exception {
 		int id = setupTestPatientExamination(false);
 		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
 		assertThat(patientExamination).isNotNull();
@@ -272,7 +135,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrListsTranslated() throws Exception {
+	void getTranslatedVariants_shouldTranslateKnownKeysAndReturnNullForUnknownKeys() throws Exception {
 		resetHashMaps();
 
 		assertThat(examinationBrowserManager.getAuscultationTranslated("normal"))
@@ -292,7 +155,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetAuscultationKey() throws Exception {
+	void getAuscultationKey_shouldReturnMatchingKeyOrEmptyString() throws Exception {
 		resetHashMaps();
 		assertThat(examinationBrowserManager.getAuscultationKey("shouldNotBeThere")).isEmpty();
 		setKnownKeyValueInHashMaps();
@@ -300,7 +163,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetBowelDescriptionKey() throws Exception {
+	void getBowelDescriptionKey_shouldReturnMatchingKeyOrEmptyString() throws Exception {
 		resetHashMaps();
 		assertThat(examinationBrowserManager.getBowelDescriptionKey("shouldNotBeThere")).isEmpty();
 		setKnownKeyValueInHashMaps();
@@ -308,7 +171,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetDiuresisDescriptionKey() throws Exception {
+	void getDiuresisDescriptionKey_shouldReturnMatchingKeyOrEmptyString() throws Exception {
 		resetHashMaps();
 		assertThat(examinationBrowserManager.getDiuresisDescriptionKey("shouldNotBeThere")).isEmpty();
 		setKnownKeyValueInHashMaps();
@@ -316,7 +179,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetBMIdescription() throws Exception {
+	void getBMIdescription_shouldReturnCategoryForEachBmiRange() throws Exception {
 		// TODO: if message resources are added to the project this code needs to be changed
 		assertThat(examinationBrowserManager.getBMIdescription(0.0d)).isEqualTo("angal.examination.bmi.severeunderweight.txt");
 		assertThat(examinationBrowserManager.getBMIdescription(17.0d)).isEqualTo("angal.examination.bmi.underweight.txt");
@@ -328,13 +191,13 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetDefaultPatientExamination() throws Exception {
+	void getDefaultPatientExamination_shouldReturnNonNullExamination() throws Exception {
 		Patient patient = testPatient.setup(false);
 		assertThat(examinationBrowserManager.getDefaultPatientExamination(patient)).isNotNull();
 	}
 
 	@Test
-	void testMgrExaminationValidation() throws Exception {
+	void saveOrUpdate_shouldThrow_whenDiuresisBowelOrAuscultationIsUnknown() throws Exception {
 		int id = setupTestPatientExamination(false);
 		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
 		assertThat(patientExamination).isNotNull();
@@ -371,86 +234,6 @@ class Tests extends OHCoreTestCase {
 						new Condition<Throwable>(
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
-	}
-
-	@Test
-	void testPatientExaminationEqualHashCompareTo() throws Exception {
-		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
-		assertThat(patientExamination).isNotNull();
-		Patient patient = testPatient.setup(false);
-		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
-		patientExamination2.setPex_ID(-1);
-		assertThat(patientExamination).isEqualTo(patientExamination);
-		assertThat(patientExamination)
-				.isNotEqualTo(patientExamination2)
-				.isNotEqualTo("xyzzy");
-		patientExamination2.setPex_ID(patientExamination.getPex_ID());
-		assertThat(patientExamination).isEqualTo(patientExamination2);
-		assertThat(patientExamination.compareTo(patientExamination2)).isZero();
-
-		assertThat(patientExamination.hashCode()).isPositive();
-	}
-
-	@Test
-	void testPatientExaminationGetBMI() throws Exception {
-		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
-		assertThat(patientExamination).isNotNull();
-		assertThat(patientExamination.getBMI()).isPositive();
-		patientExamination.setPex_height(null);
-		assertThat(patientExamination.getBMI()).isZero();
-	}
-
-	@Test
-	void testPatientExaminationGettersSetters() throws Exception {
-		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
-		assertThat(patientExamination).isNotNull();
-
-		int hgt = patientExamination.getPex_hgt();
-		patientExamination.setPex_hgt(-1);
-		assertThat(patientExamination.getPex_hgt()).isEqualTo(-1);
-		patientExamination.setPex_hgt(hgt);
-
-		int diuresis = patientExamination.getPex_diuresis();
-		patientExamination.setPex_diuresis(-1);
-		assertThat(patientExamination.getPex_diuresis()).isEqualTo(-1);
-		patientExamination.setPex_diuresis(diuresis);
-
-		String desc = patientExamination.getPex_diuresis_desc();
-		patientExamination.setPex_diuresis_desc("new description");
-		assertThat(patientExamination.getPex_diuresis_desc()).isEqualTo("new description");
-		patientExamination.setPex_diuresis_desc(desc);
-
-		desc = patientExamination.getPex_bowel_desc();
-		patientExamination.setPex_bowel_desc("new description too");
-		assertThat(patientExamination.getPex_bowel_desc()).isEqualTo("new description too");
-		patientExamination.setPex_bowel_desc(desc);
-	}
-
-	@Test
-	void testGenderPatientExamination() throws Exception {
-		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
-		assertThat(patientExamination).isNotNull();
-
-		GenderPatientExamination genderPatientExamination = new GenderPatientExamination(patientExamination, false);
-		assertThat(genderPatientExamination.isMale()).isFalse();
-		genderPatientExamination.setMale(true);
-		assertThat(genderPatientExamination.isMale()).isTrue();
-
-		assertThat(genderPatientExamination.getPatex()).isEqualTo(patientExamination);
-		Patient patient = testPatient.setup(false);
-		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
-		genderPatientExamination.setPatex(patientExamination2);
-		assertThat(genderPatientExamination.getPatex()).isEqualTo(patientExamination2);
-	}
-
-	private Patient setupTestPatient(boolean usingSet) throws OHException {
-		Patient patient = testPatient.setup(usingSet);
-		patientIoOperationRepository.saveAndFlush(patient);
-		return patient;
 	}
 
 	private int setupTestPatientExamination(boolean usingSet) throws OHException {
@@ -505,4 +288,5 @@ class Tests extends OHCoreTestCase {
 		auscultationHashMap.setAccessible(true);
 		auscultationHashMap.set(examinationBrowserManager, linkedKnownValues);
 	}
+
 }
