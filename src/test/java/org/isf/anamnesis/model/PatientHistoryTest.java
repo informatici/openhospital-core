@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,27 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.anamnesis;
+package org.isf.anamnesis.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.OHCoreTestCase;
-import org.isf.anamnesis.manager.PatientHistoryManager;
-import org.isf.anamnesis.model.PatientHistory;
-import org.isf.anamnesis.model.PatientPatientHistory;
-import org.isf.patient.TestPatient;
-import org.isf.patient.model.Patient;
+import org.isf.anamnesis.TestPatientHistory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class PatientHistoryTest extends OHCoreTestCase {
 
 	private static TestPatientHistory testPatientHistory;
-
-	@Autowired
-	PatientHistoryManager patientHistoryManager;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -52,26 +44,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPatientHistorySave() throws Exception {
-		PatientHistory patientHistory = testPatientHistory.setup();
-		PatientHistory savedPatientHistory = patientHistoryManager.saveOrUpdate(patientHistory);
-		assertThat(savedPatientHistory).isNotNull();
-	}
-
-	@Test
-	void testPatientHistoryGetByPatientId() throws Exception {
-		PatientHistory patientHistory = testPatientHistory.setup();
-		PatientHistory savedPatientHistory = patientHistoryManager.saveOrUpdate(patientHistory);
-		int patientID = savedPatientHistory.getId();
-		PatientHistory byIDPatientHistory = patientHistoryManager.getByPatientId(patientID);
-		assertThat(byIDPatientHistory).isNotNull();
-		assertThat(savedPatientHistory.compareTo(byIDPatientHistory)).isZero();
-
-		assertThat(patientHistoryManager.getByPatientId(patientID + 99)).isNull();
-	}
-
-	@Test
-	void testPatientHistoryGets() throws Exception {
+	void setters_shouldSetFields() throws Exception {
 		PatientHistory patientHistory = testPatientHistory.setup();
 
 		assertThat(patientHistory.getId()).isZero();
@@ -140,16 +113,4 @@ class Tests extends OHCoreTestCase {
 		assertThat(patientHistory.getPhyPregnancyAbort()).isZero();
 	}
 
-	@Test
-	void testPatientPatientHistory() throws Exception {
-		Patient patient = new Patient();
-		TestPatient testPatient = new TestPatient();
-		testPatient.setParameters(patient);
-		TestPatientHistory testPatientHistory = new TestPatientHistory();
-		PatientHistory patientHistory = testPatientHistory.setup();
-		PatientPatientHistory patientPatientHistory = new PatientPatientHistory(patientHistory, patient);
-
-		assertThat(patientPatientHistory.getPatientHistory()).isSameAs(patientHistory);
-		assertThat(patientPatientHistory.getPatient()).isSameAs(patient);
-	}
 }
