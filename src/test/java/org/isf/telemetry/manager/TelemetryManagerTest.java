@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestTelemetryManager extends OHCoreTestCase {
+class TelemetryManagerTest extends OHCoreTestCase {
 
 	@Autowired
 	TelemetryRepository telemetryRepository;
@@ -59,7 +59,7 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testEnable() {
+	void enable_shouldReturnTelemetry() {
 		consentMap = new HashMap<>();
 		consentMap.put("string", false);
 		consentMap.put("string2", true);
@@ -69,7 +69,7 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDisableListEmpty() {
+	void disable_shouldReturnTelemetry_whenNoneIsSaved() {
 		consentMap = new HashMap<>();
 		consentMap.put("string", false);
 		consentMap.put("string2", true);
@@ -79,7 +79,7 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDisableListNotEmpty() {
+	void disable_shouldReturnTelemetry_whenOneIsSaved() {
 		consentMap = new HashMap<>();
 		consentMap.put("string", false);
 		consentMap.put("string2", true);
@@ -92,7 +92,7 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveSettings() {
+	void retrieveSettings_shouldReturnTelemetry_whenOneIsSaved() {
 		consentMap = new HashMap<>();
 		consentMap.put("string", false);
 		consentMap.put("string2", true);
@@ -104,7 +104,7 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdateStatusSuccess() {
+	void updateStatusSuccess_shouldSetInfo() {
 		Telemetry telemetry = new Telemetry();
 		Telemetry updatedTelemetry = telemetryManager.updateStatusSuccess("infoString");
 		assertThat(updatedTelemetry).isNotNull();
@@ -112,10 +112,11 @@ class TestTelemetryManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdateStatusFail() {
+	void updateStatusFail_shouldSetInfo() {
 		Telemetry telemetry = new Telemetry();
 		Telemetry updatedTelemetry = telemetryManager.updateStatusFail("failureString");
 		assertThat(updatedTelemetry).isNotNull();
 		assertThat(updatedTelemetry.getInfo()).isEqualTo("failureString");
 	}
+
 }

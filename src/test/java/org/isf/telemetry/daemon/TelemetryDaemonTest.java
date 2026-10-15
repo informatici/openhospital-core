@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,7 +38,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class TestTelemetryDaemon {
+class TelemetryDaemonTest {
 
 	@Mock
 	ApplicationContext applicationContextMock;
@@ -66,13 +66,13 @@ class TestTelemetryDaemon {
 	}
 
 	@Test
-	void testStartStop() {
+	void startStop_shouldNotThrow() {
 		telemetryDaemon.start();
 		telemetryDaemon.stop();
 	}
 
 	@Test
-	void testGetGeoIpServiceSelected() {
+	void getGeoIpServiceSelected_shouldReturnNullOrGeoIpLookupService() {
 		telemetryDaemon.start();
 		ReflectionTestUtils.setField(telemetryDaemon, "reloadSettings", false);
 		// depending on the testing setup the value is either null or a service name
@@ -81,7 +81,7 @@ class TestTelemetryDaemon {
 	}
 
 	@Test
-	void testGetGeoIpServicesUrlMap() {
+	void getGeoIpServicesUrlMap_shouldReturnNullOrEmptyMap() {
 		telemetryDaemon.start();
 		ReflectionTestUtils.setField(telemetryDaemon, "reloadSettings", false);
 		// depending on the testing setup the value is either null or empty
@@ -90,14 +90,14 @@ class TestTelemetryDaemon {
 	}
 
 	@Test
-	void testReload() {
+	void restart_shouldNotThrow() {
 		telemetryDaemon.start();
 		telemetryDaemon.restart();
 		telemetryDaemon.stop();
 	}
 
 	@Test
-	void testRun() throws Exception {
+	void run_shouldNotThrow() throws Exception {
 		telemetryDaemon.start();
 		new Thread(telemetryDaemon::run).start();
 		Thread.sleep(2000);
@@ -105,7 +105,7 @@ class TestTelemetryDaemon {
 	}
 
 	@Test
-	void testReloadSettings() throws Exception {
+	void reloadSettings_shouldNotThrow_whenDaemonIsRunning() throws Exception {
 		telemetryDaemon.start();
 		new Thread(telemetryDaemon::run).start();
 		Thread.sleep(500);
@@ -115,8 +115,9 @@ class TestTelemetryDaemon {
 	}
 
 	@Test
-	void testGetTelemetryDaemonTwice() {
+	void getTelemetryDaemon_shouldNotThrow_whenCalledTwice() {
 		ReflectionTestUtils.setField(telemetryDaemon, "initialized", true);
 		telemetryDaemon = TelemetryDaemon.getTelemetryDaemon();
 	}
+
 }

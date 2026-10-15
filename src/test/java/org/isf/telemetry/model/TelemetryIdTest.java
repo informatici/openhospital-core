@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.OHCoreTestCase;
 import org.junit.jupiter.api.Test;
 
-class TestTelemetryId extends OHCoreTestCase {
+class TelemetryIdTest extends OHCoreTestCase {
 
 	@Test
-	void testModel() {
+	void settersAndEquals_shouldUseUuidFields() {
 		TelemetryId telemetryId = new TelemetryId();
 
 		telemetryId.setSoftwareUUID("SoftwareUUID");
@@ -55,4 +55,5 @@ class TestTelemetryId extends OHCoreTestCase {
 		telemetryId2.setOperativeSystemUUID("OperativeSystemUUIDXXXXXXXX");
 		assertThat(telemetryId.equals(telemetryId2)).isFalse();
 	}
+
 }

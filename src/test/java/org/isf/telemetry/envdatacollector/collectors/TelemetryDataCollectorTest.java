@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class TestTelemetryDataCollector extends OHCoreTestCase {
+class TelemetryDataCollectorTest extends OHCoreTestCase {
 
 	private TelemetryDataCollector telemetryDataCollector;
 
@@ -62,12 +62,12 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetId() {
+	void getId_shouldReturnTelId() {
 		assertThat(telemetryDataCollector.getId()).isEqualTo("TEL_ID");
 	}
 
 	@Test
-	void testRetrieveData() throws Exception {
+	void retrieveData_shouldReturnUuidAppVersionAndDates_whenDatesAreSet() throws Exception {
 		when(telemetryManagerMock.retrieveOrBuildNewTelemetry()).thenReturn(getTelemetry());
 		Map<String, String> data = telemetryDataCollector.retrieveData();
 		assertThat(data).isNotNull();
@@ -77,7 +77,7 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveDataWithoutTimestamps() throws Exception {
+	void retrieveData_shouldReturnOnlyUuidAndAppVersion_whenDatesAreNull() throws Exception {
 		Telemetry telemetry = new Telemetry();
 		telemetry.setId(new TelemetryId());
 		when(telemetryManagerMock.retrieveOrBuildNewTelemetry()).thenReturn(telemetry);
@@ -106,4 +106,5 @@ class TestTelemetryDataCollector extends OHCoreTestCase {
 		telemetry.setConsentMap(consentMap);
 		return telemetry;
 	}
+
 }
