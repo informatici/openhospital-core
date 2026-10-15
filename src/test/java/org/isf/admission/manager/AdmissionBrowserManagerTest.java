@@ -19,25 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.admission;
+package org.isf.admission.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.admission.TestAdmission;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
-import org.isf.admission.service.AdmissionIoOperationRepository;
-import org.isf.admission.service.AdmissionIoOperationRepositoryCustom;
-import org.isf.admission.service.AdmissionIoOperationRepositoryCustom.PatientAdmission;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
@@ -84,10 +80,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-class Tests extends OHCoreTestCase {
+class AdmissionBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestAdmission testAdmission;
 	private static TestWard testWard;
@@ -104,8 +99,6 @@ class Tests extends OHCoreTestCase {
 
 	@Autowired
 	AdmissionIoOperations admissionIoOperation;
-	@Autowired
-	AdmissionIoOperationRepository admissionIoOperationRepository;
 	@Autowired
 	AdmissionBrowserManager admissionBrowserManager;
 	@Autowired
@@ -164,611 +157,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testAdmissionGets(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		checkAdmissionIntoDb(id);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testAdmissionSets(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(true);
-		checkAdmissionIntoDb(id);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testSimpleGetAdmittedPatients(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
-		assertThat(searchResult).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testGetAdmittedPatientWithDateRanges(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		LocalDateTime admissionDate = foundAdmission.getAdmDate();
-		LocalDateTime dischargeDate = foundAdmission.getDisDate();
-		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
-		assertThat(searchResult).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-		LocalDateTime beforeAdmissionDate = admissionDate.minusDays(1);
-
-		LocalDateTime oneDayAfterAdmissionDate = admissionDate.plusDays(1);
-
-		LocalDateTime twoDaysAfterAdmissionDate = admissionDate.plusDays(2);
-
-		LocalDateTime beforeDischargeDate = dischargeDate.minusDays(1);
-
-		LocalDateTime oneDayAfterDischargeDate = dischargeDate.plusDays(1);
-
-		LocalDateTime twoDaysAfterDischargeDate = dischargeDate.plusDays(2);
-
-		// search by admission date
-		List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-			null);
-		assertThat(searchOneresult).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-
-		List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
-			new LocalDateTime[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate },
-			null);
-		assertThat(searchTwoResult).isEmpty();
-
-		// search by discharge date
-		searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
-			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
-		assertThat(searchOneresult).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-
-		searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
-			new LocalDateTime[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate });
-		assertThat(searchTwoResult).isEmpty();
-
-		// complex search by both admission and discharge date
-		searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
-		assertThat(searchOneresult).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatients(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		List<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
-		assertThat(patientsNull).hasSameSizeAs(patients);
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeFirstName(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
-
-		// then:
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmissionsByAdmissionDatePageable(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		String str = "2000-01-01T10:11:30";
-		String str2 = "2023-05-05T10:11:30";
-		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo = LocalDateTime.parse(str2);
-		int page = 0;
-		int size = 10;
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		// when:
-		List<Admission> patients = admissionIoOperation.getAdmissionsByAdmissionDate(dateFrom, dateTo);
-
-		// then:
-		assertThat(patients.get(0).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmissionsByAdmDate(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		String str = "2000-01-01T10:11:30";
-		String str2 = "2023-05-05T10:11:30";
-		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo = LocalDateTime.parse(str2);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		// when:
-		List<Admission> admissions = admissionIoOperation.getAdmissionsByAdmissionDate(dateFrom, dateTo);
-
-		// then:
-		assertThat(admissions.get(0).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetDischargesByDatePageable(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		String str = "2000-01-01T10:11:30";
-		String str2 = "2023-05-05T10:11:30";
-		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo = LocalDateTime.parse(str2);
-		int page = 0;
-		int size = 10;
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		// when:
-		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
-
-		// then:
-		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeLastName(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName());
-
-		// then:
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getNote());
-
-		// then:
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeTaxCode(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getTaxCode());
-
-		// then:
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeId(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString());
-
-		// then:
-		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldNotFindAnythingWhenNotExistingWordProvided(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
-
-		// then:
-		assertThat(patients).isEmpty();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldNotFindWhenAdmissionOutsideOfDateRange(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-		LocalDateTime[] admissionRange = {
-			foundAdmission.getAdmDate().minusDays(2),
-			foundAdmission.getAdmDate().minusDays(1)
-		};
-		LocalDateTime[] dischargeRange = {
-			foundAdmission.getDisDate().minusDays(1),
-			foundAdmission.getDisDate().plusDays(1)
-		};
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(null, admissionRange, dischargeRange);
-
-		// then:
-		assertThat(patients).isEmpty();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatientsShouldNotFindWhenDischargeOutsideOfDateRange(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// given:
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-		LocalDateTime[] admissionRange = {
-			foundAdmission.getAdmDate().minusDays(1),
-			foundAdmission.getAdmDate().plusDays(1)
-		};
-		LocalDateTime[] dischargeRange = {
-			foundAdmission.getDisDate().minusDays(2),
-			foundAdmission.getDisDate().minusDays(1)
-		};
-
-		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(null, admissionRange, dischargeRange);
-
-		// then:
-		assertThat(patients).isEmpty();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetCurrentAdmission(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setDisDate(null);
-		Admission ioAdmission = admissionIoOperation.getCurrentAdmission(foundAdmission.getPatient());
-		assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmission(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-
-		testAdmission.check(foundAdmission);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmissions(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<Admission> admissions = admissionIoOperation.getAdmissions(foundAdmission.getPatient());
-		assertThat(admissions.get(admissions.size() - 1).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoNewAdmission(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		Admission admission = buildNewAdmission();
-		Admission result = admissionIoOperation.newAdmission(admission);
-		assertThat(result)
-			.isNotNull()
-			.isEqualTo(admission);
-		admission = admissionBrowserManager.getAdmission(admission.getId());
-		testAdmission.check(admission);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoNewAdmissionReturnKey(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = admissionIoOperation.newAdmissionReturnKey(buildNewAdmission());
-		Admission admission = admissionBrowserManager.getAdmission(id);
-		testAdmission.check(admission);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoNewAdmissionStoresPatientSexAndAge(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		Admission admission = buildNewAdmission();
-		Admission result = admissionIoOperation.newAdmission(admission);
-		String expectedSex = String.valueOf(admission.getPatient().getSex());
-		// the stored age is the patient's age AT the admission date, not the current age
-		Integer expectedAge = (int) ChronoUnit.YEARS.between(admission.getPatient().getBirthDate(), admission.getAdmDate().toLocalDate());
-		assertThat(result.getSex()).isEqualTo(expectedSex);
-		assertThat(result.getAge()).isEqualTo(expectedAge);
-		// reload from the DB to confirm the snapshot is persisted on the admission itself
-		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
-		assertThat(reloaded.getSex()).isEqualTo(expectedSex);
-		assertThat(reloaded.getAge()).isEqualTo(expectedAge);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoNewAdmissionUsesRecordedAgeWhenBirthDateIsMissing(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		Admission admission = buildNewAdmission();
-		// patients are often registered by age alone, with no birth date; the snapshot must still be usable
-		Patient patient = admission.getPatient();
-		patient.setBirthDate(null);
-		patient.setAge(7);
-
-		Admission result = admissionIoOperation.newAdmission(admission);
-
-		assertThat(result.getAge()).isEqualTo(7);
-		Admission reloaded = admissionBrowserManager.getAdmission(result.getId());
-		assertThat(reloaded.getAge()).isEqualTo(7);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoUpdateAdmission(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setNote("Update");
-		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
-		assertThat(result).isNotNull();
-		Admission updateAdmission = admissionIoOperation.getAdmission(id);
-		assertThat(updateAdmission).isNotNull();
-		assertThat(updateAdmission.getNote()).isEqualTo("Update");
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmissionType(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<AdmissionType> admissionTypes = admissionIoOperation.getAdmissionType();
-		assertThat(admissionTypes.get(admissionTypes.size() - 1).getDescription()).isEqualTo(foundAdmission.getAdmType().getDescription());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetDischargeType(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		List<DischargeType> dischargeTypes = admissionIoOperation.getDischargeType();
-		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundAdmission.getDisType().getDescription());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetNextYProg(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(TimeTools.getNow());
-		admissionIoOperation.updateAdmission(foundAdmission);
-		foundAdmission = admissionIoOperation.getAdmission(id);
-		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
-
-		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoSetDeleted(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionIoOperation.getAdmission(id);
-		Admission deletedAdmission = admissionIoOperation.setDeleted(admission.getId());
-		assertThat(deletedAdmission).isNotNull();
-		assertThat(deletedAdmission.getDeleted()).isEqualTo('Y');
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testSetDeletedStampsDeletedDate(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		assertThat(admissionIoOperation.getAdmission(id).getDeletedDate()).isNull();
-
-		Admission deleted = admissionIoOperation.setDeleted(id);
-		assertThat(deleted).isNotNull();
-		assertThat(deleted.getDeleted()).isEqualTo('Y');
-		assertThat(deleted.getDeletedDate()).isNotNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoSetDeletedNotFound(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		setupTestAdmission(false);
-		Admission deletedAdmission = admissionIoOperation.setDeleted(-999999);
-		assertThat(deletedAdmission).isNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetUsedWardBed(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		int result = admissionIoOperation.getUsedWardBed(foundAdmission.getWard().getCode());
-		assertThat(result).isEqualTo(1);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	@Transactional
-		// requires active session because of lazy loading of patient photo
-	void testIoDeletePatientPhoto(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionIoOperation.getAdmission(id);
-		Patient updatedPatient = admissionIoOperation.deletePatientPhoto(admission.getPatient().getCode());
-		assertThat(updatedPatient).isNotNull();
-		assertThat(updatedPatient.getPatientProfilePhoto().getPhoto()).isNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	@Transactional
-	// requires active session because of lazy loading of patient photo
-	void testIoDeletePatientPhotoNoPatient(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		Patient deletedPatient = admissionIoOperation.deletePatientPhoto(-99999);
-		assertThat(deletedPatient).isNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoLoadAdmittedPatientNotThere(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoLoadAdmittedPatient(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionIoOperation.getAdmission(id);
-		assertThat(admission).isNotNull();
-		assertThat(admissionIoOperation.loadAdmittedPatient(admission.getPatient().getCode())).isNotNull();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetNextYProgMaternityWardBeforeJune(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// set date before June
-		AdmissionIoOperations.testing = true;
-		AdmissionIoOperations.afterJune = false;
-
-		int id = setupTestAdmission(false, true);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
-		admissionIoOperation.updateAdmission(foundAdmission);
-		foundAdmission = admissionIoOperation.getAdmission(id);
-
-		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
-
-		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-		// reset
-		AdmissionIoOperations.testing = false;
-		AdmissionIoOperations.afterJune = false;
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoGetNextYProgMaternityWardAfterJune(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		// set date after June
-		AdmissionIoOperations.testing = true;
-		AdmissionIoOperations.afterJune = true;
-
-		int id = setupTestAdmission(false, true);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
-		admissionIoOperation.updateAdmission(foundAdmission);
-		foundAdmission = admissionIoOperation.getAdmission(id);
-
-		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
-		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-		// reset
-		AdmissionIoOperations.testing = false;
-		AdmissionIoOperations.afterJune = false;
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testAdmissionGettersSetters(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		Patient foundPatient = foundAdmission.getPatient();
-		foundAdmission.setPatient(null);
-		assertThat(foundAdmission.getPatient()).isNull();
-		foundAdmission.setPatient(foundPatient);
-		assertThat(foundAdmission.getPatient()).usingRecursiveComparison().isEqualTo(foundPatient);
-		int lock = foundAdmission.getLock();
-		foundAdmission.setLock(-1);
-		assertThat(foundAdmission.getLock()).isEqualTo(-1);
-		foundAdmission.setLock(lock);
-		assertThat(foundAdmission.getLock()).isEqualTo(lock);
-
-		Admission admission = buildNewAdmission();
-		int admissionId = admission.getId();
-		admission.setId(-1);
-		assertThat(admission.getId()).isEqualTo(-1);
-		admission.setId(admissionId);
-		assertThat(admission.getId()).isEqualTo(admissionId);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testAdmittedPatientGettersSetters(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		assertThat(patients).hasSize(1);
-		AdmittedPatient admittedPatient = patients.get(0);
-		Patient patient = admittedPatient.getPatient();
-		admittedPatient.setPatient(null);
-		assertThat(admittedPatient.getPatient()).isNull();
-		admittedPatient.setPatient(patient);
-		assertThat(admittedPatient.getPatient()).usingRecursiveComparison().isEqualTo(patient);
-		Admission admission = admittedPatient.getAdmission();
-		admittedPatient.setAdmission(null);
-		assertThat(admittedPatient.getAdmission()).isNull();
-		admittedPatient.setAdmission(admission);
-		assertThat(admittedPatient.getAdmission()).usingRecursiveComparison().isEqualTo(admission);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testMgrSimpleGetAdmittedPatients(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldReturnAsManyPatientsAsIoOperations_whenSearchTermsIsNull(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -780,7 +169,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientWithDateRanges(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFilterByAdmissionAndDischargeDateRanges(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -832,7 +221,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatients(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldReturnAllPatients_whenSearchTermsIsNull(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 
 		int id = setupTestAdmission(false);
@@ -845,7 +234,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeFirstName(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFindAdmittedPatient_whenSearchTermsIsFirstName(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -861,7 +250,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeLastName(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFindAdmittedPatient_whenSearchTermsIsFullName(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -877,7 +266,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFindAdmittedPatient_whenSearchTermsIsNullNote(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -893,7 +282,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeTaxCode(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFindAdmittedPatient_whenSearchTermsIsTaxCode(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -909,7 +298,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeId(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldFindAdmittedPatient_whenSearchTermsIsPatientCode(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -925,7 +314,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldNotFindAnythingWhenNotExistingWordProvided(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldReturnEmpty_whenSearchTermsMatchNoPatient(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -940,7 +329,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldNotFindWhenAdmissionOutsideOfDateRange(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldReturnEmpty_whenAdmissionDateOutsideRange(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -964,7 +353,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmittedPatientsShouldNotFindWhenDischargeOutsideOfDateRange(boolean maternityRestartInJune) throws Exception {
+	void getAdmittedPatients_shouldReturnEmpty_whenDischargeDateOutsideRange(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -988,14 +377,14 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrLoadAdmittedPatientsNotThere(boolean maternityRestartInJune) throws Exception {
+	void loadAdmittedPatients_shouldReturnNull_whenPatientNotFound(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		assertThat(admissionBrowserManager.loadAdmittedPatients(-1)).isNull();
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetCurrentAdmission(boolean maternityRestartInJune) throws Exception {
+	void getCurrentAdmission_shouldReturnPatientAdmission(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1006,7 +395,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmissionsByPatient(boolean maternityRestartInJune) throws Exception {
+	void getAdmissions_shouldReturnPatientAdmissions(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1016,7 +405,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetNextYProg(boolean maternityRestartInJune) throws Exception {
+	void getNextYProg_shouldReturnLastYProgPlusOne(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1031,7 +420,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetNextYProgMaternityWardBeforeJune(boolean maternityRestartInJune) throws Exception {
+	void getNextYProg_shouldReturnLastYProgPlusOne_whenMaternityWardBeforeJune(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// set date before June
 		AdmissionIoOperations.testing = true;
@@ -1053,7 +442,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetNextYProgMaternityWardAfterJune(boolean maternityRestartInJune) throws Exception {
+	void getNextYProg_shouldReturnLastYProgPlusOne_whenMaternityWardAfterJune(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// set date after June
 		AdmissionIoOperations.testing = true;
@@ -1074,7 +463,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmissionType(boolean maternityRestartInJune) throws Exception {
+	void getAdmissionType_shouldReturnSavedAdmissionType(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1084,7 +473,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetDischargeType(boolean maternityRestartInJune) throws Exception {
+	void getDischargeType_shouldReturnSavedDischargeType(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1094,7 +483,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrNewAdmission(boolean maternityRestartInJune) throws Exception {
+	void newAdmission_shouldSaveAdmission(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		Admission admission = buildNewAdmission();
 		Admission result = admissionBrowserManager.newAdmission(admission);
@@ -1107,7 +496,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrNewAdmissionInvalidDate(boolean maternityRestartInJune) throws Exception {
+	void newAdmission_shouldThrowTwoErrors_whenPatientAlreadyAdmittedInPeriod(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		GeneralData.LANGUAGE = "en";
 
@@ -1131,7 +520,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrNewAdmissionReturnKey(boolean maternityRestartInJune) throws Exception {
+	void newAdmissionReturnKey_shouldReturnIdOfSavedAdmission(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		GeneralData.LANGUAGE = "en";
 		int id = admissionBrowserManager.newAdmissionReturnKey(buildNewAdmission());
@@ -1141,7 +530,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrUpdateAdmission(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldSaveNewNote(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		GeneralData.LANGUAGE = "en";
 		Admission admission = buildNewAdmission();
@@ -1157,7 +546,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrSetDeleted(boolean maternityRestartInJune) throws Exception {
+	void setDeleted_shouldMarkAdmissionDeleted(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1168,7 +557,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetUsedWardBed(boolean maternityRestartInJune) throws Exception {
+	void getUsedWardBed_shouldCountAdmittedPatientsInWard(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -1180,7 +569,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("maternityRestartInJune")
 	@Transactional
 		// requires active session because of lazy loading of patient photo
-	void testMgrDeletePatientPhoto(boolean maternityRestartInJune) throws Exception {
+	void deletePatientPhoto_shouldLeavePhotoNull_whenPatientHasNoPhoto(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1191,7 +580,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateWardNotNull(boolean maternityRestartInJune) throws Exception {
+	void newAdmission_shouldThrow_whenWardIsNull(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1208,7 +597,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateAdmissionDate(boolean maternityRestartInJune) throws Exception {
+	void newAdmission_shouldThrow_whenAdmissionDateIsNull(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1225,7 +614,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateDiseaseIn(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenDiseaseInIsNull(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1242,7 +631,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateWeight(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenWeightIsNegative(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1259,7 +648,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateMaternityVisitDate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityVisitDateIsBeforeAdmissionDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1275,7 +664,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateDeliveryDate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityDeliveryDateIsBeforeAdmissionDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1292,7 +681,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateCtrl1DateNoDeliveryDate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityControlDate1IsSetWithoutDeliveryDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1308,7 +697,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateAbortDate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrowTwoErrors_whenDischargeDateIsNullAndMaternityAbortDateIsBeforeVisitDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1325,7 +714,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateAbortDateBeforeVisitDate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityAbortDateIsBeforeVisitDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1343,7 +732,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateAbortDateAfterLimit(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityAbortDateIsAfterDischargeDate(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1361,7 +750,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateDuplicateDiseases(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenDiseasesOutAreDuplicated(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1378,7 +767,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidate(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenProgDatesOrDiseasesAreInvalid(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1498,7 +887,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrValidateMaternity(boolean maternityRestartInJune) throws Exception {
+	void updateAdmission_shouldThrow_whenMaternityControlOrAbortDatesAreInvalid(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -1543,7 +932,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmissionsPageable(boolean maternityRestartInJune) throws Exception {
+	void getAdmissionsPageable_shouldReturnPageWithAdmission_whenAdmissionDateInRange(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -1563,7 +952,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetDischargesPageable(boolean maternityRestartInJune) throws Exception {
+	void getDischargesPageable_shouldReturnPageWithAdmission_whenDischargeDateInRange(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -1583,7 +972,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testMgrGetAdmissionsByAdmissionsDate(boolean maternityRestartInJune) throws Exception {
+	void getAdmissionsByAdmissionDate_shouldReturnAdmission_whenAdmissionDateInRange(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		// given:
 		int id = setupTestAdmission(false);
@@ -1597,53 +986,6 @@ class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(patients.get(0).getId()).isEqualTo(foundAdmission.getId());
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testAdmissionEqualHash(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		int id = setupTestAdmission(false);
-		Admission admission = admissionBrowserManager.getAdmission(id);
-		Admission admission2 = buildNewAdmission();
-		admission2.setId(id); // no really legal but needed for these tests
-		assertThat(admission)
-				.isEqualTo(admission)
-				.isEqualTo(admission2)
-				.isNotEqualTo("xyzzy");
-
-		assertThat(admission.compareTo(admission2)).isZero();
-		admission2.setId(9999);
-		assertThat(admission.compareTo(admission2)).isEqualTo(admission.getId() - 9999);
-
-		assertThat(admission.hashCode()).isPositive();
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoAdmissionIoOperationRepositoryCustom(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		PatientAdmission patientAdmission = new PatientAdmission(1, 2);
-		assertThat(patientAdmission.patientId()).isEqualTo(1);
-		assertThat(patientAdmission.admissionId()).isEqualTo(2);
-	}
-
-	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
-	@MethodSource("maternityRestartInJune")
-	void testIoCountAllActiveAdmissions(boolean maternityRestartInJune) throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
-		setupTestAdmission(false);
-		long count = admissionIoOperation.countAllActiveAdmissions();
-		assertThat(count).isEqualTo(1);
-	}
-
-	class MyAdmissionIoOperationRepositoryCustom implements AdmissionIoOperationRepositoryCustom {
-
-		@Override
-		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
-			LocalDateTime[] dischargeRange) throws OHServiceException {
-			return null;
-		}
 	}
 
 	private int setupTestAdmission(boolean usingSet) throws OHException, InterruptedException, OHServiceException {
@@ -1689,11 +1031,6 @@ class Tests extends OHCoreTestCase {
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
 		Admission savedAdmission = admissionIoOperation.newAdmission(admission);
 		return savedAdmission.getId();
-	}
-
-	private void checkAdmissionIntoDb(int id) throws OHServiceException {
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		testAdmission.check(foundAdmission);
 	}
 
 	// Typically used to build a second admission record thus the need to set new codes because of database key values
