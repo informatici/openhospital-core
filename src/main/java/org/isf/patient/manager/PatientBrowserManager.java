@@ -24,15 +24,22 @@ package org.isf.patient.manager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.dicom.manager.DicomManagerFactory;
+import org.isf.dicom.manager.DicomManagerInterface;
+import org.isf.dicom.model.FileDicom;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
@@ -44,6 +51,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PatientBrowserManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientBrowserManager.class);
 
 	private final PatientIoOperations ioOperations;
 
@@ -72,6 +81,49 @@ public class PatientBrowserManager {
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
 		return ioOperations.savePatient(patient);
+	}
+
+	/**
+	 * Irreversibly anonymizes a {@link Patient}: overwrites the personal identification data with sentinel
+	 * values, removes the profile photo and every linked DICOM series, and marks the record as anonymized.
+	 * The clinical records are preserved for statistical use (GDPR right to erasure). This cannot be undone.
+	 *
+	 * @param patientId the code of the {@link Patient} to anonymize.
+	 * @return the anonymized {@link Patient}.
+	 * @throws OHServiceException if the patient does not exist or is already anonymized.
+	 */
+	public Patient anonymizePatient(int patientId) throws OHServiceException {
+		Patient patient = ioOperations.getPatient(patientId);
+		if (patient == null) {
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.patientnotfound.msg")));
+		}
+		if (patient.isAnonymized()) {
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.thepatientisalreadyanonymized.msg")));
+		}
+		deletePatientDicom(patientId);
+		return ioOperations.anonymizePatient(patient);
+	}
+
+	/**
+	 * Best-effort removal of every DICOM series linked to the patient. DICOM is an optional module, so a
+	 * missing/failing configuration is logged and does not abort the anonymization of the patient data,
+	 * which is the GDPR-critical part.
+	 */
+	private void deletePatientDicom(int patientId) {
+		try {
+			DicomManagerInterface dicomManager = DicomManagerFactory.getManager();
+			Set<String> seriesNumbers = new LinkedHashSet<>();
+			for (FileDicom file : dicomManager.loadPatientFiles(patientId)) {
+				seriesNumbers.add(file.getDicomSeriesNumber());
+			}
+			for (String seriesNumber : seriesNumbers) {
+				dicomManager.deleteSeries(patientId, seriesNumber);
+			}
+		} catch (Exception e) {
+			// Best-effort: the DICOM module may be unavailable (e.g. when running outside the GUI context), which
+			// must not abort the anonymization of the patient data, the GDPR-critical part.
+			LOGGER.warn("Could not remove DICOM images for anonymized patient {}: {}", patientId, e.getMessage());
+		}
 	}
 
 	/**
