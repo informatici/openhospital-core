@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.dicomtype;
+package org.isf.dicomtype.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,9 +28,8 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.dicomtype.manager.DicomTypeBrowserManager;
+import org.isf.dicomtype.TestDicomType;
 import org.isf.dicomtype.model.DicomType;
-import org.isf.dicomtype.service.DicomTypeIoOperation;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -41,12 +40,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class DicomTypeBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestDicomType testDicomType;
 
-	@Autowired
-	DicomTypeIoOperation dicomTypeIoOperation;
 	@Autowired
 	DicomTypeIoOperationRepository dicomTypeIoOperationRepository;
 	@Autowired
@@ -63,67 +60,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDicomTypeGets() throws Exception {
-		String code = setupTestDicomType(false);
-		checkDicomTypeIntoDb(code);
-	}
-
-	@Test
-	void testDicomTypeSets() throws Exception {
-		String code = setupTestDicomType(true);
-		checkDicomTypeIntoDb(code);
-	}
-
-	@Test
-	void testIoGetDicomType() throws Exception {
-		setupTestDicomType(false);
-		List<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
-		testDicomType.check(dicomTypes.get(0));
-	}
-
-	@Test
-	void testIoUpdateDicomType() throws Exception {
-		String typeId = setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
-		assertThat(dicomType).isNotNull();
-		dicomType.setDicomTypeDescription("newDescription");
-		DicomType updatedDicomType = dicomTypeIoOperation.updateDicomType(dicomType);
-		assertThat(updatedDicomType).isNotNull();
-		assertThat(updatedDicomType.getDicomTypeDescription()).isEqualTo("newDescription");
-	}
-
-	@Test
-	void testIoNewDicomType() throws Exception {
-		DicomType dicomType = new DicomType("id", "description");
-		DicomType savedDicomType = dicomTypeIoOperation.newDicomType(dicomType);
-		assertThat(savedDicomType.getDicomTypeDescription()).isEqualTo("description");
-	}
-
-	@Test
-	void testIoDeleteDicomType() throws Exception {
-		DicomType dicomType = new DicomType("id", "description");
-		DicomType newDicomType = dicomTypeIoOperation.newDicomType(dicomType);
-		assertThat(newDicomType).isNotNull();
-		dicomTypeIoOperation.deleteDicomType(newDicomType);
-		assertThat(dicomTypeIoOperation.isCodePresent(newDicomType.getDicomTypeID())).isFalse();
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		DicomType dicomType = new DicomType("id", "description");
-		DicomType newDicomType = dicomTypeIoOperation.newDicomType(dicomType);
-		assertThat(dicomTypeIoOperation.isCodePresent(newDicomType.getDicomTypeID())).isTrue();
-	}
-
-	@Test
-	void testMgrGetDicomType() throws Exception {
+	void getDicomType_shouldReturnSavedDicomType() throws Exception {
 		setupTestDicomType(false);
 		List<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
 
 	@Test
-	void testMgrUpdateDicomType() throws Exception {
+	void updateDicomType_shouldSaveNewDescription() throws Exception {
 		String typeId = setupTestDicomType(false);
 		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
 		assertThat(dicomType).isNotNull();
@@ -134,7 +78,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewDicomType() throws Exception {
+	void newDicomType_shouldSaveDicomType() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		DicomType newDicomType = dicomTypeBrowserManager.newDicomType(dicomType);
 		assertThat(newDicomType).isNotNull();
@@ -142,7 +86,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrDeleteDicomType() throws Exception {
+	void deleteDicomType_shouldRemoveDicomType() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		DicomType newDicomType = dicomTypeBrowserManager.newDicomType(dicomType);
 		assertThat(newDicomType).isNotNull();
@@ -151,7 +95,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrIsCodePresent() throws Exception {
+	void isCodePresent_shouldReturnTrue_whenCodeExists() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		DicomType newDicomType = dicomTypeBrowserManager.newDicomType(dicomType);
 		assertThat(newDicomType).isNotNull();
@@ -159,7 +103,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationTypeIdIsEmpty() throws Exception {
+	void updateDicomType_shouldThrow_whenTypeIdIsEmpty() throws Exception {
 		String typeId = setupTestDicomType(false);
 		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
 		assertThat(dicomType).isNotNull();
@@ -173,7 +117,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationTypeIdIsTooLong() throws Exception {
+	void updateDicomType_shouldThrow_whenTypeIdIsTooLong() throws Exception {
 		String typeId = setupTestDicomType(false);
 		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
 		assertThat(dicomType).isNotNull();
@@ -187,7 +131,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationDescriptionIsEmpty() throws Exception {
+	void newDicomType_shouldThrow_whenDescriptionIsEmpty() throws Exception {
 		DicomType dicomType = new DicomType("id", "");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
 			.isInstanceOf(OHDataValidationException.class)
@@ -198,7 +142,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationCodeAlreadyExists() throws Exception {
+	void newDicomType_shouldThrowDataIntegrityViolation_whenCodeExists() throws Exception {
 		String typeId = setupTestDicomType(true);
 		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
 		assertThat(dicomType).isNotNull();
@@ -210,21 +154,10 @@ class Tests extends OHCoreTestCase {
 			);
 	}
 
-	@Test
-	void testDicomTypeToString() throws Exception {
-		DicomType dicomType = new DicomType("id", "someDescription");
-		assertThat(dicomType).hasToString("someDescription");
-	}
-
 	private String setupTestDicomType(boolean usingSet) throws OHException {
 		DicomType dicomType = testDicomType.setup(usingSet);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
 		return dicomType.getDicomTypeID();
 	}
 
-	private void checkDicomTypeIntoDb(String code) throws OHException {
-		DicomType foundDicomType = dicomTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundDicomType).isNotNull();
-		testDicomType.check(foundDicomType);
-	}
 }
