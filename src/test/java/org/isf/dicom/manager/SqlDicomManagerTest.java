@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.dicom;
+package org.isf.dicom.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
 
 import org.isf.OHCoreTestCase;
-import org.isf.dicom.manager.DicomManagerInterface;
+import org.isf.dicom.TestDicom;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperationRepository;
 import org.isf.dicomtype.TestDicomType;
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-class TestSqlDicomManager extends OHCoreTestCase {
+class SqlDicomManagerTest extends OHCoreTestCase {
 
 	private static TestDicom testFileDicom;
 	private static TestDicomType testDicomType;
@@ -75,7 +75,7 @@ class TestSqlDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testLoadPatientFiles() throws Exception {
+	void loadPatientFiles_shouldReturnOnlyFilesOfPatient() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
@@ -88,28 +88,28 @@ class TestSqlDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testLoadDetails() throws Exception {
+	void loadDetails_shouldReturnStoredFile() throws Exception {
 		long id = setupTestFileDicom(true);
 		FileDicom fileDicom = sqlDicomManager.loadDetails(id, 0, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
-	void testLoadDetailsLongObject() throws Exception {
+	void loadDetails_shouldReturnStoredFile_whenIdFileIsLongObject() throws Exception {
 		long id = setupTestFileDicom(true);
 		FileDicom fileDicom = sqlDicomManager.loadDetails(Long.valueOf(id), 0, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
-	void testGetSeriesDetail() throws Exception {
+	void getSeriesDetail_shouldReturnFileIdsOfSeries() throws Exception {
 		long id = setupTestFileDicom(true);
 		Long[] result = sqlDicomManager.getSeriesDetail(0, "TestSeriesNumber");
 		assertThat(result).isNotEmpty();
 	}
 
 	@Test
-	void testExist() throws Exception {
+	void exist_shouldReturnTrue_whenFileIsSaved() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
@@ -120,28 +120,28 @@ class TestSqlDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExistWhenDicomFileDoesNotExist() throws Exception {
+	void exist_shouldReturnFalse_whenFileIsNotSaved() throws Exception {
 		FileDicom dicomFile = new FileDicom();
 		boolean fileExits = sqlDicomManager.exist(dicomFile);
 		assertThat(fileExits).isFalse();
 	}
 
 	@Test
-	void testExistSeriesNumber() throws Exception {
+	void exist_shouldReturnTrue_whenSeriesNumberExists() throws Exception {
 		long id = setupTestFileDicom(true);
 		boolean exists = sqlDicomManager.exist(0, "TestSeriesNumber");
 		assertThat(exists).isTrue();
 	}
 
 	@Test
-	void testExistSeriesNumberDoesNotExist() throws Exception {
+	void exist_shouldReturnFalse_whenSeriesNumberDoesNotExist() throws Exception {
 		long id = setupTestFileDicom(true);
 		boolean exists = sqlDicomManager.exist(0, "SomeOtherTestSeriesNumberThatIsNotThere");
 		assertThat(exists).isFalse();
 	}
 
 	@Test
-	void testDeleteSeries() throws Exception {
+	void deleteSeries_shouldDeleteSeries() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -159,4 +159,5 @@ class TestSqlDicomManager extends OHCoreTestCase {
 		dicomIoOperationRepository.saveAndFlush(dicom);
 		return dicom.getIdFile();
 	}
+
 }

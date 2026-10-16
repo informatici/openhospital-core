@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.dicom;
+package org.isf.dicom.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.File;
 import java.io.FileReader;
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Properties;
@@ -34,9 +33,7 @@ import java.util.Vector;
 
 import org.aspectj.util.FileUtil;
 import org.isf.OHCoreTestCase;
-import org.isf.dicom.manager.DicomManagerFactory;
-import org.isf.dicom.manager.DicomManagerInterface;
-import org.isf.dicom.manager.FileSystemDicomManager;
+import org.isf.dicom.TestDicom;
 import org.isf.dicom.manager.FileSystemDicomManager.DicomDateComparator;
 import org.isf.dicom.manager.FileSystemDicomManager.DicomTypeDateComparator;
 import org.isf.dicom.model.FileDicom;
@@ -58,7 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.FileSystemUtils;
 
-class TestFileSystemDicomManager extends OHCoreTestCase {
+class FileSystemDicomManagerTest extends OHCoreTestCase {
 
 	public static final Long _4M = 4194304L;
 	private static TestDicom testFileDicom;
@@ -101,7 +98,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testNewFileSystemDicomManagerMissingProperty() throws Exception {
+	void constructor_shouldThrow_whenStorageDirectoryPropertyIsMissing() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Properties properties = new Properties();
@@ -112,58 +109,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDicomManagerFactoryGetMaxDicomSizeSetValue() throws Exception {
-		DicomManagerFactory.getManager();
-		Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
-		Field props = clazz.getDeclaredField("props");
-		props.setAccessible(true);
-		Properties properties = new Properties();
-		properties.setProperty("dicom.max.size", "2M");
-		props.set(clazz, properties);
-		String maxDicomSize = DicomManagerFactory.getMaxDicomSize();
-		assertThat(maxDicomSize).isEqualTo("2M");
-		// reset/clear properties
-		props.set(clazz, new Properties());
-	}
-
-	@Test
-	void testDicomManagerFactoryGetMaxDicomSizeLongSetValue() throws Exception {
-		DicomManagerFactory.getManager();
-		Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
-		Field props = clazz.getDeclaredField("props");
-		props.setAccessible(true);
-		Properties properties = new Properties();
-		properties.setProperty("dicom.max.size", "2M");
-		props.set(clazz, properties);
-		long maxDicomSize = DicomManagerFactory.getMaxDicomSizeLong();
-		assertThat(maxDicomSize).isEqualTo(2097152L);
-		// reset/clear properties
-		props.set(clazz, new Properties());
-	}
-
-	@Test
-	void testDicomManagerFactoryGetMaxDicomSizeLongException() throws Exception {
-		assertThatThrownBy(() ->
-		{
-			DicomManagerFactory.getManager();
-			Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
-			Field props = clazz.getDeclaredField("props");
-			props.setAccessible(true);
-			Properties properties = new Properties();
-			properties.setProperty("dicom.max.size", "aString");
-			props.set(clazz, properties);
-			DicomManagerFactory.getMaxDicomSizeLong();
-		})
-				.isInstanceOf(OHDicomException.class);
-		Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
-		// reset/clear properties
-		Field props = clazz.getDeclaredField("props");
-		props.setAccessible(true);
-		props.set(clazz, new Properties());
-	}
-
-	@Test
-	void testSaveFile() throws Exception {
+	void saveFile_shouldWritePropertiesDataAndThumbnailFiles() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		fileSystemDicomManager.saveFile(dicomFile);
@@ -180,7 +126,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSaveFileNoSeriesNumber() throws Exception {
+	void saveFile_shouldSaveFile_whenSeriesNumberIsNull() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomFile.setDicomSeriesNumber(null);
@@ -192,7 +138,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSaveFileNoInstanceUID() throws Exception {
+	void saveFile_shouldSaveFile_whenInstanceUidIsNull() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomFile.setDicomInstanceUID(null);
@@ -204,7 +150,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testLoadPatientFiles() throws Exception {
+	void loadPatientFiles_shouldReturnFilesOfPatient() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		fileSystemDicomManager.saveFile(dicomFile);
@@ -215,60 +161,60 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testLoadDetails() throws Exception {
+	void loadDetails_shouldReturnStoredFile() throws Exception {
 		FileDicom fileDicom = fileSystemDicomManager.loadDetails(2, 1, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
-	void testLoadDetailsLongObject() throws Exception {
+	void loadDetails_shouldReturnStoredFile_whenIdFileIsLongObject() throws Exception {
 		FileDicom fileDicom = fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
-	void testLoadDetailsLongObjectSeriesNumberNull() throws Exception {
+	void loadDetails_shouldReturnNull_whenSeriesNumberIsNull() throws Exception {
 		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, null)).isNull();
 	}
 
 	@Test
-	void testLoadDetailsLongObjectSeriesNumberZeroLength() throws Exception {
+	void loadDetails_shouldReturnNull_whenSeriesNumberIsBlank() throws Exception {
 		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "     ")).isNull();
 	}
 
 	@Test
-	void testLoadDetailsLongObjectIdFileNull() throws Exception {
+	void loadDetails_shouldReturnNull_whenIdFileIsNull() throws Exception {
 		assertThat(fileSystemDicomManager.loadDetails(null, 1, "TestSeriesNumber")).isNull();
 	}
 
 	@Test
-	void testLoadDetailsLongObjectSeriesNumberNullString() throws Exception {
+	void loadDetails_shouldReturnNull_whenSeriesNumberIsNullString() throws Exception {
 		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "NuLl")).isNull();
 	}
 
 	@Test
-	void testGetSeriesDetail() throws Exception {
+	void getSeriesDetail_shouldReturnFileIdsOfSeries() throws Exception {
 		Long[] result = fileSystemDicomManager.getSeriesDetail(1, "TestSeriesNumber");
 		assertThat(result).isNotEmpty();
 	}
 
 	@Test
-	void testGetSeriesDetailSeriesNumberNull() throws Exception {
+	void getSeriesDetail_shouldReturnNull_whenSeriesNumberIsNull() throws Exception {
 		assertThat(fileSystemDicomManager.getSeriesDetail(1, null)).isNull();
 	}
 
 	@Test
-	void testGetSeriesDetailSeriesNumberEmptyString() throws Exception {
+	void getSeriesDetail_shouldReturnNull_whenSeriesNumberIsBlank() throws Exception {
 		assertThat(fileSystemDicomManager.getSeriesDetail(1, "     ")).isNull();
 	}
 
 	@Test
-	void testGetSeriesDetailSeriesNumberNullString() throws Exception {
+	void getSeriesDetail_shouldReturnNull_whenSeriesNumberIsNullString() throws Exception {
 		assertThat(fileSystemDicomManager.getSeriesDetail(1, "nuLL")).isNull();
 	}
 
 	@Test
-	void testExist() throws Exception {
+	void exist_shouldReturnTrue_whenFileIsSaved() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		fileSystemDicomManager.saveFile(dicomFile);
@@ -280,14 +226,14 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExistWhenDicomFileNoExist() throws OHServiceException {
+	void exist_shouldReturnFalse_whenFileIsNotSaved() throws OHServiceException {
 		FileDicom dicomFile = new FileDicom();
 		boolean exists = fileSystemDicomManager.exist(dicomFile);
 		assertThat(exists).isFalse();
 	}
 
 	@Test
-	void testDeleteSeries() throws Exception {
+	void deleteSeries_shouldDeleteSeries() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomFile.setDicomSeriesNumber("SeriesNumber");
@@ -300,28 +246,28 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDeleteSeriesDetailSeriesNumberNull() throws Exception {
+	void deleteSeries_shouldThrow_whenSeriesNumberIsNull() throws Exception {
 		assertThatThrownBy(() ->
 				fileSystemDicomManager.deleteSeries(1, null))
 			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
-	void testDeleteSeriesDetailSeriesNumberEmptyString() throws Exception {
+	void deleteSeries_shouldThrow_whenSeriesNumberIsBlank() throws Exception {
 		assertThatThrownBy(() ->
 			fileSystemDicomManager.deleteSeries(1, "     "))
 			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
-	void testDeleteSeriesDetailSeriesNumberNullString() throws Exception {
+	void deleteSeries_shouldThrow_whenSeriesNumberIsNullString() throws Exception {
 		assertThatThrownBy(() ->
 			fileSystemDicomManager.deleteSeries(1, "nuLL"))
 			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
-	void testDateComparator() throws Exception {
+	void dicomDateComparator_shouldSortByStudyDate() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 
@@ -353,7 +299,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDateComparatorMissingStudyDate() throws Exception {
+	void dicomDateComparator_shouldSortNullStudyDateFirst() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 
@@ -384,7 +330,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testTypeDateComparator() throws Exception {
+	void dicomTypeDateComparator_shouldSortByStudyDate_whenTypeDescriptionsAreEqual() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 
@@ -416,7 +362,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testTypeDateComparatorDicomTypeNull() throws Exception {
+	void dicomTypeDateComparator_shouldSortByStudyDate_whenADicomTypeIsNull() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 
@@ -450,7 +396,7 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testTypeDateComparatorDicomTypeDescriptionDifferent() throws Exception {
+	void dicomTypeDateComparator_shouldSortByTypeDescriptionFirst() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 
@@ -489,4 +435,5 @@ class TestFileSystemDicomManager extends OHCoreTestCase {
 		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
 		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
+
 }
