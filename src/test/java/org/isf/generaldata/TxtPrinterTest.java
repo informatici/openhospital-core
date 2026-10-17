@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestTxtPrinter {
+class TxtPrinterTest {
 
 	@Test
-	void testGetTxtPrinter() {
+	void getTxtPrinter_shouldLoadZplParametersFromProperties() {
 		TxtPrinter txtPrinter = TxtPrinter.getTxtPrinter();
 
 		assertThat(txtPrinter).isNotNull();

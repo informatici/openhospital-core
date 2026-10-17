@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,18 +25,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class TestConfigurationProperties {
+class SmsParametersTest {
 
 	@Test
-	void testConfigurationProperties() {
-		MockConfigClass mockConfigClass = new MockConfigClass("fileThatDoesNotExist");
-		assertThat(mockConfigClass.isInitialized()).isFalse();
-		assertThat(mockConfigClass.myGetProperty("someProperty", 0.0D)).isZero();
-	}
+	void initialize_shouldLoadThreadParametersFromProperties() {
+		SmsParameters.initialize();
 
-	class MockConfigClass extends ConfigurationProperties {
-		MockConfigClass(String fileProperties) {
-			super(fileProperties, false);
-		}
+		assertThat(SmsParameters.TIMEOUT).isEqualTo(3000);
+		assertThat(SmsParameters.LOOP).isEqualTo(15);
+		assertThat(SmsParameters.ICC).isEqualTo("+39");
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,14 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class TestSmsParameters {
+class XmppDataTest {
 
 	@Test
-	void testGetSmsParameters() {
-		SmsParameters.initialize();
+	void getXmppData_shouldLoadDomainAndPortFromProperties() {
+		XmppData xmppData = XmppData.getXmppData();
 
-		assertThat(SmsParameters.TIMEOUT).isEqualTo(3000);
-		assertThat(SmsParameters.LOOP).isEqualTo(15);
-		assertThat(SmsParameters.ICC).isEqualTo("+39");
+		assertThat(xmppData).isNotNull();
+
+		assertThat(XmppData.domain).isEqualTo("127.0.0.1");
+		assertThat(XmppData.port).isEqualTo(5222);
 	}
 }
