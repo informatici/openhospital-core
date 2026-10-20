@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.serviceprinting;
+package org.isf.serviceprinting.manager;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Fail.fail;
@@ -40,7 +40,6 @@ import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
-import org.isf.serviceprinting.manager.PrintManager;
 import org.isf.serviceprinting.print.PriceForPrint;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +55,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-class TestPrintManager extends OHCoreTestCase {
+class PrintManagerTest extends OHCoreTestCase {
 
 	@Mock
 	HospitalBrowsingManager hospitalBrowsingManager;
@@ -81,7 +80,7 @@ class TestPrintManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPrintManagerPrintBogusFileName() {
+	void print_shouldThrowHeadlessException_whenReportFileNotFound() {
 		assertThatThrownBy(() -> {
 			PrintManager printManager = new PrintManager(hospitalBrowsingManager);
 			when(hospitalBrowsingManager.getHospital()).thenReturn(hospital);
@@ -99,7 +98,7 @@ class TestPrintManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPrintManagerPrint(){
+	void print_shouldNotThrow_whenDisplayingInInternalViewer(){
 		boolean viewer = GeneralData.INTERNALVIEWER;
 		String locale = GeneralData.LANGUAGE;
 		GeneralData.INTERNALVIEWER = true;
