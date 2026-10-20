@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.pricesothers;
+package org.isf.pricesothers.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,10 +28,9 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.pricesothers.manager.PricesOthersManager;
+import org.isf.pricesothers.TestPricesOthers;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
-import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,12 +38,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class PricesOthersManagerTest extends OHCoreTestCase {
 
 	private static TestPricesOthers testPricesOthers;
 
-	@Autowired
-	PriceOthersIoOperations priceOthersIoOperations;
 	@Autowired
 	PriceOthersIoOperationRepository priceOthersIoOperationRepository;
 	@Autowired
@@ -61,89 +58,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPricesOthersGets() throws Exception {
-		// given:
-		int id = setupTestPricesOthers(false);
-
-		// then:
-		checkPricesOthersIntoDb(id);
-	}
-
-	@Test
-	void testPricesOthersSets() throws Exception {
-		// given:
-		int id = setupTestPricesOthers(true);
-
-		// then:
-		checkPricesOthersIntoDb(id);
-	}
-
-	@Test
-	void testIoGetPricesOthers() throws Exception {
-		// given:
-		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundPricesOthers).isNotNull();
-
-		// when:
-		List<PricesOthers> result = priceOthersIoOperations.getOthers();
-
-		// then:
-		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
-	}
-
-	@Test
-	void testIoUpdatePricesOthers() throws Exception {
-		// given:
-		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundPricesOthers).isNotNull();
-		foundPricesOthers.setDescription("Update");
-
-		// when:
-		PricesOthers updatedPricesOthers = priceOthersIoOperations.updateOther(foundPricesOthers);
-
-		// then:
-		assertThat(updatedPricesOthers.getDescription()).isEqualTo("Update");
-	}
-
-	@Test
-	void testIoNewPricesOthers() throws Exception {
-		// given:
-		PricesOthers pricesOthers = testPricesOthers.setup(true);
-
-		// when:
-		PricesOthers newPricesOthers = priceOthersIoOperations.newOthers(pricesOthers);
-
-		// then:
-		checkPricesOthersIntoDb(newPricesOthers.getId());
-	}
-
-	@Test
-	void testIoDeletePricesOthers() throws Exception {
-		// given:
-		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundPricesOthers).isNotNull();
-
-		// when:
-		priceOthersIoOperations.deleteOthers(foundPricesOthers);
-
-		// then:
-		assertThat(priceOthersIoOperationRepository.existsById(id)).isFalse();
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		int id = setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundPricesOthers).isNotNull();
-		assertThat(priceOthersIoOperations.isCodePresent(foundPricesOthers.getId())).isTrue();
-		assertThat(priceOthersIoOperations.isCodePresent(-1)).isFalse();
-	}
-
-	@Test
-	void testMgrGetPricesOthers() throws Exception {
+	void getOthers_shouldReturnSavedOther() throws Exception {
 		int id = setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundPricesOthers).isNotNull();
@@ -152,7 +67,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdatePricesOthers() throws Exception {
+	void updateOther_shouldSaveNewDescription() throws Exception {
 		int id = setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundPricesOthers).isNotNull();
@@ -162,14 +77,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewPricesOther() throws Exception {
+	void newOther_shouldSaveOther() throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
 		PricesOthers newPricesOthers = pricesOthersManager.newOther(pricesOthers);
 		checkPricesOthersIntoDb(newPricesOthers.getId());
 	}
 
 	@Test
-	void testMgrDeletePricesOther() throws Exception {
+	void deleteOther_shouldRemoveOther() throws Exception {
 		int id = setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundPricesOthers).isNotNull();
@@ -178,7 +93,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationCodeEmpty() throws Exception {
+	void newOther_shouldThrow_whenCodeIsEmpty() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			PricesOthers pricesOthers = testPricesOthers.setup(true);
@@ -193,7 +108,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidationDescriptionEmpty() throws Exception {
+	void newOther_shouldThrow_whenDescriptionIsEmpty() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			PricesOthers pricesOthers = testPricesOthers.setup(true);
@@ -207,39 +122,6 @@ class Tests extends OHCoreTestCase {
 			);
 	}
 
-	@Test
-	void testPricesOthersToString() throws Exception {
-		PricesOthers pricesOthers = new PricesOthers("TestCode", "TestDescription", true, false, false, true);
-		assertThat(pricesOthers).hasToString("TestDescription");
-	}
-
-	@Test
-	void testPricesOthersEquals() throws Exception {
-		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
-
-		assertThat(pricesOthers)
-				.isNotNull()
-				.isEqualTo(pricesOthers)
-				.isNotEqualTo("someString");
-
-		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
-		pricesOthers2.setId(-99);
-		assertThat(pricesOthers).isNotEqualTo(pricesOthers2);
-
-		pricesOthers2.setId(-1);
-		assertThat(pricesOthers).isEqualTo(pricesOthers2);
-	}
-
-	@Test
-	void testPricesOthersHashCode() throws Exception {
-		PricesOthers pricesOthers = testPricesOthers.setup(true);
-		pricesOthers.setId(1);
-		int hashCode = pricesOthers.hashCode();
-		assertThat(hashCode).isEqualTo(23 * 133 + 1);
-		// check computed value
-		assertThat(pricesOthers.hashCode()).isEqualTo(hashCode);
-	}
-
 	private int setupTestPricesOthers(boolean usingSet) throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(usingSet);
 		priceOthersIoOperationRepository.saveAndFlush(pricesOthers);
@@ -251,4 +133,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundPricesOthers).isNotNull();
 		testPricesOthers.check(foundPricesOthers);
 	}
+
 }
