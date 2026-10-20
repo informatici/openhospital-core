@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -85,6 +85,12 @@ public class MovWardBrowserManager {
 		BigDecimal quantity = mov.getQuantity();
 		if (mov.getWardTo() != null && quantity != null && quantity.remainder(BigDecimal.ONE).signum() != 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.transferquantitymustbeaninteger.msg")));
+		}
+		// A negative quantity credits the ward itself: it is how a rectification raises the quantity of a lot. That
+		// credit goes through the same integer MDSRWRD_IN_QTI column, so it must be whole units as well, or the
+		// movement would be stored with its decimals while the stock is raised by the truncated amount.
+		if (mov.getWardTo() == null && quantity != null && quantity.signum() < 0 && quantity.remainder(BigDecimal.ONE).signum() != 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.increasequantitymustbeaninteger.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -224,7 +230,7 @@ public class MovWardBrowserManager {
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
-	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
+	public BigDecimal getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
 		return ioOperations.getCurrentQuantityInWard(ward, lot);
 	}
 
