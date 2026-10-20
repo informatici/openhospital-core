@@ -41,7 +41,7 @@ import org.mockito.Mockito;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.MediaType;
 
-public class TestApiConfigProvider {
+class ApiConfigProviderTest {
 
 	private static final String CONFIG_JSON = """
 		{
@@ -66,7 +66,7 @@ public class TestApiConfigProvider {
 	}
 
 	@Test
-	void testGetTestParamsDataDefaultVersion() throws Exception {
+	void get_shouldReturnDefaultValue_whenVersionIsNotInConfig() throws Exception {
 		// Set up the mock server to respond with the desired JSON
 		mockServer.when(request().withMethod("GET").withPath("/test"))
 			.respond(response().withStatusCode(200)
@@ -101,7 +101,7 @@ public class TestApiConfigProvider {
 	}
 
 	@Test
-	void testGetTestParamsDataWithVersion() throws Exception {
+	void get_shouldReturnVersionValueAndSendUserAgent_whenVersionIsInConfig() throws Exception {
 		// Set up the mock server to respond with the desired JSON
 		mockServer.when(request().withMethod("GET").withPath("/test"))
 			.respond(response().withStatusCode(200)
@@ -139,7 +139,7 @@ public class TestApiConfigProvider {
 	}
 
 	@Test
-	void testGetTestParamsDataEmptyParmsUrl() {
+	void getConfigData_shouldReturnNull_whenParamsUrlIsEmpty() {
 
 		try (MockedStatic<GeneralData> mockedGeneralData = mockStatic(GeneralData.class)) {
 
