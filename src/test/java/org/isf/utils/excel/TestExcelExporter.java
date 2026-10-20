@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -168,6 +169,57 @@ class TestExcelExporter {
 		File outputFile = new File(tempDir, "exportDataToCSV");
 		excelExporter.exportDataToCSV(new MyCollection(), outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
+	}
+
+	@Test
+	void testExportTableToCSVIsRfc4180() throws Exception {
+		String[] trickyColumns = new String[] { "Code", "Note", "Qty" };
+		Object[][] trickyData = new Object[][] {
+						{ "A;1", "plain", 12345 },
+						{ "quote\"here", "line\nbreak", 67890 },
+		};
+		JTable trickyTable = new JTable(trickyData, trickyColumns);
+		File outputFile = new File(tempDir, "exportTableToCSV.csv");
+		excelExporter.exportTableToCSV(trickyTable, outputFile);
+
+		byte[] bytes = Files.readAllBytes(outputFile.toPath());
+		// UTF-8 BOM
+		assertThat(bytes[0]).isEqualTo((byte) 0xEF);
+		assertThat(bytes[1]).isEqualTo((byte) 0xBB);
+		assertThat(bytes[2]).isEqualTo((byte) 0xBF);
+
+		String content = new String(bytes, StandardCharsets.UTF_8).replace("\uFEFF", "");
+		String[] lines = content.split("\r\n", -1);
+		// header has no trailing separator
+		assertThat(lines[0]).isEqualTo("Code;Note;Qty");
+		// a field containing the separator is wrapped in double quotes; integral ids keep no grouping separator
+		assertThat(lines[1]).isEqualTo("\"A;1\";plain;12345");
+		// an embedded double quote is doubled and an embedded newline forces quoting
+		assertThat(content).contains("\"quote\"\"here\"");
+		assertThat(content).contains("\"line\nbreak\"");
+		assertThat(content).contains(";67890");
+	}
+
+	@Test
+	void testExportDataToCSVHasNoTrailingSeparator() throws Exception {
+		File outputFile = new File(tempDir, "exportDataToCSV.csv");
+		excelExporter.exportDataToCSV(new MyCollection(), outputFile);
+
+		byte[] bytes = Files.readAllBytes(outputFile.toPath());
+		assertThat(bytes[0]).isEqualTo((byte) 0xEF);
+		String content = new String(bytes, StandardCharsets.UTF_8).replace("\uFEFF", "");
+		for (String line : content.split("\r\n", -1)) {
+			assertThat(line).doesNotEndWith(";");
+		}
+	}
+
+	@Test
+	void testExportTableDispatchesToCSVByExtension() throws Exception {
+		File outputFile = new File(tempDir, "dispatch.csv");
+		excelExporter.exportTable(table, outputFile);
+		// the CSV path writes a UTF-8 BOM, the Excel paths do not
+		byte[] bytes = Files.readAllBytes(outputFile.toPath());
+		assertThat(bytes[0]).isEqualTo((byte) 0xEF);
 	}
 
 	class MyCollection implements Collection {
