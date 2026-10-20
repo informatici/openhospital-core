@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -48,7 +48,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
-class TestInteraction extends OHCoreTestCase {
+class InteractionTest extends OHCoreTestCase {
 
 	Interaction interaction;
 	@TempDir
@@ -83,12 +83,12 @@ class TestInteraction extends OHCoreTestCase {
 	}
 
 	@Test
-	void testNewInteraction() {
+	void constructor_shouldCreateInteraction() {
 		assertThat(interaction).isNotNull();
 	}
 
 	@Test
-	void testGetContactOnline() {
+	void getContactOnline_shouldReturnAvailableContactNames() {
 		Collection<RosterEntry> rosterEntryCollection = new ArrayList<>();
 		rosterEntryCollection.add(rosterEntryMock);
 		when(rosterMock.getEntries()).thenReturn(rosterEntryCollection);
@@ -103,12 +103,12 @@ class TestInteraction extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUserFromAddress() {
+	void userFromAddress_shouldReturnPartBeforeAt() {
 		assertThat(interaction.userFromAddress("first@last")).isEqualTo("first");
 	}
 
 	@Test
-	void testSendMessage() {
+	void sendMessage_shouldNotThrow_whenServerReturnsNoChat() {
 		MessageListener listener = new MessageListener() {
 
 			@Override
@@ -120,7 +120,7 @@ class TestInteraction extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendFile() {
+	void sendFile_shouldThrowIllegalArgumentException_whenRecipientIsNotFullJid() {
 		File file = new File(tempDir, "someFileName");
 		when(serverMock.getConnection()).thenReturn(connectionMock);
 		assertThatThrownBy(() -> interaction.sendFile("admin", file, "someDescription"))
@@ -128,10 +128,11 @@ class TestInteraction extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGets() {
+	void getters_shouldDelegateToServer() {
 		assertThat(interaction.getRoster()).isInstanceOf(Roster.class);
 		assertThat(interaction.getChatManager()).isNull();
 		assertThat(interaction.getConnection()).isNull();
 		assertThat(interaction.getServer()).isSameAs(serverMock);
 	}
+
 }
