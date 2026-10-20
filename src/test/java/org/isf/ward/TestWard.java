@@ -41,6 +41,7 @@ public class TestWard {
 	private boolean isPharmacy = true;
 	private boolean isFemale = true;
 	private boolean isMale;
+	private boolean isVirtual = true;
 	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {
@@ -54,9 +55,10 @@ public class TestWard {
 			ward = new Ward();
 			setParameters(ward, maternity);
 		} else {
-			// Create Ward with all parameters 
+			// Create Ward with all parameters
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
 					isOpd, isPharmacy, isMale, isFemale);
+			ward.setVirtual(isVirtual);
 		}
 		if (maternity) {
 			ward.setCode(maternityCode);
@@ -79,6 +81,7 @@ public class TestWard {
 		ward.setNurs(nurs);
 		ward.setOpd(isOpd);
 		ward.setPharmacy(isPharmacy);
+		ward.setVirtual(isVirtual);
 		ward.setTelephone(telephone);
 		ward.setVisitDuration(visitDuration);
 	}
@@ -95,6 +98,7 @@ public class TestWard {
 		assertThat(ward.getNurs()).isEqualTo(nurs);
 		assertThat(ward.isOpd()).isEqualTo(isOpd);
 		assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
+		assertThat(ward.isVirtual()).isEqualTo(isVirtual);
 		assertThat(ward.getTelephone()).isEqualTo(telephone);
 		assertThat(ward.getVisitDuration()).isEqualTo(visitDuration);
 	}
