@@ -42,7 +42,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class TestSoftwareDataCollector extends OHCoreTestCase {
+class SoftwareDataCollectorTest extends OHCoreTestCase {
 
 	private SoftwareDataCollector softwareDataCollector;
 
@@ -69,12 +69,12 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetId() {
+	void getId_shouldReturnTelSw() {
 		assertThat(softwareDataCollector.getId()).isEqualTo("TEL_SW");
 	}
 
 	@Test
-	void testRetrieveData() throws Exception {
+	void retrieveData_shouldReturnSoftwareDataWithoutAppVersion() throws Exception {
 		ReflectionTestUtils.setField(softwareDataCollector, "em", entityManagerMock);
 		when(entityManagerMock.unwrap(Session.class)).thenReturn(sessionMock);
 		when(sessionMock.doReturningWork(any())).thenAnswer(invocation -> {
@@ -87,4 +87,5 @@ class TestSoftwareDataCollector extends OHCoreTestCase {
 		assertThat(data).hasSize(40);
 		assertThat(data).doesNotContainKey(CollectorsConstants.APP_VERSION);
 	}
+
 }
