@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.medtype;
+package org.isf.medtype.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,9 +27,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
-import org.isf.medtype.manager.MedicalTypeBrowserManager;
+import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
-import org.isf.medtype.service.MedicalTypeIoOperation;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -39,12 +38,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class MedicalTypeBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestMedicalType testMedicalType;
 
-	@Autowired
-	MedicalTypeIoOperation medicalTypeIoOperation;
 	@Autowired
 	MedicalTypeIoOperationRepository medicalTypeIoOperationRepository;
 	@Autowired
@@ -61,72 +58,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMedicalTypeGets() throws Exception {
-		String code = setupTestMedicalType(false);
-		checkMedicalTypeIntoDb(code);
-	}
-
-	@Test
-	void testMedicalTypeSets() throws Exception {
-		String code = setupTestMedicalType(true);
-		checkMedicalTypeIntoDb(code);
-	}
-
-	@Test
-	void testIoGetMedicalType() throws Exception {
-		String code = setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMedicalType).isNotNull();
-		List<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
-		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
-	}
-
-	@Test
-	void testIoGetAllActiveMedicalType() throws Exception {
-		String code = setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMedicalType).isNotNull();
-		List<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypesNotDeleted();
-		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
-	}
-
-	@Test
-	void testIoUpdateMedicalType() throws Exception {
-		String code = setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMedicalType).isNotNull();
-		foundMedicalType.setDescription("Update");
-		MedicalType updatedMedicalType = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
-		assertThat(updatedMedicalType).isNotNull();
-		assertThat(updatedMedicalType.getDescription()).isEqualTo("Update");
-	}
-
-	@Test
-	void testIoNewMedicalType() throws Exception {
-		MedicalType medicalType = testMedicalType.setup(true);
-		MedicalType newMedicalType = medicalTypeIoOperation.newMedicalType(medicalType);
-		assertThat(newMedicalType).isNotNull();
-		checkMedicalTypeIntoDb(newMedicalType.getCode());
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		String code = setupTestMedicalType(false);
-		boolean result = medicalTypeIoOperation.isCodePresent(code);
-		assertThat(result).isTrue();
-	}
-
-	@Test
-	void testIoDeleteMedicalType() throws Exception {
-		String code = setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMedicalType).isNotNull();
-		medicalTypeIoOperation.deleteMedicalType(foundMedicalType);
-		assertThat(medicalTypeIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@Test
-	void testMgrGetMedicalType() throws Exception {
+	void getMedicalType_shouldIncludeSavedType() throws Exception {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalType).isNotNull();
@@ -135,7 +67,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetAllActiveMedicalType() throws Exception {
+	void getAllActiveMedicalType_shouldIncludeSavedType() throws Exception {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalType).isNotNull();
@@ -144,7 +76,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateMedicalType() throws Exception {
+	void updateMedicalType_shouldSaveNewDescription() throws Exception {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalType).isNotNull();
@@ -155,21 +87,21 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMedicalType() throws Exception {
+	void newMedicalType_shouldSaveMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
 		MedicalType newMedicalType = medicalTypeBrowserManager.newMedicalType(medicalType);
 		checkMedicalTypeIntoDb(newMedicalType.getCode());
 	}
 
 	@Test
-	void testMgrIsCodePresent() throws Exception {
+	void isCodePresent_shouldReturnWhetherCodeExists() throws Exception {
 		String code = setupTestMedicalType(false);
 		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isTrue();
 		assertThat(medicalTypeBrowserManager.isCodePresent("isNotThere")).isFalse();
 	}
 
 	@Test
-	void testMgrDeleteMedicalType() throws Exception {
+	void deleteMedicalType_shouldRemoveMedicalType() throws Exception {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalType).isNotNull();
@@ -178,7 +110,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateMedicalTypeNoKey() throws Exception {
+	void newMedicalType_shouldThrow_whenCodeIsEmpty() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			MedicalType medicalType = new MedicalType("", "description");
@@ -188,7 +120,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateMedicalTypeKeyTooLong() throws Exception {
+	void newMedicalType_shouldThrow_whenCodeIsTooLong() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			MedicalType medicalType = new MedicalType("thisIsTooLong", "description");
@@ -198,7 +130,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateMedicalTypeNoDescription() throws Exception {
+	void newMedicalType_shouldThrow_whenDescriptionIsEmpty() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			MedicalType medicalType = new MedicalType("Z", "");
@@ -208,7 +140,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrValidateMedicalTypeCodeAlreadyExists() throws Exception {
+	void newMedicalType_shouldThrowDataIntegrityViolation_whenCodeExists() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			String code = setupTestMedicalType(false);
@@ -218,38 +150,6 @@ class Tests extends OHCoreTestCase {
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
 				.isInstanceOf(OHDataIntegrityViolationException.class);
-	}
-
-	@Test
-	void testMedicalTypeToString() throws Exception {
-		String code = setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMedicalType)
-				.isNotNull()
-				.hasToString(foundMedicalType.getDescription());
-	}
-
-	@Test
-	void testMedicalTypeEquals() throws Exception {
-		MedicalType medicalType1 = new MedicalType("Z", "description");
-		MedicalType medicalType2 = new MedicalType("A", "description");
-		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
-
-		assertThat(medicalType1)
-				.isEqualTo(medicalType1)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(medicalType2)
-				.isNotEqualTo(medicalType3);
-	}
-
-	@Test
-	void testMedicalTypeHashCode() throws Exception {
-		MedicalType medicalType = new MedicalType("Z", "description");
-		// compute value
-		int hashCode = medicalType.hashCode();
-		assertThat(hashCode).isPositive();
-		// used already computed value
-		assertThat(medicalType.hashCode()).isEqualTo(hashCode);
 	}
 
 	private String setupTestMedicalType(boolean usingSet) throws OHException {
@@ -263,4 +163,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundMedicalType).isNotNull();
 		testMedicalType.check(foundMedicalType);
 	}
+
 }
