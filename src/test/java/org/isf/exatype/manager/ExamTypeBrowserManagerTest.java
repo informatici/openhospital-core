@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.exatype;
+package org.isf.exatype.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,9 +28,8 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.exatype.manager.ExamTypeBrowserManager;
+import org.isf.exatype.TestExamType;
 import org.isf.exatype.model.ExamType;
-import org.isf.exatype.service.ExamTypeIoOperation;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
@@ -41,12 +40,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class ExamTypeBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestExamType testExamType;
 
-	@Autowired
-	ExamTypeIoOperation examTypeIoOperation;
 	@Autowired
 	ExamTypeIoOperationRepository examTypeIoOperationRepository;
 	@Autowired
@@ -63,63 +60,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExamTypeGets() throws Exception {
-		String code = setupTestExamType(false);
-		checkExamTypeIntoDb(code);
-	}
-
-	@Test
-	void testExamTypeSets() throws Exception {
-		String code = setupTestExamType(true);
-		checkExamTypeIntoDb(code);
-	}
-
-	@Test
-	void testIoGetExamType() throws Exception {
-		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundExamType).isNotNull();
-		List<ExamType> examTypes = examTypeIoOperation.getExamType();
-		assertThat(examTypes).contains(foundExamType);
-	}
-
-	@Test
-	void testIoUpdateExamType() throws Exception {
-		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundExamType).isNotNull();
-		foundExamType.setDescription("Update");
-		ExamType updatedExamType = examTypeIoOperation.updateExamType(foundExamType);
-		assertThat(updatedExamType).isNotNull();
-		assertThat(updatedExamType.getDescription()).isEqualTo("Update");
-	}
-
-	@Test
-	void testIoNewExamType() throws Exception {
-		ExamType examType = testExamType.setup(true);
-		ExamType newExamType = examTypeIoOperation.newExamType(examType);
-		assertThat(newExamType).isNotNull();
-		checkExamTypeIntoDb(newExamType.getCode());
-	}
-
-	@Test
-	void testIoIsCodePresent() throws Exception {
-		String code = setupTestExamType(false);
-		boolean result = examTypeIoOperation.isCodePresent(code);
-		assertThat(result).isTrue();
-	}
-
-	@Test
-	void testIoDeleteExamType() throws Exception {
-		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundExamType).isNotNull();
-		examTypeIoOperation.deleteExamType(foundExamType);
-		assertThat(examTypeIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@Test
-	void testMgrGetExamType() throws Exception {
+	void getExamType_shouldReturnSavedExamType() throws Exception {
 		String code = setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundExamType).isNotNull();
@@ -128,7 +69,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateExamType() throws Exception {
+	void updateExamType_shouldSaveNewDescription() throws Exception {
 		String code = setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundExamType).isNotNull();
@@ -139,7 +80,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewExamType() throws Exception {
+	void newExamType_shouldSaveExamType() throws Exception {
 		ExamType examType = testExamType.setup(true);
 		ExamType newExamType = examTypeBrowserManager.newExamType(examType);
 		assertThat(newExamType).isNotNull();
@@ -147,14 +88,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrIsCodePresent() throws Exception {
+	void isCodePresent_shouldReturnTrue_whenCodeExists() throws Exception {
 		String code = setupTestExamType(false);
 		boolean result = examTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	void testMgrDeleteExamType() throws Exception {
+	void deleteExamType_shouldRemoveExamType() throws Exception {
 		String code = setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundExamType).isNotNull();
@@ -163,7 +104,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrExamTypeValidation() throws Exception {
+	void newAndUpdateExamType_shouldThrow_whenCodeOrDescriptionIsInvalid() throws Exception {
 		String code = setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundExamType).isNotNull();
@@ -207,17 +148,6 @@ class Tests extends OHCoreTestCase {
 				);
 	}
 
-	@Test
-	void testPatientExamTypeHashToString() throws Exception {
-		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundExamType).isNotNull();
-
-		assertThat(foundExamType.hashCode()).isPositive();
-
-		assertThat(foundExamType).hasToString(foundExamType.getDescription());
-	}
-
 	private String setupTestExamType(boolean usingSet) throws OHException {
 		ExamType examType = testExamType.setup(usingSet);
 		examTypeIoOperationRepository.saveAndFlush(examType);
@@ -229,4 +159,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundExamType).isNotNull();
 		testExamType.check(foundExamType);
 	}
+
 }
