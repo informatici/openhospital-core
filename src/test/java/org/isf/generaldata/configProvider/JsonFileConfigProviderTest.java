@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.MediaType;
 
-public class TestJsonFileConfigProvider {
+class JsonFileConfigProviderTest {
 
 	private static final String CONFIG_JSON = """
 		{
@@ -57,7 +57,7 @@ public class TestJsonFileConfigProvider {
 	}
 
 	@Test
-	void testJsonFileConfigProvider() throws Exception {
+	void get_shouldReturnDefaultValueAndSendUserAgent_whenServerReturnsJson() throws Exception {
 		mockServer.when(request().withMethod("GET").withPath("/oh-conf.json"))
 			.respond(response().withStatusCode(200)
 				.withContentType(MediaType.APPLICATION_JSON)
@@ -82,7 +82,7 @@ public class TestJsonFileConfigProvider {
 	}
 
 	@Test
-	void testJsonFileConfigProviderServerRejects() throws Exception {
+	void getConfigData_shouldReturnEmptyMap_whenServerRejectsRequest() throws Exception {
 		// Characterizes the reported bug: a non-200 response (such as the 403 the migrated server returned to
 		// requests without a proper User-Agent) must yield an empty configuration rather than a failure.
 		mockServer.when(request().withMethod("GET").withPath("/oh-conf.json"))
@@ -101,7 +101,7 @@ public class TestJsonFileConfigProvider {
 	}
 
 	@Test
-	void testJsonFileConfigProviderBadUrl() throws Exception {
+	void getConfigData_shouldReturnEmptyMap_whenUrlIsUnreachable() throws Exception {
 		GeneralData.initialize();
 		GeneralData.PARAMSURL = "https://somebadaddress.xxx";
 

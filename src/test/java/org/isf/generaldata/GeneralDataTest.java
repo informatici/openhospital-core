@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestGeneralData {
+class GeneralDataTest {
 
 	@Test
-	void testGetGeneralData() {
+	void getGeneralData_shouldLoadLanguageFromSettings() {
 		GeneralData generalData = GeneralData.getGeneralData();
 		
 		assertThat(generalData).isNotNull();
@@ -37,7 +37,7 @@ class TestGeneralData {
 	}
 
 	@Test
-	void testGetSingleUser() {
+	void getSINGLEUSER_shouldReturnFalse_whenSettingIsNo() {
 		GeneralData generalData = GeneralData.getGeneralData();
 
 		assertThat(generalData).isNotNull();
@@ -46,7 +46,7 @@ class TestGeneralData {
 	}
 
 	@Test
-	void testGetUsersListLogin() {
+	void getUSERSLISTLOGIN_shouldReturnTrue_whenSettingIsYes() {
 		GeneralData generalData = GeneralData.getGeneralData();
 
 		assertThat(generalData).isNotNull();
@@ -55,7 +55,7 @@ class TestGeneralData {
 	}
 
 	@Test
-	void testReset() {
+	void getGeneralData_shouldReturnInstance_whenCalledAfterReset() {
 		// get them one time
 		GeneralData generalData = GeneralData.getGeneralData();
 		// throw them away
