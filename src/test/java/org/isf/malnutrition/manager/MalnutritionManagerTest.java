@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.malnutrition;
+package org.isf.malnutrition.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -50,7 +50,7 @@ import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
 import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
-import org.isf.malnutrition.manager.MalnutritionManager;
+import org.isf.malnutrition.TestMalnutrition;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.malnutrition.service.MalnutritionIoOperationRepository;
@@ -76,7 +76,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class MalnutritionManagerTest extends OHCoreTestCase {
 
 	private static TestAdmission testAdmission;
 	private static TestWard testWard;
@@ -146,104 +146,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMalnutritionGets() throws Exception {
-		int code = setupTestMalnutrition(false);
-		checkMalnutritionIntoDb(code);
-	}
-
-	@Test
-	void testMalnutritionSets() throws Exception {
-		int code = setupTestMalnutrition(true);
-		checkMalnutritionIntoDb(code);
-	}
-
-	@Test
-	void testIoGetMalnutrition() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMalnutrition).isNotNull();
-		List<Malnutrition> malnutritions = malnutritionIoOperation.getMalnutritions(String.valueOf(foundMalnutrition.getAdmission().getId()));
-		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
-	}
-
-	@Test
-	void testIoGetLastMalnutrition() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMalnutrition).isNotNull();
-		Malnutrition malnutrition = malnutritionIoOperation.getLastMalnutrition(foundMalnutrition.getAdmission().getId());
-		assertThat(malnutrition.getCode()).isEqualTo(code);
-	}
-
-	@Test
-	void testIoUpdateMalnutrition() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMalnutrition).isNotNull();
-		foundMalnutrition.setHeight(200);
-		Malnutrition result = malnutritionIoOperation.updateMalnutrition(foundMalnutrition);
-		assertThat(result).isNotNull();
-		Malnutrition updatedMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(updatedMalnutrition).isNotNull();
-		assertThat(updatedMalnutrition.getHeight()).isCloseTo(200.0f, within(0.000001f));
-	}
-
-	@Test
-	void testIoNewMalnutrition() throws Exception {
-		Ward ward = testWard.setup(false);
-		Patient patient = testPatient.setup(true);
-		AdmissionType admissionType = testAdmissionType.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease diseaseIn = testDisease.setup(diseaseType, false);
-		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
-		diseaseOut1.setCode("888");
-		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
-		diseaseOut2.setCode("777");
-		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
-		diseaseOut3.setCode("666");
-		OperationType operationType = testOperationType.setup(false);
-		Operation operation = testOperation.setup(operationType, false);
-		DischargeType dischargeType = testDischargeType.setup(false);
-		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
-		DeliveryType deliveryType = testDeliveryType.setup(false);
-		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
-		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
-
-		wardIoOperationRepository.saveAndFlush(ward);
-		patientIoOperationRepository.saveAndFlush(patient);
-		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
-		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
-		operationTypeIoOperationRepository.saveAndFlush(operationType);
-		operationIoOperationRepository.saveAndFlush(operation);
-		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
-		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
-		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
-		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
-		admissionIoOperationRepository.saveAndFlush(admission);
-
-		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
-		Malnutrition result = malnutritionIoOperation.newMalnutrition(malnutrition);
-		assertThat(result).isNotNull();
-		checkMalnutritionIntoDb(malnutrition.getCode());
-	}
-
-	@Test
-	void testIoDeleteMalnutrition() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundMalnutrition).isNotNull();
-		malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
-		assertThat(malnutritionIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@Test
-	void testMgrGetMalnutrition() throws Exception {
+	void getMalnutrition_shouldReturnMalnutritionsOfAdmission() throws Exception {
 		int code = setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMalnutrition).isNotNull();
@@ -252,7 +155,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetLastMalnutrition() throws Exception {
+	void getLastMalnutrition_shouldReturnMalnutritionOfAdmission() throws Exception {
 		int code = setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMalnutrition).isNotNull();
@@ -261,7 +164,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrUpdateMalnutrition() throws Exception {
+	void updateMalnutrition_shouldSaveNewHeight() throws Exception {
 		int code = setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMalnutrition).isNotNull();
@@ -273,7 +176,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutrition() throws Exception {
+	void newMalnutrition_shouldSaveMalnutrition() throws Exception {
 		Ward ward = testWard.setup(false);
 		Patient patient = testPatient.setup(true);
 		AdmissionType admissionType = testAdmissionType.setup(false);
@@ -318,7 +221,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutritionValidateNoDateSupp() throws Exception {
+	void newMalnutrition_shouldThrow_whenDateSuppIsNull() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Ward ward = testWard.setup(false);
@@ -368,7 +271,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutritionValidateNoDateConf() throws Exception {
+	void newMalnutrition_shouldThrow_whenDateConfIsNull() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Ward ward = testWard.setup(false);
@@ -418,7 +321,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutritionValidateDatesOutOfOrder() throws Exception {
+	void newMalnutrition_shouldThrow_whenDateConfIsBeforeDateSupp() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Ward ward = testWard.setup(false);
@@ -469,7 +372,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutritionValidateDatesNoWeight() throws Exception {
+	void newMalnutrition_shouldThrow_whenWeightIsZero() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Ward ward = testWard.setup(false);
@@ -519,7 +422,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrNewMalnutritionValidateDatesNoHeight() throws Exception {
+	void newMalnutrition_shouldThrow_whenHeightIsZero() throws Exception {
 		assertThatThrownBy(() ->
 		{
 			Ward ward = testWard.setup(false);
@@ -569,33 +472,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMalnutritionGetterSetter() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(malnutrition).isNotNull();
-
-		malnutrition.setCode(-1);
-		assertThat(malnutrition.getCode()).isEqualTo(-1);
-
-		assertThat(malnutrition.getLock()).isZero();
-		malnutrition.setLock(-1);
-		assertThat(malnutrition.getLock()).isEqualTo(-1);
-	}
-
-	@Test
-	void testMalnutritionHasCode() throws Exception {
-		int code = setupTestMalnutrition(false);
-		Malnutrition malnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
-		assertThat(malnutrition).isNotNull();
-		// compute first time
-		int hashCode = malnutrition.hashCode();
-		assertThat(hashCode).isEqualTo(23 * 133 + code);
-		// use stored value
-		assertThat(malnutrition.hashCode()).isEqualTo(23 * 133 + code);
-	}
-
-	@Test
-	void testMgrDeleteMalnutrition() throws Exception {
+	void deleteMalnutrition_shouldRemoveMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMalnutrition).isNotNull();
@@ -651,4 +528,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundMalnutrition).isNotNull();
 		testMalnutrition.check(foundMalnutrition);
 	}
+
 }
