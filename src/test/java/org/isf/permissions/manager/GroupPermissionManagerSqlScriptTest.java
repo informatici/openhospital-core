@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions;
+package org.isf.permissions.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +29,6 @@ import java.util.List;
 import org.isf.OHCoreTestCase;
 import org.isf.menu.manager.UserGroupManager;
 import org.isf.menu.model.UserGroup;
-import org.isf.permissions.manager.GroupPermissionManager;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestGroupPermissionManager extends OHCoreTestCase {
+class GroupPermissionManagerSqlScriptTest extends OHCoreTestCase {
 
 	@Autowired
 	UserGroupManager userGroupManager;
@@ -53,7 +52,7 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testFindByIdIn() throws Exception {
+	void findByIdIn_shouldReturnGroupPermissionsWithGivenIds() throws Exception {
 		List<Integer> listIds = new ArrayList<>();
 		listIds.add(1);
 		listIds.add(10);
@@ -64,7 +63,7 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 
 	@Test
 	@DisplayName("Update group permissions")
-	void updateGroupPermissions() throws Exception {
+	void update_shouldAddPermissionsAndApplyReplaceFlag() throws Exception {
 		UserGroup userGroup = userGroupManager.findByIdIn(List.of("admin")).stream().findFirst().orElseGet(() -> null);
 		List<Integer> permissionsIds = List.of(10, 11, 12);
 		assertThat(userGroup).isNotNull();
@@ -83,4 +82,5 @@ class TestGroupPermissionManager extends OHCoreTestCase {
 		permissions = groupPermissionManager.update(userGroup, permissionsIds, false);
 		assertThat(permissions).hasSize(permissionsIds.size());
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,20 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.permissions;
+package org.isf.permissions.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
-import org.isf.permissions.manager.PermissionManager;
 import org.isf.permissions.model.Permission;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestPermissionManager extends OHCoreTestCase {
+class PermissionManagerTest extends OHCoreTestCase {
 
 	@Autowired
 	PermissionManager permissionManager;
@@ -44,7 +43,7 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveByGroupCode() throws Exception {
+	void retrievePermissionsByGroupCode_shouldReturnPermissionsOfGroup() throws Exception {
 		List<Permission> permissions = permissionManager.retrievePermissionsByGroupCode("doctor");
 		assertThat(permissions).isNotEmpty();
 		assertThat(permissions.get(0).getName()).isEqualTo("admissions.create");
@@ -52,7 +51,7 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveByUsername() throws Exception {
+	void retrievePermissionsByUsername_shouldReturnPermissionsOfUserGroup() throws Exception {
 		List<Permission> permissions = permissionManager.retrievePermissionsByUsername("admin");
 		assertThat(permissions).isNotEmpty();
 		assertThat(permissions.get(0).getName()).isEqualTo("admissions.create");
@@ -60,7 +59,7 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveById() throws Exception {
+	void retrievePermissionById_shouldReturnPermission_whenIdExists() throws Exception {
 		Permission permission = permissionManager.retrievePermissionById(3);
 		assertThat(permission).isNotNull();
 		assertThat(permission.getName()).isEqualTo("admissions.update");
@@ -70,7 +69,7 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveByName() throws Exception {
+	void retrievePermissionByName_shouldReturnPermission_whenNameExists() throws Exception {
 		Permission permission = permissionManager.retrievePermissionByName("admissions.create");
 		assertThat(permission).isNotNull();
 		assertThat(permission.getName()).isEqualTo("admissions.create");
@@ -78,7 +77,7 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveAllPermissions() throws Exception {
+	void retrieveAllPermissions_shouldReturnAllPermissions() throws Exception {
 		List<Permission> permissions = permissionManager.retrieveAllPermissions();
 		assertThat(permissions).isNotEmpty();
 		assertThat(permissions.get(0).getName()).isEqualTo("admissions.create");
@@ -88,10 +87,11 @@ class TestPermissionManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExists() throws Exception {
+	void exists_shouldReturnTrueOnlyForExistingId() throws Exception {
 		Permission permission = permissionManager.retrievePermissionById(3);
 		assertThat(permission).isNotNull();
 		assertThat(permissionManager.exists(5)).isTrue();
 		assertThat(permissionManager.exists(-999)).isFalse();
 	}
+
 }
