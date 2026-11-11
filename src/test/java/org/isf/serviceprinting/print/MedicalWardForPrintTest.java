@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.serviceprinting;
+package org.isf.serviceprinting.print;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +42,6 @@ import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.patient.TestPatient;
-import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -51,7 +50,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestMedicalWardForPrint extends OHCoreTestCase {
+class MedicalWardForPrintTest extends OHCoreTestCase {
 
 	private static TestMedical testMedical;
 	private static TestMedicalType testMedicalType;
@@ -91,7 +90,7 @@ class TestMedicalWardForPrint extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMedicalWardForPrint() throws Exception {
+	void constructor_shouldUseMedicalWardAndSelectedWard() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical1 = testMedical.setup(medicalType, false);
 		medical1.setDescription("first description");

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.serviceprinting;
+package org.isf.serviceprinting.manager;
 
 import static org.assertj.core.api.Fail.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +33,6 @@ import org.isf.OHCoreTestCase;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.serviceprinting.manager.PrintLabels;
 import org.isf.utils.db.DbSingleJpaConn;
 import org.isf.utils.exception.OHException;
 import org.junit.jupiter.api.AfterEach;
@@ -51,7 +50,7 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
-class TestPrintLabels extends OHCoreTestCase {
+class PrintLabelsTest extends OHCoreTestCase {
 
 	@Mock
 	private JasperReport jasperReport;
@@ -84,7 +83,7 @@ class TestPrintLabels extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPrintLabels() throws Exception {
+	void constructor_shouldNotThrow_whenReportEngineIsMocked() throws Exception {
 		try (MockedStatic<DbSingleJpaConn> mockedDbSingleJpaConn = mockStatic(DbSingleJpaConn.class);
 			 MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class);
 			 MockedStatic<JasperFillManager> mockedJasperFillManager = mockStatic(JasperFillManager.class);

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.serviceprinting;
+package org.isf.serviceprinting.manager;
 
 import static org.assertj.core.api.Fail.fail;
 import static org.mockito.Mockito.mockStatic;
@@ -28,7 +28,6 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
 import org.isf.OHCoreTestCase;
-import org.isf.serviceprinting.manager.PrintReceipt;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ import org.mockito.MockitoAnnotations;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-class TestPrintReceipt extends OHCoreTestCase {
+class PrintReceiptTest extends OHCoreTestCase {
 
 	@Mock
 	JasperPrint jasperPrint;
@@ -59,7 +58,7 @@ class TestPrintReceipt extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPrintReceiptPrinterNotFound() {
+	void constructor_shouldNotThrow_whenPrinterNotFound() {
 		try {
 			// generates a logger message only
 			new PrintReceipt(jasperPrint, "SampleReceipt");
@@ -69,7 +68,7 @@ class TestPrintReceipt extends OHCoreTestCase {
 	}
 
 	@Test
-	void testPrintReceiptPrinterPDF() {
+	void constructor_shouldNotThrow_whenPrintingPdfToDefaultPrinter() {
 		try (MockedStatic<PrintServiceLookup> mockedPrintServiceLookup = mockStatic(PrintServiceLookup.class)) {
 			mockedPrintServiceLookup.when(() -> PrintServiceLookup.lookupDefaultPrintService()).thenReturn(defaultPrintService);
 
