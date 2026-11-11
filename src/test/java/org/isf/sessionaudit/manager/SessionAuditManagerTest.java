@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sessionaudit;
+package org.isf.sessionaudit.manager;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -27,17 +27,15 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.isf.OHCoreTestCase;
-import org.isf.menu.model.User;
-import org.isf.sessionaudit.manager.SessionAuditManager;
+import org.isf.sessionaudit.TestSessionAudit;
 import org.isf.sessionaudit.model.SessionAudit;
-import org.isf.sessionaudit.model.UserSession;
 import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class Tests extends OHCoreTestCase {
+class SessionAuditManagerTest extends OHCoreTestCase {
 
 	private static TestSessionAudit testSessionAudit;
 
@@ -55,34 +53,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetSetSessionAudit() throws Exception {
-		SessionAudit sessionAudit = testSessionAudit.setup(true);
-		testSessionAudit.check(sessionAudit);
-	}
-
-	@Test
-	void testSessionAuditHashCode() throws Exception {
-		SessionAudit sessionAudit = testSessionAudit.setup(true);
-		assertThat(sessionAudit.hashCode()).isEqualTo(-1113769856);
-	}
-
-	@Test
-	void testSessionAuditEquals() throws Exception {
-		SessionAudit sessionAudit = testSessionAudit.setup(false);
-		assertThat(sessionAudit.equals(sessionAudit)).isTrue();
-
-		assertThat(sessionAudit.equals(null)).isFalse();
-		assertThat(sessionAudit.equals("someString")).isFalse();
-
-		SessionAudit sessionAudit2 = testSessionAudit.setup(true);
-		assertThat(sessionAudit.equals(sessionAudit2)).isTrue();
-
-		sessionAudit2.setCode(sessionAudit2.getCode() + 3);
-		assertThat(sessionAudit.equals(sessionAudit2)).isFalse();
-	}
-
-	@Test
-	void testNewSessionAudit() throws Exception {
+	void newSessionAudit_shouldSaveSessionAudit() throws Exception {
 		SessionAudit sessionAudit = testSessionAudit.setup(true);
 		int code = sessionAuditManager.newSessionAudit(sessionAudit);
 
@@ -93,7 +64,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSessionAuditNotFound() throws Exception {
+	void getSessionAudit_shouldReturnEmpty_whenCodeNotFound() throws Exception {
 		SessionAudit sessionAudit = testSessionAudit.setup(true);
 		int code = sessionAuditManager.newSessionAudit(sessionAudit);
 
@@ -102,7 +73,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdateSessionAudit() throws Exception {
+	void updateSessionAudit_shouldSaveLogoutDate() throws Exception {
 		SessionAudit sessionAudit = testSessionAudit.setup(true);
 		int code = sessionAuditManager.newSessionAudit(sessionAudit);
 
@@ -117,16 +88,4 @@ public class Tests extends OHCoreTestCase {
 		assertThat(updatedSessionAudit.getLogoutDate()).isEqualTo(now);
 	}
 
-	@Test
-	void testUserSessionGetSet() throws  Exception {
-		UserSession.setUser(new User("TestUser", null, "TestPassWord", "TestDescription"));
-
-		assertThat(UserSession.isLoggedIn()).isTrue();
-
-		UserSession.setSessionAuditId(-999);
-		assertThat(UserSession.getSessionAuditId()).isEqualTo(-999);
-
-		UserSession.removeUser();
-		assertThat(UserSession.isLoggedIn()).isFalse();
-	}
 }
