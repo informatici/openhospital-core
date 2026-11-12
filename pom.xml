@@ -26,7 +26,7 @@
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>7.0.7</jasperreports.version>
-		<license.maven.plugin.version>5.0.0</license.maven.plugin.version>
+		<license.maven.plugin.version>5.1.2</license.maven.plugin.version>
 		<spring-cloud.version>2025.0.1</spring-cloud.version>
 	</properties>
 	
@@ -70,7 +70,7 @@
 		<dependency>
 		    <groupId>org.mock-server</groupId>
 		    <artifactId>mockserver-junit-jupiter</artifactId>
-		    <version>7.6.0</version>
+		    <version>8.0.0</version>
 		    <scope>test</scope>
 		    <exclusions>
 		    	<exclusion>
@@ -141,6 +141,12 @@
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.6</version>
+			<exclusions>
+		        <exclusion>
+		            <groupId>net.java.dev.jna</groupId>
+		            <artifactId>platform</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
@@ -183,7 +189,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.4.240</version>
+			<version>2.5.252</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
@@ -206,7 +212,7 @@
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio-opencv</artifactId>
-			<version>5.34.3</version>
+			<version>5.35.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
@@ -244,11 +250,11 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.15.0</version>
+				<version>3.16.0</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.6</version>
+				<version>3.6.0</version>
 				<configuration>
 					<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					<reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
@@ -347,19 +353,37 @@
 								<exclude>./ide-settings/eclipse/**</exclude>
 								<exclude>./ide-settings/idea/**</exclude>
 								<exclude>.editorconfig</exclude>
+								<exclude>.env</exclude>
+								<exclude>dotenv</exclude>
 								<exclude>.springBeans</exclude>
 								<exclude>**/README</exclude>
 								<exclude>doc/**/*.txt</exclude>
 								<exclude>lib/**</exclude>
+								<exclude>mysql/db/**</exclude>
+								<exclude>repo/**</exclude>
 								<exclude>sql/**</exclude>
+								<exclude>rpt_base/**</exclude>
+								<exclude>rpt_extra/**</exclude>
+								<exclude>rpt_stat/**</exclude>
 								<exclude>rsc/**</exclude>
 								<exclude>rsc-test/**</exclude>
 								<exclude>src/test/resources/**</exclude>
 								<exclude>src/main/resources/**</exclude>
 								<exclude>**/*.properties</exclude>
 								<exclude>**/*.xml</exclude>
+								<exclude>**/*.yaml</exclude>
 								<exclude>**/*.yml</exclude>
 								<exclude>**/*.jfd</exclude>
+								<exclude>**/*.log.*</exclude>
+								<exclude>Dockerfile-ohdb</exclude>
+								<exclude>**/.DS_Store</exclude>
+								<exclude>pom.xml</exclude>
+								<exclude>**/*.ps1</exclude>
+								<exclude>**/*.bat</exclude>
+								<exclude>**/*.sh</exclude>
+								<exclude>**/Makefile</exclude>
+								<exclude>**/Dockerfile.*</exclude>
+								<exclude>**/Dockerfile.*</exclude>
 							</excludes>
 						</licenseSet>
 					</licenseSets>

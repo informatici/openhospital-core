@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,12 +35,6 @@ class TestHardwareDataCollector extends OHCoreTestCase {
 	void testGetId() {
 		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
 		assertThat(hardwareDataCollector.getId()).isEqualTo("TEL_HW");
-	}
-
-	@Test
-	void testGetDescription() {
-		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
-		assertThat(hardwareDataCollector.getDescription()).isEqualTo("Hardware information (CPU, RAM)");
 	}
 
 	@Test

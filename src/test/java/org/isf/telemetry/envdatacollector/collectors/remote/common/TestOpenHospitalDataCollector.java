@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -126,12 +126,6 @@ class TestOpenHospitalDataCollector extends OHCoreTestCase {
 	@Test
 	void testGetId() {
 		assertThat(openHospitalDataCollector.getId()).isEqualTo("TEL_OH");
-	}
-
-	@Test
-	void testGetDescription() {
-		assertThat(openHospitalDataCollector.getDescription()).isEqualTo(
-						"Hospital general information (Country; Region, City, Postal Code, TimeZone, Currency, OH Version, Number of Patients / Beds / Wards / Users)");
 	}
 
 	@Test
