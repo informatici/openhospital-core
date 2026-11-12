@@ -31,7 +31,7 @@ import jakarta.persistence.PersistenceContext;
 
 import org.hibernate.Session;
 import org.isf.generaldata.GeneralData;
-import org.isf.generaldata.Version;
+import org.isf.generaldata.MessageBundle;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
@@ -49,7 +49,6 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "TEL_SW";
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareDataCollector.class);
-	private String version;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -61,8 +60,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		version = Version.getVersion().toString();
-		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ')';
+		return MessageBundle.getMessage("angal.telemetry.collector.tel_sw");
 	}
 
 	@Override
@@ -85,8 +83,6 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
 			result.put(CollectorsConstants.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
 
-			Version.initialize();
-			result.put(CollectorsConstants.APP_VERSION, version);
 			result.put(CollectorsConstants.APP_MODE, GeneralData.MODE);
 			result.put(CollectorsConstants.APP_DEMODATA, String.valueOf(GeneralData.DEMODATA));
 			result.put(CollectorsConstants.APP_APISERVER, String.valueOf(GeneralData.APISERVER));
