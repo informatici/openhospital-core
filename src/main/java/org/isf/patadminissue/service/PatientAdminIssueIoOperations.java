@@ -75,6 +75,16 @@ public class PatientAdminIssueIoOperations {
 	}
 
 	/**
+	 * Return the codes of the patients with at least one {@link PatientAdminIssue} still open.
+	 *
+	 * @return the patient codes. It could be empty.
+	 * @throws OHServiceException
+	 */
+	public List<Integer> getCodesOfPatientsWithOpenIssues() throws OHServiceException {
+		return repository.findCodesOfPatientsWithOpenIssues();
+	}
+
+	/**
 	 * Save the {@link PatientAdminIssue}s in a single transaction.
 	 *
 	 * @param issues the issues to save

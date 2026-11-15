@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.isf.patadminissue.model.PatientAdminIssue;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,5 +37,8 @@ public interface PatientAdminIssueIoOperationRepository extends JpaRepository<Pa
 	List<PatientAdminIssue> findByPatient_CodeAndToDateIsNullOrderByFromDateAsc(int patientCode);
 
 	List<PatientAdminIssue> findByPatient_CodeInAndToDateIsNullOrderByFromDateAsc(Collection<Integer> patientCodes);
+
+	@Query("select distinct i.patient.code from PatientAdminIssue i where i.toDate is null")
+	List<Integer> findCodesOfPatientsWithOpenIssues();
 
 }

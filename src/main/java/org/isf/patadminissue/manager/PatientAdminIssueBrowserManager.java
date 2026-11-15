@@ -24,7 +24,9 @@ package org.isf.patadminissue.manager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.patadminissue.model.PatientAdminIssue;
@@ -79,6 +81,17 @@ public class PatientAdminIssueBrowserManager {
 			return List.of();
 		}
 		return ioOperations.getOpenIssues(patientCodes);
+	}
+
+	/**
+	 * Return the codes of the patients with at least one {@link PatientAdminIssue} still open, to mark them in a list
+	 * without reading the issues of every patient.
+	 *
+	 * @return the patient codes. It could be empty.
+	 * @throws OHServiceException
+	 */
+	public Set<Integer> getCodesOfPatientsWithOpenIssues() throws OHServiceException {
+		return new HashSet<>(ioOperations.getCodesOfPatientsWithOpenIssues());
 	}
 
 	/**

@@ -250,6 +250,18 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrGetCodesOfPatientsWithOpenIssues() throws Exception {
+		Patient flagged = setupTestPatient();
+		Patient cleared = setupTestPatient();
+		setupTestPatient();
+		patientAdminIssueBrowserManager.openIssue(new PatientAdminIssue(flagged, "Missing referral letter"));
+		patientAdminIssueBrowserManager.openIssue(new PatientAdminIssue(flagged, "Identity document to be verified"));
+		PatientAdminIssue resolved = patientAdminIssueBrowserManager.openIssue(new PatientAdminIssue(cleared, "Unpaid bill"));
+		patientAdminIssueBrowserManager.resolveIssue(resolved);
+		assertThat(patientAdminIssueBrowserManager.getCodesOfPatientsWithOpenIssues()).containsExactly(flagged.getCode());
+	}
+
+	@Test
 	void testMgrOpenIssuesOldestFirstAndHistoryMostRecentFirst() throws Exception {
 		Patient patient = setupTestPatient();
 		saveIssue(patient, "Second", LocalDateTime.of(2026, 1, 2, 0, 0), null);
