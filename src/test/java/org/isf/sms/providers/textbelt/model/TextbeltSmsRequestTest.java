@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,19 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms;
+package org.isf.sms.providers.textbelt.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.OHCoreTestCase;
-import org.isf.sms.providers.textbelt.model.TextbeltSmsRequest;
-import org.isf.sms.providers.textbelt.model.TextbeltSmsResponse;
 import org.junit.jupiter.api.Test;
 
-class TestsTextbelt extends OHCoreTestCase {
+class TextbeltSmsRequestTest extends OHCoreTestCase {
 
 	@Test
-	void testTextbeltSmsRequestGetSets() throws Exception {
+	void settersAndToString_shouldUseRequestFields() throws Exception {
 		TextbeltSmsRequest textbeltSmsRequest = new TextbeltSmsRequest();
 
 		textbeltSmsRequest.setMessage("message");
@@ -46,22 +44,4 @@ class TestsTextbelt extends OHCoreTestCase {
 		assertThat(textbeltSmsRequest).hasToString("TextbeltSmsRequest [phone=***, message=***, key=***]");
 	}
 
-	@Test
-	void testTextbeltSmsResponseGetSets() throws Exception {
-		TextbeltSmsResponse textbeltSmsResponse = new TextbeltSmsResponse();
-
-		textbeltSmsResponse.setSuccess(true);
-		assertThat(textbeltSmsResponse.getSuccess()).isTrue();
-
-		textbeltSmsResponse.setQuotaRemaining(999);
-		assertThat(textbeltSmsResponse.getQuotaRemaining()).isEqualTo(999);
-
-		textbeltSmsResponse.setTextId(12345l);
-		assertThat(textbeltSmsResponse.getTextId()).isEqualTo(12345l);
-
-		textbeltSmsResponse.setError("error");
-		assertThat(textbeltSmsResponse.getError()).isEqualTo("error");
-
-		assertThat(textbeltSmsResponse).hasToString("TextbeltSmsResponse [success=true, quotaRemaining=999, textId=12345, error=error]");
-	}
 }
