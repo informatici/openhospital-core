@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -31,10 +31,10 @@ import org.isf.OHCoreTestCase;
 import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.Test;
 
-class TestTelemetry extends OHCoreTestCase {
+class TelemetryTest extends OHCoreTestCase {
 
 	@Test
-	void testModel() {
+	void setters_shouldSetFields() {
 		Telemetry telemetry = new Telemetry();
 
 		LocalDateTime now = TimeTools.getNow();
@@ -81,4 +81,5 @@ class TestTelemetry extends OHCoreTestCase {
 
 		assertThat(telemetry.toString()).isNotNull();
 	}
+
 }

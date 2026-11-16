@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -41,7 +41,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 
-class TestIpApiService extends OHCoreTestCase {
+class IpApiServiceTest extends OHCoreTestCase {
 
 	@Mock
 	GeoIpInfoSettings settings;
@@ -74,13 +74,14 @@ class TestIpApiService extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetServiceName() {
+	void getServiceName_shouldReturnIpApiRemoteService() {
 		assertThat(ipApiService.getServiceName()).isEqualTo("ipapi-remote-service");
 	}
 
 	@Test
-	void testRetrieveIpInfo() {
+	void retrieveIpInfo_shouldThrowFeignException_whenHostIsUnreachable() {
 		assertThatThrownBy(() -> ipApiService.retrieveIpInfo())
 						.isInstanceOf(feign.FeignException.class);
 	}
+
 }

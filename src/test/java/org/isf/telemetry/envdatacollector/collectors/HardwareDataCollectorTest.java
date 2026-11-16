@@ -29,16 +29,16 @@ import java.util.Map;
 import org.isf.OHCoreTestCase;
 import org.junit.jupiter.api.Test;
 
-class TestHardwareDataCollector extends OHCoreTestCase {
+class HardwareDataCollectorTest extends OHCoreTestCase {
 
 	@Test
-	void testGetId() {
+	void getId_shouldReturnTelHw() {
 		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
 		assertThat(hardwareDataCollector.getId()).isEqualTo("TEL_HW");
 	}
 
 	@Test
-	void testRetrieveData() throws Exception {
+	void retrieveData_shouldReturnHardwareData() throws Exception {
 		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
 		Map<String, String> data = hardwareDataCollector.retrieveData();
 		assertThat(data).isNotNull();
@@ -47,7 +47,7 @@ class TestHardwareDataCollector extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIsSelected() {
+	void isSelected_shouldReturnTrue_whenCollectorIdIsChecked() {
 		HardwareDataCollector hardwareDataCollector = new HardwareDataCollector();
 		Map<String, Boolean> checkboxesStatus = new HashMap<>();
 		checkboxesStatus.put("string", false);
@@ -56,4 +56,5 @@ class TestHardwareDataCollector extends OHCoreTestCase {
 		checkboxesStatus.put("string4", false);
 		assertThat(hardwareDataCollector.isSelected(checkboxesStatus)).isTrue();
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.OHCoreTestCase;
 import org.junit.jupiter.api.Test;
 
-class TestGeoIpInfoBean extends OHCoreTestCase {
+class GeoIpInfoBeanTest extends OHCoreTestCase {
 
 	@Test
-	void testBean() {
+	void setters_shouldSetFields() {
 		GeoIpInfoBean geoIpInfoBean = new GeoIpInfoBean();
 
 		geoIpInfoBean.setIp("IP-string");
@@ -64,4 +64,5 @@ class TestGeoIpInfoBean extends OHCoreTestCase {
 
 		assertThat(geoIpInfoBean.toString()).isNotNull();
 	}
+
 }

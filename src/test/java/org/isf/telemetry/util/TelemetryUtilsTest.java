@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class TestTelemetryUtil extends OHCoreTestCase {
+class TelemetryUtilsTest extends OHCoreTestCase {
 
 	TelemetryUtils telemetryUtils;
 
@@ -62,7 +62,7 @@ class TestTelemetryUtil extends OHCoreTestCase {
 	}
 
 	@Test
-	void testRetrieveDataToSend() throws Exception {
+	void retrieveDataToSend_shouldReturnEmptyMap_whenNoCollectorReturnsData() throws Exception {
 		Map<String, Boolean> consentMap = new HashMap<>();
 		consentMap.put("String1", Boolean.TRUE);
 		consentMap.put("String2", Boolean.FALSE);
@@ -74,7 +74,7 @@ class TestTelemetryUtil extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendTelemetryDataSimulation() throws Exception {
+	void sendTelemetryData_shouldNotThrow_whenSimulationIsTrue() throws Exception {
 		Map<String, Map<String, String>> dataToSend = new LinkedHashMap<>();
 		Map<String, String> consentMap = new HashMap<>();
 		consentMap.put("String1", "true");
@@ -84,7 +84,7 @@ class TestTelemetryUtil extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendTelemetryData() throws Exception {
+	void sendTelemetryData_shouldNotThrow_whenSendFails() throws Exception {
 		Map<String, Map<String, String>> dataToSend = new LinkedHashMap<>();
 		Map<String, String> consentMap = new HashMap<>();
 		consentMap.put("String1", "true");
@@ -92,4 +92,5 @@ class TestTelemetryUtil extends OHCoreTestCase {
 		dataToSend.put("one", consentMap);
 		telemetryUtils.sendTelemetryData(dataToSend, false);
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.env.Environment;
 
-class TestTelemetryDataCollectorGatewayService extends OHCoreTestCase {
+class TelemetryDataCollectorGatewayServiceTest extends OHCoreTestCase {
 
 	private TelemetryDataCollectorGatewayService telemetryDataCollectorGatewayService;
 
@@ -59,7 +59,7 @@ class TestTelemetryDataCollectorGatewayService extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendWithBadURL() {
+	void send_shouldReturnFalse_whenUrlIsMalformed() {
 		try (MockedStatic<ParamsData> mockedParamsData = mockStatic(ParamsData.class)) {
 			mockedParamsData.when(() -> ParamsData.getInstance()).thenReturn(paramsDataClient);
 			when(paramsDataClient.getTelemetryUrl()).thenReturn("aBadURL");
@@ -68,7 +68,7 @@ class TestTelemetryDataCollectorGatewayService extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSendException() {
+	void send_shouldThrowFeignException_whenRequestFails() {
 		try (MockedStatic<ParamsData> mockedParamsData = mockStatic(ParamsData.class)) {
 			mockedParamsData.when(() -> ParamsData.getInstance()).thenReturn(paramsDataClient);
 			when(paramsDataClient.getTelemetryUrl()).thenReturn("http://google.com");
@@ -77,4 +77,5 @@ class TestTelemetryDataCollectorGatewayService extends OHCoreTestCase {
 							.isInstanceOf(feign.FeignException.class);
 		}
 	}
+
 }
