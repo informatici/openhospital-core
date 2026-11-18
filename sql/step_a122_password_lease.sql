@@ -1,0 +1,6 @@
+-- OP-896 (STRIDE S03): password lease tracking
+ALTER TABLE OH_USER ADD US_PASSWD_LAST_CHANGED DATETIME NULL DEFAULT NULL;
+ALTER TABLE OH_USER ADD US_PASSWD_MUST_CHANGE TINYINT(1) NOT NULL DEFAULT 0;
+
+-- initialize existing users so the lease starts from the upgrade date (nobody is forced to change immediately)
+UPDATE OH_USER SET US_PASSWD_LAST_CHANGED = NOW() WHERE US_PASSWD_LAST_CHANGED IS NULL;

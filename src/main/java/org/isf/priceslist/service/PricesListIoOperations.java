@@ -21,6 +21,8 @@
  */
 package org.isf.priceslist.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.isf.priceslist.model.Price;
@@ -130,10 +132,13 @@ public class PricesListIoOperations {
 			newPrice.setList(newList);
 			newPrice.setGroup(price.getGroup());
 			newPrice.setDesc(price.getDesc());
+			BigDecimal bdFactor = BigDecimal.valueOf(factor);
 			if (step > 0) {
-				newPrice.setPrice(Math.round(price.getPrice() * factor / step) * step);
+				BigDecimal bdStep = BigDecimal.valueOf(step);
+				BigDecimal steps = price.getPrice().multiply(bdFactor).divide(bdStep, 0, RoundingMode.HALF_UP);
+				newPrice.setPrice(steps.multiply(bdStep));
 			} else {
-				newPrice.setPrice(price.getPrice() * factor);
+				newPrice.setPrice(price.getPrice().multiply(bdFactor));
 			}
 			newPrice.setItem(price.getItem());
 			priceRepository.save(newPrice);

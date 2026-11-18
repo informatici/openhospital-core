@@ -56,13 +56,14 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	int updateUser(@Param("description") String description, @Param("groupName") UserGroup groupName, @Param("id") String id);
 
 	@Modifying
-	@Query(value = "update User user set user.desc=:description, user.userGroupName=:groupName, user.deleted=:deleted where user.userName=:id")
+	@Query(value = "update User user set user.desc=:description, user.userGroupName=:groupName, user.deleted=:deleted, user.deletedBy=:deletedBy, user.deletedDate=:deletedDate where user.userName=:id")
 	int updateUser(@Param("description") String description, @Param("groupName") UserGroup groupName, @Param("deleted") boolean deleted,
-		@Param("id") String id);
+		@Param("deletedBy") String deletedBy, @Param("deletedDate") LocalDateTime deletedDate, @Param("id") String id);
 
 	@Modifying
-	@Query(value = "update User set passwd=:password where userName=:id")
-	int updatePassword(@Param("password") String password, @Param("id") String id);
+	@Query(value = "update User set passwd=:password, passwdLastChanged=:passwdLastChanged, passwdMustChange=:passwdMustChange where userName=:id")
+	int updatePassword(@Param("password") String password, @Param("passwdLastChanged") LocalDateTime passwdLastChanged,
+		@Param("passwdMustChange") boolean passwdMustChange, @Param("id") String id);
 
 	@Modifying
 	@Query(value = "update User set failedAttempts=:attempts where userName=:id")

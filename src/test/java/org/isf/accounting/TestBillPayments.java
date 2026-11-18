@@ -23,8 +23,8 @@ package org.isf.accounting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
-import static org.assertj.core.data.Offset.offset;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -35,7 +35,7 @@ import org.isf.utils.exception.OHException;
 public class TestBillPayments {
 
 	public LocalDateTime paymentDate = LocalDateTime.of(4, 3, 2, 0, 0, 0);
-	private static double paymentAmount = 10.10;
+	private static BigDecimal paymentAmount = new BigDecimal("10.10");
 	private static String paymentUser = "TestUser";
 
 	public BillPayments setup(Bill bill, boolean usingSet) throws OHException {
@@ -60,7 +60,7 @@ public class TestBillPayments {
 	}
 
 	public void check(BillPayments billPayment) {
-		assertThat(billPayment.getAmount()).isCloseTo(paymentAmount, offset(0.1));
+		assertThat(billPayment.getAmount()).isEqualByComparingTo(paymentAmount);
 		assertThat(billPayment.getDate()).isCloseTo(paymentDate, within(1, ChronoUnit.SECONDS));
 		assertThat(billPayment.getUser()).isEqualTo(paymentUser);
 	}

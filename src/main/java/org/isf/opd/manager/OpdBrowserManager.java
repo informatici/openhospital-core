@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -93,6 +93,15 @@ public class OpdBrowserManager {
 		// Check Patient
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
+		} else {
+			// Check Sex and Age
+			// if OPDEXTENDED = true && patient not null, following checks should just pass
+			if (opd.getAge() < 0) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg")));
+			}
+			if (opd.getSex() == ' ') {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg")));
+			}
 		}
 		// Check Ward
 		if (ward == null) {
@@ -101,13 +110,6 @@ public class OpdBrowserManager {
 			if (!ward.isOpd()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg")));
 			}
-		}
-		// Check Sex and Age
-		if (opd.getAge() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg")));
-		}
-		if (opd.getSex() == ' ') {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg")));
 		}
 		// Check Disease n.1
 		if (disease == null) {

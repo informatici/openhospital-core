@@ -1,0 +1,91 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+package org.isf.telemetry.envdatacollector.collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.util.Map;
+
+import jakarta.persistence.EntityManager;
+
+import org.hibernate.Session;
+import org.hibernate.jdbc.ReturningWork;
+import org.isf.OHCoreTestCase;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
+
+class SoftwareDataCollectorTest extends OHCoreTestCase {
+
+	private SoftwareDataCollector softwareDataCollector;
+
+	@Mock
+	EntityManager entityManagerMock;
+	@Mock
+	Session sessionMock;
+	@Mock
+	Connection connectionMock;
+	@Mock
+	DatabaseMetaData databaseMetaDataMock;
+
+	private AutoCloseable closeable;
+
+	@BeforeEach
+	void setUp() {
+		closeable = MockitoAnnotations.openMocks(this);
+		softwareDataCollector = new SoftwareDataCollector();
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
+	}
+
+	@Test
+	void getId_shouldReturnTelSw() {
+		assertThat(softwareDataCollector.getId()).isEqualTo("TEL_SW");
+	}
+
+	@Test
+	void retrieveData_shouldReturnSoftwareDataWithoutAppVersion() throws Exception {
+		ReflectionTestUtils.setField(softwareDataCollector, "em", entityManagerMock);
+		when(entityManagerMock.unwrap(Session.class)).thenReturn(sessionMock);
+		when(sessionMock.doReturningWork(any())).thenAnswer(invocation -> {
+			ReturningWork<DatabaseMetaData> work = invocation.getArgument(0);
+			return work.execute(connectionMock);
+		});
+		when(connectionMock.getMetaData()).thenReturn(databaseMetaDataMock);
+		Map<String, String> data = softwareDataCollector.retrieveData();
+		assertThat(data).isNotNull();
+		assertThat(data).hasSize(40);
+		assertThat(data).doesNotContainKey(CollectorsConstants.APP_VERSION);
+	}
+
+}

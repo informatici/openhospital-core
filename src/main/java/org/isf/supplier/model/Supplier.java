@@ -38,7 +38,7 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.isf.utils.db.Auditable;
+import org.isf.utils.db.SoftDeletableAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -52,7 +52,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SUP_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "SUP_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SUP_LAST_MODIFIED_DATE"))
-public class Supplier extends Auditable<String> implements Serializable {
+@AttributeOverride(name = "deletedBy", column = @Column(name = "SUP_DELETED_BY"))
+@AttributeOverride(name = "deletedDate", column = @Column(name = "SUP_DELETED_DATE"))
+public class Supplier extends SoftDeletableAuditable<String> implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;

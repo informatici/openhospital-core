@@ -24,10 +24,12 @@ package org.isf.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
@@ -41,15 +43,18 @@ import org.isf.menu.service.UserMenuItemIoOperationRepository;
 import org.isf.permissions.manager.GroupPermissionManager;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
+import org.isf.permissions.service.GroupPermissionIoOperationRepository;
 import org.isf.permissions.service.PermissionIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 class Tests extends OHCoreTestCase {
 
@@ -72,6 +77,8 @@ class Tests extends OHCoreTestCase {
 	private UserMenuItemIoOperationRepository userMenuItemIoOperationRepository;
 	@Autowired
 	private PermissionIoOperationRepository permissionIoOperationRepository;
+	@Autowired
+	private GroupPermissionIoOperationRepository groupPermissionIoOperationRepository;
 	@Autowired
 	private GroupPermissionManager groupPermissionManager;
 
@@ -318,6 +325,32 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testPermissionNameMustBeUnique() throws Exception {
+		Permission permission = TestPermission.generatePermissions(1).get(0);
+		permission.setName("duplicate.permission");
+		permissionIoOperationRepository.saveAndFlush(permission);
+
+		Permission duplicate = TestPermission.generatePermissions(1).get(0);
+		duplicate.setName("duplicate.permission");
+		assertThatThrownBy(() -> permissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@Test
+	void testGroupPermissionPairMustBeUnique() throws Exception {
+		String code = setupTestUserGroupPermissions();
+		UserGroup userGroup = userGroupIoOperationRepository.findById(code).orElse(null);
+		assertThat(userGroup).isNotNull();
+		GroupPermission existing = groupPermissionManager.findUserGroupPermissions(code).get(0);
+
+		GroupPermission duplicate = new GroupPermission();
+		duplicate.setUserGroup(userGroup);
+		duplicate.setPermission(existing.getPermission());
+		assertThatThrownBy(() -> groupPermissionIoOperationRepository.saveAndFlush(duplicate))
+			.isInstanceOf(DataIntegrityViolationException.class);
+	}
+
+	@Test
 	void testIoUpdateUserGroup() throws Exception {
 		String code = setupTestUserGroup(false);
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).orElse(null);
@@ -367,6 +400,41 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUserGroup.isDeleted()).isTrue();
 		foundUserGroup = userBrowsingManager.findUserGroupByCode(foundUserGroup.getCode());
 		assertThat(foundUserGroup).isNull();
+	}
+
+	@Test
+	void testSoftDeleteUserStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		assertThat(user.getDeletedDate()).isNull();
+
+		// a regular update (deleted == false) must NOT stamp the deletion audit
+		user.setDesc("changed");
+		menuIoOperation.updateUser(user);
+		assertThat(userIoOperationRepository.findByUserName(userName).getDeletedDate()).isNull();
+
+		// a soft deletion records when the user was deleted
+		user.setDeleted(true);
+		menuIoOperation.updateUser(user);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		User afterDelete = userIoOperationRepository.findByUserName(userName);
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
+	}
+
+	@Test
+	void testSoftDeleteUserGroupStampsDeletedDate() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findByUserName(userName);
+		UserGroup group = userGroupIoOperationRepository.findByCode(user.getUserGroupName().getCode());
+		assertThat(group.getDeletedDate()).isNull();
+
+		group.setDeleted(true);
+		menuIoOperation.updateUserGroup(group);
+		entityManager.clear(); // the bulk update bypasses the context; drop the cached entity to read fresh
+		UserGroup afterDelete = userGroupIoOperationRepository.findByCode(group.getCode());
+		assertThat(afterDelete.isDeleted()).isTrue();
+		assertThat(afterDelete.getDeletedDate()).isNotNull();
 	}
 
 	@Test
@@ -459,6 +527,19 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testMgrNewUserForcesPasswordChangeAtFirstLogin() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		user.setPasswdMustChange(false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		User newUser = userBrowsingManager.newUser(user);
+		User foundUser = userIoOperationRepository.findById(newUser.getUserName()).orElse(null);
+		assertThat(foundUser).isNotNull();
+		// OP-896: the initial password is assigned by an administrator, so the new user must change it at first login
+		assertThat(foundUser.isPasswdMustChange()).isTrue();
+	}
+
+	@Test
 	void testMgrNewUserAlreadyExists() throws Exception {
 		assertThatThrownBy(() ->
 		{
@@ -490,9 +571,107 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundUser).isNotNull();
 		foundUser.setPasswd("Update");
 		assertThat(userBrowsingManager.updatePassword(foundUser).getUserName()).isEqualTo(foundUser.getUserName());
+		// the password update is a bulk JPQL statement: clear the context so the re-read reflects the DB
+		entityManager.clear();
 		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
 		assertThat(updatedUser).isNotNull();
 		assertThat(updatedUser.getPasswd()).isEqualTo("Update");
+		// OP-896: changing the password resets the lease clock and clears the must-change flag by default
+		assertThat(updatedUser.getPasswdLastChanged()).isNotNull();
+		assertThat(updatedUser.isPasswdMustChange()).isFalse();
+	}
+
+	@Test
+	void testMgrUpdatePasswordForcingChange() throws Exception {
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(foundUser).isNotNull();
+		// e.g. an administrator setting another user's password: force a change at next login
+		foundUser.setPasswd("Reset");
+		foundUser.setPasswdMustChange(true);
+		userBrowsingManager.updatePassword(foundUser);
+		entityManager.clear();
+		User updatedUser = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(updatedUser).isNotNull();
+		assertThat(updatedUser.getPasswdLastChanged()).isNotNull();
+		assertThat(updatedUser.isPasswdMustChange()).isTrue();
+	}
+
+	@Test
+	void testMgrIsPasswordExpired() throws Exception {
+		String userName = setupTestUser(false);
+		User user = userIoOperationRepository.findById(userName).orElse(null);
+		assertThat(user).isNotNull();
+
+		int previousLease = GeneralData.PASSWORDLEASE;
+		try {
+			// lease disabled: never expired
+			GeneralData.PASSWORDLEASE = 0;
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(100));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// lease enabled but unknown last-changed date: not expired
+			GeneralData.PASSWORDLEASE = 30;
+			user.setPasswdLastChanged(null);
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// password changed within the lease window: not expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(10));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// password changed just inside the lease window (29 of 30 days): not expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(29));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isFalse();
+
+			// password older than the lease: expired
+			user.setPasswdLastChanged(TimeTools.getNow().minusDays(31));
+			assertThat(userBrowsingManager.isPasswordExpired(user)).isTrue();
+		} finally {
+			GeneralData.PASSWORDLEASE = previousLease;
+		}
+	}
+
+	@Test
+	void testMgrGetPasswordLeaseDays() {
+		int previousLease = GeneralData.PASSWORDLEASE;
+		try {
+			// lease policy disabled
+			GeneralData.PASSWORDLEASE = 0;
+			assertThat(userBrowsingManager.getPasswordLeaseDays()).isZero();
+
+			// lease policy active
+			GeneralData.PASSWORDLEASE = 30;
+			assertThat(userBrowsingManager.getPasswordLeaseDays()).isEqualTo(30);
+		} finally {
+			GeneralData.PASSWORDLEASE = previousLease;
+		}
+	}
+
+	@Test
+	void testMgrIsPasswordValid() {
+		boolean previousStrong = GeneralData.STRONGPASSWORD;
+		int previousLength = GeneralData.STRONGLENGTH;
+		try {
+			GeneralData.STRONGPASSWORD = true;
+			GeneralData.STRONGLENGTH = 6;
+			assertThat(userBrowsingManager.isPasswordValid(null)).isFalse();
+			assertThat(userBrowsingManager.isPasswordValid("ab")).isFalse(); // too short
+			assertThat(userBrowsingManager.isPasswordValid("abcdef")).isFalse(); // long enough but not strong
+			assertThat(userBrowsingManager.isPasswordValid("Admin.123")).isTrue(); // strong and long enough
+
+			// length check disabled (0): only the strength policy applies
+			GeneralData.STRONGLENGTH = 0;
+			assertThat(userBrowsingManager.isPasswordValid("A.1")).isTrue();
+
+			// strength policy disabled: any non-null password is accepted
+			GeneralData.STRONGPASSWORD = false;
+			GeneralData.STRONGLENGTH = 6;
+			assertThat(userBrowsingManager.isPasswordValid("ab")).isFalse(); // still too short
+			assertThat(userBrowsingManager.isPasswordValid("abcdef")).isTrue();
+		} finally {
+			GeneralData.STRONGPASSWORD = previousStrong;
+			GeneralData.STRONGLENGTH = previousLength;
+		}
 	}
 
 	@Test

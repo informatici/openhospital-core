@@ -30,13 +30,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.menu.model.UserGroup;
 import org.isf.utils.db.Auditable;
 
 @Entity
-@Table(name = "OH_GROUPPERMISSION")
+@Table(name = "OH_GROUPPERMISSION", uniqueConstraints = @UniqueConstraint(name = "UX_GP_GROUP_PERM", columnNames = { "GP_UG_ID_A", "GP_P_ID_A" }))
 @AttributeOverride(name = "createdBy", column = @Column(name = "GP_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "GP_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "GP_LAST_MODIFIED_BY"))

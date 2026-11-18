@@ -55,10 +55,10 @@ BEGIN
         SET v_ms_id = NULL;
         SET v_balance = NULL;
         
-        SELECT MAX(MS_ID)
+        SELECT MAX(MS_ID) INTO v_ms_id
 			FROM OH_MEDICALDSRSTOCK
             WHERE MS_MDSR_ID = v_mdsr_id
-            AND MS_DATE_BALANCE < v_date INTO v_ms_id;
+            AND MS_DATE_BALANCE < v_date;
             
             
 		IF v_qty <> 0 THEN
@@ -67,7 +67,7 @@ BEGIN
 					MS_DATE_NEXT_MOV = v_date,
 					MS_DAYS = DATEDIFF(v_date, MS_DATE_BALANCE)
 					WHERE MS_ID = v_ms_id;
-				SELECT MS_BALANCE FROM OH_MEDICALDSRSTOCK WHERE MS_ID = v_ms_id INTO v_balance;
+				SELECT MS_BALANCE INTO v_balance FROM OH_MEDICALDSRSTOCK WHERE MS_ID = v_ms_id;
 				SET v_balance = v_balance + v_qty;
                 INSERT INTO OH_MEDICALDSRSTOCK VALUES (0, v_mdsr_id, v_date, v_balance, NULL, NULL, 'admin', NULL, 'admin', NULL, 1);
 			ELSE 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,6 +22,10 @@
 package org.isf.utils.log;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.io.File;
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +35,25 @@ class TestLogUtil {
 	void testGetLogFileAbsolutePath() {
 		// depending on the testing setup the value is either null or the value in the properties file
 		assertThat(LogUtil.getLogFileAbsolutePath()).isIn(null, "logs/openhospital.log");
+	}
+
+	@Test
+	void testLogFileFolderReportsAnUnknownPathInsteadOfFailing() {
+		// getLogFileAbsolutePath() returns null whenever no file appender is configured
+		assertThatThrownBy(() -> LogUtil.logFileFolder(null))
+						.isInstanceOf(IOException.class)
+						.hasMessageContaining("no log file");
+	}
+
+	@Test
+	void testLogFileFolderResolvesABareFileNameAgainstTheWorkingDirectory() throws IOException {
+		assertThat(LogUtil.logFileFolder("openhospital.log"))
+						.isEqualTo(new File(System.getProperty("user.dir")));
+	}
+
+	@Test
+	void testLogFileFolderKeepsTheFolderOfAPathThatHasOne() throws IOException {
+		assertThat(LogUtil.logFileFolder("logs/openhospital.log"))
+						.isEqualTo(new File(System.getProperty("user.dir"), "logs"));
 	}
 }

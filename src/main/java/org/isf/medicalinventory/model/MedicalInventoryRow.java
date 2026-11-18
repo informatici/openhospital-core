@@ -57,10 +57,10 @@ public class MedicalInventoryRow extends Auditable<String> {
 	private Integer id;
 
 	@Column(name = "MINVTR_THEORETIC_QTY")
-	private double theoreticQty;
+	private BigDecimal theoreticQty = BigDecimal.ZERO;
 
 	@Column(name = "MINVTR_REAL_QTY")
-	private double realQty;
+	private BigDecimal realQty = BigDecimal.ZERO;
 
 	@NotNull
 	@ManyToOne
@@ -88,7 +88,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 	public MedicalInventoryRow() {
 	}
 
-	public MedicalInventoryRow(Integer id, double theoreticQty, double realQty, MedicalInventory inventory, Medical medical, Lot lot) {
+	public MedicalInventoryRow(Integer id, BigDecimal theoreticQty, BigDecimal realQty, MedicalInventory inventory, Medical medical, Lot lot) {
 		this.id = id;
 		this.theoreticQty = theoreticQty;
 		this.realQty = realQty;
@@ -105,19 +105,19 @@ public class MedicalInventoryRow extends Auditable<String> {
 		this.id = id;
 	}
 
-	public double getTheoreticQty() {
+	public BigDecimal getTheoreticQty() {
 		return theoreticQty;
 	}
 
-	public void setTheoreticQty(double theoreticQty) {
+	public void setTheoreticQty(BigDecimal theoreticQty) {
 		this.theoreticQty = theoreticQty;
 	}
 
-	public double getRealQty() {
+	public BigDecimal getRealQty() {
 		return realQty;
 	}
 
-	public void setRealqty(double realQty) {
+	public void setRealqty(BigDecimal realQty) {
 		this.realQty = realQty;
 	}
 
@@ -145,7 +145,7 @@ public class MedicalInventoryRow extends Auditable<String> {
 		this.lot = lot;
 	}
 
-	public void setRealQty(double realQty) {
+	public void setRealQty(BigDecimal realQty) {
 		this.realQty = realQty;
 	}
 

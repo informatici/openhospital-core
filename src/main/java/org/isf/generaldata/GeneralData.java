@@ -89,6 +89,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static int PASSWORDTRIES;
 	public static int PASSWORDLOCKTIME;
 	public static int PASSWORDIDLE;
+	public static int PASSWORDLEASE;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -144,6 +145,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final int DEFAULT_PASSWORDTRIES = 5;
 	private static final int DEFAULT_PASSWORDLOCKTIME = 60; // minutes
 	private static final int DEFAULT_PASSWORDIDLE = 365; // days
+	private static final int DEFAULT_PASSWORDLEASE = 0; // days; 0 = disabled
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
@@ -229,6 +231,11 @@ public final class GeneralData extends ConfigurationProperties {
 		// Zero indicates no idle check
 		if (PASSWORDIDLE < 0) {
 			PASSWORDIDLE = 0;
+		}
+		PASSWORDLEASE = myGetProperty("PASSWORDLEASE", DEFAULT_PASSWORDLEASE);
+		// number of days a password is valid; zero (or negative) disables the password lease
+		if (PASSWORDLEASE < 0) {
+			PASSWORDLEASE = 0;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);

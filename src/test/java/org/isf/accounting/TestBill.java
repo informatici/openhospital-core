@@ -24,6 +24,7 @@ package org.isf.accounting;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -42,8 +43,8 @@ public class TestBill {
 	private static boolean isPatient = true;
 	private static String patName = "TestPatName";
 	private static String status = "O";
-	private static Double amount = 10.10;
-	private static Double balance = 20.20;
+	private static BigDecimal amount = new BigDecimal("10.10");
+	private static BigDecimal balance = new BigDecimal("20.20");
 	private static String user = "TestUser";
 
 	public Bill setup(PriceList priceList, Patient patient, Admission admission, boolean usingSet) throws OHException {
@@ -84,8 +85,8 @@ public class TestBill {
 		assertThat(bill.isPatient()).isEqualTo(isPatient);
 		assertThat(bill.getPatName()).isEqualTo(patName);
 		assertThat(bill.getStatus()).isEqualTo(status);
-		assertThat(bill.getAmount()).isEqualTo(amount);
-		assertThat(bill.getBalance()).isEqualTo(balance);
+		assertThat(bill.getAmount()).isEqualByComparingTo(amount);
+		assertThat(bill.getBalance()).isEqualByComparingTo(balance);
 		assertThat(bill.getUser()).isEqualTo(user);
 	}
 }

@@ -22,7 +22,8 @@
 package org.isf.medicalstockward;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
+
+import java.math.BigDecimal;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -32,8 +33,8 @@ import org.isf.ward.model.Ward;
 
 public class TestMedicalWard {
 
-	private float in_quantity = 100.100f;
-	private float out_quantity = 30.30f;
+	private int in_quantity = 100;
+	private BigDecimal out_quantity = new BigDecimal("30.30");
 
 	public MedicalWard setup(Medical medical, Ward ward, Lot lot, boolean usingSet) throws OHException {
 		MedicalWard medicalward;
@@ -58,7 +59,7 @@ public class TestMedicalWard {
 	}
 
 	public void check(MedicalWard medicalward) {
-		assertThat(medicalward.getIn_quantity()).isCloseTo(in_quantity, within(0.1F));
-		assertThat(medicalward.getOut_quantity()).isCloseTo(out_quantity, within(0.1F));
+		assertThat(medicalward.getIn_quantity()).isEqualTo(in_quantity);
+		assertThat(medicalward.getOut_quantity()).isEqualByComparingTo(out_quantity);
 	}
 }

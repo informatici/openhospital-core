@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -273,10 +273,16 @@ public class TimeTools {
 	}
 
 	public static LocalDateTime getBeginningOfDay(LocalDateTime date) {
+		if (date == null) {
+			return null;
+		}
 		return date.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	public static LocalDateTime getBeginningOfNextDay(LocalDateTime date) {
+		if (date == null) {
+			return null;
+		}
 		return date.plusDays(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 

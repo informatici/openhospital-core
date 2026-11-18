@@ -21,6 +21,7 @@
  */
 package org.isf.medicalstock.manager;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,8 +32,10 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.model.MovementLog;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.medicalstock.service.MovementLogIoOperationRepository;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
@@ -60,15 +63,18 @@ public class MovBrowserManager {
 
 	private final MedicalInventoryRowIoOperation medicalInventoryRowIoOperation;
 
+	private final MovementLogIoOperationRepository movementLogRepository;
+
 	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
 		MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager,
-		MedicalInventoryRowIoOperation medicalInventoryRowIoOperation) {
+		MedicalInventoryRowIoOperation medicalInventoryRowIoOperation, MovementLogIoOperationRepository movementLogRepository) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
 		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
 		this.movWardBrowserManager = movWardBrowserManager;
 		this.medicalInventoryRowIoOperation = medicalInventoryRowIoOperation;
+		this.movementLogRepository = movementLogRepository;
 	}
 
 	/**
@@ -175,7 +181,7 @@ public class MovBrowserManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
+	public void deleteLastMovement(Movement lastMovement, String reason) throws OHServiceException {
 
 		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
 		Lot lot = lastMovement.getLot();
@@ -183,6 +189,9 @@ public class MovBrowserManager {
 		int medicalCode = medical.getCode();
 		int quantity = lastMovement.getQuantity();
 		LocalDateTime date = lastMovement.getDate();
+
+		// OP-1388: keep an audit record of the deletion (with the optional reason) before removing the movement
+		movementLogRepository.save(new MovementLog(lastMovement, reason));
 
 		if (movType.getType().contains("+")) {
 			medical.setInqty(medical.getInqty() - quantity);
@@ -212,7 +221,7 @@ public class MovBrowserManager {
 			}
 			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardMedicalAndLot(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
-			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity().compareTo(BigDecimal.ZERO) == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);
 			} else {
 				movWardBrowserManager.updateMedicalWard(medWard);

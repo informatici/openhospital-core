@@ -32,11 +32,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import org.isf.utils.db.Auditable;
 
 @Entity
-@Table(name = "OH_PERMISSIONS")
+@Table(name = "OH_PERMISSIONS", uniqueConstraints = @UniqueConstraint(name = "UX_PERMISSIONS_NAME", columnNames = "P_NAME"))
 @AttributeOverride(name = "createdBy", column = @Column(name = "P_CREATED_BY", updatable = false))
 @AttributeOverride(name = "createdDate", column = @Column(name = "P_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "P_LAST_MODIFIED_BY"))
@@ -49,7 +50,7 @@ public class Permission extends Auditable<String> {
 	@Column(name = "P_ID_A")
 	private int id;
 
-	@Column(name = "P_NAME")
+	@Column(name = "P_NAME", nullable = false, length = 50)
 	private String name;
 
 	@Column(name = "P_DESCRIPTION")
