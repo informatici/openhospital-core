@@ -259,8 +259,8 @@ public class OpdIoOperations {
 					int page,
 					int size) throws OHServiceException {
 		Pageable pageRequest = PageRequest.of(page, size);
-		Page<Opd> pagedResult = repository.findAllOpdWhereParamsPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user,
-						pageRequest);
+		Page<Opd> pagedResult = repository.findAllOpdWhereParamsPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient,
+						user, pageRequest);
 		return setPaginationData(pagedResult);
 	}
 
