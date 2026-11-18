@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -49,6 +51,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
@@ -147,6 +150,57 @@ class Tests extends OHCoreTestCase {
 				foundOpd.getNewPatient(),
 				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
+	}
+
+	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
+	@MethodSource("opdExtended")
+	void testIoGetOpdListPageable(boolean opdExtended) throws Exception {
+		GeneralData.OPDEXTENDED = opdExtended;
+		// the OPDs share patient, disease, ward and visit, so only the date filter and the order tell them apart
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("199");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+
+		// not saved in date order, so the code alone does not give the expected order; the progressive number restarts with the new year,
+		// two visits share the same date and the last one is before the filter
+		LocalDate dateFrom = LocalDate.of(2019, 12, 31);
+		LocalDate dateTo = LocalDate.of(2020, 1, 1);
+		List<LocalDateTime> dates = List.of(dateTo.atTime(8, 0), dateFrom.atTime(8, 0), dateTo.atTime(8, 0), dateFrom.minusDays(1).atTime(8, 0));
+		List<Integer> progYears = List.of(1, 2, 2, 1);
+		List<Integer> codes = new ArrayList<>();
+		for (int i = 0; i < 4; i++) {
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			opd.setDate(dates.get(i));
+			opd.setProgYear(progYears.get(i));
+			codes.add(opdIoOperationRepository.saveAndFlush(opd).getCode());
+		}
+
+		PagedResponse<Opd> page0 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 0, 2);
+		PagedResponse<Opd> page1 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 1, 2);
+
+		assertThat(page0.getData()).hasSize(2);
+		assertThat(page1.getData()).hasSize(1);
+		assertThat(page0.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
+		assertThat(page0.getPageInfo().getTotalPages()).isEqualTo(2);
+
+		// every matching row once across the pages: newest first, and the highest code first for the two with the same date
+		List<Integer> pagedCodes = new ArrayList<>();
+		page0.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
+		page1.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
+		assertThat(pagedCodes).containsExactly(codes.get(2), codes.get(0), codes.get(1));
+
+		// a page past the end used to throw: it is empty and the total stays correct
+		PagedResponse<Opd> beyond = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 5, 2);
+		assertThat(beyond.getData()).isEmpty();
+		assertThat(beyond.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
