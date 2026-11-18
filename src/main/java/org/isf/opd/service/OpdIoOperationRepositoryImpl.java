@@ -103,8 +103,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		query.select(opd);
 		List<Predicate> predicates = buildOpdPredicates(cb, opd, ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 		query.where(cb.and(predicates.toArray(new Predicate[0])));
-		// a total order is required so DB-level LIMIT/OFFSET paging does not drop or duplicate rows across pages
-		query.orderBy(cb.asc(opd.get("prog_year")), cb.asc(opd.get("code")));
+		// newest first; the code is unique, so the order is total and LIMIT/OFFSET paging does not drop or duplicate rows across pages
+		query.orderBy(cb.desc(opd.get("date")), cb.desc(opd.get("code")));
 		TypedQuery<Opd> typedQuery = entityManager.createQuery(query);
 		typedQuery.setFirstResult((int) pageable.getOffset());
 		typedQuery.setMaxResults(pageable.getPageSize());

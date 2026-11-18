@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -155,7 +156,7 @@ class Tests extends OHCoreTestCase {
 	@MethodSource("opdExtended")
 	void testIoGetOpdListPageable(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
-		// three OPDs that all match a broad (date-only) filter, sharing the same patient/disease/ward/visit
+		// the OPDs share patient, disease, ward and visit, so only the date filter and the order tell them apart
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
@@ -168,30 +169,36 @@ class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 
-		LocalDate day = LocalDate.of(2020, 1, 15);
+		// not saved in date order, so the code alone does not give the expected order; the progressive number restarts with the new year,
+		// two visits share the same date and the last one is before the filter
+		LocalDate dateFrom = LocalDate.of(2019, 12, 31);
+		LocalDate dateTo = LocalDate.of(2020, 1, 1);
+		List<LocalDateTime> dates = List.of(dateTo.atTime(8, 0), dateFrom.atTime(8, 0), dateTo.atTime(8, 0), dateFrom.minusDays(1).atTime(8, 0));
+		List<Integer> progYears = List.of(1, 2, 2, 1);
 		List<Integer> codes = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-			opd.setDate(day.atTime(8 + i, 0));
+			opd.setDate(dates.get(i));
+			opd.setProgYear(progYears.get(i));
 			codes.add(opdIoOperationRepository.saveAndFlush(opd).getCode());
 		}
 
-		PagedResponse<Opd> page0 = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 0, 2);
-		PagedResponse<Opd> page1 = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 1, 2);
+		PagedResponse<Opd> page0 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 0, 2);
+		PagedResponse<Opd> page1 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 1, 2);
 
 		assertThat(page0.getData()).hasSize(2);
 		assertThat(page1.getData()).hasSize(1);
 		assertThat(page0.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
 		assertThat(page0.getPageInfo().getTotalPages()).isEqualTo(2);
 
-		// the two pages together must cover every row exactly once (this is what the ORDER BY guarantees)
+		// every matching row once across the pages: newest first, and the highest code first for the two with the same date
 		List<Integer> pagedCodes = new ArrayList<>();
 		page0.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
 		page1.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
-		assertThat(pagedCodes).containsExactlyInAnyOrderElementsOf(codes);
+		assertThat(pagedCodes).containsExactly(codes.get(2), codes.get(0), codes.get(1));
 
-		// a page past the end is empty but the total stays correct
-		PagedResponse<Opd> beyond = opdIoOperation.getOpdListPageable(null, "", "", day, day, 0, 0, 'A', 'A', null, 5, 2);
+		// a page past the end used to throw: it is empty and the total stays correct
+		PagedResponse<Opd> beyond = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 5, 2);
 		assertThat(beyond.getData()).isEmpty();
 		assertThat(beyond.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
 	}
