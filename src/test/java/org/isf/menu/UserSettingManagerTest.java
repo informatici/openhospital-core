@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestUserSettingManager extends OHCoreTestCase {
+class UserSettingManagerTest extends OHCoreTestCase {
 
 	private static TestUserSetting testUserSetting;
 
@@ -56,7 +56,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGet() throws Exception {
+	void getUserSettingByUserName_shouldReturnSavedUserSetting() throws Exception {
 		String name = setupTestUserSetting(false);
 		List<UserSetting> userSettings = userSettingManager.getUserSettingByUserName(name);
 		assertThat(userSettings).isNotNull();
@@ -65,7 +65,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSet() throws Exception {
+	void getUserSettingByUserName_shouldReturnSavedUserSetting_whenCreatedWithSetters() throws Exception {
 		String name = setupTestUserSetting(true);
 		List<UserSetting> userSettings = userSettingManager.getUserSettingByUserName(name);
 		assertThat(userSettings).isNotNull();
@@ -74,7 +74,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testNewUserSetting() throws Exception {
+	void newUserSetting_shouldReturnSavedUserSetting() throws Exception {
 		UserSetting userSetting = new UserSetting();
 		userSetting.setUser(testUserSetting.user);
 		userSetting.setConfigName(testUserSetting.configName);
@@ -84,7 +84,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUpdateUserSetting() throws Exception {
+	void updateUserSetting_shouldSaveNewConfigValue() throws Exception {
 		String name = setupTestUserSetting(true);
 		List<UserSetting> userSettings = userSettingManager.getUserSettingByUserName(name);
 		assertThat(userSettings).isNotNull();
@@ -96,7 +96,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetSettingByUserNameAndConfigName() throws Exception {
+	void getUserSettingByUserNameConfigName_shouldReturnSavedUserSetting() throws Exception {
 		String name = setupTestUserSetting(true);
 		UserSetting userSetting = userSettingManager.getUserSettingByUserNameConfigName(testUserSetting.user, testUserSetting.configName);
 		assertThat(userSetting).isNotNull();
@@ -105,7 +105,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetSettingById() throws Exception {
+	void getUserSettingById_shouldReturnSavedUserSetting() throws Exception {
 		String name = setupTestUserSetting(true);
 		UserSetting userSetting = userSettingManager.getUserSettingByUserNameConfigName(testUserSetting.user, testUserSetting.configName);
 		assertThat(userSetting).isNotNull();
@@ -115,7 +115,7 @@ class TestUserSettingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDeleteUserSetting() throws Exception {
+	void deleteUserSetting_shouldRemoveUserSetting() throws Exception {
 		String name = setupTestUserSetting(true);
 		UserSetting userSetting = userSettingManager.getUserSettingByUserNameConfigName(testUserSetting.user, testUserSetting.configName);
 		assertThat(userSetting).isNotNull();
