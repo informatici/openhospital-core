@@ -19,15 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.opd;
+package org.isf.opd.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -40,18 +38,16 @@ import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
-import org.isf.opd.manager.OpdBrowserManager;
+import org.isf.opd.TestOpd;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
-import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
@@ -65,9 +61,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 
-class Tests extends OHCoreTestCase {
+class OpdBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestOpd testOpd;
 	private static TestPatient testPatient;
@@ -92,8 +87,6 @@ class Tests extends OHCoreTestCase {
 	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
 	@Autowired
 	DiseaseIoOperationRepository diseaseIoOperationRepository;
-	@Autowired
-	ApplicationEventPublisher applicationEventPublisher;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -117,401 +110,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testOpdGets(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		checkOpdIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testOpdSets(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(true);
-		checkOpdIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdList(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		List<Opd> opds = opdIoOperation.getOpdList(
-				foundOpd.getWard(),
-				foundOpd.getDisease().getType().getCode(),
-				foundOpd.getDisease().getCode(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getAge() - 1,
-				foundOpd.getAge() + 1,
-				foundOpd.getSex(),
-				foundOpd.getNewPatient(),
-				foundOpd.getUserID());
-		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdListPageable(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		// the OPDs share patient, disease, ward and visit, so only the date filter and the order tell them apart
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("199");
-		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, false, ward);
-		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
-		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-
-		// not saved in date order, so the code alone does not give the expected order; the progressive number restarts with the new year,
-		// two visits share the same date and the last one is before the filter
-		LocalDate dateFrom = LocalDate.of(2019, 12, 31);
-		LocalDate dateTo = LocalDate.of(2020, 1, 1);
-		List<LocalDateTime> dates = List.of(dateTo.atTime(8, 0), dateFrom.atTime(8, 0), dateTo.atTime(8, 0), dateFrom.minusDays(1).atTime(8, 0));
-		List<Integer> progYears = List.of(1, 2, 2, 1);
-		List<Integer> codes = new ArrayList<>();
-		for (int i = 0; i < 4; i++) {
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-			opd.setDate(dates.get(i));
-			opd.setProgYear(progYears.get(i));
-			codes.add(opdIoOperationRepository.saveAndFlush(opd).getCode());
-		}
-
-		PagedResponse<Opd> page0 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 0, 2);
-		PagedResponse<Opd> page1 = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 1, 2);
-
-		assertThat(page0.getData()).hasSize(2);
-		assertThat(page1.getData()).hasSize(1);
-		assertThat(page0.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
-		assertThat(page0.getPageInfo().getTotalPages()).isEqualTo(2);
-
-		// every matching row once across the pages: newest first, and the highest code first for the two with the same date
-		List<Integer> pagedCodes = new ArrayList<>();
-		page0.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
-		page1.getData().forEach(opd -> pagedCodes.add(opd.getCode()));
-		assertThat(pagedCodes).containsExactly(codes.get(2), codes.get(0), codes.get(1));
-
-		// a page past the end used to throw: it is empty and the total stays correct
-		PagedResponse<Opd> beyond = opdIoOperation.getOpdListPageable(null, "", "", dateFrom, dateTo, 0, 0, 'A', 'A', null, 5, 2);
-		assertThat(beyond.getData()).isEmpty();
-		assertThat(beyond.getPageInfo().getTotalNbOfElements()).isEqualTo(3);
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdListPatientId(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		List<Opd> opds = opdIoOperation.getOpdList(foundOpd.getPatient().getCode());
-		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdListPatientIdZero(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-
-		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldiseases.txt");
-		disease.getType().setCode("angal.common.alltypes.txt");
-		
-		Ward ward = testWard.setup(false);
-		
-		Visit nextVisit = testVisit.setup(patient, true, ward);
-
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
-		LocalDate now = LocalDate.now();
-		opd.setDate(now.atStartOfDay());
-
-		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
-		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
-		opdIoOperationRepository.saveAndFlush(opd);
-
-		List<Opd> opds = opdIoOperation.getOpdList(0);
-		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdListToday(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-
-		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldiseases.txt");
-		disease.getType().setCode("angal.common.alltypes.txt");
-
-		Ward ward = testWard.setup(false);
-		
-		Visit nextVisit = testVisit.setup(patient, true, ward);
-
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
-		// set date to be today
-		LocalDate today = LocalDate.now();
-		opd.setDate(today.atStartOfDay());
-
-		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
-		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
-		opdIoOperationRepository.saveAndFlush(opd);
-		Patient patient2 = testPatient.setup(false);
-		DiseaseType diseaseType2 = testDiseaseType.setup(false);
-
-		Disease disease2 = testDisease.setup(diseaseType2, false);
-		disease2.setCode("299");
-		
-		Ward ward2 = testWard.setup(false);
-		ward2.setCode("ZZ");
-		
-		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
-
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
-		// set date to be 14 days ago (not within the TODAY test)
-		opd2.setDate(today.minusDays(14).atStartOfDay());
-
-		patientIoOperationRepository.saveAndFlush(patient2);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
-		diseaseIoOperationRepository.saveAndFlush(disease2);
-		wardIoOperationRepository.saveAndFlush(ward2);
-		visitsIoOperationRepository.saveAndFlush(nextVisit2);
-		opdIoOperationRepository.saveAndFlush(opd2);
-
-		List<Opd> opds = opdIoOperation.getOpdList(false);
-		assertThat(opds).hasSize(1);
-		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetOpdListLastWeek(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-
-		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldiseases.txt");
-		disease.getType().setCode("angal.common.alltypes.txt");
-
-		Ward ward = testWard.setup(false);
-		
-		Visit nextVisit = testVisit.setup(patient, true, ward);
-
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
-		LocalDate date = LocalDate.now();
-		// set date to be 3 days ago (within last week)
-		date = date.minusDays(3);
-		opd.setDate(date.atStartOfDay());
-
-		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
-		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
-		opdIoOperationRepository.saveAndFlush(opd);
-
-		Patient patient2 = testPatient.setup(false);
-		DiseaseType diseaseType2 = testDiseaseType.setup(false);
-
-		Disease disease2 = testDisease.setup(diseaseType2, false);
-		disease2.setCode("499");
-
-		Ward ward2 = testWard.setup(false);
-		ward2.setCode("ZZ");
-		
-		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
-
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
-		LocalDate date2 = LocalDate.now();
-		// set date to be 13 days aga (not within last week)
-		date2 = date2.minusDays(13);
-		opd2.setDate(date2.atStartOfDay());
-
-		patientIoOperationRepository.saveAndFlush(patient2);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
-		diseaseIoOperationRepository.saveAndFlush(disease2);
-		wardIoOperationRepository.saveAndFlush(ward2);
-		visitsIoOperationRepository.saveAndFlush(nextVisit2);
-		opdIoOperationRepository.saveAndFlush(opd2);
-
-		List<Opd> opds = opdIoOperation.getOpdList(true);
-		assertThat(opds).hasSize(1);
-		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoNewOpd(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("699");
-		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, true, ward);
-		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
-		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-		Opd newOpd = opdIoOperation.newOpd(opd);
-		checkOpdIntoDb(newOpd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoUpdateOpd(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		/*foundOpd.setReason("update reason");
-		foundOpd.setAnamnesis("update anamnesis");
-		foundOpd.setTherapies("update therapie");
-		foundOpd.setAllergies("update allergies");
-		foundOpd.setPrescription("update presciption");*/
-		Opd updatedOpd = opdIoOperation.updateOpd(foundOpd);
-		/*assertThat(updatedOpd.getReason()).isEqualTo("update reason");
-		assertThat(updatedOpd.getAnamnesis()).isEqualTo("update anamnesis");
-		assertThat(updatedOpd.getTherapies()).isEqualTo("update therapies");
-		assertThat(updatedOpd.getAllergies()).isEqualTo("update allergies");
-		assertThat(updatedOpd.getPrescription()).isEqualTo("update prescription");*/
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoDeleteOpd(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		opdIoOperation.deleteOpd(foundOpd);
-		assertThat(opdIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetProgYearZero(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		int progYear = opdIoOperation.getProgYear(0);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetProgYear(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(opd).isNotNull();
-		int progYear = opdIoOperation.getProgYear(opd.getDate().getYear());
-		assertThat(progYear).isEqualTo(opd.getProgYear());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		// given:
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-
-		// when:
-		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getDate().getYear());
-
-		// then:
-		assertThat(result).isTrue();
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		// given:
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-
-		// when:
-		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
-
-		// then:
-		assertThat(result).isTrue();
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		// given:
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-
-		// when:
-		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
-
-		// then:
-		assertThat(result).isFalse();
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testIoGetLastOpd(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
-		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		// given:
-		int id = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundOpd).isNotNull();
-		Patient mergedPatient = setupTestPatient(false);
-
-		// when:
-		applicationEventPublisher.publishEvent(new PatientMergedEvent(foundOpd.getPatient(), mergedPatient));
-
-		// then:
-		Opd result = opdIoOperationRepository.findById(id).orElse(null);
-		assertThat(result).isNotNull();
-		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testMgrGetOpd(boolean opdExtended) throws Exception {
+	void getOpd_shouldReturnOpd_whenAllFiltersMatch(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 
 		int code = setupTestOpd(false);
@@ -533,7 +132,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetOpdListPatientId(boolean opdExtended) throws Exception {
+	void getOpdList_shouldReturnPatientOpds_whenPatientCodeIsGiven(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
@@ -544,7 +143,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetOpdListPatientIdZero(boolean opdExtended) throws Exception {
+	void getOpdList_shouldReturnAllOpds_whenPatientCodeIsZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -575,7 +174,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetOpdToday(boolean opdExtended) throws Exception {
+	void getOpd_shouldReturnOnlyTodayOpds_whenOneWeekIsFalse(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 
 		Patient patient = testPatient.setup(false);
@@ -634,7 +233,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetOpdLastWeek(boolean opdExtended) throws Exception {
+	void getOpd_shouldReturnOnlyLastWeekOpds_whenOneWeekIsTrue(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -692,7 +291,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrNewOpd(boolean opdExtended) throws Exception {
+	void newOpd_shouldSaveOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		Disease disease = diseaseIoOperationRepository.findOneByCode("1");
@@ -714,7 +313,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrUpdateOpd(boolean opdExtended) throws Exception {
+	void updateOpd_shouldSaveNewNote(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		Disease disease = diseaseIoOperationRepository.findOneByCode("1");
@@ -743,7 +342,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrDeleteOpd(boolean opdExtended) throws Exception {
+	void deleteOpd_shouldRemoveOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
@@ -754,7 +353,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetProgYearZero(boolean opdExtended) throws Exception {
+	void getProgYear_shouldReturnMaxProgYear_whenYearIsZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		int progYear = opdBrowserManager.getProgYear(0);
@@ -765,7 +364,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetProgYear(boolean opdExtended) throws Exception {
+	void getProgYear_shouldReturnMaxProgYearOfThatYear_whenYearIsGiven(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 
 		int code = setupTestOpd(false);
@@ -777,7 +376,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists(boolean opdExtended) throws Exception {
+	void isExistOpdNum_shouldReturnTrue_whenOpdNumExistsInVisitYear(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
@@ -787,7 +386,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided(boolean opdExtended) throws Exception {
+	void isExistOpdNum_shouldReturnTrue_whenOpdNumExistsAndVisitYearIsZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
@@ -797,7 +396,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect(boolean opdExtended) throws Exception {
+	void isExistOpdNum_shouldReturnFalse_whenOpdNumExistsInAnotherYear(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
@@ -807,7 +406,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrGetLastOpd(boolean opdExtended) throws Exception {
+	void getLastOpd_shouldReturnLastOpdOfPatient(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
@@ -818,7 +417,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationVisitDateNull(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenVisitDateIsNull(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -848,7 +447,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationOPDEXTENDEDPatientNull(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenPatientIsNullAndOpdExtendedIsTrue(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		if (!GeneralData.OPDEXTENDED) {
 			return;
@@ -878,7 +477,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationAgeIsLessThanZero(boolean opdExtended) throws Exception {
+	void updateOpd_shouldThrow_whenAgeIsNegative(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -905,7 +504,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationSexIsEmpty(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenSexIsBlank(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -933,7 +532,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationDiseaseIsEmpty(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenDiseaseIsNull(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -959,7 +558,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationDiseaseIsEqualToDisease2(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenDiseaseIsEqualToDisease2(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -985,7 +584,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationDiseaseIsEqualToDisease3(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenDiseaseIsEqualToDisease3(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1012,7 +611,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testMgrValidationDisease2IsEqualToDisease3(boolean opdExtended) throws Exception {
+	void newOpd_shouldThrow_whenDisease2IsEqualToDisease3(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1037,109 +636,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testOpdGetSet(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
-		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-
-		Disease disease2 = new Disease("3", "TestDescription 2", diseaseType);
-		opd.setDisease2(disease2);
-
-		Disease disease3 = new Disease("2", "TestDescription 3", diseaseType);
-		opd.setDisease3(disease3);
-
-		opd.getPatient().setFirstName("John");
-		opd.getPatient().setSecondName("Smith");
-		assertThat(opd.getFullName()).isEqualTo("John Smith");
-
-		assertThat(opd.getfirstName()).isEqualTo("John");
-		assertThat(opd.getsecondName()).isEqualTo("Smith");
-
-		opd.getPatient().setFirstName(null);
-		opd.getPatient().setSecondName(null);
-
-		assertThat(opd.getFullName()).isEqualTo("null null");
-		assertThat(opd.getfirstName()).isNull();
-		assertThat(opd.getsecondName()).isNull();
-
-		opd.getPatient().setNextKin("nextOfKin");
-		opd.getPatient().setCity("city");
-		opd.getPatient().setAddress("address");
-
-		assertThat(opd.getnextKin()).isEqualTo("nextOfKin");
-		assertThat(opd.getcity()).isEqualTo("city");
-		assertThat(opd.getaddress()).isEqualTo("address");
-
-		opd.getPatient().setNextKin(null);
-		opd.getPatient().setCity(null);
-		opd.getPatient().setAddress(null);
-
-		assertThat(opd.getnextKin()).isNull();
-		assertThat(opd.getcity()).isNull();
-		assertThat(opd.getaddress()).isNull();
-
-		opd.setPatient(null);
-
-		assertThat(opd.getFullName()).isEmpty();
-		assertThat(opd.getfirstName()).isEmpty();
-		assertThat(opd.getsecondName()).isEmpty();
-		assertThat(opd.getnextKin()).isEmpty();
-		assertThat(opd.getcity()).isEmpty();
-		assertThat(opd.getaddress()).isEmpty();
-
-		opd.setCode(32000);
-		assertThat(opd.getCode()).isEqualTo(32000);
-
-		assertThat(opd.getDisease2()).isEqualTo(disease2);
-		assertThat(opd.getDisease3()).isEqualTo(disease3);
-
-		opd.setLock(-1);
-		assertThat(opd.getLock()).isEqualTo(-1);
-		
-		opd.setNextVisit(null);
-		assertThat(opd.getNextVisit()).isNull();
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testOpdHashCode(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
-		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-		// compute
-		int hashCode = opd.hashCode();
-		assertThat(hashCode).isEqualTo(23 * 133 + opd.getCode());
-		// used computed value
-		assertThat(opd.hashCode()).isEqualTo(hashCode);
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testOpdEquals(boolean opdExtended) throws Exception {
-		GeneralData.OPDEXTENDED = opdExtended;
-		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
-		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-
-		assertThat(opd).isEqualTo(opd)
-				.isNotNull()
-				.isNotEqualTo("someString");
-	}
-
-	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesSingleDiseaseValid(boolean opdExtended) throws Exception {
+	void validateOpd_shouldNotThrow_whenSingleDiseaseIsEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1155,7 +652,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesTwoDiseasesValid(boolean opdExtended) throws Exception {
+	void validateOpd_shouldNotThrow_whenTwoDiseasesAreEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1173,7 +670,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesThreeDiseasesValid(boolean opdExtended) throws Exception {
+	void validateOpd_shouldNotThrow_whenThreeDiseasesAreEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1193,7 +690,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesSingleDiseaseException(boolean opdExtended) throws Exception {
+	void validateOpd_shouldThrow_whenSingleDiseaseIsNotEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1214,7 +711,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesTwoDiseasesException(boolean opdExtended) throws Exception {
+	void validateOpd_shouldThrowTwoErrors_whenTwoDiseasesAreNotEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1236,7 +733,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
-	void testValidateOpdDiseasesThreeDiseasesException(boolean opdExtended) throws Exception {
+	void validateOpd_shouldThrowThreeErrors_whenThreeDiseasesAreNotEnabledForOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1300,12 +797,6 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 	}
 
-	private Patient setupTestPatient(boolean usingSet) throws Exception {
-		Patient patient = testPatient.setup(usingSet);
-		patientIoOperationRepository.saveAndFlush(patient);
-		return patient;
-	}
-
 	private int setupTestOpd(boolean usingSet) throws Exception {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
@@ -1330,4 +821,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundOpd).isNotNull();
 		testOpd.check(foundOpd);
 	}
+
 }
