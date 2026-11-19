@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.menu;
+package org.isf.menu.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +28,8 @@ import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
-import org.isf.menu.manager.UserBrowsingManager;
+import org.isf.menu.TestUser;
+import org.isf.menu.TestUserGroup;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.service.UserGroupIoOperationRepository;
@@ -42,7 +43,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestUserBrowsingManager extends OHCoreTestCase {
+class UserBrowsingManagerPasswordPolicyTest extends OHCoreTestCase {
 
 	private static TestUser testUser;
 	private static TestUserGroup testUserGroup;
@@ -68,7 +69,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void isNotStrongPassword() {
+	void isPasswordStrong_shouldReturnFalse_whenPasswordIsNullOrLacksDigitOrSpecialCharacter() {
 		assertThat(userBrowsingManager.isPasswordStrong(null)).isFalse();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdefgh")).isFalse();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdefgh1")).isFalse();
@@ -76,7 +77,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void isStrongPassword() {
+	void isPasswordStrong_shouldReturnTrue_whenPasswordHasLetterDigitAndSpecialCharacter() {
 		assertThat(userBrowsingManager.isPasswordStrong("abcdef1@")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("abCdef1#")).isTrue();
 		assertThat(userBrowsingManager.isPasswordStrong("abcdef1$")).isTrue();
@@ -111,7 +112,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void passwordPolicyAccessorsReflectConfiguration() {
+	void isStrongPasswordEnabledAndGetPasswordMinLength_shouldReturnConfiguredValues() {
 		GeneralData.STRONGPASSWORD = true;
 		GeneralData.STRONGLENGTH = 8;
 		assertThat(userBrowsingManager.isStrongPasswordEnabled()).isTrue();
@@ -124,7 +125,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void passwordStrengthRegexMatchesEnforcedPolicy() {
+	void getPasswordStrengthRegex_shouldMatchStrongPasswordOnly() {
 		String regex = userBrowsingManager.getPasswordStrengthRegex();
 		assertThat(regex).isNotBlank();
 		// the exposed regex must accept/reject the same passwords the strength check enforces
@@ -133,7 +134,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void isSameAsCurrentPassword() {
+	void isSameAsCurrentPassword_shouldReturnTrueOnlyForCurrentPassword() {
 		User user = new User();
 		user.setPasswd(BCrypt.hashpw("Secret1@", BCrypt.gensalt()));
 		assertThat(userBrowsingManager.isSameAsCurrentPassword(user, "Secret1@")).isTrue();
@@ -145,7 +146,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIncreaseFailedAttempts() throws Exception {
+	void increaseFailedAttempts_shouldNotThrow() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -157,7 +158,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testLockUser() throws Exception {
+	void lockUser_shouldSetLockedTime() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -169,7 +170,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUnlockUser() throws Exception {
+	void unlockUser_shouldUnlockAccountAndClearLockedTime() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -190,7 +191,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUnlockWhenTimeExpired() throws Exception {
+	void unlockWhenTimeExpired_shouldReturnTrueAndUnlockAccount_whenLockTimeHasExpired() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -211,7 +212,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testUnlockWhenTimeExpiredFails() throws Exception {
+	void unlockWhenTimeExpired_shouldReturnFalse_whenLockTimeHasNotExpired() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -227,7 +228,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetUserGroups() throws Exception {
+	void getUserGroup_shouldReturnSavedUserGroup() throws Exception {
 		String userName = setupTestUser(false);
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user).isNotNull();
@@ -239,7 +240,7 @@ class TestUserBrowsingManager extends OHCoreTestCase {
 	}
 
 	@Test
-	void testInvalidUserName() throws Exception {
+	void newUser_shouldThrow_whenUserNameHasInvalidCharacters() throws Exception {
 		assertThatThrownBy(() -> {
 			UserGroup userGroup = testUserGroup.setup(true);
 			User user = testUser.setup(userGroup, true);
