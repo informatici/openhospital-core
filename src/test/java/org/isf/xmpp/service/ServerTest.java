@@ -30,6 +30,7 @@ import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.junit.jupiter.api.Test;
@@ -50,13 +51,17 @@ class ServerTest extends OHCoreTestCase {
 	void login_shouldThrow_whenNoXmppServerIsRunning() {
 		server = Server.getInstance();
 		assertThat(server).isNotNull();
-		assertThatThrownBy(() -> server.login("isf", "isf123"));
+		assertThatThrownBy(() -> server.login("isf", "isf123"))
+						.isInstanceOf(XMPPException.class);
 	}
 
 	@Test
 	void getters_shouldUseConnection_whenLoginWasAttempted() {
 		server = Server.getInstance();
 		assertThat(server).isNotNull();
+		// login() creates the connection even when no XMPP server answers
+		assertThatThrownBy(() -> server.login("isf", "isf123"))
+						.isInstanceOf(XMPPException.class);
 		assertThat(server.getRoster()).isInstanceOf(Roster.class);
 		assertThat(server.getChatManager()).isInstanceOf(ChatManager.class);
 		assertThat(server.getUserAddress()).isEqualTo("@null");
