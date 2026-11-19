@@ -27,7 +27,9 @@ package org.isf.generaldata;
  * @author Mwithi
  */
 public final class ExaminationParameters extends ConfigurationProperties {
-	
+    
+        
+
 	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
@@ -126,18 +128,26 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final int DEFAULT_LIST_SIZE = 4;
 	
 	private static ExaminationParameters mySingleData;
-
+        
+        
+        public static VitalSignsConfig weightConfig;
 	private ExaminationParameters(String fileProperties) {
+                
 		super(fileProperties);
+                weightConfig = new VitalSignsConfig(
+        myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN),
+        myGetProperty("WEIGHT_MAX", DEFAULT_WEIGHT_MAX),
+        myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT),
+        myGetProperty("WEIGHT_STEP", DEFAULT_WEIGHT_STEP));
 			
 		HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
 		HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
 		HEIGHT_INIT = myGetProperty("HEIGHT_INIT", DEFAULT_HEIGHT_INIT);
 		
-		WEIGHT_MIN = myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN);
+		/*WEIGHT_MIN = myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN);
 		WEIGHT_MAX = myGetProperty("WEIGHT_MAX", DEFAULT_WEIGHT_MAX);
 		WEIGHT_STEP = myGetProperty("WEIGHT_STEP", DEFAULT_WEIGHT_STEP);
-		WEIGHT_INIT = myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT);
+		WEIGHT_INIT = myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT);*/
 		
 		AP_MIN_INIT = myGetProperty("AP_MIN_INIT", DEFAULT_AP_MIN_INIT);
 		AP_MAX_INIT = myGetProperty("AP_MAX_INIT", DEFAULT_AP_MAX_INIT);
