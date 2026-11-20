@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -41,6 +41,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean AUTOMATICLOT_OUT;
 	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
+	public static boolean AUTOCOMPILEJRXML;
 	public static String PATIENTSHEET;
 	public static String VISITSHEET;
 	public static String EXAMINATIONCHART;
@@ -101,6 +102,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static final boolean DEFAULT_AUTOMATICLOTWARD_TOWARD = true;
 	private static final boolean DEFAULT_LOTWITHCOST = false;
+	private static final boolean DEFAULT_AUTOCOMPILEJRXML = false;
 	private static final String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
 	private static final String DEFAULT_VISITSHEET = "WardVisits";
 	private static final String DEFAULT_EXAMINATIONCHART = "patient_examination";
@@ -169,6 +171,7 @@ public final class GeneralData extends ConfigurationProperties {
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
 		AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
 		LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
+		AUTOCOMPILEJRXML = myGetProperty("AUTOCOMPILEJRXML", DEFAULT_AUTOCOMPILEJRXML);
 		PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
 		VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
 		EXAMINATIONCHART = myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
