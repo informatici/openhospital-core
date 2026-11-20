@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.supplier;
+package org.isf.supplier.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.isf.OHCoreTestCase;
-import org.isf.supplier.manager.SupplierBrowserManager;
+import org.isf.supplier.TestSupplier;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.service.SupplierOperations;
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class Tests extends OHCoreTestCase {
+class SupplierBrowserManagerTest extends OHCoreTestCase {
 
 	private static TestSupplier testSupplier;
 
@@ -62,34 +62,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSupplierGets() throws Exception {
-		int code = setupTestSupplier(false);
-		checkSupplierIntoDb(code);
-	}
-
-	@Test
-	void testSupplierSets() throws Exception {
-		int code = setupTestSupplier(true);
-		checkSupplierIntoDb(code);
-	}
-
-	@Test
-	void testIoSupplierSaveOrUpdate() throws Exception {
-		Supplier supplier = testSupplier.setup(true);
-		Supplier newSupplier = supplierIoOperation.saveOrUpdate(supplier);
-		checkSupplierIntoDb(newSupplier.getSupId());
-	}
-
-	@Test
-	void testIoSupplierGetByID() throws Exception {
-		int code = setupTestSupplier(false);
-		Supplier foundSupplier = supplierIoOperation.getByID(code);
-		assertThat(foundSupplier).isNotNull();
-		checkSupplierIntoDb(foundSupplier.getSupId());
-	}
-
-	@Test
-	void testIoSupplierGetAll() throws Exception {
+	void getAll_shouldIncludeSavedSupplier_whenLoadedViaIoOperation() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -98,7 +71,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoSupplierGetList() throws Exception {
+	void getList_shouldIncludeSavedSupplier_whenLoadedViaIoOperation() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -107,14 +80,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrSupplierSaveOrUpdate() throws Exception {
+	void saveOrUpdate_shouldSaveSupplier() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
 		Supplier newSupplier = supplierBrowserManager.saveOrUpdate(supplier);
 		checkSupplierIntoDb(newSupplier.getSupId());
 	}
 
 	@Test
-	void testMgrSupplierGetByID() throws Exception {
+	void getByID_shouldReturnSupplier_whenIdExists() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -122,7 +95,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrSupplierGetAll() throws Exception {
+	void getAll_shouldIncludeSavedSupplier() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -131,7 +104,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrSupplierGetList() throws Exception {
+	void getList_shouldIncludeSavedSupplier() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -140,7 +113,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetHashMap() throws Exception {
+	void getHashMap_shouldExcludeDeletedSupplier_whenAllIsFalse() throws Exception {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		assertThat(foundSupplier).isNotNull();
@@ -158,40 +131,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testSupplierToString() throws Exception {
-		Supplier supplier = new Supplier(null, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
-		assertThat(supplier).hasToString("TestName");
-	}
-
-	@Test
-	void testSupplierEquals() throws Exception {
-		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
-
-		assertThat(supplier)
-				.isEqualTo(supplier)
-				.isNotNull()
-				.isNotEqualTo("someString");
-
-		Supplier supplier2 = new Supplier(2, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
-		assertThat(supplier).isNotEqualTo(supplier2);
-
-		supplier2.setSupId(supplier.getSupId());
-		assertThat(supplier).isEqualTo(supplier2);
-	}
-
-	@Test
-	void testSupplierHashCode() throws Exception {
-		int code = setupTestSupplier(false);
-		Supplier supplier = supplierBrowserManager.getByID(code);
-		assertThat(supplier).isNotNull();
-		// compute value
-		int hashCode = supplier.hashCode();
-		// use computed stored value
-		assertThat(supplier.hashCode()).isEqualTo(hashCode);
-	}
-
-	@Test
-	void testSupplierDeletion() throws Exception {
+	void getByID_shouldReturnNull_whenSupplierIsSoftDeleted() throws Exception {
 		loadSuppliers();
 
 		Supplier supplier = supplierBrowserManager.getByID(1);
@@ -201,7 +141,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDeleteSupplierStampsDeletedDate() throws Exception {
+	void delete_shouldSetDeletedFlagAndDeletedDate() throws Exception {
 		loadSuppliers();
 		Supplier supplier = supplierBrowserManager.getByID(1);
 		assertThat(supplier.getDeletedDate()).isNull();
@@ -246,4 +186,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundSupplier).isNotNull();
 		testSupplier.check(foundSupplier);
 	}
+
 }
