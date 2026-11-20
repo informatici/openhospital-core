@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,16 +25,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestEmailValidator {
+class EmailValidatorTest {
 
 	@Test
-	void testIsEmpty() throws Exception {
+	void isValid_shouldReturnTrue_whenEmailIsEmptyOrNull() throws Exception {
 		assertThat(EmailValidator.isValid("")).isTrue();
 		assertThat(EmailValidator.isValid(null)).isTrue();
 	}
 
 	@Test
-	void testDoesNotMatchPattern() throws Exception {
+	void isValid_shouldReturnFalse_whenEmailDoesNotMatchPattern() throws Exception {
 		assertThat(EmailValidator.isValid("abc")).isFalse();
 		assertThat(EmailValidator.isValid("\"ThisIsName\"@thisCompany.com")).isFalse();
 		assertThat(EmailValidator.isValid("@yahoo.com")).isFalse();
@@ -42,7 +42,7 @@ class TestEmailValidator {
 	}
 
 	@Test
-	void testDoesMatchPattern() throws Exception {
+	void isValid_shouldReturnTrue_whenEmailMatchesPattern() throws Exception {
 		assertThat(EmailValidator.isValid("ABCD@MYCOMPANY.COM")).isTrue();
 		assertThat(EmailValidator.isValid("abcabcd@mycompany.org")).isTrue();
 		assertThat(EmailValidator.isValid("someTpoint@domain.co.in")).isTrue();
@@ -50,10 +50,11 @@ class TestEmailValidator {
 	}
 
 	@Test
-	void testQuestionablePatterns() throws Exception {
+	void isValid_shouldAcceptNumericAddressAndRejectMissingTopLevelDomain() throws Exception {
 		// just numbers (like an IP address)
 		assertThat(EmailValidator.isValid("1.2@3.4")).isTrue();
 		// no domain (.com, .org, .net, etc.)
 		assertThat(EmailValidator.isValid("1point@domain")).isFalse();
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,40 +27,41 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-class TestRememberDates {
+class RememberDatesTest {
 
 	@Test
-	void testOpdVisitDate() {
+	void setLastOpdVisitDate_shouldSetLastOpdVisitDate() {
 		LocalDateTime date = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
 		RememberDates.setLastOpdVisitDate(date);
 		assertThat(RememberDates.getLastOpdVisitDate()).isEqualTo(date);
 	}
 
 	@Test
-	void testLabExamDate() {
+	void setLastLabExamDate_shouldSetLastLabExamDate() {
 		LocalDateTime date = LocalDateTime.of(2014, 11, 3, 0, 0, 0);
 		RememberDates.setLastLabExamDate(date);
 		assertThat(RememberDates.getLastLabExamDate()).isEqualTo(date);
 	}
 
 	@Test
-	void testAdmInDate() {
+	void setLastAdmInDate_shouldSetLastAdmInDate() {
 		LocalDateTime date = LocalDateTime.of(2016, 11, 3, 0, 0, 0);
 		RememberDates.setLastAdmInDate(date);
 		assertThat(RememberDates.getLastAdmInDate()).isEqualTo(date);
 	}
 
 	@Test
-	void testBillDate() {
+	void setLastBillDate_shouldSetLastBillDate() {
 		LocalDateTime date = LocalDateTime.of(2016, 1, 3, 0, 0, 0);
 		RememberDates.setLastBillDate(date);
 		assertThat(RememberDates.getLastBillDate()).isEqualTo(date);
 	}
 
 	@Test
-	void testPatientVaccineDate() {
+	void setLastPatineVaccineDate_shouldSetLastPatientVaccineDate() {
 		LocalDateTime date = LocalDateTime.of(2016, 1, 28, 0, 0, 0);
 		RememberDates.setLastPatineVaccineDate(date);
 		assertThat(RememberDates.getLastPatientVaccineDate()).isEqualTo(date);
 	}
+
 }

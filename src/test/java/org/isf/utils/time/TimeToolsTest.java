@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,10 +28,10 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-class TestTimeTools {
+class TimeToolsTest {
 
 	@Test
-	void testGetDaysBetweenDatesDate() {
+	void getDaysBetweenDates_shouldReturnDifference_whenDatesAreLocalDate() {
 		LocalDate dateFrom = LocalDate.of(114, 10, 3);
 		LocalDate dateTo = LocalDate.of(121, 10, 3);
 
@@ -40,7 +40,7 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testGetXBetweenLocaleDateTime() {
+	void getDaysWeeksAndMonthsBetweenDates_shouldReturnDifference_whenDatesAreLocalDateTime() {
 		LocalDateTime dateFrom = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
 		LocalDateTime dateTo = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 
@@ -62,7 +62,7 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testIsSameDayDate() {
+	void isSameDay_shouldReturnTrueOnlyForSameDate_whenArgumentsAreLocalDate() {
 		LocalDate day1 = LocalDate.of(114, 10, 3);
 		LocalDate day2 = LocalDate.of(114, 10, 3);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
@@ -72,7 +72,7 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testIsSameDayLocalDateTime() {
+	void isSameDay_shouldReturnTrueOnlyForSameDate_whenArgumentsAreLocalDateTime() {
 		LocalDateTime day1 = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
 		LocalDateTime day2 = LocalDateTime.of(2014, 10, 3, 10, 10, 0);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
@@ -82,31 +82,31 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testFormatLocalDateTime() {
+	void formatDateTime_shouldUseDefaultPattern_whenPatternIsNull() {
 		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-10-03 23:59:59");
 	}
 
 	@Test
-	void testFormatDateTimeDate() {
+	void formatDateTime_shouldUseDefaultPattern_whenPatternIsNullAndYearHasThreeDigits() {
 		LocalDateTime dateTime = LocalDateTime.of(121, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("0121-10-03 23:59:59");
 	}
 
 	@Test
-	void testFormatDateTimeReportLocalDateTime() {
+	void formatDateTimeReport_shouldUseDefaultPattern_whenArgumentIsLocalDateTime() {
 		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-10-03 23:59:59");
 	}
 
 	@Test
-	void testFormatDateTimeReportDate() {
+	void formatDateTimeReport_shouldUseStartOfDay_whenArgumentIsLocalDate() {
 		LocalDate date = LocalDate.of(121, 10, 3);
 		assertThat(TimeTools.formatDateTimeReport(date)).isEqualTo("0121-10-03 00:00:00");
 	}
 
 	@Test
-	void testFormatAge() {
+	void getFormattedAge_shouldReturnEmptyForNullDateAndPatternKey_whenPatternIsNotInBundle() {
 		assertThat(TimeTools.getFormattedAge(null)).isEmpty();
 		LocalDate dateTime = LocalDate.of(121, 10, 3);
 		// If message bundles were accessbile the age would look something like the pattern below
@@ -115,7 +115,7 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testParseDate() throws Exception {
+	void parseDate_shouldReturnLocalDateTime_whenPatternIsGivenDateOnlyOrNull() throws Exception {
 		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", false))
 				.isEqualTo(LocalDateTime.of(2021, 11, 3, 23, 59, 59));
 		assertThat(TimeTools.parseDate("2021-11-03", "yyyy-MM-dd", true))
@@ -125,9 +125,10 @@ class TestTimeTools {
 	}
 
 	@Test
-	void testGetDateException() throws Exception {
+	void getDate_shouldReturnNull_whenFormatIsDdSlashMmSlashYyyy() throws Exception {
 		String date = "02/03/2024";
 		LocalDateTime localDateTime = TimeTools.getDate(date, "dd/MM/yyyy");
 		assertThat(localDateTime).isNull();
 	}
+
 }
