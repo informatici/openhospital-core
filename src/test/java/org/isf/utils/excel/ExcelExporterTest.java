@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,7 +44,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class TestExcelExporter {
+class ExcelExporterTest {
 
 	private Timestamp timeStamp = new Timestamp(new GregorianCalendar(2024, 1, 1).getTimeInMillis());
 	private BigDecimal bigDecimal = new BigDecimal(98);
@@ -81,42 +81,42 @@ class TestExcelExporter {
 	}
 
 	@Test
-	void testExportTableToCSV() throws Exception {
+	void exportTableToCSV_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportTableToCSV");
 		excelExporter.exportTableToCSV(table, outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
 	}
 
 	@Test
-	void testExportTableToExcel() throws Exception {
+	void exportTableToExcel_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportTableToExcel");
 		excelExporter.exportTableToExcel(table, outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
 	}
 
 	@Test
-	void testExportTableToExcelOLD() throws Exception {
+	void exportTableToExcelOLD_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportTableToExcelOLD");
 		excelExporter.exportTableToExcelOLD(table, outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
 	}
 
 	@Test
-	void testExportDataToExcel() throws Exception {
+	void exportDataToExcel_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportDataToExcel");
 		excelExporter.exportDataToExcel(new MyCollection(), outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
 	}
 
 	@Test
-	void testExportDataToExcelOLD() throws Exception {
+	void exportDataToExcelOLD_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportDataToExcelOLD");
 		excelExporter.exportDataToExcelOLD(new MyCollection(), outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
 	}
 
 	@Test
-	void testExportResultSetToExcel() throws Exception {
+	void exportResultsetToExcel_shouldCreateFile() throws Exception {
 		ResultSet mockResultSet = MockResultSet.create(
 						new String[] { "name", "age", "weight", "empty", "timestamp", "long" }, //columns
 						new Object[][] { // data
@@ -132,7 +132,7 @@ class TestExcelExporter {
 	}
 
 	@Test
-	void testExportResultSetToExcelOLD() throws Exception {
+	void exportResultsetToExcelOLD_shouldCreateFile() throws Exception {
 		ResultSet mockResultSet = MockResultSet.create(
 						new String[] { "name", "age", "weight", "empty" }, //columns
 						new Object[][] { // data
@@ -148,7 +148,7 @@ class TestExcelExporter {
 	}
 
 	@Test
-	void testExportResultSetToCSV() throws Exception {
+	void exportResultsetToCSV_shouldCreateFile() throws Exception {
 		ResultSet mockResultSet = MockResultSet.create(
 						new String[] { "name", "age", "weight", "empty", "timestamp" }, //columns
 						new Object[][] { // data
@@ -164,7 +164,7 @@ class TestExcelExporter {
 	}
 
 	@Test
-	void testExportDataToCSV() throws Exception {
+	void exportDataToCSV_shouldCreateFile() throws Exception {
 		File outputFile = new File(tempDir, "exportDataToCSV");
 		excelExporter.exportDataToCSV(new MyCollection(), outputFile);
 		assertThat(Files.exists(outputFile.toPath())).isTrue();
