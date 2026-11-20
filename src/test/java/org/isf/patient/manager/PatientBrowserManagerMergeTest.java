@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.patient;
+package org.isf.patient.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,10 +47,10 @@ import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.examination.TestPatientExamination;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
-import org.isf.patient.manager.PatientBrowserManager;
+import org.isf.patient.TestPatient;
+import org.isf.patient.TestPatientMergedEventListener;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.service.PatientIoOperations;
 import org.isf.priceslist.TestPriceList;
 import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperationRepository;
@@ -67,7 +67,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestMergePatient extends OHCoreTestCase {
+class PatientBrowserManagerMergeTest extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
@@ -80,8 +80,6 @@ class TestMergePatient extends OHCoreTestCase {
 	private static TestVisit testVisit;
 	private static TestWard testWard;
 
-	@Autowired
-	PatientIoOperations patientIoOperation;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
@@ -129,47 +127,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMergePatientHistory() throws Exception {
-		// given:
-		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
-		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
-		Visit visit = setupVisitAndAssignPatient(obsoletePatient);
-		PatientExamination patientExamination = setupPatientExaminationAndAssignPatient(obsoletePatient);
-
-		// when:
-		patientIoOperation.mergePatientHistory(mergedPatient, obsoletePatient);
-
-		// then:
-		assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(mergedPatient, obsoletePatient);
-		assertThatVisitWasMovedFromObsoleteToMergedPatient(visit, mergedPatient);
-		assertThatExaminationWasMovedFromObsoleteToMergedPatient(patientExamination, mergedPatient);
-		assertThatPatientMergedEventWasSent(mergedPatient, obsoletePatient);
-	}
-
-	@Test
-	void testWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
-		// given:
-		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
-		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
-		Visit visit = setupVisitAndAssignPatient(obsoletePatient);
-		PatientExamination patientExamination = setupPatientExaminationAndAssignPatient(obsoletePatient);
-		testPatientMergedEventListener.setShouldFail(true);
-
-		// when:
-		try {
-			patientIoOperation.mergePatientHistory(mergedPatient, obsoletePatient);
-		} catch (Exception e) {
-		}
-
-		// then:
-		assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(mergedPatient);
-		assertThatVisitIsStillAssignedToObsoletePatient(visit, obsoletePatient);
-		assertThatExaminationIsStillAssignedToObsoletePatient(patientExamination, obsoletePatient);
-		assertThatPatientMergedEventWasSent(mergedPatient, obsoletePatient);
-	}
-
-	@Test
-	void testMgrMergePatient() throws Exception {
+	void mergePatient_shouldMarkObsoletePatientDeletedAndMoveVisitAndExamination() throws Exception {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -187,7 +145,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergePatientPatient1MissingInformation() throws Exception {
+	void mergePatient_shouldMarkObsoletePatientDeletedAndMoveVisitAndExamination_whenMergedPatientHasMissingFields() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setAddress(null);
@@ -218,7 +176,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergePatientMergeNotes() throws Exception {
+	void mergePatient_shouldPrependObsoletePatientNote_whenBothPatientsHaveNotes() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setNote("Note 1");
@@ -235,7 +193,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergePatientMergeBirthDateMissingAgeTypePatient2HasBirthDate() throws Exception {
+	void mergePatient_shouldTakeBirthDateFromObsoletePatient_whenMergedPatientHasNoAgeType() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setBirthDate(LocalDate.of(50, 1, 1));
@@ -256,7 +214,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergePatientMergeBirthDatePatient2HasAgeType() throws Exception {
+	void mergePatient_shouldKeepAgeType_whenMergedPatientHasAgeType() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setBirthDate(LocalDate.of(50, 1, 1));
@@ -277,7 +235,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
+	void mergePatient_shouldKeepVisitAndExaminationOnObsoletePatient_whenEventListenerFails() throws OHException {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -299,7 +257,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergeValidationSexNotTheSame() {
+	void mergePatient_shouldThrow_whenPatientsHaveDifferentSex() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			patient1.setSex('F');
@@ -318,7 +276,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergeValidationPatient1PendingBills() {
+	void mergePatient_shouldThrow_whenMergedPatientHasPendingBill() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			PriceList priceList = testPriceList.setup(false);
@@ -339,7 +297,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergeValidationPatient2PendingBills() {
+	void mergePatient_shouldThrow_whenObsoletePatientHasPendingBill() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
@@ -360,7 +318,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergeValidationPatient1Admitted() {
+	void mergePatient_shouldThrow_whenMergedPatientIsAdmitted() {
 		assertThatThrownBy(() -> {
 			Ward ward = testWard.setup(false, false);
 			Patient patient1 = testPatient.setup(false);
@@ -392,7 +350,7 @@ class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrMergeValidationPatient2Admitted() {
+	void mergePatient_shouldThrow_whenObsoletePatientIsAdmitted() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
@@ -478,4 +436,5 @@ class TestMergePatient extends OHCoreTestCase {
 		examinationIoOperationRepository.saveAndFlush(patientExamination);
 		return patientExamination;
 	}
+
 }
