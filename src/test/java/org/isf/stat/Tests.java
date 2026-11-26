@@ -22,6 +22,7 @@
 package org.isf.stat;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -187,6 +188,8 @@ class Tests extends OHCoreTestCase {
 		String previousLanguage = GeneralData.LANGUAGE;
 		Path statFolder = Path.of(RPT_STAT);
 		Path extraFolder = Path.of(RPT_EXTRA);
+		// the folders are created and deleted in the working directory: never touch real ones
+		assumeFalse(Files.exists(statFolder) || Files.exists(extraFolder));
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
 			GeneralData.LANGUAGE = "en";
 
@@ -243,6 +246,7 @@ class Tests extends OHCoreTestCase {
 	void testGetReportsListWithCountrySpecificLanguage() throws Exception {
 		String previousLanguage = GeneralData.LANGUAGE;
 		Path statFolder = Path.of(RPT_STAT);
+		assumeFalse(Files.exists(statFolder));
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
 			// the languages shipped with a country (am_ET, sv_SE, zh_CN) name their folder exactly as configured
 			GeneralData.LANGUAGE = "am_ET";
