@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,6 @@ package org.isf.menu.manager;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.isf.generaldata.GeneralData;
@@ -34,6 +33,7 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.permissions.model.Permission;
 import org.isf.sessionaudit.model.UserSession;
+import org.isf.utils.db.BCrypt;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -199,6 +199,33 @@ public class UserBrowsingManager {
 	 */
 	public int getPasswordLeaseDays() {
 		return GeneralData.PASSWORDLEASE;
+	}
+
+	/**
+	 * Returns whether the strong-password policy ({@link GeneralData#STRONGPASSWORD}) is enabled.
+	 *
+	 * @return {@code true} when the strength policy is enforced, {@code false} otherwise
+	 */
+	public boolean isStrongPasswordEnabled() {
+		return GeneralData.STRONGPASSWORD;
+	}
+
+	/**
+	 * Returns the configured minimum password length ({@link GeneralData#STRONGLENGTH}).
+	 *
+	 * @return the minimum length, or {@code 0} when no minimum-length policy is enforced
+	 */
+	public int getPasswordMinLength() {
+		return GeneralData.STRONGLENGTH;
+	}
+
+	/**
+	 * Returns the regular expression a password must match when the strong-password policy is enabled.
+	 *
+	 * @return the strength regular expression
+	 */
+	public String getPasswordStrengthRegex() {
+		return PASSWORD_STRENGTH_REGEX;
 	}
 
 	/**
@@ -467,8 +494,19 @@ public class UserBrowsingManager {
 	}
 
 	/**
+	 * The regular expression a password must match to be considered strong (when {@link GeneralData#STRONGPASSWORD} is
+	 * enabled): at least one digit, one letter, one special character and no white spaces.
+	 */
+	private static final String PASSWORD_STRENGTH_REGEX = "^(?=.*[0-9])" // a digit must occur at least once
+		+ "(?=.*[a-zA-Z])" // a lower case or upper case alphabetic must occur at least once
+		+ "(?=.*[\\\\_$&+,:;=\\\\?@#|/'<>.^*()%!-])" // a special character that must occur at least once
+		+ "(?=\\S+$).+$"; // white spaces not allowed
+
+	private static final Pattern PASSWORD_STRENGTH_PATTERN = Pattern.compile(PASSWORD_STRENGTH_REGEX);
+
+	/**
 	 * Tests whether a password meets the requirement for various characters being present
-	 * 
+	 *
 	 * @param password The given password
 	 * @return {@code true} if password is meets the minimum requirements, {@code false} otherwise.
 	 */
@@ -479,14 +517,7 @@ public class UserBrowsingManager {
 		if (!GeneralData.STRONGPASSWORD) {
 			return true;
 		}
-
-		String regex = "^(?=.*[0-9])" // a digit must occur at least once
-			+ "(?=.*[a-zA-Z])" // a lower case or upper case alphabetic must occur at least once
-			+ "(?=.*[\\\\_$&+,:;=\\\\?@#|/'<>.^*()%!-])" // a special character that must occur at least once
-			+ "(?=\\S+$).+$"; // white spaces not allowed
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(password);
-		return matcher.matches();
+		return PASSWORD_STRENGTH_PATTERN.matcher(password).matches();
 	}
 
 	/**
@@ -504,5 +535,24 @@ public class UserBrowsingManager {
 			return false;
 		}
 		return isPasswordStrong(password);
+	}
+
+	/**
+	 * Tests whether the given clear-text password is the same as the user's current (hashed) password, so callers
+	 * can reject reusing the current password on a change.
+	 *
+	 * @param user the user whose current password to compare against
+	 * @param newPassword the candidate new password, in clear text
+	 * @return {@code true} if {@code newPassword} matches the user's current password, {@code false} otherwise
+	 */
+	public boolean isSameAsCurrentPassword(User user, String newPassword) {
+		if (user == null || newPassword == null || newPassword.isEmpty()) {
+			return false;
+		}
+		String currentPassword = user.getPasswd();
+		if (currentPassword == null || !currentPassword.startsWith("$2")) {
+			return false;
+		}
+		return BCrypt.checkpw(newPassword, currentPassword);
 	}
 }

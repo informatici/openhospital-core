@@ -1114,6 +1114,7 @@ public class JasperReportsManager {
 		Path langSpecificPath = Path.of(jasperFileFolder, language, jasperFileName + ".properties");
 		// TODO: Remove legacy fallback after all installations include file migrations (OP-214)
 		Path legacyPath = Path.of(jasperFileFolder, jasperFileName + "_" + GeneralData.LANGUAGE + ".properties");
+		Path defaultPath = Path.of(jasperFileFolder, jasperFileName + ".properties");
 
 		Path propsPath = null;
 		if (Files.exists(langSpecificPath)) {
@@ -1121,6 +1122,9 @@ public class JasperReportsManager {
 		} else if (Files.exists(legacyPath)) {
 			LOGGER.warn(">> using legacy bundle path for '{}'; migrate to language subfolder structure.", jasperFileName);
 			propsPath = legacyPath;
+		} else if (Files.exists(defaultPath)) {
+			LOGGER.debug(">> no resource bundle for language '{}' found for report '{}', using default bundle.", language, jasperFileName);
+			propsPath = defaultPath;
 		}
 
 		if (propsPath != null) {
