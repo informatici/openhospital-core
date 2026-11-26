@@ -121,8 +121,8 @@ public class JasperReportsManager {
 	/**
 	 * Returns the list of the stat reports the user can launch, scanning the {@code rpt_stat} and {@code rpt_extra} folders for compiled {@code .jasper} files.
 	 * For each report its localized title and the names of the parameters the user is expected to provide (e.g. {@code month}/{@code year} or
-	 * {@code fromdate}/{@code todate}) are resolved. The list is sorted by title. Scanning is best-effort: a whole folder ({@code rpt_stat} or
-	 * {@code rpt_extra}) is logged and skipped when its scan fails, rather than failing the whole listing.
+	 * {@code fromdate}/{@code todate}) are resolved. The list is sorted by title. Scanning is best-effort: a report that cannot be loaded is logged and
+	 * skipped, and so is a whole folder ({@code rpt_stat} or {@code rpt_extra}) when its scan fails, rather than failing the whole listing.
 	 *
 	 * @return the available reports, never {@code null}
 	 */
@@ -149,12 +149,17 @@ public class JasperReportsManager {
 				.filter(file -> file.getName().endsWith(JASPER_FILE_EXTENSION))
 				.toList();
 			for (File jasperFile : jasperFiles) {
-				String fileName = jasperFile.getName().replace(JASPER_FILE_EXTENSION, "");
-				String title = getReportTitle(jasperFile.toPath().getParent(), fileName, language);
-				if (title == null || title.isBlank()) {
-					continue;
+				try {
+					String fileName = jasperFile.getName().replace(JASPER_FILE_EXTENSION, "");
+					String title = getReportTitle(jasperFile.toPath().getParent(), fileName, language);
+					if (title == null || title.isBlank()) {
+						continue;
+					}
+					reports.add(new ReportLauncherDto(folder, fileName, title, getUserInputParameters(jasperFile)));
+				} catch (RuntimeException e) {
+					// a single broken report (e.g. a bundle that cannot be parsed) must not hide the others
+					LOGGER.error("Error loading report '{}'; skipping.", jasperFile.getName(), e);
 				}
-				reports.add(new ReportLauncherDto(folder, fileName, title, getUserInputParameters(jasperFile)));
 			}
 		} catch (IOException | UncheckedIOException e) {
 			// the walk is lazy: a failure met while it is consumed comes out unchecked

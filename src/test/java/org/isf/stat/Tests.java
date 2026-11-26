@@ -304,6 +304,34 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	void testGetReportsListWithBrokenBundle() throws Exception {
+		String previousLanguage = GeneralData.LANGUAGE;
+		Path statFolder = Path.of(RPT_STAT);
+		assumeNoReportFolders();
+		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
+			GeneralData.LANGUAGE = "en";
+
+			Files.createDirectories(statFolder);
+			Files.createFile(statFolder.resolve("POI_ByAgeBySex.jasper"));
+			Files.writeString(statFolder.resolve("POI_ByAgeBySex.properties"), "jTitle=Patients by age and sex\n");
+			// the backslash before "users" reads as a malformed unicode escape, and loading the bundle fails with an unchecked exception
+			Files.createFile(statFolder.resolve("Broken_Report.jasper"));
+			Files.writeString(statFolder.resolve("Broken_Report.properties"), "jTitle=Reports in C:\\users\n");
+
+			when(jasperReport.getParameters()).thenReturn(new JRParameter[] {});
+			mockedJRLoader.when(() -> JRLoader.loadObject(any(File.class))).thenReturn(jasperReport);
+
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
+			List<ReportLauncherDto> reports = jasperReportsManager.getReportsList();
+
+			assertThat(reports).extracting(ReportLauncherDto::getTitle).containsExactly("Patients by age and sex");
+		} finally {
+			GeneralData.LANGUAGE = previousLanguage;
+			deleteRecursively(statFolder);
+		}
+	}
+
+	@Test
 	void testGetReportsListWhenFolderTraversalFails() throws Exception {
 		String previousLanguage = GeneralData.LANGUAGE;
 		Path statFolder = Path.of(RPT_STAT);
