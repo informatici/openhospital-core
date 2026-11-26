@@ -144,9 +144,9 @@ public class JasperReportsManager {
 		}
 		try (Stream<Path> walk = Files.walk(folderPath)) {
 			List<File> jasperFiles = walk.filter(Files::isRegularFile)
-							.map(Path::toFile)
-							.filter(file -> file.getName().endsWith(JASPER_FILE_EXTENSION))
-							.toList();
+				.map(Path::toFile)
+				.filter(file -> file.getName().endsWith(JASPER_FILE_EXTENSION))
+				.toList();
 			for (File jasperFile : jasperFiles) {
 				String fileName = jasperFile.getName().replace(JASPER_FILE_EXTENSION, "");
 				String title = getReportTitle(folder, fileName, language);
@@ -179,9 +179,9 @@ public class JasperReportsManager {
 		try {
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
 			return Arrays.stream(jasperReport.getParameters())
-							.filter(parameter -> !parameter.isSystemDefined() && parameter.isForPrompting())
-							.map(JRParameter::getName)
-							.toList();
+				.filter(parameter -> !parameter.isSystemDefined() && parameter.isForPrompting())
+				.map(JRParameter::getName)
+				.toList();
 		} catch (JRException e) {
 			LOGGER.error("Error loading parameters for report {}", jasperFile.getName(), e);
 			return List.of();
