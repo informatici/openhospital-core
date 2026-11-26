@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -120,8 +121,8 @@ public class JasperReportsManager {
 	/**
 	 * Returns the list of the stat reports the user can launch, scanning the {@code rpt_stat} and {@code rpt_extra} folders for compiled {@code .jasper} files.
 	 * For each report its localized title and the names of the parameters the user is expected to provide (e.g. {@code month}/{@code year} or
-	 * {@code fromdate}/{@code todate}) are resolved. The list is sorted by title. Scanning is best-effort: an unreadable folder is logged and skipped rather
-	 * than failing the whole listing.
+	 * {@code fromdate}/{@code todate}) are resolved. The list is sorted by title. Scanning is best-effort: a whole folder ({@code rpt_stat} or
+	 * {@code rpt_extra}) is logged and skipped when its scan fails, rather than failing the whole listing.
 	 *
 	 * @return the available reports, never {@code null}
 	 */
@@ -149,27 +150,28 @@ public class JasperReportsManager {
 				.toList();
 			for (File jasperFile : jasperFiles) {
 				String fileName = jasperFile.getName().replace(JASPER_FILE_EXTENSION, "");
-				String title = getReportTitle(folder, fileName, language);
+				String title = getReportTitle(jasperFile.toPath().getParent(), fileName, language);
 				if (title == null || title.isBlank()) {
 					continue;
 				}
 				reports.add(new ReportLauncherDto(folder, fileName, title, getUserInputParameters(jasperFile)));
 			}
-		} catch (IOException e) {
+		} catch (IOException | UncheckedIOException e) {
+			// the walk is lazy: a failure met while it is consumed comes out unchecked
 			LOGGER.error("Unable to scan report folder '{}'; skipping.", folder, e);
 		}
 	}
 
-	private String getReportTitle(String folder, String fileName, String language) {
+	private String getReportTitle(Path reportFolder, String fileName, String language) {
 		// a missing localized bundle is the normal case for English, whose properties live next to the report: it is checked
 		// beforehand so that the fallback does not log an error for every single report
-		Path localizedPath = Path.of(folder, language, fileName + ".properties");
+		Path localizedPath = reportFolder.resolve(language).resolve(fileName + ".properties");
 		String title = null;
 		if (Files.exists(localizedPath)) {
 			title = MessageBundle.loadPropertiesFileUtf8(localizedPath, LOGGER).getProperty(REPORT_TITLE_PROPERTY);
 		}
 		if (title == null || title.isBlank()) {
-			Path defaultPath = Path.of(folder, fileName + ".properties");
+			Path defaultPath = reportFolder.resolve(fileName + ".properties");
 			title = MessageBundle.loadPropertiesFileUtf8(defaultPath, LOGGER).getProperty(REPORT_TITLE_PROPERTY);
 		}
 		return title;

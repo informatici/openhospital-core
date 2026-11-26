@@ -24,17 +24,22 @@ package org.isf.stat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
@@ -188,8 +193,7 @@ class Tests extends OHCoreTestCase {
 		String previousLanguage = GeneralData.LANGUAGE;
 		Path statFolder = Path.of(RPT_STAT);
 		Path extraFolder = Path.of(RPT_EXTRA);
-		// the folders are created and deleted in the working directory: never touch real ones
-		assumeFalse(Files.exists(statFolder) || Files.exists(extraFolder));
+		assumeNoReportFolders();
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
 			GeneralData.LANGUAGE = "en";
 
@@ -246,7 +250,7 @@ class Tests extends OHCoreTestCase {
 	void testGetReportsListWithCountrySpecificLanguage() throws Exception {
 		String previousLanguage = GeneralData.LANGUAGE;
 		Path statFolder = Path.of(RPT_STAT);
-		assumeFalse(Files.exists(statFolder));
+		assumeNoReportFolders();
 		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
 			// the languages shipped with a country (am_ET, sv_SE, zh_CN) name their folder exactly as configured
 			GeneralData.LANGUAGE = "am_ET";
@@ -268,6 +272,80 @@ class Tests extends OHCoreTestCase {
 			GeneralData.LANGUAGE = previousLanguage;
 			deleteRecursively(statFolder);
 		}
+	}
+
+	@Test
+	void testGetReportsListWithReportInSubfolder() throws Exception {
+		String previousLanguage = GeneralData.LANGUAGE;
+		Path extraFolder = Path.of(RPT_EXTRA);
+		assumeNoReportFolders();
+		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
+			GeneralData.LANGUAGE = "it";
+
+			// the bundles of a report in a subfolder sit next to it, not in the top-level folder
+			Path customFolder = extraFolder.resolve("custom");
+			Files.createDirectories(customFolder.resolve("it"));
+			Files.createFile(customFolder.resolve("Localized_Report.jasper"));
+			Files.writeString(customFolder.resolve("it").resolve("Localized_Report.properties"), "jTitle=Report localizzato\n");
+			Files.createFile(customFolder.resolve("Default_Report.jasper"));
+			Files.writeString(customFolder.resolve("Default_Report.properties"), "jTitle=Default report\n");
+
+			when(jasperReport.getParameters()).thenReturn(new JRParameter[] {});
+			mockedJRLoader.when(() -> JRLoader.loadObject(any(File.class))).thenReturn(jasperReport);
+
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
+			List<ReportLauncherDto> reports = jasperReportsManager.getReportsList();
+
+			assertThat(reports).extracting(ReportLauncherDto::getTitle).containsExactly("Default report", "Report localizzato");
+		} finally {
+			GeneralData.LANGUAGE = previousLanguage;
+			deleteRecursively(extraFolder);
+		}
+	}
+
+	@Test
+	void testGetReportsListWhenFolderTraversalFails() throws Exception {
+		String previousLanguage = GeneralData.LANGUAGE;
+		Path statFolder = Path.of(RPT_STAT);
+		Path extraFolder = Path.of(RPT_EXTRA);
+		assumeNoReportFolders();
+		try (MockedStatic<JRLoader> mockedJRLoader = mockStatic(JRLoader.class)) {
+			GeneralData.LANGUAGE = "en";
+
+			Files.createDirectories(statFolder);
+			Files.createFile(statFolder.resolve("POI_ByAgeBySex.jasper"));
+			Files.writeString(statFolder.resolve("POI_ByAgeBySex.properties"), "jTitle=Patients by age and sex\n");
+			Files.createDirectories(extraFolder);
+			Files.createFile(extraFolder.resolve("Custom_Report.jasper"));
+			Files.writeString(extraFolder.resolve("Custom_Report.properties"), "jTitle=Custom report\n");
+
+			when(jasperReport.getParameters()).thenReturn(new JRParameter[] {});
+			mockedJRLoader.when(() -> JRLoader.loadObject(any(File.class))).thenReturn(jasperReport);
+
+			JasperReportsManager jasperReportsManager = new JasperReportsManager(hospitalBrowsingManager, dataSource, wardBrowserManager);
+			List<ReportLauncherDto> reports;
+			try (MockedStatic<Files> mockedFiles = mockStatic(Files.class, CALLS_REAL_METHODS)) {
+				// the walk of rpt_stat breaks while it is consumed, as it does on an entry that cannot be read
+				Stream<Path> brokenWalk = Stream.of(statFolder).peek(path -> {
+					throw new UncheckedIOException(new IOException("simulated traversal failure"));
+				});
+				// eq() and not the plain path: stubbing with the path would run the real walk and leave the folder open, which blocks its deletion on Windows
+				mockedFiles.when(() -> Files.walk(eq(statFolder))).thenReturn(brokenWalk);
+
+				reports = jasperReportsManager.getReportsList();
+			}
+
+			assertThat(reports).extracting(ReportLauncherDto::getTitle).containsExactly("Custom report");
+		} finally {
+			GeneralData.LANGUAGE = previousLanguage;
+			deleteRecursively(statFolder);
+			deleteRecursively(extraFolder);
+		}
+	}
+
+	private static void assumeNoReportFolders() {
+		// the listing tests create and delete these folders in the working directory: real ones must never be touched
+		assumeFalse(Files.exists(Path.of(RPT_STAT)) || Files.exists(Path.of(RPT_EXTRA)));
 	}
 
 	private static void deleteRecursively(Path root) throws Exception {
