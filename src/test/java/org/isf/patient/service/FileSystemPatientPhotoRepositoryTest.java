@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.patient;
+package org.isf.patient.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,17 +28,15 @@ import java.sql.Blob;
 
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
-import org.isf.patient.service.FileSystemPatientPhotoRepository;
-import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
+class FileSystemPatientPhotoRepositoryTest extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 
@@ -61,20 +59,20 @@ class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 	}
 
 	@Test
-	void testExist() throws Exception {
+	void exist_shouldReturnTrue_whenPhotoFileExists() throws Exception {
 		Integer code = setupTestPatient(true);
 		assertThat(fileSystemPatientPhotoRepository.exist("rsc-test/patient", code)).isTrue();
 	}
 
 	@Test
-	void testLoadInPatient() throws Exception {
+	void loadInPatient_shouldNotThrow() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
 		fileSystemPatientPhotoRepository.loadInPatient(patient, "rsc-test/patient");
 	}
 
 	@Test
-	void testSaveAndDelete() throws Exception {
+	void saveAndDelete_shouldNotThrow() throws Exception {
 		Blob blob = getBlob();
 		fileSystemPatientPhotoRepository.save("rsc-test/patient", 2, blob.getBytes(1, (int) blob.length()));
 		fileSystemPatientPhotoRepository.delete("rsc-test/patient", 2);
@@ -92,4 +90,5 @@ class TestFileSystemPatientPhotoRepository extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient.getCode();
 	}
+
 }
