@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.lab;
+package org.isf.lab.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -38,8 +38,8 @@ import org.isf.exatype.TestExamType;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
-import org.isf.lab.manager.LabManager;
-import org.isf.lab.manager.LabRowManager;
+import org.isf.lab.TestLaboratory;
+import org.isf.lab.TestLaboratoryRow;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
@@ -49,21 +49,18 @@ import org.isf.lab.service.LabIoOperations;
 import org.isf.lab.service.LabRowIoOperationRepository;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
-import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.pagination.PagedResponse;
-import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 
-class Tests extends OHCoreTestCase {
+class LabManagerTest extends OHCoreTestCase {
 
 	private static final String DRAFT = LaboratoryStatus.draft.toString();
 	private static TestLaboratory testLaboratory;
@@ -81,15 +78,11 @@ class Tests extends OHCoreTestCase {
 	@Autowired
 	LabRowIoOperationRepository labRowIoOperationRepository;
 	@Autowired
-	LabRowManager labRowManager;
-	@Autowired
 	ExamIoOperationRepository examIoOperationRepository;
 	@Autowired
 	ExamTypeIoOperationRepository examTypeIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
 
 	@BeforeAll
 	static void setUpClass() {
@@ -111,61 +104,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testLaboratoryGets(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int code = setupTestLaboratory(false);
-		checkLaboratoryIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratorySets(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer code = setupTestLaboratory(true);
-		checkLaboratoryIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratoryRowGets(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int code = setupTestLaboratoryRow(false);
-		checkLaboratoryRowIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratoryRowSets(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int code = setupTestLaboratoryRow(true);
-		checkLaboratoryRowIntoDb(code);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLabRowByLabId(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratoryRow).isNotNull();
-		List<LaboratoryRow> laboratoryRows = labIoOperation.getLabRow(foundLaboratoryRow.getLabId().getCode());
-		assertThat(laboratoryRows).contains(foundLaboratoryRow);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratory(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		List<Laboratory> laboratories = labIoOperation.getLaboratory();
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrGetLaboratoryRowList(boolean labExtended) throws Exception {
+	void getLaboratoryRowList_shouldReturnSavedRow(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -179,257 +118,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testIoGetLaboratoryPageable(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int id = setupTestLaboratory(false);
-		boolean oneWeek = false;
-		int pageNo = 0;
-		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(oneWeek, pageNo, pageSize);
-		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-	
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryOnWeekPageable(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int id = setupTestLaboratory(false);
-		boolean oneWeek = true;
-		int pageNo = 0;
-		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(oneWeek, pageNo, pageSize);
-		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryWithDates(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		List<Laboratory> laboratories = labIoOperation
-				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryWithoutDescription(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		// given:
-		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-
-		// when:
-		List<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
-
-		// then:
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryFromPatient(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratoryRow).isNotNull();
-		List<Laboratory> laboratories = labIoOperation.getLaboratory(foundLaboratoryRow.getLabId().getPatient());
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratoryRow.getLabId().getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryForPrint(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer id = setupTestLaboratory(true);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		var now = TimeTools.getNow();
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, now.minusWeeks(1), now, null);
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryForPrintWithDates(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryForPrintWithExamDescriptionLikePersistedOne(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		// given:
-		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		String description = foundLaboratory.getExam().getDescription();
-		String firstCharsOfDescription = description.substring(0, description.length() - 1);
-
-		// when:
-		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
-
-		// then:
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoGetLaboratoryForPrintWithNullExamDescription(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		// given:
-		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-
-		// when:
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate(), null);
-
-		// then:
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoNewLabFirstProcedure(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 1, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		Laboratory newLaboratory = labIoOperation.newLabFirstProcedure(laboratory);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoNewLabSecondProcedure(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<String> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labRow.add("TestLabRow");
-		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoNewLabSecondProcedureTransaction(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<String> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		labRow.add("TestLabRow");
-		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
-		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoNewLabSecondProcedure2(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<LaboratoryRow> labRow = new ArrayList<>();
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		labIoOperationRepository.saveAndFlush(laboratory);
-		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
-		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
-		labRow.add(laboratoryRow);
-		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure2(laboratory, labRow);
-		checkLaboratoryIntoDb(newLaboratory.getCode());
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoUpdateLaboratory(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer code = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		foundLaboratory.setNote("Update");
-		Laboratory updatedLaboratory = labIoOperation.updateLabFirstProcedure(foundLaboratory);
-		assertThat(updatedLaboratory.getNote()).isEqualTo("Update");
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoEditLabSecondProcedure(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		List<String> labRow = new ArrayList<>();
-		Integer code = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundLaboratoryRow).isNotNull();
-		labRow.add("Update");
-		labIoOperation.updateLabSecondProcedure(foundLaboratoryRow.getLabId(), labRow);
-		LaboratoryRow updatedLaboratoryRow = labRowIoOperationRepository.findById(code + 1).orElse(null);
-		assertThat(updatedLaboratoryRow).isNotNull();
-		assertThat(updatedLaboratoryRow.getDescription()).isEqualTo("Update");
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoDeleteLaboratory(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer code = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		labIoOperation.deleteLaboratory(foundLaboratory);
-		assertThat(labIoOperation.isCodePresent(code)).isFalse();
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testIoDeleteLaboratoryProcedureEquals2(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 2, false);
-		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		examTypeIoOperationRepository.saveAndFlush(examType);
-		examIoOperationRepository.saveAndFlush(exam);
-		patientIoOperationRepository.saveAndFlush(patient);
-		labIoOperationRepository.saveAndFlush(laboratory);
-		labIoOperation.deleteLaboratory(laboratory);
-		assertThat(labIoOperation.isCodePresent(laboratory.getCode())).isFalse();
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrGetLaboratoryPageable(boolean labExtended) throws Exception {
+	void getLaboratoryPageable_shouldReturnPageWithLaboratory_whenOneWeekIsFalse(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		int id = setupTestLaboratory(false);
 		boolean oneWeek = false;
@@ -443,7 +132,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratory(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratoryOfLastWeek_whenNoFilterIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		int id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
@@ -454,7 +143,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientPageable(boolean labExtended) throws Exception {
+	void getLaboratoryPageable_shouldReturnPageWithLaboratory_whenExamAndPatientAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -470,7 +159,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithNullPatientForPrint(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamIsGivenAndPatientIsNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -484,7 +173,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientExamNullForPrint(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamIsNullAndPatientIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -498,7 +187,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientNullExamNullForPrint(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamAndPatientAreNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -511,7 +200,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientForPrint(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamAndPatientAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -525,7 +214,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithNullPatientPageable(boolean labExtended) throws Exception {
+	void getLaboratoryPageable_shouldReturnPageWithLaboratory_whenExamIsGivenAndPatientIsNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -541,7 +230,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientExamNull(boolean labExtended) throws Exception {
+	void getLaboratoryPageable_shouldReturnPageWithLaboratory_whenExamIsNullAndPatientIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -557,7 +246,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientNullExamNull(boolean labExtended) throws Exception {
+	void getLaboratoryPageable_shouldReturnPageWithLaboratory_whenExamAndPatientAreNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -572,7 +261,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatient(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamAndPatientAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -586,7 +275,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithNullPatient(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamIsGivenAndPatientIsNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -600,7 +289,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientEmptyExam(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamIsEmptyAndPatientIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -614,7 +303,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithPatientNullEmptyExam(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamIsEmptyAndPatientIsNull(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratoryRow(false);
 		checkLaboratoryRowIntoDb(id);
@@ -627,18 +316,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testRowMgrGetLabRowByLabId(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundLaboratoryRow).isNotNull();
-		List<LaboratoryRow> laboratoryRows = labRowManager.getLabRowByLabId(foundLaboratoryRow.getLabId().getCode());
-		assertThat(laboratoryRows).contains(foundLaboratoryRow);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testMgrGetLaboratoryRelatedToPatient(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnPatientLaboratories_whenOnlyPatientIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		int id = setupTestLaboratoryRow(false);
 		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
@@ -649,7 +327,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithDatesAndExam(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamAndDatesAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		int id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
@@ -661,7 +339,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryWithoutExamName(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenExamIsNullAndDatesAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		// given:
 		int id = setupTestLaboratory(false);
@@ -677,7 +355,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintWithDates(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamAndDatesAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
@@ -689,7 +367,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintWithExamDescriptionLikePersistedOne(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenPartOfExamDescriptionIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		// given:
 		Integer id = setupTestLaboratory(false);
@@ -708,7 +386,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintWithNullExamDescription(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnLaboratory_whenExamIsNullAndDatesAreGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		// given:
 		Integer id = setupTestLaboratory(false);
@@ -724,7 +402,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintMultipeResultsNoRows(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldReturnAllNegativeResult_whenResultIsMultipleAndLaboratoryHasNoRows(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		// given:
 		Integer id = setupTestLaboratory(false);
@@ -749,7 +427,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintMultipeResultsRows(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldAppendRowDescriptionsToResult_whenResultIsMultiple(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
@@ -778,7 +456,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetLaboratoryForPrintMultipeResultsRowsWithPatient(boolean labExtended) throws Exception {
+	void getLaboratoryForPrint_shouldAppendRowDescriptionsToResult_whenResultIsMultipleAndPatientIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
@@ -805,7 +483,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals1(boolean labExtended) throws Exception {
+	void newLabFirstProcedure_shouldSaveLaboratory(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
@@ -823,7 +501,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2(boolean labExtended) throws Exception {
+	void newLabSecondProcedure_shouldSaveLaboratory(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ArrayList<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -843,7 +521,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2EmptyLabRows(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenExamProcedureIsTwoAndLabRowsAreEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -859,7 +537,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateExamRequestUnknownExam(boolean labExtended) {
+	void updateExamRequest_shouldThrow_whenLaboratoryNotFound(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() -> {
 			labManager.updateExamRequest(-99, "status");
@@ -869,7 +547,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateExamRequest(boolean labExtended) throws Exception {
+	void updateExamRequest_shouldSaveNewStatus(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
@@ -890,7 +568,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrLaboratory(boolean labExtended) throws Exception {
+	void getLaboratory_shouldReturnLaboratory_whenCodeExists(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
@@ -911,7 +589,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2NullLabRows(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenExamProcedureIsTwoAndLabRowsAreNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -926,7 +604,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryExceptionsBadProcedureNumber(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenExamProcedureIsUnknown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -942,7 +620,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryProcedureEquals2RollbackTransaction(boolean labExtended) throws Exception {
+	void newLabSecondProcedure_shouldSaveLaboratory_whenRowDescriptionHasSixtyCharacters(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ArrayList<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -963,7 +641,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2ProcedureEquals1(boolean labExtended) throws Exception {
+	void newLaboratory2_shouldReturnSavedLaboratory_whenExamProcedureIsOne(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -983,7 +661,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2ProcedureEquals2(boolean labExtended) throws Exception {
+	void newLaboratory2_shouldSetResultToMultipleResults_whenExamProcedureIsTwo(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -1004,7 +682,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2ProcedureEquals3(boolean labExtended) throws Exception {
+	void newLaboratory2_shouldReturnSavedLaboratory_whenExamProcedureIsThree(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -1024,7 +702,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2ProcedureEquals2NullLabRows(boolean labExtended) {
+	void newLaboratory_shouldThrowDataValidation_whenExamProcedureIsTwoAndLabRowsAreNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1039,7 +717,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2BadProcedureNumber(boolean labExtended) {
+	void newLaboratory2_shouldThrow_whenExamProcedureIsUnknown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1055,7 +733,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationMissingExamDate(boolean labExtended) throws Exception {
+	void newLaboratory_shouldSaveLaboratory_whenExamProcedureIsOne(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
@@ -1073,7 +751,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationMissingLabDate(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenLabDateIsNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1096,7 +774,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLABEXTENDEDNoPatient(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenPatientIsNullAndLabExtendedIsTrue(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		// Only generates an exception if LABEXTENDED is true
 		assumeThat(GeneralData.LABEXTENDED).isTrue();
@@ -1121,7 +799,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLABEXTENDEDPatient(boolean labExtended) throws Exception {
+	void newLaboratory_shouldCopyPatientNameAgeAndSex_whenLabExtendedIsTrue(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		// Only run if LABEXTENDED is true
 		assumeThat(GeneralData.LABEXTENDED).isTrue();
@@ -1147,7 +825,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoPatientBadSex(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenPatientIsNullAndSexIsInvalid(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1172,7 +850,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoPatientBadAge(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenPatientIsNullAndAgeIsNegative(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1197,7 +875,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoExam(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenExamIsNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1221,7 +899,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoResult(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenResultIsEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1245,7 +923,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoMaterial(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenMaterialIsEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1269,7 +947,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrValidationLNoInOutPatient(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenInOutPatientIsEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1293,7 +971,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryProcedure1(boolean labExtended) throws Exception {
+	void updateLaboratory_shouldSaveNewNote_whenExamProcedureIsOne(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer code = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
@@ -1305,7 +983,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryProcedure2(boolean labExtended) throws Exception {
+	void updateLaboratory_shouldSaveNewNote_whenExamProcedureIsTwo(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
@@ -1326,7 +1004,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryProcedure3(boolean labExtended) throws Exception {
+	void updateLaboratory_shouldSaveNewNote_whenExamProcedureIsThree(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 3, false);
@@ -1345,7 +1023,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryExceptionEmptyLabRows(boolean labExtended) {
+	void updateLaboratory_shouldThrow_whenExamProcedureIsTwoAndLabRowsAreEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1361,7 +1039,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryExceptionNullLablRows(boolean labExtended) {
+	void updateLaboratory_shouldThrow_whenExamProcedureIsTwoAndLabRowsAreNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1376,7 +1054,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrUpdateLaboratoryExceptionBadProcedureNumber(boolean labExtended) {
+	void updateLaboratory_shouldThrow_whenExamProcedureIsUnknown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1392,7 +1070,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransaction(boolean labExtended) throws Exception {
+	void newLaboratory_shouldReturnFirstSavedLaboratory_whenLaboratoryListIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<Laboratory> laboratories = new ArrayList<>();
 		List<List<String>> labRowList = new ArrayList<>();
@@ -1425,7 +1103,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransactionNoLabList(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenLaboratoryListIsEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1439,7 +1117,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratoryTransactionLabListNotEqualLabRowList(boolean labExtended) {
+	void newLaboratory_shouldThrow_whenLaboratoryListAndRowListSizesDiffer(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1469,7 +1147,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2Transaction(boolean labExtended) throws Exception {
+	void newLaboratory2_shouldReturnFirstSavedLaboratory_whenLaboratoryListIsGiven(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		List<Laboratory> labList = new ArrayList<>();
 		List<List<LaboratoryRow>> labRowList = new ArrayList<>();
@@ -1507,7 +1185,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2TransactionNoLabList(boolean labExtended) {
+	void newLaboratory2_shouldThrow_whenLaboratoryListIsEmpty(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1531,7 +1209,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrNewLaboratory2TransactionLabListNotEqualLabRowList(boolean labExtended) {
+	void newLaboratory2_shouldThrow_whenLaboratoryListAndRowListSizesDiffer(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThatThrownBy(() ->
 		{
@@ -1565,7 +1243,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrDeleteLaboratory(boolean labExtended) throws Exception {
+	void deleteLaboratory_shouldRemoveLaboratory(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		Integer code = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
@@ -1576,7 +1254,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrDeleteLaboratoryProcedure2(boolean labExtended) throws Exception {
+	void deleteLaboratory_shouldRemoveLaboratory_whenExamProcedureIsTwo(boolean labExtended) throws Exception {
 		GeneralData.LABEXTENDED = labExtended;
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
@@ -1592,14 +1270,14 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialKeyUndefined(boolean labExtended) {
+	void getMaterialKey_shouldReturnUndefined_whenDescriptionIsUnknown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThat(labManager.getMaterialKey("notThere")).isEqualTo("undefined");
 	}
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialKeyFound(boolean labExtended) {
+	void getMaterialKey_shouldReturnKey_whenDescriptionIsKnown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		// TODO: if resource bundles are made available this needs to change
 		assertThat(labManager.getMaterialKey("angal.lab.film.txt")).isEqualTo("film");
@@ -1607,7 +1285,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialTranslatedNotThere(boolean labExtended) {
+	void getMaterialTranslated_shouldReturnUndefinedDescription_whenKeyIsUnknown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		// TODO: if resource bundles are made available this needs to change
 		assertThat(labManager.getMaterialTranslated("notThere")).isEqualTo("angal.lab.undefined.txt");
@@ -1615,7 +1293,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialTranslatedNull(boolean labExtended) {
+	void getMaterialTranslated_shouldReturnUndefinedDescription_whenKeyIsNull(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		// TODO: if resource bundles are made available this needs to change
 		assertThat(labManager.getMaterialTranslated(null)).isEqualTo("angal.lab.undefined.txt");
@@ -1623,7 +1301,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialTranslatedFound(boolean labExtended) {
+	void getMaterialTranslated_shouldReturnDescription_whenKeyIsKnown(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		// TODO: if resource bundles are made available this needs to change
 		assertThat(labManager.getMaterialTranslated("film")).isEqualTo("angal.lab.film.txt");
@@ -1631,7 +1309,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("labExtended")
-	void testMgrGetMaterialLIst(boolean labExtended) {
+	void getMaterialList_shouldReturnNineDescriptionsSortedWithUndefinedFirst(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
 		assertThat(labManager.getMaterialList()).hasSize(9);
 		List<String> materailList = labManager.getMaterialList();
@@ -1639,135 +1317,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(materailList.get(0)).isEqualTo("angal.lab.undefined.txt");
 		materailList.remove(0);   // Remove the default value that is placed first in the list even if out of order
 		assertThat(materailList).isSorted();
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		// given:
-		int id = setupTestLaboratory(false);
-		Laboratory found = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(found).isNotNull();
-		Patient mergedPatient = testPatient.setup(true);
-		patientIoOperationRepository.saveAndFlush(mergedPatient);
-
-		// when:
-		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
-
-		// then:
-		Laboratory laboratory = labIoOperationRepository.findById(id).orElse(null);
-		assertThat(laboratory).isNotNull();
-		assertThat(laboratory.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-		assertThat(laboratory.getPatName()).isEqualTo(mergedPatient.getName());
-		assertThat(laboratory.getAge()).isEqualTo(mergedPatient.getAge());
-		assertThat(laboratory.getSex()).isEqualTo(String.valueOf(mergedPatient.getSex()));
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testNewLaboratoryGetterSetters(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer code = 0;
-		String result = "TestResult";
-		String note = "TestNote";
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 1, false);
-		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
-		assertThat(laboratory).isNotNull();
-		assertThat(laboratory.getCode()).isEqualTo(code);
-		assertThat(laboratory.getExam()).isEqualTo(exam);
-		assertThat(laboratory.getResult()).isEqualTo(result);
-		assertThat(laboratory.getNote()).isEqualTo(note);
-		assertThat(laboratory.getPatName()).isEqualTo(patient.getName());
-
-		laboratory.setCode(-1);
-		assertThat(laboratory.getCode()).isEqualTo(-1);
-		laboratory.setLock(-2);
-		assertThat(laboratory.getLock()).isEqualTo(-2);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratoryEqualsHashToString(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int code = setupTestLaboratory(false);
-		Laboratory laboratory = labIoOperationRepository.findById(code).orElse(null);
-		assertThat(laboratory).isNotNull();
-		Laboratory laboratory2 = new Laboratory(code + 1, null, TimeTools.getNow(), "result", "note", null, "name");
-		assertThat(laboratory)
-				.isEqualTo(laboratory)
-				.isNotEqualTo(laboratory2)
-				.isNotEqualTo("xyzzy");
-		laboratory2.setCode(code);
-		assertThat(laboratory).isEqualTo(laboratory2);
-
-		assertThat(laboratory.hashCode()).isPositive();
-
-		assertThat(laboratory.toString()).isNotEmpty();
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testNewLaboratoryRowGetterSetters(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		Integer code = 0;
-		String result = "TestResult";
-		String note = "TestNote";
-		ExamType examType = testExamType.setup(false);
-		Exam exam = testExam.setup(examType, 1, false);
-		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
-		LaboratoryRow laboratoryRow = new LaboratoryRow(code, laboratory, "description");
-		assertThat(laboratoryRow).isNotNull();
-
-		laboratoryRow.setCode(-1);
-		assertThat(laboratoryRow.getCode()).isEqualTo(-1);
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratoryRowEqualsHash(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		int code = setupTestLaboratoryRow(false);
-		LaboratoryRow laboratoryRow = labRowIoOperationRepository.findById(code).orElse(null);
-		assertThat(laboratoryRow).isNotNull();
-		LaboratoryRow laboratoryRow2 = new LaboratoryRow(code + 1, null, "description");
-		assertThat(laboratoryRow)
-				.isEqualTo(laboratoryRow)
-				.isNotEqualTo(laboratoryRow2)
-				.isNotEqualTo("xyzzy");
-		laboratoryRow2.setCode(code);
-		assertThat(laboratoryRow).isEqualTo(laboratoryRow2);
-
-		laboratoryRow.setCode(null);
-		laboratoryRow2.setCode(null);
-		assertThat(laboratoryRow).isNotEqualTo(laboratoryRow2);
-		laboratoryRow.setDescription("description");
-		assertThat(laboratoryRow).isEqualTo(laboratoryRow);
-
-		assertThat(laboratoryRow.hashCode()).isPositive();
-	}
-
-	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
-	@MethodSource("labExtended")
-	void testLaboratoryForPrintGetterSetter(boolean labExtended) throws Exception {
-		GeneralData.LABEXTENDED = labExtended;
-		setupTestLaboratory(false);
-		var now = TimeTools.getNow();
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, now.minusWeeks(1), now, null);
-
-		LaboratoryForPrint laboratoryForPrint = laboratories.get(0);
-
-		laboratoryForPrint.setCode(-1);
-		assertThat(laboratoryForPrint.getCode()).isEqualTo(-1);
-		laboratoryForPrint.setDate(laboratoryForPrint.getDate());
-		assertThat(laboratoryForPrint.getDate()).isEqualTo(laboratoryForPrint.getDate());
-		laboratoryForPrint.setExam("examString");
-		assertThat(laboratoryForPrint.getExam()).isEqualTo("examString");
-		laboratoryForPrint.setResult("resultString");
-		assertThat(laboratoryForPrint.getResult()).isEqualTo("resultString");
 	}
 
 	private Integer setupTestLaboratory(boolean usingSet) throws OHException {
@@ -1807,4 +1356,5 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundLaboratoryRow).isNotNull();
 		testLaboratoryRow.check(foundLaboratoryRow);
 	}
+
 }
