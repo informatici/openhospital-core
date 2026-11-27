@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,23 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.utils.db;
+package org.isf.utils.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.isf.ward.TestWard;
-import org.isf.ward.model.Ward;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.junit.jupiter.api.Test;
 
-class TestRememberData {
-
-	private static TestWard testWard = new TestWard();
+class OHDicomExceptionTest {
 
 	@Test
-	void testSetGet() throws Exception {
-		Ward ward = testWard.setup(false);
-		RememberData.setLastOpdWard(ward);
-		assertThat(RememberData.getLastOpdWard()).isSameAs(ward);
+	void constructor_shouldCreateException_whenCalledWithAndWithoutCause() {
+		List<OHExceptionMessage> ohExceptionMessages = new ArrayList<>();
+		ohExceptionMessages.add(new OHExceptionMessage("message"));
+		assertThat(new OHDicomException(ohExceptionMessages)).isNotNull();
+
+		assertThat(new OHDicomException(new Throwable(), ohExceptionMessages)).isNotNull();
 	}
 
 }

@@ -29,16 +29,16 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-class TestLogUtil {
+class LogUtilTest {
 
 	@Test
-	void testGetLogFileAbsolutePath() {
+	void getLogFileAbsolutePath_shouldReturnNullOrConfiguredPath() {
 		// depending on the testing setup the value is either null or the value in the properties file
 		assertThat(LogUtil.getLogFileAbsolutePath()).isIn(null, "logs/openhospital.log");
 	}
 
 	@Test
-	void testLogFileFolderReportsAnUnknownPathInsteadOfFailing() {
+	void logFileFolder_shouldThrowIOException_whenPathIsNull() {
 		// getLogFileAbsolutePath() returns null whenever no file appender is configured
 		assertThatThrownBy(() -> LogUtil.logFileFolder(null))
 						.isInstanceOf(IOException.class)
@@ -46,14 +46,15 @@ class TestLogUtil {
 	}
 
 	@Test
-	void testLogFileFolderResolvesABareFileNameAgainstTheWorkingDirectory() throws IOException {
+	void logFileFolder_shouldReturnWorkingDirectory_whenPathIsBareFileName() throws IOException {
 		assertThat(LogUtil.logFileFolder("openhospital.log"))
 						.isEqualTo(new File(System.getProperty("user.dir")));
 	}
 
 	@Test
-	void testLogFileFolderKeepsTheFolderOfAPathThatHasOne() throws IOException {
+	void logFileFolder_shouldReturnParentFolder_whenPathHasOne() throws IOException {
 		assertThat(LogUtil.logFileFolder("logs/openhospital.log"))
 						.isEqualTo(new File(System.getProperty("user.dir"), "logs"));
 	}
+
 }

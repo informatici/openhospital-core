@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,31 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.utils.pagination;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.isf.utils.time;
 
 import org.junit.jupiter.api.Test;
 
-class TestPageResponse {
+class DelayTimerTest {
 
 	@Test
-	void testSetGet() {
-		PageInfo pageInfo = TestPageInfo.setupPageInfo();
-
-		PagedResponse pagedResponse = new PagedResponse();
-
-		pagedResponse.setPageInfo(pageInfo);
-		assertThat(pagedResponse.getPageInfo()).isSameAs(pageInfo);
-
-		List<String> data = new ArrayList<>();
-		data.add("a");
-		data.add("b");
-
-		pagedResponse.setData(data);
-		assertThat(pagedResponse.getData()).isSameAs(data);
+	void startTimerStopTimerAndQuit_shouldNotThrow() throws Exception {
+		// Nothing really to check; if the code doesn't error out then it is as good as it gets
+		DelayTimer delayTimer = new DelayTimer(new Callback(), 3L);
+		delayTimer.startTimer();
+		delayTimer.startTimer();
+		new Thread(delayTimer::run);
+		delayTimer.stopTimer();
+		delayTimer.quit();
 	}
+
+	class Callback implements DelayTimerCallback {
+
+		@Override
+		public void trigger() {
+		}
+	}
+
 }

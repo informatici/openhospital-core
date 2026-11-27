@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -37,7 +37,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 
-class TestDbQueryLogger {
+class DbQueryLoggerTest {
 
 	@Mock
 	EntityManagerFactory entityManagerFactoryMock;
@@ -61,7 +61,7 @@ class TestDbQueryLogger {
 	}
 
 	@Test
-	void testNew() throws Exception {
+	void getData_shouldThrow_whenConnectionCannotBeCreated() throws Exception {
 		when(entityManagerFactoryMock.createEntityManager()).thenReturn(entityManagerMock);
 		DbQueryLogger dbQueryLogger = new DbQueryLogger();
 		assertThat(dbQueryLogger).isNotNull();
@@ -69,4 +69,5 @@ class TestDbQueryLogger {
 		assertThatThrownBy(() -> { dbQueryLogger.getData(query, true); })
 						.isInstanceOf(OHException.class);
 	}
+
 }

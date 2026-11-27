@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestBCrypt {
+class BCryptTest {
 
 	String testVectors[][] = {   // [0] = plain;  [1] = salt; [2] = expected
 			{ "",
@@ -46,7 +46,7 @@ class TestBCrypt {
 	};
 
 	@Test
-	void testHashpw() throws Exception {
+	void hashpw_shouldReturnExpectedHash_whenSaltIsKnown() throws Exception {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			String plain = testVectors[idx][0];
 			String salt = testVectors[idx][1];
@@ -57,7 +57,7 @@ class TestBCrypt {
 	}
 
 	@Test
-	void testGensaltInt() throws Exception {
+	void gensalt_shouldReturnSaltUsableByHashpw_whenLogRoundsAreGiven() throws Exception {
 		for (int idx = 4; idx <= testVectors.length; idx++) {
 			for (int jdx = 0; jdx < testVectors.length; jdx += 4) {
 				String plain = testVectors[jdx][0];
@@ -70,7 +70,7 @@ class TestBCrypt {
 	}
 
 	@Test
-	void testGensalt() {
+	void gensalt_shouldReturnSaltUsableByHashpw() {
 		for (int idx = 0; idx < testVectors.length; idx += 4) {
 			String plain = testVectors[idx][0];
 			String salt = BCrypt.gensalt();
@@ -81,7 +81,7 @@ class TestBCrypt {
 	}
 
 	@Test
-	void testCheckpwSuccess() {
+	void checkpw_shouldReturnTrue_whenPasswordMatchesHash() {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			String plain = testVectors[idx][0];
 			String expected = testVectors[idx][2];
@@ -90,7 +90,7 @@ class TestBCrypt {
 	}
 
 	@Test
-	void testCheckpwFailure() {
+	void checkpw_shouldReturnFalse_whenHashIsOfAnotherPassword() {
 		for (int idx = 0; idx < testVectors.length; idx++) {
 			int broken_index = (idx + 4) % testVectors.length;
 			String plain = testVectors[idx][0];
@@ -100,7 +100,7 @@ class TestBCrypt {
 	}
 
 	@Test
-	void testInternationalChars() {
+	void checkpw_shouldDistinguishInternationalCharsFromQuestionMarks() {
 		String pw1 = "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605";
 		String pw2 = "????????";
 
@@ -110,4 +110,5 @@ class TestBCrypt {
 		String h2 = BCrypt.hashpw(pw2, BCrypt.gensalt());
 		assertThat(BCrypt.checkpw(pw1, h2)).isFalse();
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -35,7 +35,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationContext;
 
-class TestDbJpaUtil {
+class DbJpaUtilTest {
 
 	@Mock
 	private EntityManagerFactory entityManagerFactoryMock;
@@ -59,13 +59,13 @@ class TestDbJpaUtil {
 	}
 
 	@Test
-	void testNew() throws Exception {
+	void constructor_shouldCreateDbJpaUtil() throws Exception {
 		DbJpaUtil dbJpaUtil = new DbJpaUtil();
 		assertThat(dbJpaUtil).isNotNull();
 	}
 
 	@Test
-	void testOpen() throws Exception {
+	void open_shouldNotThrow_whenEntityManagerFactoryIsMocked() throws Exception {
 		DbJpaUtil dbJpaUtil = new DbJpaUtil();
 		when(entityManagerFactoryMock.createEntityManager()).thenReturn(entityManagerMock);
 		dbJpaUtil.open();

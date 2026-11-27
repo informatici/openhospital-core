@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,30 +25,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class TestNormalizeString {
+class NormalizeStringTest {
 
 	@Test
-	void testNormalizeString() throws Exception {
+	void normalizeString_shouldStripAccentsAndDropNonAsciiChars() throws Exception {
 		assertThat(NormalizeString.normalizeString("touch" + "\u00e9")).isEqualTo("touche");
 		assertThat(NormalizeString.normalizeString("a" + "\ufb03" + "ance")).isEqualTo("aance");
 		assertThat(NormalizeString.normalizeString("fa" + "\u00e7" + "ade")).isEqualTo("facade");
 	}
 
 	@Test
-	void testNormalizeCompareTo() throws Exception {
+	void normalizeCompareTo_shouldCompareNormalizedStrings() throws Exception {
 		assertThat(NormalizeString.normalizeCompareTo("touch" + "\u00e9", "fa" + "\u00e7" + "ade")).isGreaterThan(0);
 		assertThat(NormalizeString.normalizeCompareTo("touch" + "\u00e9", "touche")).isZero();
 	}
 
 	@Test
-	void testNormalizeCompareToIgnoreCase() throws Exception {
+	void normalizeCompareToIgnorecase_shouldCompareNormalizedStringsIgnoringCase() throws Exception {
 		assertThat(NormalizeString.normalizeCompareToIgnorecase("touch" + "\u00e9", "fa" + "\u00e7" + "ade")).isGreaterThan(0);
 		assertThat(NormalizeString.normalizeCompareToIgnorecase("touch" + "\u00e9", "ToUcHe")).isZero();
 	}
 
 	@Test
-	void testNormalizeContains() throws Exception {
+	void normalizeContains_shouldSearchNormalizedTokenInNormalizedString() throws Exception {
 		assertThat(NormalizeString.normalizeContains("touch" + "\u00e9", "fa" + "\u00e7" + "ade")).isFalse();
 		assertThat(NormalizeString.normalizeContains("touch" + "\u00e9", "\u00e9")).isTrue();
 	}
+
 }

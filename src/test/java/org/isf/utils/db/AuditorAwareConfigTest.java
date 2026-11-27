@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Class to indirectly test the {@link AuditorAwareConfig}.
  */
-class TestAuditAwareConfig extends OHCoreTestCase {
+class AuditorAwareConfigTest extends OHCoreTestCase {
 
 	private static final String USERNAME = "admin";
 
@@ -56,7 +56,7 @@ class TestAuditAwareConfig extends OHCoreTestCase {
 	}
 
 	@Test
-	void shouldWriteCurrentGuiUserInAuditFields() {
+	void defaultAuditorAwareCustomizer_shouldWriteCurrentGuiUserInAuditFields() {
 		AdmissionType admissionType = admissionTypeRepository.saveAndFlush(new AdmissionType("AUD", "Audit test"));
 
 		assertThat(admissionType.getCreatedBy()).isEqualTo(USERNAME);
@@ -73,4 +73,5 @@ class TestAuditAwareConfig extends OHCoreTestCase {
 				+ "VALUES ('admin', 'admin', 'password', 'administrator', 1, 0, false)")
 			.executeUpdate();
 	}
+
 }
