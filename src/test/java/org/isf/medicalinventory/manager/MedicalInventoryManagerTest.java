@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2025 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.medicalsinventory;
+package org.isf.medicalinventory.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -33,8 +33,6 @@ import java.util.stream.Stream;
 
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
-import org.isf.medicalinventory.manager.MedicalInventoryManager;
-import org.isf.medicalinventory.manager.MedicalInventoryRowManager;
 import org.isf.medicalinventory.model.InventoryStatus;
 import org.isf.medicalinventory.model.InventoryType;
 import org.isf.medicalinventory.model.MedicalInventory;
@@ -46,6 +44,9 @@ import org.isf.medicalinventory.service.MedicalInventoryRowIoOperationRepository
 import org.isf.medicals.TestMedical;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
+import org.isf.medicalsinventory.TestMedicalInventory;
+import org.isf.medicalsinventory.TestMedicalInventoryRow;
+import org.isf.medicalsinventory.TestMedicalWardInventory;
 import org.isf.medicalstock.TestLot;
 import org.isf.medicalstock.TestMedicalStock;
 import org.isf.medicalstock.TestMovement;
@@ -84,7 +85,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-class Tests extends OHCoreTestCase {
+class MedicalInventoryManagerTest extends OHCoreTestCase {
 
 	private static TestMedicalInventory testMedicalInventory;
 	private static TestMedicalInventoryRow testMedicalInventoryRow;
@@ -112,9 +113,6 @@ class Tests extends OHCoreTestCase {
 
 	@Autowired
 	MedicalInventoryIoOperation medicalInventoryIoOperation;
-
-	@Autowired
-	MedicalInventoryRowIoOperationRepository medIvnRowIoOperationRepository;
 
 	@Autowired
 	MedicalInventoryRowIoOperation medIvnRowIoOperation;
@@ -189,67 +187,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMedicalInventoryGets() throws Exception {
-		int code = setupTestMedicalInventory();
-		checkMedicalInventoryIntoDb(code);
-	}
-
-	@Test
-	void testMedicalInventoryGetsSets() throws Exception {
-		int id = setupTestMedicalInventory();
-		MedicalInventory medicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(medicalInventory).isNotNull();
-
-		LocalDateTime now = TimeTools.getNow();
-		medicalInventory.setInventoryDate(now);
-		assertThat(medicalInventory.getInventoryDate()).isEqualTo(now);
-
-		String user = "admin";
-		medicalInventory.setUser(user);
-		assertThat(medicalInventory.getUser()).isEqualTo(user);
-
-		String inventoryReference = "ref";
-		medicalInventory.setInventoryReference(inventoryReference);
-		assertThat(medicalInventory.getInventoryReference()).isEqualTo(inventoryReference);
-
-		String inventoryType = InventoryType.main.toString();
-		medicalInventory.setInventoryType(inventoryType);
-		assertThat(medicalInventory.getInventoryType()).isEqualTo(inventoryType);
-
-		int lock = -99;
-		medicalInventory.setLock(lock);
-		assertThat(medicalInventory.getLock()).isEqualTo(lock);
-	}
-
-	@Test
-	void testMedicalInventoryRowGetsSets() throws Exception {
-		Integer id = setupTestMedicalInventoryRow();
-		MedicalInventoryRow medicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(medicalInventoryRow).isNotNull();
-
-		id = -99;
-		medicalInventoryRow.setId(id);
-		assertThat(medicalInventoryRow.getId()).isEqualTo(id);
-
-		BigDecimal theoreticQty = new BigDecimal("-17.9");
-		medicalInventoryRow.setTheoreticQty(theoreticQty);
-		assertThat(medicalInventoryRow.getTheoreticQty()).isEqualByComparingTo(theoreticQty);
-
-		BigDecimal realQty = new BigDecimal("-37.3");
-		medicalInventoryRow.setRealqty(realQty);
-		assertThat(medicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
-		medicalInventoryRow.setRealQty(realQty); // Note the uppercase 'Q'
-		assertThat(medicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
-
-		int lock = -99;
-		medicalInventoryRow.setLock(lock);
-		assertThat(medicalInventoryRow.getLock()).isEqualTo(lock);
-
-		assertThat(medicalInventoryRow.getSearchString()).isEqualTo("testdescriptiontp1");
-	}
-
-	@Test
-	void testMgrGetMedicalInventory() throws Exception {
+	void getMedicalInventory_shouldReturnSavedInventory() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory foundMedicalinventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalinventory).isNotNull();
@@ -258,16 +196,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoGetMedicalInventory() throws Exception {
-		int id = setupTestMedicalInventory();
-		MedicalInventory foundMedicalinventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalinventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventory();
-		assertThat(medicalInventories.get(medicalInventories.size() - 1).getId()).isEqualTo((Integer) id);
-	}
-
-	@Test
-	void testMgrNewMedicalInventory() throws Exception {
+	void newMedicalInventory_shouldSaveInventory() throws Exception {
 		Ward ward = testWard.setup(false);
 		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
 		List<MedicalInventoryRow> medicalInventoryRows = new ArrayList<>();
@@ -276,16 +205,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoNewMedicalInventory() throws Exception {
-		Ward ward = testWard.setup(false);
-		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory newMedicalInventory = medicalInventoryIoOperation.newMedicalInventory(medicalInventory);
-		checkMedicalInventoryIntoDb(newMedicalInventory.getId());
-		assertThat(medicalInventoryIoOperation.referenceExists(newMedicalInventory.getInventoryReference())).isTrue();
-	}
-
-	@Test
-	void testMgrUpdateMedicalInventory() throws Exception {
+	void updateMedicalInventory_shouldSaveNewStatus() throws Exception {
 		Integer id = setupTestMedicalInventory();
 		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventory).isNotNull();
@@ -296,18 +216,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoUpdateMedicalInventory() throws Exception {
-		Integer id = setupTestMedicalInventory();
-		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventory).isNotNull();
-		String status = "canceled";
-		foundMedicalInventory.setStatus(status);
-		MedicalInventory updatedMedicalInventory = medicalInventoryIoOperation.updateMedicalInventory(foundMedicalInventory);
-		assertThat(updatedMedicalInventory.getStatus()).isEqualTo(status);
-	}
-
-	@Test
-	void testDeleteMedicalInventoryWithInventoryRowsWithoutNewLot() throws Exception {
+	void deleteInventory_shouldSetStatusToCanceled_whenRowHasNoNewLot() throws Exception {
 		Integer id = setupTestMedicalInventory();
 		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventory).isNotNull();
@@ -326,7 +235,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testDeleteMedicalInventoryWithInventoryRowsWithNewLot() throws Exception {
+	void deleteInventory_shouldSetStatusToCanceled_whenRowHasNewLot() throws Exception {
 		Integer id = setupTestMedicalInventory();
 		MedicalInventory foundMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(foundMedicalInventory).isNotNull();
@@ -346,7 +255,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetMedicalInventoryWithStatus() throws Exception {
+	void getMedicalInventoryByStatusAndInventoryType_shouldReturnOnlyInventoriesWithGivenStatus() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -365,26 +274,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoGetMedicalInventoryWithStatus() throws Exception {
-		int id = setupTestMedicalInventory();
-		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(firstMedicalInventory).isNotNull();
-		Ward ward = testWard.setup(false);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		String status = InventoryStatus.canceled.toString();
-		String inventoryType = InventoryType.main.toString();
-		inventory.setStatus(status);
-		inventory.setInventoryType(inventoryType);
-		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
-		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalInventories = medicalInventoryIoOperation.getMedicalInventoryByStatusAndInventoryType(firstMedicalInventory.getStatus(),
-			firstMedicalInventory.getInventoryType());
-		assertThat(medicalInventories).hasSize(1);
-		assertThat(medicalInventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
-	}
-
-	@Test
-	void testMgrGetMedicalInventoryWithStatusAndWard() throws Exception {
+	void getMedicalInventoryByStatusAndWard_shouldReturnOnlyInventoriesWithGivenStatusAndWard() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -405,28 +295,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testIoGetMedicalInventoryWithStatusAndWard() throws Exception {
-		int id = setupTestMedicalInventory();
-		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
-		assertThat(firstMedicalInventory).isNotNull();
-		Ward ward = testWard.setup(false);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		inventory.setId(null);
-		String wardCode = "P";
-		String status = InventoryStatus.validated.toString();
-		inventory.setWardCode(wardCode);
-		inventory.setStatus(status);
-		MedicalInventory secondMedicalInventory = medIvnIoOperationRepository.saveAndFlush(inventory);
-		assertThat(secondMedicalInventory).isNotNull();
-		List<MedicalInventory> medicalinventories = medicalInventoryIoOperation
-			.getMedicalInventoryByStatusAndWard(firstMedicalInventory.getStatus(), firstMedicalInventory.getWardCode());
-		assertThat(medicalinventories).hasSize(1);
-		assertThat(medicalinventories.get(0).getStatus()).isEqualTo(firstMedicalInventory.getStatus());
-		assertThat(medicalinventories.get(0).getWardCode()).isEqualTo(firstMedicalInventory.getWardCode());
-	}
-
-	@Test
-	void testMgrGetMedicalInventoryByParams() throws Exception {
+	void getMedicalInventoryByParams_shouldReturnOnlyInventoriesWithGivenStatus() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -447,7 +316,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetMedicalInventoryByParamsNullStatus() throws Exception {
+	void getMedicalInventoryByParams_shouldReturnDraftAndValidatedInventories_whenStatusIsNull() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -470,7 +339,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetMedicalInventoryByParamsPageable() throws Exception {
+	void getMedicalInventoryByParamsPageable_shouldReturnOnlyInventoriesWithGivenStatus() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -492,7 +361,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testMgrGetMedicalInventoryByParamsNullStatusPagable() throws Exception {
+	void getMedicalInventoryByParamsPageable_shouldReturnDraftAndValidatedInventories_whenStatusIsNull() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory firstMedicalInventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(firstMedicalInventory).isNotNull();
@@ -513,105 +382,6 @@ class Tests extends OHCoreTestCase {
 		assertThat(medicalinventories.getContent().get(0).getWardCode()).containsAnyOf(firstMedicalInventory.getWardCode(), wardCode);
 	}
 
-	@Test
-	void testIoNewMedicalInventoryRow() throws Exception {
-		Ward ward = testWard.setup(false);
-		wardIoOperationRepository.saveAndFlush(ward);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
-		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		Lot lot = testLot.setup(medical, false);
-		lotIoOperationRepository.saveAndFlush(lot);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		MedicalInventoryRow newMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
-		checkMedicalInventoryRowIntoDb(newMedicalInventoryRow.getId());
-	}
-
-	@Test
-	void testMgrNewMedicalInventoryRow() throws Exception {
-		Ward ward = testWard.setup(false);
-		wardIoOperationRepository.saveAndFlush(ward);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
-		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		Lot lot = testLot.setup(medical, false);
-		lotIoOperationRepository.saveAndFlush(lot);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
-		checkMedicalInventoryRowIntoDb(newMedicalInventoryRow.getId());
-	}
-
-	@Test
-	void testMgrDeleteMedicalInventoryRow() throws Exception {
-		Ward ward = testWard.setup(false);
-		wardIoOperationRepository.saveAndFlush(ward);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
-		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		Lot lot = testLot.setup(medical, false);
-		lotIoOperationRepository.saveAndFlush(lot);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
-		checkMedicalInventoryRowIntoDb(newMedicalInventoryRow.getId());
-		int inventoryId = newMedicalInventoryRow.getId();
-		medicalInventoryRowManager.deleteMedicalInventoryRow(newMedicalInventoryRow);
-		List<MedicalInventoryRow> found = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
-		assertThat(found).isEmpty();
-	}
-
-	@Test
-	void testIoUpdateMedicalInventoryRow() throws Exception {
-		Integer id = setupTestMedicalInventoryRow();
-		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventoryRow).isNotNull();
-		BigDecimal realQty = new BigDecimal("100.0");
-		foundMedicalInventoryRow.setRealqty(realQty);
-		MedicalInventoryRow updatedMedicalInventoryRow = medIvnRowIoOperation.updateMedicalInventoryRow(foundMedicalInventoryRow);
-		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
-	}
-
-	@Test
-	void testMgrUpdateMedicalInventoryRow() throws Exception {
-		Integer id = setupTestMedicalInventoryRow();
-		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventoryRow).isNotNull();
-		BigDecimal realQty = new BigDecimal("100.0");
-		foundMedicalInventoryRow.setRealqty(realQty);
-		MedicalInventoryRow updatedMedicalInventoryRow = medicalInventoryRowManager.updateMedicalInventoryRow(foundMedicalInventoryRow);
-		assertThat(updatedMedicalInventoryRow.getRealQty()).isEqualByComparingTo(realQty);
-	}
-
-	@Test
-	void testMgrGetMedicalInventoryRowByInventoryId() throws Exception {
-		Ward ward = testWard.setup(false);
-		wardIoOperationRepository.saveAndFlush(ward);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
-		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		Lot lot = testLot.setup(medical, false);
-		lotIoOperationRepository.saveAndFlush(lot);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		MedicalInventoryRow savedMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
-		int inventoryId = savedMedicalInventoryRow.getId();
-		MedicalInventoryRow newMedicalInventoryRow = medicalInventoryRowManager.newMedicalInventoryRow(medicalInventoryRow);
-		assertThat(newMedicalInventoryRow).isNotNull();
-		List<MedicalInventoryRow> medicalInventoryRows = medicalInventoryRowManager.getMedicalInventoryRowByInventoryId(inventoryId);
-		assertThat(medicalInventoryRows).isNotEmpty();
-		assertThat(medicalInventoryRows).hasSize(1);
-	}
-
 	private int setupTestMedicalInventory() throws OHException, OHServiceException {
 		Ward ward = testWard.setup(false);
 		MedicalInventory medicalInventory = testMedicalInventory.setup(ward, false);
@@ -626,30 +396,8 @@ class Tests extends OHCoreTestCase {
 		testMedicalInventory.check(foundMedicalInventory, id);
 	}
 
-	private void checkMedicalInventoryRowIntoDb(int id) throws OHException {
-		MedicalInventoryRow foundMedicalInventoryRow = medIvnRowIoOperationRepository.findById(id).orElse(null);
-		assertThat(foundMedicalInventoryRow).isNotNull();
-		testMedicalInventoryRow.check(foundMedicalInventoryRow, foundMedicalInventoryRow.getId());
-	}
-
-	private int setupTestMedicalInventoryRow() throws OHServiceException, OHException {
-		Ward ward = testWard.setup(false);
-		wardIoOperationRepository.saveAndFlush(ward);
-		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
-		MedicalInventory savedInventory = medicalInventoryIoOperation.newMedicalInventory(inventory);
-		MedicalType medicalType = testMedicalType.setup(false);
-		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		Medical medical = testMedical.setup(medicalType, false);
-		medicalsIoOperationRepository.saveAndFlush(medical);
-		Lot lot = testLot.setup(medical, false);
-		lotIoOperationRepository.saveAndFlush(lot);
-		MedicalInventoryRow medicalInventoryRow = testMedicalInventoryRow.setup(savedInventory, medical, lot, false);
-		MedicalInventoryRow savedMedicalInventoryRow = medIvnRowIoOperation.newMedicalInventoryRow(medicalInventoryRow);
-		return savedMedicalInventoryRow.getId();
-	}
-
 	@Test
-	void testDeleteInventory() throws Exception {
+	void deleteInventory_shouldSetStatusToCanceled() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(inventory).isNotNull();
@@ -662,7 +410,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testValidateMedicalInventoryRow() throws Exception {
+	void validateMedicalInventoryRow_shouldNotThrow_whenThereAreNoMovements() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MedicalInventory inventory = testMedicalInventory.setup(ward, false);
@@ -689,7 +437,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	@MethodSource("automaticlot")
-	void testConfirmMedicalInventory(boolean in, boolean out, boolean toward) throws Exception {
+	void confirmMedicalInventoryRow_shouldInsertMovementsAndSetStatusToDone(boolean in, boolean out, boolean toward) throws Exception {
 		setGeneralData(in, out, toward);
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -752,7 +500,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testConfirmMedicalInventoryRowFractionalAdjustmentError() throws Exception {
+	void confirmMedicalInventoryRow_shouldThrow_whenQuantitiesAreFractional() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
@@ -795,7 +543,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testReferenceOfInventoryExist() throws Exception {
+	void referenceExists_shouldReturnTrue_whenReferenceExists() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(inventory).isNotNull();
@@ -805,14 +553,14 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testGetInventoryByID() throws Exception {
+	void getInventoryById_shouldReturnInventory_whenIdExists() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory inventory = medicalInventoryManager.getInventoryById(id);
 		assertThat(inventory).isNotNull();
 	}
 
 	@Test
-	void testGetInventoryByReference() throws Exception {
+	void getInventoryByReference_shouldReturnInventory_whenReferenceExists() throws Exception {
 		int id = setupTestMedicalInventory();
 		MedicalInventory inventory = medIvnIoOperationRepository.findById(id).orElse(null);
 		assertThat(inventory).isNotNull();
@@ -823,7 +571,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testValidateMedicalInventory() throws Exception {
+	void validateMedicalInventoryRow_shouldNotThrow_whenMovementsPrecedeInventoryDate() throws Exception {
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
 		MovementType chargeType = new MovementType("inventory+", "Inventory+", "+", "non-operational");
@@ -880,7 +628,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testValidateMedicalWardInventoryRow_shouldThrowFourErrors() {
+	void validateMedicalWardInventoryRow_shouldThrowFourErrors_whenMovementsFollowInventoryDate() {
 		Throwable throwable = catchThrowable(() -> {
 			// Initialize data and create movements
 			Ward ward = testWard.setup(false);
@@ -997,7 +745,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testActualizeMedicalWardInventoryRow() throws Exception {
+	void actualizeMedicalWardInventoryRow_shouldUpdateRowAndAddRowsOfNewLots_whenAllMedicalsIsTrue() throws Exception {
 		// Initialize data
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -1097,7 +845,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	void testConfirmMedicalWardInventoryRow() throws Exception {
+	void confirmMedicalWardInventoryRow_shouldInsertWardMovementsForAdjustedRows() throws Exception {
 		// Initialize data
 		Ward ward = testWard.setup(false);
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -1133,4 +881,5 @@ class Tests extends OHCoreTestCase {
 		List<MovementWard> movWard = movementWardIoOperationRepository.findByMedicalCode(medical.getCode());
 		assertThat(movWard).hasSize(2);
 	}
+
 }
