@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2026 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -590,6 +590,81 @@ class Tests extends OHCoreTestCase {
 
 		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(movementWard))
 						.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	void mgrNewMovementWardFractionalIncreaseError() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		MovementWard movementWard = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		// A negative quantity with no destination ward raises the lot in the ward itself (a rectification): the
+		// credit goes through the integer MDSRWRD_IN_QTI column, so it must be a whole number.
+		movementWard.setQuantity(new BigDecimal("-0.5"));
+
+		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(movementWard))
+						.isInstanceOf(OHDataValidationException.class);
+		assertThat(movementWardIoOperationRepository.findAll()).isEmpty();
+	}
+
+	@Test
+	void mgrNewMovementWardIncreaseAndDecreaseOfALot() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		// a lot the ward does not hold yet: its row is created
+		MovementWard newLot = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		newLot.setQuantity(new BigDecimal("-9"));
+		movWardBrowserManager.newMovementWard(newLot);
+		assertThat(movWardBrowserManager.getCurrentQuantityInWard(ward, lot)).isEqualByComparingTo("9");
+
+		// a whole increase of the existing row
+		MovementWard increase = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		increase.setQuantity(new BigDecimal("-2"));
+		movWardBrowserManager.newMovementWard(increase);
+		assertThat(movWardBrowserManager.getCurrentQuantityInWard(ward, lot)).isEqualByComparingTo("11");
+
+		// a decrease keeps its decimals
+		MovementWard decrease = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		decrease.setQuantity(new BigDecimal("1.5"));
+		movWardBrowserManager.newMovementWard(decrease);
+		assertThat(movWardBrowserManager.getCurrentQuantityInWard(ward, lot)).isEqualByComparingTo("9.5");
+
+		// a fractional increase of the existing row is refused and leaves the lot as it is
+		MovementWard fractionalIncrease = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		fractionalIncrease.setQuantity(new BigDecimal("-0.5"));
+		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(fractionalIncrease))
+						.isInstanceOf(OHDataValidationException.class);
+		assertThat(movWardBrowserManager.getCurrentQuantityInWard(ward, lot)).isEqualByComparingTo("9.5");
+		assertThat(movementWardIoOperationRepository.findAll()).hasSize(3);
+	}
+
+	@Test
+	void mgrNewMovementWardFractionalQuantityOutOfALotNotInTheWard() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Lot lot = testLot.setup(medical, false);
+
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		lotIoOperationRepository.saveAndFlush(lot);
+
+		MovementWard movementWard = testMovementWard.setup(ward, null, medical, null, null, lot, false);
+		movementWard.setQuantity(new BigDecimal("0.5"));
+		movWardBrowserManager.newMovementWard(movementWard);
+
+		assertThat(movWardBrowserManager.getCurrentQuantityInWard(ward, lot)).isEqualByComparingTo("-0.5");
 	}
 
 	@Test
